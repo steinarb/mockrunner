@@ -31,6 +31,17 @@ public class MockPageContext extends org.apache.struts.mock.MockPageContext
         jspWriter = new MockJspWriter();
         outStack = new Stack();
     }
+    
+    /**
+     * This method allows to set custom implementations
+     * of <code>JspWriter</code>. Per default, {@link MockJspWriter}
+     * is used.
+     * @param jspWriter the <code>JspWriter</code>
+     */
+    public void setJspWriter(JspWriter jspWriter)
+    {
+        this.jspWriter = jspWriter;
+    }
   
     public JspWriter getOut()
     {
