@@ -14,7 +14,6 @@ public class AllWebTests
         suite.addTest(new TestSuite(MockHttpServletRequestTest.class));
         suite.addTest(new TestSuite(MockHttpServletResponseTest.class));
         suite.addTest(new TestSuite(MockServletContextTest.class));
-        suite.addTest(new TestSuite(TagUtilTest.class));
         suite.addTest(new TestSuite(NestedTagTest.class));
         suite.addTest(new TestSuite(TagLifecycleTest.class));
         suite.addTest(new TestSuite(ServletTestModuleTest.class));

@@ -17,6 +17,7 @@ public class AllUtilTests
 		suite.addTest(new TestSuite(ParameterUtilTest.class));
 		suite.addTest(new TestSuite(FileUtilTest.class));
 		suite.addTest(new TestSuite(ClassUtilTest.class));
+		suite.addTest(new TestSuite(TagUtilTest.class));
         //$JUnit-END$
         return suite;
     }

@@ -35,7 +35,7 @@ public class NestedTagTest extends BaseTestCase
     {
         testTag = new TestTag();
         nestedTagRoot = new NestedStandardTag(testTag, context, testMap);
-        testTagChild1 = nestedTagRoot.addTagChild(TestTag.class, testMap);
+        testTagChild1 = nestedTagRoot.addTagChild(new TestTag(), testMap);
         nestedTagRoot.addTextChild("test");
         testTagChild11 = testTagChild1.addTagChild(TestTag.class, testMap);
         testTag1 = (TestTag)testTagChild1.getTag();
@@ -47,10 +47,36 @@ public class NestedTagTest extends BaseTestCase
         testTag = new TestBodyTag();
         nestedTagRoot = new NestedBodyTag((BodyTagSupport)testTag, context, testMap);
         testTagChild1 = nestedTagRoot.addTagChild(TestTag.class, testMap);
-        testTagChild11 = testTagChild1.addTagChild(TestBodyTag.class, testMap);
+        testTagChild11 = testTagChild1.addTagChild(new TestBodyTag(), testMap);
         testTagChild1.addTextChild("bodytest");
         testTag1 = (TestTag)testTagChild1.getTag();
         testTag11 = (TestBodyTag)testTagChild11.getTag();
+    }
+    
+    public void testAddTagChild()
+    {
+        testTag = new TestBodyTag();
+        nestedTagRoot = new NestedBodyTag((BodyTagSupport)testTag, context, testMap);
+        TestTag testTag = new TestTag();
+        nestedTagRoot.addTagChild(testTag);
+        nestedTagRoot.addTagChild(testTag);
+        nestedTagRoot.addTagChild(testTag);
+        nestedTagRoot.addTagChild(TestBodyTag.class);
+        assertEquals(4, nestedTagRoot.getChilds().size());
+        assertSame(testTag, ((NestedTag)nestedTagRoot.getChild(0)).getTag());
+        assertSame(testTag, ((NestedTag)nestedTagRoot.getChild(1)).getTag());
+        assertSame(testTag, ((NestedTag)nestedTagRoot.getChild(2)).getTag());
+        assertNotSame(testTag, ((NestedBodyTag)nestedTagRoot.getChild(3)).getTag());
+        NestedBodyTag bodyTag = (NestedBodyTag)nestedTagRoot.getChild(3);
+        bodyTag.addTagChild(TestTag.class);
+        bodyTag.addTagChild(new TestTag());
+        bodyTag.addTagChild(TestBodyTag.class);
+        bodyTag.addTagChild(new TestBodyTag());
+        assertEquals(4, bodyTag.getChilds().size());
+        assertTrue(((NestedTag)bodyTag.getChild(0)).getTag() instanceof TestTag);
+        assertTrue(((NestedTag)bodyTag.getChild(1)).getTag() instanceof TestTag);
+        assertTrue(((NestedTag)bodyTag.getChild(2)).getTag() instanceof TestBodyTag);
+        assertTrue(((NestedTag)bodyTag.getChild(3)).getTag() instanceof TestBodyTag);
     }
     
     public void testPopulateAttributesStandard()

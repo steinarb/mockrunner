@@ -147,7 +147,7 @@ public class NestedStandardTag extends TagSupport implements NestedTag
 	}
 	
     /**
-     * Implementation of {@link NestedTag#addTagChild}.
+     * Implementation of {@link NestedTag#addTagChild(Class)}.
      */
 	public NestedTag addTagChild(Class tag)
 	{
@@ -155,9 +155,28 @@ public class NestedStandardTag extends TagSupport implements NestedTag
 	}
 	
     /**
-     * Implementation of {@link NestedTag#addTagChild}.
+     * Implementation of {@link NestedTag#addTagChild(Class, Map)}.
      */
 	public NestedTag addTagChild(Class tag, Map attributeMap)
+	{
+		TagSupport tagSupport = TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);	
+		tagSupport.setParent(this.tag);
+		childs.add(tagSupport);
+        return (NestedTag)tagSupport;
+	}
+	
+	/**
+     * Implementation of {@link NestedTag#addTagChild(TagSupport)}.
+     */
+	public NestedTag addTagChild(TagSupport tag)
+	{
+		return addTagChild(tag, new HashMap());
+	}
+	
+    /**
+     * Implementation of {@link NestedTag#addTagChild(TagSupport, Map)}.
+     */
+	public NestedTag addTagChild(TagSupport tag, Map attributeMap)
 	{
 		TagSupport tagSupport = TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);	
 		tagSupport.setParent(this.tag);

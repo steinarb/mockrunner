@@ -108,8 +108,49 @@ public class TagTestModule extends HTMLOutputModule
     {
         try
         {
-            tag = TagUtil.createNestedTagInstance(tagClass, getMockPageContext(), attributes);
-            return (NestedTag)tag;
+            this.tag = TagUtil.createNestedTagInstance(tagClass, getMockPageContext(), attributes);
+            return (NestedTag)this.tag;
+        }
+        catch(Exception exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
+    /**
+     * Creates a {@link NestedTag} and returns it. You can
+     * add child tags or body blocks to the {@link NestedTag}.
+     * Use {@link #getTag} to get the wrapped tag.
+     * An empty attribute <code>Map</code> will be used for
+     * the tag.
+     * @param tag the tag
+     * @return instance of {@link NestedStandardTag} or {@link NestedBodyTag}
+     */
+    public NestedTag setTag(TagSupport tag)
+    {
+        return setTag(tag, new HashMap());
+    }
+    
+    /**
+     * Creates a {@link NestedTag} and returns it. You can
+     * add child tags or body blocks to the {@link NestedTag}.
+     * Use {@link #getTag} to get the wrapped tag.
+     * The attributes <code>Map</code> contains the attributes
+     * of this tag (<i>propertyname</i> maps to <i>propertyvalue</i>).
+     * The attributes are populated (i.e. the tags setters are called)
+     * during the lifecycle or with an explicit call of
+     * {@link #populateAttributes}.
+     * @param tag the tag
+     * @param attributes the attribute map
+     * @return instance of {@link NestedStandardTag} or {@link NestedBodyTag}
+     */
+    public NestedTag setTag(TagSupport tag, Map attributes)
+    {
+        try
+        {
+            this.tag = TagUtil.createNestedTagInstance(tag, getMockPageContext(), attributes);
+            return (NestedTag)this.tag;
         }
         catch(Exception exc)
         {

@@ -113,5 +113,25 @@ public interface NestedTag
      * @param tag the tag class
      * @param attributeMap the attribute map
      */     
-    public NestedTag addTagChild(Class tag, Map attributeMap);     
+    public NestedTag addTagChild(Class tag, Map attributeMap);
+    
+    /**
+     * Adds a tag child simulating nested tags.
+     * <code>NestedTag</code> will be created automatically
+     * wrapping the specified tag. An empty attribute <code>Map</code> 
+     * will be used for the tag.
+     * @param tag the tag
+     */  
+    public NestedTag addTagChild(TagSupport tag);
+     
+    /**
+     * Adds a tag child simulating nested tags.
+     * The corresponding <code>NestedTag</code> will be created 
+     * automatically wrapping the specified tag. The attributes 
+     * <code>Map</code>  contains the attributes of this tag 
+     * (<i>propertyname</i> maps to <i>propertyvalue</i>).
+     * @param tag the tag
+     * @param attributeMap the attribute map
+     */     
+    public NestedTag addTagChild(TagSupport tag, Map attributeMap);
 }
