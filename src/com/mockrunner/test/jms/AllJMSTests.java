@@ -18,6 +18,7 @@ public class AllJMSTests
         suite.addTest(new TestSuite(MockMapMessageTest.class));
         suite.addTest(new TestSuite(MockQueueSessionTest.class));
         suite.addTest(new TestSuite(MockTopicSessionTest.class));
+        suite.addTest(new TestSuite(MockSessionTest.class));
         suite.addTest(new TestSuite(MockQueueTest.class));
         suite.addTest(new TestSuite(MockTopicTest.class));
         suite.addTest(new TestSuite(JMSTestModuleTest.class));

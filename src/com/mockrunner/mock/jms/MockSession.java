@@ -101,23 +101,29 @@ public class MockSession implements Session
     }
     
     /**
-     * Returns the acknowledge mode for this session.
-     * @return the acknowledge mode
-     */
-    public int getAcknowledgeMode()
-    {
-        return acknowledgeMode;
-    }
-    
-    /**
      * Returns if messages should be automatically acknowledged,
-     * i.e. if the acknowledge mode is <code>AUTO_ACKNOWLEDGE</code>
-     * or <code>DUPS_OK_ACKNOWLEDGE</code>.
+     * i.e. if the acknowledge mode is not <code>CLIENT_ACKNOWLEDGE</code>.
      * @return <code>true</code> if messages are automatically acknowledged
      */
     public boolean isAutoAcknowledge()
     {
-        return (acknowledgeMode == AUTO_ACKNOWLEDGE) || (acknowledgeMode == DUPS_OK_ACKNOWLEDGE);
+        return acknowledgeMode != CLIENT_ACKNOWLEDGE;
+    }
+    
+    /**
+     * Note: Returns <code>0</code> if the session is transacted.
+     * This method does not exist in JMS 1.0.2. In JMS 1.1 it
+     * should return <code>Session.SESSION_TRANSACTED</code>
+     * which is specified as <code>0</code>. In order to avoid
+     * different versions for JMS 1.0.2 and 1.1 
+     * (<code>Session.SESSION_TRANSACTED</code> does not
+     * exist in 1.0.2) this method returns hardcoded <code>0</code>.
+     * @return the acknowledge mode
+     */
+    public int getAcknowledgeMode() throws JMSException
+    {
+        if(getTransacted()) return 0;
+        return acknowledgeMode;
     }
     
     public boolean getTransacted() throws JMSException
