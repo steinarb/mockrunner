@@ -1,5 +1,9 @@
 package com.mockrunner.mock.jms;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -9,16 +13,17 @@ import javax.jms.QueueSession;
 /**
  * Mock implementation of JMS <code>Queue</code>.
  */
-public class MockQueue implements Queue, Cloneable
+public class MockQueue implements Queue
 {
     private MockQueueConnection connection;
-    private QueueSession session;
+    private Set sessions;
     private String name;
     
     public MockQueue(MockQueueConnection connection, String name)
     {
         this.name = name;
         this.connection = connection;
+        sessions = new HashSet();
     }
     
     public String getQueueName() throws JMSException
@@ -27,33 +32,47 @@ public class MockQueue implements Queue, Cloneable
         return name;
     }
     
+    /**
+     * Adds a message to this <code>Queue</code> that will
+     * be propagated to the corresponding receiver. Only one
+     * receiver will get the message. The order is not
+     * predictable.
+     * @param message the message
+     */
     public void addMessage(Message message) throws JMSException
     {
-        MessageListener globalListener = session.getMessageListener();
-        if(null != globalListener)
+        Iterator sessionsIterator = sessions.iterator();
+        if(sessionsIterator.hasNext())
         {
-            globalListener.onMessage(message);
-            return;
-        }
-        MockQueueReceiver receiver = connection.getTransmissionManager().getQueueReceiver(0);
-        if(null != receiver)
-        {
-            receiver.receiveMessage(message);
+            MockQueueSession session = (MockQueueSession)sessionsIterator.next();
+            MessageListener globalListener = session.getMessageListener();
+            if(null != globalListener)
+            {
+                globalListener.onMessage(message);
+            }
+            else
+            {
+                MockQueueReceiver receiver = session.getTransmissionManager().getQueueReceiver(name);
+                if(null != receiver)
+                {
+                    receiver.receiveMessage(message);
+                }
+            }
         }
     }
     
-    public void setQueueSession(QueueSession session)
+    /**
+     * Adds a <code>QueueSession</code>. This enables the session
+     * to access this <code>Queue</code>.
+     * @param session the session
+     */
+    public void addQueueSession(QueueSession session)
     {
-        this.session = session;
+        sessions.add(session);
     }
     
     protected MockQueueConnection getConnection()
     {
         return connection;
-    }
-    
-    public Object clone() throws CloneNotSupportedException
-    {
-        return super.clone();
     }
 }

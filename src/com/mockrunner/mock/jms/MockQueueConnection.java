@@ -13,8 +13,6 @@ import javax.jms.QueueSession;
 import javax.jms.ServerSessionPool;
 
 import com.mockrunner.jms.DestinationManager;
-import com.mockrunner.jms.MessageManager;
-import com.mockrunner.jms.TransmissionManager;
 
 /**
  * Mock implementation of JMS <code>QueueConnection</code>.
@@ -26,8 +24,6 @@ import com.mockrunner.jms.TransmissionManager;
 public class MockQueueConnection implements QueueConnection
 {
     private DestinationManager destinationManager;
-    private TransmissionManager transmissionManager;
-    private MessageManager messageManager;
     private String clientId;
     private ConnectionMetaData metaData;
     private boolean started;
@@ -38,9 +34,7 @@ public class MockQueueConnection implements QueueConnection
     
     public MockQueueConnection()
     {
-        destinationManager = new DestinationManager(this);
-        transmissionManager = new TransmissionManager(this);
-        messageManager = new MessageManager();
+        destinationManager = new DestinationManager(this); 
         metaData = new MockConnectionMetaData();
         started = false;
         closed = false;
@@ -55,24 +49,6 @@ public class MockQueueConnection implements QueueConnection
     public DestinationManager getDestinationManager()
     {
         return destinationManager;
-    }
-    
-    /**
-     * Returns the {@link TransmissionManager} for this connection.
-     * @return the {@link TransmissionManager}
-     */
-    public TransmissionManager getTransmissionManager()
-    {
-        return transmissionManager;
-    }
-    
-    /**
-     * Returns the {@link MessageManager} for this connection.
-     * @return the {@link MessageManager}
-     */
-    public MessageManager getMessageManager()
-    {
-        return messageManager;
     }
     
     /**
@@ -141,7 +117,7 @@ public class MockQueueConnection implements QueueConnection
     public ConnectionConsumer createConnectionConsumer(Queue queue, String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException
     {
         throwJMSException();
-        return new MockConnectionConsumer(this);
+        return new MockConnectionConsumer(this, sessionPool);
     }
 
     public String getClientID() throws JMSException

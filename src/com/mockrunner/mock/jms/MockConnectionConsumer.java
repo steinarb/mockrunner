@@ -13,13 +13,21 @@ public class MockConnectionConsumer implements ConnectionConsumer
     private ServerSessionPool sessionPool;
     private boolean closed;
     
-    public MockConnectionConsumer(MockQueueConnection connection)
+    public MockConnectionConsumer(MockQueueConnection connection, ServerSessionPool serverSessionPool)
     {
         this.connection = connection;
-        sessionPool = new MockServerSessionPool(connection);
         closed = false;
+        sessionPool = serverSessionPool;
+        if(null == sessionPool)
+        {
+            sessionPool = new MockServerSessionPool(connection);
+        }
     }
     
+    /**
+     * Returns if this connection consumer was closed.
+     * @return <code>true</code> if this connection consumer is closed
+     */
     public boolean isClosed()
     {
         return closed;

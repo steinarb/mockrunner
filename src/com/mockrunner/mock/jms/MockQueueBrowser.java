@@ -24,6 +24,10 @@ public class MockQueueBrowser implements QueueBrowser
         this.messageSelector = messageSelector;
     }
     
+    /**
+     * Returns if this browser was closed.
+     * @return <code>true</code> if this browser is closed
+     */
     public boolean isClosed()
     {
         return closed;
