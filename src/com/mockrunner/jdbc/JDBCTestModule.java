@@ -811,7 +811,7 @@ public class JDBCTestModule
      * autocommit mode. Automatic commits are not recognized.
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyCommited()
+    public void verifyCommitted()
     {
         int number = mockFactory.getMockConnection().getNumberCommits();
         if(number <= 0)
@@ -821,18 +821,34 @@ public class JDBCTestModule
     }
     
     /**
+     * @deprecated use {@link #verifyCommitted}
+     */
+    public void verifyCommited()
+    {
+        verifyCommitted();
+    }
+    
+    /**
      * Verifies that the changes were not commited.
      * Makes only sense, if the <code>Connection</code> is not in
      * autocommit mode. Automatic commits are not recognized.
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNotCommited()
+    public void verifyNotCommitted()
     {
         int number = mockFactory.getMockConnection().getNumberCommits();
         if(number > 0)
         {
-            throw new VerifyFailedException("Connection was commited");
+            throw new VerifyFailedException("Connection was committed");
         }
+    }
+    
+    /**
+     * @deprecated use {@link #verifyNotCommitted}
+     */
+    public void verifyNotCommited()
+    {
+        verifyNotCommitted();
     }
     
     /**
