@@ -3,7 +3,7 @@ package com.mockrunner.mock.web;
 import java.security.Principal;
 
 /**
- * Mock implementation of <code>UserPrincipal</code>.
+ * Mock implementation of <code>Principal</code>.
  */
 public class MockUserPrincipal implements Principal
 {
