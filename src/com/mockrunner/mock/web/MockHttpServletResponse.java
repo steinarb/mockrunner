@@ -223,6 +223,11 @@ public class MockHttpServletResponse implements HttpServletResponse
     {
         setIntHeader("content-length", length);
     }
+    
+    public String getContentType()
+    {
+        return getHeader("content-type");
+    }
 
     public void setContentType(String type)
     {

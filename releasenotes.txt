@@ -5,6 +5,8 @@ mockrunner-0.2.9:
 - added verifyForwardName() to ActionTestModule
 - fixed bug in MockHttpSession.setAttribute(), valueUnbound will now be called
   if attribute is replaced
+- added Servlet 2.4 methods to MockHttpServletRequest and MockHttpServletResponse
+- fixed some problems with MockPageContext
 - updated jdom.jar from Beta 9 to Beta 10
 
 mockrunner-0.2.8:

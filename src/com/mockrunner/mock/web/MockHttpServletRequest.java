@@ -58,6 +58,10 @@ public class MockHttpServletRequest implements HttpServletRequest
     private String contentType;
     private List cookies;
     private String bodyContent;
+    private String localAddr;
+    private String localName;
+    private int localPort;
+    private int remotePort;
     
     public MockHttpServletRequest()
     {
@@ -77,6 +81,10 @@ public class MockHttpServletRequest implements HttpServletRequest
         roles = new HashMap();
         contentLength = -1;
         cookies = new ArrayList();
+        localAddr = "127.0.0.1";
+        localName = "localhost";
+        localPort = 8080;
+        remotePort = 5000;
     }
 
     public String getParameter(String key)
@@ -533,5 +541,45 @@ public class MockHttpServletRequest implements HttpServletRequest
         String scheme = getScheme();
         if(null == scheme) return false;
         return scheme.equals("https");
+    }
+    
+    public String getLocalAddr()
+    {
+        return localAddr;
+    }
+    
+    public void setLocalAddr(String localAddr)
+    {
+        this.localAddr = localAddr;
+    }
+
+    public String getLocalName()
+    {
+        return localName;
+    }
+    
+    public void setLocalName(String localName)
+    {
+        this.localName = localName;
+    }
+
+    public int getLocalPort()
+    {
+        return localPort;
+    }
+    
+    public void setLocalPort(int localPort)
+    {
+        this.localPort = localPort;
+    }
+
+    public int getRemotePort()
+    {
+        return remotePort;
+    }
+
+    public void setRemotePort(int remotePort)
+    {
+        this.remotePort = remotePort;
     }
 }

@@ -1,9 +1,11 @@
 package com.mockrunner.mock.web;
 
+import java.io.IOException;
 import java.util.Stack;
 
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.jsp.JspWriter;
@@ -16,6 +18,8 @@ public class MockPageContext extends org.apache.struts.mock.MockPageContext
 {
     private JspWriter jspWriter;
     private Stack outStack;
+    private Exception exception;
+    private Object page;
 
     public MockPageContext(ServletConfig config, ServletRequest request, ServletResponse response)
     {
@@ -29,6 +33,26 @@ public class MockPageContext extends org.apache.struts.mock.MockPageContext
         return jspWriter;
     }
     
+    public Exception getException() 
+    {
+        return exception;
+    }
+    
+    public void setException(Exception exception) 
+    {
+        this.exception = exception;
+    }
+    
+    public Object getPage() 
+    {
+        return page;
+    }
+    
+    public void setPage(Object page) 
+    {
+        this.page = page;
+    }
+    
     public void handlePageException(Exception exc) 
     {
         
@@ -38,10 +62,20 @@ public class MockPageContext extends org.apache.struts.mock.MockPageContext
     {
     
     }
-
-    public void include(String path) 
+    
+    public void forward(String path) 
     {
     
+    }
+
+    public void include(String path)
+    {
+    
+    }
+    
+    public void include(String path, boolean flush) throws ServletException, IOException
+    {
+
     }
 
     public void initialize(Servlet servlet, ServletRequest request,
