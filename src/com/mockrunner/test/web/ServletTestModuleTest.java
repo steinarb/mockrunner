@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.base.VerifyFailedException;
+import com.mockrunner.mock.web.MockFilterChain;
 import com.mockrunner.servlet.ServletTestModule;
 
 public class ServletTestModuleTest extends BaseTestCase
@@ -180,13 +181,22 @@ public class ServletTestModuleTest extends BaseTestCase
         filter2.setResponseWrapper(responseWrapper);
         module.setDoChain(true);
         module.doPost();
-        assertSame(requestWrapper, getWebMockObjectFactory().getMockFilterChain().getLastRequest());
-        assertSame(responseWrapper, getWebMockObjectFactory().getMockFilterChain().getLastResponse());
+        MockFilterChain chain = getWebMockObjectFactory().getMockFilterChain();
+        assertSame(requestWrapper, chain.getLastRequest());
+        assertSame(responseWrapper, chain.getLastResponse());
         assertSame(requestWrapper, module.getFilteredRequest());
         assertSame(responseWrapper, module.getFilteredResponse());
+        assertEquals(3, chain.getRequestList().size());
+        assertEquals(3, chain.getResponseList().size());
+        assertSame(getWebMockObjectFactory().getMockRequest(), chain.getRequestList().get(0));
+        assertSame(requestWrapper, chain.getRequestList().get(1));
+        assertSame(requestWrapper, chain.getRequestList().get(2));
+        assertSame(getWebMockObjectFactory().getMockResponse(), chain.getResponseList().get(0));
+        assertSame(getWebMockObjectFactory().getMockResponse(), chain.getResponseList().get(1));
+        assertSame(responseWrapper, chain.getResponseList().get(2));
     }
     
-    public void testWrappedRequest()
+    public void testWrappedRequestAndResponse()
     {
         HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(getWebMockObjectFactory().getMockRequest());
         HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(getWebMockObjectFactory().getMockResponse());
