@@ -17,7 +17,6 @@ import com.mockrunner.util.SearchUtil;
 
 /**
  * Module for JDBC tests. Not complete yet.
- * Keeps track of statements and prepared statements.
  */
 public class JDBCTestModule
 {
