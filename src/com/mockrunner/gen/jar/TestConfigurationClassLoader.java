@@ -12,14 +12,11 @@ public class TestConfigurationClassLoader extends URLClassLoader
     
     protected synchronized Class loadClass(String name, boolean resolve) throws ClassNotFoundException
     {
-        Class clazz = null;
+        Class clazz = findLoadedClass(name);
+        if(null != clazz) return clazz;
         try
         {
-            clazz = findLoadedClass(name);
-            if(null == clazz)
-            {
-                clazz = findClass(name);
-            }
+            clazz = findClass(name);
         }
         catch (ClassNotFoundException exc)
         {
