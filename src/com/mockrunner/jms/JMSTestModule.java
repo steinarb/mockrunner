@@ -411,11 +411,7 @@ public class JMSTestModule
      */
     public void verifyQueueSessionClosed(int indexOfSession)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         if(!session.isClosed())
         {
             throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not closed.");
@@ -430,11 +426,7 @@ public class JMSTestModule
      */
     public void verifyQueueSessionCommitted(int indexOfSession)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         if(!session.isCommitted())
         {
             throw new VerifyFailedException("QueueSession is not committed.");
@@ -449,11 +441,7 @@ public class JMSTestModule
      */
     public void verifyQueueSessionNotCommitted(int indexOfSession)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         if(session.isCommitted())
         {
             throw new VerifyFailedException("QueueSession is committed.");
@@ -468,11 +456,7 @@ public class JMSTestModule
      */
     public void verifyQueueSessionRolledBack(int indexOfSession)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         if(!session.isRolledBack())
         {
             throw new VerifyFailedException("QueueSession is not rolled back.");
@@ -487,11 +471,7 @@ public class JMSTestModule
      */
     public void verifyQueueSessionNotRolledBack(int indexOfSession)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         if(session.isRolledBack())
         {
             throw new VerifyFailedException("QueueSession is rolled back.");
@@ -506,11 +486,7 @@ public class JMSTestModule
      */
     public void verifyQueueSessionRecovered(int indexOfSession)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         if(!session.isRecovered())
         {
             throw new VerifyFailedException("QueueSession is not recovered.");
@@ -525,11 +501,7 @@ public class JMSTestModule
      */
     public void verifyQueueSessionNotRecovered(int indexOfSession)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         if(session.isRecovered())
         {
             throw new VerifyFailedException("QueueSession is recovered.");
@@ -544,11 +516,7 @@ public class JMSTestModule
      */
     public void verifyTopicSessionClosed(int indexOfSession)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         if(!session.isClosed())
         {
             throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not closed.");
@@ -563,11 +531,7 @@ public class JMSTestModule
      */
     public void verifyTopicSessionCommitted(int indexOfSession)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         if(!session.isCommitted())
         {
             throw new VerifyFailedException("TopicSession is not committed.");
@@ -582,11 +546,7 @@ public class JMSTestModule
      */
     public void verifyTopicSessionNotCommitted(int indexOfSession)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         if(session.isCommitted())
         {
             throw new VerifyFailedException("TopicSession is committed.");
@@ -601,11 +561,7 @@ public class JMSTestModule
      */
     public void verifyTopicSessionRolledBack(int indexOfSession)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         if(!session.isRolledBack())
         {
             throw new VerifyFailedException("TopicSession is not rolled back.");
@@ -620,11 +576,7 @@ public class JMSTestModule
      */
     public void verifyTopicSessionNotRolledBack(int indexOfSession)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         if(session.isRolledBack())
         {
             throw new VerifyFailedException("TopicSession is rolled back.");
@@ -639,11 +591,7 @@ public class JMSTestModule
      */
     public void verifyTopicSessionRecovered(int indexOfSession)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         if(!session.isRecovered())
         {
             throw new VerifyFailedException("TopicSession is not recovered.");
@@ -658,11 +606,7 @@ public class JMSTestModule
      */
     public void verifyTopicSessionNotRecovered(int indexOfSession)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         if(session.isRecovered())
         {
             throw new VerifyFailedException("TopicSession is recovered.");
@@ -813,11 +757,7 @@ public class JMSTestModule
      */
     public void verifyNumberQueueSenders(int indexOfSession, int numberOfSenders)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         QueueTransmissionManager manager = getQueueTransmissionManager(indexOfSession);
         if(numberOfSenders != manager.getQueueSenderList().size())
         {
@@ -835,11 +775,7 @@ public class JMSTestModule
      */
     public void verifyNumberQueueSenders(int indexOfSession, String queueName, int numberOfSenders)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         QueueManager queueManager = getQueueManager();
         if(null == queueManager.getQueue(queueName))
         {
@@ -861,11 +797,7 @@ public class JMSTestModule
      */
     public void verifyQueueSenderClosed(int indexOfSession, String queueName, int indexOfSender)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         QueueManager queueManager = getQueueManager();
         if(null == queueManager.getQueue(queueName))
         {
@@ -891,11 +823,7 @@ public class JMSTestModule
      */
     public void verifyAllQueueSendersClosed(int indexOfSession)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         QueueTransmissionManager manager = getQueueTransmissionManager(indexOfSession);
         List senders = manager.getQueueSenderList();
         for(int ii = 0; ii < senders.size(); ii++)
@@ -916,11 +844,7 @@ public class JMSTestModule
      */
     public void verifyNumberTopicPublishers(int indexOfSession, int numberOfPublishers)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
         if(numberOfPublishers != manager.getTopicPublisherList().size())
         {
@@ -938,11 +862,7 @@ public class JMSTestModule
      */
     public void verifyNumberTopicPublishers(int indexOfSession, String topicName, int numberOfPublishers)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         TopicManager topicManager = getTopicManager();
         if(null == topicManager.getTopic(topicName))
         {
@@ -964,11 +884,7 @@ public class JMSTestModule
      */
     public void verifyTopicPublisherClosed(int indexOfSession, String topicName, int indexOfPublisher)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         TopicManager topicManager = getTopicManager();
         if(null == topicManager.getTopic(topicName))
         {
@@ -994,11 +910,7 @@ public class JMSTestModule
      */
     public void verifyAllTopicPublishersClosed(int indexOfSession)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
         List publishers = manager.getTopicPublisherList();
         for(int ii = 0; ii < publishers.size(); ii++)
@@ -1019,11 +931,7 @@ public class JMSTestModule
      */
     public void verifyNumberQueueReceivers(int indexOfSession, int numberOfReceivers)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         QueueTransmissionManager manager = getQueueTransmissionManager(indexOfSession);
         if(numberOfReceivers != manager.getQueueReceiverList().size())
         {
@@ -1041,11 +949,7 @@ public class JMSTestModule
      */
     public void verifyNumberQueueReceivers(int indexOfSession, String queueName, int numberOfReceivers)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         QueueManager queueManager = getQueueManager();
         if(null == queueManager.getQueue(queueName))
         {
@@ -1067,11 +971,7 @@ public class JMSTestModule
      */
     public void verifyQueueReceiverClosed(int indexOfSession, String queueName, int indexOfReceiver)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         QueueManager queueManager = getQueueManager();
         if(null == queueManager.getQueue(queueName))
         {
@@ -1097,11 +997,7 @@ public class JMSTestModule
      */
     public void verifyAllQueueReceiversClosed(int indexOfSession)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         QueueTransmissionManager manager = getQueueTransmissionManager(indexOfSession);
         List receivers = manager.getQueueReceiverList();
         for(int ii = 0; ii < receivers.size(); ii++)
@@ -1122,11 +1018,7 @@ public class JMSTestModule
      */
     public void verifyNumberTopicSubscribers(int indexOfSession, int numberOfSubscribers)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
         if(numberOfSubscribers != manager.getTopicSubscriberList().size())
         {
@@ -1144,11 +1036,7 @@ public class JMSTestModule
      */
     public void verifyNumberTopicSubscribers(int indexOfSession, String topicName, int numberOfSubscribers)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         TopicManager topicManager = getTopicManager();
         if(null == topicManager.getTopic(topicName))
         {
@@ -1170,11 +1058,7 @@ public class JMSTestModule
      */
     public void verifyTopicSubscriberClosed(int indexOfSession, String topicName, int indexOfSubscriber)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         TopicManager topicManager = getTopicManager();
         if(null == topicManager.getTopic(topicName))
         {
@@ -1200,11 +1084,7 @@ public class JMSTestModule
      */
     public void verifyAllTopicSubscribersClosed(int indexOfSession)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
         List subscribers = manager.getTopicSubscriberList();
         for(int ii = 0; ii < subscribers.size(); ii++)
@@ -1225,11 +1105,7 @@ public class JMSTestModule
      */
     public void verifyNumberQueueBrowsers(int indexOfSession, int numberOfBrowsers)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         QueueTransmissionManager manager = getQueueTransmissionManager(indexOfSession);
         if(numberOfBrowsers != manager.getQueueBrowserList().size())
         {
@@ -1247,11 +1123,7 @@ public class JMSTestModule
      */
     public void verifyNumberQueueBrowsers(int indexOfSession, String queueName, int numberOfBrowsers)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         QueueManager queueManager = getQueueManager();
         if(null == queueManager.getQueue(queueName))
         {
@@ -1273,11 +1145,7 @@ public class JMSTestModule
      */
     public void verifyQueueBrowserClosed(int indexOfSession, String queueName, int indexOfBrowser)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         QueueManager queueManager = getQueueManager();
         if(null == queueManager.getQueue(queueName))
         {
@@ -1303,11 +1171,7 @@ public class JMSTestModule
      */
     public void verifyAllQueueBrowsersClosed(int indexOfSession)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         QueueTransmissionManager manager = getQueueTransmissionManager(indexOfSession);
         List browsers = manager.getQueueBrowserList();
         for(int ii = 0; ii < browsers.size(); ii++)
@@ -1328,11 +1192,7 @@ public class JMSTestModule
      */
     public void verifyDurableTopicSubscriberPresent(int indexOfSession, String nameOfSubscriber)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
         if(null == manager.getDurableTopicSubscriber(nameOfSubscriber))
         {
@@ -1348,11 +1208,7 @@ public class JMSTestModule
      */
     public void verifyNumberDurableTopicSubscribers(int indexOfSession, int numberOfSubscribers)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
         if(numberOfSubscribers != manager.getDurableTopicSubscriberMap().size())
         {
@@ -1370,11 +1226,7 @@ public class JMSTestModule
      */
     public void verifyNumberDurableTopicSubscribers(int indexOfSession, String topicName, int numberOfSubscribers)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         TopicManager topicManager = getTopicManager();
         if(null == topicManager.getTopic(topicName))
         {
@@ -1395,11 +1247,7 @@ public class JMSTestModule
      */
     public void verifyDurableTopicSubscriberClosed(int indexOfSession, String subscriberName)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
         MockTopicSubscriber subscriber = (MockTopicSubscriber)manager.getDurableTopicSubscriber(subscriberName);
         if(null == subscriber)
@@ -1419,11 +1267,7 @@ public class JMSTestModule
      */
     public void verifyAllDurableTopicSubscribersClosed(int indexOfSession)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
         Iterator keys = manager.getDurableTopicSubscriberMap().keySet().iterator();
         while(keys.hasNext())
@@ -1470,11 +1314,7 @@ public class JMSTestModule
      */
     public void verifyNumberTemporaryQueues(int indexOfSession, int numberQueues)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         if(numberQueues != getTemporaryQueueList(indexOfSession).size())
         {
             throw new VerifyFailedException("Expected " + numberQueues + " temporary queues, actually " + getTemporaryQueueList(indexOfSession).size() + " temporary queues present");
@@ -1489,11 +1329,7 @@ public class JMSTestModule
      */
     public void verifyNumberTemporaryTopics(int indexOfSession, int numberTopics)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         if(numberTopics != getTemporaryTopicList(indexOfSession).size())
         {
             throw new VerifyFailedException("Expected " + numberTopics + " temporary topics, actually " + getTemporaryTopicList(indexOfSession).size() + " temporary topics present");
@@ -1509,11 +1345,7 @@ public class JMSTestModule
      */
     public void verifyTemporaryQueueDeleted(int indexOfSession, int indexOfQueue)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         MockTemporaryQueue queue = getTemporaryQueue(indexOfSession, indexOfQueue);
         if(null == queue)
         {
@@ -1532,11 +1364,7 @@ public class JMSTestModule
      */
     public void verifyAllTemporaryQueuesDeleted(int indexOfSession)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         List queueList = getTemporaryQueueList(indexOfSession);
         for(int ii = 0; ii < queueList.size(); ii++)
         {
@@ -1557,11 +1385,7 @@ public class JMSTestModule
      */
     public void verifyTemporaryTopicDeleted(int indexOfSession, int indexOfTopic)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         MockTemporaryTopic topic = getTemporaryTopic(indexOfSession, indexOfTopic);
         if(null == topic)
         {
@@ -1580,11 +1404,7 @@ public class JMSTestModule
      */
     public void verifyAllTemporaryTopicsDeleted(int indexOfSession)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         List topicList = getTemporaryTopicList(indexOfSession);
         for(int ii = 0; ii < topicList.size(); ii++)
         {
@@ -1822,11 +1642,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfQueueMessages(int indexOfSession, int number)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         if(number != getQueueMessageManager(indexOfSession).getMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " messages, received " + getQueueMessageManager(indexOfSession).getMessageList().size() + " messages");
@@ -1843,11 +1659,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfQueueBytesMessages(int indexOfSession, int number)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         if(number != getQueueMessageManager(indexOfSession).getBytesMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " bytes messages, received " + getQueueMessageManager(indexOfSession).getBytesMessageList().size() + " bytes messages");
@@ -1864,11 +1676,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfQueueMapMessages(int indexOfSession, int number)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         if(number != getQueueMessageManager(indexOfSession).getMapMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " map messages, received " + getQueueMessageManager(indexOfSession).getMapMessageList().size() + " map messages");
@@ -1885,11 +1693,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfQueueTextMessages(int indexOfSession, int number)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         if(number != getQueueMessageManager(indexOfSession).getTextMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " text messages, received " + getQueueMessageManager(indexOfSession).getTextMessageList().size() + " text messages");
@@ -1906,11 +1710,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfQueueStreamMessages(int indexOfSession, int number)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         if(number != getQueueMessageManager(indexOfSession).getStreamMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " stream messages, received " + getQueueMessageManager(indexOfSession).getStreamMessageList().size() + " stream messages");
@@ -1927,11 +1727,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfQueueObjectMessages(int indexOfSession, int number)
     {
-        MockQueueSession session = getQueueSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
-        }
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
         if(number != getQueueMessageManager(indexOfSession).getObjectMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " object messages, received " + getQueueMessageManager(indexOfSession).getObjectMessageList().size() + " object messages");
@@ -2140,11 +1936,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfTopicMessages(int indexOfSession, int number)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         if(number != getTopicMessageManager(indexOfSession).getMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " messages, received " + getTopicMessageManager(indexOfSession).getMessageList().size() + " messages");
@@ -2161,11 +1953,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfTopicBytesMessages(int indexOfSession, int number)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         if(number != getTopicMessageManager(indexOfSession).getBytesMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " bytes messages, received " + getTopicMessageManager(indexOfSession).getBytesMessageList().size() + " bytes messages");
@@ -2182,11 +1970,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfTopicMapMessages(int indexOfSession, int number)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         if(number != getTopicMessageManager(indexOfSession).getMapMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " map messages, received " + getTopicMessageManager(indexOfSession).getMapMessageList().size() + " map messages");
@@ -2203,11 +1987,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfTopicTextMessages(int indexOfSession, int number)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         if(number != getTopicMessageManager(indexOfSession).getTextMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " text messages, received " + getTopicMessageManager(indexOfSession).getTextMessageList().size() + " text messages");
@@ -2224,11 +2004,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfTopicStreamMessages(int indexOfSession, int number)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         if(number != getTopicMessageManager(indexOfSession).getStreamMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " stream messages, received " + getTopicMessageManager(indexOfSession).getStreamMessageList().size() + " stream messages");
@@ -2245,14 +2021,30 @@ public class JMSTestModule
      */
     public void verifyNumberOfTopicObjectMessages(int indexOfSession, int number)
     {
-        MockTopicSession session = getTopicSession(indexOfSession);
-        if(null == session)
-        {
-            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
-        }
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
         if(number != getTopicMessageManager(indexOfSession).getObjectMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " object messages, received " + getTopicMessageManager(indexOfSession).getObjectMessageList().size() + " object messages");
         }
+    }
+    
+    private MockQueueSession checkAndGetQueueSessionByIndex(int indexOfSession)
+    {
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " does not exist.");
+        }
+        return session;
+    }
+    
+    private MockTopicSession checkAndGetTopicSessionByIndex(int indexOfSession)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " does not exist.");
+        }
+        return session;
     }
 }
