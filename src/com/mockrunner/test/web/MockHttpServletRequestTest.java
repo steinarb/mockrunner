@@ -1,16 +1,22 @@
 package com.mockrunner.test.web;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 
 import junit.framework.TestCase;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
+import com.mockrunner.mock.web.MockRequestDispatcher;
 
 public class MockHttpServletRequestTest extends TestCase
 {
@@ -97,5 +103,59 @@ public class MockHttpServletRequestTest extends TestCase
         assertEquals('A', (char)reader.read());
         assertEquals('B', (char)reader.read());
         assertEquals('C', (char)reader.read());
+    }
+    
+    public void testRequestDispatcher() throws Exception
+    {
+        final String rdPath1 = "rdPathOne";
+        final String rdPath2 = "rdPathTwo";
+        final String rdPath3 = "rdPathThree";
+        MockHttpServletRequest request = new MockHttpServletRequest();
+    
+        assertEquals(0, request.getRequestDispatcherMap().size());
+
+        MockRequestDispatcher rd1 = (MockRequestDispatcher)request.getRequestDispatcher(rdPath1);
+        assertEquals(rdPath1, rd1.getPath());
+        assertNull(rd1.getForwardedRequest());
+        assertNull(rd1.getIncludedRequest());
+        
+        assertEquals(1, request.getRequestDispatcherMap().size());
+        assertTrue(request.getRequestDispatcherMap().containsKey(rdPath1));
+        assertSame(rd1, request.getRequestDispatcherMap().get(rdPath1));
+        
+        MockRequestDispatcher actualRd2 = new MockRequestDispatcher();
+        request.setRequestDispatcher(rdPath2, actualRd2);
+        MockRequestDispatcher rd2 = (MockRequestDispatcher)request.getRequestDispatcher(rdPath2);
+        assertEquals(rdPath2, rd2.getPath());
+        assertSame(actualRd2, rd2);
+        assertNull(rd1.getForwardedRequest());
+        assertNull(rd1.getIncludedRequest());
+        
+        assertEquals(2, request.getRequestDispatcherMap().size());
+        assertTrue(request.getRequestDispatcherMap().containsKey(rdPath2));
+        assertSame(rd2, request.getRequestDispatcherMap().get(rdPath2));
+        
+        RequestDispatcher actualRd3 = new TestRequestDispatcher();
+        request.setRequestDispatcher(rdPath3, actualRd3);
+        RequestDispatcher rd3 = request.getRequestDispatcher(rdPath3);
+        assertSame(actualRd3, rd3);
+        
+        assertEquals(3, request.getRequestDispatcherMap().size());
+        assertTrue(request.getRequestDispatcherMap().containsKey(rdPath3));
+        assertSame(rd3, request.getRequestDispatcherMap().get(rdPath3));                          
+    }
+    
+    private class TestRequestDispatcher implements RequestDispatcher
+    {
+        
+        public void forward(ServletRequest request, ServletResponse response) throws ServletException, IOException
+        {
+
+        }
+        
+        public void include(ServletRequest request, ServletResponse response) throws ServletException, IOException
+        {
+
+        }
     }
 }

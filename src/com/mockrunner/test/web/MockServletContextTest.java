@@ -1,15 +1,21 @@
 package com.mockrunner.test.web;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Set;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextAttributeListener;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 import junit.framework.TestCase;
 
+import com.mockrunner.mock.web.MockRequestDispatcher;
 import com.mockrunner.mock.web.MockServletContext;
 
 public class MockServletContextTest extends TestCase
@@ -113,7 +119,54 @@ public class MockServletContextTest extends TestCase
         assertFalse(listener.wasAttributeRemovedCalled());
     }
     
-    private static class TestAttributeListener implements ServletContextAttributeListener
+    public void testRequestDispatcher() throws Exception
+    {
+        final String rdPath1 = "rdPathOne";
+        final String rdPath2 = "rdPathTwo";
+        final String rdPath3 = "rdPathThree";
+        MockServletContext context = new MockServletContext();
+    
+        assertEquals(0, context.getRequestDispatcherMap().size());
+
+        MockRequestDispatcher rd1 = (MockRequestDispatcher)context.getRequestDispatcher(rdPath1);
+        assertEquals(rdPath1, rd1.getPath());
+        assertNull(rd1.getForwardedRequest());
+        assertNull(rd1.getIncludedRequest());
+        
+        assertEquals(1, context.getRequestDispatcherMap().size());
+        assertTrue(context.getRequestDispatcherMap().containsKey(rdPath1));
+        assertSame(rd1, context.getRequestDispatcherMap().get(rdPath1));
+        
+        MockRequestDispatcher actualRd2 = new MockRequestDispatcher();
+        context.setRequestDispatcher(rdPath2, actualRd2);
+        MockRequestDispatcher rd2 = (MockRequestDispatcher)context.getRequestDispatcher(rdPath2);
+        assertEquals(rdPath2, rd2.getPath());
+        assertSame(actualRd2, rd2);
+        assertNull(rd1.getForwardedRequest());
+        assertNull(rd1.getIncludedRequest());
+        
+        rd2 = (MockRequestDispatcher)context.getNamedDispatcher(rdPath2);
+        assertEquals(rdPath2, rd2.getPath());
+        assertSame(actualRd2, rd2);
+        
+        assertEquals(2, context.getRequestDispatcherMap().size());
+        assertTrue(context.getRequestDispatcherMap().containsKey(rdPath2));
+        assertSame(rd2, context.getRequestDispatcherMap().get(rdPath2));
+        
+        RequestDispatcher actualRd3 = new TestRequestDispatcher();
+        context.setRequestDispatcher(rdPath3, actualRd3);
+        RequestDispatcher rd3 = context.getRequestDispatcher(rdPath3);
+        assertSame(actualRd3, rd3);
+        
+        rd3 = context.getNamedDispatcher(rdPath3);
+        assertSame(actualRd3, rd3);
+        
+        assertEquals(3, context.getRequestDispatcherMap().size());
+        assertTrue(context.getRequestDispatcherMap().containsKey(rdPath3));
+        assertSame(rd3, context.getRequestDispatcherMap().get(rdPath3));                          
+    }
+    
+    private class TestAttributeListener implements ServletContextAttributeListener
     {
         private boolean wasAttributeAddedCalled = false;
         private boolean wasAttributeReplacedCalled = false;
@@ -157,7 +210,7 @@ public class MockServletContextTest extends TestCase
         }
     }
 
-    private static class TestAttributeOrderListener implements ServletContextAttributeListener
+    private class TestAttributeOrderListener implements ServletContextAttributeListener
     {
         private String addedEventKey;
         private Object addedEventValue;
@@ -212,6 +265,20 @@ public class MockServletContextTest extends TestCase
         public Object getReplacedEventValue()
         {
             return replacedEventValue;
+        }
+    }
+    
+    private class TestRequestDispatcher implements RequestDispatcher
+    {
+        
+        public void forward(ServletRequest request, ServletResponse response) throws ServletException, IOException
+        {
+
+        }
+        
+        public void include(ServletRequest request, ServletResponse response) throws ServletException, IOException
+        {
+
         }
     }
 }

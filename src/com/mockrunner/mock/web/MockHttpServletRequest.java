@@ -171,7 +171,7 @@ public class MockHttpServletRequest implements HttpServletRequest
 
     public RequestDispatcher getRequestDispatcher(String path)
     {
-        MockRequestDispatcher dispatcher = (MockRequestDispatcher)requestDispatchers.get(path);
+        RequestDispatcher dispatcher = (RequestDispatcher)requestDispatchers.get(path);
         if(null == dispatcher)
         {
             dispatcher = new MockRequestDispatcher();
@@ -192,8 +192,8 @@ public class MockHttpServletRequest implements HttpServletRequest
     
     /**
      * Sets a <code>RequestDispatcher</code> that will be returned when calling
-     * {#getRequestDispatcher} with the specified path. If no <code>RequestDispatcher</code>
-     * is set for the specified path, {#getRequestDispatcher} automatically creates a
+     * {@link #getRequestDispatcher} with the specified path. If no <code>RequestDispatcher</code>
+     * is set for the specified path, {@link #getRequestDispatcher} automatically creates a
      * new one.
      * @param path the path for the <code>RequestDispatcher</code>
      * @param dispatcher the <code>RequestDispatcher</code> object
