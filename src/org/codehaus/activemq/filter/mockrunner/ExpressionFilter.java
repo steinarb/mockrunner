@@ -23,11 +23,11 @@ import javax.jms.Message;
 
 
 /**
- * Represents a filter using an expression
- * 
  * Alwin Ibba: Changed package
+ * 
+ * Represents a filter using an expression
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class ExpressionFilter implements Filter {
 

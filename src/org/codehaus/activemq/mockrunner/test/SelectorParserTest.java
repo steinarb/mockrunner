@@ -30,7 +30,7 @@ import org.codehaus.activemq.selector.mockrunner.SelectorParser;
 /**
  * Alwin Ibba: Changed package
  * 
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.5 $
  */
 public class SelectorParserTest extends TestCase {
 
