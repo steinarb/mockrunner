@@ -44,7 +44,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Creates the <code>JMSTestModule</code>. If you
+     * Creates the {@link com.mockrunner.jms.JMSTestModule}. If you
      * overwrite this method, you must call 
      * <code>super.setUp()</code>.
      */
@@ -55,8 +55,8 @@ public class JMSTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Gets the <code>JMSTestModule</code>. 
-     * @return the <code>JMSTestModule</code>
+     * Gets the {@link com.mockrunner.jms.JMSTestModule}. 
+     * @return the {@link com.mockrunner.jms.JMSTestModule}
      */
     protected JMSTestModule getJMSTestModule()
     {
@@ -64,8 +64,8 @@ public class JMSTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Sets the <code>JMSTestModule</code>. 
-     * @param jmsTestModule the <code>JMSTestModule</code>
+     * Sets the {@link com.mockrunner.jms.JMSTestModule}. 
+     * @param jmsTestModule the {@link com.mockrunner.jms.JMSTestModule}
      */
     protected void setJMSTestModule(JMSTestModule jmsTestModule)
     {

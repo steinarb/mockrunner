@@ -35,7 +35,7 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Creates the <code>TagTestModule</code>. If you
+     * Creates the {@link com.mockrunner.tag.TagTestModule}. If you
      * overwrite this method, you must call 
      * <code>super.setUp()</code>.
      */
@@ -46,7 +46,7 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
-     * Returns the <code>TagTestModule</code> as 
+     * Returns the {@link com.mockrunner.tag.TagTestModule} as 
      * <code>HTMLOutputModule</code>.
      * @return the <code>HTMLOutputModule</code>
      */
@@ -56,8 +56,8 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
-     * Gets the <code>TagTestModule</code>. 
-     * @return the <code>TagTestModule</code>
+     * Gets the {@link com.mockrunner.tag.TagTestModule}. 
+     * @return the {@link com.mockrunner.tag.TagTestModule}
      */
     protected TagTestModule getTagTestModule()
     {
@@ -65,8 +65,8 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
-     * Sets the <code>TagTestModule</code>. 
-     * @param tagTestModule the <code>TagTestModule</code>
+     * Sets the {@link com.mockrunner.tag.TagTestModule}. 
+     * @param tagTestModule the {@link com.mockrunner.tag.TagTestModule}
      */
     protected void setTagTestModule(TagTestModule tagTestModule)
     {

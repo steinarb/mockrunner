@@ -35,7 +35,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Creates the <code>EJBTestModule</code>. If you
+     * Creates the {@link com.mockrunner.ejb.EJBTestModule}. If you
      * overwrite this method, you must call 
      * <code>super.setUp()</code>.
      */
@@ -46,8 +46,8 @@ public class EJBTestCaseAdapter extends BaseTestCase
     }
     
     /**
-     * Gets the <code>EJBTestModule</code>. 
-     * @return the <code>EJBTestModule</code>
+     * Gets the {@link com.mockrunner.ejb.EJBTestModule}. 
+     * @return the {@link com.mockrunner.ejb.EJBTestModule}
      */
     protected EJBTestModule getEJBTestModule()
     {
@@ -55,8 +55,8 @@ public class EJBTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Sets the <code>EJBTestModule</code>. 
-     * @param ejbTestModule the <code>EJBTestModule</code>
+     * Sets the {@link com.mockrunner.ejb.EJBTestModule}. 
+     * @param ejbTestModule the {@link com.mockrunner.ejb.EJBTestModule}
      */
     protected void setEJBTestModule(EJBTestModule ejbTestModule)
     {

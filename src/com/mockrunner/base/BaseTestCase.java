@@ -201,10 +201,10 @@ public abstract class BaseTestCase extends TestCase
     }
     
     /**
-     * Creates an <code>ActionTestModule</code> with the specified
+     * Creates an {@link com.mockrunner.struts.ActionTestModule} with the specified
      * {@link WebMockObjectFactory}.
      * @param mockFactory the {@link WebMockObjectFactory}
-     * @return the created <code>ActionTestModule</code>
+     * @return the created {@link com.mockrunner.struts.ActionTestModule}
      */
     protected ActionTestModule createActionTestModule(WebMockObjectFactory mockFactory)
     {
@@ -212,10 +212,10 @@ public abstract class BaseTestCase extends TestCase
     }
     
     /**
-     * Creates an <code>ActionTestModule</code> based on the current
+     * Creates an {@link com.mockrunner.struts.ActionTestModule} based on the current
      * {@link WebMockObjectFactory}.
      * Same as <code>createActionTestModule(getWebMockObjectFactory())</code>.
-     * @return the created <code>ActionTestModule</code>
+     * @return the created {@link com.mockrunner.struts.ActionTestModule}
      */
     protected ActionTestModule createActionTestModule()
     {
@@ -223,9 +223,9 @@ public abstract class BaseTestCase extends TestCase
     }
     
     /**
-     * Creates a <code>TagTestModule</code> with the specified
+     * Creates a {@link com.mockrunner.tag.TagTestModule} with the specified
      * {@link WebMockObjectFactory}.
-     * @return the created <code>TagTestModule</code>
+     * @return the created {@link com.mockrunner.tag.TagTestModule}
      */
     protected TagTestModule createTagTestModule(WebMockObjectFactory mockFactory)
     {
@@ -233,10 +233,10 @@ public abstract class BaseTestCase extends TestCase
     }
     
     /**
-     * Creates a <code>TagTestModule</code> based on the current
+     * Creates a {@link com.mockrunner.tag.TagTestModule} based on the current
      * {@link WebMockObjectFactory}.
      * Same as <code>createTagTestModule(getWebMockObjectFactory())</code>.
-     * @return the created <code>TagTestModule</code>
+     * @return the created {@link com.mockrunner.tag.TagTestModule}
      */
     protected TagTestModule createTagTestModule()
     {
@@ -244,9 +244,9 @@ public abstract class BaseTestCase extends TestCase
     }
     
     /**
-     * Creates a <code>ServletTestModule</code> with the specified
+     * Creates a {@link com.mockrunner.servlet.ServletTestModule} with the specified
      * {@link WebMockObjectFactory}.
-     * @return the created <code>ServletTestModule</code>
+     * @return the created {@link com.mockrunner.servlet.ServletTestModule}
      */
     protected ServletTestModule createServletTestModule(WebMockObjectFactory mockFactory)
     {
@@ -254,10 +254,10 @@ public abstract class BaseTestCase extends TestCase
     }
 
     /**
-     * Creates a <code>ServletTestModule</code> based on the current
+     * Creates a {@link com.mockrunner.servlet.ServletTestModule} based on the current
      * {@link WebMockObjectFactory}.
      * Same as <code>createServletTestModule(getWebMockObjectFactory())</code>.
-     * @return the created <code>ServletTestModule</code>
+     * @return the created {@link com.mockrunner.servlet.ServletTestModule}
      */
     protected ServletTestModule createServletTestModule()
     {
@@ -265,9 +265,9 @@ public abstract class BaseTestCase extends TestCase
     }
     
     /**
-     * Creates a <code>JDBCTestModule</code> with the specified
+     * Creates a {@link com.mockrunner.jdbc.JDBCTestModule} with the specified
      * {@link JDBCMockObjectFactory}.
-     * @return the created <code>JDBCTestModule</code>
+     * @return the created {@link com.mockrunner.jdbc.JDBCTestModule}
      */
     protected JDBCTestModule createJDBCTestModule(JDBCMockObjectFactory mockFactory)
     {
@@ -275,10 +275,10 @@ public abstract class BaseTestCase extends TestCase
     }
 
     /**
-     * Creates a <code>JDBCTestModule</code> based on the current
+     * Creates a {@link com.mockrunner.jdbc.JDBCTestModule} based on the current
      * {@link JDBCMockObjectFactory}.
      * Same as <code>createJDBCTestModule(getJDBCMockObjectFactory())</code>.
-     * @return the created <code>JDBCTestModule</code>
+     * @return the created {@link com.mockrunner.jdbc.JDBCTestModule}
      */
     protected JDBCTestModule createJDBCTestModule()
     {
@@ -286,9 +286,9 @@ public abstract class BaseTestCase extends TestCase
     }
     
     /**
-     * Creates an <code>EJBTestModule</code> with the specified
+     * Creates an {@link com.mockrunner.ejb.EJBTestModule} with the specified
      * {@link EJBMockObjectFactory}.
-     * @return the created <code>EJBTestModule</code>
+     * @return the created {@link com.mockrunner.ejb.EJBTestModule}
      */
     protected EJBTestModule createEJBTestModule(EJBMockObjectFactory mockFactory)
     {
@@ -296,10 +296,10 @@ public abstract class BaseTestCase extends TestCase
     }
 
     /**
-     * Creates an <code>EJBTestModule</code> based on the current
+     * Creates an {@link com.mockrunner.ejb.EJBTestModule} based on the current
      * {@link EJBMockObjectFactory}.
      * Same as <code>createEJBTestModule(getEJBMockObjectFactory())</code>.
-     * @return the created <code>EJBTestModule</code>
+     * @return the created {@link com.mockrunner.ejb.EJBTestModule}
      */
     protected EJBTestModule createEJBTestModule()
     {
@@ -307,9 +307,9 @@ public abstract class BaseTestCase extends TestCase
     }
     
     /**
-     * Creates a <code>JMSTestModule</code> with the specified
+     * Creates a {@link com.mockrunner.jms.JMSTestModule} with the specified
      * {@link JMSMockObjectFactory}.
-     * @return the created <code>JMSTestModule</code>
+     * @return the created {@link com.mockrunner.jms.JMSTestModule}
      */
     protected JMSTestModule createJMSTestModule(JMSMockObjectFactory mockFactory)
     {
@@ -317,10 +317,10 @@ public abstract class BaseTestCase extends TestCase
     }
 
     /**
-     * Creates a <code>JMSTestModule</code> based on the current
+     * Creates a {@link com.mockrunner.jms.JMSTestModule} based on the current
      * {@link JMSMockObjectFactory}.
      * Same as <code>createJMSTestModule(getJMSMockObjectFactory())</code>.
-     * @return the created <code>JMSTestModule</code>
+     * @return the created {@link com.mockrunner.jms.JMSTestModule}
      */
     protected JMSTestModule createJMSTestModule()
     {

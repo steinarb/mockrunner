@@ -47,7 +47,7 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Creates the <code>ActionTestModule</code>. If you
+     * Creates the {@link com.mockrunner.struts.ActionTestModule}. If you
      * overwrite this method, you must call 
      * <code>super.setUp()</code>.
      */
@@ -58,7 +58,7 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
-     * Returns the <code>ActionTestModule</code> as 
+     * Returns the {@link com.mockrunner.struts.ActionTestModule} as 
      * <code>HTMLOutputModule</code>.
      * @return the <code>HTMLOutputModule</code>
      */
@@ -68,8 +68,8 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
-     * Gets the <code>ActionTestModule</code>. 
-     * @return the <code>ActionTestModule</code>
+     * Gets the {@link com.mockrunner.struts.ActionTestModule}. 
+     * @return the {@link com.mockrunner.struts.ActionTestModule}
      */
     protected ActionTestModule getActionTestModule()
     {
@@ -77,8 +77,8 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
-     * Sets the <code>ActionTestModule</code>. 
-     * @param actionTestModule the <code>ActionTestModule</code>
+     * Sets the {@link com.mockrunner.struts.ActionTestModule}. 
+     * @param actionTestModule the {@link com.mockrunner.struts.ActionTestModule}
      */
     protected void setActionTestModule(ActionTestModule actionTestModule)
     {

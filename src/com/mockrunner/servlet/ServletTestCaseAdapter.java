@@ -35,7 +35,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
-     * Creates the <code>ServletTestModule</code>. If you
+     * Creates the {@link com.mockrunner.servlet.ServletTestModule}. If you
      * overwrite this method, you must call 
      * <code>super.setUp()</code>.
      */
@@ -46,7 +46,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
-     * Returns the <code>ServletTestModule</code> as 
+     * Returns the {@link com.mockrunner.servlet.ServletTestModule} as 
      * <code>HTMLOutputModule</code>.
      * @return the <code>HTMLOutputModule</code>
      */
@@ -56,8 +56,8 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
-     * Gets the <code>ServletTestModule</code>. 
-     * @return the <code>ServletTestModule</code>
+     * Gets the {@link com.mockrunner.servlet.ServletTestModule}. 
+     * @return the {@link com.mockrunner.servlet.ServletTestModule}
      */
     protected ServletTestModule getServletTestModule()
     {
@@ -65,8 +65,8 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
-     * Sets the <code>ServletTestModule</code>. 
-     * @param servletTestModule the <code>ServletTestModule</code>
+     * Sets the {@link com.mockrunner.servlet.ServletTestModule}. 
+     * @param servletTestModule the {@link com.mockrunner.servlet.ServletTestModule}
      */
     protected void setServletTestModule(ServletTestModule servletTestModule)
     {
