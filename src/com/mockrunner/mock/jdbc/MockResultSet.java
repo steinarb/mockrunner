@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.mockrunner.util.CollectionUtil;
 import com.mockrunner.util.StreamUtil;
 
 /**
@@ -1531,10 +1532,7 @@ public class MockResultSet implements ResultSet
         while(columns.hasNext())
         {
             List nextColumn = (List)columns.next();
-            for(int ii = nextColumn.size(); ii < rowCount; ii++) 
-            {
-                nextColumn.add(null);
-            }
+            CollectionUtil.fillList(nextColumn, rowCount);
         }
     }
     

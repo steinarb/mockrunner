@@ -9,10 +9,7 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Savepoint;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.mockobjects.sql.MockCallableStatement;
@@ -23,61 +20,58 @@ import com.mockobjects.sql.MockDatabaseMetaData;
  */
 public class MockConnection implements Connection
 {
-    private List statements = new ArrayList();
-    private List preparedStatements = new ArrayList();
-    private Map preparedStatementMap = new HashMap();
-    private boolean closed = false;
-    private boolean autoCommit = false;
-    private boolean readOnly = false;
-    private int holdability = ResultSet.HOLD_CURSORS_OVER_COMMIT;
-    private int level = Connection.TRANSACTION_READ_UNCOMMITTED;
-    private Map typeMap = new HashMap();
-    private String catalog = null;
+    private StatementHandler statementHandler;
+    private PreparedStatementHandler preparedStatementHandler;
+    private Map preparedStatementMap;
+    private boolean closed;
+    private boolean autoCommit;
+    private boolean readOnly;
+    private int holdability;
+    private int level;
+    private Map typeMap;
+    private String catalog ;
     
-    public List getStatements()
+    public MockConnection()
     {
-        return Collections.unmodifiableList(statements);
+        statementHandler = new StatementHandler();
+        preparedStatementHandler = new PreparedStatementHandler();
+        closed = false;
+        autoCommit = false;
+        readOnly = false;
+        holdability = ResultSet.HOLD_CURSORS_OVER_COMMIT;
+        level = Connection.TRANSACTION_READ_UNCOMMITTED;
+        typeMap = new HashMap();
+        catalog = null;
     }
     
-    public void clearStatements()
+    public StatementHandler getStatementHandler()
     {
-        statements.clear();
+        return statementHandler;
     }
     
-    public List getPreparedStatements()
+    public PreparedStatementHandler getPreparedStatementHandler()
     {
-        return Collections.unmodifiableList(preparedStatements);
+        return preparedStatementHandler;
     }
 
-    public void clearPreparedStatements()
-    {
-        preparedStatements.clear();
-        preparedStatementMap.clear();
-    }
-      
-    public Map getPreparedStatementMap()
-    {
-        return Collections.unmodifiableMap(preparedStatementMap);
-    }
-    
     public Statement createStatement() throws SQLException
     {
         MockStatement statement = new MockStatement(this);
-        statements.add(statement);
+        getStatementHandler().addStatement(statement);
         return statement;
     }
     
     public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException
     {
         MockStatement statement = new MockStatement(this, resultSetType, resultSetConcurrency);
-        statements.add(statement);
+        getStatementHandler().addStatement(statement);
         return statement;
     }
 
     public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException
     {
         MockStatement statement = new MockStatement(this, resultSetType, resultSetConcurrency, resultSetHoldability);
-        statements.add(statement);
+        getStatementHandler().addStatement(statement);
         return statement;
     }
   
@@ -99,21 +93,21 @@ public class MockConnection implements Connection
     public PreparedStatement prepareStatement(String sql) throws SQLException
     {
         MockPreparedStatement statement = new MockPreparedStatement(this, sql);
-        addPreparedStatement(statement);
+        getPreparedStatementHandler().addPreparedStatement(statement);
         return statement;
     }
 
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException
     {
         MockPreparedStatement statement = new MockPreparedStatement(this, sql, resultSetType, resultSetConcurrency);
-        addPreparedStatement(statement);
+        getPreparedStatementHandler().addPreparedStatement(statement);
         return statement;
     }
     
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException
     {
         MockPreparedStatement statement = new MockPreparedStatement(this, sql, resultSetType, resultSetConcurrency, resultSetHoldability);
-        addPreparedStatement(statement);
+        getPreparedStatementHandler().addPreparedStatement(statement);
         return statement;
     }
 
@@ -130,18 +124,6 @@ public class MockConnection implements Connection
     public PreparedStatement prepareStatement(String sql, String[] columnNames) throws SQLException
     {
         return prepareStatement(sql);
-    }
-    
-    private void addPreparedStatement(MockPreparedStatement statement)
-    {
-        List list = (List)preparedStatementMap.get(statement.getSQL());
-        if(null == list)
-        {
-            list = new ArrayList();
-            preparedStatementMap.put(statement.getSQL(), list);
-        }
-        list.add(statement);
-        preparedStatements.add(statement);
     }
     
     public void close() throws SQLException

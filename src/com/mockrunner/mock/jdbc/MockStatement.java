@@ -11,6 +11,7 @@ import java.sql.Statement;
  */
 public class MockStatement implements Statement
 {
+    private MockResultSet resultSet = null;
     private int querySeconds = 0;
     private int maxRows = 0;
     private int maxFieldSize = 0;
@@ -37,6 +38,11 @@ public class MockStatement implements Statement
         this.resultSetType = resultSetType;
         this.resultSetConcurrency = resultSetConcurrency;
         this.resultSetHoldability = resultSetHoldability;
+    }
+    
+    public void setResultSet(MockResultSet resultSet)
+    {
+        this.resultSet = resultSet;
     }
     
     public ResultSet executeQuery(String sql) throws SQLException
