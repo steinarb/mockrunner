@@ -1,4 +1,4 @@
-package com.mockrunner.test.consistency;
+package com.mockrunner.test.gen;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -7,8 +7,8 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.test.consistency.JavaLineParser.Block;
-import com.mockrunner.test.consistency.JavaLineParser.Line;
+import com.mockrunner.test.gen.JavaLineParser.Block;
+import com.mockrunner.test.gen.JavaLineParser.Line;
 
 public class JavaLineProcessorTest extends TestCase
 {
