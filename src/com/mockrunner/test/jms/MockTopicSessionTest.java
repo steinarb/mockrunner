@@ -357,6 +357,8 @@ public class MockTopicSessionTest extends TestCase
         }
         publisher.publish(bytesMessage);
         publisher.publish(streamMessage);
+        bytesMessage = (BytesMessage)topic1.getMessage();
+        streamMessage = (StreamMessage)topic1.getMessage();
         assertEquals(123.3, bytesMessage.readDouble(), 0);
         assertEquals(234, streamMessage.readLong());
     }
@@ -410,12 +412,15 @@ public class MockTopicSessionTest extends TestCase
         MockTopicSession session2 = (MockTopicSession)connection.createTopicSession(false, Session.DUPS_OK_ACKNOWLEDGE);
         DestinationManager manager = connection.getDestinationManager();
         manager.createTopic("Topic");
-        Topic topic = (MockTopic)session1.createTopic("Topic");
+        MockTopic topic = (MockTopic)session1.createTopic("Topic");
         MockTopicPublisher publisher = (MockTopicPublisher)session2.createPublisher(topic);
         MockMapMessage message1 = new MockMapMessage();
         MockStreamMessage message2 = new MockStreamMessage();
+        topic.reset();
         publisher.publish(message1);
         publisher.publish(message2);
+        message1 = (MockMapMessage)topic.getReceivedMessageList().get(0);
+        message2 = (MockStreamMessage)topic.getReceivedMessageList().get(1);
         assertFalse(message1.isAcknowledged());
         assertFalse(message2.isAcknowledged());
         MockTopicSubscriber subscriber1 = (MockTopicSubscriber)session1.createSubscriber(topic);
@@ -429,21 +434,29 @@ public class MockTopicSessionTest extends TestCase
         TestMessageListener listener = new TestMessageListener();
         subscriber1.setMessageListener(listener);
         message2 = new MockStreamMessage();
+        topic.reset();
         publisher.publish(message2);
+        message2 = (MockStreamMessage)topic.getReceivedMessageList().get(0);
         assertFalse(message2.isAcknowledged());
         subscriber2.setMessageListener(listener);
         message2 = new MockStreamMessage();
+        topic.reset();
         publisher.publish(message2);
+        message2 = (MockStreamMessage)topic.getReceivedMessageList().get(0);
         assertTrue(message2.isAcknowledged());
         subscriber1.setMessageListener(null);
         subscriber2.setMessageListener(null);
         session1.setMessageListener(listener);
         message2 = new MockStreamMessage();
+        topic.reset();
         publisher.publish(message2);
+        message2 = (MockStreamMessage)topic.getReceivedMessageList().get(0);
         assertFalse(message2.isAcknowledged());
         session2.setMessageListener(listener);
         message2 = new MockStreamMessage();
+        topic.reset();
         publisher.publish(message2);
+        message2 = (MockStreamMessage)topic.getReceivedMessageList().get(0);
         assertTrue(message2.isAcknowledged());
     }
     
