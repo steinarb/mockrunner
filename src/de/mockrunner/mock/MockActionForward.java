@@ -48,4 +48,19 @@ public class MockActionForward extends MockForwardConfig
         }
         return false;
     }
+    
+    public boolean verifyPath(String path)
+    {
+        if (null == getPath()) return false;
+        if (getPath().equals(path))
+        {
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean verifyRedirect(boolean redirect)
+    {
+        return getRedirect() == redirect;
+    }
 }
