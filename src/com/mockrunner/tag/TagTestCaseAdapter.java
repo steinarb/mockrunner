@@ -1,11 +1,11 @@
 package com.mockrunner.tag;
 
-import java.io.BufferedReader;
 import java.util.Map;
 
 import javax.servlet.jsp.tagext.TagSupport;
 
-import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.base.HTMLOutputModule;
+import com.mockrunner.base.HTMLOutputTestCase;
 import com.mockrunner.mock.MockPageContext;
 
 /**
@@ -14,7 +14,7 @@ import com.mockrunner.mock.MockPageContext;
  * directly (so your test case can use another base
  * class).
  */
-public class TagTestCaseAdapter extends BaseTestCase
+public class TagTestCaseAdapter extends HTMLOutputTestCase
 {
     private TagTestModule tagTestModule;
     
@@ -37,6 +37,16 @@ public class TagTestCaseAdapter extends BaseTestCase
     {
         super.setUp();
         tagTestModule = createTagTestModule(getMockObjectFactory());
+    }
+    
+    /**
+     * Returns the <code>TagTestModule</code> as 
+     * <code>HTMLOutputModule</code>.
+     * @return the <code>HTMLOutputModule</code>
+     */
+    protected HTMLOutputModule getHTMLOutputModule()
+    {
+        return tagTestModule;
     }
     
     /**
@@ -191,22 +201,6 @@ public class TagTestCaseAdapter extends BaseTestCase
     protected void clearOutput()
     {
         tagTestModule.clearOutput();
-    }
-
-    /**
-     * Delegates to {@link TagTestModule#getOutput}
-     */
-    protected String getOutput()
-    {
-        return tagTestModule.getOutput();
-    }
-    
-    /**
-     * Delegates to {@link TagTestModule#getOutputAsBufferedReader}
-     */
-    protected BufferedReader getOutputAsBufferedReader()
-    {
-        return tagTestModule.getOutputAsBufferedReader();
     }
     
     /**

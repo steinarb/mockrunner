@@ -1,5 +1,6 @@
 package com.mockrunner.test;
 
+import java.io.FileInputStream;
 import java.util.List;
 
 import junit.framework.TestCase;
@@ -14,9 +15,21 @@ public class XmlUtilTest extends TestCase
 {
     private String source;
     
-    public XmlUtilTest(String arg0)
+    private void prepareHTMLFile() throws Exception
     {
-        super(arg0);
+        FileInputStream stream = new FileInputStream("src/com/mockrunner/test/test.html");
+        StringBuffer output = new StringBuffer();
+        int nextChar = stream.read();
+        while(-1 != nextChar)
+        {
+            output.append((char)nextChar);
+            nextChar = stream.read();
+        }
+        source = output.toString();
+    }
+  
+    private void prepareHTML()
+    {
         StringBuffer output = new StringBuffer();
         output.append("<html>\n");
         output.append("<head>\n");
@@ -36,6 +49,7 @@ public class XmlUtilTest extends TestCase
 
     public void testParseHTML() throws Exception
     {
+        prepareHTML();
         Document document = XmlUtil.createJDOMDocument(XmlUtil.parseHTML(source));
         Element rootElement = document.getRootElement(); 
         assertEquals("html", rootElement.getName());
@@ -52,5 +66,19 @@ public class XmlUtilTest extends TestCase
         Element linkElement = h3Element.getChild("a");
         assertEquals("http://www.mockrunner.com", linkElement.getAttributeValue("href"));
         assertEquals("http://www.mockrunner.com", linkElement.getText());
+    }
+    
+    public void testParseHTMLFile() throws Exception
+    {
+        prepareHTMLFile();
+        Document document = XmlUtil.createJDOMDocument(XmlUtil.parseHTML(source));
+        Element rootElement = document.getRootElement(); 
+        assertEquals("html", rootElement.getName());
+        List children = rootElement.getChildren();
+        assertTrue(children.size() == 2);
+        Element headElement = (Element)children.get(0);
+        assertEquals("head", headElement.getName());
+        Element bodyElement = (Element)children.get(1);
+        assertEquals("body", bodyElement.getName());
     }
 }

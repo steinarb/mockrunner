@@ -1,10 +1,12 @@
 package com.mockrunner.util;
 
 import java.io.StringReader;
+import java.io.StringWriter;
 
 import org.apache.xerces.parsers.DOMParser;
 import org.cyberneko.html.HTMLConfiguration;
 import org.jdom.input.DOMBuilder;
+import org.jdom.output.XMLOutputter;
 import org.xml.sax.InputSource;
 
 /**
@@ -12,6 +14,28 @@ import org.xml.sax.InputSource;
  */
 public class XmlUtil
 {
+    /**
+     * Returns the documents XML content as a string.
+     * @param document the <code>org.jdom.Document</code>
+     * @return the output as string
+     */
+    public static String createStringFromJDOMDocument(org.jdom.Document document)
+    {
+        try
+        {
+            XMLOutputter outputter = new XMLOutputter();
+            StringWriter writer = new StringWriter();
+            outputter.output(document, writer);
+            writer.flush();
+            return writer.toString();
+        }
+        catch(Exception exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
     /**
      * Creates a JDOM <code>Document</code> from a specified
      * W3C <code>Document</code>.

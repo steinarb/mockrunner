@@ -1,18 +1,16 @@
 package com.mockrunner.servlet;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 
+import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
 
 /**
  * Module for servlet tests. 
  */
-public class ServletTestModule
+public class ServletTestModule extends HTMLOutputModule
 {
     private MockObjectFactory mockFactory;
     private HttpServlet servlet;
@@ -141,17 +139,7 @@ public class ServletTestModule
         }
         return mockFactory.getMockResponse().getOutputStreamContents();
     }
-    
-    /**
-     * Returns the servlet output as a <code>BufferedReader</code>. 
-     * Flushes the output before returning it.
-     * @return the servlet output
-     */
-    public BufferedReader getOutputAsBufferedReader()
-    {
-        return new BufferedReader(new StringReader(getOutput()));   
-    }
-    
+   
     /**
      * Verifies the servlet output.
      * @param output the expected output.

@@ -1,0 +1,110 @@
+<html>
+<head>
+<meta http-equiv="content-cype" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" href="style.css" type="text/css">
+</head>
+
+<body bgcolor="#aad8d8">
+<table width="800" border="0" align="left" cellpadding="0" cellspacing="0">
+<tr align="left" valign="top">
+	<td colspan="2" align="center" valign="top">
+		<table width="700" border="0" align="left" cellpadding="0" cellspacing="0">
+		<tr>
+			<td width="400">
+				<a href="http://sourceforge.net"> <img src="http://sourceforge.net/sflogo.php?group_id=85669&amp;type=5" width="210" height="62" border="0" alt="SourceForge.net Logo" /></a>
+			</td>
+			<td align="center" valign="top"><h3 class="caption">Mockrunner</h3></td>
+		</tr>
+		</table>
+	</td>
+</tr>
+<tr>
+	<td align="left" valign="top" width="200">
+		<table width="230" border="0" align="left" cellpadding="0" cellspacing="0">
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td><a class="selectedmenuentry" href="index.html">Home</a></td>
+			</tr>
+			<tr>
+				<td><a class="menuentry" href="examples.html">Examples</a></td>
+			</tr>
+			<tr>
+				<td><a class="menuentry" href="doc/api/index.html">JavaDoc</a></td>
+			</tr>
+			<tr>
+				<td><a class="menuentry" href="http://sourceforge.net/project/showfiles.php?group_id=85669&release_id=172596">Download</a></td>
+			</tr>
+			<tr>
+				<td><a class="menuentry" href="license.html">License</a></td>
+			</tr>
+			<tr>
+				<td><a class="menuentry" href="contact.html">Contact</a></td>
+			</tr>
+			<tr>
+				<td><a class="menuentry" href="impressum.html">Impressum</a></td>
+			</tr>
+		</table>
+	</td>
+	<td align="left" valign="top" width="500">
+		<table width="700" border="0" align="left" cellpadding="0" cellspacing="0">
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>
+			<p class="content">
+				Mockrunner is a lightweight framework for testing 
+				<a class="contentlink" href="http://jakarta.apache.org/struts/">Struts</a>
+				actions and forms, servlets and tag classes. It extends <a class="contentlink" href="http://www.junit.org/">JUnit</a> and simulates 
+				the necessary behaviour without calling the real infrastructure, i.e. 
+				it does not call the <a class="contentlink" href="http://jakarta.apache.org/struts/">Struts</a>
+				ActionServlet or any other <a class="contentlink" href="http://jakarta.apache.org/struts/">Struts</a>
+				class except for the tested action. This makes it very fast and enables the 
+				user to manipulate all involved classes and mockobjects in all steps 
+				of the test making it possible to write very sophisticated unit-tests 
+				for <a class="contentlink" href="http://jakarta.apache.org/struts/">Struts</a> and servlets without any overhead.
+			</p>
+			<p class="content">
+				Mockrunner does not read the struts-conig.xml file or any other
+				configuration file like web.xml. It offers an API to specify
+				all necessary precondtions and parameters. This makes it possible to 
+				test the action as a reusable component with all possible parameters 
+				and with different form beans. So you can be sure the action works 
+				properly regardless of the settings  you use for that action in 
+				one or another application.
+			</p>
+			<p class="content">
+				Mockrunner is a pure mock based solution for unit tests. It's purpose
+				is to test one single action, form bean, tag class or servlet at a time
+				without overhead. It is not meant for workflow or use-case tests.
+				Furthermore you cannot test the definitions in the struts-config.xml file. 
+				If you want to do that, you can use <a class="contentlink" href="http://strutstestcase.sourceforge.net/">StrutsTestCase</a> or <a class="contentlink" href="http://jakarta.apache.org/cactus/">Cactus</a> .
+			</p>
+			<p class="content">
+				Please note that Mockrunner is in Alpha status. The Struts test module
+				is working fine but there's still a lot to do, especially with the other
+				test modules. The package structure and the APIs are far from being stable 
+				and may change in the next releases. It is planned to include support for 
+				other frameworks in the J2EE environment in future releases.
+			</p>
+			<br>
+			<br>
+			</td>
+		</tr>
+		</table>
+	</td>
+</tr>
+</table>
+</body>
+</html>
