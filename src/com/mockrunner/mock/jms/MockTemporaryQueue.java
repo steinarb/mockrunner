@@ -10,14 +10,15 @@ public class MockTemporaryQueue extends MockQueue implements TemporaryQueue
 {
     private boolean deleted;
     
-    public MockTemporaryQueue()
+    public MockTemporaryQueue(MockQueueConnection connection)
     {
-        super("TemporaryQueue");
+        super(connection, "TemporaryQueue");
         deleted = false;
     }
 
     public void delete() throws JMSException
     {
+        getConnection().throwJMSException();
         deleted = true;
     }
 

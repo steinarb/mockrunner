@@ -8,15 +8,23 @@ import javax.jms.Queue;
  */
 public class MockQueue implements Queue
 {
+    private MockQueueConnection connection;
     private String name;
     
-    public MockQueue(String name)
+    public MockQueue(MockQueueConnection connection, String name)
     {
         this.name = name;
+        this.connection = connection;
     }
     
     public String getQueueName() throws JMSException
     {
+        connection.throwJMSException();
         return name;
+    }
+    
+    protected MockQueueConnection getConnection()
+    {
+        return connection;
     }
 }
