@@ -1,6 +1,7 @@
 package com.mockrunner.mock.jms;
 
 import java.util.Enumeration;
+import java.util.Vector;
 
 import javax.jms.JMSException;
 import javax.jms.Queue;
@@ -47,9 +48,8 @@ public class MockQueueBrowser implements QueueBrowser
 
     public Enumeration getEnumeration() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return new Vector(queue.getCurrentMessageList()).elements();
     }
 
     public void close() throws JMSException

@@ -1,9 +1,5 @@
 package com.mockrunner.mock.jms;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -20,8 +16,6 @@ public class MockQueueReceiver implements QueueReceiver
     private String messageSelector;
     private boolean closed;
     private MessageListener messageListener;
-    private List messages;
-    private List receivedMessages;
 
     public MockQueueReceiver(MockQueueConnection connection, MockQueue queue, String messageSelector)
     {
@@ -30,8 +24,6 @@ public class MockQueueReceiver implements QueueReceiver
         this.messageSelector = messageSelector;
         closed = false;
         messageListener = null;
-        messages = new ArrayList();
-        receivedMessages = new ArrayList();
     }
     
     /**
@@ -45,32 +37,24 @@ public class MockQueueReceiver implements QueueReceiver
     
     /**
      * Adds a message that is immediately propagated to the
-     * message listener. If no message listener is set, the message
-     * is stored an can be received using the <code>receive</code>
-     * methods.
+     * message listener. If there's no message listener,
+     * nothing happens.
      * @param message the message
      */
     public void receiveMessage(Message message)
     {
-        receivedMessages.add(message);
-        if(null != messageListener)
-        {
-            messageListener.onMessage(message);
-        }
-        else
-        {
-            messages.add(message);
-        }
+        if(null == messageListener) return;
+        messageListener.onMessage(message);
     }
     
     /**
-     * Returns a <code>List</code> of all messages received
-     * with this receiver.
-     * @return the <code>List</code> of messages
+     * Returns if this receiver can consume an incoming message,
+     * i.e. if a <code>MessageListener</code> is registered.
+     * @return <code>true</code> if this receiver can consume the message
      */
-    public List getReceivedMessageList()
+    public boolean canConsume()
     {
-        return Collections.unmodifiableList(receivedMessages);
+        return messageListener != null;
     }
 
     public Queue getQueue() throws JMSException
@@ -100,8 +84,8 @@ public class MockQueueReceiver implements QueueReceiver
     public Message receive() throws JMSException
     {
         connection.throwJMSException();
-        if(messages.size() <= 0) return null;
-        return (Message)messages.remove(0);
+        if(queue.isEmpty()) return null;
+        return queue.getMessage();
     }
 
     public Message receive(long timeout) throws JMSException
