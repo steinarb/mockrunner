@@ -164,7 +164,7 @@ http://www.apache.org/~andyc/neko/doc/html/index.html
 nekohtml.jar
 
 The above libraries are necessary at runtime. If you try to build Mockrunner
-you probably recognize that some libraries are missing. The com.mockrunner.gen
+you will probably recognize that some libraries are missing. The com.mockrunner.gen
 packages contain tools to generate Java 1.3 and J2EE 1.3 versions and adapter classes 
 and to analyze dependencies. If you just want to make small modifications to Mockrunner,
 you probably won't need these tools. In this case, simply delete the com.mockrunner.gen
