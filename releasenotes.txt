@@ -1,6 +1,7 @@
 
 mockrunner-0.3.2:
 
+- added getMockConnection method to MockDataSource (patch by Gabor Liptak)
 - JMS MockConnectionFactory now implements MockQueueConnectionFactory and
   MockTopicConnectionFactory to provide one factory with one JNDI name
   for both domains
