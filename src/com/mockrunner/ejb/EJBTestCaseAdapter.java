@@ -315,6 +315,14 @@ public class EJBTestCaseAdapter extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link EJBTestModule#findByPrimaryKey(String, Object)}
+     */
+    protected Object findByPrimaryKey(String name, Object primaryKey)
+    {
+        return ejbTestModule.findByPrimaryKey(name, primaryKey);
+    }
+    
+    /**
      * Delegates to {@link EJBTestModule#resetUserTransaction}
      */
     protected void resetUserTransaction()

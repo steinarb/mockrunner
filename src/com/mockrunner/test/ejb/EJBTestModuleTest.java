@@ -115,8 +115,38 @@ public class EJBTestModuleTest extends TestCase
         assertSame(bean, home.findByPrimaryKey("myPk"));
 		bean = ejbModule.createEntityBean("com/AnEntityBean", "createWithName", new Object[] {"xyz"}, "anotherPk");
 		assertSame(bean, home.findByPrimaryKey("anotherPk"));
-        assertTrue(bean instanceof TestEntityBean);
+        bean = ejbModule.createEntityBean("com/AnEntityBean", new Object[] {new Short((short)1)}, "thirdPk");
+        assertSame(bean, home.findByPrimaryKey("thirdPk"));
 		assertNull(ejbModule.createBean("com/AnEntityBean", new Object[] {"xyz"}));
+    }
+    
+    public void testFindByPrimaryKey() throws Exception
+    {
+        ejbModule.setBusinessInterfaceSuffix("Bean");
+        ejbModule.setImplementationSuffix("EJB");
+        ejbModule.deployEntityBean("com/AnEntityBean", TestEntityEJB.class);
+        Object bean1 = ejbModule.createEntityBean("com/AnEntityBean", "myPk");
+        Object bean2 = ejbModule.createEntityBean("com/AnEntityBean", "createWithName", new Object[] {"xyz"}, "anotherPk");
+        assertSame(bean1, ejbModule.findByPrimaryKey("com/AnEntityBean", "myPk"));
+        assertSame(bean2, ejbModule.findByPrimaryKey("com/AnEntityBean", "anotherPk"));
+        try
+        {
+            ejbModule.findByPrimaryKey("com/AnEntity", "myPk");
+            fail();
+        }
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            ejbModule.findByPrimaryKey("com/AnEntity", "xyz");
+            fail();
+        }
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
     }
         
     public void testDeploySessionBeanClass() throws Exception
@@ -477,6 +507,16 @@ public class EJBTestModuleTest extends TestCase
 		{
 
 		}
+        
+        public String ejbCreate(Short param) throws CreateException
+        {
+            return "testPk";
+        }
+        
+        public void ejbPostCreate(Short param) throws CreateException
+        {
+
+        }
 		
 		public String ejbCreateWithName(String name) throws CreateException
 		{
@@ -538,6 +578,7 @@ public class EJBTestModuleTest extends TestCase
 	public static interface TestEntityHome extends SuperEntityHome
 	{
 		public TestEntityBean create() throws CreateException, RemoteException;
+        public TestEntityBean create(Short param) throws CreateException, RemoteException;
 		public TestEntityBean createWithName(String name) throws CreateException, RemoteException;
         public TestEntityBean findByPrimaryKey(String pk) throws FinderException, RemoteException;
     }

@@ -13,7 +13,7 @@ import javax.naming.InitialContext;
 import com.mockrunner.example.ejb.interfaces.BillEntity;
 import com.mockrunner.example.ejb.interfaces.BillEntityHome;
 
-/**
+/*
  * @ejb:bean name="BillManagerSession"
  *           display-name="BillManagerSessionBean"
  *           type="Stateless"
@@ -22,11 +22,15 @@ import com.mockrunner.example.ejb.interfaces.BillEntityHome;
  * 
  * @ejb.ejb-ref ejb-name="BillEntity" view-type="remote" ref-name="ejb/BillEntity"
  **/
+/**
+ * This simple EJB finds all {@link BillEntityBean} objects
+ * which are not paid and marks them as paid.
+ */
 public class BillManagerSessionBean implements SessionBean
 {
     private SessionContext sessionContext;
     
-    /**
+    /*
      * @ejb:interface-method
      * @ejb:transaction type="Required"
      **/
@@ -52,7 +56,7 @@ public class BillManagerSessionBean implements SessionBean
         } 
     }
     
-    /**
+    /*
      * @ejb:create-method
      **/
     public void ejbCreate() throws CreateException

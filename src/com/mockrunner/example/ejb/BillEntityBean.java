@@ -9,7 +9,7 @@ import javax.ejb.EntityBean;
 import javax.ejb.EntityContext;
 import javax.ejb.RemoveException;
 
-/**
+/*
  * @ejb:bean name="BillEntity"
  *           display-name="BillEntity"
  *           type="CMP"
@@ -31,11 +31,17 @@ import javax.ejb.RemoveException;
  *                    create-table="true"
  *                    remove-table="false"
  **/
+/**
+ * This CMP entity bean represents a bill.
+ * It has a date, and a marker, if it is paid.
+ * It has to custom finders, namely
+ * <code>findUnpaid()</code> and <code>findAll()</code>.
+ */
 public abstract class BillEntityBean implements EntityBean
 {
 	public EntityContext entityContext;
    
-   	/**
+   	/*
      * @ejb:interface-method
      * @ejb:persistent-field
      * @ejb:pk-field
@@ -44,31 +50,31 @@ public abstract class BillEntityBean implements EntityBean
    	public abstract Integer getId();
    	public abstract void setId(Integer id);
    
-    /**
+    /*
      * @ejb:interface-method
      * @ejb:persistent-field
      * @jboss:column-name name="date" sql-type="DATETIME" jdbc-type="DATE"
      **/
    	public abstract Date getDate();
    	
-	/**
+	/*
 	 * @ejb:interface-method
 	 **/
   	public abstract void setDate(Date date);
    
-    /**
+    /*
      * @ejb:interface-method
      * @ejb:persistent-field
      * @jboss:column-name name="paid"
      **/
    	public abstract boolean getPaid();
    	
-	/**
+	/*
 	 * @ejb:interface-method
 	 **/
    	public abstract void setPaid(boolean isPaid);
    
-	/**
+	/*
 	 * @ejb:create-method
 	 **/
 	public Integer ejbCreate(Integer id) throws EJBException, CreateException

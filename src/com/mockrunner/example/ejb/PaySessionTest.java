@@ -10,7 +10,7 @@ import com.mockrunner.mock.jdbc.MockResultSet;
 
 /**
  * Example test for {@link PaySessionBean}. This example demonstrates
- * howto use {@link com.mockrunner.jdbc.JDBCTestModule} and 
+ * how to use {@link com.mockrunner.jdbc.JDBCTestModule} and 
  * {@link com.mockrunner.ejb.EJBTestModule} in conjunction. 
  * The tests are similar to {@link com.mockrunner.example.jdbc.PayActionTest} 
  * but instead of an action we test an EJB. This example works with the simulated 

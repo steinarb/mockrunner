@@ -496,7 +496,7 @@ public class EJBTestModule
     public Object createBean(String name, String createMethod, Object[] parameters)
     {
         Object home = lookupHome(name);
-        return invokeCreate(home, createMethod, parameters);
+        return invokeHomeMethod(home, createMethod, parameters);
     }
     
     /**
@@ -546,7 +546,7 @@ public class EJBTestModule
      */
     public Object createEntityBean(String name, Object[] parameters, Object primaryKey)
     {
-        return createEntityBean(name, "create", new Object[0], primaryKey);
+        return createEntityBean(name, "create", parameters, primaryKey);
     }
     
     /**
@@ -572,7 +572,7 @@ public class EJBTestModule
     public Object createEntityBean(String name, String createMethod, Object[] parameters, Object primaryKey)
     {
         Object home = lookupHome(name);
-        Object remote = invokeCreate(home, createMethod, parameters);
+        Object remote = invokeHomeMethod(home, createMethod, parameters);
         Class[] interfaces = home.getClass().getInterfaces();
         Class homeInterface = getHomeInterfaceClass(interfaces);
         if(null != homeInterface)
@@ -580,6 +580,29 @@ public class EJBTestModule
             mockFactory.getMockContainer().getEntityDatabase().add(homeInterface, primaryKey, remote);
         }
         return remote;
+    }
+    
+    /**
+     * Finds an entity EJB by its primary key. The method looks up the home interface, 
+     * calls the <code>findByPrimaryKey</code> method and returns the result, 
+     * which you can cast to the remote interface.
+     * This method works with the mock container but may fail with
+     * a real remote container.
+     * This method throws a <code>RuntimeException</code> if no object with the 
+     * specified name can be found. If the found object is no EJB home interface,
+     * or if the <code>findByPrimaryKey</code> method cannot be found, this
+     * method returns <code>null</code>.
+     * If the mock container throws an exception because the primary key
+     * cannot be found in the entity database, this method returns <code>null</code>.
+     * @param name the name of the bean
+     * @param primaryKey the primary key
+     * @return the bean 
+     * @throws RuntimeException in case of error
+     */
+    public Object findByPrimaryKey(String name, Object primaryKey)
+    {
+        Object home = lookupHome(name);
+        return invokeHomeMethod(home, "findByPrimaryKey", new Object[] {primaryKey});
     }
     
     private Class getHomeInterfaceClass(Class[] interfaces)
@@ -603,7 +626,7 @@ public class EJBTestModule
         return object;
     }
     
-    private Object invokeCreate(Object home, String createMethod, Object[] parameters)
+    private Object invokeHomeMethod(Object home, String createMethod, Object[] parameters)
     {
         try
         {
