@@ -6,6 +6,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.util.MessageResources;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.web.MockActionForward;
@@ -113,6 +114,14 @@ public class ActionTestCaseAdapter extends BaseTestCase
     protected void setValidate(boolean validate)
     {
         actionTestModule.setValidate(validate);
+    }
+    
+    /**
+     * Delegates to {@link ActionTestModule#setResources}
+     */
+    public void setResources(MessageResources resources)
+    {
+        actionTestModule.setResources(resources);
     }
     
     /**
