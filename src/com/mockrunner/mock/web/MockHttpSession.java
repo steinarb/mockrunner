@@ -11,6 +11,7 @@ import java.util.Vector;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionAttributeListener;
+import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 import javax.servlet.http.HttpSessionContext;
 
@@ -212,7 +213,7 @@ public class MockHttpSession implements HttpSession
     {
         for(int ii = 0; ii < attributeListener.size(); ii++)
         {
-            MockHttpSessionBindingEvent event = new MockHttpSessionBindingEvent(this, key, value);
+            HttpSessionBindingEvent event = new HttpSessionBindingEvent(this, key, value);
             ((HttpSessionAttributeListener)attributeListener.get(ii)).attributeAdded(event);
         }
     }
@@ -221,7 +222,7 @@ public class MockHttpSession implements HttpSession
     {
         for(int ii = 0; ii < attributeListener.size(); ii++)
         {
-            MockHttpSessionBindingEvent event = new MockHttpSessionBindingEvent(this, key, value);
+            HttpSessionBindingEvent event = new HttpSessionBindingEvent(this, key, value);
             ((HttpSessionAttributeListener)attributeListener.get(ii)).attributeReplaced(event);
         }
     }
@@ -230,7 +231,7 @@ public class MockHttpSession implements HttpSession
     {
         for(int ii = 0; ii < attributeListener.size(); ii++)
         {
-            MockHttpSessionBindingEvent event = new MockHttpSessionBindingEvent(this, key, value);
+            HttpSessionBindingEvent event = new HttpSessionBindingEvent(this, key, value);
             ((HttpSessionAttributeListener)attributeListener.get(ii)).attributeRemoved(event);
         }
     }
@@ -239,7 +240,7 @@ public class MockHttpSession implements HttpSession
     {
         if (value instanceof HttpSessionBindingListener)
         {
-            MockHttpSessionBindingEvent event = new MockHttpSessionBindingEvent(this, key, value);
+            HttpSessionBindingEvent event = new HttpSessionBindingEvent(this, key, value);
             ((HttpSessionBindingListener) value).valueBound(event);
         }
     }
@@ -248,7 +249,7 @@ public class MockHttpSession implements HttpSession
     {
         if (value instanceof HttpSessionBindingListener)
         {
-            MockHttpSessionBindingEvent event = new MockHttpSessionBindingEvent(this, key, value);
+            HttpSessionBindingEvent event = new HttpSessionBindingEvent(this, key, value);
             ((HttpSessionBindingListener) value).valueUnbound(event);
         }
     }

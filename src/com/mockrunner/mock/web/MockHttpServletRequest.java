@@ -18,7 +18,10 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletInputStream;
+//import javax.servlet.ServletRequestAttributeEvent;
+//import javax.servlet.ServletRequestAttributeListener;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -63,6 +66,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     private int localPort;
     private int remotePort;
     private boolean sessionCreated;
+    private List attributeListener;
     
     public MockHttpServletRequest()
     {
@@ -87,7 +91,13 @@ public class MockHttpServletRequest implements HttpServletRequest
         localPort = 8080;
         remotePort = 5000;
         sessionCreated = false;
+        attributeListener = new ArrayList();
     }
+    
+    /*public synchronized void addAttributeListener(ServletRequestAttributeListener listener)
+    {
+        attributeListener.add(listener);
+    }*/
     
     public String getParameter(String key)
     {
@@ -148,12 +158,19 @@ public class MockHttpServletRequest implements HttpServletRequest
 
     public void removeAttribute(String key)
     {
+        Object value = attributes.get(key);
         attributes.remove(key);
+        if(null != value)
+        {
+            //callAttributeListenersRemovedMethod(key, value);
+        }
     }
 
     public void setAttribute(String key, Object value)
     {
+        Object oldValue = attributes.get(key);
         attributes.put(key, value);
+        //handleAttributeListenerCalls(key, value, oldValue);
     }
     
     public HttpSession getSession()
@@ -618,5 +635,61 @@ public class MockHttpServletRequest implements HttpServletRequest
     public void setRemotePort(int remotePort)
     {
         this.remotePort = remotePort;
+    }
+    
+    /*private synchronized void handleAttributeListenerCalls(String key, Object value, Object oldValue)
+    {
+        if(null != oldValue)
+        {
+            if(value != null)
+            {
+                callAttributeListenersReplacedMethod(key, oldValue);
+            }
+            else
+            {
+                callAttributeListenersRemovedMethod(key, oldValue);
+            }
+        }
+        else
+        {
+            if(value != null)
+            {
+                callAttributeListenersAddedMethod(key, value);
+            }
+    
+        }
+    }*/
+    
+    /*private synchronized void callAttributeListenersAddedMethod(String key, Object value)
+    {
+        for(int ii = 0; ii < attributeListener.size(); ii++)
+        {
+            ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key, value);
+            ((ServletRequestAttributeListener)attributeListener.get(ii)).attributeAdded(event);
+        }
+    }*/
+    
+    /*private synchronized void callAttributeListenersReplacedMethod(String key, Object value)
+    {
+        for(int ii = 0; ii < attributeListener.size(); ii++)
+        {
+            ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key, value);
+            ((ServletRequestAttributeListener)attributeListener.get(ii)).attributeReplaced(event);
+        }
+    }*/
+
+    /*private synchronized void callAttributeListenersRemovedMethod(String key, Object value)
+    {
+        for(int ii = 0; ii < attributeListener.size(); ii++)
+        {
+            ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key, value);
+            ((ServletRequestAttributeListener)attributeListener.get(ii)).attributeRemoved(event);
+        }
+    }*/
+    
+    private ServletContext getServletContext()
+    {
+        if(null == session) return new MockServletContext();
+        return session.getServletContext();
     }
 }
