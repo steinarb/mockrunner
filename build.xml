@@ -549,14 +549,14 @@
 	            <include name="**/*" />
 	        </fileset>
 	    </copy>
-	    <copy todir="${releasedir}/jar">
+        <copy todir="${releasedir}/jar">
 	        <fileset dir="${lib}">
                 <patternset refid="runtime.jars" />
 	        </fileset>
 	    </copy>
         <antcall target="copyrelease" />      
         <antcall target="copyreleasejdk1.3" />   
-	    <zip destfile="${releasefile}" basedir="${bin}" />
+        <zip destfile="${releasefile}" basedir="${bin}" />
 	</target>
     
     <target name="copyrelease">
@@ -605,7 +605,7 @@
                 <include name="*.jar" />
             </fileset>
         </copy>
-        <antcall target="copyreleasejdk1.3j2ee1.3"/>   
+        <antcall target="copyreleasejdk1.3j2ee1.3"/>
     </target>
     
     <target name="copyreleasejdk1.3j2ee1.3" if="dobuild.j2ee1.3">
