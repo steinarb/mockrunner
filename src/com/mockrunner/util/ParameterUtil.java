@@ -2,10 +2,6 @@ package com.mockrunner.util;
 
 import java.io.InputStream;
 import java.io.Reader;
-import java.sql.Array;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Ref;
 import java.sql.SQLException;
 import java.util.Arrays;
 
@@ -102,19 +98,19 @@ public class ParameterUtil
         {
             return StreamUtil.compareReaders((Reader)source, (Reader)target);
         }
-        if(source instanceof Ref && target instanceof Ref)
+        if(source instanceof MockRef && target instanceof MockRef)
         {
             return compareRef(source, target);
         }
-        if(source instanceof Array && target instanceof Array)
+        if(source instanceof MockArray && target instanceof MockArray)
         {
             return compareArray(source, target);
         }
-        if(source instanceof Blob && target instanceof Blob)
+        if(source instanceof MockBlob && target instanceof MockBlob)
         {
             return compareBlob(source, target);
         }
-        if(source instanceof Clob && target instanceof Clob)
+        if(source instanceof MockClob && target instanceof MockClob)
         {
             return compareClob(source, target);
         }
@@ -125,8 +121,8 @@ public class ParameterUtil
     {
         try
         {
-            String sourceString = ((Clob)source).getSubString(1, (int)((Clob)source).length());
-            String targetString = ((Clob)target).getSubString(1, (int)((Clob)target).length());
+            String sourceString = ((MockClob)source).getSubString(1, (int)((MockClob)source).length());
+            String targetString = ((MockClob)target).getSubString(1, (int)((MockClob)target).length());
             return sourceString.equals(targetString);
         }
         catch(SQLException exc)
@@ -139,8 +135,8 @@ public class ParameterUtil
     {
         try
         {
-            byte[] sourceArray = ((Blob)source).getBytes(1, (int)((Blob)source).length());
-            byte[] targetArray = ((Blob)target).getBytes(1, (int)((Blob)target).length());
+            byte[] sourceArray = ((MockBlob)source).getBytes(1, (int)((MockBlob)source).length());
+            byte[] targetArray = ((MockBlob)target).getBytes(1, (int)((MockBlob)target).length());
             return Arrays.equals(sourceArray, targetArray);
         }
         catch(SQLException exc)
@@ -153,8 +149,8 @@ public class ParameterUtil
     {
         try
         {
-            Object[] sourceArray = ArrayUtil.convertToObjectArray(((Array)source).getArray());
-            Object[] targetArray = ArrayUtil.convertToObjectArray(((Array)target).getArray());
+            Object[] sourceArray = ArrayUtil.convertToObjectArray(((MockArray)source).getArray());
+            Object[] targetArray = ArrayUtil.convertToObjectArray(((MockArray)target).getArray());
             return Arrays.equals(sourceArray, targetArray);
         }
         catch(SQLException exc)
@@ -167,7 +163,7 @@ public class ParameterUtil
     {
         try
         {
-            return ((Ref)source).getObject().equals(((Ref)target).getObject());
+            return ((MockRef)source).getObject().equals(((MockRef)target).getObject());
         }
         catch(SQLException exc)
         {

@@ -2,3 +2,4 @@ bin
 build
 classes
 doc
+.ant.properties
