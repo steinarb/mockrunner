@@ -59,7 +59,7 @@ JUnit 3.8.1:
 http://www.junit.org
 junit.jar
 
-J2EE:
+J2EE (of course any other J2EE implementation is suitable):
 http://jakarta.apache.org/tomcat
 servlet.jar
 http://www.jboss.org
