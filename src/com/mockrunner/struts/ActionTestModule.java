@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.config.MessageResourcesConfig;
 import org.apache.struts.taglib.html.Constants;
 import org.apache.struts.util.MessageResources;
 
@@ -143,8 +144,11 @@ public class ActionTestModule
      */
     public void setResources(String key, MessageResources resources)
     {
+        MessageResourcesConfig config = new MessageResourcesConfig();
+        config.setKey(key);
+        mockFactory.getMockModuleConfig().addMessageResourcesConfig(config);
         key = key + mockFactory.getMockModuleConfig().getPrefix();
-        mockFactory.getMockServletContext().setAttribute(key, resources);
+        mockFactory.getMockServletContext().setAttribute(key, resources); 
     }
     
     /**

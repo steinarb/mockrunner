@@ -22,6 +22,7 @@ public class AllWebTests
         suite.addTest(new TestSuite(MockPageContextTest.class));
         suite.addTest(new TestSuite(WebMockObjectFactoryTest.class));
         suite.addTest(new TestSuite(MapMessageResourcesTest.class));
+        suite.addTest(new TestSuite(MockModuleConfigTest.class));
         //$JUnit-END$
         return suite;
     }
