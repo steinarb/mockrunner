@@ -48,12 +48,14 @@ public class BankTest extends JDBCTestCaseAdapter
         Bank bank = new Bank();
         bank.connect();
         bank.transfer(1, 2, 5000);
+        bank.disconnect();
         verifySQLStatementExecuted("select balance");
         verifySQLStatementNotExecuted("update account");
         verifyNotCommited();
         verifyRolledBack();
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();
+        verifyConnectionClosed();
     }
     
     public void testTransferOk() throws SQLException
@@ -62,13 +64,15 @@ public class BankTest extends JDBCTestCaseAdapter
         Bank bank = new Bank();
         bank.connect();
         bank.transfer(1, 2, 5000);
+        bank.disconnect();
         verifySQLStatementExecuted("select balance");
         verifySQLStatementExecuted("update account");
         verifyPreparedStatementParameter("update account", 1, new Integer(5000));
         verifyCommited();
         verifyNotRolledBack();
         verifyAllResultSetsClosed();
-        verifyAllStatementsClosed();    
+        verifyAllStatementsClosed();
+        verifyConnectionClosed(); 
     }
     
     public void testTransferFailure() throws SQLException
@@ -77,11 +81,13 @@ public class BankTest extends JDBCTestCaseAdapter
         Bank bank = new Bank();
         bank.connect();
         bank.transfer(1, 2, 20000);
+        bank.disconnect();
         verifySQLStatementExecuted("select balance");
         verifySQLStatementNotExecuted("update account");
         verifyNotCommited();
         verifyRolledBack();
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();
+        verifyConnectionClosed();
     }
 }
