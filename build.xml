@@ -99,7 +99,6 @@
   		<copy todir="${releasedir}/jar">
   			<fileset dir="${lib}">
 				<include name="**/*"/>
-				<exclude name="struts.jar" />
 				<exclude name="xercesImpl.jar" />
 				<exclude name="xml-apis.jar" />
 			</fileset>
