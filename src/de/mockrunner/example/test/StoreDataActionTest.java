@@ -19,7 +19,7 @@ import de.mockrunner.example.StoreDataAction;
  * {@link de.mockrunner.example.StoreDataAction} and the test
  * will fail.
  * {@link de.mockrunner.base.MultiThreadTestSuite} is meant to
- * make multithread resting much easier, but it is not working
+ * make multithread testing much easier, but it is not working
  * properly yet.
  */
 public class StoreDataActionTest extends ActionTestCaseAdapter

@@ -6,7 +6,7 @@ import de.mockrunner.example.ConstrainedNumericTextTag;
 /**
  * Example test for the {@link de.mockrunner.example.ConstrainedNumericTextTag}.
  * Demonstrates the usage of {@link de.mockrunner.base.TagTestModule} 
- * resp. {@link de.mockrunner.base.TagTestCaseAdapter} 
+ * resp. {@link de.mockrunner.base.TagTestCaseAdapter}.
  */
 public class ConstrainedNumericTextTagTest extends TagTestCaseAdapter
 {
