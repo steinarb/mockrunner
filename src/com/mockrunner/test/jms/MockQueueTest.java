@@ -2,15 +2,16 @@ package com.mockrunner.test.jms;
 
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.QueueSession;
+import javax.jms.Session;
 
+import junit.framework.TestCase;
+
+import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueConnection;
 import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSession;
 import com.mockrunner.mock.jms.MockTextMessage;
-
-import junit.framework.TestCase;
 
 public class MockQueueTest extends TestCase
 {
@@ -53,7 +54,7 @@ public class MockQueueTest extends TestCase
     
     public void testAddMessage() throws Exception
     {
-        MockQueueSession session = new MockQueueSession(connection, false, QueueSession.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session = new MockQueueSession(connection, false, Session.CLIENT_ACKNOWLEDGE);
         queue.addQueueSession(session);
         queue.addMessage(new MockTextMessage("test"));
         assertEquals(1, queue.getCurrentMessageList().size());
@@ -70,6 +71,7 @@ public class MockQueueTest extends TestCase
         assertEquals(1, queue.getReceivedMessageList().size());
         assertNull(queue.getMessage());
         assertEquals("test", listener1.getMessage().toString());
+        assertFalse(((MockMessage)listener1.getMessage()).isAcknowledged());
         assertNull(listener2.getMessage());
         session.setMessageListener(null);
         queue.reset();
@@ -80,6 +82,7 @@ public class MockQueueTest extends TestCase
         assertEquals(1, queue.getReceivedMessageList().size());
         assertNull(queue.getMessage());
         assertEquals("test", listener2.getMessage().toString());
+        assertFalse(((MockMessage)listener2.getMessage()).isAcknowledged());
         assertNull(listener1.getMessage());
         queue.reset();
         listener1.reset();
@@ -92,6 +95,7 @@ public class MockQueueTest extends TestCase
         assertEquals(1, queue.getReceivedMessageList().size());
         assertNull(queue.getMessage());
         assertEquals("test", listener2.getMessage().toString());
+        assertFalse(((MockMessage)listener2.getMessage()).isAcknowledged());
         assertNull(listener1.getMessage());
         queue.reset();
         listener1.reset();
@@ -103,6 +107,7 @@ public class MockQueueTest extends TestCase
         assertEquals(1, queue.getReceivedMessageList().size());
         assertNull(queue.getMessage());
         assertEquals("test", listener2.getMessage().toString());
+        assertFalse(((MockMessage)listener2.getMessage()).isAcknowledged());
         assertNull(listener1.getMessage());
         queue.reset();
         listener1.reset();
@@ -126,6 +131,41 @@ public class MockQueueTest extends TestCase
         assertNull(listener1.getMessage());
         assertNull(listener2.getMessage());
         assertEquals("test", queue.getMessage().toString());
+    }
+    
+    public void testAddMessageAutoAcknowledge() throws Exception
+    {
+        MockQueueSession session = new MockQueueSession(connection, false, Session.AUTO_ACKNOWLEDGE);
+        doTestAcknowledge(session);    
+    }
+
+    public void testAddMessageDupOkAcknowledge() throws Exception
+    {
+        MockQueueSession session = new MockQueueSession(connection, false, Session.DUPS_OK_ACKNOWLEDGE);
+        doTestAcknowledge(session);    
+    }
+    
+    private void doTestAcknowledge(MockQueueSession session) throws Exception
+    {
+        queue.addQueueSession(session);
+        MockTextMessage message = new MockTextMessage("text");
+        queue.addMessage(message);
+        assertFalse(message.isAcknowledged());
+        message = new MockTextMessage("text");
+        TestMessageListener listener = new TestMessageListener();
+        session.setMessageListener(listener);
+        queue.addMessage(message);
+        assertTrue(message.isAcknowledged());
+        session.setMessageListener(null);
+        message = new MockTextMessage("text");
+        MockQueueReceiver receiver = (MockQueueReceiver)session.createReceiver(queue);
+        receiver.setMessageListener(listener);
+        queue.addMessage(message);
+        assertTrue(message.isAcknowledged());
+        receiver.setMessageListener(null);
+        message = new MockTextMessage("text");
+        queue.addMessage(message);
+        assertFalse(message.isAcknowledged());
     }
     
     public static class TestMessageListener implements MessageListener

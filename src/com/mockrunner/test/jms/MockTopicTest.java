@@ -6,6 +6,7 @@ import javax.jms.Session;
 
 import junit.framework.TestCase;
 
+import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockTextMessage;
 import com.mockrunner.mock.jms.MockTopic;
 import com.mockrunner.mock.jms.MockTopicConnection;
@@ -70,6 +71,7 @@ public class MockTopicTest extends TestCase
         assertEquals(1, topic.getReceivedMessageList().size());
         assertNull(topic.getMessage());
         assertEquals("test", listener1.getMessage().toString());
+        assertFalse(((MockMessage)listener1.getMessage()).isAcknowledged());
         assertNull(listener2.getMessage());
         session.setMessageListener(null);
         topic.reset();
@@ -83,6 +85,8 @@ public class MockTopicTest extends TestCase
         assertNull(topic.getMessage());
         assertEquals("test", listener1.getMessage().toString());
         assertEquals("test", listener2.getMessage().toString());
+        assertFalse(((MockMessage)listener1.getMessage()).isAcknowledged());
+        assertFalse(((MockMessage)listener2.getMessage()).isAcknowledged());
         topic.reset();
         listener1.reset();
         listener2.reset();
@@ -114,7 +118,9 @@ public class MockTopicTest extends TestCase
         assertEquals(0, topic.getCurrentMessageList().size());
         assertEquals(1, topic.getReceivedMessageList().size());
         assertEquals("test", listener1.getMessage().toString());
-        assertEquals("test", listener2.getMessage().toString());     
+        assertEquals("test", listener2.getMessage().toString()); 
+        assertFalse(((MockMessage)listener1.getMessage()).isAcknowledged());
+        assertFalse(((MockMessage)listener2.getMessage()).isAcknowledged());
         topic.reset();
         listener1.reset();
         listener2.reset();
@@ -131,6 +137,47 @@ public class MockTopicTest extends TestCase
         assertEquals(0, topic.getCurrentMessageList().size());
         assertEquals(1, topic.getReceivedMessageList().size());
         assertEquals("test", listener1.getMessage().toString());
+        assertFalse(((MockMessage)listener1.getMessage()).isAcknowledged());
+    }
+    
+    public void testAddMessageAutoAcknowledge() throws Exception
+    {
+        MockTopicSession session = new MockTopicSession(connection, false, Session.AUTO_ACKNOWLEDGE);
+        doTestAcknowledge(session);    
+    }
+    
+    public void testAddMessageDupOkAcknowledge() throws Exception
+    {
+        MockTopicSession session = new MockTopicSession(connection, false, Session.DUPS_OK_ACKNOWLEDGE);
+        doTestAcknowledge(session);    
+    }
+    
+    private void doTestAcknowledge(MockTopicSession session) throws Exception
+    {
+        topic.addTopicSession(session);
+        MockTextMessage message = new MockTextMessage("text");
+        topic.addMessage(message);
+        assertFalse(message.isAcknowledged());
+        message = new MockTextMessage("text");
+        TestMessageListener listener = new TestMessageListener();
+        session.setMessageListener(listener);
+        topic.addMessage(message);
+        assertTrue(message.isAcknowledged());
+        session.setMessageListener(null);
+        message = new MockTextMessage("text");
+        MockTopicSubscriber subscriber = (MockTopicSubscriber)session.createSubscriber(topic);
+        subscriber.setMessageListener(listener);
+        topic.addMessage(message);
+        assertTrue(message.isAcknowledged());
+        subscriber.setMessageListener(null);
+        message = new MockTextMessage("text");
+        topic.addMessage(message);
+        assertFalse(message.isAcknowledged());
+        subscriber = (MockTopicSubscriber)session.createDurableSubscriber(topic, "myDurable");
+        subscriber.setMessageListener(listener);
+        message = new MockTextMessage("text");
+        topic.addMessage(message);
+        assertTrue(message.isAcknowledged());
     }
     
     public static class TestMessageListener implements MessageListener
