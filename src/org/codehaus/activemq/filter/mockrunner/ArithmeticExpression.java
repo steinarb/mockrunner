@@ -24,9 +24,7 @@ import javax.jms.Message;
 /**
  * An expression which performs an operation on two expression values
  * 
- * Alwin Ibba: Changed package
- * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class ArithmeticExpression extends BinaryExpression {
 

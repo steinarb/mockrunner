@@ -37,7 +37,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * Java 1.4 regular expressions. This makes the class usable with
  * Java 1.3
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class ComparisonExpression extends BinaryExpression implements BooleanExpression {
 
@@ -149,6 +149,7 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
             }
 
             return (new Perl5Matcher().matches((String)rv, likePattern)) ? Boolean.TRUE : Boolean.FALSE;
+
         }
 
     }
