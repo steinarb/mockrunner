@@ -5,6 +5,7 @@ mockrunner-0.3.1:
   migratingfrom0.3.txt for details)
 - replaced all System.out and exc.printStackTrace with commons-logging
   statements in all framework classes
+- UserTransaction is now automatically bound to java:comp/UserTransaction
 - updated Struts jars from 1.2.1 to 1.2.2
 
 mockrunner-0.3:
