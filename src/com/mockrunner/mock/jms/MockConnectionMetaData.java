@@ -12,10 +12,24 @@ import javax.jms.JMSException;
 public class MockConnectionMetaData implements ConnectionMetaData
 {
     private Vector properties;
+    private int jmsMajorVersion;
+    private int jmsMinorVersion;
+    private String jmsProviderName;
+    private String jmsVersion;
+    private int providerMajorVersion;
+    private int providerMinorVersion;
+    private String providerVersion;
     
     public MockConnectionMetaData()
     {
         properties = new Vector();
+        jmsMajorVersion = 1;
+        jmsMinorVersion = 1;
+        jmsProviderName = "Mockrunner";
+        jmsVersion = "1.1";
+        providerMajorVersion = 1;
+        providerMinorVersion = 0;
+        providerVersion = "1.0";
     }
     
     public void addJMSXPropertyName(String name)
@@ -23,24 +37,59 @@ public class MockConnectionMetaData implements ConnectionMetaData
         properties.add(name);
     }
     
+    public void setJMSMajorVersion(int jmsMajorVersion)
+    {
+        this.jmsMajorVersion = jmsMajorVersion;
+    }
+
+    public void setJMSMinorVersion(int jmsMinorVersion)
+    {
+        this.jmsMinorVersion = jmsMinorVersion;
+    }
+    
+    public void setJMSProviderName(String jmsProviderName)
+    {
+        this.jmsProviderName = jmsProviderName;
+    }
+
+    public void setJMSVersion(String jmsVersion)
+    {
+        this.jmsVersion =jmsVersion;
+    }
+    
+    public void setProviderMajorVersion(int providerMajorVersion)
+    {
+        this.providerMajorVersion = providerMajorVersion;
+    }
+
+    public void setProviderMinorVersion(int providerMinorVersion)
+    {
+        this.providerMinorVersion = providerMinorVersion;
+    }
+
+    public void setProviderVersion(String providerVersion)
+    {
+        this.providerVersion = providerVersion;
+    }
+    
     public int getJMSMajorVersion() throws JMSException
     {
-        return 1;
+        return jmsMajorVersion;
     }
 
     public int getJMSMinorVersion() throws JMSException
     {
-        return 1;
+        return jmsMinorVersion;
     }
 
     public String getJMSProviderName() throws JMSException
     {
-        return "Mockrunner";
+        return jmsProviderName;
     }
 
     public String getJMSVersion() throws JMSException
     {
-        return "1.1";
+        return jmsVersion;
     }
 
     public Enumeration getJMSXPropertyNames() throws JMSException
@@ -50,16 +99,16 @@ public class MockConnectionMetaData implements ConnectionMetaData
 
     public int getProviderMajorVersion() throws JMSException
     {
-        return 1;
+        return providerMajorVersion;
     }
 
     public int getProviderMinorVersion() throws JMSException
     {
-        return 0;
+        return providerMinorVersion;
     }
 
     public String getProviderVersion() throws JMSException
     {
-        return "1.0";
+        return providerVersion;
     }
 }
