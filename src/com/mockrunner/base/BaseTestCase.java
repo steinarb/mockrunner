@@ -2,6 +2,8 @@ package com.mockrunner.base;
 
 import junit.framework.TestCase;
 
+import org.mockejb.jndi.MockContextFactory;
+
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.jdbc.JDBCTestModule;
 import com.mockrunner.jms.JMSTestModule;
@@ -37,6 +39,7 @@ public abstract class BaseTestCase extends TestCase
     {
         super.tearDown();
         jdbcMockFactory.restoreDrivers();
+        MockContextFactory.revertSetAsInitial();
         webMockFactory = null;
         jdbcMockFactory = null;
         ejbMockFactory = null;
