@@ -548,7 +548,7 @@ public class EJBTestModuleTest extends TestCase
 			}
 			catch(JMSException exc)
 			{
-				throw new RuntimeException(exc);
+				throw new RuntimeException(exc.getMessage());
 			}
 			this.message = message;
 		}

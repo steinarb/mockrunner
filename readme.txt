@@ -98,7 +98,7 @@ related to the test module you use.
 
 The third-party libraries included in the Mockrunner release are:
 
-Struts 1.2.2
+Struts 1.2.2:
 http://jakarta.apache.org/struts
 struts.jar
 
@@ -114,27 +114,26 @@ JBoss 3.2.3:
 http://www.jboss.org
 jboss-j2ee.jar                
 
-Commons (from Struts 1.2.2 release):
+Commons:
 http://jakarta.apache.org/commons       
-commons-logging.jar
-commons-logging-api.jar
-commons-collections.jar
-commons-beanutils.jar
-commons-digester.jar
-commons-validator.jar
-commons-lang-2.0.jar (not included in Struts 1.2.1 release)
+commons-logging.jar (from Struts 1.2.2 release)
+commons-collections.jar (from Struts 1.2.2 release)
+commons-beanutils.jar (from Struts 1.2.2 release)
+commons-digester.jar (from Struts 1.2.2 release)
+commons-validator.jar (from Struts 1.2.2 release)
+commons-lang-2.0.jar
 
-ORO (from Struts 1.2.1 release):
-http://jakarta.apache.org/oro
-jakarta-oro.jar
-
-MockEJB 0.6 beta1:
+MockEJB 0.6 beta2:
 http://mockejb.sourceforge.net
 mockejb.jar
 
-cglib (from MockEJB 0.6 beta1 release):
+ORO:
+http://jakarta.apache.org/oro
+jakarta-oro-2.0.8.jar (from MockEJB 0.6 beta2 release)
+
+cglib:
 http://cglib.sourceforge.net
-cglib-full-2.0-RC2.jar
+cglib-full-2.0-RC2.jar (from MockEJB 0.6 beta2 release)
 
 JDOM Beta 10:
 http://www.jdom.org
