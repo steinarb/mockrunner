@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.Savepoint;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -616,4 +618,222 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyResultSetRowDeleted(resultSet, 3);
         module.verifyResultSetRowNotUpdated(resultSet, 4);
     }
+    
+    public void testGetExecutedSQLStatementParameter() throws Exception
+    {
+		prepareStatements();
+		preparePreparedStatements();
+		prepareCallableStatements();
+		module.getPreparedStatement(0).setString(1, "test");
+		module.getPreparedStatement(0).setShort(2, (short)2);
+		module.getPreparedStatement(1).setBytes(1, new byte[]{1});
+		module.getCallableStatement(1).setBoolean("name", false);
+		module.getStatement(0).execute("select mydata");
+		module.getStatement(1).execute("select mydata");
+		module.getPreparedStatement(0).execute();
+		module.getPreparedStatement(1).execute();
+		module.getPreparedStatement(2).execute();
+		module.getCallableStatement(0).execute();
+		module.getCallableStatement(1).execute();
+		Map parameterMap = module.getExecutedSQLStatementParameter();
+		assertEquals(5, parameterMap.size());
+		Map preparedStatementMap1 = (Map)((List)parameterMap.get("INSERT INTO TEST (COL1, COL2) VALUES(?, ?)")).get(0);
+		assertEquals(2, preparedStatementMap1.size());
+		assertEquals("test", preparedStatementMap1.get(new Integer(1)));
+		assertEquals(new Short((short)2), preparedStatementMap1.get(new Integer(2)));
+		Map preparedStatementMap2 = (Map)((List)parameterMap.get("insert into test (col1, col2, col3) values(?, ?, ?)")).get(0);
+		assertEquals(1, preparedStatementMap2.size());
+		assertTrue(Arrays.equals(new byte[]{1}, (byte[])preparedStatementMap2.get(new Integer(1))));
+		Map preparedStatementMap3 = (Map)((List)parameterMap.get("update mytable set test = test + ? where id = ?")).get(0);
+		assertEquals(0, preparedStatementMap3.size());
+		Map callableStatementMap1 = (Map)((List)parameterMap.get("{call getData(?, ?, ?, ?)}")).get(0);
+		assertEquals(0, callableStatementMap1.size());
+		Map callableStatementMap2 = (Map)((List)parameterMap.get("{call setData(?, ?, ?, ?)}")).get(0);
+		assertEquals(1, callableStatementMap2.size());
+		assertEquals(new Boolean(false), callableStatementMap2.get("name"));
+    }
+    
+	public void testSQLStatementParameterNumber() throws Exception
+	{
+		preparePreparedStatements();
+		prepareCallableStatements();
+		module.getPreparedStatement(0).setString(1, "test");
+		module.getPreparedStatement(0).setString(2, "test");
+		module.getCallableStatement(0).setString("name", "test");
+		module.getCallableStatement(1).setString(1, "test");
+		module.getPreparedStatement(0).execute();
+		module.getPreparedStatement(1).execute();
+		module.getPreparedStatement(2).execute();
+		module.getCallableStatement(0).execute();
+		module.getCallableStatement(1).execute();
+		module.verifySQLStatementParameterNumber("INSERT INTO TEST (COL1, COL2) VALUES(?,", 0, 2);
+		module.verifySQLStatementParameterNumber("insert into test (col1, col2, col3) values(?, ?, ?)", 0, 0);
+		module.verifySQLStatementParameterNumber("update mytable set test = test + ? where id = ?", 0, 0);
+		module.verifySQLStatementParameterNumber("{call getData(?, ?, ?, ?)}", 0, 01);
+		module.verifySQLStatementParameterNumber("{call setData(?, ", 0, 1);
+		try
+		{
+			module.verifySQLStatementParameterNumber("{call getData(?, ?, ?, ?)}", 0, 3);
+			fail();
+		}
+		catch (VerifyFailedException exc)
+		{
+			//should throw exception
+		}
+		try
+		{
+			module.verifySQLStatementParameterNumber("insert into test (col1, col2, col3) values(?, ?, ?)", 0, 1);
+			fail();
+		}
+		catch (VerifyFailedException exc)
+		{
+			//should throw exception
+		}
+		try
+		{
+			module.verifySQLStatementParameterNumber("xyz", 0, 0);
+			fail();
+		}
+		catch(VerifyFailedException exc)
+		{
+			//should throw exception
+		}
+	}
+	
+	public void testSQLStatementParameterPreparedStatement() throws Exception
+	{
+		preparePreparedStatements();
+		module.getPreparedStatement(1).setString(1, "test1");
+		module.getPreparedStatement(1).setInt(2, 3);
+		module.getPreparedStatement(0).execute();
+		module.getPreparedStatement(1).execute();
+		module.getPreparedStatement(2).execute();
+		Map emptyMap = new HashMap();
+		Map okTestMap = new HashMap();
+		okTestMap.put(new Integer(1), "test1");
+		okTestMap.put(new Integer(2), new Integer(3));
+		Map failureTestMap1 = new HashMap();
+		failureTestMap1.put(new Integer(1), "test1");
+		failureTestMap1.put(new Integer(2), new Integer(2));
+		Map failureTestMap2 = new HashMap();
+		failureTestMap2.put(new Integer(1), "test1");
+		failureTestMap2.put(new Integer(2), new Integer(3));
+		failureTestMap2.put(new Integer(3), new Integer(3));
+		module.verifySQLStatementParameter("update mytable set test = test", 0, emptyMap);
+		module.verifySQLStatementParameter("insert into test (col1, col2, col3)", 0, okTestMap);
+		try
+		{
+			module.verifySQLStatementParameter("insert into test (col1, col2, col3) values(?, ?, ?)", 0, 0, failureTestMap1);
+			fail();
+		}
+		catch(VerifyFailedException exc)
+		{
+			//should throw exception
+		}
+		try
+		{
+			module.verifySQLStatementParameter("insert into test (col1, col2, col3) values(?, ?, ?)", 0, failureTestMap2);
+			fail();
+		}
+		catch(VerifyFailedException exc)
+		{
+			//should throw exception
+		}
+		try
+		{
+			module.verifySQLStatementParameter("INSERT INTO TEST (COL1, COL2) VALUES(?, ?)", 0, okTestMap);
+			fail();
+		}
+		catch(VerifyFailedException exc)
+		{
+			//should throw exception
+		}
+	}
+	
+	public void testSQLStatementParameterCallableStatement() throws Exception
+	{
+		prepareCallableStatements();
+		module.getCallableStatement(0).setString(1, "test1");
+		module.getCallableStatement(0).setBytes(2, new byte[] {1});
+		module.getCallableStatement(0).setInt("name", 1);
+		module.getCallableStatement(0).execute();
+		module.getCallableStatement(1).execute();
+		module.verifySQLStatementParameter("{call getData(?, ?", 0, 1, "test1");
+		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 0, 2, new byte[] {1});
+		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 0, "name", new Integer(1));
+		try
+		{
+			module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 0, 2, new byte[] {1, 2});
+			fail();
+		}
+		catch(VerifyFailedException exc)
+		{
+			//should throw exception
+		}
+		try
+		{
+			module.verifySQLStatementParameter("{call setData(?, ?, ?, ?)}", 0, 1, "");
+			fail();
+		}
+		catch(VerifyFailedException exc)
+		{
+			//should throw exception
+		}
+		try
+		{
+			module.verifySQLStatementParameter("select", 0, 1, "");
+			fail();
+		}
+		catch(VerifyFailedException exc)
+		{
+			//should throw exception
+		}
+		module.setCaseSensitive(true);
+		try
+		{
+			module.verifySQLStatementParameter("{CALL getData(?, ?", 0, 1, "test1");
+			fail();
+		}
+		catch(VerifyFailedException exc)
+		{
+			//should throw exception
+		}
+	}
+	
+	public void testSQLStatementParameterMultipleParameterSets() throws Exception
+	{
+		prepareCallableStatements();
+		module.getCallableStatement(0).setString(1, "test1");
+		module.getCallableStatement(0).execute();
+		module.getCallableStatement(0).setString(1, "xyz");
+		module.getCallableStatement(0).setBoolean("name", true);
+		module.getCallableStatement(0).execute();
+		module.getCallableStatement(0).execute();
+		module.verifySQLStatementParameterNumber("{call getData(?, ?, ?, ?)}", 0, 1);
+		module.verifySQLStatementParameterNumber("{call getData(?, ?, ?, ?)}", 1, 2);
+		module.verifySQLStatementParameterNumber("{call getData(?, ?, ?, ?)}", 2, 2);
+		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 1, 1, "xyz");
+		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 1, "name", new Boolean(true));
+		HashMap testMap = new HashMap();
+		testMap.put(new Integer(1), "test1");
+		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 0, testMap);
+		try
+		{
+			module.verifySQLStatementParameterNumber("{call getData(?, ?, ?, ?)}", 2, 0);
+			fail();
+		}
+		catch (VerifyFailedException exc)
+		{
+			//should throw exception
+		}
+		try
+		{
+			module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 0, new HashMap());
+			fail();
+		}
+		catch (VerifyFailedException exc)
+		{
+			//should throw exception
+		}
+	}
 }

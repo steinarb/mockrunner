@@ -342,33 +342,33 @@ public class JDBCTestCaseAdapter extends BaseTestCase
 	/**
 	 * Delegates to {@link JDBCTestModule#verifySQLStatementParameterNumber}
 	 */
-	protected void verifySQLStatementParameterNumber(String sql, int number)
+	protected void verifySQLStatementParameterNumber(String sql, int indexOfParameterSet, int number)
 	{
-		jdbcTestModule.verifySQLStatementParameterNumber(sql, number);
+		jdbcTestModule.verifySQLStatementParameterNumber(sql, indexOfParameterSet, number);
 	}
 
 	/**
-	 * Delegates to {@link JDBCTestModule#verifySQLStatementParameter(String, Map)}
+	 * Delegates to {@link JDBCTestModule#verifySQLStatementParameter(String, int, Map)}
 	 */
-	protected void verifySQLStatementParameter(String sql, Map parameterMap)
+	protected void verifySQLStatementParameter(String sql, int indexOfParameterSet, Map parameterMap)
 	{
-		jdbcTestModule.verifySQLStatementParameter(sql, parameterMap);
+		jdbcTestModule.verifySQLStatementParameter(sql, indexOfParameterSet, parameterMap);
 	}
 	
 	/**
-	 * Delegates to {@link JDBCTestModule#verifySQLStatementParameter(String, int, Object)}
+	 * Delegates to {@link JDBCTestModule#verifySQLStatementParameter(String, int, int, Object)}
 	 */
-	protected void verifySQLStatementParameter(String sql, int indexOfParameter, Object expectedParameter)
+	protected void verifySQLStatementParameter(String sql, int indexOfParameterSet, int indexOfParameter, Object expectedParameter)
 	{
-		jdbcTestModule.verifySQLStatementParameter(sql, indexOfParameter, expectedParameter);
+		jdbcTestModule.verifySQLStatementParameter(sql, indexOfParameterSet, indexOfParameter, expectedParameter);
 	}
 
 	/**
-	 * Delegates to {@link JDBCTestModule#verifySQLStatementParameter(String, String, Object)}
+	 * Delegates to {@link JDBCTestModule#verifySQLStatementParameter(String, int, String, Object)}
 	 */
-	protected void verifySQLStatementParameter(String sql, String nameOfParameter, Object expectedParameter)
+	protected void verifySQLStatementParameter(String sql, int indexOfParameterSet, String nameOfParameter, Object expectedParameter)
 	{
-		jdbcTestModule.verifySQLStatementParameter(sql, nameOfParameter, expectedParameter);
+		jdbcTestModule.verifySQLStatementParameter(sql, indexOfParameterSet, nameOfParameter, expectedParameter);
 	}
     
 	/**

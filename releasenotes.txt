@@ -7,6 +7,8 @@ mockrunner-0.2.9:
   of ActiveMQ selector parser, see http://activemq.codehaus.org/)
 - changed the default JMS delivery mode to PERSISTENT
 - it's now possible to clone JMS messages before sending (default is not cloning)
+- it's now possible to verify multiple parameter sets of one PreparedStatement,
+  please check out the modified BankTest example
 - fixed problem with MockStatement.getMoreResults(), now returns true, if there
   is a ResultSet
 - added excluded-properties to fix classloader problem with JUnit and commons-logging.jar

@@ -11,6 +11,25 @@ import java.util.Map;
  */
 public class SearchUtil
 {
+	/**
+	 * Compares all keys in the specified <code>Map</code> with the
+	 * specified query string using the method {@link #doesStringMatch}.
+	 * If the strings match, the corresponding object from the <code>Map</code>
+	 * is added to the resulting <code>List</code>.
+	 * @param dataMap the source <code>Map</code>
+	 * @param query the query string that must match the keys in <i>dataMap</i>
+	 * @param caseSensitive is comparison case sensitive
+	 * @param exactMatch compare exactly
+	 * @param queryContainsMapData only matters if <i>exactMatch</i> is <code>false</code>,
+	 *        specifies if query must be contained in the <code>Map</code> keys (<code>false</code>)
+	 *        or if query must contain the <code>Map</code> keys (<code>true</code>)
+	 * @return the result <code>List</code>
+	 */
+	public static List getMatchingObjects(Map dataMap, String query, boolean caseSensitive, boolean exactMatch, boolean queryContainsMapData)
+	{
+		return getMatchingObjects(dataMap, query, caseSensitive, exactMatch, queryContainsMapData, false);
+	}
+    
     /**
      * Compares all keys in the specified <code>Map</code> with the
      * specified query string using the method {@link #doesStringMatch}.
@@ -27,40 +46,45 @@ public class SearchUtil
      *        or if query must contain the <code>Map</code> keys (<code>true</code>)
      * @return the result <code>List</code>
      */
-    public static List getMatchingObjects(Map dataMap, String query, boolean caseSensitive, boolean exactMatch, boolean queryContainsMapData)
+    public static List getMatchingObjectsResolveCollection(Map dataMap, String query, boolean caseSensitive, boolean exactMatch, boolean queryContainsMapData)
     {
-        if(null == query) query = "";
-        Iterator iterator = dataMap.keySet().iterator();
-        ArrayList resultList = new ArrayList();
-        while(iterator.hasNext())
-        {
-            String nextKey = (String)iterator.next();
-            String source, currentQuery;
-            if(queryContainsMapData)
-            {
-                source = query;
-                currentQuery = nextKey;
-            }
-            else
-            {
-                source = nextKey;
-                currentQuery = query;
-            }
-            if(doesStringMatch(source, currentQuery, caseSensitive, exactMatch))
-            {
-                Object matchingObject = dataMap.get(nextKey);
-                if(matchingObject instanceof Collection)
-                {
-                    resultList.addAll((Collection)matchingObject);
-                }
-                else
-                {
-                    resultList.add(dataMap.get(nextKey));
-                }    
-            } 
-        }
-        return resultList;
+        return getMatchingObjects(dataMap, query, caseSensitive, exactMatch, queryContainsMapData, true);
     }
+    
+	private static List getMatchingObjects(Map dataMap, String query, boolean caseSensitive, boolean exactMatch, boolean queryContainsMapData, boolean resolveCollection)
+	{
+		if(null == query) query = "";
+		Iterator iterator = dataMap.keySet().iterator();
+		ArrayList resultList = new ArrayList();
+		while(iterator.hasNext())
+		{
+			String nextKey = (String)iterator.next();
+			String source, currentQuery;
+			if(queryContainsMapData)
+			{
+				source = query;
+				currentQuery = nextKey;
+			}
+			else
+			{
+				source = nextKey;
+				currentQuery = query;
+			}
+			if(doesStringMatch(source, currentQuery, caseSensitive, exactMatch))
+			{
+				Object matchingObject = dataMap.get(nextKey);
+				if(resolveCollection && (matchingObject instanceof Collection))
+				{
+					resultList.addAll((Collection)matchingObject);
+				}
+				else
+				{
+					resultList.add(dataMap.get(nextKey));
+				}    
+			} 
+		}
+		return resultList;
+	}
     
     /**
      * Compares all elements in the specified <code>Collection</code> with the

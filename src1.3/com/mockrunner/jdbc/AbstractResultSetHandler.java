@@ -217,7 +217,7 @@ public abstract class AbstractResultSetHandler
 	 */
 	public MockResultSet getResultSet(String sql)
 	{
-		List list = SearchUtil.getMatchingObjects(resultSetsForStatement, sql, getCaseSensitive(), getExactMatch(), true);
+		List list = SearchUtil.getMatchingObjectsResolveCollection(resultSetsForStatement, sql, getCaseSensitive(), getExactMatch(), true);
 		if(null != list && list.size() > 0)
 		{
 			return (MockResultSet)list.get(0);
@@ -247,7 +247,7 @@ public abstract class AbstractResultSetHandler
 	 */
 	public Integer getUpdateCount(String sql)
 	{
-		List list = SearchUtil.getMatchingObjects(updateCountForStatement, sql, getCaseSensitive(), getExactMatch(), true);
+		List list = SearchUtil.getMatchingObjectsResolveCollection(updateCountForStatement, sql, getCaseSensitive(), getExactMatch(), true);
 		if(null != list && list.size() > 0)
 		{
 			return (Integer)list.get(0);
@@ -279,7 +279,7 @@ public abstract class AbstractResultSetHandler
 	 */
 	public Boolean getReturnsResultSet(String sql)
 	{
-		List list = SearchUtil.getMatchingObjects(returnsResultSetMap, sql, getCaseSensitive(), getExactMatch(), true);
+		List list = SearchUtil.getMatchingObjectsResolveCollection(returnsResultSetMap, sql, getCaseSensitive(), getExactMatch(), true);
 		if(null != list && list.size() > 0)
 		{
 			return (Boolean)list.get(0);
