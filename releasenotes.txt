@@ -11,7 +11,7 @@ mockrunner-0.3.1:
 - improved version of UserTransaction
 - UserTransaction is now automatically bound to java:comp/UserTransaction
 - fixed getPreparedStatementResultSetHandler() problem in BookstoreTest
-- improved version of MockActionMapping as suggested by Eu Gene, it
+- improved version of MockActionMapping as suggested by Lim Eu Gene, it
   allows to setup forwards with specified path.
 - added setResourceAsStream(String path, InputStream inputStream) method 
   to MockServletContext
