@@ -31,7 +31,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     private Map attributes;
     private Map parameters;
     private Vector locales;
-    private MockRequestDispatcher dispatcher;
+    private Map requestDispatchers;
     private HttpSession session;
     private String method;
     private String authType;
@@ -68,7 +68,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         attributes = new HashMap();
         parameters = new HashMap();
         locales = new Vector();
-        dispatcher = new MockRequestDispatcher();
+        requestDispatchers = new HashMap();
         method = "GET";
         headers = new HashMap();
         requestedSessionIdIsFromCookie = true;
@@ -169,9 +169,42 @@ public class MockHttpServletRequest implements HttpServletRequest
         this.session = session;   
     }
 
-    public RequestDispatcher getRequestDispatcher(String arg0)
+    public RequestDispatcher getRequestDispatcher(String path)
     {
+        MockRequestDispatcher dispatcher = (MockRequestDispatcher)requestDispatchers.get(path);
+        if(null == dispatcher)
+        {
+            dispatcher = new MockRequestDispatcher();
+            setRequestDispatcher(path, dispatcher);
+        }
         return dispatcher;
+    }
+    
+    /**
+     * Returns the map of <code>RequestDispatcher</code> objects. The specified path
+     * maps to the corresponding <code>RequestDispatcher</code> object.
+     * @return the map of <code>RequestDispatcher</code> objects
+     */
+    public Map getRequestDispatcherMap()
+    {
+        return Collections.unmodifiableMap(requestDispatchers);
+    }
+    
+    /**
+     * Sets a <code>RequestDispatcher</code> that will be returned when calling
+     * {#getRequestDispatcher} with the specified path. If no <code>RequestDispatcher</code>
+     * is set for the specified path, {#getRequestDispatcher} automatically creates a
+     * new one.
+     * @param path the path for the <code>RequestDispatcher</code>
+     * @param dispatcher the <code>RequestDispatcher</code> object
+     */
+    public void setRequestDispatcher(String path, RequestDispatcher dispatcher)
+    {
+        if(dispatcher instanceof MockRequestDispatcher)
+        {
+            ((MockRequestDispatcher)dispatcher).setPath(path);
+        }
+        requestDispatchers.put(path, dispatcher);
     }
     
     public Locale getLocale()

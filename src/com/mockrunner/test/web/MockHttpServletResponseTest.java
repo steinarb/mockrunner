@@ -1,8 +1,12 @@
 package com.mockrunner.test.web;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import com.mockrunner.mock.web.MockHttpServletResponse;
+import com.mockrunner.mock.web.WebConstants;
 
 import junit.framework.TestCase;
 
@@ -28,7 +32,9 @@ public class MockHttpServletResponseTest extends TestCase
         assertTrue(response.getHeaderList("testHeader").contains("abc"));
         assertEquals("abc", response.getHeader("testHeader"));
         response.addDateHeader("dateHeader", 0);
-        assertEquals("Thu, 1 Jan 1970 01:00:00 +0100", response.getHeader("dateHeader"));
+        SimpleDateFormat expectedDateFormat = new SimpleDateFormat(WebConstants.DATE_FORMAT_HEADER, Locale.US);
+        String expectedDateString = expectedDateFormat.format(new Date(0));
+        assertEquals(expectedDateString, response.getHeader("dateHeader"));
         response.addIntHeader("intHeader", 0);
         assertEquals("0", response.getHeader("intHeader"));
     }
