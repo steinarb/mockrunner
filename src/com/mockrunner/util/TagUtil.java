@@ -30,10 +30,13 @@ public class TagUtil
      * @param pageContext the corresponding <code>PageContext</code>
      * @param attributes the attribute map
      * @return the instance of {@link com.mockrunner.tag.NestedTag}
+     * @throws RuntimeException if <code>tag</code> is not an
+     *         instance of <code>TagSupport</code>
      */
     public static TagSupport createNestedTagInstance(Class tag, PageContext pageContext, Map attributes)
 	{
 		if(null == tag) throw new RuntimeException("tag must not be null");
+        if(!TagSupport.class.isAssignableFrom(tag)) throw new RuntimeException("tag must be an instance of javax.servlet.jsp.tagext.TagSupport");
 		TagSupport tagSupport;
 		try
 		{

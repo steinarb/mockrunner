@@ -1,8 +1,9 @@
 package com.mockrunner.base;
 
 import com.mockobjects.servlet.MockServletConfig;
-
 import com.mockrunner.mock.MockActionMapping;
+import com.mockrunner.mock.MockFilterChain;
+import com.mockrunner.mock.MockFilterConfig;
 import com.mockrunner.mock.MockHttpServletRequest;
 import com.mockrunner.mock.MockHttpServletResponse;
 import com.mockrunner.mock.MockHttpSession;
@@ -25,6 +26,8 @@ public class MockObjectFactory
     private MockHttpSession session;
     private MockActionMapping mapping;
     private MockPageContext pageContext;
+    private MockFilterConfig filterConfig;
+    private MockFilterChain filterChain;
 
     /**
      * Creates a new set of mock objects.
@@ -90,6 +93,8 @@ public class MockObjectFactory
         response = new MockHttpServletResponse();
         if(createNewSession) session = new MockHttpSession();
         mapping = new MockActionMapping();
+        filterChain = new MockFilterChain();
+        filterConfig = new MockFilterConfig();
     }
 
     private void setUpDependencies()
@@ -98,6 +103,12 @@ public class MockObjectFactory
         request.setSession(session);
         session.setupServletContext(context);
         pageContext = new MockPageContext(config, request, response);
+        filterConfig.setupGetServletContext(context);
+    }
+    
+    public MockFilterChain createNewMockFilterChain()
+    {
+        return new MockFilterChain();
     }
 
     public MockServletConfig getMockServletConfig()
@@ -138,5 +149,15 @@ public class MockObjectFactory
     public MockPageContext getMockPageContext()
     {
         return pageContext;
+    }
+    
+    public MockFilterConfig getMockFilterConfig()
+    {
+        return filterConfig;
+    }
+
+    public MockFilterChain getMockFilterChain()
+    {
+        return filterChain;
     }
 }

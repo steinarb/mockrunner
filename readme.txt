@@ -1,36 +1,35 @@
 Mockrunner is a lightweight framework for testing struts actions
-and forms, servlets and tag classes. It extends JUnit and simulates 
-the necessary behaviour without calling the real infrastructure, i.e. 
-it does not call the struts ActionServlet or any other struts class 
-except for the tested action. This makes it very fast and enables the 
-user to manipulate all involved classes and mockobjects in all steps 
-of the test making it possible to write very sophisticated unit-tests 
-for struts and servlets without any overhead. The framework was inspired 
-by StrutsTestCase (http://strutstestcase.sourceforge.net/)
-but uses a different approach to make it faster and more flexible.
+and forms, servlets, filters and tag classes. It extends JUnit and 
+simulates  the necessary behaviour without calling the real infrastructure.
+It does not call the webcontainer or the Struts ActionServlet.
+This makes it very fast and enables the user to manipulate all involved 
+classes and mockobjects in all steps  of the test making it possible to 
+write very sophisticated unit-tests for web based applications without 
+any overhead.
 
-Mockrunner does not read the struts-conig.xml file or any other
-configuration file (like web.xml). You have to specify all preconditions
-and parameters using the Mockrunner API. For example you can specify
-if you want to have form validation and you can manipulate the parameter
-attribute. This makes it possible to test the action as a reusable
-component with all possible parameters and with different form beans.
-So you can be sure the action works properly regardless of the settings 
-you use for that action in one or another application.
+Mockrunner does not read any configuration file like web.xml 
+or struts-config.xml. You can specify all parameters using the 
+Mockrunner API. This makes it possible to test servlets, filters, tags
+and Struts actions as reusable components regardless of the settings 
+you use in one or another application. It is not possible to test the
+definitions in the configuration files. If you want to do that you can
+use StrutsTestCase (http://strutstestcase.sourceforge.net/) for
+Struts based applications or Cactus (http://jakarta.apache.org/cactus/).
 
 Mockrunner is a pure mock based solution for unit tests. It's purpose
-is to test one single action, form bean, tag class or servlet at a time
-without overhead. It is not meant for workflow tests or use-case tests.
-Furthermore you cannot test the definitions in the struts-config.xml file. 
-If you want to do that, you can use StrutsTestCase
-(http://strutstestcase.sourceforge.net/) or Cactus 
-(http://jakarta.apache.org/cactus/).
+is to write very fast unit tests without overhead. It is not meant 
+for workflow tests or use-case tests. Furthermore it does not support
+any type of in-container testing.
 
 There is a simple mechanism included in Mockrunner that makes it possible
 to write multithread tests. You can simulate multiple requests from
 the same client or from different clients and test concurrent access
 to shared ressources efficiently. Have a look at the StoreDataAction
 example to see how to do that.
+
+For components that produce HTML fragments as output (e.g. servlets
+and tags) Mockrunner provides an API to test this output as pure text
+or as parsed XML.
 
 It is planned to include support for other frameworks in the J2EE
 environment in future releases.
@@ -39,7 +38,7 @@ To start with Mockrunner check out the JavaDoc and the examples
 in the com.mockrunner.example packages.
 Most methods are self-explanatory. Just subclass one of the Adapters
 (e.g. ActionTestCaseAdapter) and start testing. If you have your
-own TestCase base class, you can use the Modules (e.g. ActionTestModule).
+own base class for tests, you can use the Modules (e.g. ActionTestModule).
 
 Mockrunner uses the following libraries and software components.
 You have to download them. Please add the specified jars to the classpath.
@@ -86,3 +85,4 @@ nekohtml.jar
 For suggestions, remarks or questions you can use the forums on
 Sourceforge (http://sourceforge.net/projects/mockrunner/) or 
 write me an email (alwin.ibba@mockrunner.com).
+
