@@ -22,11 +22,11 @@ public class MockHttpServletResponse implements HttpServletResponse
     private MockServletOutputStream outputStream;
     private Map headers;
     private Locale locale;
+    private String characterEncoding = "ISO-8859-1";
     
     public MockHttpServletResponse()
     {
         outputStream = new MockServletOutputStream();
-        writer = new PrintWriter(outputStream);
 		headers = new HashMap();
     }
     
@@ -52,6 +52,10 @@ public class MockHttpServletResponse implements HttpServletResponse
     
     public PrintWriter getWriter() throws IOException
     {
+        if(null == writer)
+        {
+        	writer = new PrintWriter(new OutputStreamWriter(getOutputStream(), characterEncoding));
+        }
         return writer;
     }
     
@@ -161,9 +165,13 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public String getCharacterEncoding()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return characterEncoding;
     }
+    
+	public void setCharacterEncoding(String encoding)
+	{
+		characterEncoding = encoding;
+	}
 
     public Locale getLocale()
     {
