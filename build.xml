@@ -5,7 +5,7 @@
 		
 		<tstamp/>
 		
-        <property name="version" value="0.2"/>
+        <property name="version" value="0.1.5"/>
         <property name="timestamp" value="${DSTAMP}-${TSTAMP}"/>
         
 		<property name="build" value="build"/>

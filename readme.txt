@@ -84,5 +84,5 @@ nekohtml.jar
 
 For suggestions, remarks or questions you can use the forums on
 Sourceforge (http://sourceforge.net/projects/mockrunner/) or 
-write me an email (alwin.ibba@mockrunner.com).
+write me an email (alwin.ibba AT mockrunner.com).
 

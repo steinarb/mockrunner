@@ -256,7 +256,7 @@ public class ServletTestModule extends HTMLOutputModule
      * Returns the last request from the filter chain. Since
      * filters can replace the request with a request wrapper,
      * this method makes only sense after calling at least
-     * one filter, e.g. after calling {@link #doFilter} or
+     * one filter, i.e. after calling {@link #doFilter} or
      * after calling one servlet method with <i>doChain</i> 
      * set to <code>true</code>.
      * @return the filtered request
@@ -270,7 +270,7 @@ public class ServletTestModule extends HTMLOutputModule
      * Returns the last resposne from the filter chain. Since
      * filters can replace the resposne with a resposne wrapper,
      * this method makes only sense after calling at least
-     * one filter, e.g. after calling {@link #doFilter} or
+     * one filter, i.e. after calling {@link #doFilter} or
      * after calling one servlet method with <i>doChain</i> 
      * set to <code>true</code>.
      * @return the filtered resposne

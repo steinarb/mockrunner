@@ -292,7 +292,7 @@ public class TagTestModule extends HTMLOutputModule
     
     /**
      * Gets the output data the current tag has rendered. Makes only sense
-     * after calling at least [@link #doStartTag} or [@link #processTagLifecycle}
+     * after calling at least {@link #doStartTag} or {@link #processTagLifecycle}
      * @return the output data
      */
     public String getOutput()

@@ -1,7 +1,5 @@
 /*-- 
 
- $Id: LICENSE-jdom.txt,v 1.1 2003/08/04 13:40:30 aibba Exp $
-
  Copyright (C) 2000-2003 Jason Hunter & Brett McLaughlin.
  All rights reserved.
  

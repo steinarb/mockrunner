@@ -1,5 +1,5 @@
 
-mockrunner-0.2:
+mockrunner-0.1.5:
 
 - reorganized package structure. ActionTestModule and
   ActionTestCaseAdapter are in com.mockrunner.struts
@@ -8,8 +8,11 @@ mockrunner-0.2:
 - improved the TagTestModule. It supports nested tag and
   is able to perform the tag lifecycle as in the real
   container.
+- added ServletTestModule with servlet and filter support
+- implemented parsing of HTML output
 - added some useful methods to ActionTestModule
-- added third party jars to release
+- added third party jars to release (except for the big
+  Xerces and Struts jars)
 
 mockrunner-0.1:
 
