@@ -94,7 +94,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         //attributeListener = new ArrayList();
     }
     
-    /*public synchronized void addAttributeListener(ServletRequestAttributeListener listener)
+    /*public void addAttributeListener(ServletRequestAttributeListener listener)
     {
         attributeListener.add(listener);
     }*/
@@ -637,7 +637,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         this.remotePort = remotePort;
     }
     
-    /*private synchronized void handleAttributeListenerCalls(String key, Object value, Object oldValue)
+    /*private void handleAttributeListenerCalls(String key, Object value, Object oldValue)
     {
         if(null != oldValue)
         {
@@ -660,7 +660,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         }
     }*/
     
-    /*private synchronized void callAttributeListenersAddedMethod(String key, Object value)
+    /*private void callAttributeListenersAddedMethod(String key, Object value)
     {
         for(int ii = 0; ii < attributeListener.size(); ii++)
         {
@@ -669,7 +669,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         }
     }*/
     
-    /*private synchronized void callAttributeListenersReplacedMethod(String key, Object value)
+    /*private void callAttributeListenersReplacedMethod(String key, Object value)
     {
         for(int ii = 0; ii < attributeListener.size(); ii++)
         {
@@ -678,7 +678,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         }
     }*/
 
-    /*private synchronized void callAttributeListenersRemovedMethod(String key, Object value)
+    /*private void callAttributeListenersRemovedMethod(String key, Object value)
     {
         for(int ii = 0; ii < attributeListener.size(); ii++)
         {

@@ -199,7 +199,7 @@
         <antcall target="compilej2ee1.3" />
     </target>
     
-    <target name="compilej2ee1.3" if="dobuild.j2ee1.3" depends="init">
+    <target name="compilej2ee1.3">
         <mkdir dir="${buildj2ee1.3}" />
         <javac destdir="${buildj2ee1.3}" executable="${java1.4.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
@@ -244,7 +244,7 @@
         <antcall target="compilejdk1.3j2ee1.3" />
     </target>
     
-    <target name="compilejdk1.3j2ee1.3" if="dobuild.j2ee1.3" depends="init">
+    <target name="compilejdk1.3j2ee1.3" if="dobuild.j2ee1.3">
         <mkdir dir="${buildjdk1.3j2ee1.3}" />
         <javac destdir="${buildjdk1.3j2ee1.3}" target="1.2" executable="${java1.3.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
@@ -318,7 +318,7 @@
         <antcall target="jarsj2ee1.3" />
     </target>
     
-    <target name="jarsj2ee1.3" if="dobuild.j2ee1.3" depends="compilej2ee1.3">
+    <target name="jarsj2ee1.3" if="dobuild.j2ee1.3">
         <antcall target="jar">
             <param name="jarname" value="mockrunner-j2ee1.3.jar" />
             <param name="jdkver" value="1.4" />
@@ -367,7 +367,7 @@
         <antcall target="jarsjdk1.3j2ee1.3" />
     </target>
     
-    <target name="jarsjdk1.3j2ee1.3" if="dobuild.j2ee1.3" depends="compilejdk1.3j2ee1.3">
+    <target name="jarsjdk1.3j2ee1.3" if="dobuild.j2ee1.3">
         <antcall target="jar">
             <param name="jarname" value="mockrunner-jdk1.3-j2ee1.3.jar" />
             <param name="jdkver" value="1.3" />
@@ -405,7 +405,7 @@
         </jar>
     </target>
     
-    <target name="dependencies" depends="init,jars,jarsjdk1.3,jarsj2ee1.3,jarsjdk1.3j2ee1.3">
+    <target name="dependencies" depends="init,jars,jarsjdk1.3">
         <mkdir dir="${dependencies}" />
         <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
             <classpath>
@@ -446,7 +446,7 @@
         </copy>
     </target>
     
-    <target name="dependenciesj2ee1.3" if="dobuild.j2ee1.3" depends="init,jarsj2ee1.3,jarsjdk1.3j2ee1.3">
+    <target name="dependenciesj2ee1.3" if="dobuild.j2ee1.3" depends="init,jars,jarsjdk1.3">
         <mkdir dir="${dependenciesj2ee1.3}" />
         <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
             <classpath>
@@ -527,14 +527,11 @@
 	    </java2html>
 	</target>
 
-	<target name="release" depends="clean,jars,jarsjdk1.3,jarsj2ee1.3,jarsjdk1.3j2ee1.3,javadoc,java2html,dependencies,dependenciesj2ee1.3">
+	<target name="release" depends="clean,jars,jarsjdk1.3,javadoc,java2html,dependencies,dependenciesj2ee1.3">
 	    <delete dir="${releasedir}" />
 	    <delete file="${releasefile}" />
 	    <mkdir dir="${releasedir}" />
-	    <mkdir dir="${releasedir}/src" />
 	    <mkdir dir="${releasedir}/doc" />
-	    <mkdir dir="${releasedir}/lib" />
-        <mkdir dir="${releasedir}/lib/j2ee1.3" />   
 	    <mkdir dir="${releasedir}/jar" />
         <filter token="version" value="${version}" />
         <filter token="timestamp" value="${timestamp}" />
@@ -560,6 +557,7 @@
 	</target>
     
     <target name="copyrelease">
+        <mkdir dir="${releasedir}/lib" />
         <mkdir dir="${releasedir}/src" />
         <copy todir="${releasedir}/src">
             <fileset dir="${src}">
@@ -574,10 +572,12 @@
                 <include name="*.txt" />
             </fileset>
         </copy>
-        <antcall target="copyreleasej2ee1.3"/>   
+        <antcall target="copyreleasej2ee1.3" />   
     </target>
         
     <target name="copyreleasej2ee1.3" if="dobuild.j2ee1.3">
+        <mkdir dir="${releasedir}/lib/j2ee1.3" />
+        <mkdir dir="${releasedir}/srcj2ee1.3" />
         <copy todir="${releasedir}/srcj2ee1.3">
             <fileset dir="${srcj2ee1.3}">
                 <include name="**/*" />
@@ -605,7 +605,7 @@
                 <include name="*.jar" />
             </fileset>
         </copy>
-        <antcall target="copyreleasejdk1.3j2ee1.3"/>
+        <antcall target="copyreleasejdk1.3j2ee1.3" />
     </target>
     
     <target name="copyreleasejdk1.3j2ee1.3" if="dobuild.j2ee1.3">

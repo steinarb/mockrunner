@@ -55,11 +55,11 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
         mockRequestProc.addLine("attributeListener = new ArrayList();");
         mockRequestProc.addLine("callAttributeListenersRemovedMethod(key, value);");
         mockRequestProc.addLine("handleAttributeListenerCalls(key, value, oldValue);");
-        mockRequestProc.addBlock("public synchronized void addAttributeListener(ServletRequestAttributeListener listener)");
-        mockRequestProc.addBlock("private synchronized void handleAttributeListenerCalls(String key, Object value, Object oldValue)");
-        mockRequestProc.addBlock("private synchronized void callAttributeListenersAddedMethod(String key, Object value)");
-        mockRequestProc.addBlock("private synchronized void callAttributeListenersReplacedMethod(String key, Object value)");
-        mockRequestProc.addBlock("private synchronized void callAttributeListenersRemovedMethod(String key, Object value)");
+        mockRequestProc.addBlock("public void addAttributeListener(ServletRequestAttributeListener listener)");
+        mockRequestProc.addBlock("private void handleAttributeListenerCalls(String key, Object value, Object oldValue)");
+        mockRequestProc.addBlock("private void callAttributeListenersAddedMethod(String key, Object value)");
+        mockRequestProc.addBlock("private void callAttributeListenersReplacedMethod(String key, Object value)");
+        mockRequestProc.addBlock("private void callAttributeListenersRemovedMethod(String key, Object value)");
         mockRequestProc.addBlock("private ServletContext getServletContext()");
         webFiles.put("com.mockrunner.mock.web.MockHttpServletRequest", mockRequestProc);
         

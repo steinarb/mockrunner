@@ -94,7 +94,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         attributeListener = new ArrayList();
     }
     
-    public synchronized void addAttributeListener(ServletRequestAttributeListener listener)
+    public void addAttributeListener(ServletRequestAttributeListener listener)
     {
         attributeListener.add(listener);
     }
