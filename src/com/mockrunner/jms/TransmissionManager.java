@@ -1,6 +1,7 @@
 package com.mockrunner.jms;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.mockrunner.mock.jms.MockQueue;
@@ -50,6 +51,15 @@ public class TransmissionManager
         if(queueSender.size() <= index) return null;
         return (MockQueueSender)queueSender.get(index);
     }
+    
+    /**
+     * Returns the list of <code>QueueSender</code> objects.
+     * @return the <code>QueueSender</code> list
+     */
+    public List getQueueSenderList()
+    {
+        return Collections.unmodifiableList(queueSender);
+    }
 
     /**
      * Creates a new <code>QueueReceiver</code> for the specified
@@ -78,6 +88,15 @@ public class TransmissionManager
         if(queueReceiver.size() <= index) return null;
         return (MockQueueReceiver)queueReceiver.get(index);
     }
+    
+    /**
+     * Returns the list of <code>QueueReceiver</code> objects.
+     * @return the <code>QueueReceiver</code> list
+     */
+    public List getQueueReceiverList()
+    {
+        return Collections.unmodifiableList(queueReceiver);
+    }
 
     /**
      * Creates a new <code>QueueBrowser</code> for the specified
@@ -105,5 +124,14 @@ public class TransmissionManager
     {
         if(queueBrowser.size() <= index) return null;
         return (MockQueueBrowser)queueBrowser.get(index);
+    }
+    
+    /**
+     * Returns the list of <code>QueueBrowser</code> objects.
+     * @return the <code>QueueBrowser</code> list
+     */
+    public List getQueueBrowserList()
+    {
+        return Collections.unmodifiableList(queueBrowser);
     }
 }

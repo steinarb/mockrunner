@@ -67,8 +67,8 @@ public class MockQueueSessionTest extends TestCase
         Queue managerQueue1 = manager.createQueue("Queue1");
         Queue managerQueue2 = manager.getQueue("Queue1");
         Queue queue = session.createQueue("Queue1");
-        assertTrue(queue == managerQueue1);
-        assertTrue(queue == managerQueue2);
+        assertTrue(managerQueue1 == managerQueue2);
+        assertFalse(queue == managerQueue1);
         assertEquals("Queue1", queue.getQueueName());
         manager.createQueue("Queue2");
         assertNotNull(session.createQueue("Queue2"));
@@ -105,10 +105,12 @@ public class MockQueueSessionTest extends TestCase
         assertNotNull(transManager.getQueueSender(1));
         assertNotNull(transManager.getQueueSender(2));
         assertNull(transManager.getQueueSender(3));
+        assertEquals(3, transManager.getQueueSenderList().size());
         assertTrue(sender == transManager.getQueueSender(0));
         assertTrue(queue1 == transManager.getQueueSender(0).getQueue());
         assertTrue(queue2 == transManager.getQueueSender(1).getQueue());
         assertTrue(queue1 == transManager.getQueueSender(2).getQueue());
+        assertEquals(0, transManager.getQueueReceiverList().size());
         session.createReceiver(queue1);
         QueueReceiver receiver = session.createReceiver(queue2);
         assertNotNull(transManager.getQueueReceiver(0));
@@ -117,10 +119,12 @@ public class MockQueueSessionTest extends TestCase
         assertTrue(receiver == transManager.getQueueReceiver(1));
         assertTrue(queue1 == transManager.getQueueReceiver(0).getQueue());
         assertTrue(queue2 == transManager.getQueueReceiver(1).getQueue());
+        assertEquals(2, transManager.getQueueReceiverList().size());
         QueueBrowser browser = session.createBrowser(queue2);
         assertNotNull(transManager.getQueueBrowser(0));
         assertNull(transManager.getQueueBrowser(1));
         assertTrue(browser == transManager.getQueueBrowser(0));
         assertTrue(queue2 == transManager.getQueueBrowser(0).getQueue());
+        assertEquals(1, transManager.getQueueBrowserList().size());
     }
 }

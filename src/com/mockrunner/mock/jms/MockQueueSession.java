@@ -40,6 +40,7 @@ public class MockQueueSession implements QueueSession
         rolledback = false;
         recovered = false;
         closed = false;
+        messageListener = null;
     }
     
     public boolean isClosed()
@@ -75,13 +76,24 @@ public class MockQueueSession implements QueueSession
         {
             throw new JMSException("Queue with name " + name + " not found");
         }
+        try
+        {
+            queue = (MockQueue)queue.clone();
+        }
+        catch(CloneNotSupportedException exc)
+        {
+            throw new JMSException(exc.getMessage());
+        }
+        queue.setQueueSession(this);
         return queue;
     }
     
     public TemporaryQueue createTemporaryQueue() throws JMSException
     {
         connection.throwJMSException();
-        return connection.getDestinationManager().createTemporaryQueue();
+        MockTemporaryQueue queue = connection.getDestinationManager().createTemporaryQueue();
+        queue.setQueueSession(this);
+        return queue;
     }
 
     public QueueReceiver createReceiver(Queue queue) throws JMSException

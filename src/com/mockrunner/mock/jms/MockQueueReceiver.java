@@ -1,5 +1,7 @@
 package com.mockrunner.mock.jms;
 
+import java.util.List;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -27,6 +29,16 @@ public class MockQueueReceiver implements QueueReceiver
     public boolean isClosed()
     {
         return closed;
+    }
+    
+    public void receiveMessage(Message message)
+    {
+
+    }
+    
+    public List getReceivedMessageList()
+    {
+        return null;
     }
 
     public Queue getQueue() throws JMSException
