@@ -1,4 +1,3 @@
-- add action message support
 - write more example tests
 - write multithreading example
 - complete TagtestModule and write tests for it

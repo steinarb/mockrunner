@@ -2,6 +2,7 @@ package de.mockrunner.test;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessages;
 
 import junit.framework.TestCase;
 import de.mockrunner.base.ActionTestModule;
@@ -38,9 +39,24 @@ public class ActionTestModuleTest extends TestCase
         return errors;
     }
     
+    private ActionMessages createTestActionMessages()
+    {
+        ActionMessages messages = new ActionMessages();
+        ActionError message1 = new ActionError("key1");
+        ActionError message2 = new ActionError("key2", new String[]{"value1" , "value2"});
+        messages.add(ActionErrors.GLOBAL_MESSAGE, message1);
+        messages.add(ActionMessages.GLOBAL_MESSAGE, message2);
+        return messages;
+    }
+    
     private ActionErrors createEmptyTestActionErrors()
     {
         return new ActionErrors();
+    }
+    
+    private ActionMessages createEmptyTestActionMessages()
+    {
+        return new ActionMessages();
     }
     
     public void testGetActionErrorByKey()
@@ -50,6 +66,15 @@ public class ActionTestModuleTest extends TestCase
         assertTrue(module.hasActionErrors());
         ActionError error = module.getActionErrorByKey("key3");
         assertEquals("value", error.getValues()[0]);
+    }
+    
+    public void testGetActionMessageByKey()
+    {
+        assertFalse(module.hasActionMessages());
+        module.setActionMessages(createTestActionMessages());
+        assertTrue(module.hasActionMessages());
+        ActionError message = module.getActionMessageByKey("key2");
+        assertEquals("value2", message.getValues()[1]);
     }
     
     public void testVerifyHasActionErrors()
@@ -70,6 +95,32 @@ public class ActionTestModuleTest extends TestCase
         try
         {
             module.verifyNoActionErrors();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    
+    public void testVerifyHasActionMessages()
+    {
+        module.setActionMessages(createEmptyTestActionMessages());
+        module.verifyNoActionMessages();
+        try
+        {
+            module.verifyHasActionMessages();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.setActionMessages(createTestActionMessages());
+        module.verifyHasActionMessages();
+        try
+        {
+            module.verifyNoActionMessages();
             fail();
         }
         catch(VerifyFailedException exc)
@@ -103,6 +154,31 @@ public class ActionTestModuleTest extends TestCase
         }
     }
     
+    public void testVerifyActionMessagePresent()
+    {
+        module.setActionMessages(createTestActionMessages());
+        module.verifyActionMessagePresent("key1");
+        module.verifyActionMessageNotPresent("key3");
+        try
+        {
+            module.verifyActionMessagePresent("key3");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyActionMessageNotPresent("key1");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    
     public void testVerifyNumberActionErrors()
     {
         module.setActionErrors(createEmptyTestActionErrors());
@@ -112,6 +188,23 @@ public class ActionTestModuleTest extends TestCase
         try
         {
             module.verifyNumberActionErrors(4);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    
+    public void testVerifyNumberActionMessages()
+    {
+        module.setActionMessages(createEmptyTestActionMessages());
+        module.verifyNumberActionMessages(0);
+        module.setActionMessages(createTestActionMessages());
+        module.verifyNumberActionMessages(2);
+        try
+        {
+            module.verifyNumberActionMessages(0);
             fail();
         }
         catch(VerifyFailedException exc)
@@ -145,6 +238,29 @@ public class ActionTestModuleTest extends TestCase
         try
         {
             module.verifyActionErrors(new String[]{"key4", "key2", "key3"});
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    public void testVerifyActionMessages()
+    {
+        module.setActionMessages(createTestActionMessages());
+        module.verifyActionMessages(new String[]{"key1", "key2"});
+        try
+        {
+            module.verifyActionMessages(new String[]{"key1", "key3", "key4"});
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyActionMessages(new String[]{"key1"});
             fail();
         }
         catch(VerifyFailedException exc)
@@ -188,6 +304,30 @@ public class ActionTestModuleTest extends TestCase
         try
         {
             module.verifyActionErrorValue("key2", new String[]{"value2", "value1"});
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    
+    public void testVerifyActionMessageValues()
+    {
+        module.setActionMessages(createTestActionMessages());
+        module.verifyActionMessageValues("key2", new String[]{"value1", "value2"});
+        try
+        {
+            module.verifyActionMessageValue("key2", "value1");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyActionMessageValue("key1", "value1");
             fail();
         }
         catch(VerifyFailedException exc)
