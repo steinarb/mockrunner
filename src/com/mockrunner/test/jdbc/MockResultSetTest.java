@@ -195,12 +195,13 @@ public class MockResultSetTest extends TestCase
     
     public void testError()
     {
+        resultSet.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
         List column = new ArrayList();
         column.add("test");
         resultSet.addColumn("column1", column);
         try
         {
-            resultSet.first();
+            resultSet.first();            
             fail("not scrollable");
         }
         catch(SQLException exc)

@@ -60,7 +60,7 @@ public class MockResultSet implements ResultSet, Cloneable
     private String cursorName;
     private int fetchSize = 0;
     private int fetchDirection = ResultSet.FETCH_FORWARD;
-    private int resultSetType = ResultSet.TYPE_FORWARD_ONLY;
+    private int resultSetType = ResultSet.TYPE_SCROLL_INSENSITIVE;
     private int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
     private boolean isDatabaseView;
     private ResultSetMetaData resultSetMetaData;

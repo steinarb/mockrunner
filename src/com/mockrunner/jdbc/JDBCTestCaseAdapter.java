@@ -11,16 +11,16 @@ import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
 
-public class JDBCTestCaseAdapater extends BaseTestCase
+public class JDBCTestCaseAdapter extends BaseTestCase
 {
     private JDBCTestModule jdbcTestModule;
     
-    public JDBCTestCaseAdapater()
+    public JDBCTestCaseAdapter()
     {
 
     }
 
-    public JDBCTestCaseAdapater(String arg0)
+    public JDBCTestCaseAdapter(String arg0)
     {
         super(arg0);
     }
@@ -57,7 +57,7 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     /**
      * Delegates to {@link JDBCTestModule#setCaseSensitive}
      */
-    protected void setPreparedStatementCaseSensitive(boolean caseSensitive)
+    protected void setCaseSensitive(boolean caseSensitive)
     {
         jdbcTestModule.setCaseSensitive(caseSensitive);
     }
@@ -65,7 +65,7 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     /**
      * Delegates to {@link JDBCTestModule#setExactMatch}
      */
-    protected void setPreparedStatementExactMatch(boolean exactMatch)
+    protected void setExactMatch(boolean exactMatch)
     {
         jdbcTestModule.setExactMatch(exactMatch);
     }
@@ -319,11 +319,27 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link JDBCTestModule#verifyNotCommited}
+     */
+    protected void verifyNotCommited()
+    {
+        jdbcTestModule.verifyNotCommited();
+    }
+    
+    /**
      * Delegates to {@link JDBCTestModule#verifyRollbacked}
      */
     protected void verifyRollbacked()
     {
         jdbcTestModule.verifyRollbacked();
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyNotRollbacked}
+     */
+    protected void verifyNotRollbacked()
+    {
+        jdbcTestModule.verifyNotRollbacked();
     }
     
     /**

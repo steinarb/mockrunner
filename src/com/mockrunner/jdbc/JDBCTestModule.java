@@ -443,7 +443,7 @@ public class JDBCTestModule
     {
         if(SearchUtil.contains(getExecutedSQLStatements(), sql, caseSensitive, exactMatch, false))
         {
-            throw new VerifyFailedException("Statement " + sql + " not executed.");
+            throw new VerifyFailedException("Statement " + sql + " was executed.");
         }
     }
     
@@ -519,6 +519,21 @@ public class JDBCTestModule
     }
     
     /**
+     * Verifies that the changes were not commited.
+     * Makes only sense, if the <code>Connection</code> is not in
+     * autocommit mode. Automatic commits are not recognized.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNotCommited()
+    {
+        int number = mockFactory.getMockConnection().getNumberCommits();
+        if(number > 0)
+        {
+            throw new VerifyFailedException("Connection was commited");
+        }
+    }
+    
+    /**
      * Verifies that the changes were rollbacked, i.e. the <code>rollback</code>
      * method of <code>Connection</code> was at least called once.
      * Makes only sense, if the <code>Connection</code> is not in
@@ -530,7 +545,22 @@ public class JDBCTestModule
         int number = mockFactory.getMockConnection().getNumberRollbacks();
         if(number <= 0)
         {
-            throw new VerifyFailedException("Connection received no rollbakcs.");
+            throw new VerifyFailedException("Connection received no rollbacks.");
+        }
+    }
+    
+    /**
+     * Verifies that the changes were not rollbacked.
+     * Makes only sense, if the <code>Connection</code> is not in
+     * autocommit mode.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNotRollbacked()
+    {
+        int number = mockFactory.getMockConnection().getNumberRollbacks();
+        if(number > 0)
+        {
+            throw new VerifyFailedException("Connection was rollbacked.");
         }
     }
     
