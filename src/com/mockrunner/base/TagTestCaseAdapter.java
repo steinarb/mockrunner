@@ -36,6 +36,15 @@ public class TagTestCaseAdapter extends BaseTestCase
     {
         return tagTestModule;
     }
+    
+    /**
+     * Sets the <code>TagTestModule</code>. 
+     * @param tagTestModule the <code>TagTestModule</code>
+     */
+    protected void setTagTestModule(TagTestModule tagTestModule)
+    {
+        this.tagTestModule = tagTestModule;
+    }
 
     /**
      * Delegates to {@link TagTestModule#createTag}

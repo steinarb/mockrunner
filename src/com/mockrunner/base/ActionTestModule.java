@@ -20,7 +20,10 @@ import com.mockrunner.mock.MockPageContext;
 
 /**
  * Module for Struts action tests. Simulates Struts
- * without reading the <i>struts-config.xml</i> file
+ * without reading the <i>struts-config.xml</i> file.
+ * Per default this class does everything like Struts
+ * when calling an action but you can change the behaviour
+ * (e.g. disable form poulation).
  */
 public class ActionTestModule
 {
@@ -29,22 +32,37 @@ public class ActionTestModule
     private ActionForm formObj;
     private Action actionObj;
     private boolean reset;
+    private boolean doPopulate;
     
     public ActionTestModule(MockObjectFactory mockFactory)
     {
         this.mockFactory = mockFactory;
         reset = true;
+        doPopulate = true;
     }
     
     /**
      * Set if the reset method should be called before
      * populating a form with {@link #populateRequestToForm}.
-     * Default is true which is the standard Struts behaviour.
+     * Default is <code>true</code> which is the standard Struts 
+     * behaviour.
      * @param reset should reset be called
      */
     public void setReset(boolean reset)
     {
         this.reset = reset;
+    }
+    
+    /**
+     * Set if the form should be populated with the request
+     * parameters before calling the action.
+     * Default is <code>true</code> which is the standard Struts
+     * behaviour.
+     * @param doPopulate should population be performed
+     */
+    public void setDoPopulate(boolean doPopulate)
+    {
+        this.doPopulate = doPopulate;
     }
 
     /**
@@ -614,7 +632,7 @@ public class ActionTestModule
      * Populates the current request parameters to the
      * <code>ActionForm</code>. The form will be reseted 
      * before populating if reset is enabled ({@link #setReset}.
-     * If form validation is enabled (use {@link #setValidate} the
+     * If form validation is enabled (use {@link #setValidate}) the
      * form will be validated after populating it and the
      * appropriate <code>ActionErrors</code> will be set.
      */
@@ -653,12 +671,13 @@ public class ActionTestModule
      * Calls the action of the specified type using
      * the <code>ActionForm</code> of the specified type. 
      * Creates the appropriate <code>ActionForm</code> and 
-     * populates it before calling the action. If form 
-     * validation is enabled (use {@link #setValidate} and 
-     * fails, the action will not be called. The returned 
-     * <code>ActionForward</code> (get it with {@link #getActionForward}) 
-     * is based on the input attribute you can set with {@link #setInput},
-     * if form validation fails.
+     * populates it before calling the action (if populating is
+     * disabled, the form will not be populated, use {@link #setDoPopulate}). 
+     * If form validation is enabled (use {@link #setValidate}) and 
+     * fails, the action will not be called. In this case,
+     * the returned  <code>ActionForward</code> (get it with 
+     * {@link #getActionForward}) is based on the input attribute. 
+     * (Set it with {@link #setInput}).
      * @param action the <code>Class</code> of the action
      * @param form the <code>Class</code> of the form
      */
@@ -679,16 +698,16 @@ public class ActionTestModule
     /**
      * Calls the action of the specified type using
      * the specified <code>ActionForm</code> object. The form 
-     * will be populated before the action is called. Please
-     * note that request parameters will eventually overwrite
+     * will be populated before the action is called (if populating is
+     * disabled, the form will not be populated, use {@link #setDoPopulate}).
+     * Please note that request parameters will eventually overwrite
      * form values. Furthermore the form will be reseted
-     * before populating it. If you do not want that, disable reset
-     * {@link #setReset}.
-     * If form validation is enabled  (use {@link #setValidate} 
-     * and fails, the action will not be called. The returned 
-     * <code>ActionForward</code> (get it with {@link #getActionForward}) 
-     * is based on the input attribute you can set with {@link #setInput},
-     * if form validation fails.
+     * before populating it. If you do not want that, disable reset 
+     * using {@link #setReset}. If form validation is enabled 
+     * (use {@link #setValidate}) and fails, the action will not be 
+     * called. In this case, the returned <code>ActionForward</code> 
+     * (get it with  {@link #getActionForward}) is based on the input 
+     * attribute. (Set it with {@link #setInput}).
      * @param action the <code>Class</code> of the action
      * @param form the <code>ActionForm</code> object
      */
@@ -734,9 +753,9 @@ public class ActionTestModule
 
     private void handleActionForm() throws Exception
     {
-        getActionForm().reset(getMockActionMapping(), mockFactory.getMockRequest());
-        populateMockRequest();
-        if (getMockActionMapping().getValidate())
+        if(reset) getActionForm().reset(getMockActionMapping(), mockFactory.getMockRequest());
+        if(doPopulate) populateMockRequest();
+        if(getMockActionMapping().getValidate())
         {
             ActionErrors errors = formObj.validate(getMockActionMapping(), mockFactory.getMockRequest());
             if (containsMessages(errors))

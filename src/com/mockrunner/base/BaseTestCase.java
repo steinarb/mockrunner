@@ -36,16 +36,31 @@ public abstract class BaseTestCase extends TestCase
     }
 
     /**
-     * Creates a <code>MockObjectFactory</code> based on another on.
-     * The created <code>MockObjectFactory</code> will have its own
-     * request and session objects, but the two factories will share
-     * one <code>ServletContext</code>. Especially important for
-     * multithreading tests.
-     * @return the created <code>MockObjectFactory</code>
+     * Same as <code>createMockObjectFactory(otherFactory, true)</code>
      */
     protected MockObjectFactory createMockObjectFactory(MockObjectFactory otherFactory)
     {
         MockObjectFactory factory = new MockObjectFactory(otherFactory);
+        return factory;
+    }
+    
+    /**
+     * Creates a <code>MockObjectFactory</code> based on another on.
+     * The created <code>MockObjectFactory</code> will have its own
+     * request and response objects. If you set <i>createNewSession</i>
+     * to <code>true</code> it will also have its own session object. 
+     * The two factories will share one <code>ServletContext</code>. 
+     * Especially important for multithreading tests.
+     * If you set <i>createNewSession</i> to false, the two factories
+     * will share one session. This setting simulates multiple requests
+     * from the same client.
+     * @param otherFactory the othe factory
+     * @param createNewSession create a new session for the new factory
+     * @return the created <code>MockObjectFactory</code>
+     */
+    protected MockObjectFactory createMockObjectFactory(MockObjectFactory otherFactory, boolean createNewSession)
+    {
+        MockObjectFactory factory = new MockObjectFactory(otherFactory, createNewSession);
         return factory;
     }
 
@@ -59,8 +74,18 @@ public abstract class BaseTestCase extends TestCase
     }
     
     /**
+     * Sets the current <code>MockObjectFactory</code>.
+     * @param mockFactory the <code>MockObjectFactory</code>
+     */
+    protected void setMockObjectFactory(MockObjectFactory mockFactory)
+    {
+        this.mockFactory = mockFactory;
+    }
+    
+    /**
      * Creates an <code>ActionTestModule</code> with the specified
      * <code>MockObjectFactory</code>.
+     * @param mockFactory the <code>MockObjectFactory</code>
      * @return the created <code>ActionTestModule</code>
      */
     protected ActionTestModule createActionTestModule(MockObjectFactory mockFactory)

@@ -76,7 +76,6 @@ public class MockForwardConfig extends ActionForward
         this.redirect = redirect;
     }
 
-   
     public String toString() 
     {
         StringBuffer sb = new StringBuffer("ForwardConfig[");

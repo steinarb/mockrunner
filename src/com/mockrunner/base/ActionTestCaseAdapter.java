@@ -45,6 +45,15 @@ public class ActionTestCaseAdapter extends BaseTestCase
     {
         return actionTestModule;
     }
+    
+    /**
+     * Sets the <code>ActionTestModule</code>. 
+     * @param actionTestModule the <code>ActionTestModule</code>
+     */
+    protected void setActionTestModule(ActionTestModule actionTestModule)
+    {
+        this.actionTestModule = actionTestModule;
+    }
 
     /**
      * Delegates to {@link ActionTestModule#addMappedPropertyRequestPrefix}
@@ -68,6 +77,22 @@ public class ActionTestCaseAdapter extends BaseTestCase
     protected void setInput(String input)
     {
         actionTestModule.setInput(input);
+    }
+    
+    /**
+     * Delegates to {@link ActionTestModule#setReset}
+     */
+    protected void setReset(boolean reset)
+    {
+        actionTestModule.setReset(reset);
+    }
+    
+    /**
+     * Delegates to {@link ActionTestModule#setDoPopulate}
+     */
+    protected void setDoPopulate(boolean doPopulate)
+    {
+        actionTestModule.setDoPopulate(doPopulate);
     }
     
     /**
