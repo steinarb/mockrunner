@@ -1,5 +1,8 @@
 package com.mockrunner.test;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -30,6 +33,7 @@ public class AllExampleTests
 {
     public static Test suite()
     {
+        Logger.getLogger("").setLevel(Level.OFF);
         TestSuite suite = new TestSuite("Test for com.mockrunner.test");
         //$JUnit-BEGIN$ 
         suite.addTest(new TestSuite(ConstrainedNumericTextTagTest.class));

@@ -78,8 +78,8 @@ public class MockHttpServletRequest implements HttpServletRequest
         headers = new HashMap();
         requestedSessionIdIsFromCookie = true;
         protocol = "HTTP/1.1";
-        serverName = "Mockrunner Server";
-        serverPort = 80;
+        serverName = "localhost";
+        serverPort = 8080;
         scheme = "http";
         remoteHost = "localhost";
         remoteAddr = "127.0.0.1";
