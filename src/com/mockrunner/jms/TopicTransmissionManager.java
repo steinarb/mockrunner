@@ -11,10 +11,10 @@ import javax.jms.JMSException;
 import javax.jms.TopicPublisher;
 import javax.jms.TopicSubscriber;
 
+import com.mockrunner.mock.jms.MockConnection;
+import com.mockrunner.mock.jms.MockSession;
 import com.mockrunner.mock.jms.MockTopic;
-import com.mockrunner.mock.jms.MockTopicConnection;
 import com.mockrunner.mock.jms.MockTopicPublisher;
-import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
 
 /**
@@ -23,13 +23,13 @@ import com.mockrunner.mock.jms.MockTopicSubscriber;
  */
 public class TopicTransmissionManager
 {
-    private MockTopicConnection connection;
-    private MockTopicSession session;
+    private MockConnection connection;
+    private MockSession session;
     private List topicPublisherList;
     private List topicSubscriberList;
     private Map topicDurableSubscriberMap;
 
-    public TopicTransmissionManager(MockTopicConnection connection, MockTopicSession session)
+    public TopicTransmissionManager(MockConnection connection, MockSession session)
     {
         this.connection = connection;
         this.session = session;

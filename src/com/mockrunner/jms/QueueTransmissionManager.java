@@ -9,12 +9,12 @@ import javax.jms.QueueBrowser;
 import javax.jms.QueueReceiver;
 import javax.jms.QueueSender;
 
+import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueBrowser;
-import com.mockrunner.mock.jms.MockQueueConnection;
 import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
-import com.mockrunner.mock.jms.MockQueueSession;
+import com.mockrunner.mock.jms.MockSession;
 
 /**
  * This class is used to create queue senders and receivers.
@@ -22,13 +22,13 @@ import com.mockrunner.mock.jms.MockQueueSession;
  */
 public class QueueTransmissionManager
 {
-    private MockQueueConnection connection;
-    private MockQueueSession session;
+    private MockConnection connection;
+    private MockSession session;
     private List queueSenderList;
     private List queueReceiverList;
     private List queueBrowserList;
     
-    public QueueTransmissionManager(MockQueueConnection connection, MockQueueSession session)
+    public QueueTransmissionManager(MockConnection connection, MockSession session)
     {
         this.connection = connection;
         this.session = session;

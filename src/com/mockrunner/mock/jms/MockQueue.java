@@ -1,34 +1,23 @@
 package com.mockrunner.mock.jms;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.Queue;
-import javax.jms.QueueSession;
 
 /**
  * Mock implementation of JMS <code>Queue</code>.
  */
-public class MockQueue implements Queue
+public class MockQueue extends MockDestination implements Queue
 {
-    private Set sessions;
     private String name;
-    private List currentMessages;
-    private List receivedMessages;
     
     public MockQueue(String name)
     {
         this.name = name;
-        sessions = new HashSet();
-        currentMessages = new ArrayList();
-        receivedMessages = new ArrayList();
     }
     
     public String getQueueName() throws JMSException
@@ -45,12 +34,12 @@ public class MockQueue implements Queue
      */
     public void addMessage(Message message) throws JMSException
     {
-        receivedMessages.add(message);    
+        receivedMessageList().add(message);    
         boolean isConsumed = false;
-        Iterator sessionsIterator = sessions.iterator();
+        Iterator sessionsIterator = sessionSet().iterator();
         while(sessionsIterator.hasNext() && !isConsumed)
         {
-            MockQueueSession session = (MockQueueSession)sessionsIterator.next();
+            MockSession session = (MockSession)sessionsIterator.next();
             MessageListener globalListener = session.getMessageListener();
             if(null != globalListener)
             {
@@ -75,82 +64,7 @@ public class MockQueue implements Queue
         }
         if(!isConsumed)
         {
-            currentMessages.add(message);
+            currentMessageList().add(message);
         }
-    }
-
-    private void acknowledgeMessage(Message message, MockQueueSession session) throws JMSException
-    {
-        if(session.isAutoAcknowledge())
-        {
-            message.acknowledge();
-        }
-    }
-    
-    /**
-     * Returns if this queue contains messages.
-     * @return <code>false</code> if there's at least one message in the queue,
-     *         <code>true</code> otherwise
-     */
-    public boolean isEmpty()
-    {
-        return currentMessages.size() <= 0;
-    }
-    
-    /**
-     * Clears all current messages.
-     */
-    public void clear()
-    {
-        currentMessages.clear();
-    }
-    
-    /**
-     * Clears all current messages and resets the list of received messages.
-     */
-    public void reset()
-    {
-        currentMessages.clear();
-        receivedMessages.clear();
-    }
-    
-    /**
-     * Returns the next message, that is in the queue. The message
-     * will be deleted from the queue. If there's no message in the
-     * queue, <code>null</code> will be returned.
-     * @return the <code>Message</code>
-     */
-    public Message getMessage()
-    {
-        if(currentMessages.size() <= 0) return null;
-        return (Message)currentMessages.remove(0);
-    }
-    
-    /**
-     * Returns a <code>List</code> of all messages, that are currently
-     * in the queue. No messages will be deleted from the queue.
-     * @return the <code>List</code> of messages
-     */
-    public List getCurrentMessageList()
-    {
-        return Collections.unmodifiableList(currentMessages);
-    }
-    
-    /**
-     * Returns a <code>List</code> of all received messages.
-     * @return the <code>List</code> of messages
-     */
-    public List getReceivedMessageList()
-    {
-        return Collections.unmodifiableList(receivedMessages);
-    }
-    
-    /**
-     * Adds a <code>QueueSession</code>.
-     * @param session the session
-     */
-    public void addQueueSession(QueueSession session)
-    {
-        sessions.add(session);
     }
 }

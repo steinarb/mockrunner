@@ -10,18 +10,18 @@ import javax.jms.TopicSubscriber;
  */
 public class MockTopicSubscriber extends MockMessageConsumer implements TopicSubscriber
 {
-    private MockTopicSession session;
+    private MockSession session;
     private MockTopic topic;
     private boolean noLocal;
     private String name;
     private boolean isDurable;
     
-    public MockTopicSubscriber(MockTopicConnection connection, MockTopicSession session, MockTopic topic)
+    public MockTopicSubscriber(MockConnection connection, MockSession session, MockTopic topic)
     {
         this(connection, session, topic, null, false);
     }
 
-    public MockTopicSubscriber(MockTopicConnection connection, MockTopicSession session, MockTopic topic, String messageSelector, boolean noLocal)
+    public MockTopicSubscriber(MockConnection connection, MockSession session, MockTopic topic, String messageSelector, boolean noLocal)
     {
         super(connection, messageSelector);
         this.session = session;

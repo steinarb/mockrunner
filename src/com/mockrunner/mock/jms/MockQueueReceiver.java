@@ -10,15 +10,15 @@ import javax.jms.QueueReceiver;
  */
 public class MockQueueReceiver extends MockMessageConsumer implements QueueReceiver
 {
-    private MockQueueSession session;
+    private MockSession session;
     private MockQueue queue;
     
-    public MockQueueReceiver(MockQueueConnection connection, MockQueueSession session, MockQueue queue)
+    public MockQueueReceiver(MockConnection connection, MockQueueSession session, MockQueue queue)
     {
         this(connection, session, queue, null); 
     }
 
-    public MockQueueReceiver(MockQueueConnection connection, MockQueueSession session, MockQueue queue, String messageSelector)
+    public MockQueueReceiver(MockConnection connection, MockSession session, MockQueue queue, String messageSelector)
     {
         super(connection, messageSelector);
         this.session = session;
