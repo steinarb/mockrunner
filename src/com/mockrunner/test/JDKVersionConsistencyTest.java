@@ -11,24 +11,26 @@ import junit.framework.TestCase;
 
 public class JDKVersionConsistencyTest extends TestCase
 {
-    public void testJDK13Consistency() throws Exception
+    public void testFileConsistency() throws Exception
     {
-        File jdk13dir = new File("src1.3");
-        File jdkdir = new File("src");
+        compareDirTrees("src1.3", "src");
+    }
+    
+    private void compareDirTrees(String sourceDir, String destinationDir) throws Exception
+    {
+        File jdk13dir = new File(sourceDir);
+        File jdkdir = new File(destinationDir);
         Map file13Map = new HashMap();
         Map fileMap = new HashMap();
-        addJavaSrcFiles(jdk13dir, file13Map);
-        addJavaSrcFiles(jdkdir, fileMap);
+        addJavaSrcFiles(sourceDir, jdk13dir, file13Map);
+        addJavaSrcFiles(destinationDir, jdkdir, fileMap);
         boolean ok = true;
         Iterator file13Iterator = file13Map.keySet().iterator();
         while(file13Iterator.hasNext())
         {
             String currentFileName = (String)file13Iterator.next();
-            System.out.println("---> " + currentFileName);
             File current13File = (File)file13Map.get(currentFileName);
             File currentFile = (File)fileMap.get(currentFileName);
-            System.out.println("--->1 " + current13File.getName());
-            System.out.println("--->2 " + currentFile.getName());
             if(null == currentFile)
             {
                 System.out.println("File " + current13File.getPath() + " not found under src");
@@ -58,14 +60,17 @@ public class JDKVersionConsistencyTest extends TestCase
         while(null != (line1 = reader1.readLine()))
         {
             line2 = reader2.readLine();
-            line1 = filter(line1);
-            line2 = filter(line2);
             if(!line1.equals(line2))
             {
-                match = false;
-                System.out.println("Mismatch in line " + lineNumber);
-                System.out.println("Line1: " + line1);
-                System.out.println("Line2: " + line2);
+                line1 = filter(line1);
+                line2 = filter(line2);
+                if(!line1.equals(line2))
+                {
+                    match = false;
+                    System.out.println("Mismatch in line " + lineNumber);
+                    System.out.println("Line1: " + line1);
+                    System.out.println("Line2: " + line2);
+                }
             }
             lineNumber++;
         }
@@ -81,7 +86,7 @@ public class JDKVersionConsistencyTest extends TestCase
         return filteredLine.trim();
     }
     
-    private void addJavaSrcFiles(File dir, Map resultMap)
+    private void addJavaSrcFiles(String rootDir, File dir, Map resultMap)
     {
         File[] fileList = dir.listFiles();
         for(int ii = 0; ii < fileList.length; ii++)
@@ -89,11 +94,12 @@ public class JDKVersionConsistencyTest extends TestCase
             File currentFile = fileList[ii];
             if(currentFile.isDirectory())
             {
-                addJavaSrcFiles(currentFile, resultMap);
+                addJavaSrcFiles(rootDir, currentFile, resultMap);
             }
             else if(currentFile.isFile() && currentFile.getName().endsWith(".java"))
             {
-                resultMap.put(currentFile.getName(), currentFile);
+                String key = currentFile.getPath().substring(rootDir.length());
+                resultMap.put(key, currentFile);
             }
         }
     }
