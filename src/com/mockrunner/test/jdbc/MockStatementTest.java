@@ -1,7 +1,11 @@
 package com.mockrunner.test.jdbc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.jdbc.MockConnection;
+import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockStatement;
 import com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler;
@@ -51,8 +55,8 @@ public class MockStatementTest extends BaseTestCase
     public void testPrepareResultSet() throws Exception
     {
         statementHandler.prepareGlobalResultSet(resultSet3);
-        statementHandler.prepareResultSet("select test from x where value = true", resultSet1);
-        statementHandler.prepareResultSet("select test1, test2 from y where value = 1", resultSet2);
+        statementHandler.prepareResultSet("select test from", resultSet1);
+        statementHandler.prepareResultSet("select test1, test2", resultSet2);
         MockStatement statement = (MockStatement)connection.createStatement();
         statement.setCursorName("cursor");
         MockResultSet testResultSet = (MockResultSet)statement.executeQuery("SELECT test1, test2 FROM y WHERE value = 1");
@@ -62,17 +66,17 @@ public class MockStatementTest extends BaseTestCase
         testResultSet = (MockResultSet)statement.executeQuery("SELECT test1, test2 FROM y WHERE value = 1");
         assertTrue(isResultSet3(testResultSet));
         statementHandler.setCaseSensitive(false);
-        testResultSet = (MockResultSet)statement.executeQuery("select test from");
+        testResultSet = (MockResultSet)statement.executeQuery("select test from x where value = true");
         assertTrue(isResultSet1(testResultSet));
         statementHandler.setExactMatch(true);
-        testResultSet = (MockResultSet)statement.executeQuery("select test from");
+        testResultSet = (MockResultSet)statement.executeQuery("select test from x where value = true");
         assertTrue(isResultSet3(testResultSet));
         statementHandler.setExactMatch(false);
-        assertTrue(statement.execute("select test from"));
+        assertTrue(statement.execute("select test from x where value = true"));
         assertTrue(isResultSet1((MockResultSet)statement.getResultSet()));
         assertEquals(-1, statement.getUpdateCount());
         statementHandler.prepareReturnsResultSet("select test from", false);
-        assertFalse(statement.execute("select test fr"));
+        assertFalse(statement.execute("select test from"));
         assertNull(statement.getResultSet());
         assertEquals(0, statement.getUpdateCount());
     }
@@ -80,24 +84,131 @@ public class MockStatementTest extends BaseTestCase
     public void testPrepareUpdateCount() throws Exception
     {
         statementHandler.prepareGlobalUpdateCount(2);
-        statementHandler.prepareUpdateCount("insert into x(y) values(1)", 3);
+        statementHandler.prepareUpdateCount("insert into", 3);
         MockStatement statement = (MockStatement)connection.createStatement();
         int testUpdateCount = statement.executeUpdate("update xy");
         assertEquals(2, testUpdateCount);
-        testUpdateCount = statement.executeUpdate("insert into");
+        testUpdateCount = statement.executeUpdate("insert into x(y) values(1)");
         assertEquals(3, testUpdateCount);
         statementHandler.setExactMatch(true);
-        testUpdateCount = statement.executeUpdate("insert into");
+        testUpdateCount = statement.executeUpdate("insert into x(y) values(1)");
         assertEquals(2, testUpdateCount);
         statementHandler.setExactMatch(false);
         statementHandler.setCaseSensitive(true);
-        testUpdateCount = statement.executeUpdate("INSERT into");
+        testUpdateCount = statement.executeUpdate("INSERT into xy");
         assertEquals(2, testUpdateCount);
         statementHandler.setCaseSensitive(false);
-        testUpdateCount = statement.executeUpdate("INSERT into");
+        testUpdateCount = statement.executeUpdate("INSERT into xy");
         assertEquals(3, testUpdateCount);
         assertFalse(statement.execute("DELETE"));
         assertEquals(2, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+    }
+    
+    public void testPrepareResultSetPreparedStatement() throws Exception
+    {
+        preparedStatementHandler.prepareGlobalResultSet(resultSet1); 
+        preparedStatementHandler.prepareResultSet("select xyz", resultSet2);
+        List params = new ArrayList();
+        params.add(new Integer(2));
+        params.add("Test");
+        preparedStatementHandler.prepareResultSet("select test", resultSet3, params);
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("select test from x where value = ? and y = ?");
+        MockResultSet testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet1(testResultSet));
+        statement.setInt(1, 2);
+        statement.setString(2, "Test");
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet3(testResultSet));
+        statement.setBoolean(3, true);
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet3(testResultSet));
+        preparedStatementHandler.setExactMatchParameter(true);
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet1(testResultSet));
+        statement.clearParameters();
+        statement.setInt(1, 2);
+        statement.setString(2, "Test");
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet3(testResultSet));
+        preparedStatementHandler.prepareResultSet("select test", resultSet3, new Object[] {"xyz", new Long(1)});
+        statement.clearParameters();
+        statement.setString(1, "ab");
+        statement.setLong(2, 1);
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet1(testResultSet));
+        statement.setString(1, "xyz");
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet3(testResultSet));
+        statement.setString(3, "xyz");
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet1(testResultSet));
+        preparedStatementHandler.setExactMatchParameter(false);
+        statement.clearParameters();
+        statement.setLong(1, 2);
+        statement.setLong(2, 1);
+        statement.setString(3, "xyz");
+        statement.setString(4, "zzz");
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet3(testResultSet));
+        statement = (MockPreparedStatement)connection.prepareStatement("select xyzxyz");
+        statement.setLong(1, 2);
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet2(testResultSet));
+        preparedStatementHandler.setExactMatch(true);
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet1(testResultSet));
+        preparedStatementHandler.prepareResultSet("select xyzxyz", resultSet3, new Object[] {});
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet3(testResultSet));
+        preparedStatementHandler.setExactMatchParameter(true);
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet1(testResultSet));
+        preparedStatementHandler.setExactMatchParameter(false);
+        preparedStatementHandler.setExactMatch(false);
+        assertTrue(statement.execute());
+        assertTrue(isResultSet3((MockResultSet)statement.getResultSet()));
+    }
+    
+    public void testPrepareUpdateCountPreparedStatement() throws Exception
+    {
+        preparedStatementHandler.prepareGlobalUpdateCount(5);
+        preparedStatementHandler.prepareUpdateCount("delete xyz", 1);
+        List params = new ArrayList();
+        params.add(new Integer(1));
+        preparedStatementHandler.prepareUpdateCount("INSERT INTO", 3, params);
+        preparedStatementHandler.prepareUpdateCount("INSERT INTO", 4, new Object[] {"1", "2"});
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("insert into x(y) values(?)");
+        int testUpdateCount = statement.executeUpdate();
+        assertEquals(5, testUpdateCount);
+        statement.setInt(1, 1);
+        statement.setInt(2, 2);
+        testUpdateCount = statement.executeUpdate();
+        assertEquals(3, testUpdateCount);
+        preparedStatementHandler.setExactMatchParameter(true);
+        testUpdateCount = statement.executeUpdate();
+        assertEquals(5, testUpdateCount);
+        statement.clearParameters();
+        statement.setString(1, "1");
+        statement.setString(2, "2");
+        testUpdateCount = statement.executeUpdate();
+        assertEquals(4, testUpdateCount);
+        preparedStatementHandler.setCaseSensitive(true);
+        testUpdateCount = statement.executeUpdate();
+        assertEquals(5, testUpdateCount);
+        statement = (MockPreparedStatement)connection.prepareStatement("delete xyz where ? = ?");
+        testUpdateCount = statement.executeUpdate();
+        assertEquals(1, testUpdateCount);
+        preparedStatementHandler.setExactMatch(true);
+        testUpdateCount = statement.executeUpdate();
+        assertEquals(5, testUpdateCount);
+        preparedStatementHandler.setExactMatch(false);
+        assertFalse(statement.execute());
+        assertEquals(1, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        preparedStatementHandler.prepareReturnsResultSet("delete xyz", true);
+        assertTrue(statement.execute());
+        assertEquals(-1, statement.getUpdateCount());
         assertNull(statement.getResultSet());
     }
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockStatement;
+import com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler;
+import com.mockrunner.mock.jdbc.StatementResultSetHandler;
 
 public class JDBCTestCaseAdapater extends BaseTestCase
 {
@@ -64,6 +66,22 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     protected void setPreparedStatementExactMatch(boolean exactMatch)
     {
         jdbcTestModule.setExactMatch(exactMatch);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getStatementResultSetHandler}
+     */
+    protected StatementResultSetHandler getStatementResultSetHandler()
+    {
+        return jdbcTestModule.getStatementResultSetHandler();
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getPreparedStatementResultSetHandler}
+     */
+    protected PreparedStatementResultSetHandler getPreparedStatementResultSetHandler()
+    {
+        return jdbcTestModule.getPreparedStatementResultSetHandler();
     }
     
     /**

@@ -74,7 +74,7 @@ public class PreparedStatementResultSetHandler extends AbstractResultSetHandler
      */
     public Integer getUpdateCount(String sql, List parameters)
     {
-        List list = SearchUtil.getMatchingObjects(updateCountForStatement, sql, getCaseSensitive(), getExactMatch());
+        List list = SearchUtil.getMatchingObjects(updateCountForStatement, sql, getCaseSensitive(), getExactMatch(), true);
         for(int ii = 0; ii < list.size(); ii++)
         {
             MockUpdateCountWrapper wrapper = (MockUpdateCountWrapper)list.get(ii);
@@ -99,7 +99,7 @@ public class PreparedStatementResultSetHandler extends AbstractResultSetHandler
      */
     public MockResultSet getResultSet(String sql, List parameters)
     {
-        List list = SearchUtil.getMatchingObjects(resultSetsForStatement, sql, getCaseSensitive(), getExactMatch());
+        List list = SearchUtil.getMatchingObjects(resultSetsForStatement, sql, getCaseSensitive(), getExactMatch(), true);
         for(int ii = 0; ii < list.size(); ii++)
         {
             MockResultSetWrapper wrapper = (MockResultSetWrapper)list.get(ii);
@@ -111,11 +111,11 @@ public class PreparedStatementResultSetHandler extends AbstractResultSetHandler
         return null;
     }
     
-    private boolean doParameterMatch(List actualParameters, List expectedParameters)
+    private boolean doParameterMatch(List expectedParameters, List actualParameters)
     {
         if(exactMatchParameter)
         {
-            if(actualParameters.size() != expectedParameters.size()) return false;
+            if(actualParameters.size() != expectedParameters.size() + 1) return false;
             return (-1 != Collections.indexOfSubList(actualParameters, expectedParameters));
         }
         else

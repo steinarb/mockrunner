@@ -19,9 +19,12 @@ public class SearchUtil
      * @param query the query string that must match the keys in dataMap
      * @param caseSensitive is comparison case sensitive
      * @param exactMatch compare exactly
+     * @param queryContainsMapData only matters if <i>exactMatch</i> is <code>false</code>,
+     *        specifies if query must be contained in the <code>Map</code> keys (<code>false</code>)
+     *        or if query must contain the <code>Map</code> keys (<code>true</code>)
      * @return the result <code>List</code>
      */
-    public static List getMatchingObjects(Map dataMap, String query, boolean caseSensitive, boolean exactMatch)
+    public static List getMatchingObjects(Map dataMap, String query, boolean caseSensitive, boolean exactMatch, boolean queryContainsMapData)
     {
         if(null == query) query = "";
         Iterator iterator = dataMap.keySet().iterator();
@@ -29,7 +32,18 @@ public class SearchUtil
         while(iterator.hasNext())
         {
             String nextKey = (String)iterator.next();
-            if(doesStringMatch(nextKey, query, caseSensitive, exactMatch))
+            String source, currentQuery;
+            if(queryContainsMapData)
+            {
+                source = query;
+                currentQuery = nextKey;
+            }
+            else
+            {
+                source = nextKey;
+                currentQuery = query;
+            }
+            if(doesStringMatch(source, currentQuery, caseSensitive, exactMatch))
             {
                 Object matchingObject = dataMap.get(nextKey);
                 if(matchingObject instanceof Collection)
@@ -48,12 +62,12 @@ public class SearchUtil
     /**
      * Simple helper method. Compares two strings and returns if
      * they match. If <i>caseSensitive</i> is set to <code>false</code>
-     * the case of the strings will be ignored. If <i>exactMatch</i> is
+     * the case of the strings is ignored. If <i>exactMatch</i> is
      * set to <code>true</code>, the strings must match exactly (i.e.
-     * the <code>equals</code> method is used. Otherwise, the method
+     * the <code>equals</code> method is used). Otherwise, the method
      * returns <code>true</code>, if <i>source</i> cotains <i>query</i>.
-     * @param source the source string
      * @param query the query string that must match source
+     * @param source the source string
      * @param caseSensitive is comparison case sensitive
      * @param exactMatch compare exactly
      * @return <code>true</code> of the strings match, <code>false</code> otherwise
