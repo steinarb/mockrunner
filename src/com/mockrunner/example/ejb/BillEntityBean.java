@@ -33,8 +33,8 @@ import javax.ejb.RemoveException;
  **/
 /**
  * This CMP entity bean represents a bill.
- * It has a date, and a marker, if it is paid.
- * It has to custom finders, namely
+ * It has a date, and a marker if it is paid.
+ * It has two custom finders, namely
  * <code>findUnpaid()</code> and <code>findAll()</code>.
  */
 public abstract class BillEntityBean implements EntityBean
@@ -45,7 +45,7 @@ public abstract class BillEntityBean implements EntityBean
      * @ejb.interface-method
      * @ejb.persistence
      * @ejb.pk-field
-     * @jboss:column-name name="id"
+     * @jboss.column-name name="id"
      **/
    	public abstract Integer getId();
    	public abstract void setId(Integer id);
