@@ -262,6 +262,11 @@ public class ActionTestModule
 
     /**
      * Verifies the forward path returned by the action.
+     * If your action uses <code>mapping.findForward("success")</code>
+     * to find the forward, you can use this method or
+     * {@link #verifyForwardName} to test the <code>success</code> forward
+     * name. If your action creates an <code>ActionForward</code> on its
+     * own you can use this method to verify the forward <code>path</code>.
      * @param path the expected path
      * @throws VerifyFailedException if verification fails
      */
@@ -274,6 +279,28 @@ public class ActionTestModule
         else if (!getActionForward().verifyPath(path))
         {
             throw new VerifyFailedException("expected " + path + ", received " + getActionForward().getPath());
+        }
+    }
+    
+    /**
+     * Verifies the forward name returned by the action.
+     * If your action uses <code>mapping.findForward("success")</code>
+     * to find the forward, you can use this method or
+     * {@link #verifyForward} to test the <code>success</code> forward
+     * name. If your action creates an <code>ActionForward</code> on its
+     * own you can use this method to verify the forward <code>name</code>.
+     * @param name the expected name
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyForwardName(String name)
+    {
+        if (null == getActionForward())
+        {
+            throw new VerifyFailedException("ActionForward == null");
+        }
+        else if (!getActionForward().verifyName(name))
+        {
+            throw new VerifyFailedException("expected " + name + ", received " + getActionForward().getName());
         }
     }
     

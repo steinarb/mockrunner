@@ -504,6 +504,32 @@ public class ActionTestModuleTest extends TestCase
         assertEquals(mockFactory.getMockActionServlet(), ((TestForm)module.getActionForm()).getServlet());
     }
     
+    public void testVerifyForwardPathAndName()
+    {
+        TestForwardAction action = new TestForwardAction();
+        module.actionPerform(action);
+        module.verifyForward("success");
+        module.verifyForwardName("success");
+        MockActionForward forward = new MockActionForward("myName");
+        action.setActionForward(forward);
+        module.actionPerform(action);
+        module.verifyForwardName("myName");
+        try
+        {
+            module.verifyForward("myName");
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        forward = new MockActionForward("myName", "myPath", true);
+        action.setActionForward(forward);
+        module.actionPerform(action);
+        module.verifyForward("myPath");
+        module.verifyForwardName("myName");
+    }
+    
     public void testActionPerformMappingTypeSet()
     {
         module.actionPerform(TestAction.class);
@@ -623,6 +649,26 @@ public class ActionTestModuleTest extends TestCase
         public Locale getTestLocale()
         {
             return locale;
+        }
+    }
+    
+    public static class TestForwardAction extends Action
+    {
+        private ActionForward forward;
+        
+        public ActionForward execute(ActionMapping mapping,
+                                             ActionForm form,
+                                             HttpServletRequest request,
+                                             HttpServletResponse response) throws Exception
+        {
+            
+            if(null != forward) return forward;
+            return mapping.findForward("success");
+        }
+        
+        public void setActionForward(ActionForward forward)
+        {
+            this.forward = forward;
         }
     }
     

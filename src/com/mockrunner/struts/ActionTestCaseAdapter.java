@@ -195,6 +195,14 @@ public class ActionTestCaseAdapter extends BaseTestCase
     {
         actionTestModule.verifyForward(path);
     }
+    
+    /**
+     * Delegates to {@link ActionTestModule#verifyForwardName}
+     */
+    protected void verifyForwardName(String name)
+    {
+        actionTestModule.verifyForwardName(name);
+    }
 
     /**
      * Delegates to {@link ActionTestModule#verifyNoActionErrors}

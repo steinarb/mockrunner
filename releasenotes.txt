@@ -1,6 +1,8 @@
 
 mockrunner-0.2.9:
 
+- added verifyForwardName() to ActionTestModule
+
 mockrunner-0.2.8:
 
 - fixed bug 949026
