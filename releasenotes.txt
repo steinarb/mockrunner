@@ -3,6 +3,7 @@ mockrunner-0.3:
 
 - improved setResources() in Struts test module to support module config
 - added example test for LookupDispatchAction
+- added createDynaActionForm() method to Struts test module
 
 mockrunner-0.2.6:
 
