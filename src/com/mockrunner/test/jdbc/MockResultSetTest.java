@@ -344,6 +344,25 @@ public class MockResultSetTest extends TestCase
     
     public void testSetFetchDirection() throws Exception
     {
+        try
+        {
+            resultSet.setFetchDirection(ResultSet.FETCH_REVERSE + 1000);
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw exception
+        }
+        resultSet.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
+        try
+        {
+            resultSet.setFetchDirection(ResultSet.FETCH_REVERSE);
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw exception
+        }
         resultSet.setResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
         resultSet.addRow(new String[] {"1", "2", "3"});
         resultSet.addRow(new String[] {"4", "5", "6"});
@@ -351,15 +370,34 @@ public class MockResultSetTest extends TestCase
         resultSet.addRow(new String[] {"10", "11", "12"});
         resultSet.last();
         resultSet.setFetchDirection(ResultSet.FETCH_REVERSE);
+        assertEquals(ResultSet.FETCH_REVERSE, resultSet.getFetchDirection());
         assertTrue(resultSet.isFirst());
-        resultSet.setFetchDirection(ResultSet.FETCH_REVERSE);
+        resultSet.setFetchDirection(ResultSet.FETCH_FORWARD);
+        assertEquals(ResultSet.FETCH_FORWARD, resultSet.getFetchDirection());
         resultSet.absolute(3);
         assertEquals(7, resultSet.getInt(1));
         resultSet.setFetchDirection(ResultSet.FETCH_REVERSE);
+        assertEquals(ResultSet.FETCH_REVERSE, resultSet.getFetchDirection());
         assertEquals(7, resultSet.getInt(1));
         resultSet.previous();
         assertEquals(10, resultSet.getInt(1));
         assertTrue(resultSet.isFirst());
+        resultSet.setFetchDirection(ResultSet.FETCH_REVERSE);
+        assertEquals(ResultSet.FETCH_REVERSE, resultSet.getFetchDirection());
+        resultSet.absolute(3);
+        assertEquals(4, resultSet.getInt(1));
+        resultSet.setFetchDirection(ResultSet.FETCH_UNKNOWN);
+        assertEquals(ResultSet.FETCH_UNKNOWN, resultSet.getFetchDirection());
+        resultSet.absolute(3);
+        assertEquals(4, resultSet.getInt(1));
+        resultSet.setFetchDirection(ResultSet.FETCH_REVERSE);
+        assertEquals(ResultSet.FETCH_REVERSE, resultSet.getFetchDirection());
+        resultSet.absolute(3);
+        assertEquals(4, resultSet.getInt(1));
+        resultSet.setFetchDirection(ResultSet.FETCH_FORWARD);
+        assertEquals(ResultSet.FETCH_FORWARD, resultSet.getFetchDirection());
+        resultSet.absolute(3);
+        assertEquals(7, resultSet.getInt(1));
     }
     
     public void testInsertDeleteRows() throws Exception

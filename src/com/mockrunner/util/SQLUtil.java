@@ -1,5 +1,8 @@
 package com.mockrunner.util;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * Simple util class for SQL statements
  */
@@ -15,5 +18,18 @@ public class SQLUtil
     {
         sql = sql.toLowerCase();
         return (-1 != sql.indexOf("select"));
+    }
+    
+    /**
+     * Throws an <code>SQLException</code> if the specified 
+     * <code>fetchDirection</code> is invalid
+     * @param fetchDirection the fetch direction
+     */
+    public static void checkFetchDirection(int fetchDirection) throws SQLException
+    {
+        if(fetchDirection != ResultSet.FETCH_FORWARD && fetchDirection != ResultSet.FETCH_REVERSE && fetchDirection != ResultSet.FETCH_UNKNOWN)
+        {
+            throw new SQLException("fetchDirection must be either FETCH_FORWARD, FETCH_REVERSE or FETCH_UNKNOWN");
+        }
     }
 }
