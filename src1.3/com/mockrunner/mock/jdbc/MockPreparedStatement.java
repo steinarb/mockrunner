@@ -150,7 +150,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             throw new SQLException("Statement " + getSQL() + " was specified to throw an exception");
         }
         MockResultSet result = resultSetHandler.getResultSet(getSQL(), params);
-		resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy());
+		resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy(params));
         if(null != result)
         {
             resultSetHandler.addExecutedStatement(getSQL());
@@ -178,7 +178,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             throw new SQLException("Statement " + getSQL() + " was specified to throw an exception");
         }
         Integer updateCount = resultSetHandler.getUpdateCount(getSQL(), params);
-		resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy());
+		resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy(params));
         if(null != updateCount)
         {
             resultSetHandler.addExecutedStatement(getSQL());
@@ -354,9 +354,8 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         setObject(parameterIndex, url);
     }
     
-    private Map getParameterMapCopy()
+    private Map getParameterMapCopy(Map actualParameters)
     {
-    	Map actualParameters = getParameterMap();
     	Map copyParameters = new HashMap();
     	Iterator keys = actualParameters.keySet().iterator();
     	while(keys.hasNext())
