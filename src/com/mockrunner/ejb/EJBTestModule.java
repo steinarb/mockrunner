@@ -1,9 +1,16 @@
 package com.mockrunner.ejb;
 
+import javax.ejb.EJBHome;
+import javax.ejb.EJBLocalHome;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import org.apache.commons.beanutils.MethodUtils;
 import org.mockejb.MockContainer;
 import org.mockejb.MockContext;
 import org.mockejb.MockEjbObject;
 import org.mockejb.SessionBeanDescriptor;
+import org.mockejb.TransactionPolicy;
 
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
@@ -17,17 +24,17 @@ public class EJBTestModule
 {
     private EJBMockObjectFactory mockFactory;
     private String impSuffix;
-    private String homeSuffix;
-    private String interfaceSuffix;
+    private String homeInterfaceSuffix;
+    private String businessInterfaceSuffix;
     private String homeInterfacePackage;
-    private String interfacePackage;
+    private String businessInterfacePackage;
     
     public EJBTestModule(EJBMockObjectFactory mockFactory)
     {
         this.mockFactory = mockFactory;
         impSuffix = "Bean";
-        homeSuffix = "Home";
-        interfaceSuffix = "";
+        homeInterfaceSuffix = "Home";
+        businessInterfaceSuffix = "";
     }
     
     /**
@@ -46,22 +53,22 @@ public class EJBTestModule
      * Sets the suffix of the remote (resp. local) interface. The
      * default is an empty string, i.e. if the implementation class is
      * <code>TestBean</code>, the remote interface is <code>Test</code>
-     * @param remoteSuffix the bean implementation suffix
+     * @param remoteSuffix the bean remote interface suffix
      */
-    public void setInterfaceSuffix(String remoteSuffix)
+    public void setBusinessInterfaceSuffix(String businessInterfaceSuffix)
     {
-        this.interfaceSuffix = remoteSuffix;
+        this.businessInterfaceSuffix = businessInterfaceSuffix;
     }
     
     /**
      * Sets the suffix of the home (resp. local home) interface. The
      * default is <i>"Home"</i>, i.e. if the implementation class is
-     * <code>TestBean</code>, the remote interface is <code>TestHome</code>
-     * @param remoteSuffix the bean implementation suffix
+     * <code>TestBean</code>, the home interface is <code>TestHome</code>
+     * @param homeInterfaceSuffix the bean home interface suffix
      */
-    public void setHomeSuffix(String homeSuffix)
+    public void setHomeInterfaceSuffix(String homeInterfaceSuffix)
     {
-        this.homeSuffix = homeSuffix;
+        this.homeInterfaceSuffix = homeInterfaceSuffix;
     }
     
     /**
@@ -70,10 +77,10 @@ public class EJBTestModule
      * same package as the bean implementation classes.
      * @param interfacePackage the package name for home and remote interfaces
      */
-    public void setInterfacesPackages(String interfacePackage)
+    public void setInterfacePackage(String interfacePackage)
     {
         setHomeInterfacePackage(interfacePackage);
-        setInterfacePackage(interfacePackage);
+        setBusinessInterfacePackage(interfacePackage);
     }
     
     /**
@@ -91,22 +98,35 @@ public class EJBTestModule
      * Sets the package for the bean remote (resp. local) interface. Per
      * default, the framework expects that the interfaces are in the
      * same package as the bean implementation classes.
-     * @param remoteInterfacePackage the package name for home interface
+     * @param businessInterfacePackage the package name for remote interface
      */
-    public void setInterfacePackage(String remoteInterfacePackage)
+    public void setBusinessInterfacePackage(String businessInterfacePackage)
     {
-        this.interfacePackage = remoteInterfacePackage;
+        this.businessInterfacePackage = businessInterfacePackage;
     }
     
     /**
      * Deploys a bean to the mock container using the specified
-     * descriptor.
+     * descriptor. Sets the transaction policy <i>SUPPORTS</i>.
      * @param descriptor the descriptor
      * @return the <code>MockEjbObject</code> of the deployed bean
      */
     public MockEjbObject deploy(SessionBeanDescriptor descriptor)
     {
-        return MockContainer.deploy(descriptor);
+        return deploy(descriptor, TransactionPolicy.SUPPORTS);
+    }
+    
+    /**
+     * Deploys a bean to the mock container using the specified
+     * descriptor. The specified transaction policy will be automatically set.
+     * @param descriptor the descriptor
+     * @return the <code>MockEjbObject</code> of the deployed bean
+     */
+    public MockEjbObject deploy(SessionBeanDescriptor descriptor, TransactionPolicy policy)
+    {
+        MockEjbObject bean = MockContainer.deploy(descriptor);
+        bean.setTransactionPolicy(policy);
+        return bean;
     }
     
     /**
@@ -115,14 +135,34 @@ public class EJBTestModule
      * determines the home and remote interfaces based on the
      * information specified with the <code>setSuffix</code>
      * and <code>setPackage</code> methods.
+     * Sets the transaction policy <i>SUPPORTS</i>.
      * @param jndiName the JNDI name
      * @param beanClass the bean implementation class
      * @return the <code>MockEjbObject</code> of the deployed bean
      */
     public MockEjbObject deploy(String jndiName, Class beanClass)
     {
+        return deploy(jndiName, beanClass, TransactionPolicy.SUPPORTS);
+    }
+    
+    /**
+     * Deploys a bean to the mock container. You have to specify
+     * the implementation class and the JNDI name. The frameworks
+     * determines the home and remote interfaces based on the
+     * information specified with the <code>setSuffix</code>
+     * and <code>setPackage</code> methods.
+     * The specified transaction policy will be automatically set.
+     * @param jndiName the JNDI name
+     * @param beanClass the bean implementation class
+     * @param policy the transaction policy
+     * @return the <code>MockEjbObject</code> of the deployed bean
+     */
+    public MockEjbObject deploy(String jndiName, Class beanClass, TransactionPolicy policy)
+    {
         SessionBeanDescriptor descriptor = new SessionBeanDescriptor(jndiName, getHomeClass(beanClass), getRemoteClass(beanClass), beanClass);
-        return deploy(descriptor);
+        MockEjbObject bean = deploy(descriptor);
+        bean.setTransactionPolicy(policy);
+        return bean;
     }
     
     /**
@@ -133,6 +173,73 @@ public class EJBTestModule
     public void addToContext(String name, Object object)
     {
         MockContext.add(name, object);
+    }
+    
+    /**
+     * Lookup an object. If the object is not bound to the <code>InitialContext</code>,
+     * a <code>RuntimeException</code> will be thrown.
+     * @param name the name of the object
+     * @return the object
+     * @throws RuntimeException if an object with the specified name cannot be found.
+     */
+    public Object lookup(String name)
+    {
+        try
+        {
+            InitialContext context = new InitialContext();
+            return context.lookup(name);
+        }
+        catch(NamingException exc)
+        {
+            throw new RuntimeException("Object with name " + name + " not found.");
+        }
+    }
+    
+    /**
+     * Lookup an EJB. The method looks up the home interface, calls
+     * the <code>create</code> method and returns the result, which
+     * you can cast to the remote interface. This method only works
+     * with <code>create</code> methods that have an empty parameter list.
+     * It works with the mock container but may fail with a real remote container.
+     * This method throws a <code>RuntimeException</code> if no object with the 
+     * specified name can be found, if the found object is no EJB home interface,
+     * or if the corresponding <code>create</code> method cannot be found.
+     * @param name the name of the bean
+     * @return the bean
+     * @throws RuntimeException in case of error
+     */
+    public Object lookupBean(String name)
+    {
+        return lookupBean(name, new Object[0]);
+    }
+    
+    /**
+     * Lookup an EJB. The method looks up the home interface, calls
+     * the <code>create</code> method with the specified parameters
+     * and returns the result, which you can cast to the remote interface.
+     * This method works with the mock container but may fail with
+     * a real remote container.
+     * This method throws a <code>RuntimeException</code> if no object with the 
+     * specified name can be found, if the found object is no EJB home interface,
+     * or if the corresponding <code>create</code> method cannot be found.
+     * @param name the name of the bean
+     * @param parameters the parameters, <code>null</code> parameters are not allowed
+     * @return the bean parameters, primitive types are automatically unwrapped
+     * @throws RuntimeException in case of error
+     */
+    public Object lookupBean(String name, Object[] parameters)
+    {
+        Object object = lookup(name);
+        if(null == object) return null;
+        if(!(object instanceof EJBHome || object instanceof EJBLocalHome)) return null;
+        try
+        {
+            return MethodUtils.invokeMethod(object, "create", parameters);
+        }
+        catch(Exception exc)
+        {
+            return null;
+        }
     }
     
     /**
@@ -261,9 +368,9 @@ public class EJBTestModule
         String classPackage = ClassUtil.getPackageName(beanClass);
         String className = ClassUtil.getClassName(beanClass);
         className = truncateImplClassName(className);
-        if(null != homeSuffix)
+        if(null != homeInterfaceSuffix)
         {
-            className += homeSuffix;
+            className += homeInterfaceSuffix;
         }
         if(null != homeInterfacePackage)
         {
@@ -284,13 +391,13 @@ public class EJBTestModule
         String classPackage = ClassUtil.getPackageName(beanClass);
         String className = ClassUtil.getClassName(beanClass);
         className = truncateImplClassName(className);
-        if(null != interfaceSuffix)
+        if(null != businessInterfaceSuffix)
         {
-            className += interfaceSuffix;
+            className += businessInterfaceSuffix;
         }
-        if(null != interfacePackage)
+        if(null != businessInterfacePackage)
         {
-            classPackage = interfacePackage;
+            classPackage = businessInterfacePackage;
         }
         try
         {

@@ -28,6 +28,35 @@ public class EJBTestModuleTest extends TestCase
         mockfactory = new EJBMockObjectFactory();
         module = new EJBTestModule(mockfactory);
     }
+    
+    public void testLookupBean() throws Exception
+    {
+        module.deploy("com/MyLookupTest", TestBean.class);
+        try
+        {
+            module.lookupBean("com/MyLookupTestTest");
+            fail();
+        }
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+        Object bean = module.lookupBean("com/MyLookupTest");
+        assertTrue(bean instanceof Test);
+        bean = module.lookupBean("com/MyLookupTest", new Object[] {new Integer(1)});
+        assertTrue(bean instanceof Test);
+        bean = module.lookupBean("com/MyLookupTest", new Object[] {new Integer(1), new Boolean(true)});
+        assertTrue(bean instanceof Test);
+        try
+        {
+            module.lookupBean("com/MyLookupTestTest", new Object[] {new Boolean(true), new Integer(1)});
+            fail();
+        }
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+    }
         
     public void testDeploy() throws Exception
     {
@@ -53,7 +82,7 @@ public class EJBTestModuleTest extends TestCase
         try
         {
             module.setHomeInterfacePackage("com.mockrunner.test.ejb");
-            module.setInterfacePackage("com.mockrunner.test");
+            module.setBusinessInterfacePackage("com.mockrunner.test");
             module.deploy("test", TestBean.class);
             fail();
         }
@@ -63,8 +92,8 @@ public class EJBTestModuleTest extends TestCase
         }
         try
         {
-            module.setInterfacesPackages("com.mockrunner.test.ejb");
-            module.setHomeSuffix("Factory");
+            module.setInterfacePackage("com.mockrunner.test.ejb");
+            module.setHomeInterfaceSuffix("Factory");
             module.deploy("test", TestBean.class);
             fail();
         }
@@ -74,8 +103,8 @@ public class EJBTestModuleTest extends TestCase
         }
         try
         {
-            module.setHomeSuffix("Home");
-            module.setInterfaceSuffix("Business");
+            module.setHomeInterfaceSuffix("Home");
+            module.setBusinessInterfaceSuffix("Business");
             module.deploy("test", TestBean.class);
             fail();
         }
@@ -85,7 +114,7 @@ public class EJBTestModuleTest extends TestCase
         }
         try
         {
-            module.setInterfaceSuffix("");
+            module.setBusinessInterfaceSuffix("");
             module.setImplementationSuffix("Impl");
             module.deploy("test", TestBean.class);
             fail();
@@ -104,8 +133,7 @@ public class EJBTestModuleTest extends TestCase
     
     public void testTransactions() throws Exception
     {
-        MockEjbObject ejbObject = module.deploy("mybean", TestBean.class);
-        ejbObject.setTransactionPolicy(TransactionPolicy.REQUIRED);
+        MockEjbObject ejbObject = module.deploy("mybean", TestBean.class, TransactionPolicy.REQUIRED);
         InitialContext context = new InitialContext();
         Object home = context.lookup("mybean");
         TestHome testHome = (TestHome)PortableRemoteObject.narrow(home, TestHome.class );
@@ -133,6 +161,16 @@ public class EJBTestModuleTest extends TestCase
         public void ejbCreate() throws CreateException
         {
     
+        }
+        
+        public void ejbCreate(int testInt) throws CreateException
+        {
+
+        }
+        
+        public void ejbCreate(int testInt, Boolean testBoolean) throws CreateException
+        {
+
         }
         
         public void ejbActivate() throws EJBException, RemoteException
@@ -164,5 +202,9 @@ public class EJBTestModuleTest extends TestCase
     public static interface TestHome extends javax.ejb.EJBHome
     {
         public Test create() throws CreateException, RemoteException;
+        
+        public Test create(int testInt) throws CreateException, RemoteException;
+        
+        public Test create(int testInt, Boolean testBoolean) throws CreateException, RemoteException;
     }
 }

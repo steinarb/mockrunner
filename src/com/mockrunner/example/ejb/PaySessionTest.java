@@ -1,25 +1,21 @@
 package com.mockrunner.example.ejb;
 
-import javax.naming.InitialContext;
-import javax.rmi.PortableRemoteObject;
-
 import org.mockejb.MockEjbObject;
 import org.mockejb.TransactionPolicy;
 
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.example.ejb.interfaces.PaySession;
-import com.mockrunner.example.ejb.interfaces.PaySessionHome;
 import com.mockrunner.jdbc.JDBCTestCaseAdapter;
 import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockResultSet;
 
 /**
  * Example test for {@link PaySessionBean}. This example demonstrates
- * howto use {@link com.mockrunner.jdbc.JDBCTestModule} and the MockEJB
- * framework in conjunction. The tests are similar to 
- * {@link com.mockrunner.example.jdbc.PayActionTest} but instead of
- * an action we test an EJB. This example works with the simulated JDBC
- * environment of Mockrunner.
+ * howto use {@link com.mockrunner.jdbc.JDBCTestModule} and 
+ * {@link com.mockrunner.ejb.EJBTestModule} in conjunction. 
+ * The tests are similar to {@link com.mockrunner.example.jdbc.PayActionTest} 
+ * but instead of an action we test an EJB. This example works with the simulated 
+ * JDBC environment of Mockrunner.
  */
 public class PaySessionTest extends JDBCTestCaseAdapter
 {
@@ -32,14 +28,11 @@ public class PaySessionTest extends JDBCTestCaseAdapter
     {
         super.setUp();
         ejbModule = createEJBTestModule();
-        ejbModule.setInterfacesPackages("com.mockrunner.example.ejb.interfaces");
+        ejbModule.setInterfacePackage("com.mockrunner.example.ejb.interfaces");
         ejbObject = ejbModule.deploy("com/mockrunner/example/PaySession", PaySessionBean.class);
         ejbObject.setTransactionPolicy(TransactionPolicy.REQUIRED);    
         ejbModule.addToContext("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
-        InitialContext context = new InitialContext();
-        Object home = context.lookup("com/mockrunner/example/PaySession");
-        PaySessionHome payHome = (PaySessionHome)PortableRemoteObject.narrow(home, PaySessionHome.class );
-        bean = (PaySession)payHome.create();
+        bean = (PaySession)ejbModule.lookupBean("com/mockrunner/example/PaySession");
         statementHandler = getJDBCMockObjectFactory().getMockConnection().getStatementResultSetHandler();
     }
     
