@@ -491,4 +491,129 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyNumberCommits(1);
         module.verifyNumberRollbacks(2);
     }
+    
+    public void testVerifyResultSet()
+    {
+        MockResultSet resultSet1 = module.getStatementResultSetHandler().createResultSet("test");
+        resultSet1.addRow(new Integer[] {new Integer(1), new Integer(2), new Integer(3)});
+        resultSet1.addRow(new Integer[] {new Integer(4), new Integer(5), new Integer(6)});
+        resultSet1.addRow(new Integer[] {new Integer(7), new Integer(8), new Integer(9)});
+        module.getStatementResultSetHandler().addReturnedResultSet(resultSet1);
+        MockResultSet resultSet2 = module.getStatementResultSetHandler().createResultSet("xyz");
+        resultSet2.addColumn("column", new String[] {"1", "2", "3"});
+        module.getStatementResultSetHandler().addReturnedResultSet(resultSet2);
+        module.verifyResultSetRow("test", 2, new Integer[] {new Integer(4), new Integer(5), new Integer(6)});
+        try
+        {
+            module.verifyResultSetRow(resultSet1, 3, new Integer[] {new Integer(4), new Integer(5), new Integer(6)});
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.verifyResultSetColumn("test", 1, new Integer[] {new Integer(1), new Integer(4), new Integer(7)});
+        module.verifyResultSetColumn(resultSet2, 1, new String[] {"1", "2", "3"});
+        module.verifyResultSetColumn(resultSet2, "column", new String[] {"1", "2", "3"});
+        module.verifyResultSetRow("xyz", 3, new String[] {"3"});
+        try
+        {
+            module.verifyResultSetRow(resultSet2, 3, new String[] {"3", "4"});
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyResultSetColumn("xyz", "testColumn", new String[] {"1"});
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyResultSetColumn("xyz", 2, new String[] {"1", "2", "3"});
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyResultSetRow(resultSet2, 5, new String[] {"1", "2", "3"});
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyResultSetEquals(resultSet1, resultSet2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.verifyResultSetEquals(resultSet1, resultSet1);
+        module.verifyResultSetEquals(resultSet2, resultSet2);
+        resultSet2 = module.getStatementResultSetHandler().createResultSet("test2");
+        resultSet2.addRow(new Integer[] {new Integer(1), new Integer(2), new Integer(3)});
+        resultSet2.addRow(new Integer[] {new Integer(4), new Integer(5), new Integer(6)});
+        resultSet2.addRow(new Integer[] {new Integer(7), new Integer(8), new Integer(9)});
+        module.getStatementResultSetHandler().addReturnedResultSet(resultSet2);
+        module.getStatementResultSetHandler().addReturnedResultSet(resultSet1);
+        module.verifyResultSetEquals(resultSet1, resultSet2);
+        module.verifyResultSetEquals("test", resultSet2);
+        module.verifyResultSetEquals("test2", resultSet1);
+    }
+    
+    public void testVerifyResultSetRowModified() throws Exception
+    {
+        MockResultSet resultSet = module.getStatementResultSetHandler().createResultSet("test");
+        resultSet.addRow(new Integer[] {new Integer(1), new Integer(2), new Integer(3)});
+        resultSet.addRow(new Integer[] {new Integer(4), new Integer(5), new Integer(6)});
+        resultSet.addRow(new Integer[] {new Integer(7), new Integer(8), new Integer(9)});
+        module.getStatementResultSetHandler().addReturnedResultSet(resultSet);
+        module.verifyResultSetRowNotDeleted(resultSet, 1);
+        module.verifyResultSetRowNotDeleted("test", 2);
+        module.verifyResultSetRowNotInserted("test", 2);
+        module.verifyResultSetRowNotUpdated(resultSet, 3);
+        try
+        {
+            module.verifyResultSetRowUpdated(resultSet, 1);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
+        resultSet.next();
+        resultSet.updateRow();
+        module.verifyResultSetRowUpdated(resultSet, 1);
+        resultSet.next();
+        resultSet.deleteRow();
+        module.verifyResultSetRowDeleted(resultSet, 2);
+        resultSet.next();
+        resultSet.moveToInsertRow();
+        resultSet.updateString(1, "test");
+        resultSet.insertRow();
+        resultSet.moveToCurrentRow();
+        module.verifyResultSetRowInserted("test", 3);
+        resultSet.first();
+        resultSet.moveToInsertRow();
+        resultSet.updateString(1, "test");
+        resultSet.insertRow();
+        resultSet.moveToCurrentRow();
+        module.verifyResultSetRowInserted("test", 1);
+        module.verifyResultSetRowDeleted(resultSet, 3);
+        module.verifyResultSetRowNotUpdated(resultSet, 4);
+    }
 }
