@@ -18,12 +18,14 @@ public class PreparedStatementResultSetHandler extends AbstractResultSetHandler
     private List preparedStatements;
     private Map preparedStatementMap;
     private Map resultSetsForStatement;
+    private Map updateCountForStatement;
     
     public PreparedStatementResultSetHandler()
     {
         preparedStatements = new ArrayList();
         preparedStatementMap = new HashMap();
         resultSetsForStatement = new HashMap();
+        updateCountForStatement = new HashMap();
         exactMatchParameter = false;
     }
     
@@ -56,6 +58,31 @@ public class PreparedStatementResultSetHandler extends AbstractResultSetHandler
         }
         list.add(statement);
         preparedStatements.add(statement);
+    }
+    
+    /**
+     * Returns the first update count that matches the
+     * specified SQL string and the specified parameters. 
+     * Please note that you can modify the search parameters with 
+     * {@link #setCaseSensitive} and {@link #setExactMatch}. 
+     * Returns <code>null</code> if no return value is present
+     * for the specified SQL string.
+     * @param sql the SQL string
+     * @param parameters the parameters
+     * @return the corresponding update count
+     */
+    public Integer getUpdateCount(String sql, List parameters)
+    {
+        List list = SearchUtil.getMatchingObjects(updateCountForStatement, sql, getCaseSensitive(), getExactMatch());
+        for(int ii = 0; ii < list.size(); ii++)
+        {
+            MockUpdateCountWrapper wrapper = (MockUpdateCountWrapper)list.get(ii);
+            if(doParameterMatch(wrapper.getParamters(), parameters))
+            {
+                return wrapper.getUpdateCount();
+            }
+        }
+        return null;
     }
     
     /**
@@ -168,6 +195,36 @@ public class PreparedStatementResultSetHandler extends AbstractResultSetHandler
         list.add(new MockResultSetWrapper(resultSet, paramters));
     }
     
+    /**
+     * Prepare the update count for execute update calls for a specified SQL string
+     * and the specified parameters.
+     * @param sql the SQL string
+     * @param updateCount the update count
+     * @param paramters the parameters
+     */
+    public void prepareUpdateCount(String sql, int updateCount, Object[] paramters)
+    {
+        prepareUpdateCount(sql, updateCount, ArrayUtil.getListFromObjectArray(paramters));
+    }
+    
+    /**
+     * Prepare the update count for execute update calls for a specified SQL string
+     * and the specified parameters.
+     * @param sql the SQL string
+     * @param updateCount the update count
+     * @param paramters the parameters
+     */
+    public void prepareUpdateCount(String sql, int updateCount, List paramters)
+    {
+        List list = (List)updateCountForStatement.get(sql);
+        if(null == list)
+        {
+            list = new ArrayList();
+            updateCountForStatement.put(sql, list);
+        }
+        list.add(new MockUpdateCountWrapper(updateCount, paramters));
+    }
+    
     private class MockResultSetWrapper
     {
         private MockResultSet resultSet;
@@ -187,6 +244,28 @@ public class PreparedStatementResultSetHandler extends AbstractResultSetHandler
         public MockResultSet getResultSet()
         {
             return resultSet;
+        }
+    }
+    
+    private class MockUpdateCountWrapper
+    {
+        private Integer updateCount;
+        private List paramters;
+    
+        public MockUpdateCountWrapper(int updateCount, List paramters)
+        {
+            this.updateCount = new Integer(updateCount);
+            this.paramters = paramters;
+        }
+    
+        public List getParamters()
+        {
+            return paramters;
+        }
+
+        public Integer getUpdateCount()
+        {
+            return updateCount;
         }
     }
 }

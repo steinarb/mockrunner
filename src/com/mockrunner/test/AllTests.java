@@ -30,6 +30,7 @@ public class AllTests
         suite.addTest(new TestSuite(ArrayUtilTest.class));
         suite.addTest(new TestSuite(SearchUtilTest.class));
         suite.addTest(new TestSuite(CollectionUtilTest.class));
+        suite.addTest(new TestSuite(StringUtilTest.class));
         suite.addTest(new TestSuite(ConstrainedNumericTextTagTest.class));
         suite.addTest(new TestSuite(TableEnumTagTest.class));
         suite.addTest(new TestSuite(LogoutServletTest.class));
