@@ -14,7 +14,7 @@ import com.mockrunner.mock.jms.MockTextMessage;
 
 /**
  * This class is used to keep track of messages that are
- * created by sessions and topics.
+ * created using sessions and topics.
  */
 public class MessageManager
 {
