@@ -223,4 +223,46 @@ public class MockStreamMessageTest extends TestCase
             //should throw exception
         }
     }
+    
+    public void testEquals() throws Exception
+    {
+        MockStreamMessage message1 = new MockStreamMessage();
+        message1.writeString("test");
+        message1.writeObject(new Long(1));
+        message1.writeBytes(new byte[] {1, 2, 3});
+        MockStreamMessage message2 = null;
+        assertFalse(message1.equals(message2));
+        message2 = new MockStreamMessage();
+        assertFalse(message1.equals(message2));
+        assertFalse(message2.equals(message1));
+        message2.writeString("test");
+        message2.writeBytes(new byte[] {1, 2, 3});
+        message2.writeObject(new Long(1));
+        assertFalse(message1.equals(message2));
+        assertFalse(message2.equals(message1));
+        message2 = new MockStreamMessage();
+        message2.writeString("test");
+        message2.writeObject(new Long(1));
+        message2.writeBytes(new byte[] {});
+        assertFalse(message1.equals(message2));
+        assertFalse(message2.equals(message1));
+        message2 = new MockStreamMessage();
+        message2.writeString("test");
+        message2.writeObject(new Long(1));
+        message2.writeBytes(new byte[] {1, 2, 3});
+        assertTrue(message1.equals(message2));
+        assertTrue(message2.equals(message1));
+        assertEquals(message1.hashCode(), message2.hashCode());
+        message2.writeString(null);
+        assertFalse(message1.equals(message2));
+        assertFalse(message2.equals(message1));
+        message1.writeString(null);
+        assertTrue(message1.equals(message2));
+        assertTrue(message2.equals(message1));
+        assertEquals(message1.hashCode(), message2.hashCode());
+        message1.reset();
+        assertTrue(message1.equals(message2));
+        assertTrue(message2.equals(message1));
+        assertEquals(message1.hashCode(), message2.hashCode());
+    }
 }

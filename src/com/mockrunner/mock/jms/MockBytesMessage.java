@@ -6,6 +6,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.IOException;
+import java.util.Arrays;
 
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
@@ -547,4 +548,29 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
         byteOutStream = new ByteArrayOutputStream();
         outStream = new DataOutputStream(byteOutStream);
     }
+    
+    /**
+     * Compares the underlying byte data.
+     */
+    public boolean equals(Object otherObject)
+    {
+        if(null == otherObject) return false;
+        if(!(otherObject instanceof MockBytesMessage)) return false;
+        MockBytesMessage otherMessage = (MockBytesMessage)otherObject;
+        byte[] firstData = byteOutStream.toByteArray();
+        byte[] secondData = otherMessage.byteOutStream.toByteArray();
+        return Arrays.equals(firstData, secondData);
+    }
+
+    public int hashCode()
+    {
+        int value = 0;
+        byte[] data = byteOutStream.toByteArray();
+        for(int ii = 0; ii < data.length; ii++)
+        {
+            value += data[ii];
+        }
+        return value;
+    }
+
 }

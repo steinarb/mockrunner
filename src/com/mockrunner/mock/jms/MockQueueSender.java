@@ -1,11 +1,13 @@
 package com.mockrunner.mock.jms;
 
+import javax.jms.BytesMessage;
 import javax.jms.DeliveryMode;
 import javax.jms.InvalidDestinationException;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Queue;
 import javax.jms.QueueSender;
+import javax.jms.StreamMessage;
 
 /**
  * Mock implementation of JMS <code>QueueSender</code>.
@@ -189,6 +191,14 @@ public class MockQueueSender implements QueueSender
         if(!disableMessageId)
         {
             message.setJMSMessageID(String.valueOf(Math.random()));
+        }
+        if(message instanceof BytesMessage)
+        {
+            ((BytesMessage)message).reset();
+        }
+        if(message instanceof StreamMessage)
+        {
+            ((StreamMessage)message).reset();
         }
     }
 }

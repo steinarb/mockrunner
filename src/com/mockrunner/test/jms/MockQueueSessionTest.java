@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.jms.BytesMessage;
 import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -14,6 +15,7 @@ import javax.jms.QueueBrowser;
 import javax.jms.QueueReceiver;
 import javax.jms.QueueSender;
 import javax.jms.QueueSession;
+import javax.jms.StreamMessage;
 import javax.jms.TemporaryQueue;
 import javax.jms.TextMessage;
 
@@ -279,6 +281,22 @@ public class MockQueueSessionTest extends TestCase
         sender.send(new MockTextMessage("Text4"));
         assertEquals(1, anotherQueue.getReceivedMessageList().size());
         assertEquals("Text4", receiver4.receive().toString());
+    }
+    
+    public void testTransmissionResetCalled() throws Exception
+    {
+        DestinationManager destManager = connection.getDestinationManager();
+        destManager.createQueue("Queue1");
+        MockQueue queue = (MockQueue)session.createQueue("Queue1");
+        QueueSender sender = session.createSender(queue);
+        BytesMessage bytesMessage = new MockBytesMessage();
+        StreamMessage streamMessage = new MockStreamMessage();
+        bytesMessage.writeInt(1);
+        streamMessage.writeLong(2);
+        sender.send(bytesMessage);
+        sender.send(streamMessage);
+        assertEquals(1, bytesMessage.readInt());
+        assertEquals(2, streamMessage.readLong());
     }
     
     public void testTransmissionMultipleSessions() throws Exception

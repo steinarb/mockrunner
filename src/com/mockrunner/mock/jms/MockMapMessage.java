@@ -1,7 +1,9 @@
 package com.mockrunner.mock.jms;
 
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Vector;
 
@@ -286,5 +288,60 @@ public class MockMapMessage extends MockMessage implements MapMessage
     {
         super.clearBody();
         data.clear();
+    }
+    
+    /**
+     * Compares the underlying map data.
+     */
+    public boolean equals(Object otherObject)
+    {
+        if(null == otherObject) return false;
+        if(!(otherObject instanceof MockMapMessage)) return false;
+        MockMapMessage otherMessage = (MockMapMessage)otherObject;
+        if(data.size() != otherMessage.data.size()) return false;
+        Iterator keys = data.keySet().iterator();
+        while(keys.hasNext())
+        {
+            Object nextKey = keys.next();
+            Object nextValue = data.get(nextKey);
+            Object otherValue = otherMessage.data.get(nextKey);
+            if(null == nextValue)
+            {
+                if(null != otherValue) return false;
+            }
+            else if(nextValue instanceof byte[])
+            {
+                if(null == otherValue) return false;
+                if(!(otherValue instanceof byte[])) return false;
+                if(!Arrays.equals((byte[])nextValue, (byte[])otherValue)) return false;
+            }
+            else
+            {
+                if(!nextValue.equals(otherValue)) return false;
+            }
+        }
+        return true;
+    }
+
+    public int hashCode()
+    {
+        int value = 0;
+        Iterator values = data.values().iterator();
+        while(values.hasNext())
+        {
+            Object nextValue = values.next();
+            if(nextValue instanceof byte[])
+            {
+                for(int ii = 0; ii < ((byte[])nextValue).length; ii++)
+                {
+                    value += ((byte[])nextValue)[ii];
+                }
+            }
+            else if(nextValue != null)
+            {
+                value += nextValue.hashCode();
+            }
+        }
+        return value;
     }
 }
