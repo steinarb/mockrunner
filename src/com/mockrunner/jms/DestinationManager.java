@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.mock.jms.MockQueue;
+import com.mockrunner.mock.jms.MockQueueBrowser;
 import com.mockrunner.mock.jms.MockQueueConnection;
 import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
@@ -18,6 +19,7 @@ public class DestinationManager
     private List tempQueues;
     private List queueSender;
     private List queueReceiver;
+    private List queueBrowser;
     
     public DestinationManager(MockQueueConnection connection)
     {
@@ -25,6 +27,7 @@ public class DestinationManager
         tempQueues = new ArrayList();
         queueSender = new ArrayList();
         queueReceiver = new ArrayList();
+        queueBrowser = new ArrayList();
         this.connection = connection;
     }
     
@@ -124,11 +127,12 @@ public class DestinationManager
      * <code>Queue</code>. Usually this method is called
      * by {@link com.mockrunner.mock.jms.MockQueueSession#createReceiver}.
      * @param queue the <code>Queue</code>
+     * @param messageSelector the message selector
      * @return the created <code>QueueReceiver</code>
      */
-    public MockQueueReceiver createQueueReceiver(MockQueue queue)
+    public MockQueueReceiver createQueueReceiver(MockQueue queue, String messageSelector)
     {
-        MockQueueReceiver receiver = new MockQueueReceiver(connection, queue);
+        MockQueueReceiver receiver = new MockQueueReceiver(connection, queue, messageSelector);
         queueReceiver.add(receiver);
         return receiver;
     }
@@ -143,5 +147,32 @@ public class DestinationManager
     public MockQueueReceiver getQueueReceiver(int index)
     {
         return (MockQueueReceiver)queueReceiver.get(index);
+    }
+    
+    /**
+     * Creates a new <code>QueueBrowser</code> for the specified
+     * <code>Queue</code>. Usually this method is called
+     * by {@link com.mockrunner.mock.jms.MockQueueSession#createBrowser}.
+     * @param queue the <code>Queue</code>
+     * @param messageSelector the message selector
+     * @return the created <code>QueueBrowser</code>
+     */
+    public MockQueueBrowser createQueueBrowser(MockQueue queue, String messageSelector)
+    {
+        MockQueueBrowser browser = new MockQueueBrowser(connection, queue, messageSelector);
+        queueBrowser.add(browser);
+        return browser;
+    }
+
+    /**
+     * Returns a <code>QueueBrowser</code> by its index resp.
+     * <code>null</code>, if no such <code>QueueBrowser</code> is
+     * present.
+     * @param index the index of the <code>QueueBrowser</code>
+     * @return the <code>QueueBrowser</code>
+     */
+    public MockQueueBrowser getQueueBrowser(int index)
+    {
+        return (MockQueueBrowser)queueBrowser.get(index);
     }
 }

@@ -25,17 +25,41 @@ public class MockQueueSession implements QueueSession
     private MockQueueConnection connection;
     private boolean transacted;
     private int acknowledgeMode;
+    private boolean committed;
+    private boolean rolledback;
+    private boolean recovered;
+    private boolean closed;
+    private MessageListener messageListener;
     
     public MockQueueSession(MockQueueConnection connection, boolean transacted, int acknowledgeMode)
     {
         this.connection = connection;
         this.transacted = transacted;
         this.acknowledgeMode = acknowledgeMode;
+        committed = false;
+        rolledback = false;
+        recovered = false;
+        closed = false;
     }
     
-    public boolean isTransacted()
+    public boolean isClosed()
     {
-        return transacted;
+        return closed;
+    }
+
+    public boolean isCommitted()
+    {
+        return committed;
+    }
+
+    public boolean isRecovered()
+    {
+        return recovered;
+    }
+
+    public boolean isRolledback()
+    {
+        return rolledback;
     }
     
     public int getAcknowledgeMode()
@@ -73,7 +97,7 @@ public class MockQueueSession implements QueueSession
         {
             throw new JMSException("queue must be an instance of MockQueue");
         }
-        return connection.getDestinationManager().createQueueReceiver((MockQueue)queue);
+        return connection.getDestinationManager().createQueueReceiver((MockQueue)queue, messageSelector);
     }
 
     public QueueSender createSender(Queue queue) throws JMSException
@@ -86,18 +110,20 @@ public class MockQueueSession implements QueueSession
         return connection.getDestinationManager().createQueueSender((MockQueue)queue);
     }
 
-    public QueueBrowser createBrowser(Queue arg0) throws JMSException
+    public QueueBrowser createBrowser(Queue queue) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return createBrowser(queue, null);
     }
 
-    public QueueBrowser createBrowser(Queue arg0, String arg1) throws JMSException
+    public QueueBrowser createBrowser(Queue queue, String messageSelector) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        if(!(queue instanceof MockQueue))
+        {
+            throw new JMSException("queue must be an instance of MockQueue");
+        }
+        return connection.getDestinationManager().createQueueBrowser((MockQueue)queue, messageSelector);
     }
 
     public BytesMessage createBytesMessage() throws JMSException
@@ -158,50 +184,48 @@ public class MockQueueSession implements QueueSession
 
     public boolean getTransacted() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return false;
+        return transacted;
     }
 
     public void commit() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        committed = true;
     }
 
     public void rollback() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        rolledback = true;
     }
 
     public void close() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        closed = true;
     }
 
     public void recover() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        recovered = true;
     }
 
     public MessageListener getMessageListener() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return messageListener;
     }
 
-    public void setMessageListener(MessageListener arg0) throws JMSException
+    public void setMessageListener(MessageListener messageListener) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        this.messageListener = messageListener;
     }
 
     public void run()
     {
-        // TODO Auto-generated method stub
+        
     }
 }

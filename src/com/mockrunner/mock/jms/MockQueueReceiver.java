@@ -6,15 +6,27 @@ import javax.jms.MessageListener;
 import javax.jms.Queue;
 import javax.jms.QueueReceiver;
 
+/**
+ * Mock implementation of JMS <code>QueueReceiver</code>.
+ */
 public class MockQueueReceiver implements QueueReceiver
 {
     private MockQueueConnection connection;
     private MockQueue queue;
+    private String messageSelector;
+    private boolean closed;
 
-    public MockQueueReceiver(MockQueueConnection connection, MockQueue queue)
+    public MockQueueReceiver(MockQueueConnection connection, MockQueue queue, String messageSelector)
     {
         this.connection = connection;
         this.queue = queue;
+        this.messageSelector = messageSelector;
+        closed = false;
+    }
+    
+    public boolean isClosed()
+    {
+        return closed;
     }
 
     public Queue getQueue() throws JMSException
@@ -25,9 +37,8 @@ public class MockQueueReceiver implements QueueReceiver
 
     public String getMessageSelector() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return messageSelector;
     }
 
     public MessageListener getMessageListener() throws JMSException
@@ -66,7 +77,7 @@ public class MockQueueReceiver implements QueueReceiver
 
     public void close() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        closed = true;
     }
 }
