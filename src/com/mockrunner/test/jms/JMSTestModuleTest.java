@@ -510,14 +510,26 @@ public class JMSTestModuleTest extends TestCase
         session1.commit();
         session2.rollback();
         module.verifyQueueSessionCommitted(0);
+        module.verifyQueueSessionNotRecovered(0);
         module.verifyQueueSessionNotRolledBack(0);
         module.verifyQueueSessionNotCommitted(1);
+        module.verifyQueueSessionRecovered(1);
         module.verifyQueueSessionRolledBack(1);
         module.verifyQueueSessionNotCommitted(2);
+        module.verifyQueueSessionNotRecovered(2);
         module.verifyQueueSessionNotRolledBack(2);
         try
         {
             module.verifyQueueSessionNotCommitted(0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyQueueSessionRecovered(0);
             fail();
         }
         catch(VerifyFailedException exc)
@@ -555,5 +567,14 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
+        try
+        {
+            module.verifyAllQueueSessionsRecovered();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        } 
     }
 }

@@ -294,6 +294,44 @@ public class JMSTestModule
     }
     
     /**
+     * Verifies that the queue session with the specified index was
+     * recovered.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyQueueSessionRecovered(int indexOfSession)
+    {
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        if(!session.isRecovered())
+        {
+            throw new VerifyFailedException("QueueConnection is not recovered.");
+        }
+    }
+    
+    /**
+     * Verifies that the queue session with the specified index was
+     * not recovered.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyQueueSessionNotRecovered(int indexOfSession)
+    {
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        if(session.isRecovered())
+        {
+            throw new VerifyFailedException("QueueConnection is recovered.");
+        }
+    }
+    
+    /**
      * Verifies that all queue sessions are closed.
      * @throws VerifyFailedException if verification fails
      */
@@ -306,6 +344,23 @@ public class JMSTestModule
             if(!currentSession.isClosed())
             {
                 throw new VerifyFailedException("QueueSession with index " + ii + " is not closed.");
+            }
+        }
+    }
+    
+    /**
+     * Verifies that all queue sessions are recovered.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllQueueSessionsRecovered()
+    {
+        List queueSessions = getQueueSessionList();
+        for(int ii = 0; ii < queueSessions.size(); ii++)
+        {
+            MockQueueSession currentSession = (MockQueueSession)queueSessions.get(ii);
+            if(!currentSession.isRecovered())
+            {
+                throw new VerifyFailedException("QueueSession with index " + ii + " is not recovered.");
             }
         }
     }
