@@ -1,4 +1,4 @@
-package com.mockrunner.gen;
+package com.mockrunner.gen.util;
 
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -7,8 +7,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 
-import com.mockrunner.gen.JavaLineParser.Block;
-import com.mockrunner.gen.JavaLineParser.Line;
+import com.mockrunner.gen.util.JavaLineParser.Block;
+import com.mockrunner.gen.util.JavaLineParser.Line;
 
 public class JavaLineProcessor
 {

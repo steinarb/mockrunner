@@ -1,9 +1,9 @@
-package com.mockrunner.test.gen;
+package com.mockrunner.test.gen.util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mockrunner.gen.JavaLineAssembler;
+import com.mockrunner.gen.util.JavaLineAssembler;
 
 import junit.framework.TestCase;
 

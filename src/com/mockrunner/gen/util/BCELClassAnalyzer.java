@@ -1,4 +1,4 @@
-package com.mockrunner.gen;
+package com.mockrunner.gen.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +11,8 @@ import org.apache.bcel.classfile.Attribute;
 import org.apache.bcel.classfile.Deprecated;
 import org.apache.bcel.classfile.EmptyVisitor;
 import org.apache.bcel.classfile.JavaClass;
+import org.apache.bcel.classfile.LocalVariable;
+import org.apache.bcel.classfile.LocalVariableTable;
 import org.apache.bcel.generic.BasicType;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.Type;
@@ -40,6 +42,30 @@ public class BCELClassAnalyzer
             }
         }
         return false;
+    }
+    
+    public String[] getArgumentNames(java.lang.reflect.Method reflectMethod)
+    {
+        org.apache.bcel.classfile.Method bcelMethod = getBCELMethod(reflectMethod);
+        if(null == bcelMethod) return null;
+        LocalVariableTable table = bcelMethod.getLocalVariableTable();
+        if(null == table) return null;
+        LocalVariable[] variables = table.getLocalVariableTable();
+        if(null == variables) return null;
+        int firstIndex = 0;
+        while((firstIndex < variables.length) && (variables[firstIndex].getName().equals("this")))
+        {
+            firstIndex++;
+        }
+        Type[] types = bcelMethod.getArgumentTypes();
+        if(null == types) return null;
+        if((variables.length - firstIndex) < types.length) return null;
+        String[] names = new String[types.length];
+        for(int ii = 0; ii < types.length; ii++)
+        {
+            names[ii] = variables[firstIndex + ii].getName();
+        }
+        return names;
     }
     
     private org.apache.bcel.classfile.Method getBCELMethod(java.lang.reflect.Method reflectMethod)

@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.mockrunner.gen.GeneratorUtil;
+import com.mockrunner.gen.util.GeneratorUtil;
 
 import junit.framework.TestCase;
 

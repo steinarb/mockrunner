@@ -1,4 +1,4 @@
-package com.mockrunner.test.gen;
+package com.mockrunner.test.gen.util;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
@@ -7,10 +7,10 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.gen.JavaLineParser;
-import com.mockrunner.gen.JavaLineProcessor;
-import com.mockrunner.gen.JavaLineParser.Block;
-import com.mockrunner.gen.JavaLineParser.Line;
+import com.mockrunner.gen.util.JavaLineParser;
+import com.mockrunner.gen.util.JavaLineProcessor;
+import com.mockrunner.gen.util.JavaLineParser.Block;
+import com.mockrunner.gen.util.JavaLineParser.Line;
 
 public class JavaLineProcessorTest extends TestCase
 {
