@@ -15,6 +15,7 @@ public class AllGenTests
         suite.addTest(new TestSuite(PackageImportSorterTest.class));
         suite.addTest(new TestSuite(BCELClassAnalyzerTest.class));
         suite.addTest(new TestSuite(JarFileExtractorTest.class));
+        suite.addTest(new TestSuite(MockrunnerJarsTest.class));
         //$JUnit-END$
         return suite;
     }

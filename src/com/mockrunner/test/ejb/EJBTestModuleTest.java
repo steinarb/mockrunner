@@ -494,8 +494,6 @@ public class EJBTestModuleTest extends TestCase
     
 	public static abstract class TestEntityEJB implements EntityBean
 	{
-		private EntityContext entityContext;
-		
 		public abstract String getName();
 		public abstract void setName(String name);
     
@@ -546,12 +544,12 @@ public class EJBTestModuleTest extends TestCase
 
 		public void setEntityContext(EntityContext context) throws EJBException, RemoteException
 		{
-			entityContext = context;
+			
 		}
 		
 		public void unsetEntityContext() throws EJBException, RemoteException
 		{
-			entityContext = null;
+			
 		}
 		
 		public void ejbLoad() throws EJBException, RemoteException
