@@ -15,7 +15,7 @@ import java.sql.Statement;
  * The SQL to create the table is
  * 
  * <code>create table account(id int not null primary key,balance int not null)</code>.
- * Check out {@link LogoutServletTest} to see how to test this class.
+ * Check out {@link com.mockrunner.example.servlet.LogoutServletTest} to see how to test this class.
  **/
 public class Bank
 {
