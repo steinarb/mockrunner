@@ -2227,7 +2227,7 @@ public class JDBCTestModule
     /*public void verifySavepointRolledBack(int index)
     {
         verifySavepointPresent(index);
-        if(!getSavepoint(index).isRollbacked())
+        if(!getSavepoint(index).isRolledBack())
         {
             throw new VerifyFailedException("Savepoint with index " + index + " not rolled back.");
         }
@@ -2241,7 +2241,7 @@ public class JDBCTestModule
     /*public void verifySavepointRolledBack(String name)
     {
         verifySavepointPresent(name);
-        if(!getSavepoint(name).isRollbacked())
+        if(!getSavepoint(name).isRolledBack())
         {
             throw new VerifyFailedException("Savepoint with name " + name + " not rolled back.");
         }
@@ -2256,7 +2256,7 @@ public class JDBCTestModule
     /*public void verifySavepointNotRolledBack(int index)
     {
         verifySavepointPresent(index);
-        if(getSavepoint(index).isRollbacked())
+        if(getSavepoint(index).isRolledBack())
         {
             throw new VerifyFailedException("Savepoint with index " + index + " is rolled back.");
         }
@@ -2270,7 +2270,7 @@ public class JDBCTestModule
     /*public void verifySavepointNotRolledBack(String name)
     {
         verifySavepointPresent(name);
-        if(getSavepoint(name).isRollbacked())
+        if(getSavepoint(name).isRolledBack())
         {
             throw new VerifyFailedException("Savepoint with name " + name + " is rolled back.");
         }
