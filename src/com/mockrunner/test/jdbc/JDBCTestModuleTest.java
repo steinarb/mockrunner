@@ -230,7 +230,7 @@ public class JDBCTestModuleTest extends TestCase
         }
     }
     
-    public void testVerifyCallableStatementoutParameter() throws Exception
+    public void testVerifyCallableStatementOutParameterRegistered() throws Exception
     {
         prepareCallableStatements();
         MockCallableStatement statement = module.getCallableStatement("{call getData(?, ?, ?, ?)}");
