@@ -91,6 +91,7 @@ public class JDKVersionGenerator
         jdbcTestCaseAdapterProc.addBlock("protected void verifySavepointNotRolledBack(int index)");
         jdbcTestCaseAdapterProc.addBlock("protected void verifySavepointNotRolledBack(String name)");
         jdbcFiles.put("com.mockrunner.jdbc.JDBCTestCaseAdapter", jdbcTestCaseAdapterProc);
+        jdbcFiles.put("com.mockrunner.jdbc.BasicJDBCTestCaseAdapter", jdbcTestCaseAdapterProc);
         
         JavaLineProcessor jdbcTestModuleProc = new JavaLineProcessor();
         jdbcTestModuleProc.addLine("import com.mockrunner.mock.jdbc.MockSavepoint;");
