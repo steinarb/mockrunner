@@ -14,6 +14,7 @@ public class AllTests
         suite.addTest(new TestSuite(MockHttpSessionTest.class));
         suite.addTest(new TestSuite(MockObjectFactoryTest.class));
         suite.addTest(new TestSuite(TagUtilTest.class));
+        suite.addTest(new TestSuite(NestedStandardTagTest.class));
         suite.addTest(com.mockrunner.example.test.AllExampleTests.suite());
         //$JUnit-END$
         return suite;

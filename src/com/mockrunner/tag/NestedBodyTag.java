@@ -104,16 +104,17 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
 		childs.add(text);
 	}
 	
-	public void addTagChild(Class tag)
+	public NestedTag addTagChild(Class tag)
 	{
-		addTagChild(tag, new HashMap());
+		return addTagChild(tag, new HashMap());
 	}
 	
-	public void addTagChild(Class tag, Map attributeMap)
+	public NestedTag addTagChild(Class tag, Map attributeMap)
 	{
 		TagSupport tagSupport = TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);	
 		tagSupport.setParent(this.tag);
 		childs.add(tagSupport);
+        return (NestedTag)tagSupport;
 	}
 	
 	public int doAfterBody() throws JspException
@@ -168,12 +169,16 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
 
 	public void setPageContext(PageContext pageContext)
 	{
-		this.pageContext = pageContext;
-		tag.setPageContext(pageContext);
-		for(int ii = 0; ii < childs.size(); ii++)
-		{
-			((TagSupport)childs.get(ii)).setPageContext(pageContext);
-		}
+        this.pageContext = pageContext;
+        tag.setPageContext(pageContext);
+        for(int ii = 0; ii < childs.size(); ii++)
+        {
+            Object child = childs.get(ii);
+            if(child instanceof TagSupport)
+            {
+                ((TagSupport)child).setPageContext(pageContext);
+            }
+        }
 	}
 
 	public void setParent(Tag arg0)

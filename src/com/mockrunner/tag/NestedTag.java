@@ -22,7 +22,7 @@ public interface NestedTag
       
     public void addTextChild(String text);
        
-    public void addTagChild(Class tag);
+    public NestedTag addTagChild(Class tag);
         
-    public void addTagChild(Class tag, Map attributeMap);     
+    public NestedTag addTagChild(Class tag, Map attributeMap);     
 }

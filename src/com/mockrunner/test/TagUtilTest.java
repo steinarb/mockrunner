@@ -3,7 +3,6 @@ package com.mockrunner.test;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.mockrunner.base.BaseTestCase;
@@ -50,98 +49,13 @@ public class TagUtilTest extends BaseTestCase
         assertEquals("test", tag.getTestString());
         assertEquals(12.3, tag.getTestDouble(), 0.00);
         assertEquals(new Integer(100), tag.getTestInteger());
-        assertFalse(tag.releaseCalled);
+        assertFalse(tag.getReleaseCalled());
         testMap.put("testInteger", "3");
         testMap.put("noValidProperty", "123");
         testMap.put("testDouble", "notValid");
         TagUtil.populateTag(tag, testMap, true);
-        assertTrue(tag.releaseCalled);
+        assertTrue(tag.getReleaseCalled());
         assertEquals(new Integer(3), tag.getTestInteger());
         assertEquals(0.0, tag.getTestDouble(), 0.00);
-    }
-    
-    public static class TestTag extends TagSupport
-    {
-        private String testString;
-        private Integer testInteger;
-        private double testDouble;
-        private boolean releaseCalled = false;
-        
-        public double getTestDouble()
-        {
-            return testDouble;
-        }
-
-        public Integer getTestInteger()
-        {
-            return testInteger;
-        }
-
-        public String getTestString()
-        {
-            return testString;
-        }
-
-        public void setTestDouble(double testDouble)
-        {
-            this.testDouble = testDouble;
-        }
-
-        public void setTestInteger(Integer testInteger)
-        {
-            this.testInteger = testInteger;
-        }
-
-        public void setTestString(String testString)
-        {
-            this.testString = testString;
-        }
-        
-        public void release()
-        {
-            releaseCalled = true;
-        }
-
-        public boolean getReleaseCalled()
-        {
-            return releaseCalled;
-        }
-    }
-    
-    public static class TestBodyTag extends BodyTagSupport
-    {
-        private String testString;
-        private Integer testInteger;
-        private double testDouble;
-    
-        public double getTestDouble()
-        {
-            return testDouble;
-        }
-
-        public Integer getTestInteger()
-        {
-            return testInteger;
-        }
-
-        public String getTestString()
-        {
-            return testString;
-        }
-
-        public void setTestDouble(double testDouble)
-        {
-            this.testDouble = testDouble;
-        }
-
-        public void setTestInteger(Integer testInteger)
-        {
-            this.testInteger = testInteger;
-        }
-
-        public void setTestString(String testString)
-        {
-            this.testString = testString;
-        }
     }
 }
