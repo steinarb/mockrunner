@@ -24,6 +24,24 @@ public class TransmissionManagerWrapper
     }
     
     /**
+     * Returns the underlying {@link QueueTransmissionManager}.
+     * @return the {@link QueueTransmissionManager}
+     */
+    public QueueTransmissionManager getQueueTransmissionManager()
+    {
+        return queueManager;
+    }
+    
+    /**
+     * Returns the underlying {@link TopicTransmissionManager}.
+     * @return the {@link TopicTransmissionManager}
+     */
+    public TopicTransmissionManager getTopicTransmissionManager()
+    {
+        return topicManager;
+    }
+    
+    /**
      * Returns the {@link com.mockrunner.mock.jms.MockMessageProducer} objects
      * with the specified index resp. <code>null</code>, if no such
      * {@link com.mockrunner.mock.jms.MockMessageProducer} exists.
