@@ -274,8 +274,9 @@ public class EJBTestModule
      * specified name can be found, if the found object is no EJB home interface,
      * or if the corresponding <code>create</code> method cannot be found.
      * @param name the name of the bean
-     * @param parameters the parameters, <code>null</code> parameters are not allowed
-     * @return the bean parameters, primitive types are automatically unwrapped
+     * @param parameters the parameters, <code>null</code> parameters are not allowed,
+     *  primitive types are automatically unwrapped
+     * @return the bean 
      * @throws RuntimeException in case of error
      */
     public Object lookupBean(String name, Object[] parameters)
