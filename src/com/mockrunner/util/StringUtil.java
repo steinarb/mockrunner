@@ -44,7 +44,7 @@ public class StringUtil
      * <i>["a"] [null] ["b"] ["c"] [null]</i>.
      * @param string the String
      * @param delim the delimiter
-     * @param doTrim should each token be trimmed before adding
+     * @param doTrim should each token be trimmed
      * @return the array of tokens
      */
     public static String[] split(String string, String delim, boolean doTrim)
