@@ -21,7 +21,7 @@ public class ConstrainedNumericTextTagTest extends BasicTagTestCaseAdapter
     private void prepareStrutsTag()
     {
         tag.setName("test");
-        getWebMockObjectFactory().getMockRequest().setAttribute("test", "test");
+        setRequestAttribute("test", "test");
     }
 
     public void testOnBlurHandler() throws Exception

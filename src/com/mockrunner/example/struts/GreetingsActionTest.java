@@ -38,11 +38,11 @@ public class GreetingsActionTest extends BasicActionTestCaseAdapter
         getActionMockObjectFactory().getMockActionMapping().setPath("/greetings");
         addRequestParameter("name", "testname");
         actionPerform(GreetingsAction.class, GreetingsValidatorForm.class);
-        assertEquals("Hello testname, you are visitor 1", getActionMockObjectFactory().getMockRequest().getAttribute("greetings"));
+        assertEquals("Hello testname, you are visitor 1", getRequestAttribute("greetings"));
         getActionMockObjectFactory().getMockServletContext().setAttribute("counter", new Integer(6));
         verifyNoActionErrors();
         actionPerform(GreetingsAction.class, GreetingsValidatorForm.class);
-        assertEquals("Hello testname, you are visitor 7", getActionMockObjectFactory().getMockRequest().getAttribute("greetings"));
+        assertEquals("Hello testname, you are visitor 7", getRequestAttribute("greetings"));
         verifyNoActionErrors();
         verifyForward("success");
     }

@@ -106,6 +106,15 @@ public class WebMockObjectFactory
     }
     
     /**
+     * Refreshes the mock objects dependencies. May be called after setting request
+     * and response wrappers.
+     */
+    public void refresh()
+    {
+        pageContext = new MockPageContext(config, wrappedRequest, wrappedResponse);
+    }
+    
+    /**
      * Returns the <code>MockServletConfig</code>
      * @return the <code>MockServletConfig</code>
      */

@@ -26,9 +26,7 @@ public abstract class WebTestModule
     }
 
     /**
-     * Adds a request parameter. Request parameters are populated
-     * to the <code>ActionForm</code>. To add parameters for map
-     * backed properties use the <i>value(property)</i> style.
+     * Adds a request parameter.
      * @param key the request key
      * @param value the request value
      */
@@ -38,10 +36,10 @@ public abstract class WebTestModule
     }
 
     /**
-     * Adds several request parameters. Request parameters are populated *
-     to the <code>ActionForm</code>. To add parameters for map * backed
-     properties use the <i>value(property)</i> style. * @param key the
-     request key * @param values the request values */
+     * Adds several request parameters. 
+     * @param key the
+     * @param values the request values 
+     */
     public void addRequestParameter(String key, String[] values)
     {
         mockFactory.getMockRequest().setupAddParameter(key, values);
@@ -54,7 +52,7 @@ public abstract class WebTestModule
      */
     public String getRequestParameter(String key)
     {
-        return mockFactory.getMockRequest().getParameter(key);
+        return mockFactory.getWrappedRequest().getParameter(key);
     }
 
     /**
@@ -64,7 +62,7 @@ public abstract class WebTestModule
      */
     public Object getRequestAttribute(String key)
     {
-        return mockFactory.getMockRequest().getAttribute(key);
+        return mockFactory.getWrappedRequest().getAttribute(key);
     }
 
     /**
@@ -74,7 +72,7 @@ public abstract class WebTestModule
      */
     public void setRequestAttribute(String key, Object value)
     {
-        mockFactory.getMockRequest().setAttribute(key, value);
+        mockFactory.getWrappedRequest().setAttribute(key, value);
     }
 
     /**

@@ -31,6 +31,9 @@ public class AllWebTests
         suite.addTest(new TestSuite(XmlUtilTest.class));
         suite.addTest(new TestSuite(MockJspFragmentTest.class));
         suite.addTest(new TestSuite(MockJspWriterTest.class));
+        suite.addTest(new TestSuite(MockFilterChainTest.class));
+        suite.addTest(new TestSuite(WebTestModuleTest.class));
+        suite.addTest(new TestSuite(ActionMockObjectFactoryTest.class));
         //$JUnit-END$
         return suite;
     }

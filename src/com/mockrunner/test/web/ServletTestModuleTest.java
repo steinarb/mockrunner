@@ -11,7 +11,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.base.VerifyFailedException;
@@ -133,9 +135,17 @@ public class ServletTestModuleTest extends BaseTestCase
         assertTrue(filter1.wasDoFilterCalled());
         assertTrue(filter2.wasDoFilterCalled());
         assertTrue(filter3.wasDoFilterCalled());
-        assertTrue(getWebMockObjectFactory().getMockFilterChain() == filter1.getLastFilterChain());
-        assertTrue(getWebMockObjectFactory().getMockFilterChain() == filter2.getLastFilterChain());
-        assertTrue(getWebMockObjectFactory().getMockFilterChain() == filter3.getLastFilterChain());
+        assertSame(getWebMockObjectFactory().getMockFilterChain(), filter1.getLastFilterChain());
+        assertSame(getWebMockObjectFactory().getMockFilterChain(), filter2.getLastFilterChain());
+        assertSame(getWebMockObjectFactory().getMockFilterChain(), filter3.getLastFilterChain());
+        filter1.reset();
+        filter2.reset();
+        filter3.reset();
+        module.setDoChain(true);
+        module.doGet();
+        assertTrue(filter1.wasDoFilterCalled());
+        assertTrue(filter2.wasDoFilterCalled());
+        assertTrue(filter3.wasDoFilterCalled());
     }
     
     public void testFilterChainWithRelease()
@@ -158,13 +168,46 @@ public class ServletTestModuleTest extends BaseTestCase
         assertFalse(filter.wasDoFilterCalled());
     }
     
+    public void testFilterChainWithWrapper()
+    {
+        TestFilter filter1 = new TestFilter();
+        TestFilter filter2 = new TestFilter();
+        module.addFilter(filter1);
+        module.addFilter(filter2);
+        HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(getWebMockObjectFactory().getMockRequest());
+        HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(getWebMockObjectFactory().getMockResponse());
+        filter1.setRequestWrapper(requestWrapper);
+        filter2.setResponseWrapper(responseWrapper);
+        module.setDoChain(true);
+        module.doPost();
+        assertSame(requestWrapper, getWebMockObjectFactory().getMockFilterChain().getLastRequest());
+        assertSame(responseWrapper, getWebMockObjectFactory().getMockFilterChain().getLastResponse());
+        assertSame(requestWrapper, module.getFilteredRequest());
+        assertSame(responseWrapper, module.getFilteredResponse());
+    }
+    
+    public void testWrappedRequest()
+    {
+        HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(getWebMockObjectFactory().getMockRequest());
+        HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(getWebMockObjectFactory().getMockResponse());
+        getWebMockObjectFactory().addRequestWrapper(requestWrapper);
+        getWebMockObjectFactory().addResponseWrapper(responseWrapper);
+        module.createServlet(TestServlet.class);
+        module.setDoChain(true);
+        module.doPost();
+        assertSame(requestWrapper, getWebMockObjectFactory().getMockFilterChain().getLastRequest());
+        assertSame(responseWrapper, getWebMockObjectFactory().getMockFilterChain().getLastResponse());
+    }
+    
     public static class TestFilter implements Filter
     {
         private boolean initCalled  = false;
         private boolean doFilterCalled  = false;
+        private HttpServletRequestWrapper requestWrapper;
+        private HttpServletResponseWrapper responseWrapper;
         private FilterChain lastChain;
 
-        public void init(FilterConfig arg0) throws ServletException
+        public void init(FilterConfig config) throws ServletException
         {
             initCalled = true;
         }
@@ -173,6 +216,14 @@ public class ServletTestModuleTest extends BaseTestCase
         {
             doFilterCalled = true;
             lastChain = chain;
+            if(null != requestWrapper)
+            {
+                request = requestWrapper;
+            }
+            if(null != responseWrapper)
+            {
+                response = responseWrapper;
+            }
             chain.doFilter(request, response);
         }
 
@@ -181,6 +232,16 @@ public class ServletTestModuleTest extends BaseTestCase
        
         }
 
+        public void setRequestWrapper(HttpServletRequestWrapper requestWrapper)
+        {
+            this.requestWrapper = requestWrapper;
+        }
+        
+        public void setResponseWrapper(HttpServletResponseWrapper responseWrapper)
+        {
+            this.responseWrapper = responseWrapper;
+        }
+        
         public boolean wasDoFilterCalled()
         {
             return doFilterCalled;
