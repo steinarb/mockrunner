@@ -2,6 +2,7 @@ package com.mockrunner.base;
 
 import junit.framework.TestCase;
 
+import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.jdbc.JDBCTestModule;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.web.WebMockObjectFactory;
@@ -199,13 +200,34 @@ public abstract class BaseTestCase extends TestCase
     }
 
     /**
-     * Creates an <code>JDBCTestModule</code> based on the current
+     * Creates a <code>JDBCTestModule</code> based on the current
      * {@link JDBCMockObjectFactory}.
-     * Same as <code>createJDBCTestModule(getWebMockObjectFactory())</code>.
+     * Same as <code>createJDBCTestModule(getJDBCMockObjectFactory())</code>.
      * @return the created <code>TagTestModule</code>
      */
     protected JDBCTestModule createJDBCTestModule()
     {
         return new JDBCTestModule(getJDBCMockObjectFactory());
+    }
+    
+    /**
+     * Creates an <code>EJBTestModule</code> with the specified
+     * {@link JDBCMockObjectFactory}.
+     * @return the created <code>TagTestModule</code>
+     */
+    protected EJBTestModule createEJBTestModule(JDBCMockObjectFactory mockFactory)
+    {
+        return new EJBTestModule(mockFactory);
+    }
+
+    /**
+     * Creates an <code>EJBTestModule</code> based on the current
+     * {@link JDBCMockObjectFactory}.
+     * Same as <code>createEJBTestModule(getJDBCMockObjectFactory())</code>.
+     * @return the created <code>TagTestModule</code>
+     */
+    protected EJBTestModule createEJBTestModule()
+    {
+        return new EJBTestModule(getJDBCMockObjectFactory());
     }
 }

@@ -76,6 +76,7 @@
             <src path="${src}/com/mockrunner/tag"/>
             <src path="${src}/com/mockrunner/mock/web"/>
             <src path="${src}/com/mockrunner/util"/>
+            <src path="${src}/com/mockrunner/ejb"/>
             <src path="${src}/org/apache"/>
             <src path="${src1.3}"/>
 		</javac>	
