@@ -5,4 +5,5 @@
 - make MockObjectFactory more generic (custom mock objects)
 - ant integration
 - add more ResultSetFactories (e.g. with type based definitions)
+- improve JavaDoc descriptions
 
