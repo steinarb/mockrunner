@@ -21,6 +21,18 @@ public class ArrayUtilTest extends TestCase
         }
     }
     
+    public void testGetListFromObjectArray()
+    {
+        String[] testArray = new String[] {"abc", "def", "ghi"};
+        List list = ArrayUtil.getListFromObjectArray(testArray);
+        assertTrue(list.size() == 3);
+        for(int ii = 0; ii < testArray.length; ii++)
+        {
+            Object nextObjectFromList = list.get(ii);
+            assertEquals(testArray[ii], nextObjectFromList);
+        }
+    }
+    
     public void testGetByteArrayFromList()
     {
         ArrayList list = new ArrayList();

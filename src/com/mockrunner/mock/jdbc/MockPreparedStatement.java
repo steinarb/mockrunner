@@ -17,9 +17,11 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -31,6 +33,9 @@ import com.mockobjects.sql.MockResultSetMetaData;
  */
 public class MockPreparedStatement extends MockStatement implements PreparedStatement
 {
+    private MockResultSet resultSet = null;
+    private List resultSetsWithParameters = new ArrayList();
+    private List parametersForResultSet = new ArrayList();
     private Map paramObjects = new HashMap();
     private String sql;
     private MockParameterMetaData parameterMetaData;
@@ -54,6 +59,18 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         super(connection, resultSetType, resultSetConcurrency, resultSetHoldability);
         this.sql = sql;
         prepareParameterMetaData();
+    }
+    
+    public void setResultSet(MockResultSet resultSet)
+    {
+        this.resultSet = resultSet;
+    }
+    
+    public void addResultSet(MockResultSet resultSet, List parameters)
+    {
+        this.resultSet = resultSet;
+        resultSetsWithParameters.add(resultSet);
+        parametersForResultSet.add(parameters);
     }
     
     private void prepareParameterMetaData()

@@ -78,7 +78,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyNumberPreparedStatements(3);
         module.verifyPreparedStatementPresent("update");
         module.verifyPreparedStatementNotPresent("select");
-        module.setPreparedStatementCaseSensitive(true);
+        module.setCaseSensitive(true);
         statements = module.getPreparedStatements("insert");
         assertNotNull(statements);
         assertEquals(1, statements.size());
@@ -89,7 +89,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyNumberPreparedStatements(1, "insert");
         module.verifyNumberPreparedStatements(1, "INSERT");
         module.verifyNumberPreparedStatements(3);
-        module.setPreparedStatementExactMatch(true);
+        module.setExactMatch(true);
         statements = module.getPreparedStatements("insert");
         assertNotNull(statements);
         assertEquals(0, statements.size());
