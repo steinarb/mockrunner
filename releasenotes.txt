@@ -1,4 +1,9 @@
 
+mockrunner-0.3:
+
+- adapted EJBTestModule to new MockEJB 0.6 API (check out
+  migratingfrom0.2.9.txt for details)
+
 mockrunner-0.2.9:
 
 - fixed bugs 951972 and 951963
@@ -6,15 +11,13 @@ mockrunner-0.2.9:
 - JMS test framework now supports message selectors (using a modified version
   of ActiveMQ selector parser, see http://activemq.codehaus.org/)
 - added NewsSubscriber example test to demonstrate message selectors
-- adapted EJBTestModule to new MockEJB 0.6 API (check out
-  migratingfrom0.2.8.txt for details)
 - changed the default JMS delivery mode to PERSISTENT
 - it's now possible to clone JMS messages before sending (default is not cloning)
 - it's now possible to verify multiple parameter sets of one PreparedStatement,
   please check out the modified BankTest example
 - fixed problem with MockStatement.getMoreResults(), now returns true, if there
   is a ResultSet
-- added excluded-properties to fix classloader problem with JUnit and commons-logging.jar
+- added excluded.properties to fix classloader problem with JUnit and commons-logging.jar
 - added verifyForwardName() to ActionTestModule
 - fixed problem with ActionTestModule.createDynaActionForm(), now returns
   DynaActionForm instance
@@ -26,7 +29,6 @@ mockrunner-0.2.9:
 - removed deprecated verifyComited and verifyNotComited methods in JDBCTestModule
 - reorganized package structure for tests
 - mockrunner jars are now compiled with debug information (line numbers)
-- updated mockejb.jar from 0.5 to 0.6 beta1
 - updated jdom.jar from Beta 9 to Beta 10
 
 mockrunner-0.2.8:
