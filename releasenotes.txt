@@ -5,6 +5,8 @@ mockrunner-0.2.9:
 - fixed bug (NullPointerException) when a null JMS correlation ID is set
 - JMS test framework now supports message selectors (using a modified version
   of ActiveMQ selector parser, see http://activemq.codehaus.org/)
+- adapted EJBTestModule to new MockEJB 0.6 API (check out
+  migratingfrom0.2.8.txt for details)
 - changed the default JMS delivery mode to PERSISTENT
 - it's now possible to clone JMS messages before sending (default is not cloning)
 - it's now possible to verify multiple parameter sets of one PreparedStatement,
@@ -23,6 +25,7 @@ mockrunner-0.2.9:
 - removed deprecated verifyComited method in JDBCTestModule
 - reorganized package structure for tests
 - mockrunner jars are now compiled with debug information (line numbers)
+- updated mockejb.jar from 0.5 to 0.6 beta1
 - updated jdom.jar from Beta 9 to Beta 10
 
 mockrunner-0.2.8:

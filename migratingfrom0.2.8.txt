@@ -1,0 +1,28 @@
+
+Starting with version 0.2.9, Mockrunner supports the MockEJB 0.6 API
+and the new features of MockEJB. This breaks the Mockrunner API in a
+few cases.
+
+If you don't use the EJBTestModule and do not test JMS code with
+message driven beans, everything should be fine.
+
+Otherwise, please consider the following changes:
+
+- MockEJB 0.6 deprecates the use of MockEjbObject in favor of the new
+  interceptor framework. The MockContainer.deploy methods no longer
+  return the MockEjbObject. For this reason, EJBTestModule.deploy
+  methods do not return this object as well. Please refer to
+  the MockEJB documentation on http://www.mockejb.org
+  
+- MockEJB 0.6 supports session beans, entity beans and message driven
+  beans and provides a descriptor for each of these bean types.
+  You can deploy each bean type using the EJBTestModule API. There
+  is a generic deploy method and special deploySessionBean, deployEntityBean
+  and deployMessageBean methods. The deploy method for session beans was
+  renamed to deploySessionBean. If you use this method, you have to change
+  the name. However, parameters are the same.
+  
+- Major changes affect message driven beans. If you use the Mockrunner JMS
+  test framework without message driven beans, you should not be affected
+  by the changes.
+  
