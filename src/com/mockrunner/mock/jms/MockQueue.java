@@ -64,7 +64,7 @@ public class MockQueue implements Queue
                 }
                 else
                 {
-                    List receivers = session.getTransmissionManager().getQueueReceiverList(name);
+                    List receivers = session.getQueueTransmissionManager().getQueueReceiverList(name);
                     for(int ii = 0; ii < receivers.size() && !isConsumed; ii++)
                     {
                         MockQueueReceiver receiver = (MockQueueReceiver)receivers.get(ii);

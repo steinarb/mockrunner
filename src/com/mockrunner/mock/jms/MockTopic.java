@@ -63,7 +63,7 @@ public class MockTopic implements Topic
                 }
                 else
                 {
-                    List subscribers = session.getTransmissionManager().getTopicSubscriberList(name);
+                    List subscribers = session.getTopicTransmissionManager().getTopicSubscriberList(name);
                     for(int ii = 0; ii < subscribers.size(); ii++)
                     {
                         MockTopicSubscriber subscriber = (MockTopicSubscriber)subscribers.get(ii);
@@ -73,7 +73,7 @@ public class MockTopic implements Topic
                             isConsumed = true;
                         }
                     }
-                    Map durableSubscribers = session.getTransmissionManager().getDurableTopicSubscriberMap(name);
+                    Map durableSubscribers = session.getTopicTransmissionManager().getDurableTopicSubscriberMap(name);
                     Iterator keys = durableSubscribers.keySet().iterator();
                     while(keys.hasNext())
                     {

@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 
 import com.mockrunner.jms.MessageManager;
 import com.mockrunner.jms.TopicManager;
-import com.mockrunner.jms.TransmissionManager;
+import com.mockrunner.jms.TopicTransmissionManager;
 import com.mockrunner.mock.jms.MockBytesMessage;
 import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockStreamMessage;
@@ -100,7 +100,7 @@ public class MockTopicSessionTest extends TestCase
     public void testCreatePublisherAndSubscriber() throws Exception
     {
         TopicManager topicManager = connection.getTopicManager();
-        TransmissionManager transManager = session.getTransmissionManager();
+        TopicTransmissionManager transManager = session.getTopicTransmissionManager();
         topic1 = topicManager.createTopic("Topic1");
         topic2 = topicManager.createTopic("Topic2");
         assertEquals(0, transManager.getTopicPublisherList().size());
@@ -114,7 +114,7 @@ public class MockTopicSessionTest extends TestCase
         assertTrue(publisher2 == transManager.getTopicPublisher("Topic2"));
         assertTrue(topic1 == transManager.getTopicPublisher("Topic1").getTopic());
         assertTrue(topic2 == transManager.getTopicPublisher(1).getTopic());
-        assertEquals(0, transManager.getQueueReceiverList().size());
+        assertEquals(0, transManager.getTopicSubscriberList().size());
         TopicSubscriber subscriber = session.createSubscriber(topic1);
         assertFalse(((MockTopicSubscriber)subscriber).isDurable());
         session.createSubscriber(topic2);
@@ -133,7 +133,7 @@ public class MockTopicSessionTest extends TestCase
     public void testCreateDurableSubscriber() throws Exception
     {
         TopicManager topicManager = connection.getTopicManager();
-        TransmissionManager transManager = session.getTransmissionManager();
+        TopicTransmissionManager transManager = session.getTopicTransmissionManager();
         topic1 = topicManager.createTopic("Topic1");
         assertEquals(0, transManager.getDurableTopicSubscriberMap().size());
         TopicSubscriber subscriber1 = session.createDurableSubscriber(topic1, "Durable1");

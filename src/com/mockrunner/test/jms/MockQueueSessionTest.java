@@ -23,7 +23,7 @@ import junit.framework.TestCase;
 
 import com.mockrunner.jms.MessageManager;
 import com.mockrunner.jms.QueueManager;
-import com.mockrunner.jms.TransmissionManager;
+import com.mockrunner.jms.QueueTransmissionManager;
 import com.mockrunner.mock.jms.MockBytesMessage;
 import com.mockrunner.mock.jms.MockMapMessage;
 import com.mockrunner.mock.jms.MockMessage;
@@ -124,7 +124,7 @@ public class MockQueueSessionTest extends TestCase
         QueueSender sender = session.createSender(queue1);
         session.createSender(queue2);
         session.createSender(queue1);
-        TransmissionManager transManager = session.getTransmissionManager();
+        QueueTransmissionManager transManager = session.getQueueTransmissionManager();
         assertNotNull(transManager.getQueueSender(0));
         assertNotNull(transManager.getQueueSender(1));
         assertNotNull(transManager.getQueueSender(2));
