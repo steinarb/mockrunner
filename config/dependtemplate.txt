@@ -7,10 +7,14 @@ jars are recognized as well. If you add all dependend jars
 for a specified mockrunner-xyz.jar to your classpath, you
 are on the safe side. However, not all listed dependencies
 are necessary at runtime in all cases. Especially with the 
-"all-in-one"-files mockrunner.jar and mockrunner-jdk1.3.jar,
+"all-in-one"-files mockrunner.jar, mockrunner-jdk1.3.jar,
+mockrunner-j2ee1.3.jar and mockrunner-jdk1.3-j2ee1.3.jar
 you don't have to add everything to the classpath. E.g. if you're 
 only using EJB and JMS, you don't have to add the web related jar 
 files, because the necessary factories and modules are created when 
-they are used resp. lazy initialized.
+they are used resp. lazy initialized. If you only need one technology
+it's recommended to use the corresponding jar file instead of the
+"all-in-one" mockrunner.jar. E.g. if you only want to use the JDBC
+test framework, you can use mockrunner-jdbc.jar.
 Please note that each mockrunner-xyz.jar file contains a jarversion.txt 
 which lists the Mockrunner version and the supported JDK and J2EE versions.

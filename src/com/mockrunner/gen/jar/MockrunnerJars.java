@@ -30,6 +30,11 @@ public class MockrunnerJars
         mockrunnerJars.add("mockrunner-servlet.jar");
         mockrunnerJars.add("mockrunner-tag.jar");
         mockrunnerJars.add("mockrunner-struts.jar");
+        mockrunnerJars.add("mockrunner-j2ee1.3.jar");
+        mockrunnerJars.add("mockrunner-jdk1.3-j2ee1.3.jar");
+        mockrunnerJars.add("mockrunner-servlet-j2ee1.3.jar");
+        mockrunnerJars.add("mockrunner-struts-j2ee1.3.jar");
+        mockrunnerJars.add("mockrunner-tag-j2ee1.3.jar");
         
         permissions = new HashMap();
         permissions.put("mockrunner.jar", new Permission(true, true, true, true, true));
