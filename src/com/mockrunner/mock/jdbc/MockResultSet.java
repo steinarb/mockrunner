@@ -593,13 +593,23 @@ public class MockResultSet implements ResultSet
     
     public Ref getRef(int columnIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getObject(columnIndex);
+        if(null != value)
+        {
+            if(value instanceof Ref) return (Ref)value;
+            return new MockRef(value);
+        }
         return null;
     }
 
     public Ref getRef(String columnName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getObject(columnName);
+        if(null != value)
+        {
+            if(value instanceof Ref) return (Ref)value;
+            return new MockRef(value);
+        }
         return null;
     }
 
