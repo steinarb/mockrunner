@@ -138,7 +138,7 @@ public class EJBTestModule
     }
     
     /**
-     * Deploys a stateless bean to the mock container. You have to specify
+     * Deploys a stateless session bean to the mock container. You have to specify
      * the implementation class and the JNDI name. The frameworks
      * determines the home and remote interfaces based on the
      * information specified with the <code>setSuffix</code>
@@ -154,7 +154,7 @@ public class EJBTestModule
     }
     
     /**
-     * Deploys a bean to the mock container. You have to specify
+     * Deploys a session bean to the mock container. You have to specify
      * the implementation class and the JNDI name. The frameworks
      * determines the home and remote interfaces based on the
      * information specified with the <code>setSuffix</code>
@@ -171,7 +171,7 @@ public class EJBTestModule
     }
     
     /**
-     * Deploys a stateless bean to the mock container. You have to specify
+     * Deploys a stateless session bean to the mock container. You have to specify
      * the implementation class and the JNDI name. The frameworks
      * determines the home and remote interfaces based on the
      * information specified with the <code>setSuffix</code>
@@ -188,7 +188,7 @@ public class EJBTestModule
     }
     
     /**
-     * Deploys a bean to the mock container. You have to specify
+     * Deploys a session bean to the mock container. You have to specify
      * the implementation class and the JNDI name. The frameworks
      * determines the home and remote interfaces based on the
      * information specified with the <code>setSuffix</code>
