@@ -26,11 +26,43 @@ import com.mockrunner.mock.web.MockBodyContent;
  */
 public class NestedBodyTag extends BodyTagSupport implements NestedTag
 {
-    private BodyTagSupport tag;
+    private BodyTag tag;
     private PageContext pageContext;
     private Map attributes;
     private List childs;
     private boolean doRelease;
+    
+    /**
+     * Constructor for a tag with an empty attribute map.
+     * If the specified tag is not an instance of <code>BodyTagSupport</code>,
+     * the methods that delegate to <code>BodyTagSupport</code> specific methods
+     * throw an exception.
+     * @param tag the tag
+     * @param pageContext the corresponding <code>PageContext</code>
+     */
+    public NestedBodyTag(BodyTag tag, PageContext pageContext)
+    {
+        this(tag, pageContext, new HashMap());
+    }
+    
+    /**
+     * Constructor for a tag with the specified attribute map.
+     * If the specified tag is not an instance of <code>BodyTagSupport</code>,
+     * the methods that delegate to <code>BodyTagSupport</code> specific methods
+     * throw an exception.
+     * @param tag the tag
+     * @param pageContext the corresponding <code>PageContext</code>
+     * @param attributes the attribute map
+     */
+    public NestedBodyTag(BodyTag tag, PageContext pageContext, Map attributes)
+    {
+        this.tag = tag;
+        this.pageContext = pageContext;
+        tag.setPageContext(pageContext);
+        childs = new ArrayList();
+        this.attributes = attributes;
+        doRelease = false;
+    }
     
     /**
      * Constructor for a tag with an empty attribute map.
@@ -50,12 +82,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
      */
     public NestedBodyTag(BodyTagSupport tag, PageContext pageContext, Map attributes)
     {
-        this.tag = tag;
-        this.pageContext = pageContext;
-        tag.setPageContext(pageContext);
-        childs = new ArrayList();
-        this.attributes = attributes;
-        doRelease = false;
+        this((BodyTag)tag, pageContext, attributes);
     }
     
     /**
@@ -123,11 +150,22 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     
     /**
      * Implementation of {@link NestedTag#getTag}.
+     * @throws <code>RuntimeException</code>, if the wrapped tag
+     *         is not an instance of <code>TagSupport</code>
      */
     public TagSupport getTag()
     {
-        return tag;
+        checkTagSupport();
+        return (TagSupport)tag;
     }
+    
+    /**
+     * Implementation of {@link NestedTag#getWrappedTag}.
+     */
+    /*public JspTag getWrappedTag()
+    {
+        return tag;
+    }*/
     
     /**
      * Implementation of {@link NestedTag#removeChilds}.
@@ -175,10 +213,10 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
      */
     public NestedTag addTagChild(Class tag, Map attributeMap)
     {
-        TagSupport tagSupport = TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);	
-        tagSupport.setParent(this.tag);
-        childs.add(tagSupport);
-        return (NestedTag)tagSupport;
+        Tag childTag = (Tag)TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);	
+        childTag.setParent(this.tag);
+        childs.add(childTag);
+        return (NestedTag)childTag;
     }
     
     /**
@@ -194,11 +232,37 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
      */
     public NestedTag addTagChild(TagSupport tag, Map attributeMap)
     {
-        TagSupport tagSupport = TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);	
-        tagSupport.setParent(this.tag);
-        childs.add(tagSupport);
-        return (NestedTag)tagSupport;
+        Tag childTag = (Tag)TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);   
+        childTag.setParent(this.tag);
+        childs.add(childTag);
+        return (NestedTag)childTag;
     }
+    
+    /**
+     * Implementation of {@link NestedTag#addTagChild(JspTag)}.
+     */
+    /*public NestedTag addTagChild(JspTag tag)
+    {
+        return addTagChild(tag, new HashMap());
+    }*/
+    
+    /**
+     * Implementation of {@link NestedTag#addTagChild(JspTag, Map)}.
+     */
+    /*public NestedTag addTagChild(JspTag tag, Map attributeMap)
+    {
+        JspTag childTag = (JspTag)TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);   
+        if(childTag instanceof Tag)
+        {
+            ((Tag)childTag).setParent(this.tag);
+        }
+        else if(childTag instanceof SimpleTag)
+        {
+            ((SimpleTag)childTag).setParent(this.tag);
+        }
+        childs.add(childTag);
+        return (NestedTag)childTag;
+    }*/
     
     /**
      * Delegates to wrapped tag.
@@ -226,10 +290,13 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     
     /**
      * Delegates to wrapped tag.
+     * @throws <code>RuntimeException</code>, if the wrapped tag
+     *         is not an instance of <code>TagSupport</code>
      */
     public String getId()
     {
-        return tag.getId();
+        checkTagSupport();
+        return ((TagSupport)tag).getId();
     }
     
     /**
@@ -242,18 +309,24 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     
     /**
      * Delegates to wrapped tag.
+     * @throws <code>RuntimeException</code>, if the wrapped tag
+     *         is not an instance of <code>TagSupport</code>
      */
     public Object getValue(String arg0)
     {
-        return tag.getValue(arg0);
+        checkTagSupport();
+        return ((TagSupport)tag).getValue(arg0);
     }
     
     /**
      * Delegates to wrapped tag.
+     * @throws <code>RuntimeException</code>, if the wrapped tag
+     *         is not an instance of <code>TagSupport</code>
      */
     public Enumeration getValues()
     {
-        return tag.getValues();
+        checkTagSupport();
+        return ((TagSupport)tag).getValues();
     }
     
     /**
@@ -266,18 +339,24 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     
     /**
      * Delegates to wrapped tag.
+     * @throws <code>RuntimeException</code>, if the wrapped tag
+     *         is not an instance of <code>TagSupport</code>
      */
     public void removeValue(String arg0)
     {
-        tag.removeValue(arg0);
+        checkTagSupport();
+        ((TagSupport)tag).removeValue(arg0);
     }
     
     /**
      * Delegates to wrapped tag.
+     * @throws <code>RuntimeException</code>, if the wrapped tag
+     *         is not an instance of <code>TagSupport</code>
      */
     public void setId(String arg0)
     {
-        tag.setId(arg0);
+        checkTagSupport();
+        ((TagSupport)tag).setId(arg0);
     }
     
     /**
@@ -308,10 +387,13 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     
     /**
      * Delegates to wrapped tag.
+     * @throws <code>RuntimeException</code>, if the wrapped tag
+     *         is not an instance of <code>TagSupport</code>
      */
     public void setValue(String arg0, Object arg1)
     {
-        tag.setValue(arg0, arg1);
+        checkTagSupport();
+        ((TagSupport)tag).setValue(arg0, arg1);
     }
     
     /**
@@ -324,18 +406,24 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     
     /**
      * Delegates to wrapped tag.
+     * @throws <code>RuntimeException</code>, if the wrapped tag
+     *         is not an instance of <code>BodyTagSupport</code>
      */
     public BodyContent getBodyContent()
     {
-        return tag.getBodyContent();
+        checkTagSupport();
+        return ((BodyTagSupport)tag).getBodyContent();
     }
     
     /**
      * Delegates to wrapped tag.
+     * @throws <code>RuntimeException</code>, if the wrapped tag
+     *         is not an instance of <code>BodyTagSupport</code>
      */
     public JspWriter getPreviousOut()
     {
-        return tag.getPreviousOut();
+        checkTagSupport();
+        return ((BodyTagSupport)tag).getPreviousOut();
     }
     
     /**
@@ -352,5 +440,13 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     public String toString()
     {
         return TagUtil.dumpTag(this, new StringBuffer(), 0);
+    }
+    
+    private void checkTagSupport()
+    {
+        if(!(tag instanceof BodyTagSupport))
+        {
+            throw new RuntimeException("This method can only be called if the wrapped tag is an instance of BodyTagSupport.");
+        }
     }
 }
