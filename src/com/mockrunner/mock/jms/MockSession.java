@@ -112,10 +112,18 @@ public class MockSession implements Session
     }
     
     /**
+     * @deprecated use {@link #getTransmissionManagerWrapper}
+     */
+    public TransmissionManagerWrapper getTransmissionManager()
+    {
+        return getTransmissionManagerWrapper();
+    }
+    
+    /**
      * Returns the {@link com.mockrunner.jms.TransmissionManagerWrapper}.
      * @return the {@link com.mockrunner.jms.TransmissionManagerWrapper}
      */
-    public TransmissionManagerWrapper getTransmissionManager()
+    public TransmissionManagerWrapper getTransmissionManagerWrapper()
     {
         return transManager;
     }
