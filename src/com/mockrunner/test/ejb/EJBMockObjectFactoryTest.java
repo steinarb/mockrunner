@@ -31,9 +31,16 @@ public class EJBMockObjectFactoryTest extends TestCase
         assertNotNull(factory.getMockContainer());
         transaction.rollback();
         factory = new EJBMockObjectFactory();
-        assertEquals(context.lookup("javax.transaction.UserTransaction"), transaction);
-        assertEquals(context.lookup("java:comp/UserTransaction"), transaction);
+        assertSame(context.lookup("javax.transaction.UserTransaction"), transaction);
+        assertSame(context.lookup("java:comp/UserTransaction"), transaction);
         assertFalse(transaction.wasRollbackCalled());
+        unbind();
+        EJBMockObjectFactory.setTransactionJNDIName("myJNDIName");
+        factory = new EJBMockObjectFactory();
+        transaction = factory.getMockUserTransaction();
+        assertSame(context.lookup("myJNDIName"), transaction);
+        assertSame(context.lookup("javax.transaction.UserTransaction"), transaction);
+        assertSame(context.lookup("java:comp/UserTransaction"), transaction);
     }
     
     private void unbind() throws Exception

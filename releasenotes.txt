@@ -55,6 +55,7 @@ mockrunner-0.3.2:
   is called without a previous created session, this method returns null
 - fixed bug with parameter sets in batch updates, always the latest parameter
   set has been stored
+- it's now possible to set the JNDI name for the UserTransaction
 - fixed bug in MockHttpServletResponse.getWriter()
 - fixed bug in MockResultSet.setFetchDirection
 - fixed minor classloading bug in EJBTestModule
