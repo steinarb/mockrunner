@@ -12,7 +12,9 @@ import junit.framework.TestCase;
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.jdbc.JDBCTestModule;
+import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
+import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockStatement;
 
@@ -130,9 +132,14 @@ public class JDBCTestModuleTest extends TestCase
         statement = module.getPreparedStatement("INSERT INTO TEST (COL1, COL2) VALUES(?, ?)");  
         statement.setString(1, "test1");
         statement.setString(2, "test2");
+        statement.setBytes(3, new byte[] {1, 2, 3});
+        statement.setBytes(4, new byte[] {});
         module.verifyPreparedStatementParameterPresent(statement, 2);
-        module.verifyPreparedStatementParameterNotPresent(statement, 3);
-        module.verifyPreparedStatementParameter(0, 1, "test1");
+        module.verifyPreparedStatementParameterPresent(statement, 3);
+        module.verifyPreparedStatementParameterPresent(statement, 4);
+        module.verifyPreparedStatementParameterNotPresent(statement, 5);
+        module.verifyPreparedStatementParameter(0, 3, new byte[] {1, 2, 3});
+        module.verifyPreparedStatementParameter(0, 4, new byte[] {});
     }
     
     public void testGetCallableStatementsByIndex() throws Exception
@@ -200,6 +207,21 @@ public class JDBCTestModuleTest extends TestCase
         try
         {
             module.verifyCallableStatementParameter(1, 1, "zzz");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw Exception
+        }
+        statement.setBytes(1, new byte[] {1});
+        statement.setBlob(2, new MockBlob(new byte[] {3, 4}));
+        statement.setClob(3, new MockClob("test"));
+        module.verifyCallableStatementParameter(1, 1, new byte[] {1});
+        module.verifyCallableStatementParameter(statement, 2, new MockBlob(new byte[] {3, 4}));
+        module.verifyCallableStatementParameter(1, 3, new MockClob("test"));
+        try
+        {
+            module.verifyCallableStatementParameter(1, 1, new byte[] {2});
             fail();
         }
         catch(VerifyFailedException exc)

@@ -108,7 +108,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     
     public void addBatch() throws SQLException
     {
-        batchParameters.add(getParameterList(paramObjects));
+        batchParameters.add(new HashMap(paramObjects));
     }
 
     public void clearParameters() throws SQLException
@@ -132,10 +132,10 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     
     public ResultSet executeQuery() throws SQLException
     {
-        return executeQuery(getParameterList(paramObjects));
+        return executeQuery(paramObjects);
     }
     
-    private ResultSet executeQuery(List params) throws SQLException
+    private ResultSet executeQuery(Map params) throws SQLException
     {
         MockResultSet result = resultSetHandler.getResultSet(getSQL(), params);
         if(null != result)
@@ -148,10 +148,10 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public int executeUpdate() throws SQLException
     {
-        return executeUpdate(getParameterList(paramObjects));
+        return executeUpdate(paramObjects);
     }
     
-    private int executeUpdate(List params) throws SQLException
+    private int executeUpdate(Map params) throws SQLException
     {
         Integer updateCount = resultSetHandler.getUpdateCount(getSQL(), params);
         if(null != updateCount)
@@ -171,7 +171,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         }
         for(int ii = 0; ii < results.length; ii++)
         {
-            List currentParameters = (List)batchParameters.get(ii);
+            Map currentParameters = (Map)batchParameters.get(ii);
             results[ii] = executeUpdate(currentParameters);
         }
         return results;
@@ -320,18 +320,5 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     public void setURL(int parameterIndex, URL url) throws SQLException
     {
         setObject(parameterIndex, url);
-    }
-    
-    private List getParameterList(Map parameterMap)
-    { 
-        ArrayList resultList = new ArrayList();
-        Iterator iterator = parameterMap.keySet().iterator();
-        while(iterator.hasNext())
-        {
-            Integer nextIndex = (Integer)iterator.next();
-            CollectionUtil.fillList(resultList, nextIndex.intValue() + 1);
-            resultList.set(nextIndex.intValue(), parameterMap.get(nextIndex));
-        }
-        return resultList;
     }
 }

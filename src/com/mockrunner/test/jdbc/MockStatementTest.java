@@ -2,9 +2,12 @@ package com.mockrunner.test.jdbc;
 
 import java.sql.BatchUpdateException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
@@ -160,6 +163,9 @@ public class MockStatementTest extends BaseTestCase
         statement.setString(2, "Test");
         testResultSet = (MockResultSet)statement.executeQuery();
         assertTrue(isResultSet3(testResultSet));
+        statement.setString(3, "Test");
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet1(testResultSet));
         preparedStatementHandler.prepareResultSet("select test", resultSet3, new Object[] {"xyz", new Long(1)});
         statement.clearParameters();
         statement.setString(1, "ab");
@@ -174,7 +180,7 @@ public class MockStatementTest extends BaseTestCase
         assertTrue(isResultSet1(testResultSet));
         preparedStatementHandler.setExactMatchParameter(false);
         statement.clearParameters();
-        statement.setLong(1, 2);
+        statement.setString(1, "xyz");
         statement.setLong(2, 1);
         statement.setString(3, "xyz");
         statement.setString(4, "zzz");
@@ -197,6 +203,22 @@ public class MockStatementTest extends BaseTestCase
         preparedStatementHandler.setExactMatch(false);
         assertTrue(statement.execute());
         assertTrue(isResultSet3((MockResultSet)statement.getResultSet()));
+        Map paramMap = new HashMap();
+        paramMap.put(new Integer(1), "Test");
+        paramMap.put(new Integer(2), new MockClob("Test"));
+        preparedStatementHandler.prepareResultSet("select xyzxyz", resultSet3, paramMap);
+        statement.clearParameters();
+        statement.setString(1, "Test");
+        statement.setString(2, "Test");
+        statement.setClob(3, new MockClob("Test"));
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet3(testResultSet));
+        preparedStatementHandler.setExactMatchParameter(true);
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet2(testResultSet));
+        preparedStatementHandler.setExactMatch(true);
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet1(testResultSet));
     }
     
     public void testPrepareUpdateCountPreparedStatement() throws Exception
@@ -277,5 +299,33 @@ public class MockStatementTest extends BaseTestCase
         updateCounts = statement.executeBatch();
         assertTrue(updateCounts.length == 1);
         assertEquals(2, updateCounts[0]);
+        Map paramMap = new HashMap();
+        paramMap.put(new Integer(1), "1");
+        paramMap.put(new Integer(2), "2");
+        preparedStatementHandler.prepareUpdateCount("update", 7, paramMap);
+        updateCounts = statement.executeBatch();
+        assertTrue(updateCounts.length == 1);
+        assertEquals(7, updateCounts[0]);
+    }
+    
+    public void testClearResultSetsAndUpdateCounts() throws Exception
+    {
+        preparedStatementHandler.prepareGlobalUpdateCount(5);
+        preparedStatementHandler.prepareUpdateCount("delete xyz", 1);
+        preparedStatementHandler.prepareGlobalResultSet(resultSet1); 
+        preparedStatementHandler.prepareResultSet("select xyz", resultSet2);
+        preparedStatementHandler.prepareResultSet("select test", resultSet3);
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("select test");
+        MockResultSet resultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet3(resultSet));
+        preparedStatementHandler.clearResultSets();
+        resultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet1(resultSet));
+        statement = (MockPreparedStatement)connection.prepareStatement("delete xyz");
+        int updateCount = statement.executeUpdate();
+        assertEquals(1, updateCount);
+        preparedStatementHandler.clearUpdateCounts();
+        updateCount = statement.executeUpdate();
+        assertEquals(5, updateCount);
     }
 }
