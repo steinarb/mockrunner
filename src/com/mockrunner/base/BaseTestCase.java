@@ -40,11 +40,14 @@ public abstract class BaseTestCase extends TestCase
     protected void tearDown() throws Exception
     {
         super.tearDown();
-        jdbcMockFactory.restoreDrivers();
+        if(null != jdbcMockFactory)
+        {
+            jdbcMockFactory.restoreDrivers();
+            jdbcMockFactory = null;
+        }
         MockContextFactory.revertSetAsInitial();
         webMockFactory = null;
         actionMockFactory = null;
-        jdbcMockFactory = null;
         ejbMockFactory = null;
         jmsMockFactory  = null;
     }
@@ -57,11 +60,6 @@ public abstract class BaseTestCase extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        actionMockFactory = createActionMockObjectFactory();
-        webMockFactory = actionMockFactory;
-        jdbcMockFactory = createJDBCMockObjectFactory();
-        ejbMockFactory = createEJBMockObjectFactory();
-        jmsMockFactory = createJMSMockObjectFactory();
     } 
 
     /**
@@ -106,6 +104,13 @@ public abstract class BaseTestCase extends TestCase
      */
     protected WebMockObjectFactory getWebMockObjectFactory()
     {
+        synchronized(ActionMockObjectFactory.class) 
+        {
+            if(webMockFactory == null)
+            {
+                webMockFactory = getActionMockObjectFactory();
+            }
+        }
         return webMockFactory;
     }
     
@@ -154,6 +159,13 @@ public abstract class BaseTestCase extends TestCase
      */
     protected ActionMockObjectFactory getActionMockObjectFactory()
     {
+        synchronized(ActionMockObjectFactory.class) 
+        {
+            if(actionMockFactory == null)
+            {
+                actionMockFactory = createActionMockObjectFactory();
+            }
+        }
         return actionMockFactory;
     }
     
@@ -181,6 +193,13 @@ public abstract class BaseTestCase extends TestCase
      */
     protected JDBCMockObjectFactory getJDBCMockObjectFactory()
     {
+        synchronized(JDBCMockObjectFactory.class) 
+        {
+            if(jdbcMockFactory == null)
+            {
+                jdbcMockFactory = createJDBCMockObjectFactory();
+            }
+        }
         return jdbcMockFactory;
     }
 
@@ -208,6 +227,13 @@ public abstract class BaseTestCase extends TestCase
      */
     protected EJBMockObjectFactory getEJBMockObjectFactory()
     {
+        synchronized(EJBMockObjectFactory.class) 
+        {
+            if(ejbMockFactory == null)
+            {
+                ejbMockFactory = createEJBMockObjectFactory();
+            }
+        }
         return ejbMockFactory;
     }
 
@@ -235,6 +261,13 @@ public abstract class BaseTestCase extends TestCase
      */
     protected JMSMockObjectFactory getJMSMockObjectFactory()
     {
+        synchronized(JMSMockObjectFactory.class) 
+        {
+            if(jmsMockFactory == null)
+            {
+                jmsMockFactory = createJMSMockObjectFactory();
+            }
+        }
         return jmsMockFactory;
     }
 
@@ -374,3 +407,4 @@ public abstract class BaseTestCase extends TestCase
         return new JMSTestModule(getJMSMockObjectFactory());
     }
 }
+

@@ -9,31 +9,81 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.mock.ejb.EJBMockObjectFactory;
+import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jdbc.MockDriver;
+import com.mockrunner.mock.jms.JMSMockObjectFactory;
+import com.mockrunner.mock.web.ActionMockObjectFactory;
+import com.mockrunner.mock.web.WebMockObjectFactory;
 
 public class BaseTestCaseTest extends BaseTestCase
 {
-    protected void setUp() throws Exception
+    public void testOneDriver() throws Exception
     {
         DriverManager.registerDriver(new TestDriver());
         DriverManager.registerDriver(new TestDriver());
-        super.setUp();
-    }
-
-    protected void tearDown() throws Exception
-    {
-        super.tearDown();
+        getJDBCMockObjectFactory();
         Enumeration drivers = DriverManager.getDrivers();
+        assertTrue(drivers.nextElement() instanceof MockDriver);
+        assertFalse(drivers.hasMoreElements());
+        super.tearDown();
+        drivers = DriverManager.getDrivers();
         assertTrue(drivers.hasMoreElements());
         drivers.nextElement();
         assertTrue(drivers.hasMoreElements());
     }
     
-    public void testOneDriver()
+    public void testLazyFactoriesInstance()
     {
-        Enumeration drivers = DriverManager.getDrivers();
-        assertTrue(drivers.nextElement() instanceof MockDriver);
-        assertFalse(drivers.hasMoreElements());
+        assertSame(getJDBCMockObjectFactory(), getJDBCMockObjectFactory());
+        assertSame(getJMSMockObjectFactory(), getJMSMockObjectFactory());
+        assertSame(getEJBMockObjectFactory(), getEJBMockObjectFactory());
+        assertSame(getWebMockObjectFactory(), getWebMockObjectFactory());
+        assertSame(getActionMockObjectFactory(), getActionMockObjectFactory());
+        assertSame(getActionMockObjectFactory(), getWebMockObjectFactory());
+    }
+    
+    public void testSetActionAndWebFactories()
+    {
+        WebMockObjectFactory webFactory = new WebMockObjectFactory();
+        setWebMockObjectFactory(webFactory);
+        assertSame(webFactory, getWebMockObjectFactory());
+        assertNotSame(webFactory, getActionMockObjectFactory());
+        ActionMockObjectFactory actionFactory = new ActionMockObjectFactory();
+        setActionMockObjectFactory(actionFactory);
+        assertSame(actionFactory, getActionMockObjectFactory());
+        setWebMockObjectFactory(null);
+        assertSame(actionFactory, getWebMockObjectFactory());
+    }
+    
+    public void testSetJMSFactory()
+    {
+        JMSMockObjectFactory jmsFactory = new JMSMockObjectFactory();
+        setJMSMockObjectFactory(jmsFactory);
+        assertSame(jmsFactory, getJMSMockObjectFactory());
+        setJMSMockObjectFactory(null);
+        assertNotNull(getJMSMockObjectFactory());
+        assertNotSame(jmsFactory, getJMSMockObjectFactory());
+    }
+    
+    public void testSetJDBCFactory()
+    {
+        JDBCMockObjectFactory jdbcFactory = new JDBCMockObjectFactory();
+        setJDBCMockObjectFactory(jdbcFactory);
+        assertSame(jdbcFactory, getJDBCMockObjectFactory());
+        setJDBCMockObjectFactory(null);
+        assertNotNull(getJDBCMockObjectFactory());
+        assertNotSame(jdbcFactory, getJDBCMockObjectFactory());
+    }
+    
+    public void testSetEJBFactory()
+    {
+        EJBMockObjectFactory ejbFactory = new EJBMockObjectFactory();
+        setEJBMockObjectFactory(ejbFactory);
+        assertSame(ejbFactory, getEJBMockObjectFactory());
+        setEJBMockObjectFactory(null);
+        assertNotNull(getEJBMockObjectFactory());
+        assertNotSame(ejbFactory, getEJBMockObjectFactory());
     }
 
     public static class TestDriver implements Driver

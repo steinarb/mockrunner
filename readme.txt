@@ -62,10 +62,7 @@ are identical in both versions. Struts versions 1.1 and 1.2 are supported.
 It's not possible to use Mockrunner with Struts 1.0.
 
 To start with Mockrunner check out the JavaDoc and the examples
-in the com.mockrunner.example packages.
-Most methods are self-explanatory. Just subclass one of the adapters
-(e.g. ActionTestCaseAdapter) and start testing. If you have your
-own base class for tests, you can use the modules (e.g. ActionTestModule).
+in the com.mockrunner.example packages. Most methods are self-explanatory.
 
 Mockrunner uses some classes from ActiveMQ project (http://activemq.codehaus.org/)
 for JMS message selector parsing. The classes are modified in order to
@@ -73,18 +70,20 @@ fit the needs of Mockrunner. The corresponding classes are in a different packag
 than the original ActiveMQ classes, so you should not face classloading problems
 when using ActiveMQ in your project.
 
-Mockrunner depends on some third-party libraries.  Just add them to the classpath. 
-If you extend one of the test adapters (e.g. JDBCTestCaseAdapter), you have 
-to add all third-party libraries to the classpath, because the base class 
-for all adapters, BaseTestCase, depends on them. If you only use one test 
-module, e.g. JDBCTestModule, it's also possible, to create the test module 
-using:
+Mockrunner depends on some third-party libraries. You have to add them to the classpath.
+You can subclass one of the standard adapters (e.g. ActionTestCaseAdapter)
+which extend BaseTestCase. BaseTestCase provides easy access to all test modules and all
+mock object factories, but it depends on all third-party libraries. However, you don't
+have to add all the jar files to the classpath, just those that are related to the 
+test module you use (because the factories are lazy initialized when necessary).
+If you only use one technology, e.g. JDBC, it's recommended to subclass the basic
+adapter version (e.g. BasicJDBCTestCaseAdapter), which does not extend BaseTestCase
+and does not depend on all third-party libraries. Please note, that all adapters
+just delegate to their corresponding module. If you don't want to extend a Mockrunner
+adapter, you can always create a module like this:
 
 JDBCMockObjectFactory factory = new JDBCMockObjectFactory();
 JDBCTestModule module = new JDBCTestModule(factory);
-
-In this case you don't have to add all libraries, just those that are
-related to the test module you use.
 
 The third-party libraries included in the Mockrunner release are:
 
