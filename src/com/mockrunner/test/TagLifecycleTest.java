@@ -7,6 +7,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.mock.MockBodyContent;
 import com.mockrunner.mock.MockJspWriter;
 import com.mockrunner.tag.NestedStandardTag;
 import com.mockrunner.tag.NestedTag;
@@ -111,12 +112,25 @@ public class TagLifecycleTest extends BaseTestCase
         level1child2Tag.setDoStartTagReturnValue(TagSupport.SKIP_BODY);
         level1child3Tag.setDoStartTagReturnValue(BodyTagSupport.EVAL_BODY_BUFFERED);
         root.doLifecycle();
-        
         assertEquals("TestTagTestBodyTagroottextTestTagTestBodyTag", getTagOutput());
+        assertEquals("level1textchild3", ((MockBodyContent)level1child3Tag.getBufferedOut()).getOutputAsString());
+        clearOutput();
+        level1child3Tag.setDoStartTagReturnValue(BodyTagSupport.EVAL_BODY_INCLUDE);
+        root.doLifecycle();
+        assertEquals("TestTagTestBodyTagroottextTestTagTestBodyTaglevel1textchild3", getTagOutput());
+        clearOutput();
+        level1child3Tag.setDoAfterBodyReturnValue(BodyTagSupport.EVAL_BODY_AGAIN);
+        root.doLifecycle();
+        assertEquals("TestTagTestBodyTagroottextTestTagTestBodyTaglevel1textchild3level1textchild3", getTagOutput());
     }
     
     private String getTagOutput()
     {
         return ((MockJspWriter)(getMockObjectFactory().getMockPageContext().getOut())).getOutputAsString();
+    }
+    
+    private void clearOutput() throws Exception
+    {
+        ((MockJspWriter)(getMockObjectFactory().getMockPageContext().getOut())).clearBuffer();
     }
 }

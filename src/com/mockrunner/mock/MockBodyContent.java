@@ -20,6 +20,16 @@ public class MockBodyContent extends BodyContent
         super(writer);
         body = new MockJspWriter();
     }
+    
+    public String getOutputAsString()
+    {
+        return getString();
+    }
+
+    public String toString()
+    {
+        return getString();
+    }
 
     public Reader getReader()
     {
