@@ -128,14 +128,21 @@ public class JavaLineProcessorTest extends TestCase
         JavaLineParser parser = new JavaLineParser();
         parser.addLine("import java.io.FileReader");
         parser.addBlock("public test()");
-        List result = parser.parse(getInvalidTestCode());
-        assertEquals(1, result.size());
-        Line line1 = (Line)result.get(0);
-        assertEquals("import java.io.FileReader;", line1.getLine());
-        assertEquals(4, line1.getLineNumber());
+        try
+        {
+            List result = parser.parse(getInvalidTestCode());
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            assertTrue(exc.getMessage().indexOf("Blocks not found") != -1);
+            assertTrue(exc.getMessage().indexOf("public test()") != -1);
+            assertTrue(exc.getMessage().indexOf("Lines not found") == -1);
+        }
+        
     }
     
-    public void testDeeplyNested() throws Exception
+    public void testParseDeeplyNested() throws Exception
     {
         String testJava = getNestedTestCode();
         JavaLineParser parser = new JavaLineParser();
@@ -146,6 +153,33 @@ public class JavaLineProcessorTest extends TestCase
         assertEquals("test", block1.getLine());
         assertEquals(1, block1.getLineNumber());
         assertEquals(16, block1.getEndLineNumber());
+    }
+    
+    public void testParseError() throws Exception
+    {
+        JavaLineParser parser = new JavaLineParser();
+        List lineList = new ArrayList();
+        lineList.add("imprt java.io.FileReader");
+        lineList.add("java.io.FileInputStream");
+        parser.addLines(lineList);
+        parser.addLine("blic clas");
+        List blockList = new ArrayList();
+        blockList.add("public test)");
+        parser.addBlocks(blockList);
+        parser.addBlock("anotherethod");
+        try
+        {
+            List result = parser.parse(getValidTestCode());
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            assertTrue(exc.getMessage().indexOf("Lines not found") != -1);
+            assertTrue(exc.getMessage().indexOf("imprt java.io.FileReader") != -1);
+            assertTrue(exc.getMessage().indexOf("Blocks not found") != -1);
+            assertTrue(exc.getMessage().indexOf("public test)") != -1);
+            assertTrue(exc.getMessage().indexOf("anotherethod") != -1);
+        }
     }
     
     public void testProcessValid() throws Exception
@@ -180,7 +214,7 @@ public class JavaLineProcessorTest extends TestCase
         assertTrue(result.trim().endsWith("*/"));
     }
     
-    public void testProcessCommentAll() throws Exception
+    public void testProcessCommentFirst() throws Exception
     {
         String testCode = getValidTestCode();
         JavaLineProcessor processor = new JavaLineProcessor();
@@ -189,11 +223,9 @@ public class JavaLineProcessorTest extends TestCase
         processor.addLines(lineList);
         String result = processor.process(testCode);
         BufferedReader reader = new BufferedReader(new StringReader(result));
-        String currentLine = null;
-        while(null != (currentLine = reader.readLine()))
-        {
-            assertTrue(currentLine.trim().startsWith("//"));
-        }
+        assertTrue(reader.readLine().trim().startsWith("//"));
+        assertFalse(reader.readLine().trim().startsWith("//"));
+        assertFalse(reader.readLine().trim().startsWith("//"));
     }
     
     private String stripChars(String theString)

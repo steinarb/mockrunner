@@ -30,6 +30,19 @@ public class SynchronizeVersionUtil
     private Map prepareJDBCJDK13()
     {
         Map jdbcFiles = new HashMap();
+        
+        JavaLineProcessor mockConnectionProc = new JavaLineProcessor();
+        mockConnectionProc.addLine("import java.sql.Savepoint");
+        mockConnectionProc.addLine("private int holdability;");
+        mockConnectionProc.addLine("holdability = ResultSet.HOLD_CURSORS_OVER_COMMIT;");
+        mockConnectionProc.addBlock("public int getHoldability()");
+        mockConnectionProc.addBlock("public void setHoldability(int holdability)");
+        mockConnectionProc.addBlock("public Savepoint setSavepoint()");
+        mockConnectionProc.addBlock("public Savepoint setSavepoint(String name)");
+        mockConnectionProc.addBlock("public void releaseSavepoint(Savepoint savepoint)");
+        mockConnectionProc.addBlock("public void rollback(Savepoint savepoint)");
+        jdbcFiles.put("com.mockrunner.mock.jdbc.MockConnection", mockConnectionProc);
+        
         return jdbcFiles;
     }
 
@@ -62,6 +75,7 @@ public class SynchronizeVersionUtil
         currentFileName = currentFileName.replace('\\', '.');
         currentFileName = currentFileName.replace('/', '.');
         currentFileName = currentFileName.substring(1);
+        currentFileName = currentFileName.substring(0 , currentFileName.length() - 5);
         JavaLineProcessor currentProcessor = (JavaLineProcessor)jdbcFiles.get(currentFileName);
         if(null == currentProcessor)
         {
