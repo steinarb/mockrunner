@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.ClassUtil;
+import com.mockrunner.util.StringUtil;
 
 public class JavaClassGenerator
 {
@@ -89,11 +90,14 @@ public class JavaClassGenerator
     public void addConstructorDeclaration(ConstructorDeclaration constructor)
     {
         constructors.add(constructor);
+        addImportsForArguments(constructor);
     }
     
     public void addMethodDeclaration(MethodDeclaration method)
     {
         methods.add(method);
+        addImportsForArguments(method);
+        addImportForReturnType(method);
     }
 
     public String generate()
@@ -109,6 +113,7 @@ public class JavaClassGenerator
         assembler.setIndentLevel(1);
         appendMembers(assembler);
         appendConstructors(assembler);
+        appendMethods(assembler);
         assembler.setIndentLevel(0);
         assembler.appendRightBrace();
         return assembler.getResult();
@@ -134,6 +139,27 @@ public class JavaClassGenerator
         }
     }
     
+    private void appendMethods(JavaLineAssembler assembler)
+    {
+        for(int ii = 0; ii < methods.size(); ii++)
+        {
+            MethodDeclaration declaration = (MethodDeclaration)methods.get(ii);
+            assembler.appendNewLine();
+            assembler.appendBlockComment(declaration.getCommentLines());
+            String[] modifiers = prepareModifiers(declaration.getModifier());
+            String[] argumentTypes = prepareArgumentTypes(declaration.getArguments());
+            String returnType = ClassUtil.getClassName(declaration.getReturnType());
+            assembler.appendMethodDeclaration(modifiers, returnType, declaration.getName(), argumentTypes, declaration.getArgumentNames());
+            assembler.appendIndent();
+            assembler.appendLeftBrace();
+            assembler.appendNewLine();
+            appendCodeLines(assembler, declaration.getCodeLines());
+            assembler.appendIndent();
+            assembler.appendRightBrace();
+            assembler.appendNewLine();
+        }
+    }
+    
     private void appendConstructors(JavaLineAssembler assembler)
     {
         for(int ii = 0; ii < constructors.size(); ii++)
@@ -146,10 +172,25 @@ public class JavaClassGenerator
             assembler.appendIndent();
             assembler.appendLeftBrace();
             assembler.appendNewLine();
+            appendCodeLines(assembler, declaration.getCodeLines());
             assembler.appendIndent();
             assembler.appendRightBrace();
             assembler.appendNewLine();
         }
+    }
+    
+    private void appendCodeLines(JavaLineAssembler assembler, String[] codeLines)
+    {
+        assembler.setIndentLevel(2);
+        assembler.appendCodeLines(codeLines);
+        assembler.setIndentLevel(1);
+    }
+    
+    private String[] prepareModifiers(int modifier)
+    {
+        String modifierString = Modifier.toString(modifier);
+        if(null == modifierString || modifierString.trim().length() <= 0) return null;
+        return StringUtil.split(modifierString, " ", true);
     }
     
     private String[] prepareArgumentTypes(Class[] arguments)
@@ -159,18 +200,35 @@ public class JavaClassGenerator
         for(int ii = 0; ii < arguments.length; ii++)
         {
             Class clazz = arguments[ii];
-            addImportIfNecessary(clazz);
             names[ii] = ClassUtil.getClassName(clazz);
         }
         return names;
     }
+    
+    private void addImportsForArguments(ConstructorDeclaration declaration)
+    {
+        Class[] arguments = declaration.getArguments();
+        if(null == arguments || arguments.length <= 0) return;
+        for(int ii = 0; ii < arguments.length; ii++)
+        {
+            addImportIfNecessary(arguments[ii]);
+        }
+    }
+    
+    private void addImportForReturnType(MethodDeclaration declaration)
+    {
+        Class returnType = declaration.getReturnType();
+        if(null == returnType) return;
+        addImportIfNecessary(returnType);
+    }
 
     private void addImportIfNecessary(Class clazz)
     {
-        if(!(imports.contains(clazz.getName())) && !(clazz.getName().startsWith("java.lang")))
-        {
-            addImport(clazz);
-        }
+        if(null == clazz) return;
+        if(imports.contains(clazz.getName())) return;
+        if(clazz.getName().startsWith("java.lang")) return;
+        if(clazz.isPrimitive()) return;
+        addImport(clazz);
     }
     
     public static class ConstructorDeclaration

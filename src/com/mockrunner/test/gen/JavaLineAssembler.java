@@ -108,6 +108,21 @@ public class JavaLineAssembler
         }
     }
     
+    public void appendCodeLines(String[] lines)
+    {
+        if(null == lines || lines.length <= 0)
+        {
+            appendNewLine();
+        }
+        else
+        {
+            for(int ii = 0; ii < lines.length; ii++)
+            {
+                appendLine(lines[ii]);
+            }
+        }
+    }
+    
     public void appendPackageInfo(String packageName)
     {
         if(null != packageName && packageName.length() > 0)

@@ -11,6 +11,7 @@ public class AllGenTests
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(JavaLineProcessorTest.class));
         suite.addTest(new TestSuite(JavaLineAssemblerTest.class));
+        suite.addTest(new TestSuite(JavaClassGeneratorTest.class));
         //$JUnit-END$
         return suite;
     }
