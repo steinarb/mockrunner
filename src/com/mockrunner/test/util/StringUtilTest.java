@@ -9,6 +9,22 @@ import com.mockrunner.util.StringUtil;
 
 public class StringUtilTest extends TestCase
 {
+    public void testCompare()
+    {
+        assertEquals(-1, StringUtil.compare("", ""));
+        assertEquals(-1, StringUtil.compare("", "abc"));
+        assertEquals(-1, StringUtil.compare("123", ""));
+        assertEquals(-1, StringUtil.compare("123", "abc"));
+        assertEquals(-1, StringUtil.compare("ASD", "asd"));
+        assertEquals(0, StringUtil.compare("a", "a"));
+        assertEquals(0, StringUtil.compare("a", "ab"));
+        assertEquals(0, StringUtil.compare("123", "1bc"));
+        assertEquals(2, StringUtil.compare("123", "123"));
+        assertEquals(2, StringUtil.compare("123", "1234"));
+        assertEquals(2, StringUtil.compare("1234", "123"));
+        assertEquals(11, StringUtil.compare(" Hello World", " Hello World "));
+    }
+    
     public void testSplit()
     {
         String test = "This;;is;a;;  ;test; String;;";

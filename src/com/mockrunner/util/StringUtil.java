@@ -20,6 +20,26 @@ public class StringUtil
     private final static Log log = LogFactory.getLog(StringUtil.class);
     
     /**
+     * Compares two strings and returns the last
+     * index where the two string are equal. If
+     * the first character of the two string does
+     * not match or if at least one of the two strings
+     * is empty, -1 is returned.
+     * @param string1 the first string
+     * @param string2 the second string
+     * @return the last index, where the strings are equal
+     */
+    public static int compare(String string1, String string2)
+    {
+        int endIndex = Math.min(string1.length(), string2.length());
+        for(int ii = 0; ii < endIndex; ii++)
+        {
+            if(string1.charAt(ii) != string2.charAt(ii)) return ii - 1;
+        }
+        return endIndex - 1;
+    }
+    
+    /**
      * Appends the entries in the specified <code>List</code> as strings
      * with a terminating <i>"\n"</i> after each row.
      * @param buffer the buffer
