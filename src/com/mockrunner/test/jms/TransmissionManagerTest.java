@@ -27,16 +27,16 @@ public class TransmissionManagerTest extends TestCase
 {
     private MockConnection connection;
     private MockSession session;
-    
+
     protected void setUp() throws Exception
     {
         super.setUp();
         DestinationManager destManager = new DestinationManager();
         ConfigurationManager confManager = new ConfigurationManager();
-        connection = new MockConnection(destManager, confManager);
+        connection = new MockConnection(destManager, confManager); 
         session = (MockSession)connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
     }
-    
+
     public void testQueueTransmissionManagerCreate()
     {
         QueueTransmissionManager manager = session.getQueueTransmissionManager();
@@ -68,7 +68,7 @@ public class TransmissionManagerTest extends TestCase
         assertNull(manager.getQueueReceiver("Queue3"));
         assertNull(manager.getQueueBrowser("Queue3"));
     }
-    
+
     public void testTopicTransmissionManagerCreate()
     {
         TopicTransmissionManager manager = session.getTopicTransmissionManager();
@@ -101,7 +101,7 @@ public class TransmissionManagerTest extends TestCase
         assertNull(manager.getTopicPublisher("Topic2"));
         assertNull(manager.getTopicSubscriber("Topic2"));
     }
-    
+
     public void testQueueTransmissionManagerClose()
     {
         QueueTransmissionManager manager = session.getQueueTransmissionManager();
@@ -123,14 +123,11 @@ public class TransmissionManagerTest extends TestCase
         receiver1 = manager.createQueueReceiver(new MockQueue("Queue1"), "");
         receiver2 = manager.createQueueReceiver(new MockQueue("Queue1"), "");
         browser = manager.createQueueBrowser(new MockQueue("Queue1"), "");
-        manager.closeAll();
-        assertTrue(sender1.isClosed());
-        assertTrue(sender2.isClosed());
-        assertTrue(receiver1.isClosed());
-        assertTrue(receiver2.isClosed());
-        assertTrue(browser.isClosed());
+        manager.closeAll(); assertTrue(sender1.isClosed());
+        assertTrue(sender2.isClosed()); assertTrue(receiver1.isClosed());
+        assertTrue(receiver2.isClosed()); assertTrue(browser.isClosed());
     }
-    
+
     public void testTopicTransmissionManagerClose()
     {
         TopicTransmissionManager manager = session.getTopicTransmissionManager();
@@ -149,9 +146,10 @@ public class TransmissionManagerTest extends TestCase
         assertTrue(durableSubscriber1.isClosed());
         assertTrue(durableSubscriber2.isClosed());
         assertTrue(durableSubscriber3.isClosed());
-        publisher1 = manager.createTopicPublisher(new MockTopic("Topic1"));
-        publisher2 = manager.createTopicPublisher(new MockTopic("Topic2"));
-        subscriber1 = manager.createTopicSubscriber(new MockTopic("Topic1"), "", false);;
+        publisher1 = manager.createTopicPublisher(new
+        MockTopic("Topic1")); publisher2 =
+        manager.createTopicPublisher(new MockTopic("Topic2")); subscriber1
+        = manager.createTopicSubscriber(new MockTopic("Topic1"), "", false);;
         durableSubscriber1 = manager.createDurableTopicSubscriber(new MockTopic("Topic1"), "subscription1", "", true);
         durableSubscriber2 = manager.createDurableTopicSubscriber(new MockTopic("Topic1"), "subscription2", "", false);
         durableSubscriber3 = manager.createDurableTopicSubscriber(new MockTopic("Topic2"), "subscription3", "", true);
@@ -163,7 +161,7 @@ public class TransmissionManagerTest extends TestCase
         assertTrue(durableSubscriber2.isClosed());
         assertTrue(durableSubscriber3.isClosed());
     }
-    
+
     public void testGenericTransmissionManager()
     {
         GenericTransmissionManager manager = session.getGenericTransmissionManager();
@@ -172,19 +170,18 @@ public class TransmissionManagerTest extends TestCase
         MockMessageProducer producer3 = manager.createTopicPublisher();
         assertSame(producer1, manager.getMessageProducer(0));
         assertSame(producer2, manager.getMessageProducer(1));
-        assertSame(producer3, manager.getMessageProducer(2));
-        List producerList = manager.getMessageProducerList();
-        assertEquals(3, producerList.size());
+        assertSame(producer3, manager.getMessageProducer(2)); List
+        producerList = manager.getMessageProducerList(); assertEquals(3,
+        producerList.size());
         assertTrue(producerList.contains(producer1));
         assertTrue(producerList.contains(producer2));
-        assertTrue(producerList.contains(producer3));
-        manager.closeAll();
+        assertTrue(producerList.contains(producer3)); manager.closeAll();
         assertTrue(producer1.isClosed());
         assertTrue(producer2.isClosed());
         assertTrue(producer3.isClosed());
     }
-    
-    public void testTransmissionManagerWrapper()
+
+    public void testTransmissionManagerWrapperProducerAndConsumer()
     {
         QueueTransmissionManager queueManager = session.getQueueTransmissionManager();
         MockQueueSender sender1 = queueManager.createQueueSender(new MockQueue("Queue1"));
@@ -217,5 +214,85 @@ public class TransmissionManagerTest extends TestCase
         assertTrue(manager.getMessageConsumerList().contains(subscriber1));
         assertTrue(manager.getMessageConsumerList().contains(subscriber2));
         assertTrue(manager.getMessageConsumerList().contains(durableSubscriber1));
+    }
+
+    public void testTransmissionManagerWrapperQueueSender()
+    {
+        QueueTransmissionManager queueManager = session.getQueueTransmissionManager();
+        MockQueueSender sender1 = queueManager.createQueueSender(new MockQueue("Queue1"));
+        MockQueueSender sender2 = queueManager.createQueueSender(new MockQueue("Queue2"));
+        GenericTransmissionManager genericManager = session.getGenericTransmissionManager();
+        MockMessageProducer producer1 = genericManager.createMessageProducer();
+        MockMessageProducer producer2 = genericManager.createTopicPublisher();
+        MockMessageProducer producer3 = genericManager.createQueueSender(); 
+        TopicTransmissionManager topicManager = session.getTopicTransmissionManager();
+        TransmissionManagerWrapper manager = new TransmissionManagerWrapper(queueManager, topicManager, genericManager);
+        assertEquals(5, manager.getMessageProducerList().size());
+        assertEquals(3, manager.getQueueSenderList().size());
+        assertNotNull(manager.getQueueSender(2));
+        assertNull(manager.getQueueSender(3));
+        assertNotNull(manager.getMessageProducer(4));
+        assertNull(manager.getMessageProducer(5));
+        assertTrue(manager.getMessageProducerList().contains(sender1));
+        assertTrue(manager.getMessageProducerList().contains(sender2));
+        assertTrue(manager.getMessageProducerList().contains(producer1));
+        assertTrue(manager.getMessageProducerList().contains(producer2));
+        assertTrue(manager.getMessageProducerList().contains(producer3));
+        assertTrue(manager.getQueueSenderList().contains(sender1));
+        assertTrue(manager.getQueueSenderList().contains(sender2));
+        assertTrue(manager.getQueueSenderList().contains(producer3));
+    }
+
+    public void testTransmissionManagerWrapperTopicPublisher()
+    {
+        TopicTransmissionManager topicManager = session.getTopicTransmissionManager();
+        MockTopicPublisher publisher1 = topicManager.createTopicPublisher(new MockTopic("Topic1"));
+        GenericTransmissionManager genericManager = session.getGenericTransmissionManager();
+        MockMessageProducer producer1 = genericManager.createMessageProducer();
+        MockMessageProducer producer2 = genericManager.createTopicPublisher();
+        MockMessageProducer producer3 = genericManager.createQueueSender();
+        QueueTransmissionManager queueManager = session.getQueueTransmissionManager();
+        TransmissionManagerWrapper manager = new TransmissionManagerWrapper(queueManager, topicManager, genericManager);
+        assertEquals(4, manager.getMessageProducerList().size());
+        assertEquals(2, manager.getTopicPublisherList().size());
+        assertNotNull(manager.getTopicPublisher(1));
+        assertNull(manager.getTopicPublisher(2));
+        assertNotNull(manager.getMessageProducer(3));
+        assertNull(manager.getMessageProducer(4));
+        assertTrue(manager.getMessageProducerList().contains(publisher1));
+        assertTrue(manager.getMessageProducerList().contains(producer1));
+        assertTrue(manager.getMessageProducerList().contains(producer2));
+        assertTrue(manager.getMessageProducerList().contains(producer3));
+        assertTrue(manager.getTopicPublisherList().contains(publisher1));
+        assertTrue(manager.getTopicPublisherList().contains(producer2));
+    }
+
+    public void testTransmissionManagerWrapperReceiverAndSubscriber() 
+    {
+        QueueTransmissionManager queueManager = session.getQueueTransmissionManager();
+        MockQueueReceiver receiver1 = queueManager.createQueueReceiver(new MockQueue("Queue1"), "");
+        MockQueueReceiver receiver2 = queueManager.createQueueReceiver(new MockQueue("Queue1"), "");
+        TopicTransmissionManager topicManager = session.getTopicTransmissionManager();
+        MockTopicSubscriber subscriber1 = topicManager.createTopicSubscriber(new MockTopic("Topic1"), "", false);
+        MockTopicSubscriber subscriber2 = topicManager.createTopicSubscriber(new MockTopic("Topic1"), "", true);
+        GenericTransmissionManager genericManager = session.getGenericTransmissionManager();
+        TransmissionManagerWrapper manager = new TransmissionManagerWrapper(queueManager, topicManager, genericManager);
+        assertEquals(4, manager.getMessageConsumerList().size());
+        assertEquals(2, manager.getTopicSubscriberList().size());
+        assertEquals(2, manager.getQueueReceiverList().size());
+        assertNotNull(manager.getMessageConsumer(3));
+        assertNull(manager.getMessageConsumer(4));
+        assertNotNull(manager.getQueueReceiver(1));
+        assertNull(manager.getQueueReceiver(2));
+        assertNotNull(manager.getTopicSubscriber(1));
+        assertNull(manager.getTopicSubscriber(2));
+        assertTrue(manager.getMessageConsumerList().contains(receiver1));
+        assertTrue(manager.getMessageConsumerList().contains(receiver2));
+        assertTrue(manager.getMessageConsumerList().contains(subscriber1));
+        assertTrue(manager.getMessageConsumerList().contains(subscriber2)); 
+        assertTrue(manager.getQueueReceiverList().contains(receiver1));
+        assertTrue(manager.getQueueReceiverList().contains(receiver2));
+        assertTrue(manager.getTopicSubscriberList().contains(subscriber1));
+        assertTrue(manager.getTopicSubscriberList().contains(subscriber2));
     }
 }

@@ -7,7 +7,7 @@ import org.apache.struts.action.ActionServlet;
 
 /**
  * This mock version of the Struts <code>ActionServlet</code>
- * is necessary, because some Struts methods uses it to
+ * is necessary, because some Struts methods use it to
  * get the <code>ServletContext</code> and other things.
  */
 public class MockActionServlet extends ActionServlet

@@ -7,6 +7,7 @@ mockrunner-0.3.2:
 - introduced NestedApplicationException, which is thrown instead of
   RuntimeException and nests the original exception
 - renamed ArrayUtil.contains to ArrayUtil.indexOf, contains is misleading
+- added getBinaryContent to MockServletOutputStream
 - fixed bug 1077690 (JMS spec allows MessageProducers with null destination)
   reported by Peter Ryan
 - fixed bug in MockHttpServletResponse.getWriter()
