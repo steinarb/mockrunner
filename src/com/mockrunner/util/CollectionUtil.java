@@ -1,7 +1,6 @@
 package com.mockrunner.util;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**
@@ -52,6 +51,16 @@ public class CollectionUtil
         return getByteArrayFromList(data, index, data.size() - index);
     }
     
+    /**
+     * Returns a byte array containing the bytes from the <code>List</code>.
+     * The <code>List</code> must contain <code>Byte</code> objects.
+     * <code>null</code> entries in the <code>List</code> are
+     * allowed, the resulting byte will be 0.
+     * @param data the <code>List</code>
+     * @param index the index at which to start
+     * @param len the number of bytes
+     * @return the resulting byte array
+     */
     public static byte[] getByteArrayFromList(List data, int index, int len)
     {
         if(index >= data.size())

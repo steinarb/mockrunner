@@ -5,7 +5,10 @@ mockrunner-0.1.6:
   mockobjects of mockrunner-0.1.5 are in com.mockrunner.mock.web
   package now. Please adapt your imports.
 - replaced JDK 1.3 mockobjects with 1.4 version
-- added MockEjb framework for EJB tests
+- added methods to MockObjectFactory in order to specify
+  custom request wrapper. This makes it possible to
+  use filters in conjunction with Struts actions
+  (among other things)
 
 mockrunner-0.1.5:
 
