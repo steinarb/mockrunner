@@ -50,6 +50,16 @@ public class MockStatement implements Statement
         this.resultSetHandler = resultSetHandler;
     }
     
+    protected void setNextResultSet(ResultSet resultSet)
+    {
+        this.nextResultSet = resultSet;
+    }
+    
+    protected void setNextUpdateCount(int updateCount)
+    {
+        this.nextUpdateCount = updateCount;
+    }
+    
     public String getCursorName()
     {
         return cursorName;
@@ -147,15 +157,20 @@ public class MockStatement implements Statement
         {
             callExecuteQuery = SQLUtil.isSelect(sql);
         }
+        callExecute(sql, callExecuteQuery);
+        return callExecuteQuery;
+    }
+    
+    protected void callExecute(String sql, boolean callExecuteQuery) throws SQLException
+    {
         if(callExecuteQuery)
         {
-            nextResultSet = executeQuery(sql);
+            setNextResultSet(executeQuery(sql));
         }
         else
         {
-            nextUpdateCount = executeUpdate(sql);
+            setNextUpdateCount(executeUpdate(sql));
         }
-        return callExecuteQuery;
     }
 
     public ResultSet getResultSet() throws SQLException

@@ -17,14 +17,18 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.mockobjects.sql.MockResultSetMetaData;
+import com.mockrunner.util.CollectionUtil;
 
 /**
  * Mock implementation of <code>PreparedStatement</code>.
@@ -111,17 +115,39 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public boolean execute() throws SQLException
     {
-        return false;
+        return super.execute(getSQL());
+    }
+    
+    protected void callExecute(String sql, boolean callExecuteQuery) throws SQLException
+    {
+        if(callExecuteQuery)
+        {
+            setNextResultSet(executeQuery());
+        }
+        else
+        {
+            setNextUpdateCount(executeUpdate());
+        }
     }
 
     public ResultSet executeQuery() throws SQLException
     {
-        return null;
+        MockResultSet result = resultSetHandler.getResultSet(getSQL(), getParameterList());
+        if(null != result)
+        {
+            return cloneResultSet(result);
+        }
+        return super.executeQuery(getSQL());
     }
 
     public int executeUpdate() throws SQLException
     {
-        return 0;
+        Integer updateCount = resultSetHandler.getUpdateCount(getSQL(), getParameterList());
+        if(null != updateCount)
+        {
+            return updateCount.intValue();
+        }
+        return super.executeUpdate(getSQL());
     }
 
     public ResultSetMetaData getMetaData() throws SQLException
@@ -267,5 +293,18 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     public void setURL(int parameterIndex, URL url) throws SQLException
     {
         setObject(parameterIndex, url);
+    }
+    
+    private List getParameterList()
+    {
+        ArrayList resultList = new ArrayList();
+        Iterator iterator = paramObjects.keySet().iterator();
+        while(iterator.hasNext())
+        {
+            Integer nextIndex = (Integer)iterator.next();
+            CollectionUtil.fillList(resultList, nextIndex.intValue() + 1);
+            resultList.set(nextIndex.intValue(), paramObjects.get(nextIndex));
+        }
+        return resultList;
     }
 }
