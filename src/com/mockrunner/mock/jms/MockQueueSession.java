@@ -126,7 +126,7 @@ public class MockQueueSession implements QueueSession
      * Returns if the current transaction was rolled back.
      * @return <code>true</code> if the transaction was rolled back
      */
-    public boolean isRolledback()
+    public boolean isRolledBack()
     {
         return rolledback;
     }

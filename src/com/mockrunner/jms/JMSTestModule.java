@@ -5,6 +5,9 @@ import java.util.List;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockQueue;
+import com.mockrunner.mock.jms.MockQueueBrowser;
+import com.mockrunner.mock.jms.MockQueueReceiver;
+import com.mockrunner.mock.jms.MockQueueSender;
 import com.mockrunner.mock.jms.MockQueueSession;
 import com.mockrunner.mock.jms.MockTemporaryQueue;
 
@@ -171,6 +174,164 @@ public class JMSTestModule
     }
     
     /**
+     * Verifies that the queue connection is closed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyQueueConnectionClosed()
+    {
+        if(!mockFactory.getMockQueueConnection().isClosed())
+        {
+            throw new VerifyFailedException("QueueConnection is not closed.");
+        }
+    }
+    
+    /**
+     * Verifies that the queue session with the specified index is
+     * closed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyQueueSessionClosed(int indexOfSession)
+    {
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        if(!session.isClosed())
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not closed.");
+        }
+    }
+    
+    /**
+     * Verifies that the queue session with the specified index was
+     * committed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyQueueSessionCommitted(int indexOfSession)
+    {
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        if(!session.isCommitted())
+        {
+            throw new VerifyFailedException("QueueConnection is not committed.");
+        }
+    }
+    
+    /**
+     * Verifies that the queue session with the specified index was
+     * not committed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyQueueSessionNotCommitted(int indexOfSession)
+    {
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        if(session.isCommitted())
+        {
+            throw new VerifyFailedException("QueueConnection is committed.");
+        }
+    }
+    
+    /**
+     * Verifies that the queue session with the specified index was
+     * rolled back.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyQueueSessionRolledBack(int indexOfSession)
+    {
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        if(!session.isRolledBack())
+        {
+            throw new VerifyFailedException("QueueConnection is not rolled back.");
+        }
+    }
+    
+    /**
+     * Verifies that the queue session with the specified index was
+     * not rolled back.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyQueueSessionNotRolledBack(int indexOfSession)
+    {
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        if(session.isRolledBack())
+        {
+            throw new VerifyFailedException("QueueConnection is rolled back.");
+        }
+    }
+    
+    /**
+     * Verifies that all queue sessions are closed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllQueueSessionsClosed()
+    {
+        List queueSessions = getQueueSessionList();
+        for(int ii = 0; ii < queueSessions.size(); ii++)
+        {
+            MockQueueSession currentSession = (MockQueueSession)queueSessions.get(ii);
+            if(!currentSession.isClosed())
+            {
+                throw new VerifyFailedException("QueueSession with index " + ii + " is not closed.");
+            }
+        }
+    }
+
+    /**
+     * Verifies that all queue sessions were commited.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllQueueSessionsCommitted()
+    {
+        List queueSessions = getQueueSessionList();
+        for(int ii = 0; ii < queueSessions.size(); ii++)
+        {
+            MockQueueSession currentSession = (MockQueueSession)queueSessions.get(ii);
+            if(!currentSession.isCommitted())
+            {
+                throw new VerifyFailedException("QueueSession with index " + ii + " is not committed.");
+            }
+        }
+    }
+
+    /**
+     * Verifies that all queue sessions were rolled back.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllQueueSessionsRolledBack()
+    {
+        List queueSessions = getQueueSessionList();
+        for(int ii = 0; ii < queueSessions.size(); ii++)
+        {
+            MockQueueSession currentSession = (MockQueueSession)queueSessions.get(ii);
+            if(!currentSession.isRolledBack())
+            {
+                throw new VerifyFailedException("QueueSession with index " + ii + " is not rolled back.");
+            }
+        }   
+    }
+    
+    /**
      * Verifies the number of senders for the specified session.
      * @param indexOfSession the index of the session
      * @param numberOfSenders the expected number of senders
@@ -178,7 +339,11 @@ public class JMSTestModule
      */
     public void verifyNumberQueueSenders(int indexOfSession, int numberOfSenders)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
         TransmissionManager manager = getTransmissionManager(indexOfSession);
         if(numberOfSenders != manager.getQueueSenderList().size())
         {
@@ -196,7 +361,11 @@ public class JMSTestModule
      */
     public void verifyNumberQueueSenders(int indexOfSession, String queueName, int numberOfSenders)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
         TransmissionManager manager = getTransmissionManager(indexOfSession);
         if(numberOfSenders != manager.getQueueSenderList(queueName).size())
         {
@@ -205,19 +374,53 @@ public class JMSTestModule
     }
     
     /**
-     * Verifies that a sender for the specified queue name was
-     * created for the specified session.
+     * Verifies that the specified sender is closed.
      * @param indexOfSession the index of the session
      * @param queueName the name of the queue
+     * @param indexOfSender the index of the sender
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyQueueSenderPresent(int indexOfSession, String queueName)
+    public void verifyQueueSenderClosed(int indexOfSession, String queueName, int indexOfSender)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
-        TransmissionManager manager = getTransmissionManager(indexOfSession);
-        if(null == manager.getQueueSender(queueName))
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
         {
-            throw new VerifyFailedException("A sender for queue " + queueName + " does not exist for session " + indexOfSession);
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        List senders = manager.getQueueSenderList(queueName);
+        if(indexOfSender >= senders.size())
+        {
+            throw new VerifyFailedException("QueueSender with index " + indexOfSender + " is not present.");
+        }
+        MockQueueSender sender = (MockQueueSender)senders.get(indexOfSender);
+        if(!sender.isClosed())
+        {
+            throw new VerifyFailedException("QueueSender of queue " + queueName + " with index " + indexOfSender + " not closed.");
+        }
+    }
+    
+    /**
+     * Verifies that all senders for the specified session are closed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllQueueSendersClosed(int indexOfSession)
+    {
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        List senders = manager.getQueueSenderList();
+        for(int ii = 0; ii < senders.size(); ii++)
+        {
+            MockQueueSender currentSender = (MockQueueSender)senders.get(ii);
+            if(!currentSender.isClosed())
+            {
+                throw new VerifyFailedException("QueueSender with index " + ii + " not closed.");
+            }
         }
     }
     
@@ -229,7 +432,11 @@ public class JMSTestModule
      */
     public void verifyNumberQueueReceivers(int indexOfSession, int numberOfReceivers)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
         TransmissionManager manager = getTransmissionManager(indexOfSession);
         if(numberOfReceivers != manager.getQueueReceiverList().size())
         {
@@ -247,28 +454,66 @@ public class JMSTestModule
      */
     public void verifyNumberQueueReceivers(int indexOfSession, String queueName, int numberOfReceivers)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
         TransmissionManager manager = getTransmissionManager(indexOfSession);
         if(numberOfReceivers != manager.getQueueReceiverList(queueName).size())
         {
             throw new VerifyFailedException("Expected " + numberOfReceivers + " receivers for queue " + queueName + ", actually " + manager.getQueueReceiverList().size() + " receivers present");
         }
     }
-
+    
     /**
-     * Verifies that a receiver for the specified queue name was
-     * created for the specified session.
+     * Verifies that the specified receiver is closed.
      * @param indexOfSession the index of the session
      * @param queueName the name of the queue
+     * @param indexOfReceiver the index of the receiver
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyQueueReceiverPresent(int indexOfSession, String queueName)
+    public void verifyQueueReceiverClosed(int indexOfSession, String queueName, int indexOfReceiver)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
-        TransmissionManager manager = getTransmissionManager(indexOfSession);
-        if(null == manager.getQueueReceiver(queueName))
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
         {
-            throw new VerifyFailedException("A receiver for queue " + queueName + " does not exist for session " + indexOfSession);
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        List receivers = manager.getQueueReceiverList(queueName);
+        if(indexOfReceiver >= receivers.size())
+        {
+            throw new VerifyFailedException("QueueReceiver with index " + indexOfReceiver + " is not present.");
+        }
+        MockQueueReceiver receiver = (MockQueueReceiver)manager.getQueueReceiverList(queueName).get(indexOfReceiver);
+        if(!receiver.isClosed())
+        {
+            throw new VerifyFailedException("QueueReceiver of queue " + queueName + " with index " + indexOfReceiver + " not closed.");
+        }
+    }
+
+    /**
+     * Verifies that all receivers for the specified session are closed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllQueueReceiversClosed(int indexOfSession)
+    {
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        List receivers = manager.getQueueReceiverList();
+        for(int ii = 0; ii < receivers.size(); ii++)
+        {
+            MockQueueReceiver currentReceiver = (MockQueueReceiver)receivers.get(ii);
+            if(!currentReceiver.isClosed())
+            {
+                throw new VerifyFailedException("QueueReceiver with index " + ii + " not closed.");
+            }
         }
     }
     
@@ -280,7 +525,11 @@ public class JMSTestModule
      */
     public void verifyNumberQueueBrowsers(int indexOfSession, int numberOfBrowsers)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
         TransmissionManager manager = getTransmissionManager(indexOfSession);
         if(numberOfBrowsers != manager.getQueueBrowserList().size())
         {
@@ -298,31 +547,69 @@ public class JMSTestModule
      */
     public void verifyNumberQueueBrowsers(int indexOfSession, String queueName, int numberOfBrowsers)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
         TransmissionManager manager = getTransmissionManager(indexOfSession);
         if(numberOfBrowsers != manager.getQueueBrowserList(queueName).size())
         {
             throw new VerifyFailedException("Expected " + numberOfBrowsers + " browsers for queue " + queueName + ", actually " + manager.getQueueBrowserList().size() + " browsers present");
         }
     }
-
+    
     /**
-     * Verifies that a browser for the specified queue name was
-     * created for the specified session.
+     * Verifies that the specified browser is closed.
      * @param indexOfSession the index of the session
      * @param queueName the name of the queue
+     * @param indexOfBrowser the index of the browser
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyQueueBrowserPresent(int indexOfSession, String queueName)
+    public void verifyQueueBrowserClosed(int indexOfSession, String queueName, int indexOfBrowser)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
-        TransmissionManager manager = getTransmissionManager(indexOfSession);
-        if(null == manager.getQueueBrowser(queueName))
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
         {
-            throw new VerifyFailedException("A browser for queue " + queueName + " does not exist for session " + indexOfSession);
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        List browsers = manager.getQueueBrowserList(queueName);
+        if(indexOfBrowser >= browsers.size())
+        {
+            throw new VerifyFailedException("QueueBrowser with index " + indexOfBrowser + " is not present.");
+        }
+        MockQueueBrowser browser = (MockQueueBrowser)manager.getQueueBrowserList(queueName).get(indexOfBrowser);
+        if(!browser.isClosed())
+        {
+            throw new VerifyFailedException("QueueBrowser of queue " + queueName + " with index " + indexOfBrowser + " not closed.");
         }
     }
-    
+
+    /**
+     * Verifies that all browsers for the specified session are closed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllQueueBrowsersClosed(int indexOfSession)
+    {
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        List browsers = manager.getQueueBrowserList();
+        for(int ii = 0; ii < browsers.size(); ii++)
+        {
+            MockQueueBrowser currentBrowser = (MockQueueBrowser)browsers.get(ii);
+            if(!currentBrowser.isClosed())
+            {
+                throw new VerifyFailedException("QueueBrowser with index " + ii + " not closed.");
+            }
+        }
+    }
+
     /**
      * Verifies the number of sessions.
      * @param number the expected number of sessions
@@ -344,10 +631,62 @@ public class JMSTestModule
      */
     public void verifyNumberTemporaryQueues(int indexOfSession, int numberQueues)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
         if(numberQueues != getTemporaryQueueList(indexOfSession).size())
         {
             throw new VerifyFailedException("Expected " + numberQueues + " temporary queues, actually " + getTemporaryQueueList(indexOfSession).size() + " temporary queues present");
+        }
+    }
+    
+    /**
+     * Verifies that the temporary queue with the specified index
+     * was closed.
+     * @param indexOfSession the index of the session
+     * @param indexOfQueue the index of the queue
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTemporaryQueueDeleted(int indexOfSession, int indexOfQueue)
+    {
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        MockTemporaryQueue queue = getTemporaryQueue(indexOfSession, indexOfQueue);
+        if(null == queue)
+        {
+            throw new VerifyFailedException("TemporaryQueue with index " + indexOfQueue + " is not present.");
+        }
+        if(!queue.isDeleted())
+        {
+            throw new VerifyFailedException("Temporary queue with index " + indexOfQueue + " not closed.");
+        }
+    }
+    
+    /**
+     * Verifies that all temporary queues were deleted.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllTemporaryQueuesDeleted(int indexOfSession)
+    {
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        List queueList = getTemporaryQueueList(indexOfSession);
+        for(int ii = 0; ii < queueList.size(); ii++)
+        {
+            MockTemporaryQueue currentQueue = (MockTemporaryQueue)queueList.get(ii);
+            if(!currentQueue.isDeleted())
+            {
+                throw new VerifyFailedException("Temporary queue with index " + ii + " not closed.");
+            }
         }
     }
     
@@ -438,7 +777,11 @@ public class JMSTestModule
      */
     public void verifyNumberOfMessages(int indexOfSession, int number)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
         if(number != getMessageManager(indexOfSession).getMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " messages, received " + getMessageManager(indexOfSession).getMessageList().size() + " messages");
@@ -454,7 +797,11 @@ public class JMSTestModule
      */
     public void verifyNumberOfBytesMessages(int indexOfSession, int number)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
         if(number != getMessageManager(indexOfSession).getBytesMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " bytes messages, received " + getMessageManager(indexOfSession).getMessageList().size() + " bytes messages");
@@ -470,7 +817,11 @@ public class JMSTestModule
      */
     public void verifyNumberOfMapMessages(int indexOfSession, int number)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
         if(number != getMessageManager(indexOfSession).getMapMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " map messages, received " + getMessageManager(indexOfSession).getMessageList().size() + " map messages");
@@ -486,7 +837,11 @@ public class JMSTestModule
      */
     public void verifyNumberOfTextMessages(int indexOfSession, int number)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
         if(number != getMessageManager(indexOfSession).getTextMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " text messages, received " + getMessageManager(indexOfSession).getMessageList().size() + " text messages");
@@ -502,7 +857,11 @@ public class JMSTestModule
      */
     public void verifyNumberOfStreamMessages(int indexOfSession, int number)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
         if(number != getMessageManager(indexOfSession).getStreamMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " stream messages, received " + getMessageManager(indexOfSession).getMessageList().size() + " stream messages");
@@ -518,7 +877,11 @@ public class JMSTestModule
      */
     public void verifyNumberOfObjectMessages(int indexOfSession, int number)
     {
-        verifyNumberQueueSessions(indexOfSession + 1);
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
         if(number != getMessageManager(indexOfSession).getObjectMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " object messages, received " + getMessageManager(indexOfSession).getMessageList().size() + " object messages");
