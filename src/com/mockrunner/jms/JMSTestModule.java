@@ -194,11 +194,28 @@ public class JMSTestModule
      */
     public void registerTestMessageListenerForQueue(MockConnection connection, String queueName, boolean transacted, int acknowledgeMode, MessageListener listener)
     {
+        registerTestMessageListenerForQueue(connection, queueName, transacted, acknowledgeMode, null, listener);
+    }
+    
+    /**
+     * Creates a new session and receiver using the specified connection and
+     * registers the specified listener. Starts the connection for message
+     * receiving. This method is useful for creating test listeners when
+     * testing senders. It can be used to register message driven beans.
+     * @param connection the connection used for creating the session
+     * @param queueName the name of the queue used for message receiving
+     * @param transacted should the created session be transacted
+     * @param acknowledgeMode the acknowledge mode of the created session
+     * @param messageSelector the message selector
+     * @param listener the listener that should be registered
+     */
+    public void registerTestMessageListenerForQueue(MockConnection connection, String queueName, boolean transacted, int acknowledgeMode, String messageSelector, MessageListener listener)
+    {
         try
         {
             Queue queue = getDestinationManager().getQueue(queueName);
             MockSession session = (MockSession)connection.createSession(transacted, acknowledgeMode);
-            MessageConsumer consumer = session.createConsumer(queue);
+            MessageConsumer consumer = session.createConsumer(queue, messageSelector);
             consumer.setMessageListener(listener);
             connection.start();
         }
@@ -265,11 +282,28 @@ public class JMSTestModule
      */
     public void registerTestMessageListenerForTopic(MockConnection connection, String topicName, boolean transacted, int acknowledgeMode, MessageListener listener)
     {
+        registerTestMessageListenerForTopic(connection, topicName, transacted, acknowledgeMode, null, listener);
+    }
+    
+    /**
+     * Creates a new session and subscriber using the specified connection and
+     * registers the specified listener. Starts the connection for message
+     * receiving. This method is useful for creating test listeners when
+     * testing publishers. It can be used to resgister message driven beans.
+     * @param connection the connection used for creating the session
+     * @param topicName the name of the topic used for message receiving
+     * @param transacted should the created session be transacted
+     * @param acknowledgeMode the acknowledge mode of the created session
+     * @param messageSelector the message selector
+     * @param listener the listener that should be registered
+     */
+    public void registerTestMessageListenerForTopic(MockConnection connection, String topicName, boolean transacted, int acknowledgeMode, String messageSelector, MessageListener listener)
+    {
         try
         {
             Topic topic = getDestinationManager().getTopic(topicName);
             MockSession session = (MockSession)connection.createSession(transacted, acknowledgeMode);
-            MessageConsumer consumer = session.createConsumer(topic);
+            MessageConsumer consumer = session.createConsumer(topic, messageSelector);
             consumer.setMessageListener(listener);
             connection.start();
         }
