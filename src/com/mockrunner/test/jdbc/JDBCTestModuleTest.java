@@ -120,6 +120,22 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyPreparedStatementPresent("insert into test (col1, col2, col3) values(?, ?, ?)");
     }
     
+    public void testGetPreparedStatementsBySQLRegEx() throws Exception
+    {
+        module.setUseRegularExpression(true);
+        preparePreparedStatements();
+        List statements = module.getPreparedStatements("insert");
+        assertNotNull(statements);
+        assertEquals(0, statements.size());
+        statements = module.getPreparedStatements("insert into.*");
+        assertEquals(2, statements.size());
+        module.verifyNumberPreparedStatements(0, "update");
+        module.verifyNumberPreparedStatements(2, "insert (.*) test.*");
+        module.verifyNumberPreparedStatements(2, "insert (.*) TEST.*");
+        module.setCaseSensitive(true);
+        module.verifyNumberPreparedStatements(0, "insert (.*) TEST.*");
+    }
+    
     public void testGetPreparedStatementObjects() throws Exception
     {
         preparePreparedStatements();
@@ -177,6 +193,18 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyNumberCallableStatements(2, "call");
         module.verifyCallableStatementPresent("call setData");
         module.verifyCallableStatementNotPresent("call setXYZ");
+    }
+    
+    public void testGetCallableStatementsBySQLRegEx() throws Exception
+    {
+        module.setUseRegularExpression(true);
+        prepareCallableStatements();
+        List statements = module.getCallableStatements("call");
+        assertTrue(statements.size() == 0);
+        MockCallableStatement statement = module.getCallableStatement(".*CALL.*");
+        assertEquals("{call getData(?, ?, ?, ?)}", statement.getSQL());
+        module.verifyCallableStatementNotPresent("call setData");
+        module.verifyCallableStatementPresent("{call setData.*}");
     }
     
     public void testGetCallableStatementObjects() throws Exception
@@ -296,6 +324,32 @@ public class JDBCTestModuleTest extends TestCase
         module.verifySQLStatementNotExecuted("call");
         module.setCaseSensitive(false);
         module.verifySQLStatementExecuted("{CALL getData(?, ?, ?, ?)}");
+    }
+    
+    public void testGetExecutedSQLStatementsRegEx() throws Exception
+    {
+        module.setUseRegularExpression(true);
+        prepareStatements();
+        preparePreparedStatements();
+        prepareCallableStatements();
+        MockStatement statement = module.getStatement(0);
+        statement.execute("select");
+        statement.execute("UPDATE");
+        MockPreparedStatement preparedStatement = module.getPreparedStatement("insert.*");
+        preparedStatement.execute();
+        MockCallableStatement callableStatement = module.getCallableStatement("{call.*");
+        callableStatement.executeUpdate();
+        module.verifySQLStatementExecuted("select");
+        module.verifySQLStatementExecuted("update.*");
+        module.verifySQLStatementExecuted("INSERT into .*");
+        module.verifySQLStatementExecuted("{call.*");
+        module.verifySQLStatementNotExecuted("{call}");
+        module.setCaseSensitive(true);
+        module.verifySQLStatementExecuted("UPDATE.*");
+        module.verifySQLStatementNotExecuted("update");
+        module.setExactMatch(true);
+        module.verifySQLStatementNotExecuted("UPDATE.*");
+        module.verifySQLStatementExecuted("UPDATE");
     }
     
     public void testReturnedResultSetsClosed() throws Exception
@@ -721,6 +775,18 @@ public class JDBCTestModuleTest extends TestCase
 		failureTestMap2.put(new Integer(2), new Integer(3));
 		failureTestMap2.put(new Integer(3), new Integer(3));
 		module.verifySQLStatementParameter("update mytable set test = test", 0, emptyMap);
+		try
+		{
+		    module.setUseRegularExpression(true);
+		    module.verifySQLStatementParameter("update mytable set test = test", 0, emptyMap);
+			fail();
+		}
+		catch(VerifyFailedException exc)
+		{
+			//should throw exception
+		}
+		module.verifySQLStatementParameter("update mytable set test = test.*", 0, emptyMap);
+		module.setUseRegularExpression(false);
 		module.verifySQLStatementParameter("insert into test (col1, col2, col3)", 0, okTestMap);
 		try
 		{
@@ -760,6 +826,18 @@ public class JDBCTestModuleTest extends TestCase
 		module.getCallableStatement(0).execute();
 		module.getCallableStatement(1).execute();
 		module.verifySQLStatementParameter("{call getData(?, ?", 0, 1, "test1");
+		module.setUseRegularExpression(true);
+		module.verifySQLStatementParameter(".*getData\\(\\?, \\?.*", 0, 1, "test1");
+		module.setUseRegularExpression(false);
+		try
+        {
+		    module.verifySQLStatementParameter(".*getData\\(\\?, \\?.*", 0, 1, "test1");
+            fail();
+        } 
+		catch(VerifyFailedException exc)
+        {
+		    //should throw exception
+        }
 		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 0, 2, new byte[] {1});
 		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 0, "name", new Integer(1));
 		try
@@ -769,7 +847,7 @@ public class JDBCTestModuleTest extends TestCase
 		}
 		catch(VerifyFailedException exc)
 		{
-			//should throw exception
+		    //should throw exception
 		}
 		try
 		{
@@ -813,6 +891,10 @@ public class JDBCTestModuleTest extends TestCase
 		module.verifySQLStatementParameterNumber("{call getData(?, ?, ?, ?)}", 0, 1);
 		module.verifySQLStatementParameterNumber("{call getData(?, ?, ?, ?)}", 1, 2);
 		module.verifySQLStatementParameterNumber("{call getData(?, ?, ?, ?)}", 2, 2);
+		module.setUseRegularExpression(true);
+		module.verifySQLStatementParameterNumber("{call getData\\(\\?, \\?, \\?, \\?\\)}", 2, 2);
+		module.verifySQLStatementParameterNumber(".call getData.*}", 2, 2);
+		module.setUseRegularExpression(false);
 		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 1, 1, "xyz");
 		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 1, "name", new Boolean(true));
 		HashMap testMap = new HashMap();
