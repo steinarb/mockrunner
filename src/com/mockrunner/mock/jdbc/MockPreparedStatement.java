@@ -31,43 +31,25 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 {
     private Map setObjects = new HashMap();
     private String sql;
-    private ResultSetMetaData resultSetMetaData;
-    private ParameterMetaData parameterMetaData;
     
     public MockPreparedStatement(Connection connection, String sql)
     {
         super(connection);
         this.sql = sql;
-        resultSetMetaData = new MockResultSetMetaData();
-        parameterMetaData = new MockParameterMetaData();
     }
     
     public MockPreparedStatement(Connection connection, String sql, int resultSetType, int resultSetConcurrency)
     {
         super(connection, resultSetType, resultSetConcurrency);
         this.sql = sql;
-        resultSetMetaData = new MockResultSetMetaData();
-        parameterMetaData = new MockParameterMetaData();
     }
 
     public MockPreparedStatement(Connection connection, String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability)
     {
         super(connection, resultSetType, resultSetConcurrency, resultSetHoldability);
         this.sql = sql;
-        resultSetMetaData = new MockResultSetMetaData();
-        parameterMetaData = new MockParameterMetaData();
     }
-    
-    public void setupResultSetMetaData(ResultSetMetaData resultSetMetaData)
-    {
-        this.resultSetMetaData = resultSetMetaData;
-    }
-    
-    public void setupParameterMetaData(ParameterMetaData parameterMetaData)
-    {
-        this.parameterMetaData = parameterMetaData;
-    }
-    
+  
     public String getSQL()
     {
         return sql;
@@ -125,12 +107,12 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public ResultSetMetaData getMetaData() throws SQLException
     {
-        return resultSetMetaData;
+        return new MockResultSetMetaData();
     }
 
     public ParameterMetaData getParameterMetaData() throws SQLException
     {
-        return parameterMetaData;
+        return new MockParameterMetaData();
     }
 
     public void setArray(int parameterIndex, Array array) throws SQLException
