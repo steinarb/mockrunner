@@ -1,6 +1,6 @@
 package com.mockrunner.example.servlet;
 
-import com.mockrunner.servlet.ServletTestCaseAdapter;
+import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 
 /**
  * Example test for {@link LogoutServlet}.
@@ -8,7 +8,7 @@ import com.mockrunner.servlet.ServletTestCaseAdapter;
  * resp. {@link com.mockrunner.servlet.ServletTestCaseAdapter}
  * with and without a filter.
  */
-public class LogoutServletTest extends ServletTestCaseAdapter
+public class LogoutServletTest extends BasicServletTestCaseAdapter
 {
     protected void setUp() throws Exception
     {

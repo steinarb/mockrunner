@@ -3,8 +3,8 @@ package com.mockrunner.example.jdbc;
 import java.sql.Date;
 import java.util.List;
 
+import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.CallableStatementResultSetHandler;
-import com.mockrunner.jdbc.JDBCTestCaseAdapter;
 import com.mockrunner.mock.jdbc.MockResultSet;
 
 /**
@@ -13,7 +13,7 @@ import com.mockrunner.mock.jdbc.MockResultSet;
  * resp. {@link com.mockrunner.jdbc.JDBCTestCaseAdapter} with
  * stored procdures.
  */
-public class OrderDBTest extends JDBCTestCaseAdapter
+public class OrderDBTest extends BasicJDBCTestCaseAdapter
 {
     private CallableStatementResultSetHandler statementHandler;
     

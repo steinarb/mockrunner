@@ -10,7 +10,7 @@ import org.mockejb.interceptor.Interceptor;
 import org.mockejb.interceptor.InvocationContext;
 import org.mockejb.interceptor.MethodPatternPointcut;
 
-import com.mockrunner.ejb.EJBTestCaseAdapter;
+import com.mockrunner.ejb.BasicEJBTestCaseAdapter;
 import com.mockrunner.example.ejb.interfaces.BillEntity;
 import com.mockrunner.example.ejb.interfaces.BillManagerSession;
 
@@ -22,7 +22,7 @@ import com.mockrunner.example.ejb.interfaces.BillManagerSession;
  * You don't have to intercept these methods, just the
  * <code>findUnpaid</code> method.
  */
-public class BillManagerSessionTest extends EJBTestCaseAdapter
+public class BillManagerSessionTest extends BasicEJBTestCaseAdapter
 {
     private BillManagerSession bean;
     

@@ -3,8 +3,8 @@ package com.mockrunner.example.jdbc;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.FileResultSetFactory;
-import com.mockrunner.jdbc.JDBCTestCaseAdapter;
 import com.mockrunner.mock.jdbc.MockResultSet;
 
 /**
@@ -38,7 +38,7 @@ import com.mockrunner.mock.jdbc.MockResultSet;
  * must appear in the specified order, all other characters are irrelevant.
  * Besides that simple example, you can use any Perl5 compatible expression.
  */
-public class BookstoreTest extends JDBCTestCaseAdapter
+public class BookstoreTest extends BasicJDBCTestCaseAdapter
 {
     protected void setUp() throws Exception
     {

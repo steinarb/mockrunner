@@ -1,8 +1,8 @@
 package com.mockrunner.example.struts;
 
 import com.mockrunner.mock.web.ActionMockObjectFactory;
-import com.mockrunner.struts.ActionTestCaseAdapter;
 import com.mockrunner.struts.ActionTestModule;
+import com.mockrunner.struts.BasicActionTestCaseAdapter;
 
 /**
  * Example test for {@link StoreDataAction}. 
@@ -21,7 +21,7 @@ import com.mockrunner.struts.ActionTestModule;
  * make multithread testing much easier, but it is not working
  * properly yet, so we do not use it here.
  */
-public class StoreDataActionTest extends ActionTestCaseAdapter
+public class StoreDataActionTest extends BasicActionTestCaseAdapter
 { 
     private volatile int numberSuccess;
     

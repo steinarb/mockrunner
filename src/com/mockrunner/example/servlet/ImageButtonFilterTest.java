@@ -2,7 +2,7 @@ package com.mockrunner.example.servlet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.mockrunner.servlet.ServletTestCaseAdapter;
+import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 
 /**
  * Example test for the {@link ImageButtonFilter}.
@@ -10,7 +10,7 @@ import com.mockrunner.servlet.ServletTestCaseAdapter;
  * {@link com.mockrunner.servlet.ServletTestModule} 
  * resp. {@link com.mockrunner.servlet.ServletTestCaseAdapter}.
  */
-public class ImageButtonFilterTest extends ServletTestCaseAdapter
+public class ImageButtonFilterTest extends BasicServletTestCaseAdapter
 {
     private ImageButtonFilter filter;
     
