@@ -24,7 +24,7 @@
         <echo>
          Property "build.j2ee1.3" not set or set to false. Please 
          create a file ".ant.properties" in this directory and set 
-         "build.j2ee1.3" to true in order to build the J2EE 1.3
+         "build.j2ee1.3" to true if you would like build the J2EE 1.3
          compatible jars.
         </echo>
     </target>
@@ -36,7 +36,7 @@
 	     to your Java2HTML installation (location of j2h.jar) if you
 	     would like to generate the documentation.
 	    </echo>
-	</target>
+    </target>
 
     <target name="prepareenvironment">
         <condition property="dobuild.j2ee1.3">
