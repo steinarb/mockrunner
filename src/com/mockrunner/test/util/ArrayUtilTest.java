@@ -131,26 +131,26 @@ public class ArrayUtilTest extends TestCase
         assertEquals(false, booleanArray[2]);
     }
     
-    public void testContains()
+    public void testIndexOf()
     {
         byte[] testArray = new byte[] {1, 1, 5, 3, 4, 5, 7, 7, 8, 3, 2};
-        assertEquals(-1, ArrayUtil.contains(testArray, new byte[] {0}));
-        assertEquals(-1, ArrayUtil.contains(testArray, new byte[] {0, 2}));
-        assertEquals(0, ArrayUtil.contains(testArray, new byte[] {1}));
-        assertEquals(1, ArrayUtil.contains(testArray, new byte[] {1, 5}));
-        assertEquals(6, ArrayUtil.contains(testArray, new byte[] {7, 7, 8}));
-        assertEquals(0, ArrayUtil.contains(testArray, new byte[] {1, 1, 5, 3, 4, 5, 7, 7, 8, 3}));
-        assertEquals(0, ArrayUtil.contains(testArray, testArray));
-        assertEquals(-1, ArrayUtil.contains(testArray, new byte[] {1, 1, 5, 3, 4, 5, 7, 7, 8, 3, 0}));
-        assertEquals(10, ArrayUtil.contains(testArray, new byte[] {2}));
-        assertEquals(2, ArrayUtil.contains(testArray, new byte[] {5, 3}));
-        assertEquals(0, ArrayUtil.contains(testArray, new byte[] {}));
+        assertEquals(-1, ArrayUtil.indexOf(testArray, new byte[] {0}));
+        assertEquals(-1, ArrayUtil.indexOf(testArray, new byte[] {0, 2}));
+        assertEquals(0, ArrayUtil.indexOf(testArray, new byte[] {1}));
+        assertEquals(1, ArrayUtil.indexOf(testArray, new byte[] {1, 5}));
+        assertEquals(6, ArrayUtil.indexOf(testArray, new byte[] {7, 7, 8}));
+        assertEquals(0, ArrayUtil.indexOf(testArray, new byte[] {1, 1, 5, 3, 4, 5, 7, 7, 8, 3}));
+        assertEquals(0, ArrayUtil.indexOf(testArray, testArray));
+        assertEquals(-1, ArrayUtil.indexOf(testArray, new byte[] {1, 1, 5, 3, 4, 5, 7, 7, 8, 3, 0}));
+        assertEquals(10, ArrayUtil.indexOf(testArray, new byte[] {2}));
+        assertEquals(2, ArrayUtil.indexOf(testArray, new byte[] {5, 3}));
+        assertEquals(0, ArrayUtil.indexOf(testArray, new byte[] {}));
         
-        assertEquals(2, ArrayUtil.contains(testArray, new byte[] {5, 3}), 1);
-        assertEquals(-1, ArrayUtil.contains(testArray, new byte[] {5, 3}), 5);
-        assertEquals(-1, ArrayUtil.contains(testArray, testArray), 1);
-        assertEquals(1, ArrayUtil.contains(testArray, new byte[] {1}), 1);
-        assertEquals(6, ArrayUtil.contains(testArray, new byte[] {7, 7, 8}), 6);
+        assertEquals(2, ArrayUtil.indexOf(testArray, new byte[] {5, 3}), 1);
+        assertEquals(-1, ArrayUtil.indexOf(testArray, new byte[] {5, 3}), 5);
+        assertEquals(-1, ArrayUtil.indexOf(testArray, testArray), 1);
+        assertEquals(1, ArrayUtil.indexOf(testArray, new byte[] {1}), 1);
+        assertEquals(6, ArrayUtil.indexOf(testArray, new byte[] {7, 7, 8}), 6);
     }
     
     public void testConvertToObjectArray()

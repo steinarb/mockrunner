@@ -47,7 +47,7 @@ public class MockBlob implements Blob, Cloneable
     public long position(byte[] pattern, long start) throws SQLException
     {
         byte[] data = ArrayUtil.getByteArrayFromList(blobData);
-        int index = ArrayUtil.contains(data, pattern, (int)(start - 1));
+        int index = ArrayUtil.indexOf(data, pattern, (int)(start - 1));
         if(-1 != index) index += 1;
         return index;
     }

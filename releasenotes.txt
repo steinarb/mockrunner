@@ -1,6 +1,8 @@
 
 mockrunner-0.3.2:
 
+- renamed ArrayUtil.contains to ArrayUtil.indexOf, contains is misleading
+
 mockrunner-0.3.1:
 
 - adapted EJBTestModule to new MockEJB 0.6 API (check out
