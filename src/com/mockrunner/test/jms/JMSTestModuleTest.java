@@ -171,8 +171,8 @@ public class JMSTestModuleTest extends TestCase
     
     public void testRegisterQueueMessageListener() throws Exception
     {
-        DestinationManager manager = mockFactory.getDestinationManager();
-        manager.createQueue("queue");
+        DestinationManager destManager = mockFactory.getDestinationManager();
+        destManager.createQueue("queue");
         TestMessageListener listener = new TestMessageListener(true);
         module.registerTestMessageListenerForQueue("queue", listener);
         QueueConnection currentQueueConnection = module.getCurrentQueueConnection();
@@ -196,12 +196,16 @@ public class JMSTestModuleTest extends TestCase
         module.registerTestMessageListenerForQueue(queueConnection, "queue", false, Session.CLIENT_ACKNOWLEDGE, listener);
         assertFalse(module.getQueueSession(1).getTransacted());
         assertFalse(module.getQueueSession(1).isAutoAcknowledge());
+        module.registerTestMessageListenerForQueue(queueConnection, "queue", false, Session.CLIENT_ACKNOWLEDGE, "number = 1", listener);
+        QueueTransmissionManager queueManager = module.getQueueSession(2).getQueueTransmissionManager();
+        MockQueueReceiver queueReceiver = queueManager.getQueueReceiver(0);
+        assertEquals("number = 1", queueReceiver.getMessageSelector());
     }
     
     public void testRegisterTopicMessageListener() throws Exception
     {
-        DestinationManager manager = mockFactory.getDestinationManager();
-        manager.createTopic("topic");
+        DestinationManager destManager = mockFactory.getDestinationManager();
+        destManager.createTopic("topic");
         TestMessageListener listener = new TestMessageListener(true);
         module.registerTestMessageListenerForTopic("topic", listener);
         TopicConnection currentTopicConnection = module.getCurrentTopicConnection();
@@ -229,6 +233,10 @@ public class JMSTestModuleTest extends TestCase
         module.registerTestMessageListenerForTopic(topicConnection, "topic", false, Session.DUPS_OK_ACKNOWLEDGE, listener);
         assertFalse(module.getTopicSession(1).getTransacted());
         assertTrue(module.getTopicSession(1).isAutoAcknowledge());
+        module.registerTestMessageListenerForTopic(topicConnection, "topic", false, Session.CLIENT_ACKNOWLEDGE, "number = 2", listener);
+        TopicTransmissionManager topicManager = module.getTopicSession(2).getTopicTransmissionManager();
+        MockTopicSubscriber topicSubscriber = topicManager.getTopicSubscriber(0);
+        assertEquals("number = 2", topicSubscriber.getMessageSelector());
     }
     
     public void testRegisterMessageListener() throws Exception

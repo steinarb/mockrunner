@@ -164,6 +164,15 @@ public class MockSessionTest extends TestCase
     {
         MockQueue queue = manager.createQueue("Queue");
         MockTopic topic = manager.createTopic("Topic");
+        try
+        {
+            session.createProducer(null);
+            fail();
+        }
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
         MessageProducer producer1 = session.createProducer(queue);
         assertTrue(producer1 instanceof MockQueueSender);
         MessageProducer producer2 = session.createProducer(topic);
@@ -193,6 +202,15 @@ public class MockSessionTest extends TestCase
     {
         MockQueue queue = manager.createQueue("Queue");
         MockTopic topic = manager.createTopic("Topic");
+        try
+        {
+            session.createConsumer(null, "", false);
+            fail();
+        }
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
         MessageConsumer consumer1 = session.createConsumer(queue, "", false);
         assertTrue(consumer1 instanceof MockQueueReceiver);
         MessageConsumer consumer2 = session.createConsumer(topic);
