@@ -14,6 +14,7 @@ import com.mockrunner.tag.TagTestModule;
  */
 public abstract class BaseTestCase extends TestCase
 {
+    private MockObjectFactory mockFactory;
     private WebMockObjectFactory webMockFactory;
     private JDBCMockObjectFactory jdbcMockFactory;
     
@@ -35,6 +36,7 @@ public abstract class BaseTestCase extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
+        mockFactory = createMockObjectFactory();
         webMockFactory = createWebMockObjectFactory();
         jdbcMockFactory = createJDBCMockObjectFactory();
     }
@@ -94,6 +96,51 @@ public abstract class BaseTestCase extends TestCase
     protected void setWebMockObjectFactory(WebMockObjectFactory mockFactory)
     {
         this.webMockFactory = mockFactory;
+    }
+    
+    /**
+     * @deprecated
+     * use {@link #createWebMockObjectFactory}
+     */
+    protected MockObjectFactory createMockObjectFactory()
+    {
+        return new MockObjectFactory();
+    }
+
+    /**
+     * @deprecated
+     * use {@link #createWebMockObjectFactory(WebMockObjectFactory)}
+     */
+    protected MockObjectFactory createMockObjectFactory(MockObjectFactory otherFactory)
+    {
+        return new MockObjectFactory(otherFactory);
+    }
+
+    /**
+     * @deprecated
+     * use {@link #createWebMockObjectFactory(WebMockObjectFactory, boolean)}
+     */
+    protected MockObjectFactory createMockObjectFactory(MockObjectFactory otherFactory, boolean createNewSession)
+    {
+        return new MockObjectFactory(otherFactory, createNewSession);
+    }
+
+    /**
+     * @deprecated
+     * use {@link #getWebMockObjectFactory}
+     */
+    protected MockObjectFactory getMockObjectFactory()
+    {
+        return mockFactory;
+    }
+
+    /**
+     * @deprecated
+     * use {@link #setWebMockObjectFactory}
+     */
+    protected void setMockObjectFactory(MockObjectFactory mockFactory)
+    {
+        this.mockFactory = mockFactory;
     }
     
     /**
