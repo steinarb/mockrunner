@@ -9,11 +9,21 @@ package com.mockrunner.mock.jms;
  */
 public class JMSMockObjectFactory
 {
+    private MockQueueConnectionFactory queueConnectionFactory;
+    private MockQueueConnection queueConnection;
+    
     /**
      * Creates a new set of mock objects.
      */
     public JMSMockObjectFactory()
     {
-        
+        queueConnectionFactory = new MockQueueConnectionFactory();
+        queueConnection = new MockQueueConnection();
+        setUpDependencies();
+    }
+    
+    private void setUpDependencies()
+    {
+        queueConnectionFactory.setQueueConnection(queueConnection);
     }
 }

@@ -8,6 +8,7 @@ mockrunner-0.2.1:
   the MockUserTransaction handling. Removed the getMockUserTransaction
   method from JDBCMockObjectFactory (it wasn't useful anyway, because
   it always recreated the transaction)
+- introduced EJBTestModule in order to simplify the use of MockEJB
 
 mockrunner-0.2:
 
