@@ -284,7 +284,7 @@ public class MockStatement implements Statement
             String nextSQL = (String)batches.get(ii);
             if(isQuery(nextSQL))
             {
-                throw new BatchUpdateException("SQL " + batches.get(ii) + " in ths list of batches returned a ResultSet.", null);
+                throw new BatchUpdateException("SQL " + batches.get(ii) + " in the list of batches returned a ResultSet.", null);
             }
             results[ii] = executeUpdate(nextSQL);
         }
