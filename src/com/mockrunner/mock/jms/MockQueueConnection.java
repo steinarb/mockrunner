@@ -13,6 +13,7 @@ import javax.jms.QueueSession;
 import javax.jms.ServerSessionPool;
 
 import com.mockrunner.jms.DestinationManager;
+import com.mockrunner.jms.MessageManager;
 
 /**
  * Mock implementation of JMS <code>QueueConnection</code>.
@@ -24,6 +25,7 @@ import com.mockrunner.jms.DestinationManager;
 public class MockQueueConnection implements QueueConnection
 {
     private DestinationManager destinationManager;
+    private MessageManager messageManager;
     private String clientId;
     private ConnectionMetaData metaData;
     private boolean started;
@@ -35,6 +37,7 @@ public class MockQueueConnection implements QueueConnection
     public MockQueueConnection()
     {
         destinationManager = new DestinationManager(this);
+        messageManager = new MessageManager();
         metaData = new MockConnectionMetaData();
         started = false;
         closed = false;
@@ -49,6 +52,15 @@ public class MockQueueConnection implements QueueConnection
     public DestinationManager getDestinationManager()
     {
         return destinationManager;
+    }
+    
+    /**
+     * Returns the {@link MessageManager} for this connection.
+     * @return the {@link MessageManager}
+     */
+    public MessageManager getMessageManager()
+    {
+        return messageManager;
     }
     
     /**
