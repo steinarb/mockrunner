@@ -2,4 +2,3 @@
 - add better support of HTML fragments
 - get MultiThreadTestSuite working
 - write more tests for framework components
-- refactor mockobjects to fit into www.mockobjects.com concept

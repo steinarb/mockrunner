@@ -18,6 +18,7 @@ import com.mockrunner.util.SearchUtil;
  * objects and update count values that are returned by the
  * <code>execute</code> method of a statement, if the current
  * SQL string matches.
+ * Furthermore it can be used to create <code>ResultSet</code> objects.
  */
 public abstract class AbstractResultSetHandler
 {
@@ -29,6 +30,27 @@ public abstract class AbstractResultSetHandler
     private Map updateCountForStatement = new HashMap();
     private Map returnsResultSetMap = new HashMap();
     private Set executedStatements = new HashSet();
+    
+    /**
+     * Returns a new <code>ResultSet</code>.
+     * @return the new <code>ResultSet</code>
+     */
+    public MockResultSet createResultSet()
+    {
+        return new MockResultSet();
+    }
+    
+    /**
+     * Returns a new <code>ResultSet</code> created by
+     * the specified factory. Currently there's only
+     * the {@link FileResultSetFactory} to create <code>ResultSet</code>
+     * objects based on CSV files but you can implement your own factories.
+     * @return the new <code>ResultSet</code>
+     */
+    public MockResultSet createResultSet(ResultSetFactory factory)
+    {
+        return factory.create();
+    }
     
     /**
      * Set if specified SQL strings should be handled case sensitive.
