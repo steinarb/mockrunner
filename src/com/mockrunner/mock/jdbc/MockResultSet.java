@@ -123,13 +123,14 @@ public class MockResultSet implements ResultSet
             addColumn();
         }
         adjustColumns();
-        int rowCount = getRowCount();
         for(int ii = 0; ii < values.size(); ii++)
         {   
            Object nextValue = values.get(ii);
-           List nextColumnList = (List)columnNameList.get(ii);
-           nextColumnList.add(rowCount + 1, nextValue);
+           String nextColumnName = (String)columnNameList.get(ii);
+           List nextColumnList = (List)columnMap.get(nextColumnName);
+           nextColumnList.add(nextValue);
         }
+        adjustColumns();
         copyColumnMap();
         adjustFlags();
     }
@@ -1413,7 +1414,7 @@ public class MockResultSet implements ResultSet
     private String determineValidColumnName()
     {
         String name = "Column";
-        int count = 1;
+        int count = columnNameList.size() + 1;
         while(columnMap.containsKey(name + count))
         {
             count ++;

@@ -32,6 +32,7 @@ public class AllTests
         suite.addTest(new TestSuite(MockBlobTest.class));
         suite.addTest(new TestSuite(MockClobTest.class));
         suite.addTest(new TestSuite(MockArrayTest.class));
+        suite.addTest(new TestSuite(MockResultSetTest.class));
         suite.addTest(new TestSuite(XmlUtilTest.class));
         suite.addTest(new TestSuite(StreamUtilTest.class));
         suite.addTest(new TestSuite(ArrayUtilTest.class));
