@@ -121,7 +121,7 @@ public class JDKVersionGenerator
     {
         System.out.println("Start processing for JDBC JDK1.3");
         Map jdbcProcMap = prepareJDBCJDK13();
-        ConsistencyUtil util = new ConsistencyUtil();
+        GeneratorUtil util = new GeneratorUtil();
         Map jdbcMap = new HashMap();
         File jdbc = new File(src14Dir + "/com/mockrunner/jdbc");
         File jdbcMock = new File(src14Dir + "/com/mockrunner/mock/jdbc");

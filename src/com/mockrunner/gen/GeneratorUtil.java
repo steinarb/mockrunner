@@ -3,7 +3,7 @@ package com.mockrunner.gen;
 import java.io.File;
 import java.util.Map;
 
-public class ConsistencyUtil
+public class GeneratorUtil
 {
     public void addJavaSrcFiles(String rootDir, File dir, Map resultMap)
     {
