@@ -25,27 +25,58 @@ public class JarFileDependenciesTest extends TestCase
 {
     private final static String RELEASE_DIR = "bin";
     private final static String LIB_DIR = "lib";
-    private final static String DIV_DIR = "div";
+    private final static String J2EE13_DIR = "j2ee1.3";
     private final static String THIRD_PARTY_DIR = "jar";
     
-    private List getThirdPartyJars()
+    private List getThirdPartyJarsJ2EE14()
     {
         String jarDirName = getBaseDir() + THIRD_PARTY_DIR;
         return new ArrayList(Arrays.asList(new File(jarDirName).listFiles(new JarFileFilter())));
     }
     
+    private List getThirdPartyJarsJ2EE13()
+    {
+        List fileList = getThirdPartyJarsJ2EE14();
+        List resultList = new ArrayList();
+        for(int ii = 0; ii < fileList.size(); ii++)
+        {
+            File currentFile = (File)fileList.get(ii);
+            if(!MockrunnerJars.getStandardInterfaceJ2EE14Jars().contains(currentFile.getName()))
+            {
+                resultList.add(currentFile);
+            }
+        }
+        String jarDirName = getBaseDir() + THIRD_PARTY_DIR + File.separator + J2EE13_DIR;
+        resultList.addAll(Arrays.asList(new File(jarDirName).listFiles(new JarFileFilter())));
+        return resultList;
+    }
+    
     private List getReleasedJars()
     {
-        String jarDirName = getBaseDir() + LIB_DIR;
-        File[] jarFiles1 = new File(jarDirName).listFiles(new JarFileFilter());
-        jarDirName += File.separator + DIV_DIR;
-        File[] jarFiles2 = new File(jarDirName).listFiles(new JarFileFilter());
         List jarFiles = new ArrayList();
-        jarFiles.addAll(Arrays.asList(jarFiles1));
-        jarFiles.addAll(Arrays.asList(jarFiles2));
+        jarFiles.addAll(getJ2EE13Jars());
+        jarFiles.addAll(getJ2EE14Jars());
         return jarFiles;
     }
     
+    private List getJ2EE13Jars()
+    {
+        String jarDirName = getBaseDir() + LIB_DIR + File.separator + J2EE13_DIR;
+        return listFiles(jarDirName);
+    }
+    
+    private List getJ2EE14Jars()
+    {
+        String jarDirName = getBaseDir() + LIB_DIR;
+        return listFiles(jarDirName);
+    }
+    
+    private List listFiles(String jarDirName)
+    {
+        File[] jarFiles = new File(jarDirName).listFiles(new JarFileFilter());
+        return Arrays.asList(jarFiles);
+    }
+
     private String getBaseDir()
     {
         File releaseDir = new File(RELEASE_DIR);
@@ -75,19 +106,29 @@ public class JarFileDependenciesTest extends TestCase
         assertTrue("There are missing jars in the release", ok);
     }
     
-    public void testJarFileDependencies() throws Exception
+    public void testJarFileDependenciesJ2EE14() throws Exception
     {  
         File tempDir = new File("temp");
+        delete(tempDir);
         tempDir.mkdir();
         List allJars = new ArrayList();
-        allJars.addAll(getReleasedJars());
-        allJars.addAll(getThirdPartyJars());
-        for(int ii = 0; ii < allJars.size(); ii++)
-        {
-            File nextFile = (File)allJars.get(ii);
-            File nextCopyFile = new File(tempDir, nextFile.getName());   
-            copyFile(nextFile, nextCopyFile);
-        }
+        allJars.addAll(getJ2EE14Jars());
+        allJars.addAll(getThirdPartyJarsJ2EE14());
+        copyFiles(tempDir, allJars);
+        boolean failure = doFilesContainIllegalDependencies(tempDir);
+        delete(tempDir);
+        assertFalse("There are illegal dependencies", failure);
+    }
+    
+    public void testJarFileDependenciesJ2EE13() throws Exception
+    {  
+        File tempDir = new File("temp");
+        delete(tempDir);
+        tempDir.mkdir();
+        List allJars = new ArrayList();
+        allJars.addAll(getJ2EE13Jars());
+        allJars.addAll(getThirdPartyJarsJ2EE13());
+        copyFiles(tempDir, allJars);
         boolean failure = doFilesContainIllegalDependencies(tempDir);
         delete(tempDir);
         assertFalse("There are illegal dependencies", failure);
@@ -145,6 +186,16 @@ public class JarFileDependenciesTest extends TestCase
             return false;
         }
         return true;
+    }
+    
+    private void copyFiles(File tempDir, List allJars) throws IOException
+    {
+        for(int ii = 0; ii < allJars.size(); ii++)
+        {
+            File nextFile = (File)allJars.get(ii);
+            File nextCopyFile = new File(tempDir, nextFile.getName());   
+            copyFile(nextFile, nextCopyFile);
+        }
     }
 
     private void copyFile(File source, File destination) throws IOException

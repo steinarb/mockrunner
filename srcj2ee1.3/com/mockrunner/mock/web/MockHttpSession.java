@@ -154,7 +154,7 @@ public class MockHttpSession implements HttpSession
         handleAttributeListenerCalls(key, value, oldValue);
     }
 
-    private void handleBindingListenerCalls(String key, Object value, Object oldValue)
+    private synchronized void handleBindingListenerCalls(String key, Object value, Object oldValue)
     {
         if(oldValue != null)
         {
@@ -166,7 +166,7 @@ public class MockHttpSession implements HttpSession
         }
     }
 
-    private void handleAttributeListenerCalls(String key, Object value, Object oldValue)
+    private synchronized void handleAttributeListenerCalls(String key, Object value, Object oldValue)
     {
         if(null != oldValue)
         {

@@ -10,7 +10,10 @@ import java.util.Set;
 public class MockrunnerJars
 {
     private static List mockrunnerJars;
+    private static List mockrunnerJ2EE13Jars;
+    private static List mockrunnerJ2EE14Jars;
     private static List standardInterfaceJars;
+    private static List standardInterfaceJ2EE14Jars;
     private static Map permissions;
     private static Set strutsJars;
     private static Set webJ2EEJars;
@@ -21,20 +24,24 @@ public class MockrunnerJars
     static
     {
         mockrunnerJars = new ArrayList();
-        mockrunnerJars.add("mockrunner.jar");
-        mockrunnerJars.add("mockrunner-jdk1.3.jar");
-        mockrunnerJars.add("mockrunner-ejb.jar");
-        mockrunnerJars.add("mockrunner-jdbc.jar");
-        mockrunnerJars.add("mockrunner-jdbc-jdk1.3.jar");
-        mockrunnerJars.add("mockrunner-jms.jar");
-        mockrunnerJars.add("mockrunner-servlet.jar");
-        mockrunnerJars.add("mockrunner-tag.jar");
-        mockrunnerJars.add("mockrunner-struts.jar");
-        mockrunnerJars.add("mockrunner-j2ee1.3.jar");
-        mockrunnerJars.add("mockrunner-jdk1.3-j2ee1.3.jar");
-        mockrunnerJars.add("mockrunner-servlet-j2ee1.3.jar");
-        mockrunnerJars.add("mockrunner-struts-j2ee1.3.jar");
-        mockrunnerJars.add("mockrunner-tag-j2ee1.3.jar");
+        mockrunnerJ2EE13Jars = new ArrayList();
+        mockrunnerJ2EE14Jars = new ArrayList();
+        mockrunnerJ2EE14Jars.add("mockrunner.jar");
+        mockrunnerJ2EE14Jars.add("mockrunner-jdk1.3.jar");
+        mockrunnerJ2EE14Jars.add("mockrunner-ejb.jar");
+        mockrunnerJ2EE14Jars.add("mockrunner-jdbc.jar");
+        mockrunnerJ2EE14Jars.add("mockrunner-jdbc-jdk1.3.jar");
+        mockrunnerJ2EE14Jars.add("mockrunner-jms.jar");
+        mockrunnerJ2EE14Jars.add("mockrunner-servlet.jar");
+        mockrunnerJ2EE14Jars.add("mockrunner-tag.jar");
+        mockrunnerJ2EE14Jars.add("mockrunner-struts.jar");
+        mockrunnerJ2EE13Jars.add("mockrunner-j2ee1.3.jar");
+        mockrunnerJ2EE13Jars.add("mockrunner-jdk1.3-j2ee1.3.jar");
+        mockrunnerJ2EE13Jars.add("mockrunner-servlet-j2ee1.3.jar");
+        mockrunnerJ2EE13Jars.add("mockrunner-struts-j2ee1.3.jar");
+        mockrunnerJ2EE13Jars.add("mockrunner-tag-j2ee1.3.jar");
+        mockrunnerJars.addAll(mockrunnerJ2EE13Jars);
+        mockrunnerJars.addAll(mockrunnerJ2EE14Jars);
         
         permissions = new HashMap();
         permissions.put("mockrunner.jar", new Permission(true, true, true, true, true));
@@ -46,11 +53,19 @@ public class MockrunnerJars
         permissions.put("mockrunner-servlet.jar", new Permission(false, true, false, false, true));
         permissions.put("mockrunner-tag.jar", new Permission(false, true, false, false, true));
         permissions.put("mockrunner-struts.jar", new Permission(true, true, false, false, true));
+        permissions.put("mockrunner-j2ee1.3.jar", new Permission(true, true, true, true, true));
+        permissions.put("mockrunner-jdk1.3-j2ee1.3.jar", new Permission(true, true, true, true, true));
+        permissions.put("mockrunner-servlet-j2ee1.3.jar", new Permission(false, true, false, false, true));
+        permissions.put("mockrunner-struts-j2ee1.3.jar", new Permission(true, true, false, false, true));
+        permissions.put("mockrunner-tag-j2ee1.3.jar", new Permission(false, true, false, false, true));
     
         standardInterfaceJars = new ArrayList();
-        standardInterfaceJars.add("servlet-api.jar");
-        standardInterfaceJars.add("jsp-api.jar");
-        standardInterfaceJars.add("jboss-j2ee.jar");
+        standardInterfaceJ2EE14Jars = new ArrayList();
+        standardInterfaceJ2EE14Jars.add("servlet-api.jar");
+        standardInterfaceJ2EE14Jars.add("jsp-api.jar");
+        standardInterfaceJ2EE14Jars.add("jboss-j2ee.jar");
+        standardInterfaceJars.add("servlet.jar");
+        standardInterfaceJars.addAll(standardInterfaceJ2EE14Jars);
         
         strutsJars = new HashSet();
         strutsJars.add("struts.jar");
@@ -78,9 +93,24 @@ public class MockrunnerJars
         return mockrunnerJars;
     }
     
+    public static List getMockrunnerJ2EE13Jars()
+    {
+        return mockrunnerJ2EE13Jars;
+    }
+    
+    public static List getMockrunnerJ2EE14Jars()
+    {
+        return mockrunnerJ2EE13Jars;
+    }
+    
     public static List getStandardInterfaceJars()
     {
         return standardInterfaceJars;
+    }
+    
+    public static List getStandardInterfaceJ2EE14Jars()
+    {
+        return standardInterfaceJ2EE14Jars;
     }
     
     public static Permission getPermission(String jar)
