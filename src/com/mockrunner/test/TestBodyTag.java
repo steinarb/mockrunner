@@ -1,5 +1,6 @@
 package com.mockrunner.test;
 
+import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 public class TestBodyTag extends BodyTagSupport
@@ -7,6 +8,7 @@ public class TestBodyTag extends BodyTagSupport
     private String testString;
     private Integer testInteger;
     private double testDouble;
+    private PageContext context;
 
     public double getTestDouble()
     {
@@ -36,5 +38,16 @@ public class TestBodyTag extends BodyTagSupport
     public void setTestString(String testString)
     {
         this.testString = testString;
+    }
+    
+    public void setPageContext(PageContext context)
+    {
+        super.setPageContext(context);
+        this.context = context;
+    }
+
+    public PageContext getPageContext()
+    {
+        return context;
     }
 }

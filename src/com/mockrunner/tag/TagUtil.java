@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -58,13 +59,15 @@ public class TagUtil
 		for(int ii = 0; ii < bodyList.size(); ii++)
 		{
 			Object nextChild = bodyList.get(ii);
-			if(nextChild instanceof NestedBodyTag)
+            if(nextChild instanceof NestedBodyTag)
 			{
-				((NestedBodyTag)nextChild).doLifecycle();
+                int result = ((NestedBodyTag)nextChild).doLifecycle();
+                if(Tag.SKIP_PAGE == result) return;
 			}
 			else if(nextChild instanceof NestedStandardTag)
 			{
-				((NestedStandardTag)nextChild).doLifecycle();
+                int result = ((NestedStandardTag)nextChild).doLifecycle();
+                if(Tag.SKIP_PAGE == result) return;
 			}
 			else
 			{
