@@ -1,5 +1,7 @@
 package com.mockrunner.test;
 
+import java.io.IOException;
+
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -36,6 +38,14 @@ public class TestTag extends TagSupport
     public int doStartTag() throws JspException
     {
         doStartTagCalled = true;
+        try
+        {
+            pageContext.getOut().print("TestTag");
+        }
+        catch(IOException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
         return doStartTagReturnValue;
     }
     

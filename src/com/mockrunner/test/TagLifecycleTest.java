@@ -3,7 +3,11 @@ package com.mockrunner.test;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.jsp.tagext.TagSupport;
+
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.mock.MockJspWriter;
 import com.mockrunner.tag.NestedStandardTag;
 import com.mockrunner.tag.NestedTag;
 
@@ -18,6 +22,15 @@ public class TagLifecycleTest extends BaseTestCase
     private NestedTag level3child1;
     private NestedTag level3child2;
     
+    private TestTag rootTag;
+    private TestBodyTag level1child1Tag;
+    private TestTag level1child2Tag;
+    private TestBodyTag level1child3Tag;
+    private TestTag level2child1Tag;
+    private TestBodyTag level2child2Tag;
+    private TestTag level3child1Tag;
+    private TestTag level3child2Tag;
+    
     public TagLifecycleTest(String arg0)
     {
         super(arg0);
@@ -30,13 +43,80 @@ public class TagLifecycleTest extends BaseTestCase
         testMap.put("testString", "test");
         root = new NestedStandardTag(new TestTag(), getMockObjectFactory().getMockPageContext(), testMap);
         level1child1 = root.addTagChild(TestBodyTag.class, testMap);
-        root.addTextChild("level1text");
+        root.addTextChild("roottext");
         level1child2 = root.addTagChild(TestTag.class, testMap);
         level1child3 = root.addTagChild(TestBodyTag.class, testMap);
+        level1child3.addTextChild("level1textchild3");
         level2child1 = level1child2.addTagChild(TestTag.class, testMap);
         level2child2 = level1child2.addTagChild(TestBodyTag.class, testMap);
-        level1child2.addTextChild("level2text");
+        level1child2.addTextChild("level2textchild2");
         level3child1 = level2child1.addTagChild(TestTag.class, testMap);
         level3child2 = level2child2.addTagChild(TestTag.class, testMap);
+        
+        rootTag = (TestTag)root.getTag();
+        level1child1Tag = (TestBodyTag)level1child1.getTag();
+        level1child2Tag = (TestTag)level1child2.getTag();
+        level1child3Tag = (TestBodyTag)level1child3.getTag();
+        level2child1Tag = (TestTag)level2child1.getTag();
+        level2child2Tag = (TestBodyTag)level2child2.getTag();
+        level3child1Tag = (TestTag)level3child1.getTag();
+        level3child2Tag = (TestTag)level3child2.getTag();
+    }
+    
+    public void testMethodsCalled() throws Exception
+    {
+        level1child1Tag.setDoStartTagReturnValue(TagSupport.EVAL_BODY_INCLUDE);
+        level1child2Tag.setDoStartTagReturnValue(TagSupport.SKIP_BODY);
+        level1child3Tag.setDoStartTagReturnValue(BodyTagSupport.EVAL_BODY_BUFFERED);
+        root.doLifecycle();
+        assertTrue(rootTag.wasDoStartTagCalled());
+        assertTrue(rootTag.wasDoAfterBodyCalled());
+        assertTrue(rootTag.wasDoEndTagCalled());
+  
+        assertTrue(level1child1Tag.wasDoStartTagCalled());
+        assertFalse(level1child1Tag.wasDoInitBodyCalled());
+        assertTrue(level1child1Tag.wasDoAfterBodyCalled());
+        assertTrue(level1child1Tag.wasDoEndTagCalled());
+        
+        assertTrue(level1child2Tag.wasDoStartTagCalled());
+        assertFalse(level1child2Tag.wasDoAfterBodyCalled());
+        assertTrue(level1child2Tag.wasDoEndTagCalled());
+        
+        assertTrue(level1child3Tag.wasDoStartTagCalled());
+        assertTrue(level1child3Tag.wasDoInitBodyCalled());
+        assertTrue(level1child3Tag.wasDoAfterBodyCalled());
+        assertTrue(level1child3Tag.wasDoEndTagCalled());
+        
+        assertFalse(level2child1Tag.wasDoStartTagCalled());
+        assertFalse(level2child1Tag.wasDoAfterBodyCalled());
+        assertFalse(level2child1Tag.wasDoEndTagCalled());
+        
+        assertFalse(level2child2Tag.wasDoStartTagCalled());
+        assertFalse(level2child2Tag.wasDoInitBodyCalled());
+        assertFalse(level2child2Tag.wasDoAfterBodyCalled());
+        assertFalse(level2child2Tag.wasDoEndTagCalled());
+        
+        assertFalse(level3child1Tag.wasDoStartTagCalled());
+        assertFalse(level3child1Tag.wasDoAfterBodyCalled());
+        assertFalse(level3child1Tag.wasDoEndTagCalled());
+        
+        assertFalse(level3child2Tag.wasDoStartTagCalled());
+        assertFalse(level3child2Tag.wasDoAfterBodyCalled());
+        assertFalse(level3child2Tag.wasDoEndTagCalled());
+    }
+    
+    public void testOutput() throws Exception
+    {
+        level1child1Tag.setDoStartTagReturnValue(TagSupport.SKIP_BODY);
+        level1child2Tag.setDoStartTagReturnValue(TagSupport.SKIP_BODY);
+        level1child3Tag.setDoStartTagReturnValue(BodyTagSupport.EVAL_BODY_BUFFERED);
+        root.doLifecycle();
+        
+        assertEquals("TestTagTestBodyTagroottextTestTagTestBodyTag", getTagOutput());
+    }
+    
+    private String getTagOutput()
+    {
+        return ((MockJspWriter)(getMockObjectFactory().getMockPageContext().getOut())).getOutputAsString();
     }
 }
