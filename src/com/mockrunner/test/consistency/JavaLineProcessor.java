@@ -93,7 +93,7 @@ public class JavaLineProcessor
         } 
         catch(IOException exc)
         {
-            throw new RuntimeException(exc);
+            throw new RuntimeException(exc.getMessage());
         }
     }
     
@@ -107,7 +107,7 @@ public class JavaLineProcessor
             } 
             catch(IOException exc)
             {
-                throw new RuntimeException(exc);
+                throw new RuntimeException(exc.getMessage());
             }
         }
     }
@@ -124,7 +124,7 @@ public class JavaLineProcessor
         } 
         catch (IOException exc)
         {
-            throw new RuntimeException(exc);
+            throw new RuntimeException(exc.getMessage());
         }
     }
 }

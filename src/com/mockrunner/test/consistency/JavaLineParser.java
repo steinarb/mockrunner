@@ -72,7 +72,7 @@ public class JavaLineParser
         }
         catch(IOException exc)
         {
-            throw new RuntimeException(exc);
+            throw new RuntimeException(exc.getMessage());
         }
         checkLinesOrBlocksLeft(tempLinesToParse, tempBlocksToParse);
         return resultList;
@@ -158,7 +158,7 @@ public class JavaLineParser
         } 
         catch(IOException exc)
         {
-            throw new RuntimeException(exc);
+            throw new RuntimeException(exc.getMessage());
         }
     }
     

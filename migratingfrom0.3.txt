@@ -1,6 +1,5 @@
-
-There are some changes in Mockrunner 0.3.1 that breaks the Mockrunner 0.2.9 API.
-Affected are EJB, JMS and Struts.
+There are some changes in Mockrunner 0.3.1 that breaks the Mockrunner 0.3 API.
+Affected are EJB and JMS
 
 Starting with version 0.3.1, Mockrunner supports the MockEJB 0.6 API
 and the new features of MockEJB.
