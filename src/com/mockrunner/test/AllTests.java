@@ -20,6 +20,7 @@ public class AllTests
         TestSuite suite = new TestSuite("Test for com.mockrunner.test");
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(ActionTestModuleTest.class));
+        suite.addTest(new TestSuite(JDBCTestModuleTest.class));
         suite.addTest(new TestSuite(MockHttpSessionTest.class));
         suite.addTest(new TestSuite(MockObjectFactoryTest.class));
         suite.addTest(new TestSuite(TagUtilTest.class));
