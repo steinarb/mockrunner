@@ -31,7 +31,7 @@ public class JavaClassGeneratorTest extends TestCase
         generator.addInterfaceImplementation(List.class);
         generator.addImport(XmlUtil.class);
         generator.addMemberDeclaration(XmlUtil.class, "util");
-        generator.addMemberDeclaration("String", "name");
+        generator.addMemberDeclaration(String.class, "name");
         System.out.println(generator.generate());
         assertEquals(getExpected(), generator.generate());
     }
