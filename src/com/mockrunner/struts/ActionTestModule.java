@@ -680,7 +680,7 @@ public class ActionTestModule
      */
     public ActionMessages getActionMessages()
     {
-        return (ActionMessages) mockFactory.getWrappedRequest().getAttribute(Globals.MESSAGE_KEY);
+        return (ActionMessages)mockFactory.getWrappedRequest().getAttribute(Globals.MESSAGE_KEY);
     }
     
     /**
