@@ -12,6 +12,7 @@ public class AllConsistencyTests
         suite.addTest(new TestSuite(AdapterConsistencyTest.class));
         suite.addTest(new TestSuite(VersionConsistencyTest.class));
         suite.addTest(new TestSuite(JarFileDependenciesTest.class));
+        suite.addTest(new TestSuite(JarReferenceTest.class));
         //$JUnit-END$
         return suite;
     }
