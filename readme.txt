@@ -107,7 +107,7 @@ http://www.junit.org
 junit.jar
 
 J2EE 1.3:
-Tomcat 4.1.30:
+Tomcat 4.1.31:
 http://jakarta.apache.org/tomcat
 servlet.jar
 JBoss 3.2.3:
