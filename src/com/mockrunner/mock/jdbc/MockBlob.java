@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.CollectionUtil;
 
@@ -17,6 +20,7 @@ import com.mockrunner.util.CollectionUtil;
  */
 public class MockBlob implements Blob, Cloneable
 {
+    private final static Log log = LogFactory.getLog(MockBlob.class);
     private List blobData;
     
     public MockBlob(byte[] data)
@@ -114,7 +118,7 @@ public class MockBlob implements Blob, Cloneable
         }
         catch(CloneNotSupportedException exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
         }
         return null;
     }

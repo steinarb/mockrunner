@@ -9,6 +9,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import org.apache.commons.beanutils.MethodUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.mockejb.BasicEjbDescriptor;
 import org.mockejb.EntityBeanDescriptor;
 import org.mockejb.MDBDescriptor;
@@ -28,6 +30,7 @@ import com.mockrunner.util.ClassUtil;
  */
 public class EJBTestModule
 {
+    private final static Log log = LogFactory.getLog(EJBTestModule.class);
     private EJBMockObjectFactory mockFactory;
     private String impSuffix;
     private String homeInterfaceSuffix;
@@ -151,7 +154,7 @@ public class EJBTestModule
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
         } 
     }
     

@@ -7,6 +7,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.struts.util.MessageResources;
 import org.apache.struts.util.MessageResourcesFactory;
 
@@ -19,6 +21,7 @@ import org.apache.struts.util.MessageResourcesFactory;
  */
 public class MapMessageResources extends MessageResources
 {
+    private final static Log log = LogFactory.getLog(MapMessageResources.class);
     private Map messages;
     
     /**
@@ -125,7 +128,7 @@ public class MapMessageResources extends MessageResources
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
         }
     }
     

@@ -4,6 +4,8 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.xerces.parsers.DOMParser;
 import org.cyberneko.html.HTMLConfiguration;
 import org.jdom.Element;
@@ -16,6 +18,8 @@ import org.xml.sax.InputSource;
  */
 public class XmlUtil
 {
+    private final static Log log = LogFactory.getLog(XmlUtil.class);
+    
     /**
      * Convinience method for HTML fragments. Returns the body
      * as JDOM <code>Element</code>.
@@ -76,7 +80,7 @@ public class XmlUtil
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -112,7 +116,7 @@ public class XmlUtil
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -133,7 +137,7 @@ public class XmlUtil
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -159,7 +163,7 @@ public class XmlUtil
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }

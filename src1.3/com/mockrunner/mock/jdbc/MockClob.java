@@ -10,11 +10,15 @@ import java.io.Writer;
 import java.sql.Clob;
 import java.sql.SQLException;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Mock implementation of <code>Clob</code>.
  */
 public class MockClob implements Clob, Cloneable
 {
+    private final static Log log = LogFactory.getLog(MockClob.class);
     private StringBuffer clobData;
     
     public MockClob(String data)
@@ -153,7 +157,7 @@ public class MockClob implements Clob, Cloneable
         }
         catch(CloneNotSupportedException exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
         }
         return null;
     }

@@ -11,12 +11,16 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Mock implementation of <code>FilterChain</code>.
  */
 public class MockFilterChain implements FilterChain
 {
-	private ArrayList filters = new ArrayList();
+    private final static Log log = LogFactory.getLog(MockFilterChain.class);
+    private ArrayList filters = new ArrayList();
 	private Servlet servlet;
 	private Iterator iterator;
     private ServletRequest lastRequest;
@@ -60,7 +64,7 @@ public class MockFilterChain implements FilterChain
 		}
 		catch(Exception exc)
 		{
-			exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
 			throw new RuntimeException(exc.getMessage());
 		}
 	}

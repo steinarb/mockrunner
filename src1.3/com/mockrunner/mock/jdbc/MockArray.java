@@ -5,6 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.mockrunner.util.ArrayUtil;
 
 /**
@@ -12,6 +15,7 @@ import com.mockrunner.util.ArrayUtil;
  */
 public class MockArray implements Array, Cloneable
 {
+    private final static Log log = LogFactory.getLog(MockArray.class);
     private Object array;
     
     public MockArray(Object array)
@@ -102,7 +106,7 @@ public class MockArray implements Array, Cloneable
         }
         catch(CloneNotSupportedException exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
         }
         return null;
     }
