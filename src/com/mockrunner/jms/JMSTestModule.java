@@ -1,5 +1,6 @@
 package com.mockrunner.jms;
 
+import java.util.Iterator;
 import java.util.List;
 
 import com.mockrunner.base.VerifyFailedException;
@@ -11,6 +12,11 @@ import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
 import com.mockrunner.mock.jms.MockQueueSession;
 import com.mockrunner.mock.jms.MockTemporaryQueue;
+import com.mockrunner.mock.jms.MockTemporaryTopic;
+import com.mockrunner.mock.jms.MockTopic;
+import com.mockrunner.mock.jms.MockTopicPublisher;
+import com.mockrunner.mock.jms.MockTopicSession;
+import com.mockrunner.mock.jms.MockTopicSubscriber;
 
 /**
  * Module for JMS tests.
@@ -63,11 +69,20 @@ public class JMSTestModule
     
     /**
      * Returns the list of {@link MockQueueSession} obejcts.
-     * @return the {@link MockQueueSession}
+     * @return the {@link MockQueueSession} list
      */
     public List getQueueSessionList()
     {
         return mockFactory.getMockQueueConnection().getQueueSessionList();
+    }
+    
+    /**
+     * Returns the list of {@link MockTopicSession} obejcts.
+     * @return the {@link MockTopicSession} list
+     */
+    public List getTopicSessionList()
+    {
+        return mockFactory.getMockTopicConnection().getTopicSessionList();
     }
     
     /**
@@ -82,6 +97,17 @@ public class JMSTestModule
     }
     
     /**
+     * Returns the {@link MockTopicSession} for the specified index
+     * or <code>null<(/code> if the session does not exist.
+     * @param indexOfSession the index of the session
+     * @return the {@link MockTopicSession}
+     */
+    public MockTopicSession getTopicSession(int indexOfSession)
+    {
+        return mockFactory.getMockTopicConnection().getTopicSession(indexOfSession);
+    }
+    
+    /**
      * Returns the {@link MockQueue} with the specified name
      * or <code>null<(/code> if no such queue exists.
      * @param name the name of the queue
@@ -93,16 +119,40 @@ public class JMSTestModule
     }
     
     /**
+     * Returns the {@link MockTopic} with the specified name
+     * or <code>null<(/code> if no such topic exists.
+     * @param name the name of the topic
+     * @return the {@link MockTopic}
+     */
+    public MockTopic getTopic(String name)
+    {
+        return getDestinationManager().getTopic(name);
+    }
+    
+    /**
      * Returns the list of {@link MockTemporaryQueue} objects
      * for the specified session.
      * @param indexOfSession the index of the session
-     * @return the {@link MockTemporaryQueue}
+     * @return the {@link MockTemporaryQueue} list
      */
     public List getTemporaryQueueList(int indexOfSession)
     {
         MockQueueSession session = getQueueSession(indexOfSession);
         if(null == session) return null;
         return session.getTemporaryQueueList();
+    }
+    
+    /**
+     * Returns the list of {@link MockTemporaryTopic} objects
+     * for the specified session.
+     * @param indexOfSession the index of the session
+     * @return the {@link MockTemporaryTopic} list
+     */
+    public List getTemporaryTopicList(int indexOfSession)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session) return null;
+        return session.getTemporaryTopicList();
     }
     
     /**
@@ -118,6 +168,21 @@ public class JMSTestModule
         MockQueueSession session = getQueueSession(indexOfSession);
         if(null == session) return null;
         return session.getTemporaryQueue(indexOfQueue);
+    }
+    
+    /**
+     * Returns the {@link MockTemporaryTopic} with the specified index
+     * for the specified session. Returns <code>null</code> if no such
+     * temporary queue exists.
+     * @param indexOfSession the index of the session
+     * @param indexOfTopic the index of the temporary queue
+     * @return the {@link MockTemporaryTopic}
+     */
+    public MockTemporaryTopic getTemporaryTopic(int indexOfSession, int indexOfTopic)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session) return null;
+        return session.getTemporaryTopic(indexOfTopic);
     }
     
     /**
@@ -175,6 +240,60 @@ public class JMSTestModule
     }
     
     /**
+     * Returns the list of messages that are currently present in the topic
+     * resp. <code>null</code> if no such topic exists.
+     * @param name the name of the queue
+     * @return the list of messages
+     */
+    public List getCurrentMessageListFromTopic(String name)
+    {
+        MockTopic topic = getTopic(name);
+        if(null == topic) return null;
+        return topic.getCurrentMessageList();
+    }
+
+    /**
+     * Returns the list of messages that are currently present in the 
+     * temporary topic resp. <code>null</code> if no such topic exists.
+     * @param indexOfSession the index of the session
+     * @param indexOfTopic the index of the temporary topic
+     * @return the list of messages
+     */
+    public List getCurrentMessageListFromTemporaryTopic(int indexOfSession, int indexOfTopic)
+    {
+        MockTemporaryTopic topic = getTemporaryTopic(indexOfSession, indexOfTopic);
+        if(null == topic) return null;
+        return topic.getCurrentMessageList();
+    }
+
+    /**
+     * Returns the list of messages that were received by the topic
+     * resp. <code>null</code> if no such topic exists.
+     * @param name the name of the topic
+     * @return the list of messages
+     */
+    public List getReceivedMessageListFromTopic(String name)
+    {
+        MockTopic topic = getTopic(name);
+        if(null == topic) return null;
+        return topic.getReceivedMessageList();
+    }
+
+    /**
+     * Returns the list of messages that were received by the 
+     * temporary topic resp. <code>null</code> if no such topic exists.
+     * @param indexOfSession the index of the session
+     * @param indexOfTopic the index of the temporary topic
+     * @return the list of messages
+     */
+    public List getReceivedMessageListFromTemporaryTopic(int indexOfSession, int indexOfTopic)
+    {
+        MockTemporaryTopic topic = getTemporaryTopic(indexOfSession, indexOfTopic);
+        if(null == topic) return null;
+        return topic.getReceivedMessageList();
+    }
+    
+    /**
      * Verifies that the queue connection is closed.
      * @throws VerifyFailedException if verification fails
      */
@@ -187,7 +306,7 @@ public class JMSTestModule
     }
     
     /**
-     * Verifies that the queue connection is closed.
+     * Verifies that the queue connection is started.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyQueueConnectionStarted()
@@ -195,6 +314,54 @@ public class JMSTestModule
         if(!mockFactory.getMockQueueConnection().isStarted())
         {
             throw new VerifyFailedException("QueueConnection is not started.");
+        }
+    }
+    
+    /**
+     * Verifies that the queue connection is started.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyQueueConnectionStopped()
+    {
+        if(!mockFactory.getMockQueueConnection().isStopped())
+        {
+            throw new VerifyFailedException("QueueConnection is not stopped.");
+        }
+    }
+    
+    /**
+     * Verifies that the topic connection is closed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTopicConnectionClosed()
+    {
+        if(!mockFactory.getMockTopicConnection().isClosed())
+        {
+            throw new VerifyFailedException("TopicConnection is not closed.");
+        }
+    }
+
+    /**
+     * Verifies that the topic connection is started.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTopicConnectionStarted()
+    {
+        if(!mockFactory.getMockTopicConnection().isStarted())
+        {
+            throw new VerifyFailedException("TopicConnection is not started.");
+        }
+    }
+
+    /**
+     * Verifies that the topic connection is started.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTopicConnectionStopped()
+    {
+        if(!mockFactory.getMockTopicConnection().isStopped())
+        {
+            throw new VerifyFailedException("TopicConnection is not stopped.");
         }
     }
     
@@ -232,7 +399,7 @@ public class JMSTestModule
         }
         if(!session.isCommitted())
         {
-            throw new VerifyFailedException("QueueConnection is not committed.");
+            throw new VerifyFailedException("QueueSession is not committed.");
         }
     }
     
@@ -251,7 +418,7 @@ public class JMSTestModule
         }
         if(session.isCommitted())
         {
-            throw new VerifyFailedException("QueueConnection is committed.");
+            throw new VerifyFailedException("QueueSession is committed.");
         }
     }
     
@@ -270,7 +437,7 @@ public class JMSTestModule
         }
         if(!session.isRolledBack())
         {
-            throw new VerifyFailedException("QueueConnection is not rolled back.");
+            throw new VerifyFailedException("QueueSession is not rolled back.");
         }
     }
     
@@ -289,7 +456,7 @@ public class JMSTestModule
         }
         if(session.isRolledBack())
         {
-            throw new VerifyFailedException("QueueConnection is rolled back.");
+            throw new VerifyFailedException("QueueSession is rolled back.");
         }
     }
     
@@ -308,7 +475,7 @@ public class JMSTestModule
         }
         if(!session.isRecovered())
         {
-            throw new VerifyFailedException("QueueConnection is not recovered.");
+            throw new VerifyFailedException("QueueSession is not recovered.");
         }
     }
     
@@ -327,7 +494,140 @@ public class JMSTestModule
         }
         if(session.isRecovered())
         {
-            throw new VerifyFailedException("QueueConnection is recovered.");
+            throw new VerifyFailedException("QueueSession is recovered.");
+        }
+    }
+    
+    /**
+     * Verifies that the topic session with the specified index is
+     * closed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTopicSessionClosed(int indexOfSession)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        if(!session.isClosed())
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not closed.");
+        }
+    }
+
+    /**
+     * Verifies that the topic session with the specified index was
+     * committed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTopicSessionCommitted(int indexOfSession)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        if(!session.isCommitted())
+        {
+            throw new VerifyFailedException("TopicSession is not committed.");
+        }
+    }
+
+    /**
+     * Verifies that the topic session with the specified index was
+     * not committed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTopicSessionNotCommitted(int indexOfSession)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        if(session.isCommitted())
+        {
+            throw new VerifyFailedException("TopicSession is committed.");
+        }
+    }
+
+    /**
+     * Verifies that the topic session with the specified index was
+     * rolled back.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTopicSessionRolledBack(int indexOfSession)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        if(!session.isRolledBack())
+        {
+            throw new VerifyFailedException("TopicSession is not rolled back.");
+        }
+    }
+
+    /**
+     * Verifies that the topic session with the specified index was
+     * not rolled back.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTopicSessionNotRolledBack(int indexOfSession)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        if(session.isRolledBack())
+        {
+            throw new VerifyFailedException("TopicSession is rolled back.");
+        }
+    }
+
+    /**
+     * Verifies that the topic session with the specified index was
+     * recovered.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTopicSessionRecovered(int indexOfSession)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        if(!session.isRecovered())
+        {
+            throw new VerifyFailedException("TopicSession is not recovered.");
+        }
+    }
+
+    /**
+     * Verifies that the topic session with the specified index was
+     * not recovered.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTopicSessionNotRecovered(int indexOfSession)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        if(session.isRecovered())
+        {
+            throw new VerifyFailedException("TopicSession is recovered.");
         }
     }
     
@@ -400,6 +700,74 @@ public class JMSTestModule
     }
     
     /**
+     * Verifies that all topic sessions are closed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllTopicSessionsClosed()
+    {
+        List topicSessions = getTopicSessionList();
+        for(int ii = 0; ii < topicSessions.size(); ii++)
+        {
+            MockTopicSession currentSession = (MockTopicSession)topicSessions.get(ii);
+            if(!currentSession.isClosed())
+            {
+                throw new VerifyFailedException("TopicSession with index " + ii + " is not closed.");
+            }
+        }
+    }
+
+    /**
+     * Verifies that all topic sessions are recovered.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllTopicSessionsRecovered()
+    {
+        List topicSessions = getTopicSessionList();
+        for(int ii = 0; ii < topicSessions.size(); ii++)
+        {
+            MockTopicSession currentSession = (MockTopicSession)topicSessions.get(ii);
+            if(!currentSession.isRecovered())
+            {
+                throw new VerifyFailedException("TopicSession with index " + ii + " is not recovered.");
+            }
+        }
+    }
+
+    /**
+     * Verifies that all topic sessions were commited.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllTopicSessionsCommitted()
+    {
+        List topicSessions = getTopicSessionList();
+        for(int ii = 0; ii < topicSessions.size(); ii++)
+        {
+            MockTopicSession currentSession = (MockTopicSession)topicSessions.get(ii);
+            if(!currentSession.isCommitted())
+            {
+                throw new VerifyFailedException("TopicSession with index " + ii + " is not committed.");
+            }
+        }
+    }
+
+    /**
+     * Verifies that all topic sessions were rolled back.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllTopicSessionsRolledBack()
+    {
+        List topicSessions = getTopicSessionList();
+        for(int ii = 0; ii < topicSessions.size(); ii++)
+        {
+            MockQueueSession currentSession = (MockQueueSession)topicSessions.get(ii);
+            if(!currentSession.isRolledBack())
+            {
+                throw new VerifyFailedException("TopicSession with index " + ii + " is not rolled back.");
+            }
+        }   
+    }
+    
+    /**
      * Verifies the number of senders for the specified session.
      * @param indexOfSession the index of the session
      * @param numberOfSenders the expected number of senders
@@ -437,7 +805,7 @@ public class JMSTestModule
         TransmissionManager manager = getTransmissionManager(indexOfSession);
         if(numberOfSenders != manager.getQueueSenderList(queueName).size())
         {
-            throw new VerifyFailedException("Expected " + numberOfSenders + " senders for queue " + queueName + ", actually " + manager.getQueueSenderList().size() + " senders present");
+            throw new VerifyFailedException("Expected " + numberOfSenders + " senders for queue " + queueName + ", actually " + manager.getQueueSenderList(queueName).size() + " senders present");
         }
     }
     
@@ -493,6 +861,99 @@ public class JMSTestModule
     }
     
     /**
+     * Verifies the number of publishers for the specified session.
+     * @param indexOfSession the index of the session
+     * @param numberOfPublishers the expected number of publishers
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberTopicPublishers(int indexOfSession, int numberOfPublishers)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        if(numberOfPublishers != manager.getTopicPublisherList().size())
+        {
+            throw new VerifyFailedException("Expected " + numberOfPublishers + " publishers, actually " + manager.getTopicPublisherList().size() + " publishers present");
+        }
+    }
+
+    /**
+     * Verifies the number of publishers for the specified session and
+     * the sepcified topic name.
+     * @param indexOfSession the index of the session
+     * @param topicName the name of the topic
+     * @param numberOfPublishers the expected number of publishers
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberTopicPublishers(int indexOfSession, String topicName, int numberOfPublishers)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        if(numberOfPublishers != manager.getTopicPublisherList(topicName).size())
+        {
+            throw new VerifyFailedException("Expected " + numberOfPublishers + " publishers for topic " + topicName + ", actually " + manager.getTopicPublisherList(topicName).size() + " publishers present");
+        }
+    }
+
+    /**
+     * Verifies that the specified publisher is closed.
+     * @param indexOfSession the index of the session
+     * @param topicName the name of the topic
+     * @param indexOfPublisher the index of the publisher
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTopicPublisherClosed(int indexOfSession, String topicName, int indexOfPublisher)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        List publishers = manager.getTopicPublisherList(topicName);
+        if(indexOfPublisher >= publishers.size())
+        {
+            throw new VerifyFailedException("TopicPublisher with index " + indexOfPublisher + " is not present.");
+        }
+        MockTopicPublisher publisher = (MockTopicPublisher)publishers.get(indexOfPublisher);
+        if(!publisher.isClosed())
+        {
+            throw new VerifyFailedException("TopicPublisher of topic " + topicName + " with index " + indexOfPublisher + " not closed.");
+        }
+    }
+
+    /**
+     * Verifies that all publishers for the specified session are closed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllTopicPublishersClosed(int indexOfSession)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        List publishers = manager.getTopicPublisherList();
+        for(int ii = 0; ii < publishers.size(); ii++)
+        {
+            MockTopicPublisher currentPublisher = (MockTopicPublisher)publishers.get(ii);
+            if(!currentPublisher.isClosed())
+            {
+                throw new VerifyFailedException("TopicPublisher with index " + ii + " not closed.");
+            }
+        }
+    }
+    
+    /**
      * Verifies the number of receivers for the specified session.
      * @param indexOfSession the index of the session
      * @param numberOfReceivers the expected number of receivers
@@ -530,7 +991,7 @@ public class JMSTestModule
         TransmissionManager manager = getTransmissionManager(indexOfSession);
         if(numberOfReceivers != manager.getQueueReceiverList(queueName).size())
         {
-            throw new VerifyFailedException("Expected " + numberOfReceivers + " receivers for queue " + queueName + ", actually " + manager.getQueueReceiverList().size() + " receivers present");
+            throw new VerifyFailedException("Expected " + numberOfReceivers + " receivers for queue " + queueName + ", actually " + manager.getQueueReceiverList(queueName).size() + " receivers present");
         }
     }
     
@@ -554,7 +1015,7 @@ public class JMSTestModule
         {
             throw new VerifyFailedException("QueueReceiver with index " + indexOfReceiver + " is not present.");
         }
-        MockQueueReceiver receiver = (MockQueueReceiver)manager.getQueueReceiverList(queueName).get(indexOfReceiver);
+        MockQueueReceiver receiver = (MockQueueReceiver)receivers.get(indexOfReceiver);
         if(!receiver.isClosed())
         {
             throw new VerifyFailedException("QueueReceiver of queue " + queueName + " with index " + indexOfReceiver + " not closed.");
@@ -581,6 +1042,99 @@ public class JMSTestModule
             if(!currentReceiver.isClosed())
             {
                 throw new VerifyFailedException("QueueReceiver with index " + ii + " not closed.");
+            }
+        }
+    }
+    
+    /**
+     * Verifies the number of subscribers for the specified session.
+     * @param indexOfSession the index of the session
+     * @param numberOfSubscribers the expected number of subscribers
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberTopicSubscribers(int indexOfSession, int numberOfSubscribers)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        if(numberOfSubscribers != manager.getTopicSubscriberList().size())
+        {
+            throw new VerifyFailedException("Expected " + numberOfSubscribers + " subscribers, actually " + manager.getTopicSubscriberList().size() + " subscribers present");
+        }
+    }
+
+    /**
+     * Verifies the number of subscribers for the specified session and
+     * the sepcified topic name.
+     * @param indexOfSession the index of the session
+     * @param topicName the name of the topic
+     * @param numberOfSubscribers the expected number of subscribers
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberTopicSubscribers(int indexOfSession, String topicName, int numberOfSubscribers)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        if(numberOfSubscribers != manager.getTopicSubscriberList(topicName).size())
+        {
+            throw new VerifyFailedException("Expected " + numberOfSubscribers + " subscribers for topic " + topicName + ", actually " + manager.getTopicSubscriberList(topicName).size() + " subscribers present");
+        }
+    }
+
+    /**
+     * Verifies that the specified subscriber is closed.
+     * @param indexOfSession the index of the session
+     * @param topicName the name of the topic
+     * @param indexOfSubscriber the index of the receiver
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTopicSubscriberClosed(int indexOfSession, String topicName, int indexOfSubscriber)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        List subscribers = manager.getTopicSubscriberList(topicName);
+        if(indexOfSubscriber >= subscribers.size())
+        {
+            throw new VerifyFailedException("TopicSubscriber with index " + indexOfSubscriber + " is not present.");
+        }
+        MockTopicSubscriber subscriber = (MockTopicSubscriber)subscribers.get(indexOfSubscriber);
+        if(!subscriber.isClosed())
+        {
+            throw new VerifyFailedException("TopicSubscriber of topic " + topicName + " with index " + indexOfSubscriber + " not closed.");
+        }
+    }
+
+    /**
+     * Verifies that all subscribers for the specified session are closed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllTopicSubscribersClosed(int indexOfSession)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        List subscribers = manager.getTopicSubscriberList();
+        for(int ii = 0; ii < subscribers.size(); ii++)
+        {
+            MockTopicSubscriber currentSubscriber = (MockTopicSubscriber)subscribers.get(ii);
+            if(!currentSubscriber.isClosed())
+            {
+                throw new VerifyFailedException("TopicSubscriber with index " + ii + " not closed.");
             }
         }
     }
@@ -623,7 +1177,7 @@ public class JMSTestModule
         TransmissionManager manager = getTransmissionManager(indexOfSession);
         if(numberOfBrowsers != manager.getQueueBrowserList(queueName).size())
         {
-            throw new VerifyFailedException("Expected " + numberOfBrowsers + " browsers for queue " + queueName + ", actually " + manager.getQueueBrowserList().size() + " browsers present");
+            throw new VerifyFailedException("Expected " + numberOfBrowsers + " browsers for queue " + queueName + ", actually " + manager.getQueueBrowserList(queueName).size() + " browsers present");
         }
     }
     
@@ -647,7 +1201,7 @@ public class JMSTestModule
         {
             throw new VerifyFailedException("QueueBrowser with index " + indexOfBrowser + " is not present.");
         }
-        MockQueueBrowser browser = (MockQueueBrowser)manager.getQueueBrowserList(queueName).get(indexOfBrowser);
+        MockQueueBrowser browser = (MockQueueBrowser)browsers.get(indexOfBrowser);
         if(!browser.isClosed())
         {
             throw new VerifyFailedException("QueueBrowser of queue " + queueName + " with index " + indexOfBrowser + " not closed.");
@@ -674,6 +1228,117 @@ public class JMSTestModule
             if(!currentBrowser.isClosed())
             {
                 throw new VerifyFailedException("QueueBrowser with index " + ii + " not closed.");
+            }
+        }
+    }
+    
+    /**
+     * Verifies that a durable subscriber exists.
+     * @param indexOfSession the index of the session
+     * @param nameOfSubscriber the name of the durable subscriber
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyDurableTopicSubscriberPresent(int indexOfSession, String nameOfSubscriber)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        if(null == manager.getDurableTopicSubscriber(nameOfSubscriber))
+        {
+            throw new VerifyFailedException("Durable subscriber with name " + nameOfSubscriber + " not present.");
+        }
+    }
+    
+    /**
+     * Verifies the number of durable subscribers for the specified session.
+     * @param indexOfSession the index of the session
+     * @param numberOfSubscribers the expected number of durable subscribers
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberDurableTopicSubscribers(int indexOfSession, int numberOfSubscribers)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        if(numberOfSubscribers != manager.getDurableTopicSubscriberMap().size())
+        {
+            throw new VerifyFailedException("Expected " + numberOfSubscribers + " durable subscribers, actually " + manager.getDurableTopicSubscriberMap().size() + " durable subscribers present");
+        }
+    }
+    
+    /**
+     * Verifies the number of durable subscribers for the specified session and
+     * the sepcified topic name.
+     * @param indexOfSession the index of the session
+     * @param topicName the name of the topic
+     * @param numberOfSubscribers the expected number of durable subscribers
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberDurableTopicSubscribers(int indexOfSession, String topicName, int numberOfSubscribers)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        if(numberOfSubscribers != manager.getDurableTopicSubscriberMap(topicName).size())
+        {
+            throw new VerifyFailedException("Expected " + numberOfSubscribers + " durable subscribers for topic " + topicName + ", actually " + manager.getDurableTopicSubscriberMap(topicName).size() + " durable subscribers present");
+        }
+    }
+    
+    /**
+     * Verifies that the specified durable subscriber is closed.
+     * @param indexOfSession the index of the session
+     * @param subscriberName the name of the durable subscriber
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyDurableTopicSubscriberClosed(int indexOfSession, String subscriberName)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        MockTopicSubscriber subscriber = (MockTopicSubscriber)manager.getDurableTopicSubscriber(subscriberName);
+        if(null == subscriber)
+        {
+            throw new VerifyFailedException("Durable TopicSubscriber with name " + subscriberName + " not present.");
+        }
+        if(!subscriber.isClosed())
+        {
+            throw new VerifyFailedException("Durable TopicSubscriber with name " + subscriberName + " not closed.");
+        }
+    }
+    
+    /**
+     * Verifies that all durable subscribers for the specified session are closed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllDurableTopicSubscribersClosed(int indexOfSession)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TransmissionManager manager = getTransmissionManager(indexOfSession);
+        Iterator keys = manager.getDurableTopicSubscriberMap().keySet().iterator();
+        while(keys.hasNext())
+        {
+            MockTopicSubscriber currentSubscriber = (MockTopicSubscriber)manager.getDurableTopicSubscriberMap().get(keys.next());
+            if(!currentSubscriber.isClosed())
+            {
+                throw new VerifyFailedException("Durable TopicSubscriber with name " + currentSubscriber.getName() + " not closed.");
             }
         }
     }
@@ -990,7 +1655,7 @@ public class JMSTestModule
         }
         if(number != getMessageManager(indexOfSession).getBytesMessageList().size())
         {
-            throw new VerifyFailedException("Expected " + number + " bytes messages, received " + getMessageManager(indexOfSession).getMessageList().size() + " bytes messages");
+            throw new VerifyFailedException("Expected " + number + " bytes messages, received " + getMessageManager(indexOfSession).getBytesMessageList().size() + " bytes messages");
         }
     }
     
@@ -1010,7 +1675,7 @@ public class JMSTestModule
         }
         if(number != getMessageManager(indexOfSession).getMapMessageList().size())
         {
-            throw new VerifyFailedException("Expected " + number + " map messages, received " + getMessageManager(indexOfSession).getMessageList().size() + " map messages");
+            throw new VerifyFailedException("Expected " + number + " map messages, received " + getMessageManager(indexOfSession).getMapMessageList().size() + " map messages");
         }
     }
     
@@ -1030,7 +1695,7 @@ public class JMSTestModule
         }
         if(number != getMessageManager(indexOfSession).getTextMessageList().size())
         {
-            throw new VerifyFailedException("Expected " + number + " text messages, received " + getMessageManager(indexOfSession).getMessageList().size() + " text messages");
+            throw new VerifyFailedException("Expected " + number + " text messages, received " + getMessageManager(indexOfSession).getTextMessageList().size() + " text messages");
         }
     }
     
@@ -1050,7 +1715,7 @@ public class JMSTestModule
         }
         if(number != getMessageManager(indexOfSession).getStreamMessageList().size())
         {
-            throw new VerifyFailedException("Expected " + number + " stream messages, received " + getMessageManager(indexOfSession).getMessageList().size() + " stream messages");
+            throw new VerifyFailedException("Expected " + number + " stream messages, received " + getMessageManager(indexOfSession).getStreamMessageList().size() + " stream messages");
         }
     }
     
@@ -1070,7 +1735,7 @@ public class JMSTestModule
         }
         if(number != getMessageManager(indexOfSession).getObjectMessageList().size())
         {
-            throw new VerifyFailedException("Expected " + number + " object messages, received " + getMessageManager(indexOfSession).getMessageList().size() + " object messages");
+            throw new VerifyFailedException("Expected " + number + " object messages, received " + getMessageManager(indexOfSession).getObjectMessageList().size() + " object messages");
         }
     }
 }

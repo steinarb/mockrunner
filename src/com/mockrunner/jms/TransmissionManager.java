@@ -577,7 +577,7 @@ public class TransmissionManager
      * @param topic the <code>Topic</code>
      * @return the created <code>TopicSubscriber</code>
      */
-    public MockTopicSubscriber createTopicDurableSubscriber(MockTopic topic, String name, String messageSelector, boolean noLocal)
+    public MockTopicSubscriber createDurableTopicSubscriber(MockTopic topic, String name, String messageSelector, boolean noLocal)
     {
         MockTopicSubscriber subscriber = new MockTopicSubscriber(connection, topic, messageSelector, noLocal);
         subscriber.setDurable(true);
@@ -593,7 +593,7 @@ public class TransmissionManager
      * @param name the name of the <code>TopicSubscriber</code>
      * @return the <code>TopicSubscriber</code>
      */
-    public MockTopicSubscriber getTopicDurableSubscriber(String name)
+    public MockTopicSubscriber getDurableTopicSubscriber(String name)
     {
         return (MockTopicSubscriber)topicDurableSubscriberMap.get(name);
     }
@@ -606,12 +606,41 @@ public class TransmissionManager
     {
         topicDurableSubscriberMap.remove(name);
     }
+    
+    /**
+     * Returns the map of all durable <code>TopicSubscriber</code> objects
+     * for a specific <code>Topic</code>.
+     * @param topicName the name of the <code>Topic</code>
+     * @return the map of <code>TopicSubscriber</code> objects
+     */
+    public Map getDurableTopicSubscriberMap(String topicName)
+    {
+        Map resultMap = new HashMap();
+        Iterator subscriberNames = topicDurableSubscriberMap.keySet().iterator();
+        while(subscriberNames.hasNext())
+        {
+            Object nextName = subscriberNames.next();
+            MockTopicSubscriber subscriber = (MockTopicSubscriber)topicDurableSubscriberMap.get(nextName);
+            try
+            {
+                if(null != subscriber && subscriber.getTopic().getTopicName().equals(topicName))
+                {
+                    resultMap.put(nextName, subscriber);
+                }
+            }
+            catch(JMSException exc)
+            {
+                
+            }
+        }
+        return resultMap;
+    }
 
     /**
      * Returns the map of all durable <code>TopicSubscriber</code> objects.
      * @return the map of <code>TopicSubscriber</code> objects
      */
-    public Map getTopicDurableSubscriberMap()
+    public Map getDurableTopicSubscriberMap()
     {
         return Collections.unmodifiableMap(topicDurableSubscriberMap);
     }

@@ -107,6 +107,18 @@ public class MockTopicTest extends TestCase
         listener1.reset();
         listener2.reset();
         subscriber1 = (MockTopicSubscriber)session.createSubscriber(topic);
+        subscriber2 = (MockTopicSubscriber)session.createDurableSubscriber(topic, "durable");
+        subscriber1.setMessageListener(listener1);
+        subscriber2.setMessageListener(listener2);
+        topic.addMessage(new MockTextMessage("test"));
+        assertEquals(0, topic.getCurrentMessageList().size());
+        assertEquals(1, topic.getReceivedMessageList().size());
+        assertEquals("test", listener1.getMessage().toString());
+        assertEquals("test", listener2.getMessage().toString());     
+        topic.reset();
+        listener1.reset();
+        listener2.reset();
+        subscriber1 = (MockTopicSubscriber)session.createSubscriber(topic);
         subscriber1.setMessageListener(listener1);
         connection.stop();
         topic.addMessage(new MockTextMessage("test"));
