@@ -372,7 +372,7 @@ public class EJBTestModule
     
     /**
      * Adds an object to the mock context by calling <code>rebind</code>
-     * @param name the name of the object
+     * @param name JNDI name of the object
      * @param object the object to add
      */
     public void bindToContext(String name, Object object)
@@ -391,7 +391,7 @@ public class EJBTestModule
     /**
      * Lookup an object. If the object is not bound to the <code>InitialContext</code>,
      * a <code>RuntimeException</code> will be thrown.
-     * @param name the name of the object
+     * @param name JNDI name of the object
      * @return the object
      * @throws RuntimeException if an object with the specified name cannot be found.
      */
@@ -428,7 +428,7 @@ public class EJBTestModule
      * specified name can be found. If the found object is no EJB home interface,
      * or if the corresponding <code>create</code> method cannot be found, this
      * method returns <code>null</code>.
-     * @param name the name of the bean
+     * @param name JNDI name of the bean
      * @return the bean
      * @throws RuntimeException in case of error
      */
@@ -457,7 +457,7 @@ public class EJBTestModule
      * specified name can be found. If the found object is no EJB home interface,
      * or if the corresponding <code>create</code> method cannot be found, this
      * method returns <code>null</code>.
-     * @param name the name of the bean
+     * @param name JNDI name of the bean
      * @param parameters the parameters, <code>null</code> parameters are not allowed,
      *  primitive types are automatically unwrapped
      * @return the bean 
@@ -486,7 +486,7 @@ public class EJBTestModule
      * specified name can be found. If the found object is no EJB home interface,
      * or if the corresponding <code>create</code> method cannot be found, this
      * method returns <code>null</code>.
-     * @param name the name of the bean
+     * @param name JNDI name of the bean
      * @param createMethod the name of the create method
      * @param parameters the parameters, <code>null</code> parameters are not allowed,
      *  primitive types are automatically unwrapped
@@ -513,7 +513,7 @@ public class EJBTestModule
      * method returns <code>null</code>.
      * The created entity EJB is added to the mock database automatically
      * using the provided primary key.
-     * @param name the name of the bean
+     * @param name JNDI name of the bean
      * @param primaryKey the primary key
      * @return the bean
      * @throws RuntimeException in case of error
@@ -537,7 +537,7 @@ public class EJBTestModule
      * method returns <code>null</code>.
      * The created entity EJB is added to the mock database automatically
      * using the provided primary key.
-     * @param name the name of the bean
+     * @param name JNDI name of the bean
      * @param parameters the parameters, <code>null</code> parameters are not allowed,
      *  primitive types are automatically unwrapped
      * @param primaryKey the primary key
@@ -561,7 +561,7 @@ public class EJBTestModule
      * method returns <code>null</code>.
      * The created entity EJB is added to the mock database automatically
      * using the provided primary key.
-     * @param name the name of the bean
+     * @param name JNDI name of the bean
      * @param createMethod the name of the create method
      * @param parameters the parameters, <code>null</code> parameters are not allowed,
      *  primitive types are automatically unwrapped
@@ -594,7 +594,7 @@ public class EJBTestModule
      * method returns <code>null</code>.
      * If the mock container throws an exception because the primary key
      * cannot be found in the entity database, this method returns <code>null</code>.
-     * @param name the name of the bean
+     * @param name JNDI name of the bean
      * @param primaryKey the primary key
      * @return the bean 
      * @throws RuntimeException in case of error
