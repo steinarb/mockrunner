@@ -1,17 +1,31 @@
 package com.mockrunner.test.web;
 
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import junit.framework.TestCase;
 
 import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.validator.ValidatorResources;
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.ActionServlet;
+import org.apache.struts.action.DynaActionForm;
 import org.apache.struts.config.FormBeanConfig;
 import org.apache.struts.config.FormPropertyConfig;
+import org.apache.struts.util.MessageResources;
+import org.apache.struts.validator.ValidatorForm;
 
-import junit.framework.TestCase;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.mock.web.WebMockObjectFactory;
@@ -493,7 +507,7 @@ public class ActionTestModuleTest extends TestCase
     public void testActionPerformMappingTypeSet()
     {
         module.actionPerform(TestAction.class);
-        assertEquals("com.mockrunner.test.web.TestAction", mockFactory.getMockActionMapping().getType());
+        assertEquals(TestAction.class.getName(), mockFactory.getMockActionMapping().getType());
     }
     
     public void testSetResourcesAndLocale()
@@ -527,7 +541,7 @@ public class ActionTestModuleTest extends TestCase
     public void testCreateDynaActionForm()
     {
         FormBeanConfig config = new FormBeanConfig();
-        config.setType("com.mockrunner.test.web.TestDynaForm");
+        config.setType(TestDynaForm.class.getName());
         FormPropertyConfig property1 = new FormPropertyConfig();
         property1.setName("property1");
         property1.setType("java.lang.String");
@@ -577,5 +591,165 @@ public class ActionTestModuleTest extends TestCase
         assertTrue(errors.size() == 1);
         ActionError error = (ActionError)errors.get().next();
         assertEquals("errors.minlength", error.getKey());
+    }
+    
+    public static class TestAction extends Action
+    {
+        private MessageResources resources;
+        private MessageResources resourcesForKey;
+        private Locale locale;
+    
+        public ActionForward execute(ActionMapping mapping,
+                                     ActionForm form,
+                                     HttpServletRequest request,
+                                     HttpServletResponse response) throws Exception
+        {
+            resources = getResources(request);
+            resourcesForKey = getResources(request, "test");
+            locale = getLocale(request);
+            return mapping.findForward("success");
+        }
+    
+        public MessageResources getTestResourcesForKey()
+        {
+            return resourcesForKey;
+        }
+    
+        public MessageResources getTestResources()
+        {
+            return resources;
+        }
+    
+        public Locale getTestLocale()
+        {
+            return locale;
+        }
+    }
+    
+    public static class TestForm extends ActionForm
+    {
+        private boolean validationOk = true;
+        private Map mappedProperties = new HashMap();
+        private String property;
+        private Map indexedProperties = new HashMap();
+        private TestNested nested = new TestNested();
+        private boolean resetCalled = false;
+    
+        public ActionServlet getServlet()
+        {
+            return super.getServlet();
+        }
+  
+        public void setValidationOk(boolean validationOk)
+        {
+            this.validationOk = validationOk;
+        }
+    
+        public String getProperty()
+        {
+            return property;
+        }
+
+        public void setProperty(String string)
+        {
+            property = string;
+        }
+
+        public String getIndexedProperty(int index)
+        {
+            return (String)indexedProperties.get(new Integer(index));
+        }
+
+        public void setIndexedProperty(int index, String string)
+        {
+            indexedProperties.put(new Integer(index), string);
+        }
+
+        public Object getValue(String name)
+        {
+            return mappedProperties.get(name);
+        }
+    
+        public void setValue(String name, Object value)
+        {
+            mappedProperties.put(name, value);
+        }
+
+        public TestNested getNested()
+        {
+            return nested;
+        }
+    
+        public void setNested(TestNested nested)
+        {
+            this.nested = nested;
+        }
+
+        public boolean wasResetCalled()
+        {
+            return resetCalled;
+        }
+
+        public void reset(ActionMapping mapping, HttpServletRequest request)
+        {
+            super.reset(mapping, request);
+            resetCalled = true;
+        }
+    
+        public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+        {
+            ActionErrors errors = new ActionErrors();
+            if(!validationOk)
+            {
+                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("testkey"));
+            }
+            return errors;
+        }
+    }
+    
+    public static class TestDynaForm extends DynaActionForm
+    {
+
+    }
+    
+    public static class TestValidatorForm extends ValidatorForm
+    {
+        private String firstName;
+        private String lastName;
+    
+        public String getFirstName()
+        {
+            return firstName;
+        }
+
+        public String getLastName()
+        {
+            return lastName;
+        }
+
+        public void setFirstName(String firstName)
+        {
+            this.firstName = firstName;
+        }
+
+        public void setLastName(String lastName)
+        {
+            this.lastName = lastName;
+        }
+    }
+
+    public static class TestNested
+    {
+        private String property;
+ 
+        public String getProperty()
+        {
+            return property;
+        }
+
+        public void setProperty(String string)
+        {
+            property = string;
+        }
     }
 }
