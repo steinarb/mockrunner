@@ -1,6 +1,6 @@
 Mockrunner is a lightweight framework for unit testing applications in
 the J2EE environment. It supports Struts actions and forms, servlets, 
-filters and tag classes. Furthermore it includes a JDBC test framework. 
+filters and tag classes. Furthermore it includes a JDBC and a JMS test framework. 
 The JDBC test framework can be used standalone or in conjunction with MockEJB 
 (http://mockejb.sourceforge.net/) to test EJB based applications.
 
@@ -27,6 +27,11 @@ database would provide when executing different SQL statements. The
 framework is meant for testing the Java part of JDBC based applications.
 If you want to test SQL code you can use SQLUnit (http://sqlunit.sourceforge.net/)
 or dbUnit (http://dbunit.sourceforge.net) which runs against a real database.
+
+The JMS test framework implements all JMS interfaces and can be used to test JMS 
+based code. The JMS test framework is able to send and receive messages and to keep
+track of everything that happens while delivering the message.
+Receivers can be plain Java classes or message driven beans.
 
 All test modules in Mockrunner can be combined. You can test a Servlet
 that calls a SessionBean that uses some JDBC code to read data from a database.

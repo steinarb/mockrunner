@@ -2,6 +2,7 @@ package com.mockrunner.example.jms;
 
 import javax.jms.JMSException;
 import javax.jms.MessageListener;
+import javax.jms.Queue;
 
 import org.mockejb.MockEjbObject;
 import org.mockejb.TransactionPolicy;
@@ -9,7 +10,6 @@ import org.mockejb.TransactionPolicy;
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.example.jms.interfaces.PrintSession;
 import com.mockrunner.jms.JMSTestCaseAdapter;
-import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockTextMessage;
 
 /**
@@ -23,22 +23,20 @@ import com.mockrunner.mock.jms.MockTextMessage;
 public class PrintSessionBeanTest extends JMSTestCaseAdapter
 {
     private EJBTestModule ejbModule;
-    private MockQueue queue;
     private PrintSession bean;
-    private MessageListener listener;
 
     protected void setUp() throws Exception
     {
         super.setUp();
         ejbModule = createEJBTestModule();
         ejbModule.bindToContext("java:/ConnectionFactory", getJMSMockObjectFactory().getMockQueueConnectionFactory());
-        queue = getDestinationManager().createQueue("testQueue");
+        Queue queue = getDestinationManager().createQueue("testQueue");
         ejbModule.bindToContext("queue/testQueue", queue);
         ejbModule.setInterfacePackage("com.mockrunner.example.jms.interfaces");
         ejbModule.deploy("com/mockrunner/example/PrintSession", PrintSessionBean.class, TransactionPolicy.REQUIRED);
         bean = (PrintSession)ejbModule.lookupBean("com/mockrunner/example/PrintSession");
         MockEjbObject ejbObject = ejbModule.deployMessageBean(PrintMessageDrivenBean.class, TransactionPolicy.REQUIRED);
-        listener = ejbModule.createMessageBean(ejbObject);
+        MessageListener listener = ejbModule.createMessageBean(ejbObject);
         registerTestMessageListenerForQueue("testQueue", listener);
     }
     
