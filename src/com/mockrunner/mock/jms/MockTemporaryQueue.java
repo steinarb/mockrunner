@@ -10,7 +10,7 @@ public class MockTemporaryQueue extends MockQueue implements TemporaryQueue
 {
     private boolean deleted;
     
-    public MockTemporaryQueue(MockQueueConnection connection)
+    public MockTemporaryQueue(MockConnection connection)
     {
         super(connection, "TemporaryQueue");
         deleted = false;
