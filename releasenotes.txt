@@ -1,7 +1,9 @@
 
 mockrunner-0.2.1:
 
-- removed deprecated methods and classes
+- removed deprecated methods and classes.
+- removed dependencies from www.mockobjects.com mock objects,
+  the mockobjects jars are no longer necessary.
 
 mockrunner-0.2:
 
