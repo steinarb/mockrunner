@@ -25,7 +25,6 @@ import com.mockrunner.test.web.AllWebTests;
 
 public class AllTests
 {
-
     public static Test suite()
     {
         TestSuite suite = new TestSuite("Test for com.mockrunner.test");

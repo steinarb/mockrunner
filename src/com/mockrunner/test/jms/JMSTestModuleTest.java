@@ -7,6 +7,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
+import javax.jms.QueueConnection;
 import javax.jms.QueueReceiver;
 import javax.jms.QueueSender;
 import javax.jms.QueueSession;
@@ -15,6 +16,7 @@ import javax.jms.TemporaryQueue;
 import javax.jms.TemporaryTopic;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
+import javax.jms.TopicConnection;
 import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 import javax.jms.TopicSubscriber;
@@ -24,6 +26,8 @@ import junit.framework.TestCase;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.jms.JMSTestModule;
+import com.mockrunner.jms.QueueTransmissionManager;
+import com.mockrunner.jms.TopicTransmissionManager;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockBytesMessage;
 import com.mockrunner.mock.jms.MockMapMessage;
@@ -121,6 +125,58 @@ public class JMSTestModuleTest extends TestCase
         assertEquals(queueSession1, module.getQueueSession(1));
         module.setCurrentQueueConnectionIndex(0);
         assertNull(module.getQueueSession(0));
+    }
+    
+    public void testRegisterQueueMessageListener() throws Exception
+    {
+        DestinationManager manager = mockFactory.getDestinationManager();
+        manager.createQueue("queue");
+        TestMessageListener listener = new TestMessageListener(true);
+        module.registerTestMessageListenerForQueue("queue", listener);
+        QueueConnection currentQueueConnection = module.getCurrentQueueConnection();
+        assertFalse(currentQueueConnection == queueConnection);
+        QueueTransmissionManager transManager = module.getQueueTransmissionManager(0);
+        QueueReceiver receiver = transManager.getQueueReceiver(0);
+        assertTrue(listener == receiver.getMessageListener());
+        module.verifyQueueConnectionStarted();
+        listener = new TestMessageListener(true);
+        module.registerTestMessageListenerForQueue(queueConnection, "queue", listener);
+        module.verifyNumberQueueSessions(1);
+        module.setCurrentQueueConnectionIndex(0);
+        module.verifyNumberQueueSessions(1);
+        transManager = module.getQueueTransmissionManager(0);
+        receiver = transManager.getQueueReceiver(0);
+        assertTrue(listener == receiver.getMessageListener());
+        module.verifyQueueConnectionStarted();
+        assertTrue(queueConnection.isStarted());
+    }
+    
+    public void testRegisterTopicMessageListener() throws Exception
+    {
+        DestinationManager manager = mockFactory.getDestinationManager();
+        manager.createTopic("topic");
+        TestMessageListener listener = new TestMessageListener(true);
+        module.registerTestMessageListenerForTopic("topic", listener);
+        TopicConnection currentTopicConnection = module.getCurrentTopicConnection();
+        assertFalse(currentTopicConnection == topicConnection);
+        TopicTransmissionManager transManager = module.getTopicTransmissionManager(0);
+        TopicSubscriber subscriber = transManager.getTopicSubscriber(0);
+        assertTrue(listener == subscriber.getMessageListener());
+        module.verifyTopicConnectionStarted();
+        module.registerTestMessageListenerForTopic((MockTopicConnection)currentTopicConnection, "topic", listener);
+        module.verifyNumberTopicSessions(2);
+        transManager = module.getTopicTransmissionManager(1);
+        subscriber = transManager.getTopicSubscriber(0);
+        assertTrue(listener == subscriber.getMessageListener());
+        module.verifyTopicConnectionStarted();
+        assertFalse(topicConnection.isStarted());
+        module.registerTestMessageListenerForTopic(topicConnection, "topic", listener);
+        module.verifyNumberTopicSessions(2);
+        module.setCurrentTopicConnectionIndex(0);
+        module.verifyNumberTopicSessions(1);
+        transManager = module.getTopicTransmissionManager(0);
+        subscriber = transManager.getTopicSubscriber(0);
+        assertTrue(listener == subscriber.getMessageListener());
     }
     
     public void testGetQueue() throws Exception
