@@ -14,11 +14,14 @@ import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.TemporaryQueue;
 
+import com.mockrunner.jms.QueueTransmissionManager;
+
 /**
  * Mock implementation of JMS <code>QueueSession</code>.
  */
 public class MockQueueSession extends MockSession implements QueueSession
 {
+    private QueueTransmissionManager queueTransManager;
     private List tempQueues;
     
     public MockQueueSession(MockQueueConnection connection)
@@ -26,10 +29,20 @@ public class MockQueueSession extends MockSession implements QueueSession
         this(connection, false, Session.AUTO_ACKNOWLEDGE);
     }
     
-    public MockQueueSession(MockConnection connection, boolean transacted, int acknowledgeMode)
+    public MockQueueSession(MockQueueConnection connection, boolean transacted, int acknowledgeMode)
     {
         super(connection, transacted, acknowledgeMode);
+        queueTransManager = new QueueTransmissionManager(connection);
         tempQueues = new ArrayList();
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.jms.QueueTransmissionManager}.
+     * @return the {@link com.mockrunner.jms.QueueTransmissionManager}
+     */
+    public QueueTransmissionManager getQueueTransmissionManager()
+    {
+        return queueTransManager;
     }
     
     /**
@@ -89,7 +102,7 @@ public class MockQueueSession extends MockSession implements QueueSession
             throw new InvalidDestinationException("queue must be an instance of MockQueue");
         }
         addSessionToQueue(queue);
-        return getTransmissionManager().createQueueReceiver((MockQueue)queue, messageSelector);
+        return queueTransManager.createQueueReceiver((MockQueue)queue, messageSelector);
     }
 
     public QueueSender createSender(Queue queue) throws JMSException
@@ -100,7 +113,7 @@ public class MockQueueSession extends MockSession implements QueueSession
             throw new InvalidDestinationException("queue must be an instance of MockQueue");
         }
         addSessionToQueue(queue);
-        return getTransmissionManager().createQueueSender((MockQueue)queue);
+        return queueTransManager.createQueueSender((MockQueue)queue);
     }
 
     public QueueBrowser createBrowser(Queue queue) throws JMSException
@@ -117,7 +130,13 @@ public class MockQueueSession extends MockSession implements QueueSession
             throw new InvalidDestinationException("queue must be an instance of MockQueue");
         }
         addSessionToQueue(queue);
-        return getTransmissionManager().createQueueBrowser((MockQueue)queue, messageSelector);
+        return queueTransManager.createQueueBrowser((MockQueue)queue, messageSelector);
+    }
+    
+    public void close() throws JMSException
+    {
+        queueTransManager.closeAll();
+        super.close();
     }
 
     private void addSessionToQueue(Queue queue)

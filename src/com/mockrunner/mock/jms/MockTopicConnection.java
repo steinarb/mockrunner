@@ -33,8 +33,8 @@ public class MockTopicConnection extends MockConnection implements TopicConnecti
     }
     
     /**
-     * Returns the {com.mockrunner.jms.QueueManager}.
-     * @return the {com.mockrunner.jms.QueueManager}
+     * Returns the {@link com.mockrunner.jms.QueueManager}.
+     * @return the {@link com.mockrunner.jms.QueueManager}
      */
     public TopicManager getTopicManager()
     {

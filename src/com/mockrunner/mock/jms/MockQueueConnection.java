@@ -33,8 +33,8 @@ public class MockQueueConnection extends MockConnection implements QueueConnecti
     }
     
     /**
-     * Returns the {com.mockrunner.jms.QueueManager}.
-     * @return the {com.mockrunner.jms.QueueManager}
+     * Returns the {@link com.mockrunner.jms.QueueManager}.
+     * @return the {@link com.mockrunner.jms.QueueManager}
      */
     public QueueManager getQueueManager()
     {

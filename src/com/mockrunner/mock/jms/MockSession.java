@@ -13,7 +13,6 @@ import javax.jms.StreamMessage;
 import javax.jms.TextMessage;
 
 import com.mockrunner.jms.MessageManager;
-import com.mockrunner.jms.TransmissionManager;
 
 /**
  * Mock implementation of JMS <code>Session</code>.
@@ -22,7 +21,6 @@ public class MockSession implements Session
 {
     private MockConnection connection;
     private MessageManager messageManager;
-    private TransmissionManager transmissionManager;
     private MessageListener messageListener;
     private boolean transacted;
     private int acknowledgeMode;
@@ -37,7 +35,6 @@ public class MockSession implements Session
         this.transacted = transacted;
         this.acknowledgeMode = acknowledgeMode;
         messageManager = new MessageManager();
-        transmissionManager = new TransmissionManager(connection);
         messageListener = null;
         committed = false;
         rolledback = false;
@@ -52,15 +49,6 @@ public class MockSession implements Session
     public MessageManager getMessageManager()
     {
         return messageManager;
-    }
-    
-    /**
-     * Returns the {@link TransmissionManager} for this session.
-     * @return the {@link TransmissionManager}
-     */
-    public TransmissionManager getTransmissionManager()
-    {
-        return transmissionManager;
     }
     
     /**
@@ -195,7 +183,6 @@ public class MockSession implements Session
     public void close() throws JMSException
     {
         connection.throwJMSException();
-        getTransmissionManager().closeAll();
         if(getTransacted() && !isCommitted())
         {
             rollback();

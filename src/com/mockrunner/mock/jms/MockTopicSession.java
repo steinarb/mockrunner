@@ -13,11 +13,14 @@ import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 import javax.jms.TopicSubscriber;
 
+import com.mockrunner.jms.TopicTransmissionManager;
+
 /**
  * Mock implementation of JMS <code>TopicSession</code>.
  */
 public class MockTopicSession extends MockSession implements TopicSession
 {
+    private TopicTransmissionManager topicTransManager;
     private List tempTopics;
     
     public MockTopicSession(MockTopicConnection connection)
@@ -25,10 +28,20 @@ public class MockTopicSession extends MockSession implements TopicSession
         this(connection, false, Session.AUTO_ACKNOWLEDGE);
     }
     
-    public MockTopicSession(MockConnection connection, boolean transacted, int acknowledgeMode)
+    public MockTopicSession(MockTopicConnection connection, boolean transacted, int acknowledgeMode)
     {
         super(connection, transacted, acknowledgeMode);
+        topicTransManager = new TopicTransmissionManager(connection);
         tempTopics = new ArrayList();
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.jms.TopicTransmissionManager}.
+     * @return the {@link com.mockrunner.jms.TopicTransmissionManager}
+     */
+    public TopicTransmissionManager getTopicTransmissionManager()
+    {
+        return topicTransManager;
     }
     
     /**
@@ -82,7 +95,7 @@ public class MockTopicSession extends MockSession implements TopicSession
             throw new InvalidDestinationException("topic must be an instance of MockTopic");
         }
         addSessionToTopic(topic);
-        return getTransmissionManager().createTopicPublisher((MockTopic)topic);
+        return topicTransManager.createTopicPublisher((MockTopic)topic);
     }
 
     public TopicSubscriber createSubscriber(Topic topic) throws JMSException
@@ -99,7 +112,7 @@ public class MockTopicSession extends MockSession implements TopicSession
             throw new InvalidDestinationException("topic must be an instance of MockTopic");
         }
         addSessionToTopic(topic);
-        return getTransmissionManager().createTopicSubscriber((MockTopic)topic, messageSelector, noLocal);
+        return topicTransManager.createTopicSubscriber((MockTopic)topic, messageSelector, noLocal);
     }
 
     public TopicSubscriber createDurableSubscriber(Topic topic, String name) throws JMSException
@@ -116,13 +129,19 @@ public class MockTopicSession extends MockSession implements TopicSession
             throw new InvalidDestinationException("topic must be an instance of MockTopic");
         }
         addSessionToTopic(topic);
-        return getTransmissionManager().createDurableTopicSubscriber((MockTopic)topic, name, messageSelector, noLocal);
+        return topicTransManager.createDurableTopicSubscriber((MockTopic)topic, name, messageSelector, noLocal);
     }
  
     public void unsubscribe(String name) throws JMSException
     {
         getConnection().throwJMSException();
-        getTransmissionManager().removeTopicDurableSubscriber(name);
+        topicTransManager.removeTopicDurableSubscriber(name);
+    }
+    
+    public void close() throws JMSException
+    {
+        topicTransManager.closeAll();
+        super.close();
     }
     
     private void addSessionToTopic(Topic topic)
