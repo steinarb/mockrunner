@@ -55,7 +55,7 @@
 		
 	<target name="compile" depends="init">	
 		<mkdir dir="${build}"/>
-		<javac srcdir="${src}" destdir="${build}" executable="${java1.4.home}/bin/javac" fork="true" nowarn="true">
+		<javac srcdir="${src}" destdir="${build}" executable="${java1.4.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
 		 	<classpath>
                 <pathelement location="${build}"/>
 	            <path refid="classpath.jar"/>
@@ -65,7 +65,7 @@
 	
 	<target name="compile1.3" depends="init">	
 		<mkdir dir="${build1.3}"/>
-		<javac destdir="${build1.3}" target="1.2" executable="${java1.3.home}/bin/javac" fork="true" nowarn="true">
+		<javac destdir="${build1.3}" target="1.2" executable="${java1.3.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
 		 	<classpath>
                 <pathelement location="${build1.3}"/>
 	            <path refid="classpath.jar"/>
