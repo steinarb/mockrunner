@@ -1,5 +1,5 @@
 /* ====================================================================
- * Mockrunner Software License, Version 1.1
+ * Mockrunner License, Version 1.1
  * based on Apache Software License, version 1.1.
  *
  * Copyright (c) 2003 Alwin Ibba.  All rights reserved.
