@@ -541,6 +541,18 @@ public class MockTopicSessionTest extends TestCase
         assertEquals(7, listener.getMessageList().size());
     }
     
+    public void testTransmissionWithNullDestination() throws Exception
+    {
+        MockTopicSession session = (MockTopicSession)connection.createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);
+        DestinationManager manager = connection.getDestinationManager();
+        MockTopic topic = (MockTopic)manager.createTopic("Topic");
+        TopicPublisher publisher = session.createPublisher(null);
+        MockTextMessage message = new MockTextMessage("Text");
+        publisher.publish(topic, message);
+        assertEquals(1, topic.getReceivedMessageList().size());
+        assertEquals(1, topic.getCurrentMessageList().size());
+    }
+    
     public static class TestListMessageListener implements MessageListener
     {
         private List messages = new ArrayList();
