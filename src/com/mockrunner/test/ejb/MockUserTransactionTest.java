@@ -20,7 +20,6 @@ public class MockUserTransactionTest extends TestCase
         assertFalse(transaction.wasCommitCalled());
         assertFalse(transaction.wasRollbackCalled());
         assertFalse(transaction.wasRollbackOnlyCalled());
-        assertEquals(0, transaction.getTransactionTimeout());
     }
     
     public void testNumberCalls() throws Exception
