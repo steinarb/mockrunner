@@ -8,7 +8,6 @@ import org.apache.tools.ant.Task;
 /* 
  * Very simple ant task for the JarAnalyzer
  * http://www.kirkk.com/wiki/wiki.php/Main/JarAnalyzer
- * by Kirk Knoernschild
  */
 public class JarAnalyzerTask extends Task
 {
