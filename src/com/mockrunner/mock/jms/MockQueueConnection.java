@@ -34,7 +34,7 @@ public class MockQueueConnection implements QueueConnection
     
     public MockQueueConnection()
     {
-        destinationManager = new DestinationManager();
+        destinationManager = new DestinationManager(this);
         metaData = new MockConnectionMetaData();
         started = false;
         closed = false;

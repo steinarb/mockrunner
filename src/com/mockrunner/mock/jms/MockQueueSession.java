@@ -60,25 +60,30 @@ public class MockQueueSession implements QueueSession
         return connection.getDestinationManager().createTemporaryQueue();
     }
 
-    public QueueReceiver createReceiver(Queue arg0) throws JMSException
+    public QueueReceiver createReceiver(Queue queue) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return createReceiver(queue, null);
     }
 
-    public QueueReceiver createReceiver(Queue arg0, String arg1) throws JMSException
+    public QueueReceiver createReceiver(Queue queue, String messageSelector) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        if(!(queue instanceof MockQueue))
+        {
+            throw new JMSException("queue must be an instance of MockQueue");
+        }
+        return connection.getDestinationManager().createQueueReceiver((MockQueue)queue);
     }
 
-    public QueueSender createSender(Queue arg0) throws JMSException
+    public QueueSender createSender(Queue queue) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        if(!(queue instanceof MockQueue))
+        {
+            throw new JMSException("queue must be an instance of MockQueue");
+        }
+        return connection.getDestinationManager().createQueueSender((MockQueue)queue);
     }
 
     public QueueBrowser createBrowser(Queue arg0) throws JMSException
