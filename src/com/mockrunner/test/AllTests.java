@@ -7,6 +7,7 @@ import com.mockrunner.example.ejb.LogActionTest;
 import com.mockrunner.example.ejb.PaySessionTest;
 import com.mockrunner.example.jdbc.BankTest;
 import com.mockrunner.example.jdbc.BookstoreTest;
+import com.mockrunner.example.jdbc.OrderDBTest;
 import com.mockrunner.example.jdbc.PayActionTest;
 import com.mockrunner.example.jms.PrintMessageServletTest;
 import com.mockrunner.example.jms.PrintSessionBeanTest;
@@ -60,6 +61,7 @@ public class AllTests
         suite.addTest(new TestSuite(BankTest.class));
         suite.addTest(new TestSuite(PayActionTest.class));
         suite.addTest(new TestSuite(BookstoreTest.class));
+        suite.addTest(new TestSuite(OrderDBTest.class));
         suite.addTest(new TestSuite(LogActionTest.class));
         suite.addTest(new TestSuite(PaySessionTest.class));
         suite.addTest(new TestSuite(PrintMessageServletTest.class));
