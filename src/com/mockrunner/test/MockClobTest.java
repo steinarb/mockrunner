@@ -1,5 +1,11 @@
 package com.mockrunner.test;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Arrays;
+
 import com.mockrunner.mock.jdbc.MockClob;
 
 import junit.framework.TestCase;
@@ -20,6 +26,15 @@ public class MockClobTest extends TestCase
         assertEquals("This is a Test Clob", clob.getSubString(1, 19));
         assertEquals("Th", clob.getSubString(1, 2));
         assertEquals("C", clob.getSubString(16, 1));
+        Reader reader = clob.getCharacterStream();
+        char[] charData = new char[19];
+        reader.read(charData);
+        String readString = new String(charData);
+        assertEquals("This is a Test Clob", readString);
+        InputStream stream = clob.getAsciiStream();
+        byte[] byteData = new byte[19];
+        stream.read(byteData);
+        assertTrue(Arrays.equals("This is a Test Clob".getBytes(), byteData));
     }
     
     public void testPosition() throws Exception
@@ -40,5 +55,15 @@ public class MockClobTest extends TestCase
         assertEquals("This is a Test Mock Clob", clob.getSubString(1, 24));
         clob.setString(1, "XYZ This", 4, 4);
         assertEquals("This is a Test Mock Clob", clob.getSubString(1, 24));
+        OutputStream stream = clob.setAsciiStream(1);
+        stream.write(new byte[] {65, 66, 67, 68});
+        assertEquals("ABCD is a Test Mock Clob", clob.getSubString(1, 24));
+        Writer writer = clob.setCharacterStream(5);
+        writer.write("FFG");
+        stream.write(69);
+        assertEquals("ABCDEFG a Test Mock Clob", clob.getSubString(1, 24));
+        writer = clob.setCharacterStream(1);
+        writer.write("This is a Test ClobThis is a Test Clob");
+        assertEquals("This is a Test ClobThis is a Test Clob", clob.getSubString(1, 38));
     }
 }
