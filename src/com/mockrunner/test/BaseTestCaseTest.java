@@ -68,6 +68,5 @@ public class BaseTestCaseTest extends BaseTestCase
         {
             return false;
         }
-
     }
 }

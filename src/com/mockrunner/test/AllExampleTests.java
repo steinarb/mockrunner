@@ -51,7 +51,7 @@ public class AllExampleTests
         suite.addTest(new TestSuite(PrintMessageServletTest.class));
         suite.addTest(new TestSuite(StockQuotePublisherTest.class));
         suite.addTest(new TestSuite(PrintSessionBeanTest.class));
-		suite.addTest(new TestSuite(NewsSubscriberTest.class));
+        suite.addTest(new TestSuite(NewsSubscriberTest.class));
         //$JUnit-END$
         return suite;
     }
