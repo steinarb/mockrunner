@@ -181,7 +181,7 @@ jaranalyzer-0.9.3.jar
 
 regexp 1.3
 http://jakarta.apache.org/regexp
-jakarta-regexp-1.3.jar (from JarAnalyzer 0.92 release)
+jakarta-regexp-1.3.jar (from JarAnalyzer 0.9.3 release)
 
 IMPORTANT NOTE: In order to fix problems with JUnits TestCaseClassLoader, all
 Mockrunner jar files contain an excluded.properties file including all org.apache,
