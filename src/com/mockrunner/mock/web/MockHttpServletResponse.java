@@ -1,6 +1,7 @@
 package com.mockrunner.mock.web;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,6 +21,7 @@ public class MockHttpServletResponse implements HttpServletResponse
     private PrintWriter writer;
     private MockServletOutputStream outputStream;
     private Map headers;
+    private Locale locale;
     
     public MockHttpServletResponse()
     {
@@ -165,9 +167,13 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public Locale getLocale()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return locale;
     }
+    
+	public void setLocale(Locale locale)
+	{
+		this.locale = locale;
+	}
     
     public boolean isCommitted()
     {
@@ -199,12 +205,6 @@ public class MockHttpServletResponse implements HttpServletResponse
     }
 
     public void setContentType(String arg0)
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void setLocale(Locale arg0)
     {
         // TODO Auto-generated method stub
 
