@@ -115,9 +115,13 @@ ORO (from Struts 1.1 release):
 http://jakarta.apache.org/oro
 jakarta-oro.jar
 
-MockEJB 0.5:
+MockEJB 0.6 beta1:
 http://mockejb.sourceforge.net
 mockejb.jar
+
+cglib (from MockEJB 0.6 beta1 release):
+http://cglib.sourceforge.net
+cglib-full-2.0-RC2.jar
 
 JDOM Beta 10:
 http://www.jdom.org
