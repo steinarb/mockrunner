@@ -44,9 +44,9 @@ public class XMLUISummary implements Summary {
         outputAll(jarBundle, destFile);
     }
 
-	private File getFile() throws IOException {
-		try {
-			InputStreamReader streamReader = new InputStreamReader(System.in);
+    private File getFile() throws IOException {
+	    try {
+		    InputStreamReader streamReader = new InputStreamReader(System.in);
 			BufferedReader reader = new BufferedReader(streamReader);
 			String fileName = reader.readLine();
 			File file = new File(fileName);
