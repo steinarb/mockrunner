@@ -45,7 +45,7 @@ public class PrintSessionBean implements SessionBean
             InitialContext initialContext = new InitialContext();
             QueueConnectionFactory queueFactory = (QueueConnectionFactory)initialContext.lookup("java:/ConnectionFactory");
             queueConnection = queueFactory.createQueueConnection();
-            queueSession = queueConnection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
+            queueSession = queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
             Queue queue = (Queue)initialContext.lookup("queue/testQueue");
             TextMessage message = queueSession.createTextMessage(customerId);
             queueSender = queueSession.createSender(queue);
