@@ -29,6 +29,7 @@ public abstract class AbstractResultSetHandler
     private int globalUpdateCount = 0;
     private Map updateCountForStatement = new HashMap();
     private Map returnsResultSetMap = new HashMap();
+    private Set throwsSQLException = new HashSet();
     private Set executedStatements = new HashSet();
     
     /**
@@ -120,6 +121,14 @@ public abstract class AbstractResultSetHandler
     public void clearReturnsResultSet()
     {
         returnsResultSetMap.clear();
+    }
+    
+    /**
+     * Clears the list of statements that should throw an exception.
+     */
+    public void clearThrowsSQLException()
+    {
+        throwsSQLException.clear();
     }
     
     /**
@@ -226,6 +235,19 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
+     * Returns if the specified SQL string should raise an exception.
+     * This can be used to simulate database exceptions.
+     * @param sql the SQL string
+     * @return <code>true</code> if the specified SQL string should raise an exception,
+     *         <code>false</code> otherwise
+     */
+    public boolean getThrowsSQLException(String sql)
+    {
+        if(SearchUtil.contains(throwsSQLException, sql, getCaseSensitive(), getExactMatch(), true)) return true;
+        return false;
+    }
+    
+    /**
      * Prepare a <code>ResultSet</code> for a specified SQL string.
      * @param sql the SQL string
      * @param resultSet the corresponding {@link MockResultSet}
@@ -281,6 +303,16 @@ public abstract class AbstractResultSetHandler
     public void prepareReturnsResultSet(String sql, boolean returnsResultSet)
     {
         returnsResultSetMap.put(sql, new Boolean(returnsResultSet));
+    }
+    
+    /**
+     * Prepare if the specified SQL string should raise an exception.
+     * This can be used to simulate database exceptions.
+     * @param sql the SQL string
+     */
+    public void prepareThrowsSQLException(String sql)
+    {
+        throwsSQLException.add(sql);
     }
     
     /**

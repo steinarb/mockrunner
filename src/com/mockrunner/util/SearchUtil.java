@@ -69,14 +69,29 @@ public class SearchUtil
      * @param query the query string that must match the keys in <i>col</i>
      * @param caseSensitive is comparison case sensitive
      * @param exactMatch compare exactly
+     * @param queryContainsSetData only matters if <i>exactMatch</i> is <code>false</code>,
+     *        specifies if query must be contained in the <code>Set</code> (<code>false</code>)
+     *        or if query must contain the <code>Set</code> (<code>true</code>)
      * @return <code>true</code> if <i>col</i> contains <i>query</i>, false otherwise
      */
-    public static boolean contains(Collection col, String query, boolean caseSensitive, boolean exactMatch)
+    public static boolean contains(Collection col, String query, boolean caseSensitive, boolean exactMatch, boolean queryContainsSetData)
     {
         Iterator iterator = col.iterator();
         while(iterator.hasNext())
         {
-            if(doesStringMatch((String)iterator.next(), query, caseSensitive, exactMatch)) return true;
+            String nextKey = (String)iterator.next();
+            String source, currentQuery;
+            if(queryContainsSetData)
+            {
+                source = query;
+                currentQuery = nextKey;
+            }
+            else
+            {
+                source = nextKey;
+                currentQuery = query;
+            }
+            if(doesStringMatch(source, currentQuery, caseSensitive, exactMatch)) return true;
         }
         return false;
     }
