@@ -1,5 +1,6 @@
 package com.mockrunner.jdbc;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -8,6 +9,8 @@ import java.util.Map;
 
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
+import com.mockrunner.mock.jdbc.CallableStatementResultSetHandler;
+import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
@@ -81,6 +84,20 @@ public class JDBCTestModule
     public PreparedStatementResultSetHandler getPreparedStatementResultSetHandler()
     {
         return mockFactory.getMockConnection().getPreparedStatementResultSetHandler();
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.mock.jdbc.CallableStatementResultSetHandler}.
+     * The {@link com.mockrunner.mock.jdbc.CallableStatementResultSetHandler}
+     * contains methods that can be used to specify the 
+     * {@link com.mockrunner.mock.jdbc.MockResultSet} objects
+     * and update counts that a {@link com.mockrunner.mock.jdbc.MockCallableStatement} 
+     * should return when executing an SQL statement.
+     * @return the {@link com.mockrunner.mock.jdbc.CallableStatementResultSetHandler}
+     */
+    public CallableStatementResultSetHandler getCallableStatementResultSetHandler()
+    {
+        return mockFactory.getMockConnection().getCallableStatementResultSetHandler();
     }
     
     /**
@@ -163,6 +180,65 @@ public class JDBCTestModule
     }
     
     /**
+     * Returns a {@link com.mockrunner.mock.jdbc.MockCallableStatement} that was 
+     * created using a {@link com.mockrunner.mock.jdbc.MockConnection} by its index.
+     * @param index the index of the <code>CallableStatement</code>
+     * @return the <code>CallableStatement</code> or <code>null</code>, if there is no such
+     *         <code>CallableStatement</code>
+     */
+    public MockCallableStatement getCallableStatement(int index)
+    {
+        List statements = getCallableStatements();
+        if(index < statements.size()) return (MockCallableStatement)statements.get(index);
+        return null;
+    }
+    
+    /**
+     * Returns a {@link com.mockrunner.mock.jdbc.MockCallableStatement} that was 
+     * created using a {@link com.mockrunner.mock.jdbc.MockConnection} by its SQL statement
+     * (the stored procedure name).
+     * If there are more than one {@link com.mockrunner.mock.jdbc.MockCallableStatement}
+     * objects with the specified SQL, the first one will be returned.
+     * Please note that you can modify the search parameters with 
+     * {@link #setCaseSensitive} and {@link #setExactMatch}.
+     * @param sql the SQL statement used to create the <code>CallableStatement</code>
+     * @return the <code>CallableStatement</code> or <code>null</code>, if there is no macth
+     */
+    public MockCallableStatement getCallableStatement(String sql)
+    {
+        List list = getCallableStatements(sql);
+        if(null != list && list.size() > 0)
+        {
+            return (MockCallableStatement)list.get(0);
+        }
+        return null;
+    }
+    
+    /**
+     * Returns all {@link com.mockrunner.mock.jdbc.MockCallableStatement}.
+     * @return the <code>List</code> of <code>CallableStatement</code> objects
+     */
+    public List getCallableStatements()
+    {
+        return mockFactory.getMockConnection().getCallableStatementResultSetHandler().getCallableStatements();
+    }
+    
+    /**
+     * Returns all {@link com.mockrunner.mock.jdbc.MockCallableStatement} with
+     * the specified SQL statement (name of the stored procedure) as a <code>List</code>. 
+     * If there are no matches, an empty <code>List</code> will be returned. 
+     * Please note that you can modify the search parameters with {@link #setCaseSensitive} 
+     * and {@link #setExactMatch}.
+     * @param sql the SQL statement used to create the <code>CallableStatement</code>
+     * @return the <code>List</code> of <code>CallableStatement</code> objects
+     */
+    public List getCallableStatements(String sql)
+    {
+        Map sqlStatements = mockFactory.getMockConnection().getCallableStatementResultSetHandler().getCallableStatementMap();
+        return SearchUtil.getMatchingObjects(sqlStatements, sql, caseSensitive, exactMatch, false); 
+    }
+    
+    /**
      * Returns a parameter that was added to a <code>PreparedStatement</code>
      * using its <code>set</code> methods.
      * @param statement the <code>PreparedStatement</code>
@@ -198,6 +274,82 @@ public class JDBCTestModule
     public Object getPreparedStatementParameter(int indexOfStatement, int indexOfParameter)
     {
         return getPreparedStatementParameter(getPreparedStatement(indexOfStatement), indexOfParameter);
+    }
+    
+    /**
+     * Returns a parameter that was added to a <code>CallableStatement</code>
+     * using its <code>set</code> methods.
+     * @param statement the <code>CallableStatement</code>
+     * @param indexOfParameter the index used to set the parameter
+     * @return the corresponding object
+     */
+    public Object getCallableStatementParameter(CallableStatement statement, int indexOfParameter)
+    {
+        if(null == statement) return null;
+        return ((MockCallableStatement)statement).getParameter(indexOfParameter);
+    }
+
+    /**
+     * Returns a parameter that was added to a <code>CallableStatement</code>
+     * using its <code>set</code> methods. Uses the first <code>CallableStatement</code>
+     * with the specified SQL statement.
+     * @param sql the SQL statement
+     * @param indexOfParameter the index used to set the object
+     * @return the corresponding object
+     */
+    public Object getCallableStatementParameter(String sql, int indexOfParameter)
+    {
+        return getCallableStatementParameter(getCallableStatement(sql), indexOfParameter);
+    }
+
+    /**
+     * Returns an object that was added to a <code>CallableStatement</code>
+     * using its <code>set</code> methods.
+     * @param indexOfStatement the index of the statement
+     * @param indexOfParameter the index used to set the object
+     * @return the corresponding object
+     */
+    public Object getCallableStatementParameter(int indexOfStatement, int indexOfParameter)
+    {
+        return getCallableStatementParameter(getCallableStatement(indexOfStatement), indexOfParameter);
+    }
+    
+    /**
+     * Returns a parameter that was added to a <code>CallableStatement</code>
+     * using its <code>set</code> methods.
+     * @param statement the <code>CallableStatement</code>
+     * @param indexOfParameter the index used to set the parameter
+     * @return the corresponding object
+     */
+    public Object getCallableStatementParameter(CallableStatement statement, String nameOfParameter)
+    {
+        if(null == statement) return null;
+        return ((MockCallableStatement)statement).getParameter(nameOfParameter);
+    }
+
+    /**
+     * Returns a parameter that was added to a <code>CallableStatement</code>
+     * using its <code>set</code> methods. Uses the first <code>CallableStatement</code>
+     * with the specified SQL statement.
+     * @param sql the SQL statement
+     * @param indexOfParameter the index used to set the object
+     * @return the corresponding object
+     */
+    public Object getCallableStatementParameter(String sql, String nameOfParameter)
+    {
+        return getCallableStatementParameter(getCallableStatement(sql), nameOfParameter);
+    }
+
+    /**
+     * Returns an object that was added to a <code>CallableStatement</code>
+     * using its <code>set</code> methods.
+     * @param indexOfStatement the index of the statement
+     * @param indexOfParameter the index used to set the object
+     * @return the corresponding object
+     */
+    public Object getCallableStatementParameter(int indexOfStatement, String nameOfParameter)
+    {
+        return getCallableStatementParameter(getCallableStatement(indexOfStatement), nameOfParameter);
     }
     
     /**
@@ -271,7 +423,8 @@ public class JDBCTestModule
     }
     
     /**
-     * Verifies that all statements and all prepared statements are closed.
+     * Verifies that all statements, all prepared statements and
+     * all callable statements are closed.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyAllStatementsClosed()
@@ -292,6 +445,15 @@ public class JDBCTestModule
             if(!statement.isClosed())
             {
                 throw new VerifyFailedException("Prepared statement with index " + ii + " (SQL " + statement.getSQL() + ") not closed.");
+            }
+        }
+        statements = getCallableStatements();
+        for(int ii = 0; ii < statements.size(); ii++)
+        {
+            MockPreparedStatement statement = (MockCallableStatement)statements.get(ii);
+            if(!statement.isClosed())
+            {
+                throw new VerifyFailedException("Callable statement with index " + ii + " (SQL " + statement.getSQL() + ") not closed.");
             }
         }
     }
@@ -392,6 +554,28 @@ public class JDBCTestModule
         verifyNumberStatements(number, getPreparedStatements(sql));
     }
     
+    /**
+     * Verifies the number of callable statements.
+     * @param number the expected number
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberCallableStatements(int number)
+    {
+        verifyNumberStatements(number, getCallableStatements());
+    }
+
+    /**
+     * Verifies the number of callable statements with the specified
+     * SQL.
+     * @param number the expected number
+     * @param sql the SQL
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberCallableStatements(int number, String sql)
+    {
+        verifyNumberStatements(number, getCallableStatements(sql));
+    }
+    
     private void verifyNumberStatements(int number, List statements)
     {
         if(null == statements || statements.size() == 0)
@@ -460,6 +644,42 @@ public class JDBCTestModule
     }
     
     /**
+     * Verifies that a callable statement is closed.
+     * @param index the index of the callable statement
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementClosed(int index)
+    {
+        MockCallableStatement statement = getCallableStatement(index);
+        if(null == statement)
+        {
+            throw new VerifyFailedException("No callable statement with index " + index + " present.");
+        }
+        if(!statement.isClosed())
+        {
+            throw new VerifyFailedException("Callable statement with index " + index + " not closed.");
+        }
+    }
+
+    /**
+     * Verifies that a callable statement is closed.
+     * @param sql the SQL statement
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementClosed(String sql)
+    {
+        MockCallableStatement statement = getCallableStatement(sql);
+        if(null == statement)
+        {
+            throw new VerifyFailedException("No callable statement with SQL " + sql + " present.");
+        }
+        if(!statement.isClosed())
+        {
+            throw new VerifyFailedException("Callable statement with SQL " + sql + " not closed.");
+        }
+    }
+    
+    /**
      * Verifies that a <code>PreparedStatement</code> with the specified 
      * SQL statement is present.
      * @param sql the SQL statement
@@ -488,17 +708,45 @@ public class JDBCTestModule
     }
     
     /**
+     * Verifies that a <code>CallableStatement</code> with the specified 
+     * SQL statement is present.
+     * @param sql the SQL statement
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementPresent(String sql)
+    {
+        if(null == getCallableStatement(sql))
+        {
+            throw new VerifyFailedException("Callable statement with SQL " +  sql + " present.");
+        }
+    }
+    
+    /**
+     * Verifies that a <code>CallableStatement</code> with the specified 
+     * SQL statement is not present.
+     * @param sql the SQL statement
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementNotPresent(String sql)
+    {
+        if(null != getCallableStatement(sql) )
+        {
+            throw new VerifyFailedException("Callable statement with SQL " +  sql + " not present.");
+        }
+    }
+    
+    /**
      * Verifies that a parameter was added to a <code>PreparedStatement</code> with
      * the specified index.
      * @param statement the <code>PreparedStatement</code>
-     * @param indexOfObject the index used to set the object
+     * @param indexOfParameter the index used to set the object
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyPreparedStatementParameterPresent(PreparedStatement statement, int indexOfObject)
+    public void verifyPreparedStatementParameterPresent(PreparedStatement statement, int indexOfParameter)
     {
-        if(null == getPreparedStatementParameter(statement, indexOfObject))
+        if(null == getPreparedStatementParameter(statement, indexOfParameter))
         {
-            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfObject + " not present.");
+            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " not present.");
         }
     }
 
@@ -534,7 +782,7 @@ public class JDBCTestModule
     }
     
     /**
-     * erifies that a parameter with the specified index is not present.
+     * Verifies that a parameter with the specified index is not present.
      * @param statement the <code>PreparedStatement</code>
      * @param indexOfParameter the index used to set the object
      * @throws VerifyFailedException if verification fails
@@ -573,6 +821,184 @@ public class JDBCTestModule
         if(null != getPreparedStatementParameter(indexOfStatement, indexOfParameter))
         {
             throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " present.");
+        }
+    }
+    
+    /**
+     * Verifies that a parameter was added to a <code>CallableStatement</code> with
+     * the specified index.
+     * @param statement the <code>CallableStatement</code>
+     * @param indexOfObject the index used to set the object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameterPresent(CallableStatement statement, int indexOfParameter)
+    {
+        if(null == getCallableStatementParameter(statement, indexOfParameter))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " not present.");
+        }
+    }
+
+    /**
+     * Verifies that a parameter was added to a <code>CallableStatement</code> with
+     * the specified index. Uses the first <code>CallableStatement</code> with
+     * the specified SQL.
+     * @param sql the SQL statement of the <code>CallableStatement</code>
+     * @param indexOfParameter the index used to set the object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameterPresent(String sql, int indexOfParameter)
+    {
+        if(null == getCallableStatementParameter(sql, indexOfParameter))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " not present.");
+        }
+    }
+    
+    /**
+     * Verifies that a parameter was added to a <code>CallableStatement</code> with
+     * the specified index.
+     * @param indexOfStatement the index of the statement
+     * @param indexOfParameter the index used to set the object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameterPresent(int indexOfStatement, int indexOfParameter)
+    {
+        if(null == getCallableStatementParameter(indexOfStatement, indexOfParameter))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " not present.");
+        }
+    }
+    
+    /**
+     * Verifies that a parameter with the specified index is not present.
+     * @param statement the <code>CallableStatement</code>
+     * @param indexOfParameter the index used to set the object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameterNotPresent(CallableStatement statement, int indexOfParameter)
+    {
+        if(null != getCallableStatementParameter(statement, indexOfParameter))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " present.");
+        }
+    }
+
+    /**
+     * Verifies that a parameter with the specified index is not present.
+     * Uses the first <code>CallableStatement</code> with the specified SQL.
+     * @param sql the SQL statement of the <code>CallableStatement</code>
+     * @param indexOfParameter the index used to set the object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameterNotPresent(String sql, int indexOfParameter)
+    {
+        if(null != getCallableStatementParameter(sql, indexOfParameter))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " present.");
+        }
+    }
+
+    /**
+     * Verifies that a parameter with the specified index is not present.
+     * @param indexOfStatement the index of the statement
+     * @param indexOfParameter the index used to set the object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameterNotPresent(int indexOfStatement, int indexOfParameter)
+    {
+        if(null != getCallableStatementParameter(indexOfStatement, indexOfParameter))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " present.");
+        }
+    }
+    
+    /**
+     * Verifies that a parameter was added to a <code>CallableStatement</code> with
+     * the specified index.
+     * @param statement the <code>CallableStatement</code>
+     * @param indexOfObject the index used to set the object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameterPresent(CallableStatement statement, String nameOfParameter)
+    {
+        if(null == getCallableStatementParameter(statement, nameOfParameter))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + nameOfParameter + " not present.");
+        }
+    }
+
+    /**
+     * Verifies that a parameter was added to a <code>CallableStatement</code> with
+     * the specified index. Uses the first <code>CallableStatement</code> with
+     * the specified SQL.
+     * @param sql the SQL statement of the <code>CallableStatement</code>
+     * @param indexOfParameter the index used to set the object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameterPresent(String sql, String nameOfParameter)
+    {
+        if(null == getCallableStatementParameter(sql, nameOfParameter))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + nameOfParameter + " not present.");
+        }
+    }
+    
+    /**
+     * Verifies that a parameter was added to a <code>CallableStatement</code> with
+     * the specified index.
+     * @param indexOfStatement the index of the statement
+     * @param indexOfParameter the index used to set the object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameterPresent(int indexOfStatement, String nameOfParameter)
+    {
+        if(null == getCallableStatementParameter(indexOfStatement, nameOfParameter))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + nameOfParameter + " not present.");
+        }
+    }
+    
+    /**
+     * Verifies that a parameter with the specified index is not present.
+     * @param statement the <code>CallableStatement</code>
+     * @param indexOfParameter the index used to set the object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameterNotPresent(CallableStatement statement, String nameOfParameter)
+    {
+        if(null != getCallableStatementParameter(statement, nameOfParameter))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + nameOfParameter + " present.");
+        }
+    }
+
+    /**
+     * Verifies that a parameter with the specified index is not present.
+     * Uses the first <code>CallableStatement</code> with the specified SQL.
+     * @param sql the SQL statement of the <code>CallableStatement</code>
+     * @param indexOfParameter the index used to set the object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameterNotPresent(String sql, String nameOfParameter)
+    {
+        if(null != getCallableStatementParameter(sql, nameOfParameter))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + nameOfParameter + " present.");
+        }
+    }
+
+    /**
+     * Verifies that a parameter with the specified index is not present.
+     * @param indexOfStatement the index of the statement
+     * @param indexOfParameter the index used to set the object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameterNotPresent(int indexOfStatement, String nameOfParameter)
+    {
+        if(null != getCallableStatementParameter(indexOfStatement, nameOfParameter))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + nameOfParameter + " present.");
         }
     }
     

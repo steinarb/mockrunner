@@ -1,9 +1,12 @@
 package com.mockrunner.jdbc;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.util.List;
 
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.mock.jdbc.CallableStatementResultSetHandler;
+import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
@@ -86,6 +89,14 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link JDBCTestModule#getCallableStatementResultSetHandler}
+     */
+    protected CallableStatementResultSetHandler getCallableStatementResultSetHandler()
+    {
+        return jdbcTestModule.getCallableStatementResultSetHandler();
+    }
+    
+    /**
      * Delegates to {@link JDBCTestModule#getStatement}
      */
     protected MockStatement getStatement(int index)
@@ -134,6 +145,38 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link JDBCTestModule#getCallableStatement(int)}
+     */
+    protected MockCallableStatement getCallableStatement(int index)
+    {
+        return jdbcTestModule.getCallableStatement(index);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getCallableStatement(String)}
+     */
+    protected MockCallableStatement getCallableStatement(String sql)
+    {
+        return jdbcTestModule.getCallableStatement(sql);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getCallableStatements()}
+     */
+    protected List getCallableStatements()
+    {
+        return jdbcTestModule.getCallableStatements();
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getCallableStatements(String)}
+     */
+    protected List getCallableStatements(String sql)
+    {
+        return jdbcTestModule.getCallableStatements(sql);
+    }
+    
+    /**
      * Delegates to {@link JDBCTestModule#getPreparedStatementParameter(PreparedStatement, int)}
      */
     protected Object getPreparedStatementParameter(PreparedStatement statement, int indexOfParameter)
@@ -155,6 +198,54 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     protected Object getPreparedStatementParameter(int indexOfStatement, int indexOfParameter)
     {
         return jdbcTestModule.getPreparedStatementParameter(indexOfStatement, indexOfParameter);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getCallableStatementParameter(CallableStatement, int)}
+     */
+    protected Object getCallableStatementParameter(CallableStatement statement, int indexOfParameter)
+    {
+        return jdbcTestModule.getCallableStatementParameter(statement, indexOfParameter);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#getCallableStatementParameter(String, int)}
+     */
+    protected Object getCallableStatementParameter(String sql, int indexOfParameter)
+    {
+        return jdbcTestModule.getCallableStatementParameter(sql, indexOfParameter);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#getCallableStatementParameter(CallableStatement, String)}
+     */
+    protected Object getCallableStatementParameter(CallableStatement statement, String nameOfParameter)
+    {
+        return jdbcTestModule.getCallableStatementParameter(statement, nameOfParameter);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#getCallableStatementParameter(String, String)}
+     */
+    protected Object getCallableStatementParameter(String sql, String nameOfParameter)
+    {
+        return jdbcTestModule.getCallableStatementParameter(sql, nameOfParameter);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#getCallableStatementParameter(int, String)}
+     */
+    protected Object getCallableStatementParameter(int indexOfStatement, String nameOfParameter)
+    {
+        return jdbcTestModule.getCallableStatementParameter(indexOfStatement, nameOfParameter);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#getCallableStatementParameter(int, int)}
+     */
+    protected Object getCallableStatementParameter(int indexOfStatement, int indexOfParameter)
+    {
+        return jdbcTestModule.getCallableStatementParameter(indexOfStatement, indexOfParameter);
     }
     
     /**
@@ -254,6 +345,22 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link JDBCTestModule#verifyNumberCallableStatements(int)}
+     */
+    protected void verifyNumberCallableStatements(int number)
+    {
+        jdbcTestModule.verifyNumberCallableStatements(number);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifyNumberCallableStatements(int, String)}
+     */
+    protected void verifyNumberCallableStatements(int number, String sql)
+    {
+        jdbcTestModule.verifyNumberCallableStatements(number, sql);
+    }
+    
+    /**
      * Delegates to {@link JDBCTestModule#verifyStatementClosed}
      */
     protected void verifyStatementClosed(int index)
@@ -278,6 +385,22 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link JDBCTestModule#verifyCallableStatementClosed(int)}
+     */
+    protected void verifyCallableStatementClosed(int index)
+    {
+        jdbcTestModule.verifyCallableStatementClosed(index);
+    }
+  
+    /**
+     * Delegates to {@link JDBCTestModule#verifyCallableStatementClosed(String)}
+     */
+    protected void verifyCallableStatementClosed(String sql)
+    {
+        jdbcTestModule.verifyCallableStatementClosed(sql);
+    }
+    
+    /**
      * Delegates to {@link JDBCTestModule#verifyPreparedStatementPresent}
      */
     protected void verifyPreparedStatementPresent(String sql)
@@ -291,6 +414,22 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     protected void verifyPreparedStatementNotPresent(String sql)
     {
         jdbcTestModule.verifyPreparedStatementNotPresent(sql);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyCallableStatementPresent}
+     */
+    protected void verifyCallableStatementPresent(String sql)
+    {
+        jdbcTestModule.verifyCallableStatementPresent(sql);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyCallableStatementNotPresent}
+     */   
+    protected void verifyCallableStatementNotPresent(String sql)
+    {
+        jdbcTestModule.verifyCallableStatementNotPresent(sql);
     }
     
     /**
@@ -339,6 +478,67 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     protected void verifyPreparedStatementParameterNotPresent(int indexOfStatement, int indexOfParameter)
     {
         jdbcTestModule.verifyPreparedStatementParameterNotPresent(indexOfStatement, indexOfParameter);
+    }
+    
+    protected void verifyCallableStatementParameterPresent(CallableStatement statement, int indexOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterPresent(statement, indexOfParameter);
+    }
+
+    protected void verifyCallableStatementParameterPresent(String sql, int indexOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterPresent(sql, indexOfParameter);
+    }
+    
+    protected void verifyCallableStatementParameterPresent(int indexOfStatement, int indexOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterPresent(indexOfStatement, indexOfParameter);
+    }
+    
+       
+    protected void verifyCallableStatementParameterNotPresent(CallableStatement statement, int indexOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterNotPresent(statement, indexOfParameter);
+    }
+
+    protected void verifyCallableStatementParameterNotPresent(String sql, int indexOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterNotPresent(sql, indexOfParameter);
+    }
+
+    protected void verifyCallableStatementParameterNotPresent(int indexOfStatement, int indexOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterNotPresent(indexOfStatement, indexOfParameter);
+    }
+    
+    protected void verifyCallableStatementParameterPresent(CallableStatement statement, String nameOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterPresent(statement, nameOfParameter);
+    }
+
+    protected void verifyCallableStatementParameterPresent(String sql, String nameOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterPresent(sql, nameOfParameter);
+    }
+    
+    protected void verifyCallableStatementParameterPresent(int indexOfStatement, String nameOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterPresent(indexOfStatement, nameOfParameter);
+    }
+    
+    protected void verifyCallableStatementParameterNotPresent(CallableStatement statement, String nameOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterNotPresent(statement, nameOfParameter);
+    }
+
+    protected void verifyCallableStatementParameterNotPresent(String sql, String nameOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterNotPresent(sql, nameOfParameter);
+    }
+
+    protected void verifyCallableStatementParameterNotPresent(int indexOfStatement, String nameOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterNotPresent(indexOfStatement, nameOfParameter);
     }
     
     /**

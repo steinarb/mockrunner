@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mockobjects.sql.MockCallableStatement;
 import com.mockobjects.sql.MockDatabaseMetaData;
 
 /**
@@ -23,6 +22,7 @@ public class MockConnection implements Connection
 {
     private StatementResultSetHandler statementHandler;
     private PreparedStatementResultSetHandler preparedStatementHandler;
+    private CallableStatementResultSetHandler callableStatementHandler;
     private Map preparedStatementMap;
     private Map savepoints;
     private int savepointCount;
@@ -40,6 +40,7 @@ public class MockConnection implements Connection
     {
         statementHandler = new StatementResultSetHandler();
         preparedStatementHandler = new PreparedStatementResultSetHandler();
+        callableStatementHandler = new CallableStatementResultSetHandler();
         closed = false;
         autoCommit = false;
         readOnly = false;
@@ -92,6 +93,11 @@ public class MockConnection implements Connection
     {
         return preparedStatementHandler;
     }
+    
+    public CallableStatementResultSetHandler getCallableStatementResultSetHandler()
+    {
+        return callableStatementHandler;
+    }
 
     public Statement createStatement() throws SQLException
     {
@@ -113,22 +119,28 @@ public class MockConnection implements Connection
         getStatementResultSetHandler().addStatement(statement);
         return statement;
     }
-  
-    public CallableStatement prepareCall(String arg0, int arg1, int arg2, int arg3) throws SQLException
+    
+    public CallableStatement prepareCall(String sql) throws SQLException
     {
-        return new MockCallableStatement();
-    }
-
-    public CallableStatement prepareCall(String arg0, int arg1, int arg2) throws SQLException
-    {
-        return new MockCallableStatement();
-    }
-
-    public CallableStatement prepareCall(String arg0) throws SQLException
-    {
-        return new MockCallableStatement();
+        MockCallableStatement statement = new MockCallableStatement(this, sql);
+        getCallableStatementResultSetHandler().addCallableStatement(statement);
+        return statement;
     }
     
+    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency) throws SQLException
+    {
+        MockCallableStatement statement = new MockCallableStatement(this, sql, resultSetType, resultSetConcurrency);
+        getCallableStatementResultSetHandler().addCallableStatement(statement);
+        return statement;
+    }
+  
+    public CallableStatement prepareCall(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException
+    {
+        MockCallableStatement statement = new MockCallableStatement(this, sql, resultSetType, resultSetConcurrency, resultSetHoldability);
+        getCallableStatementResultSetHandler().addCallableStatement(statement);
+        return statement;
+    }
+
     public PreparedStatement prepareStatement(String sql) throws SQLException
     {
         MockPreparedStatement statement = new MockPreparedStatement(this, sql);
