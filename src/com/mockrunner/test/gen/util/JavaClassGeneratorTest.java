@@ -1,6 +1,7 @@
 package com.mockrunner.test.gen.util;
 
 import java.beans.IntrospectionException;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +68,11 @@ public class JavaClassGeneratorTest extends TestCase
         method3.setExceptions(new Class[] {IntrospectionException.class, RuntimeException.class});
         method3.setCodeLines(new String[] {"Line1", "Line2"});
         generator.addMethodDeclaration(method3);
+        MethodDeclaration method4 = new MethodDeclaration();
+        method4.setName("fourthMethod");
+        method4.setReturnType(int[].class);
+        method4.setArguments(new Class[] {String.class, URL[][].class, Double[].class, boolean[].class});
+        generator.addMethodDeclaration(method4);
         assertEquals(getExpected(), generator.generate());
     }
     
@@ -74,6 +80,7 @@ public class JavaClassGeneratorTest extends TestCase
     {
         return "package com.mockrunner.test.gen.util;" + NL + NL +
                "import java.beans.IntrospectionException;" + NL +
+               "import java.net.URL;" + NL +
                "import java.util.List;" + NL +
                "import java.util.Map;" + NL + NL +
                "import javax.servlet.http.HttpServlet;" + NL + NL +
@@ -119,6 +126,9 @@ public class JavaClassGeneratorTest extends TestCase
                "    {" + NL +
                "        Line1" + NL +
                "        Line2" + NL +
+               "    }" + NL + NL +
+               "    public int[] fourthMethod(String string, URL[][] urls, Double[] doubleValues, boolean[] booleanValues)" + NL +
+               "    {" + NL + NL +
                "    }" + NL +
                "}";
     }

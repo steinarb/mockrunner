@@ -33,19 +33,29 @@ public class ClassUtil
     /**
      * Returns the name of the specified class. This method
      * only returns the class name without package information.
+     * If the specified class represents a primitive type, the
+     * name of the primitive type will be returned. If the
+     * specified class is an array, <code>[]</code> will be
+     * appended to the name (once for each dimension).
      * @param clazz the Class
      * @return the class name
      */
     public static String getClassName(Class clazz)
     {
+        String dimensions = "";
+        while(clazz.isArray())
+        {
+            clazz = clazz.getComponentType();
+            dimensions += "[]";
+        }
         String classPackage = getPackageName(clazz);
         if(classPackage.length() == 0)
         {
-            return clazz.getName();
+            return clazz.getName() + dimensions;
         }
         else
         {
-            return clazz.getName().substring(classPackage.length() + 1);
+            return clazz.getName().substring(classPackage.length() + 1) + dimensions;
         }
     }
     
@@ -72,6 +82,8 @@ public class ClassUtil
      * to lower case (by preserving one upper case character).
      * E.g. the result of <code>JMSTestModule</code> is
      * <code>jmsTestModule</code>.
+     * If the specified <code>argumentType</code> is an array,
+     * an <code>"s"</code> is appended to the string.
      * If the resulting string is a Java keyword, <code>"Value"</code> 
      * is appended to the string (what is always the case with
      * primitive types).
@@ -80,6 +92,12 @@ public class ClassUtil
      */
     public static String getArgumentName(Class argumentType)
     {
+        String dimensions = "";
+        while(argumentType.isArray())
+        {
+            argumentType = argumentType.getComponentType();
+            dimensions = "s";
+        }
         String name = getClassName(argumentType);
         int index = 0;
         while(index < name.length() - 1 && Character.isUpperCase(name.charAt(index)) && Character.isUpperCase(name.charAt(index + 1)))
@@ -95,6 +113,7 @@ public class ClassUtil
         {
              name += "Value";
         }
+        name += dimensions;
         return name;
     }
 }

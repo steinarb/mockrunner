@@ -1,5 +1,6 @@
 package com.mockrunner.gen.util;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import org.apache.bcel.classfile.EmptyVisitor;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.LocalVariable;
 import org.apache.bcel.classfile.LocalVariableTable;
+import org.apache.bcel.generic.ArrayType;
 import org.apache.bcel.generic.BasicType;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.Type;
@@ -127,6 +129,18 @@ public class BCELClassAnalyzer
     }
 
     private Class typeToClass(Type type)
+    {
+        if(!(type instanceof ArrayType))
+        {
+            return simpleTypeToClass(type);
+        }
+        ArrayType arrayType = (ArrayType)type;
+        Class basicClass = simpleTypeToClass(arrayType.getBasicType());
+        if(null == basicClass) return null;
+        return Array.newInstance(basicClass, new int[arrayType.getDimensions()]).getClass();
+    }
+    
+    private Class simpleTypeToClass(Type type)
     {
         if(null == type) return null;
         if(type instanceof BasicType)

@@ -79,12 +79,11 @@ public class StandardAdapterProcessor implements AdapterProcessor
     
     private void addSetUpMethod(JavaClassGenerator classGenerator, Class module, String memberName)
     {
-        String name = module.getName();
         MethodDeclaration method = createProtectedMethod();
         method.setName("setUp");
         method.setExceptions(new Class[] {Exception.class});
         String[] comment = new String[2];
-        comment[0] = "Creates the {@link " + name + "}. If you";
+        comment[0] = "Creates the " + getJavaDocModuleLink(module) + ". If you";
         comment[1] = "overwrite this method, you must call <code>super.setUp()</code>.";
         method.setCommentLines(comment);
         String[] codeLines = new String[2];
@@ -103,7 +102,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         webTestMethod.setName("getWebTestModule");
         webTestMethod.setReturnType(WebTestModule.class);
         String[] comment = new String[3];
-        comment[0] = "Returns the {@link " + module.getName() + "} as";
+        comment[0] = "Returns the " + getJavaDocModuleLink(module) + " as";
         comment[1] = "{@link com.mockrunner.base.WebTestModule}.";
         comment[2] = "@return the {@link com.mockrunner.base.WebTestModule}";
         webTestMethod.setCommentLines(comment);
@@ -113,7 +112,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         htmlOutputMethod.setName("getHTMLOutputModule");
         htmlOutputMethod.setReturnType(HTMLOutputModule.class);
         comment = new String[3];
-        comment[0] = "Returns the {@link " + module.getName() + "} as";
+        comment[0] = "Returns the " + getJavaDocModuleLink(module) + " as";
         comment[1] = "{@link com.mockrunner.base.HTMLOutputModule}.";
         comment[2] = "@return the {@link com.mockrunner.base.HTMLOutputModule}";
         htmlOutputMethod.setCommentLines(comment);
@@ -127,7 +126,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         getMethod.setName("get" + ClassUtil.getClassName(module));
         getMethod.setReturnType(module);
         String[] comment = new String[2];
-        comment[0] = "Gets the " + module.getName() + ".";
+        comment[0] = "Gets the " + getJavaDocModuleLink(module) + ".";
         comment[1] = "@return the {@link " + module.getName() + "}";
         getMethod.setCommentLines(comment);
         getMethod.setCodeLines(new String[] {"return " + memberName + ";"});
@@ -135,8 +134,8 @@ public class StandardAdapterProcessor implements AdapterProcessor
         MethodDeclaration setMethod = createProtectedMethod();
         setMethod.setName("set" + ClassUtil.getClassName(module));
         comment = new String[2];
-        comment[0] = "Sets the {@link " + module.getName() + "}.";
-        comment[1] = "@param servletTestModule the {@link " + module.getName() + "}";
+        comment[0] = "Sets the " + getJavaDocModuleLink(module) + ".";
+        comment[1] = "@param " + memberName + " the {@link " + module.getName() + "}";
         setMethod.setCommentLines(comment);
         setMethod.setArguments(new Class[] {module});
         setMethod.setArgumentNames(new String[] {memberName});
@@ -276,6 +275,11 @@ public class StandardAdapterProcessor implements AdapterProcessor
         buffer.append(");");
         return buffer.toString();
     }
+    
+    private String getJavaDocModuleLink(Class module)
+    {
+        return "{@link " + module.getName() + "}";
+    }
 
     private MethodDeclaration createProtectedMethod()
     {
@@ -300,10 +304,12 @@ public class StandardAdapterProcessor implements AdapterProcessor
     private String[] getClassComment(Class module)
     {
         String name = module.getName();
-        String[] comment = new String[3];
+        String[] comment = new String[5];
         comment[0] = "Delegator for {@link " + name + "}. You can";
         comment[1] = "subclass this adapter or use {@link " + name + "}";
         comment[2] = "directly (so your test case can use another base class).";
+        comment[3] = "<b>This class is generated from the " + ClassUtil.getClassName(module) + " and should not be";
+        comment[4] = "edited directly</b>.";
         return comment;
     }
     
@@ -318,6 +324,6 @@ public class StandardAdapterProcessor implements AdapterProcessor
 
     private String prepareClassNameFromBaseName(String className)
     {
-        return "Test" + className + "CaseAdapter";
+        return className + "CaseAdapter";
     }
 }

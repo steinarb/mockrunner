@@ -11,10 +11,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.gen.util.AdapterProcessor;
 import com.mockrunner.gen.util.StandardAdapterProcessor;
+import com.mockrunner.jdbc.JDBCTestModule;
 import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.servlet.ServletTestModule;
+import com.mockrunner.struts.ActionTestModule;
+import com.mockrunner.tag.TagTestModule;
 
 public class AdapterGenerator
 {
@@ -31,9 +35,17 @@ public class AdapterGenerator
     public AdapterGenerator()
     {
         units = new ArrayList();
+        List actionExcluded = new ArrayList();
+        actionExcluded.add("getOutput");
+        units.add(new ProcessingUnit(ActionTestModule.class, new StandardAdapterProcessor(), actionExcluded));
         List servletExcluded = new ArrayList();
         servletExcluded.add("getOutput");
         units.add(new ProcessingUnit(ServletTestModule.class, new StandardAdapterProcessor(), servletExcluded));
+        List tagExcluded = new ArrayList();
+        tagExcluded.add("getOutput");
+        units.add(new ProcessingUnit(TagTestModule.class, new StandardAdapterProcessor(), tagExcluded));
+        units.add(new ProcessingUnit(EJBTestModule.class, new StandardAdapterProcessor(), null));
+        units.add(new ProcessingUnit(JDBCTestModule.class, new StandardAdapterProcessor(), null));
         units.add(new ProcessingUnit(JMSTestModule.class, new StandardAdapterProcessor(), null));
     }
     
