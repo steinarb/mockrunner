@@ -135,30 +135,30 @@ public class MockTopicSessionTest extends TestCase
         DestinationManager destManager = connection.getDestinationManager();
         TransmissionManager transManager = session.getTransmissionManager();
         topic1 = destManager.createTopic("Topic1");
-        assertEquals(0, transManager.getTopicDurableSubscriberMap().size());
+        assertEquals(0, transManager.getDurableTopicSubscriberMap().size());
         TopicSubscriber subscriber1 = session.createDurableSubscriber(topic1, "Durable1");
         TopicSubscriber subscriber2 = session.createDurableSubscriber(topic1, "Durable2", null, true);
-        assertEquals(2, transManager.getTopicDurableSubscriberMap().size());
+        assertEquals(2, transManager.getDurableTopicSubscriberMap().size());
         assertFalse(((MockTopicSubscriber)subscriber1).getNoLocal());
         assertTrue(((MockTopicSubscriber)subscriber1).isDurable());
         assertTrue(((MockTopicSubscriber)subscriber2).getNoLocal());
         assertTrue(((MockTopicSubscriber)subscriber2).isDurable());
-        assertTrue(subscriber1 == transManager.getTopicDurableSubscriber("Durable1"));
-        assertTrue(subscriber2 == transManager.getTopicDurableSubscriber("Durable2"));
-        assertEquals("Durable1", transManager.getTopicDurableSubscriber("Durable1").getName());
-        assertTrue(topic1 == transManager.getTopicDurableSubscriber("Durable2").getTopic());
+        assertTrue(subscriber1 == transManager.getDurableTopicSubscriber("Durable1"));
+        assertTrue(subscriber2 == transManager.getDurableTopicSubscriber("Durable2"));
+        assertEquals("Durable1", transManager.getDurableTopicSubscriber("Durable1").getName());
+        assertTrue(topic1 == transManager.getDurableTopicSubscriber("Durable2").getTopic());
         session.unsubscribe("Durable2");
-        assertEquals(1, transManager.getTopicDurableSubscriberMap().size());
-        assertTrue(subscriber1 == transManager.getTopicDurableSubscriberMap().get("Durable1"));
-        assertNull(transManager.getTopicDurableSubscriberMap().get("Durable2"));
-        assertNull(transManager.getTopicDurableSubscriber("Durable2"));
+        assertEquals(1, transManager.getDurableTopicSubscriberMap().size());
+        assertTrue(subscriber1 == transManager.getDurableTopicSubscriberMap().get("Durable1"));
+        assertNull(transManager.getDurableTopicSubscriberMap().get("Durable2"));
+        assertNull(transManager.getDurableTopicSubscriber("Durable2"));
         TopicSubscriber subscriber3 = session.createDurableSubscriber(topic1, "Durable1");
         assertFalse(((MockTopicSubscriber)subscriber3).getNoLocal());
         assertTrue(((MockTopicSubscriber)subscriber3).isDurable());
-        assertFalse(subscriber1 == transManager.getTopicDurableSubscriber("Durable1"));
-        assertTrue(subscriber3 == transManager.getTopicDurableSubscriber("Durable1"));
+        assertFalse(subscriber1 == transManager.getDurableTopicSubscriber("Durable1"));
+        assertTrue(subscriber3 == transManager.getDurableTopicSubscriber("Durable1"));
         session.unsubscribe("Durable1");
-        assertEquals(0, transManager.getTopicDurableSubscriberMap().size());
+        assertEquals(0, transManager.getDurableTopicSubscriberMap().size());
     }
     
     public void testTransmissionGlobalListener() throws Exception
@@ -172,7 +172,7 @@ public class MockTopicSessionTest extends TestCase
         publisher.publish(new MockTextMessage("Text1"));
         assertEquals("Text1", ((TextMessage)globalListener.getMessage()).getText());
         TopicSubscriber subscriber1 = session.createSubscriber(topic1);
-        TopicSubscriber subscriber2 = session.createSubscriber(topic1);
+        TopicSubscriber subscriber2 = session.createDurableSubscriber(topic1, "durable");
         TestMessageListener listener1 = new TestMessageListener();
         TestMessageListener listener2 = new TestMessageListener();
         subscriber1.setMessageListener(listener1);
@@ -262,6 +262,57 @@ public class MockTopicSessionTest extends TestCase
         assertNull(topic2.getMessage());
     }
     
+    public void testTransmissionDurableSubscriber() throws Exception
+    {
+        DestinationManager destManager = connection.getDestinationManager();
+        destManager.createTopic("Topic1");
+        destManager.createTopic("Topic2");
+        topic1 = (MockTopic)session.createTopic("Topic1");
+        topic2 = (MockTopic)session.createTopic("Topic2");
+        TopicPublisher publisher1 = session.createPublisher(topic1);
+        TopicPublisher publisher2 = session.createPublisher(topic2);
+        MockTopicSubscriber subscriber1 = (MockTopicSubscriber)session.createSubscriber(topic1);
+        MockTopicSubscriber subscriber2 = (MockTopicSubscriber)session.createSubscriber(topic2);
+        MockTopicSubscriber durableSubscriber1 = (MockTopicSubscriber)session.createDurableSubscriber(topic1, "durable1");
+        MockTopicSubscriber durableSubscriber2 = (MockTopicSubscriber)session.createDurableSubscriber(topic1, "durable2");
+        TestMessageListener listener1 = new TestMessageListener();
+        TestMessageListener listener2 = new TestMessageListener();
+        TestMessageListener durableListener1 = new TestMessageListener();
+        TestMessageListener durableListener2 = new TestMessageListener();
+        subscriber1.setMessageListener(listener1);
+        subscriber2.setMessageListener(listener2);
+        durableSubscriber1.setMessageListener(durableListener1);
+        durableSubscriber2.setMessageListener(durableListener2);
+        publisher1.publish(new MockTextMessage("Text1"));
+        assertEquals(1, topic1.getReceivedMessageList().size());
+        assertEquals(0, topic1.getCurrentMessageList().size());
+        assertEquals(0, topic2.getReceivedMessageList().size());
+        assertEquals(0, topic2.getCurrentMessageList().size());
+        assertEquals("Text1", ((TextMessage)listener1.getMessage()).getText());
+        assertEquals("Text1", ((TextMessage)durableListener1.getMessage()).getText());
+        assertEquals("Text1", ((TextMessage)durableListener2.getMessage()).getText());
+        assertNull(listener2.getMessage());
+        publisher2.publish(new MockTextMessage("Text2"));
+        assertEquals(1, topic1.getReceivedMessageList().size());
+        assertEquals(0, topic1.getCurrentMessageList().size());
+        assertEquals(1, topic2.getReceivedMessageList().size());
+        assertEquals(0, topic2.getCurrentMessageList().size());
+        assertEquals("Text1", ((TextMessage)listener1.getMessage()).getText());
+        assertEquals("Text1", ((TextMessage)durableListener1.getMessage()).getText());
+        assertEquals("Text1", ((TextMessage)durableListener2.getMessage()).getText());
+        assertEquals("Text2", ((TextMessage)listener2.getMessage()).getText());
+        session.unsubscribe("durable2");
+        publisher1.publish(new MockTextMessage("Text3"));
+        assertEquals(2, topic1.getReceivedMessageList().size());
+        assertEquals(0, topic1.getCurrentMessageList().size());
+        assertEquals(1, topic2.getReceivedMessageList().size());
+        assertEquals(0, topic2.getCurrentMessageList().size());
+        assertEquals("Text3", ((TextMessage)listener1.getMessage()).getText());
+        assertEquals("Text3", ((TextMessage)durableListener1.getMessage()).getText());
+        assertEquals("Text1", ((TextMessage)durableListener2.getMessage()).getText());
+        assertEquals("Text2", ((TextMessage)listener2.getMessage()).getText());
+    }
+                
     public void testTransmissionResetCalled() throws Exception
     {
         DestinationManager destManager = connection.getDestinationManager();

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.jms.JMSException;
@@ -66,6 +67,17 @@ public class MockTopic implements Topic
                     for(int ii = 0; ii < subscribers.size(); ii++)
                     {
                         MockTopicSubscriber subscriber = (MockTopicSubscriber)subscribers.get(ii);
+                        if(subscriber.canConsume())
+                        {
+                            subscriber.receiveMessage(message);
+                            isConsumed = true;
+                        }
+                    }
+                    Map durableSubscribers = session.getTransmissionManager().getDurableTopicSubscriberMap(name);
+                    Iterator keys = durableSubscribers.keySet().iterator();
+                    while(keys.hasNext())
+                    {
+                        MockTopicSubscriber subscriber = (MockTopicSubscriber)durableSubscribers.get(keys.next());
                         if(subscriber.canConsume())
                         {
                             subscriber.receiveMessage(message);

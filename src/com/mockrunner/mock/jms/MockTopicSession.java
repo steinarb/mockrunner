@@ -116,7 +116,7 @@ public class MockTopicSession extends MockSession implements TopicSession
             throw new InvalidDestinationException("topic must be an instance of MockTopic");
         }
         addSessionToTopic(topic);
-        return getTransmissionManager().createTopicDurableSubscriber((MockTopic)topic, name, messageSelector, noLocal);
+        return getTransmissionManager().createDurableTopicSubscriber((MockTopic)topic, name, messageSelector, noLocal);
     }
  
     public void unsubscribe(String name) throws JMSException
