@@ -98,7 +98,7 @@ related to the test module you use.
 
 The third-party libraries included in the Mockrunner release are:
 
-Struts 1.2.1
+Struts 1.2.2
 http://jakarta.apache.org/struts
 struts.jar
 
@@ -114,7 +114,7 @@ JBoss 3.2.3:
 http://www.jboss.org
 jboss-j2ee.jar                
 
-Commons (from Struts 1.2.1 release):
+Commons (from Struts 1.2.2 release):
 http://jakarta.apache.org/commons       
 commons-logging.jar
 commons-logging-api.jar
