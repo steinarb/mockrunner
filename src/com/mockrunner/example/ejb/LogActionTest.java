@@ -46,5 +46,7 @@ public class LogActionTest extends ActionTestCaseAdapter
         assertFalse(bean.getEjbContext().getRollbackOnly());
         jdbcModule.verifyAllStatementsClosed();
         jdbcModule.verifyConnectionClosed();
+        verifyNoActionErrors();
+        verifyForward("success");
     }
 }
