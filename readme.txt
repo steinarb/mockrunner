@@ -105,7 +105,7 @@ mockobjects-jdk1.4-0.09.jar
 mockobjects-jdk1.4-j2ee1.3-0.09.jar
 
 MockEjb 0.4:
-http://www.mockejb.org
+http://mockejb.sourceforge.net
 mockejb.jar
 
 JDOM Beta 9 (or higher):
