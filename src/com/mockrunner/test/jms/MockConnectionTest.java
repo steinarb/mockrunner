@@ -16,6 +16,7 @@ import javax.jms.TopicSession;
 import junit.framework.TestCase;
 
 import com.mockrunner.jms.DestinationManager;
+import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockConnectionFactory;
 import com.mockrunner.mock.jms.MockMessageConsumer;
@@ -154,8 +155,29 @@ public class MockConnectionTest extends TestCase
         assertTrue(topicFactory.createConnection() instanceof TopicConnection);
         assertTrue(topicFactory.createConnection(null, null) instanceof TopicConnection);
         MockConnectionFactory factory = new MockConnectionFactory(new DestinationManager());
-        assertTrue(topicFactory.createConnection() instanceof Connection);
-        assertTrue(topicFactory.createConnection(null, null) instanceof Connection);
+        assertTrue(factory.createConnection() instanceof Connection);
+        assertTrue(factory.createConnection(null, null) instanceof Connection);
+        assertFalse(factory.createConnection() instanceof QueueConnection);
+        assertFalse(factory.createConnection(null, null) instanceof TopicConnection);
+    }
+    
+    public void testDistinctFactoriesButSameDestinationManager() throws Exception
+    {
+        JMSMockObjectFactory mockFactory = new JMSMockObjectFactory();
+        MockQueueConnectionFactory queueFactory = mockFactory.getMockQueueConnectionFactory();
+        MockTopicConnectionFactory topicFactory = mockFactory.getMockTopicConnectionFactory();
+        MockConnectionFactory factory = mockFactory.getMockConnectionFactory();
+        MockConnection queueConnection = (MockConnection)queueFactory.createConnection();
+        MockConnection topicConnection = (MockConnection)topicFactory.createConnection();
+        MockConnection connection = (MockConnection)factory.createConnection();
+        assertNotSame(queueFactory, topicFactory);
+        assertNotSame(queueFactory, factory);
+        assertNotSame(topicFactory, factory);
+        assertNotSame(queueConnection, topicConnection);
+        assertNotSame(queueConnection, connection);
+        assertNotSame(topicConnection, connection);
+        assertSame(queueConnection.getDestinationManager(), topicConnection.getDestinationManager());
+        assertSame(connection.getDestinationManager(), topicConnection.getDestinationManager());
     }
     
     public void testQueueConnectionClose() throws Exception
@@ -235,7 +257,11 @@ public class MockConnectionTest extends TestCase
         assertTrue(topicConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE) instanceof TopicSession);
         assertNotNull(topicConnection.createConnectionConsumer((Destination)null, null, null, 0));
         assertNotNull(topicConnection.createConnectionConsumer((Topic)null, null, null, 0));
-        assertNotNull(queueConnection.createDurableConnectionConsumer(null, null, null, null, 0));
+        assertNotNull(topicConnection.createDurableConnectionConsumer(null, null, null, null, 0));
+        assertTrue(connection.createSession(true, Session.CLIENT_ACKNOWLEDGE) instanceof Session);
+        assertNotNull(connection.createConnectionConsumer((Destination)null, null, null, 0));
+        assertNotNull(connection.createConnectionConsumer((Topic)null, null, null, 0));
+        assertNotNull(connection.createDurableConnectionConsumer(null, null, null, null, 0));
     }
     
     public void testCreateQueueSession() throws Exception
@@ -270,6 +296,16 @@ public class MockConnectionTest extends TestCase
         assertNull(topicConnection.getTopicSession(3));
         assertEquals(3, topicConnection.getSessionList().size());
         assertEquals(3, topicConnection.getTopicSessionList().size());
+    }
+    
+    public void testCreateSession() throws Exception
+    {
+        connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+        connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        assertTrue(connection.getSession(0) instanceof MockSession);
+        assertTrue(connection.getSession(1) instanceof MockSession);
+        assertNull(connection.getSession(3));
+        assertEquals(2, connection.getSessionList().size());
     }
 
     public void testException() throws Exception
