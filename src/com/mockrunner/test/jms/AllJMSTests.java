@@ -22,6 +22,7 @@ public class AllJMSTests
         suite.addTest(new TestSuite(MockMessageProducerTest.class));
         suite.addTest(new TestSuite(MockQueueTest.class));
         suite.addTest(new TestSuite(MockTopicTest.class));
+        suite.addTest(new TestSuite(TransmissionManagerTest.class));
         suite.addTest(new TestSuite(JMSTestModuleTest.class));
         //$JUnit-END$
         return suite;

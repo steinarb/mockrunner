@@ -28,6 +28,7 @@ import javax.jms.TopicSubscriber;
 import com.mockrunner.jms.MessageManager;
 import com.mockrunner.jms.QueueTransmissionManager;
 import com.mockrunner.jms.TopicTransmissionManager;
+import com.mockrunner.jms.TransmissionManagerWrapper;
 
 /**
  * Mock implementation of JMS <code>Session</code>.
@@ -50,6 +51,7 @@ public class MockSession implements Session
     private MockConnection connection;
     private QueueTransmissionManager queueTransManager;
     private TopicTransmissionManager topicTransManager;
+    private TransmissionManagerWrapper transManager;
     private MessageManager messageManager;
     private MessageListener messageListener;
     private List tempQueues;
@@ -68,6 +70,7 @@ public class MockSession implements Session
         this.acknowledgeMode = acknowledgeMode;
         queueTransManager = new QueueTransmissionManager(connection, this);
         topicTransManager = new TopicTransmissionManager(connection, this);
+        transManager = new TransmissionManagerWrapper(queueTransManager, topicTransManager);
         messageManager = new MessageManager();
         tempQueues = new ArrayList();
         tempTopics = new ArrayList();
@@ -94,6 +97,15 @@ public class MockSession implements Session
     public TopicTransmissionManager getTopicTransmissionManager()
     {
         return topicTransManager;
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.jms.TransmissionManagerWrapper}.
+     * @return the {@link com.mockrunner.jms.TransmissionManagerWrapper}
+     */
+    public TransmissionManagerWrapper getTransmissionManager()
+    {
+        return transManager;
     }
     
     /**
