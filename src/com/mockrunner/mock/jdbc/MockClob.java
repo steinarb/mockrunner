@@ -11,7 +11,7 @@ import java.sql.Clob;
 import java.sql.SQLException;
 
 /**
- * Mock implementation of a JDBC 3.0 <code>Clob</code>.
+ * Mock implementation of <code>Clob</code>.
  */
 public class MockClob implements Clob, Cloneable
 {
