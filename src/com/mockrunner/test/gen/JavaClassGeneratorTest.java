@@ -69,7 +69,7 @@ public class JavaClassGeneratorTest extends TestCase
                "     */" + NL +
                "    public MyClass(String string1, FileUtil util1)" + NL +
                "    {" + NL +
-               "    }" + NL + NL +
+               "    }" + NL +
                "}";
     }
 }
