@@ -17,11 +17,6 @@ public class TagUtilTest extends BaseTestCase
     private MockPageContext pageContext;
     private Map testMap;
     
-    public TagUtilTest(String arg0)
-    {
-        super(arg0);
-    }
-    
     protected void setUp() throws Exception
     {
         super.setUp();

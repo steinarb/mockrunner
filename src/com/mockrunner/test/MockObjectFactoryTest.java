@@ -6,11 +6,6 @@ import junit.framework.TestCase;
 
 public class MockObjectFactoryTest extends TestCase
 {
-    public MockObjectFactoryTest(String arg0)
-    {
-        super(arg0);
-    }
-
     public void testDifferentMockObjects()
     {
         MockObjectFactory factory1 = new MockObjectFactory();

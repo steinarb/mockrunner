@@ -31,11 +31,6 @@ public class TagLifecycleTest extends BaseTestCase
     private TestBodyTag level2child2Tag;
     private TestTag level3child1Tag;
     private TestTag level3child2Tag;
-    
-    public TagLifecycleTest(String arg0)
-    {
-        super(arg0);
-    }
 
     protected void setUp() throws Exception
     {

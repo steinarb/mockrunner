@@ -15,11 +15,6 @@ public class AuthenticationActionTest extends ActionTestCaseAdapter
     private MockAuthenticationStrategy strategy;
     private AuthenticationForm form;
     
-    public AuthenticationActionTest(String arg0)
-    {
-        super(arg0);
-    }
-
     protected void setUp() throws Exception
     {
         super.setUp();

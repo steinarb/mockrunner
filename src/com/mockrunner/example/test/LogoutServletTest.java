@@ -12,11 +12,6 @@ public class LogoutServletTest extends BaseTestCase
 {
     private LogoutServlet servlet;
     
-    public LogoutServletTest(String arg0)
-    {
-        super(arg0);
-    }
-
     protected void setUp() throws Exception
     {
         super.setUp();

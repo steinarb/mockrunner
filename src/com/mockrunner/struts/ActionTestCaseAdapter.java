@@ -21,6 +21,11 @@ import com.mockrunner.mock.MockPageContext;
 public class ActionTestCaseAdapter extends BaseTestCase
 {
     private ActionTestModule actionTestModule;
+    
+    public ActionTestCaseAdapter()
+    {
+        
+    }
 
     public ActionTestCaseAdapter(String arg0)
     {
