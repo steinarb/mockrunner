@@ -29,7 +29,7 @@ public class ParameterUtil
      * are copied into new allocated streams resp. arrays.
      * <code>Ref</code>, <code>Array</code>, <code>Blob</code> and 
      * <code>Clob</code> objects are cloned. All other objects are
-     * returned clone by calling the clone method. If the object is not
+     * cloned by calling the clone method. If the object is not
      * cloneable, it is returned unchanged.
      * @param source the parameter to copy
      * @return a copy of the parameter
