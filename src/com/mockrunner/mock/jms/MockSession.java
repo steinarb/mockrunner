@@ -58,8 +58,8 @@ public class MockSession implements Session
     private List tempTopics;
     private boolean transacted;
     private int acknowledgeMode;
-    private boolean committed;
-    private boolean rolledback;
+    private int numberCommits;
+    private int numberRollbacks;
     private boolean recovered;
     private boolean closed;
     
@@ -75,8 +75,8 @@ public class MockSession implements Session
         tempQueues = new ArrayList();
         tempTopics = new ArrayList();
         messageListener = null;
-        committed = false;
-        rolledback = false;
+        numberCommits = 0;
+        numberRollbacks = 0;
         recovered = false;
         closed = false;
     }
@@ -185,7 +185,16 @@ public class MockSession implements Session
      */
     public boolean isCommitted()
     {
-        return committed;
+        return (numberCommits > 0);
+    }
+    
+    /**
+     * Returns the number of commits.
+     * @return the number of commits
+     */
+    public int getNumberCommits()
+    {
+        return numberCommits;
     }
 
     /**
@@ -194,7 +203,16 @@ public class MockSession implements Session
      */
     public boolean isRolledBack()
     {
-        return rolledback;
+        return (numberRollbacks > 0);
+    }
+    
+    /**
+     * Returns the number of rollbacks.
+     * @return the number of rollbacks
+     */
+    public int getNumberRollbacks()
+    {
+        return numberRollbacks;
     }
     
     /**
@@ -298,14 +316,14 @@ public class MockSession implements Session
     public void commit() throws JMSException
     {
         connection.throwJMSException();
-        committed = true;
+        numberCommits++;
     }
 
     public void rollback() throws JMSException
     {
         connection.throwJMSException();
         recover();
-        rolledback = true;
+        numberRollbacks++;
     }
 
     public void close() throws JMSException
