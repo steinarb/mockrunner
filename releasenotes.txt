@@ -1,12 +1,17 @@
 
 mockrunner-0.2.7:
 
-- improved setResources() in Struts test module to support module config
+- removed most of the methods in MockActionMapping, we can use the
+  real Strust implementation
+- improved setResources() to Struts test module to support module config
+- added createValidatorResources() and setValidatorResources() to
+  Struts test module for validator support
 - added example test for LookupDispatchAction
 - added createDynaActionForm() method to Struts test module
 - fixed problem with restoreDrivers() method of JDBCMockObjectFactory 
   (now clears the list of preserved drivers after restoring them)
 - added registerMockDriver() to JDBCMockObjectFactory
+- added commons-validator.jar and jakarta-oro.jar third party libraries
 - disabled namespace processing of NekoHTML parser, because of
   problems with NekoHTML 0.9
 - updated nekohtml.jar from 0.8.3 to 0.9

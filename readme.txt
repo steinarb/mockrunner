@@ -105,6 +105,10 @@ commons-lang.jar
 commons-digester.jar
 commons-validator.jar
 
+ORO (from Struts 1.1 release):
+http://jakarta.apache.org/oro
+jakarta-oro.jar
+
 MockEJB 0.5:
 http://mockejb.sourceforge.net
 mockejb.jar
