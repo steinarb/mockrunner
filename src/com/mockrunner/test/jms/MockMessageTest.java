@@ -1,6 +1,7 @@
 package com.mockrunner.test.jms;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 
 import javax.jms.MessageFormatException;
@@ -121,5 +122,21 @@ public class MockMessageTest extends TestCase
             //should throw Exception
         }
         assertNull(message.getObjectProperty("null"));
+    }
+    
+    public void testSetAndGetCorrelationID() throws Exception
+    {
+        MockMessage message = new MockMessage();
+        assertNull(message.getJMSCorrelationID());
+        assertNull(message.getJMSCorrelationIDAsBytes());
+        message.setJMSCorrelationIDAsBytes("ABC".getBytes("ISO-8859-1"));
+        assertEquals("ABC", message.getJMSCorrelationID());
+        assertTrue(Arrays.equals("ABC".getBytes("ISO-8859-1"), message.getJMSCorrelationIDAsBytes()));
+        message.setJMSCorrelationIDAsBytes(null);
+        assertNull(message.getJMSCorrelationID());
+        assertNull(message.getJMSCorrelationIDAsBytes());
+        message.setJMSCorrelationID("test");
+        assertEquals("test", message.getJMSCorrelationID());
+        assertTrue(Arrays.equals("test".getBytes("ISO-8859-1"), message.getJMSCorrelationIDAsBytes()));
     }
 }
