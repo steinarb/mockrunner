@@ -534,13 +534,13 @@ public class JDBCTestModule
     }
     
     /**
-     * Verifies that the changes were rollbacked, i.e. the <code>rollback</code>
+     * Verifies that the changes were rolled back, i.e. the <code>rollback</code>
      * method of <code>Connection</code> was at least called once.
      * Makes only sense, if the <code>Connection</code> is not in
      * autocommit mode.
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyRollbacked()
+    public void verifyRolledback()
     {
         int number = mockFactory.getMockConnection().getNumberRollbacks();
         if(number <= 0)
@@ -550,12 +550,12 @@ public class JDBCTestModule
     }
     
     /**
-     * Verifies that the changes were not rollbacked.
+     * Verifies that the changes were not rolled back.
      * Makes only sense, if the <code>Connection</code> is not in
      * autocommit mode.
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNotRollbacked()
+    public void verifyNotRolledback()
     {
         int number = mockFactory.getMockConnection().getNumberRollbacks();
         if(number > 0)
