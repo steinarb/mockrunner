@@ -15,6 +15,7 @@ import javax.jms.QueueBrowser;
 import javax.jms.QueueReceiver;
 import javax.jms.QueueSender;
 import javax.jms.QueueSession;
+import javax.jms.Session;
 import javax.jms.StreamMessage;
 import javax.jms.TemporaryQueue;
 import javax.jms.TextMessage;
@@ -49,8 +50,8 @@ public class MockQueueSessionTest extends TestCase
     {
         super.setUp();
         connection = new MockQueueConnection();
-        session = (MockQueueSession)connection.createQueueSession(false, QueueSession.CLIENT_ACKNOWLEDGE);
-        anotherSession = (MockQueueSession)connection.createQueueSession(false, QueueSession.CLIENT_ACKNOWLEDGE);
+        session = (MockQueueSession)connection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
+        anotherSession = (MockQueueSession)connection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
     }
     
     public void testCreateMessages() throws Exception
@@ -347,6 +348,49 @@ public class MockQueueSessionTest extends TestCase
         {
             //should throw exception
         }
+    }
+    
+    public void testTransmissionMessageAcknowledged() throws Exception
+    {
+        MockQueueSession session1 = (MockQueueSession)connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+        QueueManager queueManager = connection.getQueueManager();
+        queueManager.createQueue("Queue");
+        MockQueue queue = (MockQueue)session1.createQueue("Queue");
+        QueueSender sender = session1.createSender(queue);
+        MockTextMessage message = new MockTextMessage("Text");
+        sender.send(message);
+        MockQueueReceiver receiver = (MockQueueReceiver)session1.createReceiver(queue);
+        assertFalse(message.isAcknowledged());
+        receiver.receiveNoWait();
+        assertTrue(message.isAcknowledged());
+        TestMessageListener listener = new TestMessageListener();
+        receiver.setMessageListener(listener);
+        message = new MockTextMessage("Text");
+        sender.send(message);
+        assertTrue(message.isAcknowledged());
+        receiver.setMessageListener(null);
+        session1.setMessageListener(listener);
+        message = new MockTextMessage("Text");
+        sender.send(message);
+        assertTrue(message.isAcknowledged());
+        session1.setMessageListener(null);
+        MockQueueSession session2 = (MockQueueSession)connection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
+        receiver = (MockQueueReceiver)session2.createReceiver(queue);
+        receiver.setMessageListener(listener);
+        sender = session2.createSender(queue);
+        message = new MockTextMessage("Text");
+        sender.send(message);
+        assertFalse(message.isAcknowledged());
+        receiver.setMessageListener(null);
+        message = new MockTextMessage("Text");
+        sender.send(message);
+        assertFalse(message.isAcknowledged());
+        receiver.receive();
+        assertFalse(message.isAcknowledged());
+        session1.setMessageListener(listener);
+        message = new MockTextMessage("Text");
+        sender.send(message);
+        assertTrue(message.isAcknowledged());
     }
     
     public void testTransmissionConnectionStopped() throws Exception

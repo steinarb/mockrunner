@@ -7,6 +7,7 @@ import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.jms.Session;
 import javax.jms.StreamMessage;
 import javax.jms.TemporaryTopic;
 import javax.jms.TextMessage;
@@ -21,6 +22,7 @@ import com.mockrunner.jms.MessageManager;
 import com.mockrunner.jms.TopicManager;
 import com.mockrunner.jms.TopicTransmissionManager;
 import com.mockrunner.mock.jms.MockBytesMessage;
+import com.mockrunner.mock.jms.MockMapMessage;
 import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockStreamMessage;
 import com.mockrunner.mock.jms.MockTextMessage;
@@ -388,6 +390,49 @@ public class MockTopicSessionTest extends TestCase
         {
             //should throw exception
         }
+    }
+    
+    public void testTransmissionMessageAcknowledged() throws Exception
+    {
+        MockTopicSession session1 = (MockTopicSession)connection.createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);
+        MockTopicSession session2 = (MockTopicSession)connection.createTopicSession(false, Session.DUPS_OK_ACKNOWLEDGE);
+        TopicManager topicManager = connection.getTopicManager();
+        topicManager.createTopic("Topic");
+        Topic topic = (MockTopic)session1.createTopic("Topic");
+        MockTopicPublisher publisher = (MockTopicPublisher)session2.createPublisher(topic);
+        MockMapMessage message1 = new MockMapMessage();
+        MockStreamMessage message2 = new MockStreamMessage();
+        publisher.publish(message1);
+        publisher.publish(message2);
+        assertFalse(message1.isAcknowledged());
+        assertFalse(message2.isAcknowledged());
+        MockTopicSubscriber subscriber1 = (MockTopicSubscriber)session1.createSubscriber(topic);
+        MockTopicSubscriber subscriber2 = (MockTopicSubscriber)session2.createDurableSubscriber(topic, "mySubscription");
+        subscriber1.receive(1);
+        assertFalse(message1.isAcknowledged());
+        assertFalse(message2.isAcknowledged());
+        subscriber2.receiveNoWait();
+        assertFalse(message1.isAcknowledged());
+        assertTrue(message2.isAcknowledged());
+        TestMessageListener listener = new TestMessageListener();
+        subscriber1.setMessageListener(listener);
+        message2 = new MockStreamMessage();
+        publisher.publish(message2);
+        assertFalse(message2.isAcknowledged());
+        subscriber2.setMessageListener(listener);
+        message2 = new MockStreamMessage();
+        publisher.publish(message2);
+        assertTrue(message2.isAcknowledged());
+        subscriber1.setMessageListener(null);
+        subscriber2.setMessageListener(null);
+        session1.setMessageListener(listener);
+        message2 = new MockStreamMessage();
+        publisher.publish(message2);
+        assertFalse(message2.isAcknowledged());
+        session2.setMessageListener(listener);
+        message2 = new MockStreamMessage();
+        publisher.publish(message2);
+        assertTrue(message2.isAcknowledged());
     }
     
     public void testTransmissionConnectionStopped() throws Exception

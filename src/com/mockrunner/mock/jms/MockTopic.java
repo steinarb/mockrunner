@@ -60,6 +60,7 @@ public class MockTopic implements Topic
                 {
                     globalListener.onMessage(message);
                     isConsumed = true;
+                    acknowledgeMessage(message, session);
                 }
                 else
                 {
