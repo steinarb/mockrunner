@@ -14,7 +14,7 @@ import org.apache.struts.action.ActionMapping;
  * stored in the <code>ServletContext</code>. Since the repository
  * is not thread safe we have to synchronize the access. Used to
  * demonstrate how to do multithread testing. Check out
- * {@link de.mockrunner.example.test.StoreDataActionTest}.
+ * {@link com.mockrunner.example.test.StoreDataActionTest}.
  */
 public class StoreDataAction extends Action
 {

@@ -12,7 +12,7 @@ import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.MockActionForward;
 
 /**
- * Test for {@link de.mockrunner.base.ActionTestModule}
+ * Test for {@link com.mockrunner.base.ActionTestModule}
  */
 public class ActionTestModuleTest extends TestCase
 {
