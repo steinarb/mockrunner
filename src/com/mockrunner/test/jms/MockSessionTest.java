@@ -13,6 +13,7 @@ import javax.jms.Session;
 import junit.framework.TestCase;
 
 import com.mockrunner.jms.DestinationManager;
+import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueConnection;
 import com.mockrunner.mock.jms.MockQueueReceiver;
@@ -61,6 +62,14 @@ public class MockSessionTest extends TestCase
         testCreateProducer(session, manager);
     }
     
+    public void testCreateProducerWithSession() throws Exception
+    {
+        DestinationManager manager = new DestinationManager();
+        MockConnection connection = new MockConnection(manager);
+        MockSession session =(MockSession)connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        testCreateProducer(session, manager);
+    }
+    
     public void testCreateConsumerWithQueueSession() throws Exception
     {
         DestinationManager manager = new DestinationManager();
@@ -74,6 +83,14 @@ public class MockSessionTest extends TestCase
         DestinationManager manager = new DestinationManager();
         MockTopicConnection connection = new MockTopicConnection(manager);
         MockSession session =(MockSession)connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+        testCreateConsumer(session, manager);
+    }
+    
+    public void testCreateComsumerWithSession() throws Exception
+    {
+        DestinationManager manager = new DestinationManager();
+        MockConnection connection = new MockConnection(manager);
+        MockSession session =(MockSession)connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         testCreateConsumer(session, manager);
     }
     
