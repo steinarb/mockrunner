@@ -1,35 +1,39 @@
 package com.mockrunner.gen;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
-import com.mockrunner.gen.proc.GeneratorUtil;
 import com.mockrunner.gen.proc.JavaLineProcessor;
-import com.mockrunner.util.common.StreamUtil;
 
-public class JDKVersionGenerator
+public class JDKVersionGenerator extends AbstractVersionGenerator
 {
-    private final static String src14Dir = "src";
-    private final static String src13Dir = "src1.3";
-    
     public static void main(String[] args) throws Exception
     {
         JDKVersionGenerator synchVersionUtil = new JDKVersionGenerator();
         synchVersionUtil.doSynchronize();
     }
     
-    public void doSynchronize() throws Exception
+    protected String getGeneratorName()
     {
-        doSynchronizeJDBCJDK13();
+        return "JDBC JDK1.3";
     }
     
-    private Map prepareJDBCJDK13()
+    protected String getRootTargetDir()
+    {
+        return "src1.3";
+    }
+    
+    protected String getRootSourceDir()
+    {
+        return "src";
+    }
+    
+    protected String[] getProcessedPackages()
+    {
+        return new String[] {"com/mockrunner/jdbc", "com/mockrunner/mock/jdbc"};
+    }
+    
+    protected Map prepareProcessorMap()
     {
         Map jdbcFiles = new HashMap();
         
@@ -118,79 +122,5 @@ public class JDKVersionGenerator
         jdbcFiles.put("com.mockrunner.mock.jdbc.MockParameterMetaData", new Boolean(false));
         
         return jdbcFiles;
-    }
-
-    private void doSynchronizeJDBCJDK13() throws Exception
-    {
-        System.out.println("Start processing for JDBC JDK1.3");
-        Map jdbcProcMap = prepareJDBCJDK13();
-        GeneratorUtil util = new GeneratorUtil();
-        Map jdbcMap = new HashMap();
-        File jdbc = new File(src14Dir + "/com/mockrunner/jdbc");
-        File jdbcMock = new File(src14Dir + "/com/mockrunner/mock/jdbc");
-        util.addJavaSrcFiles(src14Dir, jdbc, jdbcMap);
-        util.addJavaSrcFiles(src14Dir, jdbcMock, jdbcMap);
-        processFiles(jdbcProcMap, jdbcMap, src13Dir);
-        System.out.println("Sucessfully finished processing for JDBC JDK1.3");
-    }
-    
-    private void processFiles(Map procMap, Map map, String targetDir) throws FileNotFoundException, IOException
-    {
-        Iterator sourceIterator = map.keySet().iterator();
-        while(sourceIterator.hasNext())
-        {
-            String currentFileName = (String)sourceIterator.next();
-            File currentSourceFile = (File)map.get(currentFileName);
-            File currentDestFile = new File(targetDir + currentFileName);
-            String sourceFileContent = StreamUtil.getReaderAsString(new FileReader(currentSourceFile));
-            System.out.println("Processing file " + currentSourceFile);
-            String processedFileContent = processFile(currentFileName, sourceFileContent, procMap);
-            if(null != processedFileContent)
-            {
-                writeFileContent(processedFileContent, currentDestFile);
-            }
-        }
-    }
-
-    private String processFile(String currentFileName, String fileContent, Map jdbcProcMap)
-    {
-        currentFileName = currentFileName.replace('\\', '.');
-        currentFileName = currentFileName.replace('/', '.');
-        currentFileName = currentFileName.substring(1);
-        currentFileName = currentFileName.substring(0 , currentFileName.length() - 5);
-        Object currentObject = (Object)jdbcProcMap.get(currentFileName);
-        if(null == currentObject)
-        {
-            return fileContent;
-        }
-        else if(currentObject instanceof JavaLineProcessor)
-        {
-            return ((JavaLineProcessor)currentObject).process(fileContent);
-        }
-        else if(currentObject instanceof Boolean)
-        {
-            if(!((Boolean)currentObject).booleanValue())
-            {
-                return null;
-            }
-            else
-            {
-                return fileContent;
-            }
-        }
-        return null;
-    }
-
-    private void writeFileContent(String fileContent, File currentDestFile) throws FileNotFoundException, IOException
-    {
-        if(!currentDestFile.getParentFile().exists())
-        {
-            currentDestFile.getParentFile().mkdirs();
-        }
-        System.out.println("Writing file " + currentDestFile);
-        FileWriter currentDestFileWriter = new FileWriter(currentDestFile); 
-        currentDestFileWriter.write(fileContent);
-        currentDestFileWriter.flush();
-        currentDestFileWriter.close();
     }
 }
