@@ -31,7 +31,7 @@ import com.mockobjects.sql.MockResultSetMetaData;
  */
 public class MockPreparedStatement extends MockStatement implements PreparedStatement
 {
-    private Map setObjects = new HashMap();
+    private Map paramObjects = new HashMap();
     private String sql;
     private MockParameterMetaData parameterMetaData;
     
@@ -70,17 +70,17 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     
     public Map getObjectMap()
     {
-        return Collections.unmodifiableMap(setObjects);
+        return Collections.unmodifiableMap(paramObjects);
     }
     
     public Object getObject(int index)
     {
-        return setObjects.get(new Integer(index));
+        return paramObjects.get(new Integer(index));
     }
     
     public void setObject(int index, Object object) throws SQLException 
     {
-        setObjects.put(new Integer(index), object);
+        paramObjects.put(new Integer(index), object);
     }
     
     public void setObject(int parameterIndex, Object object, int targetSqlType, int scale) throws SQLException
@@ -100,7 +100,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public void clearParameters() throws SQLException
     {
-        setObjects.clear();
+        paramObjects.clear();
     }
 
     public boolean execute() throws SQLException
