@@ -36,6 +36,8 @@ mockrunner-0.3.2:
   reported by Peter Ryan
 - TransmissionManagerWrapper now allows transparent access to senders and
   receivers
+- added createBean methods with Class[] parameter to EJBTestModule in order
+  to specify parameter types and allow null parameters
 - refactored MockPageContext, it does no longer depend on 
   org.apache.struts.mock.MockPageContext
 - changed session creation in MockHttpServletRequest. If getSession(false)
