@@ -1,12 +1,13 @@
 package com.mockrunner.util;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Util class for collections
+ * Util class for arrays
  */
-public class CollectionUtil
+public class ArrayUtil
 {
     /**
      * Returns a <code>List</code> containing the bytes from the
@@ -135,6 +136,123 @@ public class CollectionUtil
             newList.add(list.get(ii));
         }
         return newList;
+    }
+    
+    /**
+     * Returns a truncated copy of <i>sourceArray</i>. <i>len</i>
+     * entries are copied.
+     * @param sourceArray the source array
+     * @param len the truncate length
+     * @return the truncated array
+     * @throws IllegalArgumentException if the specified object
+     *         is not an array (either of reference or primitive
+     *         component type)
+     */
+    public static Object truncateArray(Object sourceArray, int len)
+    {
+        return truncateArray(sourceArray, 0, len);
+    }
+    
+    /**
+     * Returns a truncated copy of <i>sourceArray</i>. <i>len</i>
+     * entries are copied starting at the specified index.
+     * @param sourceArray the source array
+     * @param index the start index
+     * @param len the truncate length
+     * @return the truncated array
+     * @throws IllegalArgumentException if the specified object
+     *         is not an array (either of reference or primitive
+     *         component type)
+     */
+    public static Object truncateArray(Object sourceArray, int index, int len)
+    {
+        if(!sourceArray.getClass().isArray())
+        {
+            throw new IllegalArgumentException("sourceArray must be an array");
+        }
+        Object targetArray = Array.newInstance(sourceArray.getClass().getComponentType(), len);
+        System.arraycopy(sourceArray, index, targetArray, 0, len);
+        return targetArray;
+    }
+    
+    /**
+     * Returns an object array by wrapping primitive types. If the 
+     * specified array is of primitive component type, an <code>Object[]</code>
+     * with the corresponding wrapper component type is returned.
+     * If the specified array is already an object array, the instance is
+     * returned unchanged.
+     * @param sourceArray the array
+     * @return the corresponding object array
+     * @throws IllegalArgumentException if the specified object
+     *         is not an array (either of reference or primitive
+     *         component type)
+     */
+    public static Object[] convertToObjectArray(Object sourceArray)
+    {
+        if(!sourceArray.getClass().isArray())
+        {
+            throw new IllegalArgumentException("sourceArray must be an array");
+        }
+        Class componentType = sourceArray.getClass().getComponentType();
+        if(!componentType.isPrimitive())
+        {
+            return (Object[])sourceArray;
+        }
+        if(componentType == Boolean.TYPE)
+        {
+            componentType = Boolean.class;
+        }
+        else if(componentType == Byte.TYPE)
+        {
+            componentType = Byte.class;
+        }
+        else if(componentType == Character.TYPE)
+        {
+            componentType = Character.class;
+        }
+        else if(componentType == Short.TYPE)
+        {
+            componentType = Short.class;
+        }
+        else if(componentType == Integer.TYPE)
+        {
+            componentType = Integer.class;
+        }
+        else if(componentType == Long.TYPE)
+        {
+            componentType = Long.class;
+        }
+        else if(componentType == Float.TYPE)
+        {
+            componentType = Float.class;
+        }
+        else if(componentType == Double.TYPE)
+        {
+            componentType = Double.class;
+        }
+        int length = Array.getLength(sourceArray);
+        Object[] targetArray = (Object[])Array.newInstance(componentType, length);
+        for(int ii = 0; ii < length; ii++)
+        {
+            targetArray[ii] = Array.get(sourceArray, ii);
+        }
+        return targetArray;
+    }
+    
+    /**
+     * Creates an array with a single object as component.
+     * If the specified object is an array, it will be returned
+     * unchanged. Otherwise an array with the specified object
+     * as the single element will be returned.
+     * @param object the object
+     * @return the corresponding array
+     */
+    public static Object convertToArray(Object object)
+    {
+        if(object.getClass().isArray()) return object;
+        Object array = Array.newInstance(object.getClass(), 1);
+        Array.set(array, 0, object);
+        return array;
     }
     
     /**
