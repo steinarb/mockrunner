@@ -4,6 +4,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMessages;
 
 import de.mockrunner.mock.MockActionForward;
 import de.mockrunner.mock.MockActionMapping;
@@ -53,20 +54,40 @@ public class ActionTestCaseAdapter extends BaseTestCase
     {
         actionTestModule.verifyNoActionErrors();
     }
+    
+    protected void verifyNoActionMessages()
+    {
+        actionTestModule.verifyNoActionMessages();
+    }
 
     protected void verifyHasActionErrors()
     {
         actionTestModule.verifyHasActionErrors();
+    }
+    
+    protected void verifyHasActionMessages()
+    {
+        actionTestModule.verifyHasActionMessages();
     }
 
     protected void verifyActionErrorPresent(String errorName)
     {
         actionTestModule.verifyActionErrorPresent(errorName);
     }
+    
+    protected void verifyActionMessagePresent(String messageName)
+    {
+        actionTestModule.verifyActionMessagePresent(messageName);
+    }
 
     protected void verifyActionErrorNotPresent(String errorName)
     {
         actionTestModule.verifyActionErrorNotPresent(errorName);
+    }
+    
+    protected void verifyActionMessageNotPresent(String messageName)
+    {
+        actionTestModule.verifyActionMessageNotPresent(messageName);
     }
 
     protected void verifyActionErrors(String errorNames[])
@@ -74,24 +95,49 @@ public class ActionTestCaseAdapter extends BaseTestCase
         actionTestModule.verifyActionErrors(errorNames);
     }
     
+    protected void verifyActionMessages(String messageNames[])
+    {
+        actionTestModule.verifyActionMessages(messageNames);
+    }
+    
     protected void verifyActionErrorValues(String errorKey, Object[] values)
     {
         actionTestModule.verifyActionErrorValues(errorKey, values);
+    }
+    
+    protected void verifyActionMessageValues(String messageKey, Object[] values)
+    {
+        actionTestModule.verifyActionMessageValues(messageKey, values);
     }
     
     protected void verifyActionErrorValue(String errorKey, Object value)
     {
         actionTestModule.verifyActionErrorValue(errorKey, value);
     }
+    
+    protected void verifyActionMessageValue(String messageKey, Object value)
+    {
+        actionTestModule.verifyActionMessageValue(messageKey, value);
+    }
+    
+    protected void verifyNumberActionErrors(int number)
+    {
+        actionTestModule.verifyNumberActionErrors(number);
+    }
+    
+    protected void verifyNumberActionessages(int number)
+    {
+        actionTestModule.verifyNumberActionMessages(number);
+    }
 
     protected ActionError getActionErrorByKey(String errorKey)
     {
         return actionTestModule.getActionErrorByKey(errorKey);
     }
-
-    protected void verifyNumberActionErrors(int number)
+    
+    protected ActionError getActionMessageByKey(String messageKey)
     {
-        actionTestModule.verifyNumberActionErrors(number);
+        return actionTestModule.getActionMessageByKey(messageKey);
     }
 
     protected void setActionErrors(ActionErrors errors)
@@ -108,7 +154,22 @@ public class ActionTestCaseAdapter extends BaseTestCase
     {
         return actionTestModule.hasActionErrors();
     }
+    
+    protected void setActionMessages(ActionMessages messages)
+    {
+        actionTestModule.setActionMessages(messages);
+    }
 
+    protected ActionMessages getActionMessages()
+    {
+        return actionTestModule.getActionMessages();
+    }
+
+    protected boolean hasActionMessages()
+    {
+        return actionTestModule.hasActionMessages();
+    }
+    
     protected MockActionMapping getMockActionMapping()
     {
         return actionTestModule.getMockActionMapping();

@@ -10,6 +10,8 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 import org.apache.struts.taglib.html.Constants;
 
 import de.mockrunner.mock.MockActionForward;
@@ -60,12 +62,21 @@ public class ActionTestModule
 
     public void verifyNoActionErrors()
     {
-        ActionErrors errors = getActionErrors();
-        if (null != errors && !errors.isEmpty())
+        verifyNoActionMessages(getActionErrors());   
+    }
+    
+    public void verifyNoActionMessages()
+    {
+        verifyNoActionMessages(getActionMessages());   
+    }
+    
+    private void verifyNoActionMessages(ActionMessages messages)
+    {
+        if (containsMessages(messages))
         {
             StringBuffer buffer = new StringBuffer();
-            buffer.append("has action errors: ");
-            Iterator iterator = errors.get();
+            buffer.append("has the following messages/errors: ");
+            Iterator iterator = messages.get();
             while (iterator.hasNext())
             {
                 ActionError error = (ActionError) iterator.next();
@@ -77,58 +88,89 @@ public class ActionTestModule
 
     public void verifyHasActionErrors()
     {
-        ActionErrors errors = getActionErrors();
-        if (null == errors || errors.isEmpty())
+        if (!containsMessages(getActionErrors()))
         {
             throw new VerifyFailedException("no action errors");
+        }
+    }
+    
+    public void verifyHasActionMessages()
+    {
+        if (!containsMessages(getActionMessages()))
+        {
+            throw new VerifyFailedException("no action messages");
         }
     }
 
     public void verifyActionErrorPresent(String errorName)
     {
-        if (!hasActionErrors())
-        {
-            throw new VerifyFailedException("no action errors");
-        }
-        ActionErrors errors = (ActionErrors) getActionErrors();
-        Iterator iterator = errors.get();
+        verifyActionMessagePresent(errorName, getActionErrors());
+    }
+    
+    public void verifyActionMessagePresent(String messageName)
+    {
+        verifyActionMessagePresent(messageName, getActionMessages());
+    }
+    
+    private void verifyActionMessagePresent(String messageName, ActionMessages messages)
+    {
+        if (!containsMessages(messages)) throw new VerifyFailedException("no action messages/errors");
+        Iterator iterator = messages.get();
         while (iterator.hasNext())
         {
-            ActionError error = (ActionError) iterator.next();
-            if (error.getKey().equals(errorName))
+            ActionMessage message = (ActionMessage) iterator.next();
+            if (message.getKey().equals(messageName))
             {
                 return;
             }
         }
-        throw new VerifyFailedException(errorName + " not in array errorNames");
+        throw new VerifyFailedException("message/error " + messageName + " not present");
     }
-
+    
     public void verifyActionErrorNotPresent(String errorName)
     {
-        ActionErrors errors = (ActionErrors) getActionErrors();
-        Iterator iterator = errors.get();
+        verifyActionMessageNotPresent(errorName, getActionErrors());
+    }
+    
+    public void verifyActionMessageNotPresent(String messageName)
+    {
+        verifyActionMessageNotPresent(messageName, getActionMessages());
+    }
+    
+    private void verifyActionMessageNotPresent(String messageName, ActionMessages messages)
+    {
+        Iterator iterator = messages.get();
         while (iterator.hasNext())
         {
-            ActionError error = (ActionError) iterator.next();
-            if (error.getKey().equals(errorName))
+            ActionMessage message = (ActionMessage) iterator.next();
+            if (message.getKey().equals(messageName))
             {
-                throw new VerifyFailedException(errorName + " in array errorNames");
+                throw new VerifyFailedException("message/error " + messageName + " present");
             }
         }
     }
 
     public void verifyActionErrors(String errorNames[])
     {
-        if (!hasActionErrors()) throw new VerifyFailedException("no action errors");
-        ActionErrors errors = (ActionErrors) getActionErrors();
-        if(errors.size() != errorNames.length) throw new VerifyFailedException("expected " + errorNames.length + " errors, received " + errors.size() + " errors");
-        Iterator iterator = errors.get();
-        for (int ii = 0; ii < errorNames.length; ii++)
+        verifyActionMessages(errorNames, getActionErrors());  
+    }
+    
+    public void verifyActionMessages(String errorMessages[])
+    {
+        verifyActionMessages(errorMessages, getActionMessages());  
+    }
+    
+    private void verifyActionMessages(String messageNames[], ActionMessages messages)
+    {
+        if (!containsMessages(messages)) throw new VerifyFailedException("no action messages/errors");
+        if(messages.size() != messageNames.length) throw new VerifyFailedException("expected " + messageNames.length + " messages/errors, received " + messages.size() + " messages/errors");
+        Iterator iterator = messages.get();
+        for (int ii = 0; ii < messageNames.length; ii++)
         {
-            ActionError error = (ActionError) iterator.next();
-            if (!error.getKey().equals(errorNames[ii]))
+            ActionMessage message = (ActionMessage) iterator.next();
+            if (!message.getKey().equals(messageNames[ii]))
             {
-                throw new VerifyFailedException("mismatch at position " + ii + ", actual: " + error.getKey() + ", expected: " + errorNames[ii]);
+                throw new VerifyFailedException("mismatch at position " + ii + ", actual: " + message.getKey() + ", expected: " + messageNames[ii]);
             }
         }
     }
@@ -137,55 +179,100 @@ public class ActionTestModule
     {
         ActionError error = getActionErrorByKey(errorKey);
         if(null == error) throw new VerifyFailedException("action error " + errorKey + " not present");
-        Object[] actualValues = error.getValues();
-        if(null == actualValues) throw new VerifyFailedException("action error " + errorKey + " has no values");
-        if(values.length != actualValues.length) throw new VerifyFailedException("action error " + errorKey + " has " + actualValues + " values");
+        verifyActionMessageValues(error, values);
+    }
+    
+    public void verifyActionMessageValues(String messageKey, Object[] values)
+    {
+        ActionMessage message = getActionMessageByKey(messageKey);
+        if(null == message) throw new VerifyFailedException("action message " + messageKey + " not present");
+        verifyActionMessageValues(message, values);
+    }
+    
+    private void verifyActionMessageValues(ActionMessage message, Object[] values)
+    {
+        Object[] actualValues = message.getValues();
+        if(null == actualValues) throw new VerifyFailedException("action message/error " + message.getKey() + " has no values");
+        if(values.length != actualValues.length) throw new VerifyFailedException("action message/error " + message.getKey() + " has " + actualValues + " values");
         for(int ii = 0; ii < actualValues.length; ii++)
         {
             if(!values[ii].equals(actualValues[ii]))
             {
-                throw new VerifyFailedException("action error " + errorKey + ": expected value[" + ii + "]: " + values[ii] + " received value[" + ii + "]: " + actualValues[ii]);
+                throw new VerifyFailedException("action message/error " + message.getKey() + ": expected value[" + ii + "]: " + values[ii] + " received value[" + ii + "]: " + actualValues[ii]);
             }
         }
     }
     
     public void verifyActionErrorValue(String errorKey, Object value)
     {
-        ActionError error = getActionErrorByKey(errorKey);
-        if(null == error) throw new VerifyFailedException("action error " + errorKey + " not present");
-        Object[] values = error.getValues();
-        if(null == values) throw new VerifyFailedException("action error " + errorKey + " has no values");
-        if(1 != values.length) throw new VerifyFailedException("action error " + errorKey + " has " + values.length + " values");
-        if(value.equals(values[0])) return;
-        throw new VerifyFailedException("action error " + errorKey + ": expected value: " + value + " received value: " + values[0]);
+        verifyActionErrorValues(errorKey, new Object[] { value });
+    }
+    
+    public void verifyActionMessageValue(String messageKey, Object value)
+    {
+        verifyActionMessageValues(messageKey, new Object[] { value });
+    }
+    
+    public void verifyNumberActionErrors(int number)
+    {
+        verifyNumberActionMessages(number, getActionErrors());
+    }
+    
+    public void verifyNumberActionMessages(int number)
+    {
+        verifyNumberActionMessages(number, getActionMessages());
+    }
+   
+    private void verifyNumberActionMessages(int number, ActionMessages messages)
+    {
+        if (null != messages)
+        {
+            if (messages.size() == number) return;
+            throw new VerifyFailedException("expected " + number + " messages/errors, received " + messages.size() + " messages/errors");
+        }
+        if (number == 0) return;
+        throw new VerifyFailedException("no action messages/errors");
     }
 
     public ActionError getActionErrorByKey(String errorKey)
     {
-        ActionErrors errors = (ActionErrors) getActionErrors();
-        if (null == errors) return null;
-        Iterator iterator = errors.get();
+        return (ActionError)getActionMessageByKey(errorKey, getActionErrors());
+    }
+    
+    public ActionError getActionMessageByKey(String messageKey)
+    {
+        return (ActionError)getActionMessageByKey(messageKey, getActionMessages());
+    }
+    
+    private ActionMessage getActionMessageByKey(String messageKey, ActionMessages messages)
+    {
+        if(null == messages) return null;
+        Iterator iterator = messages.get();
         while (iterator.hasNext())
         {
-            ActionError error = (ActionError) iterator.next();
-            if (error.getKey().equals(errorKey))
+            ActionMessage message = (ActionMessage) iterator.next();
+            if (message.getKey().equals(messageKey))
             {
-                return error;
+                return message;
             }
         }
         return null;
     }
-
-    public void verifyNumberActionErrors(int number)
+    
+    public void setActionMessages(ActionMessages messages)
     {
-        ActionErrors errors = getActionErrors();
-        if (null != errors)
-        {
-            if (errors.size() == number) return;
-            throw new VerifyFailedException("expected " + number + " errors, received " + errors.size() + " errors");
-        }
-        if (number == 0) return;
-        throw new VerifyFailedException("no action errors");
+        mockFactory.getMockRequest().setAttribute(Globals.MESSAGE_KEY, messages);
+    }
+
+    public ActionMessages getActionMessages()
+    {
+        return (ActionMessages) mockFactory.getMockRequest().getAttribute(Globals.MESSAGE_KEY);
+    }
+    
+    public boolean hasActionMessages()
+    {
+        ActionMessages messages = getActionMessages();
+        return containsMessages(messages);
     }
 
     public void setActionErrors(ActionErrors errors)
@@ -201,7 +288,7 @@ public class ActionTestModule
     public boolean hasActionErrors()
     {
         ActionErrors errors = getActionErrors();
-        return containsErrors(errors);
+        return containsMessages(errors);
     }
 
     public MockActionMapping getMockActionMapping()
@@ -352,7 +439,7 @@ public class ActionTestModule
         if (validate)
         {
             ActionErrors errors = formObj.validate(getMockActionMapping(), mockFactory.getMockRequest());
-            if (containsErrors(errors))
+            if (containsMessages(errors))
             {
                 mockFactory.getMockRequest().setAttribute(Globals.ERROR_KEY, errors);
             }
@@ -370,9 +457,9 @@ public class ActionTestModule
             BeanUtils.setProperty(getActionForm(), key, value[0]);
         }
     }
-
-    private boolean containsErrors(ActionErrors errors)
+   
+    private boolean containsMessages(ActionMessages messages)
     {
-        return (null != errors) && (errors.size() > 0);
+        return (null != messages) && (messages.size() > 0);
     }
 }
