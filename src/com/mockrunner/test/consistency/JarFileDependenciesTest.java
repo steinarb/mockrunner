@@ -62,8 +62,17 @@ public class JarFileDependenciesTest extends TestCase
         {
             jarFileNames.add(((File)jarFiles.get(ii)).getName());
         }
+        boolean ok = true;
+        for(int ii = 0; ii < mockrunnerJars.size(); ii++)
+        {
+            if(!jarFileNames.contains(mockrunnerJars.get(ii)))
+            {
+                System.out.println("Missing jar in release: " + mockrunnerJars.get(ii));
+                ok = false;
+            }
+        }
         assertEquals(jarFileNames.size(), mockrunnerJars.size());
-        assertTrue(jarFileNames.containsAll(mockrunnerJars));
+        assertTrue("There are missing jars in the release", ok);
     }
     
     public void testJarFileDependencies() throws Exception

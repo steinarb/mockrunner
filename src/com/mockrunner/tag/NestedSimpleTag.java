@@ -1,19 +1,19 @@
 package com.mockrunner.tag;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
+/**
+ * Implementation of {@link NestedTag} wrapping tags of
+ * type <code>SimpleTag</code>. <code>NestedSimpleTag</code> instances 
+ * are created with the help of {@link TagTestModule#createNestedTag}. 
+ * You do not need to create them on your own in the tests.
+ */
 public class NestedSimpleTag //extends SimpleTagSupport implements NestedTag
 {
-    //private SimpleTag tag;
-    //private JspContext jspContext;
-    //private Map attributes;
-    private List childs;
+    /*private SimpleTag tag;
+    private JspContext jspContext;
+    private JspFragment jspBody;
+    private Map attributes;*/
     
     /**
      * Constructor for a tag with an empty attribute map.
@@ -35,7 +35,7 @@ public class NestedSimpleTag //extends SimpleTagSupport implements NestedTag
     {
         this.tag = tag;
         this.jspContext = jspContext;
-        childs = new ArrayList();
+        jspBody = new MockJspFragment(jspContext, tag);
         this.attributes = attributes;
     }*/
     
@@ -88,21 +88,30 @@ public class NestedSimpleTag //extends SimpleTagSupport implements NestedTag
     
     /**
      * Implementation of {@link NestedTag#doLifecycle} for simple
-     * tags.
+     * tags. Returns <code>-1</code> in this case, because
+     * <code>doTag()</code> does not have a return value.
      */
-    public int doLifecycle() throws JspException
+    /*public int doLifecycle() throws JspException
     {
-        return 0;
-    }
+        try
+        {
+            tag.doTag();
+        } 
+        catch(IOException exc)
+        {
+            throw new NestedApplicationException(exc);
+        }
+        return -1;
+    }*/
     
     /**
      * Implementation of {@link NestedTag#getTag}.
-     * Returns <code>null</code> because simple tag
-     * cannot be an instance of <code>TagSupport</code>.
+     * Should not be called and throws a <code>RuntimeException</code>,
+     * because a simple tag is not an instance of <code>TagSupport</code>.
      */
     public TagSupport getTag()
     {
-        return null;
+        throw new RuntimeException("This method cannot be called for simple tags.");
     }
     
     /**
@@ -116,74 +125,99 @@ public class NestedSimpleTag //extends SimpleTagSupport implements NestedTag
     /**
      * Implementation of {@link NestedTag#removeChilds}.
      */
-    public void removeChilds()
+    /*public void removeChilds()
     {
-        childs.clear();
-    }
+        if(null != jspBody && jspBody instanceof MockJspFragment)
+        {
+            ((MockJspFragment)jspBody).removeChilds();
+        }
+    }*/
     
     /**
      * Implementation of {@link NestedTag#getChilds}.
      */
-    public List getChilds()
+    /*public List getChilds()
     {
-        return childs;
-    }
+        if(null != jspBody && jspBody instanceof MockJspFragment)
+        {
+            return ((MockJspFragment)jspBody).getChilds();
+        }
+        return null;
+    }*/
     
     /**
      * Implementation of {@link NestedTag#getChild}.
      */
-    public Object getChild(int index)
+    /*public Object getChild(int index)
     {
-        return childs.get(index);
-    }
+        if(null != jspBody && jspBody instanceof MockJspFragment)
+        {
+            return ((MockJspFragment)jspBody).getChild(index);
+        }
+        return null;
+    }*/
     
     /**
      * Implementation of {@link NestedTag#addTextChild}.
      */
-    public void addTextChild(String text)
+    /*public void addTextChild(String text)
     {
-        if(null == text) text = "";
-        childs.add(text);
-    }
+        if(null != jspBody && jspBody instanceof MockJspFragment)
+        {
+            ((MockJspFragment)jspBody).addTextChild(text);
+        }
+    }*/
     
     /**
      * Implementation of {@link NestedTag#addTagChild(Class)}.
      */
-    public NestedTag addTagChild(Class tag)
+    /*public NestedTag addTagChild(Class tag)
     {
-        return addTagChild(tag, new HashMap());
-    }
+        if(null != jspBody && jspBody instanceof MockJspFragment)
+        {
+            return ((MockJspFragment)jspBody).addTagChild(tag);
+        }
+        return null;
+    }*/
     
     /**
      * Implementation of {@link NestedTag#addTagChild(Class, Map)}.
      */
-    public NestedTag addTagChild(Class tag, Map attributeMap)
+    /*public NestedTag addTagChild(Class tag, Map attributeMap)
     {
+        if(null != jspBody && jspBody instanceof MockJspFragment)
+        {
+            return ((MockJspFragment)jspBody).addTagChild(tag, attributeMap);
+        }
         return null;
-    }
+    }*/
     
     /**
      * Implementation of {@link NestedTag#addTagChild(TagSupport)}.
      */
-    public NestedTag addTagChild(TagSupport tag)
+    /*public NestedTag addTagChild(TagSupport tag)
     {
         return addTagChild(tag, new HashMap());
-    }
+    }*/
     
     /**
      * Implementation of {@link NestedTag#addTagChild(TagSupport, Map)}.
      */
-    public NestedTag addTagChild(TagSupport tag, Map attributeMap)
+    /*public NestedTag addTagChild(TagSupport tag, Map attributeMap)
     {
-        return null;
-    }
+        return addTagChild((JspTag)tag, attributeMap);
+    }*/
     
     /**
      * Implementation of {@link NestedTag#addTagChild(JspTag)}.
      */
     /*public NestedTag addTagChild(JspTag tag)
     {
-        return addTagChild((TagSupport)tag);
+        if(null != jspBody && jspBody instanceof MockJspFragment)
+        {
+            return ((MockJspFragment)jspBody).addTagChild(tag);
+        }
+        return null;
     }*/
     
     /**
@@ -191,42 +225,77 @@ public class NestedSimpleTag //extends SimpleTagSupport implements NestedTag
      */
     /*public NestedTag addTagChild(JspTag tag, Map attributeMap)
     {
-        return addTagChild((TagSupport)tag, attributeMap);
+        if(null != jspBody && jspBody instanceof MockJspFragment)
+        {
+            return ((MockJspFragment)jspBody).addTagChild(tag, attributeMap);
+        }
+        return null;
     }*/
     
-    public void doTag() throws JspException, IOException
+    /**
+     * Delegates to wrapped tag.
+     */
+    /*public void doTag() throws JspException, IOException
     {
-        //super.doTag();
-    }
+        tag.doTag();
+    }*/
     
+    /**
+     * Returns the body fragment.
+     * @return the body fragment
+     */
     /*public JspFragment getJspBody()
     {
-        return super.getJspBody();
-    }
+        return jspBody;
+    }*/
     
-    public JspContext getJspContext()
+    /**
+     * Returns the <code>JspContext</code>.
+     * @return the <code>JspContext</code>
+     */
+    /*public JspContext getJspContext()
     {
         return jspContext;
-    }
+    }*/
     
-    public JspTag getParent()
+    /**
+     * Delegates to wrapped tag.
+     */
+    /*public JspTag getParent()
     {
-        return super.getParent();
-    }
+        return tag.getParent();
+    }*/
     
-    public void setJspBody(JspFragment arg0)
+    /**
+     * Delegates to wrapped tag.
+     */
+    /*public void setJspBody(JspFragment jspBody)
     {
-        super.setJspBody(arg0);
-    }
+        this.jspBody = jspBody;
+        tag.setJspBody(jspBody);
+    }*/
     
-    public void setJspContext(JspContext jspContext)
+    /**
+     * Delegates to wrapped tag. Also calls <code>setJspContext</code>
+     * on the body fragment, if the body fragment is an instance of
+     * {@link com.mockrunner.mock.web.MockJspFragment}
+     */
+    /*public void setJspContext(JspContext jspContext)
     {
         this.jspContext = jspContext;
-    }
+        tag.setJspContext(jspContext);
+        if(null != jspBody && jspBody instanceof MockJspFragment)
+        {
+           ((MockJspFragment)jspBody).setJspContext(jspContext);
+        }
+    }*/
     
-    public void setParent(JspTag arg0)
+    /**
+     * Delegates to wrapped tag.
+     */
+    /*public void setParent(JspTag parent)
     {
-        super.setParent(arg0);
+        tag.setParent(parent);
     }*/
     
     /**

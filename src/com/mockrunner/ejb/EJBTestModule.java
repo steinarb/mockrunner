@@ -794,9 +794,6 @@ public class EJBTestModule
         }
         catch(ClassNotFoundException exc)
         {
-            System.out.println(classPackage);
-            System.out.println(beanClass.getClassLoader());
-            exc.printStackTrace();
             throw new RuntimeException("Home interface not found: " + exc.getMessage());
         }
     }

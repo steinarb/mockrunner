@@ -92,8 +92,6 @@ public class XMLResultSetFactory implements ResultSetFactory
     
     /**
      * Get whether or not trim is true or false.
-     * 
-     * @param trim
      */
     public boolean getTrim() 
     {

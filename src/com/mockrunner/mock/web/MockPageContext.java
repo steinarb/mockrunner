@@ -385,8 +385,8 @@ public class MockPageContext extends PageContext
         jspWriter = new MockJspWriter();
         outStack = new Stack();
     }
-    /*
-    public void setExpressionEvaluator(ExpressionEvaluator evaluator)
+    
+    /*public void setExpressionEvaluator(ExpressionEvaluator evaluator)
     {
         this.evaluator = evaluator;
     }
