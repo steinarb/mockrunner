@@ -41,7 +41,7 @@ import com.mockrunner.jms.TransmissionManagerWrapper;
  * the message will be automatically acknowledged,
  * otherwise, it will not be acknowledged. According
  * to JMS specification, the acknowledged mode must
- * be ignored for transacted session. This is currently
+ * be ignored for transacted sessions. This is currently
  * not implemented, i.e. transacted sessions behave like
  * sessions with acknowledge mode AUTO_ACKNOWLEDGE. 
  * Messages are acknowledged even if the transaction is 
