@@ -79,6 +79,30 @@ public class TagTestCaseAdapter extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link TagTestModule#doInitBody}
+     */
+    public void doInitBody()
+    {
+        tagTestModule.doInitBody();
+    }
+
+    /**
+     * Delegates to {@link TagTestModule#doAfterBody}
+     */
+    public void doAfterBody()
+    {
+        tagTestModule.doAfterBody();
+    }
+
+    /**
+     * Delegates to {@link TagTestModule#release}
+     */
+    public void release()
+    {
+        tagTestModule.release();
+    }
+
+    /**
      * Delegates to {@link TagTestModule#getOutput}
      */
     public String getOutput()
