@@ -13,7 +13,17 @@ import org.apache.oro.text.regex.Perl5Matcher;
 
 /**
  * Helper class for finding matching SQL statements based on various
- * search parameters.
+ * search parameters. The search parameters are:
+ * <br>
+ * <code>caseSensitive</code> do a case sensitive match (default is <code>false</code>)
+ * <br>
+ * <code>exactMatch</code> the strings must match exactly, the parameter <code>caseSensitive</code>
+ *                         is recognized, but <code>useRegularExpression</code> is irrelevant,
+ *                         if <code>exactMatch</code> is <code>true</code> (default is <code>false</code>)
+ * <br>
+ * <code>useRegularExpression</code> use regular expressions for matching, if this parameter is
+ *                                   <code>false</code>, strings match, if one string starts with the other
+ *                                   (default is <code>false</code>)
  */
 public class SQLStatementMatcher
 {
@@ -35,7 +45,7 @@ public class SQLStatementMatcher
     
     /**
      * Compares all keys in the specified <code>Map</code> with the
-     * specified query string using the method {@link #doesStringMatch}.
+     * specified query string using the method {@link #doStringsMatch}.
      * If the strings match, the corresponding object from the <code>Map</code>
      * is added to the resulting <code>List</code>.
      * @param dataMap the source <code>Map</code>
@@ -82,7 +92,7 @@ public class SQLStatementMatcher
     
     /**
      * Compares all elements in the specified <code>Collection</code> with the
-     * specified query string using the method {@link #doesStringMatch}.
+     * specified query string using the method {@link #doStringsMatch}.
      * @param col the <code>Collections</code>
      * @param query the query string that must match the keys in <i>col</i>
      * @param queryContainsData only matters if <i>exactMatch</i> is <code>false</code>,

@@ -27,6 +27,7 @@ public abstract class AbstractResultSetHandler
 {
     private boolean caseSensitive = false;
     private boolean exactMatch = false;
+    private boolean useRegularExpression = false;
     private MockResultSet globalResultSet;
     private Map resultSetsForStatement = new HashMap();
     private int globalUpdateCount = 0;
@@ -109,6 +110,20 @@ public abstract class AbstractResultSetHandler
     public void setExactMatch(boolean exactMatch)
     {
         this.exactMatch = exactMatch;
+    }
+    
+    /**
+     * Set if regular expressions should be used when matching
+     * SQL statements. Irrelevant if <code>exactMatch</code> is
+     * <code>true</code>. Default is <code>false</code>, i.e. you
+     * cannot use regular expressions and matching is based
+     * on string comparison (which is much faster). Enable
+     * this feature only if necessary.
+     * @param useRegularExpression should regular expressions be used
+     */
+    public void setUseRegularExpression(boolean useRegularExpression)
+    {
+        this.useRegularExpression = useRegularExpression;
     }
     
     /**
@@ -216,7 +231,7 @@ public abstract class AbstractResultSetHandler
      */
     public MockResultSet getResultSet(String sql)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch());
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpression());
         List list = matcher.getMatchingObjects(resultSetsForStatement, sql, true, true);
         if(null != list && list.size() > 0)
         {
@@ -247,7 +262,7 @@ public abstract class AbstractResultSetHandler
      */
     public Integer getUpdateCount(String sql)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch());
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpression());
         List list = matcher.getMatchingObjects(updateCountForStatement, sql, true, true);
         if(null != list && list.size() > 0)
         {
@@ -280,7 +295,7 @@ public abstract class AbstractResultSetHandler
      */
     public Boolean getReturnsResultSet(String sql)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch());
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpression());
         List list = matcher.getMatchingObjects(returnsResultSetMap, sql, true, true);
         if(null != list && list.size() > 0)
         {
@@ -298,7 +313,7 @@ public abstract class AbstractResultSetHandler
      */
     public boolean getThrowsSQLException(String sql)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch());
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpression());
         if(matcher.contains(throwsSQLException, sql, true)) return true;
         return false;
     }
@@ -395,5 +410,14 @@ public abstract class AbstractResultSetHandler
     protected boolean getExactMatch()
     {
         return exactMatch;
+    }
+    
+    /**
+     * Returns if regular expression matching is enabled
+     * @return if regular expression matching is enabled
+     */
+    protected boolean getUseRegularExpression()
+    {
+        return useRegularExpression;
     }
 }
