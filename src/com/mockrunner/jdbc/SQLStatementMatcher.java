@@ -1,4 +1,4 @@
-package com.mockrunner.util;
+package com.mockrunner.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -7,51 +7,40 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Simple util class with some methods for searching into collections
+ * Helper class for finding matching SQL statements based on various
+ * search parameters.
  */
-public class SearchUtil
+public class SQLStatementMatcher
 {
-	/**
-	 * Compares all keys in the specified <code>Map</code> with the
-	 * specified query string using the method {@link #doesStringMatch}.
-	 * If the strings match, the corresponding object from the <code>Map</code>
-	 * is added to the resulting <code>List</code>.
-	 * @param dataMap the source <code>Map</code>
-	 * @param query the query string that must match the keys in <i>dataMap</i>
-	 * @param caseSensitive is comparison case sensitive
-	 * @param exactMatch compare exactly
-	 * @param queryContainsMapData only matters if <i>exactMatch</i> is <code>false</code>,
-	 *        specifies if query must be contained in the <code>Map</code> keys (<code>false</code>)
-	 *        or if query must contain the <code>Map</code> keys (<code>true</code>)
-	 * @return the result <code>List</code>
-	 */
-	public static List getMatchingObjects(Map dataMap, String query, boolean caseSensitive, boolean exactMatch, boolean queryContainsMapData)
-	{
-		return getMatchingObjects(dataMap, query, caseSensitive, exactMatch, queryContainsMapData, false);
-	}
+    private boolean isCaseSensitive = false;
+    private boolean isExactMatch = false;
+    private boolean isUseRegularExpression = false;
+    
+    public SQLStatementMatcher(boolean isCaseSensitive, boolean isExactMatch)
+    {
+        this(isCaseSensitive, isExactMatch, false);
+    }
+    
+    public SQLStatementMatcher(boolean isCaseSensitive, boolean isExactMatch, boolean isUseRegularExpression)
+    {
+        this.isCaseSensitive = isCaseSensitive;
+        this.isExactMatch = isExactMatch;
+        this.isUseRegularExpression = isUseRegularExpression;
+    }
     
     /**
      * Compares all keys in the specified <code>Map</code> with the
      * specified query string using the method {@link #doesStringMatch}.
      * If the strings match, the corresponding object from the <code>Map</code>
-     * is added to the resulting <code>List</code>. If the object to add is
-     * a <code>Collection</code>, all elements of the <code>Collection</code>
-     * will be added.
+     * is added to the resulting <code>List</code>.
      * @param dataMap the source <code>Map</code>
      * @param query the query string that must match the keys in <i>dataMap</i>
-     * @param caseSensitive is comparison case sensitive
-     * @param exactMatch compare exactly
-     * @param queryContainsMapData only matters if <i>exactMatch</i> is <code>false</code>,
+     * @param queryContainsMapData only matters if <i>isExactMatch</i> is <code>false</code>,
      *        specifies if query must be contained in the <code>Map</code> keys (<code>false</code>)
      *        or if query must contain the <code>Map</code> keys (<code>true</code>)
      * @return the result <code>List</code>
      */
-    public static List getMatchingObjectsResolveCollection(Map dataMap, String query, boolean caseSensitive, boolean exactMatch, boolean queryContainsMapData)
-    {
-        return getMatchingObjects(dataMap, query, caseSensitive, exactMatch, queryContainsMapData, true);
-    }
-    
-	private static List getMatchingObjects(Map dataMap, String query, boolean caseSensitive, boolean exactMatch, boolean queryContainsMapData, boolean resolveCollection)
+    public List getMatchingObjects(Map dataMap, String query, boolean resolveCollection, boolean queryContainsMapData)
 	{
 		if(null == query) query = "";
 		Iterator iterator = dataMap.keySet().iterator();
@@ -70,7 +59,7 @@ public class SearchUtil
 				source = nextKey;
 				currentQuery = query;
 			}
-			if(doesStringMatch(source, currentQuery, caseSensitive, exactMatch))
+			if(doesStringMatch(source, currentQuery))
 			{
 				Object matchingObject = dataMap.get(nextKey);
 				if(resolveCollection && (matchingObject instanceof Collection))
@@ -91,14 +80,12 @@ public class SearchUtil
      * specified query string using the method {@link #doesStringMatch}.
      * @param col the <code>Collections</code>
      * @param query the query string that must match the keys in <i>col</i>
-     * @param caseSensitive is comparison case sensitive
-     * @param exactMatch compare exactly
      * @param queryContainsData only matters if <i>exactMatch</i> is <code>false</code>,
      *        specifies if query must be contained in the <code>Collection</code> data (<code>false</code>)
      *        or if query must contain the <code>Collection</code> data (<code>true</code>)
      * @return <code>true</code> if <i>col</i> contains <i>query</i>, false otherwise
      */
-    public static boolean contains(Collection col, String query, boolean caseSensitive, boolean exactMatch, boolean queryContainsData)
+    public boolean contains(Collection col, String query, boolean queryContainsData)
     {
         Iterator iterator = col.iterator();
         while(iterator.hasNext())
@@ -115,34 +102,27 @@ public class SearchUtil
                 source = nextKey;
                 currentQuery = query;
             }
-            if(doesStringMatch(source, currentQuery, caseSensitive, exactMatch)) return true;
+            if(doesStringMatch(source, currentQuery)) return true;
         }
         return false;
     }
     
     /**
-     * Simple helper method. Compares two strings and returns if
-     * they match. If <i>caseSensitive</i> is set to <code>false</code>
-     * the case of the strings is ignored. If <i>exactMatch</i> is
-     * set to <code>true</code>, the strings must match exactly (i.e.
-     * the <code>equals</code> method is used). Otherwise, the method
-     * returns <code>true</code>, if <i>source</i> cotains <i>query</i>.
+     * Compares two strings and returns if they match. 
      * @param query the query string that must match source
      * @param source the source string
-     * @param caseSensitive is comparison case sensitive
-     * @param exactMatch compare exactly
      * @return <code>true</code> of the strings match, <code>false</code> otherwise
      */
-    public static boolean doesStringMatch(String source, String query, boolean caseSensitive, boolean exactMatch)
+    public boolean doesStringMatch(String source, String query)
     {
         if(null == source) source = "";
         if(null == query) query = "";
-        if(!caseSensitive)
+        if(!isCaseSensitive)
         {
             source = source.toLowerCase();
             query = query.toLowerCase();
         }
-        if(exactMatch)
+        if(isExactMatch)
         {
             if(source.equals(query)) return true;
         }

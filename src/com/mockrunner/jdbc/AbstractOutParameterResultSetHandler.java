@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.util.ArrayUtil;
-import com.mockrunner.util.SearchUtil;
 
 /**
  * Abstract base class for all statement types
@@ -28,7 +27,8 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      */
     public Map getOutParameter(String sql)
     {
-        List list = SearchUtil.getMatchingObjectsResolveCollection(outParameterForStatement, sql, getCaseSensitive(), getExactMatch(), true);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch());
+        List list = matcher.getMatchingObjects(outParameterForStatement, sql, true, true);
         if(null != list && list.size() > 0)
         {
             return (Map)list.get(0);
@@ -49,7 +49,8 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      */
     public Map getOutParameter(String sql, Map parameters)
     {
-        List list = SearchUtil.getMatchingObjectsResolveCollection(outParameterForStatementParameters, sql, getCaseSensitive(), getExactMatch(), true);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch());
+        List list = matcher.getMatchingObjects(outParameterForStatementParameters, sql, true, true);
         for(int ii = 0; ii < list.size(); ii++)
         {
             MockOutParameterWrapper wrapper = (MockOutParameterWrapper)list.get(ii);

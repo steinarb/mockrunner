@@ -12,7 +12,6 @@ public class AllUtilTests
 		suite.addTest(new TestSuite(XmlUtilTest.class));
 		suite.addTest(new TestSuite(StreamUtilTest.class));
 		suite.addTest(new TestSuite(ArrayUtilTest.class));
-		suite.addTest(new TestSuite(SearchUtilTest.class));
 		suite.addTest(new TestSuite(CollectionUtilTest.class));
 		suite.addTest(new TestSuite(StringUtilTest.class));
 		suite.addTest(new TestSuite(ParameterUtilTest.class));

@@ -18,7 +18,6 @@ import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
 import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.ParameterUtil;
-import com.mockrunner.util.SearchUtil;
 import com.mockrunner.util.StringUtil;
 
 /**
@@ -277,7 +276,8 @@ public class JDBCTestModule
     public List getPreparedStatements(String sql)
     {
         Map sqlStatements = mockFactory.getMockConnection().getPreparedStatementResultSetHandler().getPreparedStatementMap();
-        return SearchUtil.getMatchingObjectsResolveCollection(sqlStatements, sql, caseSensitive, exactMatch, false); 
+        SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch);
+        return matcher.getMatchingObjects(sqlStatements, sql, true, false); 
     }
     
     /**
@@ -336,7 +336,8 @@ public class JDBCTestModule
     public List getCallableStatements(String sql)
     {
         Map sqlStatements = mockFactory.getMockConnection().getCallableStatementResultSetHandler().getCallableStatementMap();
-        return SearchUtil.getMatchingObjectsResolveCollection(sqlStatements, sql, caseSensitive, exactMatch, false); 
+        SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch);
+        return matcher.getMatchingObjects(sqlStatements, sql, true, false); 
     }
     
     /**
@@ -517,7 +518,8 @@ public class JDBCTestModule
      */
     public void verifySQLStatementExecuted(String sql)
     {
-        if(!SearchUtil.contains(getExecutedSQLStatements(), sql, caseSensitive, exactMatch, false))
+        SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch);
+        if(!matcher.contains(getExecutedSQLStatements(), sql, false))
         {
             throw new VerifyFailedException("Statement " + sql + " not executed.");
         }
@@ -530,7 +532,8 @@ public class JDBCTestModule
      */
     public void verifySQLStatementNotExecuted(String sql)
     {
-        if(SearchUtil.contains(getExecutedSQLStatements(), sql, caseSensitive, exactMatch, false))
+        SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch);
+        if(matcher.contains(getExecutedSQLStatements(), sql, false))
         {
             throw new VerifyFailedException("Statement " + sql + " was executed.");
         }
@@ -644,7 +647,8 @@ public class JDBCTestModule
 	private Map verifyAndGetParametersForSQL(String sql, int indexOfParameterSet)
 	{
 		verifySQLStatementExecuted(sql);
-		List matchingParameterList = SearchUtil.getMatchingObjects(getExecutedSQLStatementParameter(), sql, caseSensitive, exactMatch, false);
+		SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch);
+		List matchingParameterList = matcher.getMatchingObjects(getExecutedSQLStatementParameter(), sql, true, false);
 		if(null == matchingParameterList || matchingParameterList.size() == 0)
 		{
 			throw new VerifyFailedException("No parameters for SQL " + sql + " found.");

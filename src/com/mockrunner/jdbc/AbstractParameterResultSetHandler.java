@@ -10,7 +10,6 @@ import java.util.Map;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.ParameterUtil;
-import com.mockrunner.util.SearchUtil;
 
 /**
  * Abstract base class for all statement types
@@ -92,7 +91,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public Integer getUpdateCount(String sql, Map parameters)
     {
-        List list = SearchUtil.getMatchingObjectsResolveCollection(updateCountForStatement, sql, getCaseSensitive(), getExactMatch(), true);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch());
+        List list = matcher.getMatchingObjects(updateCountForStatement, sql, true, true);
         for(int ii = 0; ii < list.size(); ii++)
         {
             MockUpdateCountWrapper wrapper = (MockUpdateCountWrapper)list.get(ii);
@@ -117,7 +117,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public MockResultSet getResultSet(String sql, Map parameters)
     {
-        List list = SearchUtil.getMatchingObjectsResolveCollection(resultSetsForStatement, sql, getCaseSensitive(), getExactMatch(), true);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch());
+        List list = matcher.getMatchingObjects(resultSetsForStatement, sql, true, true);
         for(int ii = 0; ii < list.size(); ii++)
         {
             MockResultSetWrapper wrapper = (MockResultSetWrapper)list.get(ii);
@@ -140,7 +141,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public boolean getThrowsSQLException(String sql, Map parameters)
     {
-        List list = SearchUtil.getMatchingObjectsResolveCollection(throwsSQLException, sql, getCaseSensitive(), getExactMatch(), true);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch());
+        List list = matcher.getMatchingObjects(throwsSQLException, sql, true, true);
         for(int ii = 0; ii < list.size(); ii++)
         {
             if(doParameterMatch((Map)list.get(ii), parameters))

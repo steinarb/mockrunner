@@ -19,6 +19,7 @@ public class AllJDBCTests
         suite.addTest(new TestSuite(JDBCMockObjectFactoryTest.class));
 		suite.addTest(new TestSuite(AbstractParameterResultSetHandlerTest.class));
 		suite.addTest(new TestSuite(ParameterSetsTest.class));
+		suite.addTest(new TestSuite(SQLStatementMatcherTest.class));
         //$JUnit-END$
         return suite;
     }
