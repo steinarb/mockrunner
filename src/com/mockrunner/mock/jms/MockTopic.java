@@ -62,10 +62,10 @@ public class MockTopic implements Topic
                 }
                 else
                 {
-                    List receivers = session.getTransmissionManager().getQueueReceiverList(name);
-                    for(int ii = 0; ii < receivers.size(); ii++)
+                    List subscribers = session.getTransmissionManager().getTopicSubscriberList(name);
+                    for(int ii = 0; ii < subscribers.size(); ii++)
                     {
-                        MockTopicSubscriber subscriber = (MockTopicSubscriber)receivers.get(ii);
+                        MockTopicSubscriber subscriber = (MockTopicSubscriber)subscribers.get(ii);
                         if(subscriber.canConsume())
                         {
                             subscriber.receiveMessage(message);

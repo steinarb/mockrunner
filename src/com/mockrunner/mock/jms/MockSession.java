@@ -188,6 +188,7 @@ public class MockSession implements Session
     public void rollback() throws JMSException
     {
         connection.throwJMSException();
+        recover();
         rolledback = true;
     }
 

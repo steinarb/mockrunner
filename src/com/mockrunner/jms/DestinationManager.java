@@ -99,6 +99,6 @@ public class DestinationManager
      */
     public MockTopic getTopic(String name)
     {
-        return (MockTopic)queues.get(name);
+        return (MockTopic)topics.get(name);
     }
 }

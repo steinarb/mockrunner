@@ -47,7 +47,7 @@ public class MockTopicSession extends MockSession implements TopicSession
      * @param index the index
      * @return the <code>TemporaryTopic</code>
      */
-    public MockTemporaryTopic getTemporaryQueue(int index)
+    public MockTemporaryTopic getTemporaryTopic(int index)
     {
         if(tempTopics.size() <= index || index < 0) return null;
         return (MockTemporaryTopic)tempTopics.get(index);
