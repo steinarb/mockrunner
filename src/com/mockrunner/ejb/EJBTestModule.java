@@ -366,11 +366,11 @@ public class EJBTestModule
         String classPackage = ClassUtil.getPackageName(beanClass);
         String className = ClassUtil.getClassName(beanClass);
         className = truncateImplClassName(className);
-        if(null != homeInterfaceSuffix)
+        if(null != homeInterfaceSuffix && 0 != homeInterfaceSuffix.length())
         {
             className += homeInterfaceSuffix;
         }
-        if(null != homeInterfacePackage)
+        if(null != homeInterfacePackage && 0 != homeInterfacePackage.length())
         {
             classPackage = homeInterfacePackage;
         }
@@ -389,11 +389,11 @@ public class EJBTestModule
         String classPackage = ClassUtil.getPackageName(beanClass);
         String className = ClassUtil.getClassName(beanClass);
         className = truncateImplClassName(className);
-        if(null != businessInterfaceSuffix)
+        if(null != businessInterfaceSuffix && 0 != businessInterfaceSuffix.length())
         {
             className += businessInterfaceSuffix;
         }
-        if(null != businessInterfacePackage)
+        if(null != businessInterfacePackage && 0 != businessInterfacePackage.length())
         {
             classPackage = businessInterfacePackage;
         }
