@@ -331,6 +331,32 @@ public class MockQueueSessionTest extends TestCase
         }
     }
     
+    public void testTransmissionWithMessageSelector() throws Exception
+    {
+        DestinationManager manager = connection.getDestinationManager();
+        manager.createQueue("Queue");
+        MockQueue queue = (MockQueue)session.createQueue("Queue");
+        MockQueueReceiver receiver1 = (MockQueueReceiver)session.createReceiver(queue, "text = 'test'");
+        TestListMessageListener listener1 = new TestListMessageListener();
+        receiver1.setMessageListener(listener1);
+        QueueSender sender = session.createSender(queue);
+        MockBytesMessage message1 = new MockBytesMessage();
+        sender.send(message1);
+        MockBytesMessage message2 = new MockBytesMessage();
+        message2.setStringProperty("text", "test");
+        sender.send(message2);
+        assertEquals(1, listener1.getMessageList().size());
+        assertSame(message2, listener1.getMessageList().get(0));
+        assertNull(receiver1.receive());
+        MockQueueReceiver receiver2 = (MockQueueReceiver)session.createReceiver(queue);
+        assertSame(message1, receiver2.receiveNoWait());
+        receiver2.setMessageListener(listener1);
+        listener1.clearMessageList();
+        sender.send(message1);
+        sender.send(message2);
+        assertEquals(2, listener1.getMessageList().size());
+    }
+    
     public void testTransmissionMessageAcknowledged() throws Exception
     {
         MockQueueSession session1 = (MockQueueSession)connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -500,6 +526,11 @@ public class MockQueueSessionTest extends TestCase
         public List getMessageList()
         {
             return messages;
+        }
+        
+        public void clearMessageList()
+        {
+            messages.clear();
         }
     
         public void onMessage(Message message)

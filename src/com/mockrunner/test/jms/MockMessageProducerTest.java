@@ -38,7 +38,7 @@ public class MockMessageProducerTest extends TestCase
     {
         DestinationManager destManager = new DestinationManager();
         ConfigurationManager confManager = new ConfigurationManager();
-        MockQueueSender sender = new MockQueueSender(new MockQueueConnection(destManager, confManager), queue);  
+        MockQueueSender sender = new MockQueueSender(new MockQueueConnection(destManager, confManager), queue);
         doTestSendMessage(sender);
         assertEquals(1, queue.getCurrentMessageList().size());
         assertEquals(1, queue.getReceivedMessageList().size());

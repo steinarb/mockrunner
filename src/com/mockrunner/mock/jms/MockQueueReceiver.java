@@ -39,7 +39,16 @@ public class MockQueueReceiver extends MockMessageConsumer implements QueueRecei
             throw new JMSException("Receiver is closed");
         }
         if(queue.isEmpty()) return null;
-        Message message = queue.getMessage();
+        Message message;
+        if((!getConnection().getConfigurationManager().getUseMessageSelectors()) || (null == getMessageFilter()))
+        {
+            message = queue.getMessage();
+        }
+        else
+        {
+            message = queue.getMatchingMessage(getMessageFilter());
+        }
+        if(null == message) return null;
         if(session.isAutoAcknowledge()) message.acknowledge();
         return message;
     }

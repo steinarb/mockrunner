@@ -11,6 +11,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
+import org.codehaus.activemq.router.filter.mockrunner.Filter;
+
 /**
  * Mock implementation of JMS <code>Destination</code>.
  */
@@ -69,6 +71,34 @@ public abstract class MockDestination implements Destination
     {
         if(currentMessages.size() <= 0) return null;
         return (Message)currentMessages.remove(0);
+    }
+    
+    /**
+     * Returns the next message that matches the filter. 
+     * The message will be deleted. 
+     * If there's no matching message <code>null</code> will be returned.
+     * @param filter the message filter
+     * @return the <code>Message</code>
+     */
+    public Message getMatchingMessage(Filter filter)
+    {
+        for(int ii = 0; ii < currentMessages.size(); ii++)
+        {
+            Message currentMessage = (Message)currentMessages.get(ii);
+            try
+            {
+                if(filter.matches(currentMessage))
+                {
+                    currentMessages.remove(ii);
+                    return currentMessage;
+                }
+            }
+            catch(JMSException exc)
+            {
+                throw new RuntimeException(exc.getMessage());
+            }
+        }
+        return null;
     }
 
     /**

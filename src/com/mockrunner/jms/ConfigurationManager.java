@@ -7,10 +7,12 @@ package com.mockrunner.jms;
 public class ConfigurationManager
 {
     private boolean doCloneOnSend;
+    private boolean useMessageSelectors;
     
     public ConfigurationManager()
     {
         doCloneOnSend = false;
+        useMessageSelectors = true;
     }
     
     /**
@@ -41,5 +43,34 @@ public class ConfigurationManager
     public void setDoCloneOnSend(boolean doCloneOnSend)
     {
         this.doCloneOnSend = doCloneOnSend;
+    }
+    
+    /**
+     * Get if message selectors should be used or simply
+     * ignored while testing.
+     * @return <code>true</code> use message selectors,
+     *         <code>false</code> ignore message selectors
+     */
+    public boolean getUseMessageSelectors()
+    {
+        return useMessageSelectors;
+    }
+
+    /**
+     * Set if message selectors should be used or simply
+     * ignored while testing. Default is <code>true</code>,
+     * i.e. message selectors are used. Message selector support
+     * of Mockrunner is based on a modified version of the
+     * selector parser of the open source JMS implementation
+     * ActiveMQ. It is a bit experimental at the moment. If there
+     * are problems with the parsing or if you don't need message
+     * selectors at all, turn them off. Disable selector parsing also
+     * results in a better test performance.
+     * @param useMessageSelectors <code>true</code> use message selectors,
+     *                            <code>false</code> ignore message selectors
+     */
+    public void setUseMessageSelectors(boolean useMessageSelectors)
+    {
+        this.useMessageSelectors = useMessageSelectors;
     }
 }
