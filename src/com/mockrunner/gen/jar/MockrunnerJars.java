@@ -34,8 +34,8 @@ public class MockrunnerJars
         permissions.put("mockrunner.jar", new Permission(true, true, true, true, true));
         permissions.put("mockrunner-jdk1.3.jar", new Permission(true, true, true, true, true));
         permissions.put("mockrunner-ejb.jar", new Permission(false, false, true, true, false));
-        permissions.put("mockrunner-jdbc.jar", new Permission(false, false, false, false, false));
-        permissions.put("mockrunner-jdbc-jdk1.3.jar", new Permission(false, false, false, false, false));
+        permissions.put("mockrunner-jdbc.jar", new Permission(false, false, false, false, true));
+        permissions.put("mockrunner-jdbc-jdk1.3.jar", new Permission(false, false, false, false, true));
         permissions.put("mockrunner-jms.jar", new Permission(false, false, true, false, false));
         permissions.put("mockrunner-servlet.jar", new Permission(false, true, false, false, true));
         permissions.put("mockrunner-tag.jar", new Permission(false, true, false, false, true));

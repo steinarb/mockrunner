@@ -4,6 +4,8 @@ mockrunner-0.3.2:
 - lazy initializing mock object factories in BaseTestCase as
   suggested by Gábor Lipták. This makes the standard adapters
   useable without all the third party dependencies.
+- added XMLResultSetFactory to createMockResultSets based on
+  XML files (contribution by Jeremy Whitlock)
 - introduced basic adapter versions (e.g. BasicJMSTestCaseAdapter)
   which do not extend BaseTestCase
 - adapters (both standard and basic) are generated now with the
