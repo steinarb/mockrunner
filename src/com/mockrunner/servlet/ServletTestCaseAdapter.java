@@ -74,9 +74,17 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
+     * Delegates to {@link ServletTestModule#setCaseSensitive}
+     */
+    protected void setCaseSensitive(boolean caseSensitive)
+    {
+        servletTestModule.setCaseSensitive(caseSensitive);
+    }
+    
+    /**
      * Delegates to {@link ServletTestModule#createServlet}
      */
-    public HttpServlet createServlet(Class servletClass)
+    protected HttpServlet createServlet(Class servletClass)
     {
         return servletTestModule.createServlet(servletClass);
     }
@@ -84,7 +92,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#getServlet}
      */
-    public HttpServlet getServlet()
+    protected HttpServlet getServlet()
     {
         return servletTestModule.getServlet();
     }
@@ -92,7 +100,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#createFilter}
      */
-    public Filter createFilter(Class filterClass)
+    protected Filter createFilter(Class filterClass)
     {
         return servletTestModule.createFilter(filterClass);
     }
@@ -100,7 +108,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#addFilter(Filter)}
      */
-    public void addFilter(Filter filter)
+    protected void addFilter(Filter filter)
     {
         servletTestModule.addFilter(filter);
     }
@@ -108,7 +116,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#releaseFilters}
      */
-    public void releaseFilters()
+    protected void releaseFilters()
     {
         servletTestModule.releaseFilters();
     }
@@ -116,7 +124,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#setDoChain}
      */
-    public void setDoChain(boolean doChain)
+    protected void setDoChain(boolean doChain)
     {
         servletTestModule.setDoChain(doChain);
     }
@@ -124,7 +132,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#addRequestParameter(String)}
      */
-    public void addRequestParameter(String key)
+    protected void addRequestParameter(String key)
     {
         servletTestModule.addRequestParameter(key);
     }
@@ -132,7 +140,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#addRequestParameter(String, String)}
      */
-    public void addRequestParameter(String key, String value)
+    protected void addRequestParameter(String key, String value)
     {
         servletTestModule.addRequestParameter(key, value);
     }
@@ -140,7 +148,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#doFilter}
      */
-    public void doFilter()
+    protected void doFilter()
     {
         servletTestModule.doFilter();
     }
@@ -148,7 +156,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#init}
      */
-    public void init()
+    protected void init()
     {
         servletTestModule.init();
     }
@@ -156,7 +164,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#doDelete}
      */
-    public void doDelete()
+    protected void doDelete()
     {
         servletTestModule.doDelete();
     }
@@ -164,7 +172,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#doGet}
      */  
-    public void doGet()
+    protected void doGet()
     {
         servletTestModule.doGet();
     }
@@ -172,7 +180,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#doOptions}
      */  
-    public void doOptions()
+    protected void doOptions()
     {
         servletTestModule.doOptions();
     }
@@ -180,7 +188,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#doPost}
      */      
-    public void doPost()
+    protected void doPost()
     {
         servletTestModule.doPost();
     }
@@ -188,7 +196,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#doPut}
      */      
-    public void doPut()
+    protected void doPut()
     {
         servletTestModule.doPut();
     }
@@ -196,7 +204,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#doTrace}
      */    
-    public void doTrace()
+    protected void doTrace()
     {
         servletTestModule.doTrace();
     }
@@ -204,7 +212,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#service}
      */
-    public void service()
+    protected void service()
     {
         servletTestModule.service();
     }
@@ -212,7 +220,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#getFilteredRequest}
      */
-    public ServletRequest getFilteredRequest()
+    protected ServletRequest getFilteredRequest()
     {
         return servletTestModule.getFilteredRequest();
     }
@@ -220,15 +228,23 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#getFilteredResponse}
      */
-    public ServletResponse getFilteredResponse()
+    protected ServletResponse getFilteredResponse()
     {
         return servletTestModule.getFilteredResponse();
+    }
+
+    /**
+     * Delegates to {@link ServletTestModule#clearOutput}
+     */
+    protected void clearOutput()
+    {
+        servletTestModule.clearOutput();
     }
     
     /**
      * Delegates to {@link ServletTestModule#verifyOutput}
      */ 
-    public void verifyOutput(String output)
+    protected void verifyOutput(String output)
     {
         servletTestModule.verifyOutput(output);
     }
@@ -236,7 +252,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link ServletTestModule#verifyOutputContains}
      */
-    public void verifyOutputContains(String output)
+    protected void verifyOutputContains(String output)
     {
         servletTestModule.verifyOutputContains(output);
     }

@@ -69,9 +69,11 @@ public class JMSTestModuleTest extends TestCase
         assertNull(module.getCurrentQueueConnection());
         assertNull(module.getCurrentTopicConnection());
         MockQueueConnection queueConnection1 = (MockQueueConnection)mockFactory.getMockQueueConnectionFactory().createQueueConnection();
+        module.setCurrentQueueConnectionIndex(-1);
         assertEquals(queueConnection1, module.getCurrentQueueConnection());
         assertNull(module.getCurrentTopicConnection());
         MockTopicConnection topicConnection1 = (MockTopicConnection)mockFactory.getMockTopicConnectionFactory().createTopicConnection();
+        module.setCurrentTopicConnectionIndex(-2);
         assertEquals(topicConnection1, module.getCurrentTopicConnection());
         queueConnection1.close();
         module.verifyQueueConnectionClosed();

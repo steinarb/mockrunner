@@ -1,6 +1,7 @@
 package com.mockrunner.test.web;
 
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.servlet.ServletTestModule;
 
 public class ServletTestModuleTest extends BaseTestCase
@@ -16,6 +17,33 @@ public class ServletTestModuleTest extends BaseTestCase
     {
         super.setUp();
         module = new ServletTestModule(getWebMockObjectFactory());
+    }
+    
+    public void testCaseSensitive() throws Exception
+    {
+        getWebMockObjectFactory().getMockResponse().getWriter().write("This is a test");
+        try
+        {
+            module.verifyOutput("this is a test");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.setCaseSensitive(false);
+        module.verifyOutput("this is a test");
+        module.verifyOutputContains("TeSt");
+        module.setCaseSensitive(true);
+        try
+        {
+            module.verifyOutputContains("THIS");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
     }
 
     public void testServletMethodsCalled()

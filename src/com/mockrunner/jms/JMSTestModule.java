@@ -33,13 +33,14 @@ public class JMSTestModule
     public JMSTestModule(JMSMockObjectFactory mockFactory)
     {
         this.mockFactory = mockFactory;
-        currentQueueConnectionIndex = 0;
-        currentTopicConnectionIndex = 0;
+        currentQueueConnectionIndex = -1;
+        currentTopicConnectionIndex = -1;
     }
     
     /**
      * Sets the index of the queue connection that should be used
-     * for the current test.
+     * for the current test. Per default the latest created connection
+     * is used.
      * @param connectionIndex the index of the connection
      */
     public void setCurrentQueueConnectionIndex(int connectionIndex)
@@ -55,12 +56,17 @@ public class JMSTestModule
      */
     public MockQueueConnection getCurrentQueueConnection()
     {
+        if(0 > currentQueueConnectionIndex)
+        { 
+            return mockFactory.getMockQueueConnectionFactory().getLatestQueueConnection();
+        }
         return mockFactory.getMockQueueConnectionFactory().getQueueConnection(currentQueueConnectionIndex);
     }
     
     /**
      * Sets the index of the topic connection that should be used
-     * for the current test.
+     * for the current test. Per default the latest created connection
+     * is used.
      * @param connectionIndex the index of the connection
      */
     public void setCurrentTopicConnectionIndex(int connectionIndex)
@@ -76,6 +82,10 @@ public class JMSTestModule
      */
     public MockTopicConnection getCurrentTopicConnection()
     {
+        if(0 > currentTopicConnectionIndex)
+        { 
+            return mockFactory.getMockTopicConnectionFactory().getLatestTopicConnection();
+        }
         return mockFactory.getMockTopicConnectionFactory().getTopicConnection(currentTopicConnectionIndex);
     }
     

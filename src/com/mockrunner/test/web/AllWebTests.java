@@ -18,6 +18,7 @@ public class AllWebTests
         suite.addTest(new TestSuite(NestedTagTest.class));
         suite.addTest(new TestSuite(TagLifecycleTest.class));
         suite.addTest(new TestSuite(ServletTestModuleTest.class));
+        suite.addTest(new TestSuite(TagTestModuleTest.class));
         suite.addTest(new TestSuite(MockPageContextTest.class));
         suite.addTest(new TestSuite(WebMockObjectFactoryTest.class));
         //$JUnit-END$

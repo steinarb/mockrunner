@@ -23,10 +23,22 @@ public class TagTestModule extends HTMLOutputModule
     private WebMockObjectFactory mockFactory;
     private TagSupport tag;
     private String body;
+    private boolean caseSensitive;
 
     public TagTestModule(WebMockObjectFactory mockFactory)
     {
         this.mockFactory = mockFactory;
+        caseSensitive = true;
+    }
+    
+    /**
+     * Set if {@link #verifyOutput} and {@link #verifyOutputContains}
+     * should compare case sensitive. Default is <code>true</code>.
+     * @param caseSensitive enable or disable case sensitivity
+     */
+    public void setCaseSensitive(boolean caseSensitive)
+    {
+        this.caseSensitive = caseSensitive;
     }
     
     /**
@@ -309,6 +321,11 @@ public class TagTestModule extends HTMLOutputModule
     public void verifyOutput(String output)
     {
         String actualOutput = getOutput();
+        if(!caseSensitive)
+        {
+            output = output.toLowerCase();
+            actualOutput = actualOutput.toLowerCase();
+        }
         if(!output.equals(actualOutput))
         {
             throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");
@@ -323,6 +340,11 @@ public class TagTestModule extends HTMLOutputModule
     public void verifyOutputContains(String output)
     {
         String actualOutput = getOutput();
+        if(!caseSensitive)
+        {
+            output = output.toLowerCase();
+            actualOutput = actualOutput.toLowerCase();
+        }
         if(-1 == actualOutput.indexOf(output))
         {
             throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");

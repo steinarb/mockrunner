@@ -20,11 +20,23 @@ public class ServletTestModule extends HTMLOutputModule
     private WebMockObjectFactory mockFactory;
     private HttpServlet servlet;
     private boolean doChain;
+    private boolean caseSensitive;
       
     public ServletTestModule(WebMockObjectFactory mockFactory)
     {
         this.mockFactory = mockFactory;
         doChain = false;
+        caseSensitive = true;
+    }
+    
+    /**
+     * Set if {@link #verifyOutput} and {@link #verifyOutputContains}
+     * should compare case sensitive. Default is <code>true</code>.
+     * @param caseSensitive enable or disable case sensitivity
+     */
+    public void setCaseSensitive(boolean caseSensitive)
+    {
+        this.caseSensitive = caseSensitive;
     }
     
     /**
@@ -317,6 +329,14 @@ public class ServletTestModule extends HTMLOutputModule
         }
         return mockFactory.getMockResponse().getOutputStreamContent();
     }
+    
+    /**
+     * Clears the output content
+     */ 
+    public void clearOutput()
+    {
+        mockFactory.getMockResponse().resetBuffer();
+    }
    
     /**
      * Verifies the servlet output.
@@ -326,6 +346,11 @@ public class ServletTestModule extends HTMLOutputModule
     public void verifyOutput(String output)
     {
         String actualOutput = getOutput();
+        if(!caseSensitive)
+        {
+            output = output.toLowerCase();
+            actualOutput = actualOutput.toLowerCase();
+        }
         if(!output.equals(actualOutput))
         {
             throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");
@@ -340,6 +365,11 @@ public class ServletTestModule extends HTMLOutputModule
     public void verifyOutputContains(String output)
     {
         String actualOutput = getOutput();
+        if(!caseSensitive)
+        {
+            output = output.toLowerCase();
+            actualOutput = actualOutput.toLowerCase();
+        }
         if(-1 == actualOutput.indexOf(output))
         {
             throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");

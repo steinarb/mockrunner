@@ -64,7 +64,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#setImplementationSuffix}
      */
-    public void setImplementationSuffix(String impSuffix)
+    protected void setImplementationSuffix(String impSuffix)
     {
         ejbTestModule.setImplementationSuffix(impSuffix);
     }
@@ -72,7 +72,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#setBusinessInterfaceSuffix}
      */
-    public void setBusinessInterfaceSuffix(String businessInterfaceSuffix)
+    protected void setBusinessInterfaceSuffix(String businessInterfaceSuffix)
     {
         ejbTestModule.setBusinessInterfaceSuffix(businessInterfaceSuffix);
     }
@@ -80,7 +80,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#setHomeInterfaceSuffix}
      */
-    public void setHomeInterfaceSuffix(String homeInterfaceSuffix)
+    protected void setHomeInterfaceSuffix(String homeInterfaceSuffix)
     {
         ejbTestModule.setHomeInterfaceSuffix(homeInterfaceSuffix);
     }
@@ -88,7 +88,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#setInterfacePackage}
      */
-    public void setInterfacePackage(String interfacePackage)
+    protected void setInterfacePackage(String interfacePackage)
     {
         ejbTestModule.setInterfacePackage(interfacePackage);
     }
@@ -96,7 +96,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#setHomeInterfacePackage}
      */
-    public void setHomeInterfacePackage(String homeInterfacePackage)
+    protected void setHomeInterfacePackage(String homeInterfacePackage)
     {
         ejbTestModule.setHomeInterfacePackage(homeInterfacePackage);
     }
@@ -104,7 +104,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#setBusinessInterfacePackage}
      */
-    public void setBusinessInterfacePackage(String businessInterfacePackage)
+    protected void setBusinessInterfacePackage(String businessInterfacePackage)
     {
         ejbTestModule.setBusinessInterfacePackage(businessInterfacePackage);
     }
@@ -112,7 +112,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#deploy(SessionBeanDescriptor)}
      */
-    public MockEjbObject deploy(SessionBeanDescriptor descriptor)
+    protected MockEjbObject deploy(SessionBeanDescriptor descriptor)
     {
         return ejbTestModule.deploy(descriptor);
     }
@@ -120,7 +120,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#deploy(SessionBeanDescriptor, TransactionPolicy)}
      */
-    public MockEjbObject deploy(SessionBeanDescriptor descriptor, TransactionPolicy policy)
+    protected MockEjbObject deploy(SessionBeanDescriptor descriptor, TransactionPolicy policy)
     {
         return ejbTestModule.deploy(descriptor, policy);
     }
@@ -128,7 +128,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#deploy(String, Class)}
      */
-    public MockEjbObject deploy(String jndiName, Class beanClass)
+    protected MockEjbObject deploy(String jndiName, Class beanClass)
     {
         return ejbTestModule.deploy(jndiName, beanClass);
     }
@@ -136,7 +136,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#deploy(String, Class, boolean)}
      */
-    public MockEjbObject deploy(String jndiName, Class beanClass, boolean stateful)
+    protected MockEjbObject deploy(String jndiName, Class beanClass, boolean stateful)
     {
         return ejbTestModule.deploy(jndiName, beanClass, stateful);
     }
@@ -144,7 +144,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#deploy(String, Class, TransactionPolicy)}
      */
-    public MockEjbObject deploy(String jndiName, Class beanClass, TransactionPolicy policy)
+    protected MockEjbObject deploy(String jndiName, Class beanClass, TransactionPolicy policy)
     {
         return ejbTestModule.deploy(jndiName, beanClass, policy);
     }
@@ -152,7 +152,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#deploy(String, Class, boolean, TransactionPolicy)}
      */
-    public MockEjbObject deploy(String jndiName, Class beanClass, boolean stateful, TransactionPolicy policy)
+    protected MockEjbObject deploy(String jndiName, Class beanClass, boolean stateful, TransactionPolicy policy)
     {
         return ejbTestModule.deploy(jndiName, beanClass, stateful, policy);
     }
@@ -160,7 +160,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#bindToContext}
      */
-    public void bindToContext(String name, Object object)
+    protected void bindToContext(String name, Object object)
     {
         ejbTestModule.bindToContext(name, object);
     }
@@ -168,7 +168,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#lookup}
      */
-    public Object lookup(String name)
+    protected Object lookup(String name)
     {
         return ejbTestModule.lookup(name);
     }
@@ -176,7 +176,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#lookupBean(String)}
      */
-    public Object lookupBean(String name)
+    protected Object lookupBean(String name)
     {
         return ejbTestModule.lookupBean(name);
     }
@@ -184,7 +184,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#lookupBean(String, Object[])}
      */
-    public Object lookupBean(String name, Object[] parameters)
+    protected Object lookupBean(String name, Object[] parameters)
     {
         return ejbTestModule.lookupBean(name, parameters);
     }
@@ -192,7 +192,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#resetUserTransaction}
      */
-    public void resetUserTransaction()
+    protected void resetUserTransaction()
     {
         ejbTestModule.resetUserTransaction();
     }
@@ -200,7 +200,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#verifyCommitted}
      */
-    public void verifyCommitted()
+    protected void verifyCommitted()
     {
         ejbTestModule.verifyCommitted();
     }
@@ -208,7 +208,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#verifyNotCommitted}
      */
-    public void verifyNotCommitted()
+    protected void verifyNotCommitted()
     {
         ejbTestModule.verifyNotCommitted();
     }
@@ -216,7 +216,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#verifyRolledBack}
      */
-    public void verifyRolledBack()
+    protected void verifyRolledBack()
     {
         ejbTestModule.verifyRolledBack();
     }
@@ -224,7 +224,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#verifyNotRolledBack}
      */
-    public void verifyNotRolledBack()
+    protected void verifyNotRolledBack()
     {
         ejbTestModule.verifyNotRolledBack();
     }
@@ -232,7 +232,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#verifyMarkedForRollback}
      */
-    public void verifyMarkedForRollback()
+    protected void verifyMarkedForRollback()
     {
         ejbTestModule.verifyMarkedForRollback();
     }
@@ -240,7 +240,7 @@ public class EJBTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link EJBTestModule#verifyNotMarkedForRollback}
      */
-    public void verifyNotMarkedForRollback()
+    protected void verifyNotMarkedForRollback()
     {
         ejbTestModule.verifyNotMarkedForRollback();
     }

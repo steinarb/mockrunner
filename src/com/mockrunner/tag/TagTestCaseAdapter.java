@@ -72,6 +72,14 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     {
         this.tagTestModule = tagTestModule;
     }
+    
+    /**
+     * Delegates to {@link TagTestModule#setCaseSensitive}
+     */
+    public void setCaseSensitive(boolean caseSensitive)
+    {
+        tagTestModule.setCaseSensitive(caseSensitive);
+    }
 
     /**
      * Delegates to {@link TagTestModule#createTag(Class)}
