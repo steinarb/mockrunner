@@ -5,8 +5,7 @@ mockrunner-0.1.6:
 - addec MockEjb framework for EJB tests
 - reorganized package structure for mockobjects. The
   mockobjects of mockrunner-0.1.5 are in com.mockrunner.mock.web
-  package now. The old ones still exist but are deprecated
-  and will be removed in the future.
+  package now. Please adapt your imports.
 
 mockrunner-0.1.5:
 
