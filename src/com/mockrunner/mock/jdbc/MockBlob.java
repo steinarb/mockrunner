@@ -7,7 +7,11 @@ import java.sql.SQLException;
 
 public class MockBlob implements Blob
 {
-
+    public MockBlob(byte[] data)
+    {
+    
+    }
+    
     public long length() throws SQLException
     {
         // TODO Auto-generated method stub
