@@ -23,6 +23,8 @@ public class JavaClassGeneratorTest extends TestCase
     public void testGenerate()
     {
         generator.setClassName("MyClass");
+        String[] commentLines = new String[] {"This is", "a comment"};
+        generator.setClassComment(commentLines);
         generator.setPackage(this.getClass().getPackage());
         generator.setSuperClass(ClassUtil.class);
         generator.addInterfaceImplementation(Map.class);
@@ -41,6 +43,10 @@ public class JavaClassGeneratorTest extends TestCase
                "import java.util.Map;" + NL +
                "import java.util.List;" + NL +
                "import com.mockrunner.util.XmlUtil;" + NL + NL +
+               "/**" + NL +
+               " * This is" + NL +
+               " * a comment" + NL +
+               " */" + NL +
                "public class MyClass extends ClassUtil implements Map, List" + NL +
                "{" + NL +
                "    private XmlUtil util;" + NL + 
