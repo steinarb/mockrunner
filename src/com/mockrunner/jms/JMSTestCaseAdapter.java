@@ -174,7 +174,15 @@ public class JMSTestCaseAdapter extends BaseTestCase
     protected DestinationManager getDestinationManager()
     {
         return jmsTestModule.getDestinationManager();
-    } 
+    }
+    
+    /**
+     * Delegates to {@link JMSTestModule#getConfigurationManager}
+     */
+    public ConfigurationManager getConfigurationManager()
+    {
+        return jmsTestModule.getConfigurationManager();
+    }
 
     /**
      * Delegates to {@link JMSTestModule#getQueueMessageManager}

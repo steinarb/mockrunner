@@ -1,5 +1,6 @@
 package com.mockrunner.mock.jms;
 
+import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 
 /**
@@ -14,6 +15,7 @@ import com.mockrunner.jms.DestinationManager;
 public class JMSMockObjectFactory
 {
     private DestinationManager destinationManager;
+    private ConfigurationManager configurationManager;
     private MockQueueConnectionFactory queueConnectionFactory;
     private MockTopicConnectionFactory topicConnectionFactory;
     private MockConnectionFactory connectionFactory;
@@ -24,9 +26,19 @@ public class JMSMockObjectFactory
     public JMSMockObjectFactory()
     {
         destinationManager = new DestinationManager();
-        queueConnectionFactory = new MockQueueConnectionFactory(destinationManager);
-        topicConnectionFactory = new MockTopicConnectionFactory(destinationManager);
-        connectionFactory = new MockConnectionFactory(destinationManager);
+        configurationManager = new ConfigurationManager();
+        queueConnectionFactory = new MockQueueConnectionFactory(destinationManager, configurationManager);
+        topicConnectionFactory = new MockTopicConnectionFactory(destinationManager, configurationManager);
+        connectionFactory = new MockConnectionFactory(destinationManager, configurationManager);
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.jms.ConfigurationManager}.
+     * @return the {@link com.mockrunner.jms.ConfigurationManager}
+     */
+    public ConfigurationManager getConfigurationManager()
+    {
+        return configurationManager;
     }
     
     /**

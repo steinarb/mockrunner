@@ -15,6 +15,7 @@ import javax.jms.TopicSession;
 
 import junit.framework.TestCase;
 
+import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockConnection;
@@ -44,15 +45,16 @@ public class MockConnectionTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        DestinationManager manager = new DestinationManager();
-        queueConnection = new MockQueueConnection(manager);
-        topicConnection = new MockTopicConnection(manager);
-        connection = new MockConnection(manager);
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        queueConnection = new MockQueueConnection(destManager, confManager);
+        topicConnection = new MockTopicConnection(destManager, confManager);
+        connection = new MockConnection(destManager, confManager);
     }
     
     public void testQueueFactory() throws Exception
     {
-        MockQueueConnectionFactory queueFactory = new MockQueueConnectionFactory(new DestinationManager());
+        MockQueueConnectionFactory queueFactory = new MockQueueConnectionFactory(new DestinationManager(), new ConfigurationManager());
         MockQueueConnection queueConnection1 = (MockQueueConnection)queueFactory.createQueueConnection();
         MockQueueConnection queueConnection2 = (MockQueueConnection)queueFactory.createQueueConnection();
         JMSException exception = new JMSException("");
@@ -78,7 +80,7 @@ public class MockConnectionTest extends TestCase
     
     public void testTopicFactory() throws Exception
     {
-        MockTopicConnectionFactory topicFactory = new MockTopicConnectionFactory(new DestinationManager());
+        MockTopicConnectionFactory topicFactory = new MockTopicConnectionFactory(new DestinationManager(), new ConfigurationManager());
         JMSException exception = new JMSException("");
         topicFactory.setJMSException(exception);
         MockTopicConnection topicConnection1 = (MockTopicConnection)topicFactory.createTopicConnection(null, null);
@@ -113,7 +115,7 @@ public class MockConnectionTest extends TestCase
     
     public void testFactory() throws Exception
     {
-        MockConnectionFactory factory = new MockConnectionFactory(new DestinationManager());
+        MockConnectionFactory factory = new MockConnectionFactory(new DestinationManager(), new ConfigurationManager());
         JMSException exception = new JMSException("");
         factory.setJMSException(exception);
         MockConnection connection1 = (MockConnection)factory.createConnection(null, null);
@@ -148,13 +150,13 @@ public class MockConnectionTest extends TestCase
     
     public void testFactoriesCreateConnectionType() throws Exception
     {
-        MockQueueConnectionFactory queueFactory = new MockQueueConnectionFactory(new DestinationManager());
+        MockQueueConnectionFactory queueFactory = new MockQueueConnectionFactory(new DestinationManager(), new ConfigurationManager());
         assertTrue(queueFactory.createConnection() instanceof QueueConnection);
         assertTrue(queueFactory.createConnection(null, null) instanceof QueueConnection);
-        MockTopicConnectionFactory topicFactory = new MockTopicConnectionFactory(new DestinationManager());
+        MockTopicConnectionFactory topicFactory = new MockTopicConnectionFactory(new DestinationManager(), new ConfigurationManager());
         assertTrue(topicFactory.createConnection() instanceof TopicConnection);
         assertTrue(topicFactory.createConnection(null, null) instanceof TopicConnection);
-        MockConnectionFactory factory = new MockConnectionFactory(new DestinationManager());
+        MockConnectionFactory factory = new MockConnectionFactory(new DestinationManager(), new ConfigurationManager());
         assertTrue(factory.createConnection() instanceof Connection);
         assertTrue(factory.createConnection(null, null) instanceof Connection);
         assertFalse(factory.createConnection() instanceof QueueConnection);

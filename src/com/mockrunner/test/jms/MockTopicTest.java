@@ -6,6 +6,7 @@ import javax.jms.Session;
 
 import junit.framework.TestCase;
 
+import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockTextMessage;
@@ -22,8 +23,9 @@ public class MockTopicTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        DestinationManager manager = new DestinationManager();
-        connection = new MockTopicConnection(manager);
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        connection = new MockTopicConnection(destManager, confManager);
         topic = new MockTopic("TestTopic");
     }
 

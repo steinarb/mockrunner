@@ -287,6 +287,15 @@ public class JMSTestModule
     {
         return mockFactory.getDestinationManager();
     }
+    
+    /**
+     * Returns the {@link ConfigurationManager}.
+     * @return the {@link ConfigurationManager}
+     */
+    public ConfigurationManager getConfigurationManager()
+    {
+        return mockFactory.getConfigurationManager();
+    }
 
     /**
      * Returns the {@link MessageManager} for the specified session

@@ -6,6 +6,7 @@ import javax.jms.Session;
 
 import junit.framework.TestCase;
 
+import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockQueue;
@@ -22,8 +23,9 @@ public class MockQueueTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        DestinationManager manager = new DestinationManager();
-        connection = new MockQueueConnection(manager);
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        connection = new MockQueueConnection(destManager, confManager);
         queue = new MockQueue("TestQueue");
     }
 
