@@ -1,11 +1,13 @@
 package com.mockrunner.mock.web;
 
+import java.security.Principal;
+
 /**
  * Mock implementation of <code>UserPrincipal</code>.
  */
-public class MockUserPrincipal implements java.security.Principal
+public class MockUserPrincipal implements Principal
 {
-    String mName;
+    private String mName;
 
     public MockUserPrincipal(String name)
     {
