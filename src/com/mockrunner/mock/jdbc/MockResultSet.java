@@ -147,8 +147,8 @@ public class MockResultSet implements ResultSet
     
     public int getRowCount()
     {
-        if(columnMap.size() == 0) return 0;
-        List column = (List)columnMap.keySet().iterator().next();
+        if(columnMapCopy.size() == 0) return 0;
+        List column = (List)columnMapCopy.values().iterator().next();
         return column.size();
     }
     
