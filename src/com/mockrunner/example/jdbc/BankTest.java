@@ -11,13 +11,13 @@ import com.mockrunner.mock.jdbc.MockResultSet;
  * {@link com.mockrunner.jdbc.JDBCTestModule} 
  * resp. {@link com.mockrunner.jdbc.JDBCTestCaseAdapter}.
  * Please note that the framework does not execute any SQL statements.
- * We have to specify the <code>MockResultSet</code> of the <i>select</i>
- * statement. Since there is only one <i>select</i>, we can set
- * the <code>MockResultSet</code> as global one. We use
- * the Java API to add one row to the <code>MockResultSet</code>.
+ * You have to specify the <code>MockResultSet</code> of the <i>select</i>
+ * statement. Since there is only one <i>select</i> in this test, the
+ * <code>MockResultSet</code> is set as the global one.
+ * The Java API is used to add one row to the <code>MockResultSet</code>.
  * It's also possible to read the test tables from text files.
- * We test a valid transaction (there's enough money on the source account)
- * and the failure case.
+ * This test covers a valid transaction test 
+ * (there's enough money on the source account) and the failure case.
  * You do not have to specify the exact SQL statements,
  * <i>select balance</i> is ok for <i>select balance from account where id=1</i>.
  * You can specify the search parameters of SQL statements with

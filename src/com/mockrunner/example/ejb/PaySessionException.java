@@ -2,7 +2,7 @@ package com.mockrunner.example.ejb;
 
 /**
  * Exception class for 
- * {@link com.mockrunner.example.jdbc.PaySessionBean}.
+ * {@link PaySessionBean}.
  */
 public class PaySessionException extends Exception
 {

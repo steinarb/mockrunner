@@ -49,7 +49,7 @@ public class BookstoreTest extends JDBCTestCaseAdapter
     
     public void testCorrectSQL() throws Exception
     {
-        MockResultSet result = getPreparedStatementResultSetHandler().createResultSet();    
+        MockResultSet result = getStatementResultSetHandler().createResultSet();    
         getStatementResultSetHandler().prepareResultSet("select isbn, quantity", result);
         List orderList = new ArrayList();
         orderList.add("1234567890");

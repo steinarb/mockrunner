@@ -59,9 +59,11 @@ JUnit 3.8.1:
 http://www.junit.org
 junit.jar
 
-J2EE (of course any other J2EE implementation is suitable):
+J2EE 1.3:
+Tomcat 4.1.27:
 http://jakarta.apache.org/tomcat
 servlet.jar
+JBoss 3.2.2RC2:
 http://www.jboss.org
 jboss-j2ee.jar                
 
@@ -86,7 +88,7 @@ JDOM Beta 9 (or higher):
 http://www.jdom.org
 jdom.jar
 
-NekoHTML Parser:
+NekoHTML Parser 0.8.1:
 http://www.apache.org/~andyc/neko/doc/html/index.html
 nekohtml.jar
 
