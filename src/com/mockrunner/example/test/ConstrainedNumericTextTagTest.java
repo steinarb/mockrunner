@@ -12,11 +12,6 @@ public class ConstrainedNumericTextTagTest extends TagTestCaseAdapter
 {
     private ConstrainedNumericTextTag tag;
     
-    public ConstrainedNumericTextTagTest(String arg0)
-    {
-        super(arg0);
-    }
-
     protected void setUp() throws Exception
     {
         super.setUp();

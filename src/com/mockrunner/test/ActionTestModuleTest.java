@@ -16,11 +16,6 @@ public class ActionTestModuleTest extends TestCase
     private MockObjectFactory mockfactory;
     private ActionTestModule module;
     
-    public ActionTestModuleTest(String arg0)
-    {
-        super(arg0);
-    }
-    
     protected void setUp() throws Exception
     {
         super.setUp();

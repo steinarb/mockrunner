@@ -23,11 +23,6 @@ public class NestedTagTest extends BaseTestCase
     private NestedTag testTagChild11;
     private Map testMap;
     
-    public NestedTagTest(String arg0)
-    {
-        super(arg0);
-    }
-
     protected void setUp() throws Exception
     {
         super.setUp();

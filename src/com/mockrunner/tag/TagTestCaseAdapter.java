@@ -16,6 +16,11 @@ import com.mockrunner.mock.MockPageContext;
 public class TagTestCaseAdapter extends BaseTestCase
 {
     private TagTestModule tagTestModule;
+    
+    public TagTestCaseAdapter()
+    {
+        
+    }
 
     public TagTestCaseAdapter(String arg0)
     {

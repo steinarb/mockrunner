@@ -26,11 +26,6 @@ public class StoreDataActionTest extends ActionTestCaseAdapter
 { 
     private volatile int numberSuccess;
     
-    public StoreDataActionTest(String arg0)
-    {
-        super(arg0);
-    }
-    
     protected void setUp() throws Exception
     {
         super.setUp();

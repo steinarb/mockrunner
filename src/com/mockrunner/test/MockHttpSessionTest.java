@@ -9,11 +9,6 @@ import junit.framework.TestCase;
 
 public class MockHttpSessionTest extends TestCase
 {
-    public MockHttpSessionTest(String arg0)
-    {
-        super(arg0);
-    }
-    
     public void testInvalidate()
     {
         MockHttpSession session = new MockHttpSession();
