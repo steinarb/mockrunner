@@ -15,15 +15,19 @@ public class MockTemporaryQueue extends MockQueue implements TemporaryQueue
         super(connection, "TemporaryQueue");
         deleted = false;
     }
+    
+    /**
+     * Returns if this temporary queue is deleted.
+     * @return <code>true</code> if this queue is deleted 
+     */
+    public boolean isDeleted()
+    {
+        return deleted;
+    }
 
     public void delete() throws JMSException
     {
         getConnection().throwJMSException();
         deleted = true;
-    }
-
-    public boolean isDeleted()
-    {
-        return deleted;
     }
 }

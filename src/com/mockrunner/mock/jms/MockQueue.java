@@ -118,8 +118,7 @@ public class MockQueue implements Queue
     }
     
     /**
-     * Adds a <code>QueueSession</code>. This enables the session
-     * to access this <code>Queue</code>.
+     * Adds a <code>QueueSession</code>.
      * @param session the session
      */
     public void addQueueSession(QueueSession session)
