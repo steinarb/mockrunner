@@ -8,7 +8,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -28,16 +27,7 @@ public class MockrunnerTextSummary implements Summary
 
     public MockrunnerTextSummary()
     {
-        mockrunnerJars = new ArrayList();
-        mockrunnerJars.add("mockrunner.jar");
-        mockrunnerJars.add("mockrunner-jdk1.3.jar");
-        mockrunnerJars.add("mockrunner-ejb.jar");
-        mockrunnerJars.add("mockrunner-jdbc.jar");
-        mockrunnerJars.add("mockrunner-jdbc-jdk1.3.jar");
-        mockrunnerJars.add("mockrunner-jms.jar");
-        mockrunnerJars.add("mockrunner-servlet.jar");
-        mockrunnerJars.add("mockrunner-tag.jar");
-        mockrunnerJars.add("mockrunner-struts.jar");
+        mockrunnerJars = MockrunnerJars.getMockrunnerJars();
     }
     
     public void createSummary(File srcDir, File destFile) throws Exception 
@@ -49,10 +39,10 @@ public class MockrunnerTextSummary implements Summary
         try
         {
             output(dependencyMap, destFile);
-        } catch (Exception e)
+        } 
+        catch(Exception exc)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            exc.printStackTrace();
         }
     }
 
