@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Savepoint;
 import java.sql.Statement;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ public class MockConnection implements Connection
     private StatementResultSetHandler statementHandler;
     private PreparedStatementResultSetHandler preparedStatementHandler;
     private Map preparedStatementMap;
+    private Map savepoints;
+    private int savepointCount;
     private boolean closed;
     private boolean autoCommit;
     private boolean readOnly;
@@ -41,7 +44,14 @@ public class MockConnection implements Connection
         holdability = ResultSet.HOLD_CURSORS_OVER_COMMIT;
         level = Connection.TRANSACTION_READ_UNCOMMITTED;
         typeMap = new HashMap();
+        savepoints = new HashMap();
+        savepointCount = 0;
         catalog = null;
+    }
+    
+    public Map getSavepointMap()
+    {
+        return Collections.unmodifiableMap(savepoints);
     }
     
     public StatementResultSetHandler getStatementResultSetHandler()
@@ -203,12 +213,15 @@ public class MockConnection implements Connection
 
     public Savepoint setSavepoint() throws SQLException
     {
-        return new MockSavepoint();
+        return setSavepoint("");
     }
 
     public Savepoint setSavepoint(String name) throws SQLException
     {
-        return new MockSavepoint(name);
+        MockSavepoint savePoint = new MockSavepoint(name, savepointCount);
+        savepoints.put(new Integer(savePoint.getSavepointId()), savePoint);
+        savepointCount++;
+        return savePoint;
     }
 
     public void setTransactionIsolation(int level) throws SQLException
@@ -223,7 +236,13 @@ public class MockConnection implements Connection
 
     public void releaseSavepoint(Savepoint savepoint) throws SQLException
     {
-
+        MockSavepoint currentSavepoint = (MockSavepoint)savepoints.get(new Integer(savepoint.getSavepointId()));
+        if(currentSavepoint.isReleased())
+        {
+            throw new SQLException("Savepoint with id " + currentSavepoint.getSavepointId() + " and name " 
+                                   + currentSavepoint.getSavepointName() + " is released");
+        }
+        currentSavepoint.setReleased(true);
     }
 
     public void commit() throws SQLException
@@ -238,7 +257,13 @@ public class MockConnection implements Connection
 
     public void rollback(Savepoint savepoint) throws SQLException
     {
-
+        MockSavepoint currentSavepoint = (MockSavepoint)savepoints.get(new Integer(savepoint.getSavepointId()));
+        if(currentSavepoint.isReleased())
+        {
+            throw new SQLException("Savepoint with id " + currentSavepoint.getSavepointId() + " and name " 
+                                   + currentSavepoint.getSavepointName() + " is released");
+        }
+        currentSavepoint.setRollbacked(true);
     }
 
     public void clearWarnings() throws SQLException
