@@ -1,5 +1,6 @@
 package com.mockrunner.tag;
 
+import java.io.BufferedReader;
 import java.util.Map;
 
 import javax.servlet.jsp.tagext.TagSupport;
@@ -190,6 +191,14 @@ public class TagTestCaseAdapter extends BaseTestCase
     protected String getOutput()
     {
         return tagTestModule.getOutput();
+    }
+    
+    /**
+     * Delegates to {@link TagTestModule#getOutputAsBufferedReader}
+     */
+    protected BufferedReader getOutputAsBufferedReader()
+    {
+        return tagTestModule.getOutputAsBufferedReader();
     }
     
     /**

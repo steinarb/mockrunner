@@ -1,6 +1,8 @@
 package com.mockrunner.tag;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -284,6 +286,16 @@ public class TagTestModule
     {
         MockJspWriter writer = (MockJspWriter)mockFactory.getMockPageContext().getOut();
         return writer.getOutputAsString();
+    }
+    
+    /**
+     * Gets the output data the current tag has rendered as a <code>BufferedReader</code>. 
+     * Makes only sense after calling at least [@link #doStartTag} or [@link #processTagLifecycle}
+     * @return the output data as <code>BufferedReader</code>
+     */
+    public BufferedReader getOutputAsBufferedReader()
+    {
+        return new BufferedReader(new StringReader(getOutput()));
     }
     
     /**

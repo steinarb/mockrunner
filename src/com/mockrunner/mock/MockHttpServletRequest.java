@@ -3,6 +3,7 @@ package com.mockrunner.mock;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Vector;
 
@@ -95,5 +96,17 @@ public class MockHttpServletRequest extends com.mockobjects.servlet.MockHttpServ
     public RequestDispatcher getRequestDispatcher(String arg0)
     {
         return dispatcher;
+    }
+    
+    public Locale getLocale()
+    {
+        return Locale.getDefault();
+    }
+
+    public Enumeration getLocales()
+    {
+        Vector locales = new Vector();
+        locales.add(getLocale());
+        return locales.elements();
     }
 }
