@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -22,14 +23,27 @@ public class MockHttpServletResponse implements HttpServletResponse
     private MockServletOutputStream outputStream;
     private Map headers;
     private Locale locale;
-    private String characterEncoding = "ISO-8859-1";
-    
+    private String characterEncoding;
+    private int bufferSize;
+    private boolean wasErrorSent;
+    private boolean wasRedirectSent;
+    private int errorCode;
+    private int statusCode;
+    private List cookies;
+
     public MockHttpServletResponse()
     {
         outputStream = new MockServletOutputStream();
-		headers = new HashMap();
+        headers = new HashMap();
+        characterEncoding = "ISO-8859-1";
+        bufferSize = 0;
+        wasErrorSent = false;
+        wasRedirectSent = false;
+        errorCode = SC_OK;
+        statusCode = SC_OK;
+        cookies = new ArrayList();
     }
-    
+
     public String encodeURL(String url)
     {
         return url;
@@ -49,53 +63,52 @@ public class MockHttpServletResponse implements HttpServletResponse
     {
         return url;
     }
-    
+
     public PrintWriter getWriter() throws IOException
     {
-        if(null == writer)
+        if (null == writer)
         {
-        	writer = new PrintWriter(new OutputStreamWriter(getOutputStream(), characterEncoding));
+            writer = new PrintWriter(new OutputStreamWriter(getOutputStream(), characterEncoding));
         }
         return writer;
     }
-    
+
     public ServletOutputStream getOutputStream() throws IOException
     {
         return outputStream;
     }
-    
-    public String getOutputStreamContent() 
+
+    public String getOutputStreamContent()
     {
         return outputStream.getContent();
     }
-    
-    public void addCookie(Cookie arg0)
-    {
-        // TODO Auto-generated method stub
 
+    public void addCookie(Cookie cookie)
+    {
+        cookies.add(cookie);
     }
 
-    public void addDateHeader(String arg0, long arg1)
+    public void addDateHeader(String key, long date)
     {
-        // TODO Auto-generated method stub
-
+        String dateString = new Date(date).toString();
+        addHeader(key, dateString);
     }
 
     public void addHeader(String key, String value)
     {
-		List valueList = (List)headers.get(key);
-		if(null == valueList)
-		{
-			valueList = new ArrayList();
-			headers.put(key, valueList);
-		}
-		valueList.add(value);
+        List valueList = (List) headers.get(key);
+        if (null == valueList)
+        {
+            valueList = new ArrayList();
+            headers.put(key, valueList);
+        }
+        valueList.add(value);
     }
 
-    public void addIntHeader(String arg0, int arg1)
+    public void addIntHeader(String key, int value)
     {
-        // TODO Auto-generated method stub
-
+        String stringValue = new Integer(value).toString();
+        addHeader(key, stringValue);
     }
 
     public boolean containsHeader(String key)
@@ -103,118 +116,149 @@ public class MockHttpServletResponse implements HttpServletResponse
         return headers.containsKey(key);
     }
 
-    public void sendError(int arg0, String arg1) throws IOException
+    public void sendError(int code, String message) throws IOException
     {
-        // TODO Auto-generated method stub
-
+        errorCode = code;
+        wasErrorSent = true;
     }
 
-    public void sendError(int arg0) throws IOException
+    public void sendError(int code) throws IOException
     {
-        // TODO Auto-generated method stub
-
+        errorCode = code;
+        wasErrorSent = true;
     }
 
-    public void sendRedirect(String arg0) throws IOException
+    public void sendRedirect(String location) throws IOException
     {
-        // TODO Auto-generated method stub
-
+        setHeader("location", location);
+        wasRedirectSent = true;
     }
 
-    public void setDateHeader(String arg0, long arg1)
+    public void setDateHeader(String key, long date)
     {
-        // TODO Auto-generated method stub
-
+        String dateString = new Date(date).toString();
+        setHeader(key, dateString);
     }
 
-    public void setHeader(String arg0, String arg1)
+    public void setHeader(String key, String value)
     {
-        // TODO Auto-generated method stub
-
+        List valueList = new ArrayList();
+        headers.put(key, valueList);
+        valueList.add(value);
     }
 
-    public void setIntHeader(String arg0, int arg1)
+    public void setIntHeader(String key, int value)
     {
-        // TODO Auto-generated method stub
-
+        String stringValue = new Integer(value).toString();
+        setHeader(key, stringValue);
     }
 
-    public void setStatus(int arg0, String arg1)
+    public void setStatus(int code, String message)
     {
-        // TODO Auto-generated method stub
-
+        statusCode = code;
     }
 
-    public void setStatus(int arg0)
+    public void setStatus(int code)
     {
-        // TODO Auto-generated method stub
-
+        statusCode = code;
     }
 
     public void flushBuffer() throws IOException
     {
-		writer.flush();
-		outputStream.flush();
+        writer.flush();
+        outputStream.flush();
     }
 
     public int getBufferSize()
     {
-        // TODO Auto-generated method stub
-        return 0;
+        return bufferSize;
     }
 
     public String getCharacterEncoding()
     {
         return characterEncoding;
     }
-    
-	public void setCharacterEncoding(String encoding)
-	{
-		characterEncoding = encoding;
-	}
+
+    public void setCharacterEncoding(String encoding)
+    {
+        characterEncoding = encoding;
+    }
 
     public Locale getLocale()
     {
         return locale;
     }
-    
-	public void setLocale(Locale locale)
-	{
-		this.locale = locale;
-	}
-    
+
+    public void setLocale(Locale locale)
+    {
+        this.locale = locale;
+    }
+
     public boolean isCommitted()
     {
-        // TODO Auto-generated method stub
         return false;
     }
 
     public void reset()
     {
-		headers.clear();
-		resetBuffer();
+        headers.clear();
+        resetBuffer();
     }
 
     public void resetBuffer()
     {
-		outputStream.clearContent();
+        outputStream.clearContent();
     }
 
-    public void setBufferSize(int arg0)
+    public void setBufferSize(int size)
     {
-        // TODO Auto-generated method stub
-
+        bufferSize = size;
     }
 
-    public void setContentLength(int arg0)
+    public void setContentLength(int length)
     {
-        // TODO Auto-generated method stub
-
+        setIntHeader("content-length", length);
     }
 
-    public void setContentType(String arg0)
+    public void setContentType(String type)
     {
-        // TODO Auto-generated method stub
-
+        setHeader("content-type", type);
+    }
+    
+    public List getHeaderList(String key)
+    {
+        return (List)headers.get(key);
+    }
+    
+    public String getHeader(String key)
+    {
+        List list = getHeaderList(key);
+        if(null == list || 0 == list.size()) return null;
+        return (String)list.get(0);
+    }
+    
+    public int getStatusCode()
+    {
+        return statusCode;
+    }
+    
+    public int getErrorCode()
+    {
+        return errorCode;
+    }
+    
+    public List getCookies()
+    {
+        return cookies;
+    }
+    
+    public boolean wasErrorSent()
+    {
+        return wasErrorSent;
+    }
+    
+    public boolean wasRedirectSent()
+    {
+        return wasRedirectSent;
     }
 }
