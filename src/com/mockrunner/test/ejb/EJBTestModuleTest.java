@@ -117,7 +117,8 @@ public class EJBTestModuleTest extends TestCase
 		assertSame(bean, home.findByPrimaryKey("anotherPk"));
         bean = ejbModule.createEntityBean("com/AnEntityBean", new Object[] {new Short((short)1)}, "thirdPk");
         assertSame(bean, home.findByPrimaryKey("thirdPk"));
-		assertNull(ejbModule.createBean("com/AnEntityBean", new Object[] {"xyz"}));
+		assertNull(ejbModule.createEntityBean("com/AnEntityBean", new Object[] {"xyz"}, "thirdPk"));
+		assertSame(bean, home.findByPrimaryKey("thirdPk"));
     }
     
     public void testFindByPrimaryKey() throws Exception

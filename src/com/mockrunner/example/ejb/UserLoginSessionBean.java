@@ -21,6 +21,9 @@ import com.mockrunner.example.ejb.interfaces.UserEntityHome;
  * 
  * @ejb.ejb-ref ejb-name="UserEntity" view-type="remote" ref-name="ejb/UserEntity"
  **/
+/**
+ * Facade session bean for {@link UserEntityBean}.
+ */
 public class UserLoginSessionBean implements SessionBean
 {
     private SessionContext sessionContext;

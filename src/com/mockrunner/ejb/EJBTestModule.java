@@ -575,7 +575,7 @@ public class EJBTestModule
         Object remote = invokeHomeMethod(home, createMethod, parameters);
         Class[] interfaces = home.getClass().getInterfaces();
         Class homeInterface = getHomeInterfaceClass(interfaces);
-        if(null != homeInterface)
+        if(null != homeInterface && null != remote)
         {
             mockFactory.getMockContainer().getEntityDatabase().add(homeInterface, primaryKey, remote);
         }
