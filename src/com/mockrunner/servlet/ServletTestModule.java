@@ -168,9 +168,8 @@ public class ServletTestModule extends HTMLOutputModule
     
     /**
      * Calls the current filters <code>doFilter</code> method.
-     * Calls only the current filter with a new <code>MockFilterChain</code>
-     * without going through the filter chain, regardless of the
-     * <code>doChain</code> setting.
+     * Calls only the current filter without going through the 
+     * filter chain, regardless of the <code>doChain</code> setting.
      */
     public void doFilter()
     {
