@@ -24,5 +24,14 @@ Otherwise, please consider the following changes:
   
 - Major changes affect message driven beans. If you use the Mockrunner JMS
   test framework without message driven beans, you should not be affected
-  by the changes.
+  by the changes. Message driven beans are now deployed using the method
+  EJBTestModule.deployMessageBean. You have to provide JNDI names, factory
+  and destination objects and an instance of the message driven bean.
+  The provided objects are automatically bound to the JNDI context. The
+  mock container creates a session with a proper receiver and registers
+  the provided bean. The method JMSTestModule.registerTestMessageListener
+  is no longer necessary. Please check out the modified version of
+  com.mockrunner.example.jms.PrintSessionBeanTest for an example.
+  The PrintSessionBeanTest also shows how to test message driven beans
+  without deploying the bean to the mock container.
   
