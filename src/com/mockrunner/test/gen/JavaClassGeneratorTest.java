@@ -3,14 +3,13 @@ package com.mockrunner.test.gen;
 import java.util.List;
 import java.util.Map;
 
+import junit.framework.TestCase;
+
 import com.mockrunner.test.gen.JavaClassGenerator.ConstructorDeclaration;
 import com.mockrunner.test.gen.JavaClassGenerator.MethodDeclaration;
 import com.mockrunner.util.ClassUtil;
 import com.mockrunner.util.CollectionUtil;
-import com.mockrunner.util.FileUtil;
 import com.mockrunner.util.XmlUtil;
-
-import junit.framework.TestCase;
 
 public class JavaClassGeneratorTest extends TestCase
 {
@@ -39,8 +38,8 @@ public class JavaClassGeneratorTest extends TestCase
         generator.addConstructorDeclaration();
         ConstructorDeclaration constructor = new ConstructorDeclaration();
         constructor.setCommentLines(new String[] {"A", "comment"});
-        constructor.setArguments(new Class[] {String.class, FileUtil.class});
-        constructor.setArgumentNames(new String[] {"string1", "util1"});
+        constructor.setArguments(new Class[] {String.class, JavaClassGeneratorTest.class});
+        constructor.setArgumentNames(new String[] {"string1", "generator1"});
         constructor.setCodeLines(new String[] {"Line1", "Line2"});
         generator.addConstructorDeclaration(constructor);
         MethodDeclaration method1 = new MethodDeclaration();
@@ -70,7 +69,7 @@ public class JavaClassGeneratorTest extends TestCase
                "import java.util.Map;" + NL +
                "import java.util.List;" + NL +
                "import com.mockrunner.util.XmlUtil;" + NL +
-               "import com.mockrunner.util.FileUtil;" + NL +
+               "import com.mockrunner.test.gen.JavaClassGeneratorTest;" + NL +
                "import com.mockrunner.util.CollectionUtil;" + NL + NL +
                "/**" + NL +
                " * This is" + NL +
@@ -87,7 +86,7 @@ public class JavaClassGeneratorTest extends TestCase
                "     * A" + NL +
                "     * comment" + NL +
                "     */" + NL +
-               "    public MyClass(String string1, FileUtil util1)" + NL +
+               "    public MyClass(String string1, JavaClassGeneratorTest generator1)" + NL +
                "    {" + NL +
                "        Line1" + NL +
                "        Line2" + NL +
