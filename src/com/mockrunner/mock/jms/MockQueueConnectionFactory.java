@@ -1,8 +1,5 @@
 package com.mockrunner.mock.jms;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.QueueConnection;
@@ -13,17 +10,11 @@ import com.mockrunner.jms.DestinationManager;
 /**
  * Mock implementation of JMS <code>QueueConnectionFactory</code>.
  */
-public class MockQueueConnectionFactory implements QueueConnectionFactory
+public class MockQueueConnectionFactory extends MockConnectionFactory implements QueueConnectionFactory
 {
-    private DestinationManager destinationManager;
-    private List queueConnections;
-    private JMSException exception;
-    
     public MockQueueConnectionFactory(DestinationManager destinationManager)
     {
-        queueConnections = new ArrayList();
-        this.destinationManager = destinationManager;
-        exception = null;
+        super(destinationManager);
     }
     
     public Connection createConnection() throws JMSException
@@ -38,36 +29,15 @@ public class MockQueueConnectionFactory implements QueueConnectionFactory
     
     public QueueConnection createQueueConnection() throws JMSException
     {
-        MockQueueConnection connection = new MockQueueConnection(destinationManager);
-        connection.setJMSException(exception);
-        queueConnections.add(connection);
+        MockQueueConnection connection = new MockQueueConnection(destinationManager());
+        connection.setJMSException(exception());
+        connections().add(connection);
         return connection;
     }
 
     public QueueConnection createQueueConnection(String name, String password) throws JMSException
     {
         return createQueueConnection();
-    }
-    
-    /**
-     * Set an exception that will be passed to all
-     * created connections. This can be used to
-     * simulate server errors. Check out
-     * {@link MockConnection#setJMSException}
-     * for details.
-     * @param exception the exception
-     */
-    public void setJMSException(JMSException exception)
-    {
-        this.exception = exception;
-    }
-    
-    /**
-     * Clears the list of connections
-     */
-    public void clearConnections()
-    {
-        queueConnections.clear();
     }
     
     /**
@@ -79,8 +49,8 @@ public class MockQueueConnectionFactory implements QueueConnectionFactory
      */
     public MockQueueConnection getQueueConnection(int index)
     {
-        if(queueConnections.size() <= index) return null;
-        return (MockQueueConnection)queueConnections.get(index);
+        if(connections().size() <= index) return null;
+        return (MockQueueConnection)connections().get(index);
     }
     
     /**
@@ -91,7 +61,7 @@ public class MockQueueConnectionFactory implements QueueConnectionFactory
      */
     public MockQueueConnection getLatestQueueConnection()
     {
-        if(queueConnections.size() == 0) return null;
-        return (MockQueueConnection)queueConnections.get(queueConnections.size() - 1);
+        if(connections().size() == 0) return null;
+        return (MockQueueConnection)connections().get(connections().size() - 1);
     }
 }

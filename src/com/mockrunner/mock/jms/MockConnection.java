@@ -19,7 +19,7 @@ import com.mockrunner.jms.DestinationManager;
 /**
  * Mock implementation of JMS <code>Connection</code>.
  */
-public abstract class MockConnection implements Connection
+public class MockConnection implements Connection
 {
     private ConnectionMetaData metaData;
     private List sessions;
@@ -110,6 +110,14 @@ public abstract class MockConnection implements Connection
     public void setMetaData(ConnectionMetaData metaData)
     {
         this.metaData = metaData;
+    }
+    
+    public Session createSession(boolean transacted, int acknowledgeMode) throws JMSException
+    {
+        throwJMSException();
+        MockSession session = new MockSession(this, transacted, acknowledgeMode);
+        sessions().add(session);
+        return session;
     }
     
     public ConnectionConsumer createConnectionConsumer(Destination destination, String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException

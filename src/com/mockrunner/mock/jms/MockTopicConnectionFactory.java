@@ -1,8 +1,5 @@
 package com.mockrunner.mock.jms;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.TopicConnection;
@@ -13,17 +10,11 @@ import com.mockrunner.jms.DestinationManager;
 /**
  * Mock implementation of JMS <code>TopicConnectionFactory</code>.
  */
-public class MockTopicConnectionFactory implements TopicConnectionFactory
+public class MockTopicConnectionFactory extends MockConnectionFactory implements TopicConnectionFactory
 {
-    private DestinationManager destinationManager;
-    private List topicConnections;
-    private JMSException exception;
-    
     public MockTopicConnectionFactory(DestinationManager destinationManager)
     {
-        this.destinationManager = destinationManager;
-        topicConnections = new ArrayList();
-        exception = null;
+        super(destinationManager);
     }
     
     public Connection createConnection() throws JMSException
@@ -38,36 +29,15 @@ public class MockTopicConnectionFactory implements TopicConnectionFactory
     
     public TopicConnection createTopicConnection() throws JMSException
     {
-        MockTopicConnection connection = new MockTopicConnection(destinationManager);
-        connection.setJMSException(exception);
-        topicConnections.add(connection);
+        MockTopicConnection connection = new MockTopicConnection(destinationManager());
+        connection.setJMSException(exception());
+        connections().add(connection);
         return connection;
     }
 
     public TopicConnection createTopicConnection(String name, String password) throws JMSException
     {
         return createTopicConnection();
-    }
-    
-    /**
-     * Set an exception that will be passed to all
-     * created connections. This can be used to
-     * simulate server errors. Check out
-     * {@link MockConnection#setJMSException}
-     * for details.
-     * @param exception the exception
-     */
-    public void setJMSException(JMSException exception)
-    {
-        this.exception = exception;
-    }
-    
-    /**
-     * Clears the list of connections
-     */
-    public void clearConnections()
-    {
-        topicConnections.clear();
     }
 
     /**
@@ -79,8 +49,8 @@ public class MockTopicConnectionFactory implements TopicConnectionFactory
      */
     public MockTopicConnection getTopicConnection(int index)
     {
-        if(topicConnections.size() <= index) return null;
-        return (MockTopicConnection)topicConnections.get(index);
+        if(connections().size() <= index) return null;
+        return (MockTopicConnection)connections().get(index);
     }
 
     /**
@@ -91,7 +61,7 @@ public class MockTopicConnectionFactory implements TopicConnectionFactory
      */
     public MockTopicConnection getLatestTopicConnection()
     {
-        if(topicConnections.size() == 0) return null;
-        return (MockTopicConnection)topicConnections.get(topicConnections.size() - 1);
+        if(connections().size() == 0) return null;
+        return (MockTopicConnection)connections().get(connections().size() - 1);
     }
 }
