@@ -198,6 +198,38 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link JDBCTestModule#verifyCommited}
+     */
+    protected void verifyCommited()
+    {
+        jdbcTestModule.verifyCommited();
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyRollbacked}
+     */
+    protected void verifyRollbacked()
+    {
+        jdbcTestModule.verifyRollbacked();
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyNumberCommits}
+     */
+    protected void verifyNumberCommits(int number)
+    {
+        jdbcTestModule.verifyNumberCommits(number);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyNumberRollbacks}
+     */
+    protected void verifyNumberRollbacks(int number)
+    {
+        jdbcTestModule.verifyNumberRollbacks(number);
+    }
+    
+    /**
      * Delegates to {@link JDBCTestModule#verifyNumberStatements}
      */
     protected void verifyNumberStatements(int number)

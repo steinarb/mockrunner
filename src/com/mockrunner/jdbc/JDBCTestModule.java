@@ -298,6 +298,70 @@ public class JDBCTestModule
     }
     
     /**
+     * Verifies that the changes were commited, i.e. the <code>commit</code>
+     * method of <code>Connection</code> was at least called once.
+     * Makes only sense, if the <code>Connection</code> is not in
+     * autocommit mode. Automatic commits are not recognized.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCommited()
+    {
+        int number = mockFactory.getMockConnection().getNumberCommits();
+        if(number <= 0)
+        {
+            throw new VerifyFailedException("Connection received no commits.");
+        }
+    }
+    
+    /**
+     * Verifies that the changes were rollbacked, i.e. the <code>rollback</code>
+     * method of <code>Connection</code> was at least called once.
+     * Makes only sense, if the <code>Connection</code> is not in
+     * autocommit mode.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyRollbacked()
+    {
+        int number = mockFactory.getMockConnection().getNumberRollbacks();
+        if(number <= 0)
+        {
+            throw new VerifyFailedException("Connection received no rollbakcs.");
+        }
+    }
+    
+    /**
+     * Verifies the number of <code>commit</code> calls.
+     * Makes only sense, if the <code>Connection</code> is not in
+     * autocommit mode.
+     * @param number the expected number of commits
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberCommits(int number)
+    {
+        int actualNumber = mockFactory.getMockConnection().getNumberCommits();
+        if(actualNumber != number)
+        {
+            throw new VerifyFailedException("Connection received " + actualNumber + "commits, expected " + number);
+        }
+    }
+    
+    /**
+     * Verifies the number of <code>rollback</code> calls.
+     * Makes only sense, if the <code>Connection</code> is not in
+     * autocommit mode.
+     * @param number the expected number of rollbacks
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberRollbacks(int number)
+    {
+        int actualNumber = mockFactory.getMockConnection().getNumberRollbacks();
+        if(actualNumber != number)
+        {
+            throw new VerifyFailedException("Connection received " + actualNumber + "rollbacks, expected " + number);
+        }
+    }
+    
+    /**
      * Verifies the number of statements.
      * @param number the expected number
      * @throws VerifyFailedException if verification fails

@@ -33,6 +33,8 @@ public class MockConnection implements Connection
     private int level;
     private Map typeMap;
     private String catalog ;
+    private int numberCommits;
+    private int numberRollbacks;
     
     public MockConnection()
     {
@@ -47,11 +49,38 @@ public class MockConnection implements Connection
         savepoints = new HashMap();
         savepointCount = 0;
         catalog = null;
+        numberCommits = 0;
+        numberRollbacks = 0;
+    }
+    
+    public int getNumberCommits()
+    {
+        return numberCommits;
+    }
+    
+    public int getNumberRollbacks()
+    {
+        return numberRollbacks;
     }
     
     public Map getSavepointMap()
     {
         return Collections.unmodifiableMap(savepoints);
+    }
+    
+    public void resetNumberCommits()
+    {
+        numberCommits = 0;
+    }
+    
+    public void resetNumberRollbacks()
+    {
+        numberRollbacks = 0;
+    }
+    
+    public void resetSavepointMap()
+    {
+        savepoints.clear();
     }
     
     public StatementResultSetHandler getStatementResultSetHandler()
@@ -247,12 +276,12 @@ public class MockConnection implements Connection
 
     public void commit() throws SQLException
     {
-
+        numberCommits++;
     }
 
     public void rollback() throws SQLException
     {
-
+        numberRollbacks++;
     }
 
     public void rollback(Savepoint savepoint) throws SQLException
@@ -264,6 +293,7 @@ public class MockConnection implements Connection
                                    + currentSavepoint.getSavepointName() + " is released");
         }
         currentSavepoint.setRollbacked(true);
+        numberRollbacks++;
     }
 
     public void clearWarnings() throws SQLException
