@@ -11,6 +11,10 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import com.mockrunner.base.HTMLOutputModule;
+import com.mockrunner.base.HTMLOutputTestCase;
+import com.mockrunner.base.WebTestCase;
+import com.mockrunner.base.WebTestModule;
 import com.mockrunner.ejb.EJBTestCaseAdapter;
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.jdbc.JDBCTestCaseAdapter;
@@ -67,6 +71,14 @@ public class AdapterConsistencyTest extends TestCase
         adapterMap.put(JMSTestModule.class, JMSTestCaseAdapter.class);
         exceptions = new ArrayList();
         exceptionMap.put(JMSTestModule.class, exceptions);
+        
+        adapterMap.put(HTMLOutputModule.class, HTMLOutputTestCase.class);
+        exceptions = new ArrayList();
+        exceptionMap.put(HTMLOutputModule.class, exceptions);
+        
+        adapterMap.put(WebTestModule.class, WebTestCase.class);
+        exceptions = new ArrayList();
+        exceptionMap.put(WebTestModule.class, exceptions);
     }
     
     public void testAdapterConsistency()
