@@ -53,6 +53,7 @@ public class AdapterConsistencyTest extends TestCase
         
         adapterMap.put(ActionTestModule.class, ActionTestCaseAdapter.class);
         exceptions = new ArrayList();
+        exceptions.add("getOutput");
         exceptionMap.put(ActionTestModule.class, exceptions);
         
         adapterMap.put(EJBTestModule.class, EJBTestCaseAdapter.class);

@@ -26,6 +26,7 @@ import org.apache.struts.taglib.html.Constants;
 import org.apache.struts.util.MessageResources;
 import org.apache.struts.validator.ValidatorPlugIn;
 
+import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.mock.web.MockActionMapping;
@@ -40,7 +41,7 @@ import com.mockrunner.util.StreamUtil;
  * when calling an action but you can change the behaviour
  * (e.g. disable form population).
  */
-public class ActionTestModule
+public class ActionTestModule extends HTMLOutputModule
 {
     private final static Log log = LogFactory.getLog(ActionTestModule.class);
     private WebMockObjectFactory mockFactory;
@@ -1154,6 +1155,24 @@ public class ActionTestModule
             throw new RuntimeException(exc.getMessage());
         }
         return getActionForward();
+    }
+    
+    /**
+     * Returns the HTML output as a string (if the action creates HTML output). 
+     * Flushes the output before returning it.
+     * @return the output
+     */
+    public String getOutput()
+    {
+        try
+        {
+            mockFactory.getMockResponse().getWriter().flush();    
+        }
+        catch(Exception exc)
+        {
+            log.error(exc.getMessage(), exc);
+        }
+        return mockFactory.getMockResponse().getOutputStreamContent();
     }
 
     private void setResult(ActionForward currentForward)

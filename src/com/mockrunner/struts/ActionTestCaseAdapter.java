@@ -14,7 +14,8 @@ import org.apache.struts.action.DynaActionForm;
 import org.apache.struts.config.FormBeanConfig;
 import org.apache.struts.util.MessageResources;
 
-import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.base.HTMLOutputModule;
+import com.mockrunner.base.HTMLOutputTestCase;
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.mock.web.MockActionMapping;
 import com.mockrunner.mock.web.MockPageContext;
@@ -25,7 +26,7 @@ import com.mockrunner.mock.web.MockPageContext;
  * directly (so your test case can use another base
  * class).
  */
-public class ActionTestCaseAdapter extends BaseTestCase
+public class ActionTestCaseAdapter extends HTMLOutputTestCase
 {
     private ActionTestModule actionTestModule;
     
@@ -54,6 +55,16 @@ public class ActionTestCaseAdapter extends BaseTestCase
     {
         super.setUp();
         actionTestModule = createActionTestModule(getWebMockObjectFactory());
+    }
+    
+    /**
+     * Returns the <code>ActionTestModule</code> as 
+     * <code>HTMLOutputModule</code>.
+     * @return the <code>HTMLOutputModule</code>
+     */
+    protected HTMLOutputModule getHTMLOutputModule()
+    {
+        return actionTestModule;
     }
     
     /**
