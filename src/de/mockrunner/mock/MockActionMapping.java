@@ -260,7 +260,7 @@ public class MockActionMapping extends ActionMapping
 
     public ActionForward getInputForward()
     {
-        return null;
+        return new MockActionForward(input);
     }
 
     public void removeForward(ActionForward forward)

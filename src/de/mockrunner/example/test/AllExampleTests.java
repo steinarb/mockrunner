@@ -11,6 +11,7 @@ public class AllExampleTests
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(AuthenticationActionTest.class));
         suite.addTest(new TestSuite(ConstrainedNumericTextTagTest.class));
+        suite.addTest(new TestSuite(StoreDataActionTest.class));
         //$JUnit-END$
         return suite;
     }

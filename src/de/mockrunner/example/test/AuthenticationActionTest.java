@@ -5,6 +5,12 @@ import de.mockrunner.example.AuthenticationAction;
 import de.mockrunner.example.AuthenticationForm;
 import de.mockrunner.example.AuthenticationStrategy;
 
+/**
+ * This simple TestCase demonstrates how to use the
+ * ActionTestModule. Extend your test from  
+ * ActionTestCaseAdapter. The methods are 
+ * self-explanatory.
+ */
 public class AuthenticationActionTest extends ActionTestCaseAdapter
 {
     private MockAuthenticationStrategy strategy;
@@ -31,6 +37,8 @@ public class AuthenticationActionTest extends ActionTestCaseAdapter
         strategy.setupLoginOk(true);
         actionPerform(AuthenticationAction.class, form);
         verifyNoActionErrors();
+        verifyNumberActionMessages(1);
+        verifyActionMessagePresent("auth.login.successful");
         verifyForward("success");
     }
     

@@ -7,8 +7,10 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import de.mockrunner.mock.MockJspWriter;
 
-
-
+/**
+ * Used for custom tag testing. Will be
+ * extended.
+ */
 public class TagTestModule
 {
     private MockObjectFactory mockFactory;

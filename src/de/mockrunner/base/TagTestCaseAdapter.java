@@ -2,6 +2,9 @@ package de.mockrunner.base;
 
 import javax.servlet.jsp.tagext.TagSupport;
 
+/**
+ * Delegator for TagTestModule
+ */
 public class TagTestCaseAdapter extends BaseTestCase
 {
     private TagTestModule tagTestModule;
