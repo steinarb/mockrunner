@@ -38,6 +38,8 @@ public class StandardAdapterProcessor implements AdapterProcessor
         addTearDownMethod(classGenerator, memberName);
         addSetUpMethod(classGenerator, module, memberName);
         addHTMLOutputAndWebTestMethods(classGenerator, module, memberName);
+        addGetAndSetModuleMethods(classGenerator, module, memberName);
+        addDelegatorMethods(classGenerator, module, excludedMethods, memberName);
         output = classGenerator.generate();
     }
     
@@ -118,9 +120,57 @@ public class StandardAdapterProcessor implements AdapterProcessor
         classGenerator.addMethodDeclaration(htmlOutputMethod);
     }
     
+    private void addGetAndSetModuleMethods(JavaClassGenerator classGenerator, Class module, String memberName)
+    {
+        MethodDeclaration getMethod = createProtectedMethod();
+        getMethod.setName("get" + ClassUtil.getClassName(module));
+        getMethod.setReturnType(module);
+        String[] comment = new String[2];
+        comment[0] = "Gets the " + module.getName() + ".";
+        comment[1] = "@return the {@link " + module.getName() + "}";
+        getMethod.setCommentLines(comment);
+        getMethod.setCodeLines(new String[] {"return " + memberName + ";"});
+        classGenerator.addMethodDeclaration(getMethod);
+        MethodDeclaration setMethod = createProtectedMethod();
+        setMethod.setName("set" + ClassUtil.getClassName(module));
+        comment = new String[2];
+        comment[0] = "Sets the {@link " + module.getName() + "}.";
+        comment[1] = "@param servletTestModule the {@link " + module.getName() + "}";
+        setMethod.setCommentLines(comment);
+        setMethod.setArguments(new Class[] {module});
+        setMethod.setArgumentNames(new String[] {memberName});
+        setMethod.setCodeLines(new String[] {"this." + memberName + " = " + memberName + ";"});
+        classGenerator.addMethodDeclaration(setMethod);
+    }
+    
     private void addDelegatorMethods(JavaClassGenerator classGenerator, Class module, List excludedMethods, String memberName)
     {
-        
+        Method[] moduleMethods = getDelegateMethods(module, excludedMethods);
+        for(int ii = 0; ii < moduleMethods.length; ii++)
+        {
+            Method method = moduleMethods[ii];
+            MethodDeclaration delegationMethod = createProtectedMethod();
+            delegationMethod.setName(method.getName());
+            delegationMethod.setReturnType(method.getReturnType());
+            Class[] exceptions = method.getExceptionTypes();
+            if(exceptions.length > 0)
+            {
+                delegationMethod.setExceptions(exceptions);
+            }
+            Class[] parameters = method.getParameterTypes();
+            String[] argumentNames = null;
+            if(parameters.length > 0)
+            {
+                delegationMethod.setArguments(parameters);
+                argumentNames = getArgumentNames(parameters);
+                delegationMethod.setArgumentNames(getArgumentNames(parameters));
+            }
+            String delegationCodeLine = createDelegationCodeLine(method, memberName, argumentNames);
+            delegationMethod.setCodeLines(new String[] {delegationCodeLine});
+            String delegationMethodComment = createDelegationMethodComment(module, method);
+            delegationMethod.setCommentLines(new String[] {delegationMethodComment});
+            classGenerator.addMethodDeclaration(delegationMethod);
+        }
     }
     
     private void addConstructors(JavaClassGenerator classGenerator)
@@ -131,6 +181,16 @@ public class StandardAdapterProcessor implements AdapterProcessor
         constructor.setArgumentNames(new String[] {"name"});
         constructor.setCodeLines(new String[] {"super(name);"});
         classGenerator.addConstructorDeclaration(constructor);
+    }
+    
+    private String[] getArgumentNames(Class[] arguments)
+    {
+        String[] names = new String[arguments.length];
+        for(int ii = 0; ii < arguments.length; ii++)
+        {
+            names[ii] = ClassUtil.getArgumentName(arguments[ii]);
+        }
+        return names;
     }
     
     private Method[] getDelegateMethods(Class module, List excludedMethods)
@@ -154,6 +214,57 @@ public class StandardAdapterProcessor implements AdapterProcessor
         if(null == excludedMethods) return true;
         if(excludedMethods.contains(currentMethod.getName())) return false;
         return true;
+    }
+    
+    private String createDelegationMethodComment(Class module, Method method)
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("Delegates to {@link ");
+        buffer.append(module.getName());
+        buffer.append("#");
+        buffer.append(method.getName());
+        Class[] argumentTypes = method.getParameterTypes();
+        if(argumentTypes.length > 0)
+        {
+            buffer.append("(");
+            for(int ii = 0; ii < argumentTypes.length; ii++)
+            {
+                buffer.append(ClassUtil.getClassName(argumentTypes[ii]));
+                if(ii < argumentTypes.length-1)
+                {
+                    buffer.append(", ");
+                }
+            }
+            buffer.append(")");
+        }
+        buffer.append("}");
+        return buffer.toString();
+    }
+    
+    private String createDelegationCodeLine(Method method, String memberName, String[] argumentNames)
+    {
+        StringBuffer buffer = new StringBuffer();
+        if(!Void.TYPE.equals(method.getReturnType()))
+        {
+            buffer.append("return ");
+        }
+        buffer.append(memberName);
+        buffer.append(".");
+        buffer.append(method.getName());
+        buffer.append("(");
+        if(null != argumentNames)
+        {
+            for(int ii = 0; ii < argumentNames.length; ii++)
+            {
+                buffer.append(argumentNames[ii]);
+                if(ii < argumentNames.length-1)
+                {
+                    buffer.append(", ");
+                }
+            }
+        }
+        buffer.append(");");
+        return buffer.toString();
     }
 
     private MethodDeclaration createProtectedMethod()

@@ -45,7 +45,7 @@ public class JavaClassGeneratorTest extends TestCase
         ConstructorDeclaration constructor = new ConstructorDeclaration();
         constructor.setCommentLines(new String[] {"A", "comment"});
         constructor.setArguments(new Class[] {String.class, JavaClassGeneratorTest.class});
-        constructor.setArgumentNames(new String[] {"string1", "generator1"});
+        constructor.setArgumentNames(new String[] {"string1"});
         constructor.setExceptions(new Class[] {Exception.class});
         constructor.setCodeLines(new String[] {"Line1", "Line2"});
         generator.addConstructorDeclaration(constructor);
@@ -58,7 +58,7 @@ public class JavaClassGeneratorTest extends TestCase
         method2.setName("anotherMethod");
         method2.setReturnType(CollectionUtil.class);
         method2.setArguments(new Class[] {String.class, Double.TYPE});
-        method2.setArgumentNames(new String[] {"string1", "double1"});
+        method2.setArgumentNames(new String[] {"string1"});
         generator.addMethodDeclaration(method2);
         MethodDeclaration method3 = new MethodDeclaration();
         method3.setName("thirdMethod");
@@ -96,7 +96,7 @@ public class JavaClassGeneratorTest extends TestCase
                "     * A" + NL +
                "     * comment" + NL +
                "     */" + NL +
-               "    public MyClass(String string1, JavaClassGeneratorTest generator1) throws Exception" + NL +
+               "    public MyClass(String string1, JavaClassGeneratorTest javaClassGeneratorTest) throws Exception" + NL +
                "    {" + NL +
                "        Line1" + NL +
                "        Line2" + NL +
@@ -109,7 +109,7 @@ public class JavaClassGeneratorTest extends TestCase
                "    {" + NL +
                "        Line1" + NL +
                "    }" + NL + NL +
-               "    public CollectionUtil anotherMethod(String string1, double double1)" + NL +
+               "    public CollectionUtil anotherMethod(String string1, double doubleValue)" + NL +
                "    {" + NL + NL +
                "    }" + NL + NL +
                "    /**" + NL +
