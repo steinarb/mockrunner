@@ -23,6 +23,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
     public void process(Class module, List excludedMethods)
     {
         JavaClassGenerator classGenerator = new JavaClassGenerator();
+        BCELClassAnalyzer analyzer = new BCELClassAnalyzer(module);
         classGenerator.setCreateJavaDocComments(true);
         classGenerator.setPackage(module.getPackage());
         classGenerator.setClassName(prepareName(module));
@@ -39,7 +40,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         addSetUpMethod(classGenerator, module, memberName);
         addHTMLOutputAndWebTestMethods(classGenerator, module, memberName);
         addGetAndSetModuleMethods(classGenerator, module, memberName);
-        addDelegatorMethods(classGenerator, module, excludedMethods, memberName);
+        addDelegatorMethods(classGenerator, analyzer, module, excludedMethods, memberName);
         output = classGenerator.generate();
     }
     
@@ -143,7 +144,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         classGenerator.addMethodDeclaration(setMethod);
     }
     
-    private void addDelegatorMethods(JavaClassGenerator classGenerator, Class module, List excludedMethods, String memberName)
+    private void addDelegatorMethods(JavaClassGenerator classGenerator, BCELClassAnalyzer analyzer, Class module, List excludedMethods, String memberName)
     {
         Method[] moduleMethods = getDelegateMethods(module, excludedMethods);
         for(int ii = 0; ii < moduleMethods.length; ii++)
@@ -167,8 +168,8 @@ public class StandardAdapterProcessor implements AdapterProcessor
             }
             String delegationCodeLine = createDelegationCodeLine(method, memberName, argumentNames);
             delegationMethod.setCodeLines(new String[] {delegationCodeLine});
-            String delegationMethodComment = createDelegationMethodComment(module, method);
-            delegationMethod.setCommentLines(new String[] {delegationMethodComment});
+            String[] delegationMethodComment = createDelegationMethodComment(analyzer, module, method);
+            delegationMethod.setCommentLines(delegationMethodComment);
             classGenerator.addMethodDeclaration(delegationMethod);
         }
     }
@@ -217,7 +218,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         return true;
     }
     
-    private String createDelegationMethodComment(Class module, Method method)
+    private String[] createDelegationMethodComment(BCELClassAnalyzer analyzer, Class module, Method method)
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("Delegates to {@link ");
@@ -239,7 +240,11 @@ public class StandardAdapterProcessor implements AdapterProcessor
             buffer.append(")");
         }
         buffer.append("}");
-        return buffer.toString();
+        if(analyzer.isMethodDeprecated(method))
+        {
+            return new String[] {buffer.toString(), "@deprecated"};
+        }
+        return new String[] {buffer.toString()};
     }
     
     private String createDelegationCodeLine(Method method, String memberName, String[] argumentNames)
