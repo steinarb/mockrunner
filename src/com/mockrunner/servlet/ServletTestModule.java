@@ -315,7 +315,7 @@ public class ServletTestModule extends HTMLOutputModule
         {
         
         }
-        return mockFactory.getMockResponse().getOutputStreamContents();
+        return mockFactory.getMockResponse().getOutputStreamContent();
     }
    
     /**

@@ -68,6 +68,6 @@ public class WebMockObjectFactoryTest extends TestCase
         assertTrue(response instanceof HttpServletResponseWrapper);
         response.getWriter().print("test");
         response.getWriter().flush();
-        assertEquals("test", factory.getMockResponse().getOutputStreamContents());     
+        assertEquals("test", factory.getMockResponse().getOutputStreamContent());     
     }
 }

@@ -26,6 +26,6 @@ public class GenericHTMLOutputModule extends HTMLOutputModule
         {
         
         }
-        return factory.getMockResponse().getOutputStreamContents();
+        return factory.getMockResponse().getOutputStreamContent();
     }
 }
