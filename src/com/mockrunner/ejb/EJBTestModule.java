@@ -251,10 +251,13 @@ public class EJBTestModule
      * the <code>create</code> method and returns the result, which
      * you can cast to the remote interface. This method only works
      * with <code>create</code> methods that have an empty parameter list.
+     * The <code>create</code> method must have the name <code>create</code>
+     * with no postfix.
      * It works with the mock container but may fail with a real remote container.
      * This method throws a <code>RuntimeException</code> if no object with the 
-     * specified name can be found, if the found object is no EJB home interface,
-     * or if the corresponding <code>create</code> method cannot be found.
+     * specified name can be found. If the found object is no EJB home interface,
+     * or if the corresponding <code>create</code> method cannot be found, this
+     * method returns <code>null</code>.
      * @param name the name of the bean
      * @return the bean
      * @throws RuntimeException in case of error
@@ -268,11 +271,14 @@ public class EJBTestModule
      * Lookup an EJB. The method looks up the home interface, calls
      * the <code>create</code> method with the specified parameters
      * and returns the result, which you can cast to the remote interface.
+     * The <code>create</code> method must have the name <code>create</code>
+     * with no postfix.
      * This method works with the mock container but may fail with
      * a real remote container.
      * This method throws a <code>RuntimeException</code> if no object with the 
-     * specified name can be found, if the found object is no EJB home interface,
-     * or if the corresponding <code>create</code> method cannot be found.
+     * specified name can be found. If the found object is no EJB home interface,
+     * or if the corresponding <code>create</code> method cannot be found, this
+     * method returns <code>null</code>.
      * @param name the name of the bean
      * @param parameters the parameters, <code>null</code> parameters are not allowed,
      *  primitive types are automatically unwrapped
@@ -281,12 +287,34 @@ public class EJBTestModule
      */
     public Object lookupBean(String name, Object[] parameters)
     {
+        return lookupBean(name, "create", parameters);
+    }
+    
+    /**
+     * Lookup an EJB. The method looks up the home interface, calls
+     * the <code>create</code> method with the specified parameters
+     * and returns the result, which you can cast to the remote interface.
+     * This method works with the mock container but may fail with
+     * a real remote container.
+     * This method throws a <code>RuntimeException</code> if no object with the 
+     * specified name can be found. If the found object is no EJB home interface,
+     * or if the corresponding <code>create</code> method cannot be found, this
+     * method returns <code>null</code>.
+     * @param name the name of the bean
+     * @param createMethod the name of the create method
+     * @param parameters the parameters, <code>null</code> parameters are not allowed,
+     *  primitive types are automatically unwrapped
+     * @return the bean 
+     * @throws RuntimeException in case of error
+     */
+    public Object lookupBean(String name, String createMethod, Object[] parameters)
+    {
         Object object = lookup(name);
         if(null == object) return null;
         if(!(object instanceof EJBHome || object instanceof EJBLocalHome)) return null;
         try
         {
-            return MethodUtils.invokeMethod(object, "create", parameters);
+            return MethodUtils.invokeMethod(object, createMethod, parameters);
         }
         catch(Exception exc)
         {
