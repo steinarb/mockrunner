@@ -139,6 +139,30 @@ public class StringUtil
     }
     
     /**
+     * Returns how many times <code>string</code> contains
+     * <code>other</coder>.
+     * @param string the string to search
+     * @param other the string that is searched
+     * @return the number of occurences
+     */
+    public static int countMatches(String string, String other) 
+    {
+        if(null == string) return 0;
+        if(null == other) return 0;
+        if(0 >= string.length()) return 0;
+        if(0 >= other.length()) return 0;
+        int count = 0;
+        int index = 0;
+        while((index <= string.length() - other.length()) && (-1 != (index = string.indexOf(other, index))))
+        {
+            count++;
+            index += other.length();
+        }
+        return count;
+    }
+
+    
+    /**
      * Returns if the specified strings are equal, ignoring
      * case, if <code>caseSensitive</code> is <code>false</code>.
      * @param source the source String

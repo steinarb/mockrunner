@@ -93,6 +93,25 @@ public class StringUtilTest extends TestCase
         assertEquals("Test\nTest\n1000\nnull\n3\n", buffer.toString());
     }
     
+    public void testCountMatches()
+    {
+        assertEquals(0, StringUtil.countMatches(null, null));
+        assertEquals(0, StringUtil.countMatches(null, ""));
+        assertEquals(0, StringUtil.countMatches("", null));
+        assertEquals(0, StringUtil.countMatches("", ""));
+        assertEquals(1, StringUtil.countMatches("a", "a"));
+        assertEquals(3, StringUtil.countMatches("aaa", "a"));
+        assertEquals(2, StringUtil.countMatches("abcabcab", "abc"));
+        assertEquals(2, StringUtil.countMatches("abcababc", "abc"));
+        assertEquals(3, StringUtil.countMatches("abcababc", "a"));
+        assertEquals(1, StringUtil.countMatches("Hello World", "ld"));
+        assertEquals(3, StringUtil.countMatches(" Hello World ", " "));
+        assertEquals(3, StringUtil.countMatches("112211111", "11"));
+        assertEquals(1, StringUtil.countMatches("aaaaa", "aaa"));
+        assertEquals(1, StringUtil.countMatches("bbb", "bb"));
+        assertEquals(0, StringUtil.countMatches("bbb", "bbbb"));
+    }
+    
     public void testMatchesExact()
     {
         assertTrue(StringUtil.matchesExact("", "", true));

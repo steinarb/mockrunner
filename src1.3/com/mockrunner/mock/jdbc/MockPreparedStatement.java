@@ -26,10 +26,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
-
 import com.mockrunner.jdbc.AbstractParameterResultSetHandler;
 import com.mockrunner.jdbc.ParameterUtil;
+import com.mockrunner.util.common.StringUtil;
 
 /**
  * Mock implementation of <code>PreparedStatement</code>.
@@ -71,7 +70,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     
     /*private void prepareParameterMetaData()
     {
-        int number = StringUtils.countMatches(sql, "?");
+        int number = StringUtil.countMatches(sql, "?");
         parameterMetaData = new MockParameterMetaData();
         parameterMetaData.setParameterCount(number);
     }*/
