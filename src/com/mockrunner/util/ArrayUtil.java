@@ -284,9 +284,9 @@ public class ArrayUtil
      * @return the index of the first occurence, resp.
      *         -1, if <i>source</i> does not contain <i>bytes</i>
      */
-    public static int contains(byte[] source, byte[] bytes)
+    public static int indexOf(byte[] source, byte[] bytes)
     {
-        return contains(source, bytes, 0);
+        return indexOf(source, bytes, 0);
     }
     
     /**
@@ -298,7 +298,7 @@ public class ArrayUtil
      * @return the index of the first occurence, resp.
      *         -1, if <i>source</i> does not contain <i>bytes</i>
      */
-    public static int contains(byte[] source, byte[] bytes, int index)
+    public static int indexOf(byte[] source, byte[] bytes, int index)
     {
         if(index + bytes.length > source.length) return -1;
         for(int ii = index; ii <= source.length - bytes.length; ii++)

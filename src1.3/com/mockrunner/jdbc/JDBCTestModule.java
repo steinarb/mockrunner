@@ -2293,7 +2293,7 @@ public class JDBCTestModule
     }*/
 
     /**
-     * @deprecated use {@link #verifySavepointNotRollbacked(int)}
+     * @deprecated use {@link #verifySavepointNotRolledBack(int)}
      */
     /*public void verifySavepointNotRollbacked(int index)
     {
@@ -2301,7 +2301,7 @@ public class JDBCTestModule
     }*/
 
     /**
-     * @deprecated use {@link #verifySavepointNotRollbacked(String)}
+     * @deprecated use {@link #verifySavepointNotRolledBack(String)}
      */
     /*public void verifySavepointNotRollbacked(String name)
     {
