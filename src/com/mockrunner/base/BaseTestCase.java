@@ -1,5 +1,6 @@
 package com.mockrunner.base;
 
+import com.mockrunner.jdbc.JDBCTestModule;
 import com.mockrunner.servlet.ServletTestModule;
 import com.mockrunner.struts.*;
 import com.mockrunner.tag.*;
@@ -114,7 +115,7 @@ public abstract class BaseTestCase extends TestCase
     }
     
     /**
-     * Creates an <code>TagTestModule</code> with the specified
+     * Creates a <code>TagTestModule</code> with the specified
      * <code>MockObjectFactory</code>.
      * @return the created <code>TagTestModule</code>
      */
@@ -124,7 +125,7 @@ public abstract class BaseTestCase extends TestCase
     }
     
     /**
-     * Creates an <code>TagTestModule</code> based on the current
+     * Creates a <code>TagTestModule</code> based on the current
      * <code>MockObjectFactory</code>.
      * Same as <code>createTagTestModule(getMockObjectFactory())</code>.
      * @return the created <code>TagTestModule</code>
@@ -135,9 +136,9 @@ public abstract class BaseTestCase extends TestCase
     }
     
     /**
-     * Creates an <code>ServletTestModule</code> with the specified
+     * Creates a <code>ServletTestModule</code> with the specified
      * <code>MockObjectFactory</code>.
-     * @return the created <code>TagTestModule</code>
+     * @return the created <code>ServletTestModule</code>
      */
     protected ServletTestModule createServletTestModule(MockObjectFactory mockFactory)
     {
@@ -145,13 +146,34 @@ public abstract class BaseTestCase extends TestCase
     }
 
     /**
-     * Creates an <code>ServletTestModule</code> based on the current
+     * Creates a <code>ServletTestModule</code> based on the current
      * <code>MockObjectFactory</code>.
-     * Same as <code>createTagTestModule(getMockObjectFactory())</code>.
-     * @return the created <code>TagTestModule</code>
+     * Same as <code>createServletTestModule(getMockObjectFactory())</code>.
+     * @return the created <code>ServletTestModule</code>
      */
     protected ServletTestModule createServletTestModule()
     {
         return new ServletTestModule(getMockObjectFactory());
+    }
+    
+    /**
+     * Creates a <code>JDBCTestModule</code> with the specified
+     * <code>MockObjectFactory</code>.
+     * @return the created <code>TagTestModule</code>
+     */
+    protected JDBCTestModule createJDBCTestModule(MockObjectFactory mockFactory)
+    {
+        return new JDBCTestModule(mockFactory);
+    }
+
+    /**
+     * Creates an <code>JDBCTestModule</code> based on the current
+     * <code>MockObjectFactory</code>.
+     * Same as <code>createJDBCTestModule(getMockObjectFactory())</code>.
+     * @return the created <code>TagTestModule</code>
+     */
+    protected JDBCTestModule createJDBCTestModule()
+    {
+        return new JDBCTestModule(getMockObjectFactory());
     }
 }

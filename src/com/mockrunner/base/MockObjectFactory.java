@@ -1,7 +1,9 @@
 package com.mockrunner.base;
 
 import com.mockobjects.servlet.MockServletConfig;
+import com.mockobjects.sql.MockDataSource;
 import com.mockrunner.mock.MockActionMapping;
+import com.mockrunner.mock.MockConnection;
 import com.mockrunner.mock.MockFilterChain;
 import com.mockrunner.mock.MockFilterConfig;
 import com.mockrunner.mock.MockHttpServletRequest;
@@ -28,6 +30,8 @@ public class MockObjectFactory
     private MockPageContext pageContext;
     private MockFilterConfig filterConfig;
     private MockFilterChain filterChain;
+    private MockDataSource dataSource;
+    private MockConnection connection;
 
     /**
      * Creates a new set of mock objects.
@@ -95,6 +99,8 @@ public class MockObjectFactory
         mapping = new MockActionMapping();
         filterChain = new MockFilterChain();
         filterConfig = new MockFilterConfig();
+        dataSource = new MockDataSource();
+        connection = new MockConnection();
     }
 
     private void setUpDependencies()
@@ -104,6 +110,7 @@ public class MockObjectFactory
         session.setupServletContext(context);
         pageContext = new MockPageContext(config, request, response);
         filterConfig.setupGetServletContext(context);
+        dataSource.setupConnection(connection);
     }
     
     /**
@@ -195,5 +202,23 @@ public class MockObjectFactory
     public MockFilterChain getMockFilterChain()
     {
         return filterChain;
+    }
+    
+    /**
+     * Returns the <code>MockDataSource</code>
+     * @return the <code>MockDataSource</code>
+     */
+    public MockDataSource getMockDataSource()
+    {
+        return dataSource;
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.mock.MockConnection}.
+     * @return the {@link com.mockrunner.mock.MockConnection}
+     */
+    public MockConnection getMockConnection()
+    {
+        return connection;
     }
 }
