@@ -70,7 +70,7 @@ public class JDBCTestModule
      */
     public List getStatements()
     {
-        return mockFactory.getMockConnection().getStatements();
+        return mockFactory.getMockConnection().getStatementHandler().getStatements();
     }
     
     /**
@@ -113,7 +113,7 @@ public class JDBCTestModule
      */
     public List getPreparedStatements()
     {
-        return mockFactory.getMockConnection().getPreparedStatements();
+        return mockFactory.getMockConnection().getPreparedStatementHandler().getPreparedStatements();
     }
     
     /**
@@ -127,7 +127,7 @@ public class JDBCTestModule
      */
     public List getPreparedStatements(String sql)
     {
-        Map sqlStatements = mockFactory.getMockConnection().getPreparedStatementMap();
+        Map sqlStatements = mockFactory.getMockConnection().getPreparedStatementHandler().getPreparedStatementMap();
         return SearchUtil.getMatchingObjects(sqlStatements, sql, caseSensitive, exactMatch); 
     }
     
