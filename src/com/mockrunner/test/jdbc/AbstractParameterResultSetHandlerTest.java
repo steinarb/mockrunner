@@ -2,6 +2,7 @@ package com.mockrunner.test.jdbc;
 
 import java.sql.Date;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 
 import com.mockrunner.base.BaseTestCase;
@@ -25,6 +26,43 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 		connection = getJDBCMockObjectFactory().getMockConnection();
 		preparedStatementHandler = connection.getPreparedStatementResultSetHandler();
 		callableStatementHandler = connection.getCallableStatementResultSetHandler();
+	}
+	
+	public void testGetResultSet() throws Exception
+	{
+	    MockResultSet result = new MockResultSet("id");
+	    preparedStatementHandler.prepareResultSet("select [x]", result, new String[] {"a", "b"});
+	    assertNull(preparedStatementHandler.getResultSet("select x"));
+	    preparedStatementHandler.setUseRegularExpression(true);
+	    assertNull(preparedStatementHandler.getResultSet("select x"));
+	    Map parameter = new HashMap();
+	    parameter.put(new Integer(1), "a");
+	    parameter.put(new Integer(2), "b");
+	    assertSame(result, preparedStatementHandler.getResultSet("select x", parameter));
+	}
+	
+	public void testGetUpdateCount() throws Exception
+	{
+	    callableStatementHandler.prepareUpdateCount("insert.*", 2, new HashMap());
+	    assertNull(callableStatementHandler.getUpdateCount("insert.*"));
+	    assertEquals(new Integer(2), callableStatementHandler.getUpdateCount("insert.*", new HashMap()));
+	    callableStatementHandler.setUseRegularExpression(true);
+	    assertEquals(new Integer(2), callableStatementHandler.getUpdateCount("INSERT INTO", new HashMap()));
+	    Map parameter = new HashMap();
+	    parameter.put(new Integer(1), "a");
+	    parameter.put(new Integer(2), "b");
+	    assertEquals(new Integer(2), callableStatementHandler.getUpdateCount("INSERT INTO", parameter));
+	    callableStatementHandler.setExactMatchParameter(true);
+	    assertNull(callableStatementHandler.getUpdateCount("INSERT INTO", parameter));
+	}
+	
+	public void testGetThrowsSQLException()
+	{
+	    preparedStatementHandler.prepareThrowsSQLException(".*", new HashMap());
+	    assertFalse(preparedStatementHandler.getThrowsSQLException("select * from", new HashMap()));
+	    preparedStatementHandler.setUseRegularExpression(true);
+	    assertTrue(preparedStatementHandler.getThrowsSQLException("select * from", new HashMap()));
+	    assertFalse(preparedStatementHandler.getThrowsSQLException("select * from"));
 	}
 	
 	public void testGetParameterMapForExecutedStatementNull() throws Exception

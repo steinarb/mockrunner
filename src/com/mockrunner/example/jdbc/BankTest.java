@@ -68,9 +68,9 @@ public class BankTest extends JDBCTestCaseAdapter
         verifySQLStatementExecuted("select balance");
         verifySQLStatementExecuted("update account");
         verifySQLStatementParameter("update account", 0, 1, new Integer(-5000));
-		verifySQLStatementParameter("update account", 0, 2, new Integer(1));
-		verifySQLStatementParameter("update account", 1, 1, new Integer(5000));
-		verifySQLStatementParameter("update account", 1, 2, new Integer(2));
+        verifySQLStatementParameter("update account", 0, 2, new Integer(1));
+        verifySQLStatementParameter("update account", 1, 1, new Integer(5000));
+        verifySQLStatementParameter("update account", 1, 2, new Integer(2));
         verifyCommitted();
         verifyNotRolledBack();
         verifyAllResultSetsClosed();
