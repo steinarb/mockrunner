@@ -26,20 +26,20 @@ import org.apache.struts.validator.ValidatorForm;
 
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
+import com.mockrunner.mock.web.ActionMockObjectFactory;
 import com.mockrunner.mock.web.MockActionForward;
-import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.struts.ActionTestModule;
 import com.mockrunner.struts.MapMessageResources;
 
 public class ActionTestModuleTest extends TestCase
 {
-    private WebMockObjectFactory mockFactory;
+    private ActionMockObjectFactory mockFactory;
     private ActionTestModule module;
     
     protected void setUp() throws Exception
     {
         super.setUp();
-        mockFactory = new WebMockObjectFactory();
+        mockFactory = new ActionMockObjectFactory();
         module = new ActionTestModule(mockFactory);
     }
     

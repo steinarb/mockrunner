@@ -10,6 +10,7 @@ import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
+import com.mockrunner.mock.web.ActionMockObjectFactory;
 import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.servlet.ServletTestModule;
 import com.mockrunner.struts.ActionTestModule;
@@ -21,6 +22,7 @@ import com.mockrunner.tag.TagTestModule;
 public abstract class BaseTestCase extends TestCase
 {
     private WebMockObjectFactory webMockFactory;
+    private ActionMockObjectFactory actionMockFactory;
     private JDBCMockObjectFactory jdbcMockFactory;
     private EJBMockObjectFactory ejbMockFactory;
     private JMSMockObjectFactory jmsMockFactory;
@@ -41,6 +43,7 @@ public abstract class BaseTestCase extends TestCase
         jdbcMockFactory.restoreDrivers();
         MockContextFactory.revertSetAsInitial();
         webMockFactory = null;
+        actionMockFactory = null;
         jdbcMockFactory = null;
         ejbMockFactory = null;
         jmsMockFactory  = null;
@@ -54,7 +57,8 @@ public abstract class BaseTestCase extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        webMockFactory = createWebMockObjectFactory();
+        actionMockFactory = createActionMockObjectFactory();
+        webMockFactory = actionMockFactory;
         jdbcMockFactory = createJDBCMockObjectFactory();
         ejbMockFactory = createEJBMockObjectFactory();
         jmsMockFactory = createJMSMockObjectFactory();
@@ -78,7 +82,7 @@ public abstract class BaseTestCase extends TestCase
     }
     
     /**
-     * Creates a {@link com.mockrunner.mock.web.WebMockObjectFactory} based on another on.
+     * Creates a {@link com.mockrunner.mock.web.WebMockObjectFactory} based on another one.
      * The created {@link com.mockrunner.mock.web.WebMockObjectFactory} will have its own
      * request and response objects. If you set <i>createNewSession</i>
      * to <code>true</code> it will also have its own session object.
@@ -112,6 +116,54 @@ public abstract class BaseTestCase extends TestCase
     protected void setWebMockObjectFactory(WebMockObjectFactory mockFactory)
     {
         this.webMockFactory = mockFactory;
+    }
+    
+    /**
+     * Creates a {@link ActionMockObjectFactory}. 
+     * @return the created {@link ActionMockObjectFactory}
+     */
+    protected ActionMockObjectFactory createActionMockObjectFactory()
+    {
+        return new ActionMockObjectFactory();
+    }
+
+    /**
+     * Same as <code>createActionMockObjectFactory(otherFactory, true)</code>
+     */
+    protected ActionMockObjectFactory createActionMockObjectFactory(WebMockObjectFactory otherFactory)
+    {
+        return new ActionMockObjectFactory(otherFactory);
+    }
+    
+    /**
+     * Creates a {@link com.mockrunner.mock.web.ActionMockObjectFactory} based on 
+     * another {@link com.mockrunner.mock.web.WebMockObjectFactory}.
+     * @param otherFactory the other factory
+     * @param createNewSession create a new session for the new factory
+     * @return the created {@link com.mockrunner.mock.web.ActionMockObjectFactory}
+     * @see #createWebMockObjectFactory(WebMockObjectFactory, boolean)
+     */
+    protected ActionMockObjectFactory createActionMockObjectFactory(WebMockObjectFactory otherFactory, boolean createNewSession)
+    {
+        return new ActionMockObjectFactory(otherFactory, createNewSession);
+    }
+
+    /**
+     * Gets the current {@link ActionMockObjectFactory}.
+     * @return the {@link ActionMockObjectFactory}
+     */
+    protected ActionMockObjectFactory getActionMockObjectFactory()
+    {
+        return actionMockFactory;
+    }
+    
+    /**
+     * Sets the current {@link ActionMockObjectFactory}.
+     * @param mockFactory the {@link ActionMockObjectFactory}
+     */
+    protected void setActionMockObjectFactory(ActionMockObjectFactory mockFactory)
+    {
+        this.actionMockFactory = mockFactory;
     }
     
     /**
@@ -198,10 +250,10 @@ public abstract class BaseTestCase extends TestCase
     /**
      * Creates an {@link com.mockrunner.struts.ActionTestModule} with the specified
      * {@link WebMockObjectFactory}.
-     * @param mockFactory the {@link WebMockObjectFactory}
+     * @param mockFactory the {@link ActionMockObjectFactory}
      * @return the created {@link com.mockrunner.struts.ActionTestModule}
      */
-    protected ActionTestModule createActionTestModule(WebMockObjectFactory mockFactory)
+    protected ActionTestModule createActionTestModule(ActionMockObjectFactory mockFactory)
     {
         return new ActionTestModule(mockFactory);
     }
@@ -209,12 +261,12 @@ public abstract class BaseTestCase extends TestCase
     /**
      * Creates an {@link com.mockrunner.struts.ActionTestModule} based on the current
      * {@link WebMockObjectFactory}.
-     * Same as <code>createActionTestModule(getWebMockObjectFactory())</code>.
+     * Same as <code>createActionTestModule(getActionMockObjectFactory())</code>.
      * @return the created {@link com.mockrunner.struts.ActionTestModule}
      */
     protected ActionTestModule createActionTestModule()
     {
-        return new ActionTestModule(getWebMockObjectFactory());
+        return new ActionTestModule(getActionMockObjectFactory());
     }
     
     /**

@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import junit.framework.TestCase;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -17,30 +19,28 @@ import org.jdom.Element;
 
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.WebTestModule;
+import com.mockrunner.mock.web.ActionMockObjectFactory;
 import com.mockrunner.mock.web.MockActionForward;
-import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.servlet.ServletTestModule;
 import com.mockrunner.struts.ActionTestModule;
 import com.mockrunner.tag.TagTestModule;
 import com.mockrunner.util.common.StreamUtil;
 
-import junit.framework.TestCase;
-
 public class HTMLOutputModuleTest extends TestCase
 {
     private final static String testHTML = "<html><body><tag></body></html>";
-    private WebMockObjectFactory webfactory;
+    private ActionMockObjectFactory actionWebFactory;
     
      
     protected void setUp() throws Exception
     {
         super.setUp();
-        webfactory = new WebMockObjectFactory();
+        actionWebFactory = new ActionMockObjectFactory();
     }
     
     public void testActionTestModuleOutput()
     {
-        ActionTestModule module = new ActionTestModule(webfactory);
+        ActionTestModule module = new ActionTestModule(actionWebFactory);
         module.actionPerform(TestOutputAction.class);
         doTestOutputAsString(module);
         doTestOutputAsBufferedReader(module);
@@ -49,13 +49,13 @@ public class HTMLOutputModuleTest extends TestCase
     
     public void testActionTestModuleAttributes()
     {
-        ActionTestModule module = new ActionTestModule(webfactory);
+        ActionTestModule module = new ActionTestModule(actionWebFactory);
         doTestAttributes(module);
     }
 
     public void testServletTestModuleOutput()
     {
-        ServletTestModule module = new ServletTestModule(webfactory);
+        ServletTestModule module = new ServletTestModule(actionWebFactory);
         module.createServlet(TestOutputServlet.class);
         module.doGet();
         doTestOutputAsString(module);
@@ -65,13 +65,13 @@ public class HTMLOutputModuleTest extends TestCase
     
     public void testServletTestModuleAttributes()
     {
-        ServletTestModule module = new ServletTestModule(webfactory);
+        ServletTestModule module = new ServletTestModule(actionWebFactory);
         doTestAttributes(module);
     }
     
     public void testTagTestModuleOutput()
     {
-        TagTestModule module = new TagTestModule(webfactory);
+        TagTestModule module = new TagTestModule(actionWebFactory);
         module.createTag(TestOutputTag.class);
         module.doStartTag();
         doTestOutputAsString(module);
@@ -81,7 +81,7 @@ public class HTMLOutputModuleTest extends TestCase
     
     public void testTagTestModuleAttributes()
     {
-        TagTestModule module = new TagTestModule(webfactory);
+        TagTestModule module = new TagTestModule(actionWebFactory);
         doTestAttributes(module);
     }
     
@@ -110,9 +110,9 @@ public class HTMLOutputModuleTest extends TestCase
         module.setSessionAttribute("sessionatt", new Integer(3));
         module.addRequestParameter("requestparam");
         module.setRequestAttribute("requestatt", "xyz");
-        assertEquals(new Integer(3), webfactory.getMockSession().getAttribute("sessionatt"));
-        assertEquals("", webfactory.getMockRequest().getParameter("requestparam"));
-        assertEquals("xyz", webfactory.getMockRequest().getAttribute("requestatt"));
+        assertEquals(new Integer(3), actionWebFactory.getMockSession().getAttribute("sessionatt"));
+        assertEquals("", actionWebFactory.getMockRequest().getParameter("requestparam"));
+        assertEquals("xyz", actionWebFactory.getMockRequest().getAttribute("requestatt"));
     }
     
     public static class TestOutputAction extends Action

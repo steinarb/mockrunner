@@ -6,6 +6,7 @@ import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.base.BasicHTMLOutputTestCase;
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.gen.proc.JavaClassGenerator.MethodDeclaration;
+import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.util.common.ClassUtil;
 
 public class BasicAdapterProcessor extends StandardAdapterProcessor
@@ -90,7 +91,7 @@ public class BasicAdapterProcessor extends StandardAdapterProcessor
         if(HTMLOutputModule.class.isAssignableFrom(memberInfo.getModule()))
         {
             createMethod = prepareCreateMethod(factory);
-            createMethod.setArguments(new Class[] {factory});
+            createMethod.setArguments(new Class[] {WebMockObjectFactory.class});
             createMethod.setArgumentNames(new String[] {"otherFactory"});
             codeLines = new String[] {"return new " + ClassUtil.getClassName(factory) + "(otherFactory);"};
             createMethod.setCodeLines(codeLines);
@@ -98,7 +99,7 @@ public class BasicAdapterProcessor extends StandardAdapterProcessor
             createMethod.setCommentLines(comment);
             classGenerator.addMethodDeclaration(createMethod);
             createMethod = prepareCreateMethod(factory);
-            createMethod.setArguments(new Class[] {factory, Boolean.TYPE});
+            createMethod.setArguments(new Class[] {WebMockObjectFactory.class, Boolean.TYPE});
             createMethod.setArgumentNames(new String[] {"otherFactory", "createNewSession"});
             codeLines = new String[] {"return new " + ClassUtil.getClassName(factory) + "(otherFactory, createNewSession);"};
             createMethod.setCodeLines(codeLines);
@@ -151,19 +152,20 @@ public class BasicAdapterProcessor extends StandardAdapterProcessor
     private String[] getCreateMethodComment(Class factory)
     {
         String link = getJavaDocLink(factory);
-        String[] comment = new String[12];
-        comment[0] = "Creates a " + link + " based on another on.";
-        comment[1] = "The created " + link + " will have its own";
-        comment[2] = "request and response objects. If you set <i>createNewSession</i>";
-        comment[3] = "to <code>true</code> it will also have its own session object.";
-        comment[4] = "The two factories will share one <code>ServletContext</code>.";
-        comment[5] = "Especially important for multithreading tests.";
-        comment[6] = "If you set <i>createNewSession</i> to false, the two factories";
-        comment[7] = "will share one session. This setting simulates multiple requests";
-        comment[8] = "from the same client.";
-        comment[9] = "@param otherFactory the other factory";
-        comment[10] = "@param createNewSession create a new session for the new factory";
-        comment[11] = "@return the created " + link;
+        String[] comment = new String[13];
+        comment[0] = "Creates a " + link + " based on another ";
+        comment[1] = getJavaDocLink(WebMockObjectFactory.class) + ".";
+        comment[2] = "The created " + link + " will have its own";
+        comment[3] = "request and response objects. If you set <i>createNewSession</i>";
+        comment[4] = "to <code>true</code> it will also have its own session object.";
+        comment[5] = "The two factories will share one <code>ServletContext</code>.";
+        comment[6] = "Especially important for multithreading tests.";
+        comment[7] = "If you set <i>createNewSession</i> to false, the two factories";
+        comment[8] = "will share one session. This setting simulates multiple requests";
+        comment[9] = "from the same client.";
+        comment[10] = "@param otherFactory the other factory";
+        comment[11] = "@param createNewSession create a new session for the new factory";
+        comment[12] = "@return the created " + link;
         return comment;
     }
 }

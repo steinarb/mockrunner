@@ -28,8 +28,8 @@ public class LogoutActionTest extends ActionTestCaseAdapter
         servletModule.createFilter(ImageButtonFilter.class);
         servletModule.setDoChain(true);
         servletModule.doFilter();
-        getWebMockObjectFactory().addRequestWrapper(new HttpServletRequestWrapper((HttpServletRequest)servletModule.getFilteredRequest()));
+        getActionMockObjectFactory().addRequestWrapper(new HttpServletRequestWrapper((HttpServletRequest)servletModule.getFilteredRequest()));
         actionPerform(LogoutAction.class);
-        assertFalse(getWebMockObjectFactory().getMockSession().isValid());
+        assertFalse(getActionMockObjectFactory().getMockSession().isValid());
     }  
 }

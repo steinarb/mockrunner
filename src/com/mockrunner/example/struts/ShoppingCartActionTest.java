@@ -19,7 +19,7 @@ public class ShoppingCartActionTest extends ActionTestCaseAdapter
     
     public void testForward()
     {
-        getWebMockObjectFactory().getMockActionMapping().setParameter("method");
+        getActionMockObjectFactory().getMockActionMapping().setParameter("method");
         addRequestParameter("method", "Add");
         actionPerform(ShoppingCartAction.class);
         verifyForward("add");

@@ -34,23 +34,23 @@ public class GreetingsActionTest extends ActionTestCaseAdapter
     
     public void testSuccesfulGreetings()
     {
-        getWebMockObjectFactory().getMockServletContext().setAttribute("counter", new Integer(0));
-        getWebMockObjectFactory().getMockActionMapping().setPath("/greetings");
+        getActionMockObjectFactory().getMockServletContext().setAttribute("counter", new Integer(0));
+        getActionMockObjectFactory().getMockActionMapping().setPath("/greetings");
         addRequestParameter("name", "testname");
         actionPerform(GreetingsAction.class, GreetingsValidatorForm.class);
-        assertEquals("Hello testname, you are visitor 1", getWebMockObjectFactory().getMockRequest().getAttribute("greetings"));
-        getWebMockObjectFactory().getMockServletContext().setAttribute("counter", new Integer(6));
+        assertEquals("Hello testname, you are visitor 1", getActionMockObjectFactory().getMockRequest().getAttribute("greetings"));
+        getActionMockObjectFactory().getMockServletContext().setAttribute("counter", new Integer(6));
         verifyNoActionErrors();
         actionPerform(GreetingsAction.class, GreetingsValidatorForm.class);
-        assertEquals("Hello testname, you are visitor 7", getWebMockObjectFactory().getMockRequest().getAttribute("greetings"));
+        assertEquals("Hello testname, you are visitor 7", getActionMockObjectFactory().getMockRequest().getAttribute("greetings"));
         verifyNoActionErrors();
         verifyForward("success");
     }
     
     public void testValidationError()
     {
-        getWebMockObjectFactory().getMockServletContext().setAttribute("counter", new Integer(0));
-        getWebMockObjectFactory().getMockActionMapping().setPath("/greetings"); 
+        getActionMockObjectFactory().getMockServletContext().setAttribute("counter", new Integer(0));
+        getActionMockObjectFactory().getMockActionMapping().setPath("/greetings"); 
         actionPerform(GreetingsAction.class, GreetingsValidatorForm.class);
         verifyNumberActionErrors(1);
         verifyActionErrorPresent("errors.required");
