@@ -11,6 +11,7 @@ public class AllEJBTests
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(EJBTestModuleTest.class));
         suite.addTest(new TestSuite(EJBMockObjectFactoryTest.class));
+        suite.addTest(new TestSuite(MockUserTransactionTest.class));
         //$JUnit-END$
         return suite;
     }
