@@ -68,8 +68,10 @@ import java.util.Iterator;
  * threaded, chache invalidation is done quickly by incrementing a 'view' counter.
  * When a CacheExpressionnotices it's last cached value was generated in an old 'view',
  * it invalidates its cached value.
+ * 
+ * Alwin Ibba: Changed package
  *
- * @version $Revision: 1.2 $ $Date: 2005/02/04 18:50:20 $
+ * @version $Revision: 1.3 $ $Date: 2005/02/04 19:05:38 $
  */
 public class MultiExpressionEvaluator {
 

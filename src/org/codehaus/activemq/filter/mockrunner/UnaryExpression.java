@@ -29,7 +29,9 @@ import javax.jms.Message;
 /**
  * An expression which performs an operation on two expression values
  * 
- * @version $Revision: 1.2 $
+ * Alwin Ibba: Changed package
+ * 
+ * @version $Revision: 1.3 $
  */
 public abstract class UnaryExpression implements Expression {
 

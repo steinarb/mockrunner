@@ -26,7 +26,9 @@ import javax.jms.Message;
 /**
  * Represents a constant expression
  * 
- * @version $Revision: 1.2 $
+ * Alwin Ibba: Changed package
+ * 
+ * @version $Revision: 1.3 $
  */
 public class ConstantExpression implements Expression {
 
