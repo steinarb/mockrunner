@@ -8,8 +8,9 @@ mockrunner-0.2.9:
 - added verifyForwardName() to ActionTestModule
 - fixed problem with ActionTestModule.createDynaActionForm(), now returns
   DynaActionForm instance
-- fixed bug in MockHttpSession.setAttribute(), valueUnbound will now be called
-  if attribute is replaced
+- fixed bug in MockHttpSession.setAttribute() and MockHttpSession.removeAttribute(),
+  HttpSessionBindingListener methods will now be called properly
+- added support for HttpSessionAttributeListener and ServletContextAttributeListener
 - added Servlet 2.4 methods to MockHttpServletRequest and MockHttpServletResponse
 - fixed some problems with MockPageContext
 - mockrunner jars are now compiled with debug information (line numbers)
