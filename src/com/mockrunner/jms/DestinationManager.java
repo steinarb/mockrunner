@@ -5,16 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockQueue;
-import com.mockrunner.mock.jms.MockQueueConnection;
 
 public class DestinationManager
 {
-    private MockQueueConnection connection;
+    private MockConnection connection;
     private Map queues;
     private List tempQueues;
     
-    public DestinationManager(MockQueueConnection connection)
+    public DestinationManager(MockConnection connection)
     {
         queues = new HashMap();
         tempQueues = new ArrayList();

@@ -18,13 +18,13 @@ import javax.jms.QueueSession;
  */
 public class MockQueue implements Queue
 {
-    private MockQueueConnection connection;
+    private MockConnection connection;
     private Set sessions;
     private String name;
     private List currentMessages;
     private List receivedMessages;
     
-    public MockQueue(MockQueueConnection connection, String name)
+    public MockQueue(MockConnection connection, String name)
     {
         this.name = name;
         this.connection = connection;
@@ -127,7 +127,7 @@ public class MockQueue implements Queue
         sessions.add(session);
     }
     
-    protected MockQueueConnection getConnection()
+    protected MockConnection getConnection()
     {
         return connection;
     }
