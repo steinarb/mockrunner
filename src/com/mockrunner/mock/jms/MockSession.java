@@ -437,7 +437,7 @@ public class MockSession implements Session
     {
 		if(null == destination)
 		{
-			throw new RuntimeException("destination must not be null");
+			throw new IllegalArgumentException("destination must not be null");
 		}
         getConnection().throwJMSException();      
         if(destination instanceof MockQueue)

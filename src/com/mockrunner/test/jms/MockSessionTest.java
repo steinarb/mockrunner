@@ -231,7 +231,7 @@ public class MockSessionTest extends TestCase
             session.createConsumer(null, "", false);
             fail();
         }
-        catch(RuntimeException exc)
+        catch(IllegalArgumentException exc)
         {
             //should throw exception
         }
