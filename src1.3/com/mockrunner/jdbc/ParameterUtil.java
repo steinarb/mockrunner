@@ -5,14 +5,13 @@ import java.io.Reader;
 import java.sql.SQLException;
 import java.util.Arrays;
 
-import org.apache.commons.beanutils.MethodUtils;
-
 import com.mockrunner.mock.jdbc.MockArray;
 import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockRef;
 import com.mockrunner.mock.jdbc.MockStruct;
 import com.mockrunner.util.common.ArrayUtil;
+import com.mockrunner.util.common.MethodUtil;
 import com.mockrunner.util.common.StreamUtil;
 
 /**
@@ -50,7 +49,7 @@ public class ParameterUtil
         {
             try
             {
-                return MethodUtils.invokeExactMethod(source, "clone", null);
+                return MethodUtil.invoke(source, "clone");
             }
             catch(Exception exc)
             {

@@ -69,4 +69,44 @@ public class TagUtilTest extends BaseTestCase
         assertNull(tag.getTestString());
         assertEquals(0, tag.getTestDouble(), 0.0);
     }
+    
+    public void testPopulateTagWithArbitraryBeans()
+    {
+        testMap.put("object", this);
+        testMap.put("tagUtilTest", this);
+        ArbitraryTag tag = new ArbitraryTag();
+        TagUtil.populateTag(tag, testMap, false);
+        assertSame(this, tag.getObject());
+        assertSame(this, tag.getTagUtilTest());
+        testMap.put("object", "abc");
+        TagUtil.populateTag(tag, testMap, false);
+        assertEquals("abc", tag.getObject());
+        assertSame(this, tag.getTagUtilTest());
+    }
+    
+    public class ArbitraryTag extends TagSupport
+    {
+        private TagUtilTest tagUtilTest;
+        private Object object;
+        
+        public Object getObject()
+        {
+            return object;
+        }
+        
+        public TagUtilTest getTagUtilTest()
+        {
+            return tagUtilTest;
+        }
+        
+        public void setObject(Object object)
+        {
+            this.object = object;
+        }
+        
+        public void setTagUtilTest(TagUtilTest tagUtilTest)
+        {
+            this.tagUtilTest = tagUtilTest;
+        }
+    }
 }

@@ -16,6 +16,7 @@ public class AllUtilTests
 		suite.addTest(new TestSuite(FileUtilTest.class));
 		suite.addTest(new TestSuite(ClassUtilTest.class));
         suite.addTest(new TestSuite(CaseAwareMapTest.class));
+        suite.addTest(new TestSuite(MethodUtilTest.class));
         //$JUnit-END$
         return suite;
     }
