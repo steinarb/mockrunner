@@ -11,9 +11,6 @@ import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.MockActionForward;
 import com.mockrunner.struts.ActionTestModule;
 
-/**
- * Test for {@link com.mockrunner.base.ActionTestModule}
- */
 public class ActionTestModuleTest extends TestCase
 {
     private MockObjectFactory mockfactory;

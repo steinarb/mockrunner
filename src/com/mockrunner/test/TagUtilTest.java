@@ -1,0 +1,147 @@
+package com.mockrunner.test;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.jsp.tagext.TagSupport;
+
+import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.mock.MockPageContext;
+import com.mockrunner.tag.NestedBodyTag;
+import com.mockrunner.tag.NestedStandardTag;
+import com.mockrunner.tag.NestedTag;
+import com.mockrunner.tag.TagUtil;
+
+public class TagUtilTest extends BaseTestCase
+{
+    private MockPageContext pageContext;
+    private Map testMap;
+    
+    public TagUtilTest(String arg0)
+    {
+        super(arg0);
+    }
+    
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        pageContext = getMockObjectFactory().getMockPageContext();
+        testMap = new HashMap();
+    }
+
+    public void testCreateNestedTagInstance()
+    {
+        TagSupport tag = TagUtil.createNestedTagInstance(TestTag.class, pageContext, testMap);
+        assertTrue(tag instanceof NestedStandardTag);
+        assertTrue(((NestedTag)tag).getTag() instanceof TestTag);
+        tag = TagUtil.createNestedTagInstance(TestBodyTag.class, pageContext, testMap);
+        assertTrue(tag instanceof NestedBodyTag);
+        assertTrue(((NestedTag)tag).getTag() instanceof TestBodyTag);
+    }
+    
+    public void testPopulateTag()
+    {
+        testMap.put("testString", "test");
+        testMap.put("testDouble", new Double(12.3));
+        testMap.put("testInteger", new Integer(100));
+        TestTag tag = new TestTag();
+        TagUtil.populateTag(tag, testMap, false);
+        assertEquals("test", tag.getTestString());
+        assertEquals(12.3, tag.getTestDouble(), 0.00);
+        assertEquals(new Integer(100), tag.getTestInteger());
+        assertFalse(tag.releaseCalled);
+        testMap.put("testInteger", "3");
+        testMap.put("noValidProperty", "123");
+        testMap.put("testDouble", "notValid");
+        TagUtil.populateTag(tag, testMap, true);
+        assertTrue(tag.releaseCalled);
+        assertEquals(new Integer(3), tag.getTestInteger());
+        assertEquals(0.0, tag.getTestDouble(), 0.00);
+    }
+    
+    public static class TestTag extends TagSupport
+    {
+        private String testString;
+        private Integer testInteger;
+        private double testDouble;
+        private boolean releaseCalled = false;
+        
+        public double getTestDouble()
+        {
+            return testDouble;
+        }
+
+        public Integer getTestInteger()
+        {
+            return testInteger;
+        }
+
+        public String getTestString()
+        {
+            return testString;
+        }
+
+        public void setTestDouble(double testDouble)
+        {
+            this.testDouble = testDouble;
+        }
+
+        public void setTestInteger(Integer testInteger)
+        {
+            this.testInteger = testInteger;
+        }
+
+        public void setTestString(String testString)
+        {
+            this.testString = testString;
+        }
+        
+        public void release()
+        {
+            releaseCalled = true;
+        }
+
+        public boolean getReleaseCalled()
+        {
+            return releaseCalled;
+        }
+    }
+    
+    public static class TestBodyTag extends BodyTagSupport
+    {
+        private String testString;
+        private Integer testInteger;
+        private double testDouble;
+    
+        public double getTestDouble()
+        {
+            return testDouble;
+        }
+
+        public Integer getTestInteger()
+        {
+            return testInteger;
+        }
+
+        public String getTestString()
+        {
+            return testString;
+        }
+
+        public void setTestDouble(double testDouble)
+        {
+            this.testDouble = testDouble;
+        }
+
+        public void setTestInteger(Integer testInteger)
+        {
+            this.testInteger = testInteger;
+        }
+
+        public void setTestString(String testString)
+        {
+            this.testString = testString;
+        }
+    }
+}
