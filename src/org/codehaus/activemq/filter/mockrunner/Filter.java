@@ -24,10 +24,8 @@ import javax.jms.Message;
 
 /**
  * Represents a subscription filter
- * 
- * Alwin Ibba: Changed package
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface Filter {
 

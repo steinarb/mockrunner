@@ -3,8 +3,6 @@ package org.codehaus.activemq.selector.mockrunner;
 
 /**
  * Describes the input token stream.
- * 
- * Alwin Ibba: Changed package
  */
 
 public class Token {

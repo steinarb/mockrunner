@@ -18,6 +18,7 @@
 package org.codehaus.activemq.mockrunner.test;
 
 import junit.framework.TestCase;
+
 import org.codehaus.activemq.filter.mockrunner.ComparisonExpression;
 import org.codehaus.activemq.filter.mockrunner.Expression;
 import org.codehaus.activemq.filter.mockrunner.ExpressionFilter;
@@ -27,9 +28,7 @@ import org.codehaus.activemq.filter.mockrunner.PropertyExpression;
 import org.codehaus.activemq.selector.mockrunner.SelectorParser;
 
 /**
- * Alwin Ibba: Changed package
- * 
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class SelectorParserTest extends TestCase {
 
