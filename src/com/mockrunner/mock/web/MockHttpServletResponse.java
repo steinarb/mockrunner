@@ -3,6 +3,7 @@ package com.mockrunner.mock.web;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -90,7 +91,8 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public void addDateHeader(String key, long date)
     {
-        String dateString = new Date(date).toString();
+        Date dateValue = new Date(date);
+        String dateString = DateFormat.getDateInstance().format(dateValue);
         addHeader(key, dateString);
     }
 
@@ -136,7 +138,8 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public void setDateHeader(String key, long date)
     {
-        String dateString = new Date(date).toString();
+        Date dateValue = new Date(date);
+        String dateString = DateFormat.getDateInstance().format(dateValue);
         setHeader(key, dateString);
     }
 
