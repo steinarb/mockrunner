@@ -70,6 +70,7 @@ public class TagUtil
 	public static void populateTag(TagSupport tag, Map attributes, boolean doRelease)
 	{
 		if(doRelease) tag.release();
+		if(null == attributes || attributes.isEmpty()) return;
 		try
 		{
 			BeanUtils.copyProperties(tag, attributes);

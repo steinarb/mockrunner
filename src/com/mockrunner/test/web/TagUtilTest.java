@@ -52,5 +52,12 @@ public class TagUtilTest extends BaseTestCase
         assertTrue(tag.wasReleaseCalled());
         assertEquals(new Integer(3), tag.getTestInteger());
         assertEquals(0.0, tag.getTestDouble(), 0.00);
+        tag = new TestTag();
+        testMap.clear();
+        TagUtil.populateTag(tag, testMap, true);
+        assertTrue(tag.wasReleaseCalled());
+        assertNull(tag.getTestInteger());
+        assertNull(tag.getTestString());
+        assertEquals(0, tag.getTestDouble(), 0.0);
     }
 }
