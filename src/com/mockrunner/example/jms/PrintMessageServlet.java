@@ -37,7 +37,7 @@ public class PrintMessageServlet extends HttpServlet
             QueueSession queueSession = queueConnection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
             Queue queue = (Queue)initialContext.lookup("queue/testQueue");
             QueueReceiver receiver = queueSession.createReceiver(queue);
-            receiver.setMessageListener(new PrintMessageReceiver());
+            receiver.setMessageListener(new PrintMessageListener());
             queueConnection.start();
         }
         catch(Exception exc)

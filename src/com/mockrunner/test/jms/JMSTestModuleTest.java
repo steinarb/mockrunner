@@ -97,12 +97,12 @@ public class JMSTestModuleTest extends TestCase
         }
         module.setCurrentTopicConnectionIndex(0);
         module.verifyTopicConnectionClosed();
-        queueConnection1.stop();
-        module.verifyQueueConnectionStarted();
+        queueConnection1.start();
+        module.verifyQueueConnectionStopped();
         module.setCurrentQueueConnectionIndex(1);
         try
         {
-            module.verifyQueueConnectionStarted();
+            module.verifyQueueConnectionStopped();
             fail();
         }
         catch(VerifyFailedException exc)
