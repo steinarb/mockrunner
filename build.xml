@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="mockrunner" default="jar" basedir=".">
+<project name="mockrunner" default="release" basedir=".">
 
 	<target name="init">
 		
@@ -10,12 +10,13 @@
         
 		<property name="build" value="build"/>
 		<property name="src" value="src"/>
+		<property name="doc" value="doc"/>
 		<property name="bin" value="bin"/>
 		<property name="lib" value="lib"/>
 		
-		<mkdir dir="${build}"/>
-		<mkdir dir="${bin}"/>
-		
+		<property name="releasedir" value="${bin}/mockrunner-${version}"/>
+		<property name="releasefile" value="${bin}/mockrunner-${version}.zip"/>
+
 		<filter token="version" value="${version}"/>
         <filter token="timestamp" value="${timestamp}"/>
 		
@@ -29,32 +30,70 @@
 	</target>
 		
 	<target name="compile" depends="init">	
-
-		<javac srcdir="${src}" destdir="${build}">
+		<mkdir dir="${build}"/>
+		<javac srcdir="${src}" destdir="${build}" nowarn="true">
 		 	<classpath>
                 <path refid="classpath"/>
             </classpath>
 		</javac>
-
 	</target>
 
 	<target name="jar" depends="compile">
-		<copy todir="${build}" filtering="true">
-    		<fileset dir="${basedir}">
-				<include name="*.txt"/>
-			</fileset>
-  		</copy>
-		<jar jarfile="${bin}/mockrunner.jar">
-			<fileset dir="${src}"/>
+		<delete file="${build}/mockrunner.jar"/>
+		<jar jarfile="${build}/mockrunner.jar">
 			<fileset dir="${build}"/>
+			<fileset dir="${basedir}">
+				<include name="LICENSE*.txt"/>
+			</fileset>
 		</jar>
 	</target>
 	
-	<target name="clean" depends="init">
+	<target name="javadoc" depends="init">
+		<mkdir dir="${doc}/api"/>
+        <javadoc destdir="${doc}/api"
+           		 author="true"
+           		 version="true"
+           		 use="true"
+           		 classpathref="classpath"
+           		 windowtitle="Mockrunner">
+
+			    <fileset dir="${src}" defaultexcludes="yes">
+			    	<include name="de/mockrunner/**" />
+			    	<exclude name="de/mockrunner/test/**" />
+			    </fileset>
+
+    			<doctitle><![CDATA[<h1>Mockrunner</h1>]]></doctitle>
+  		</javadoc>
+    </target>
 	
+	<target name="release" depends="clean,jar,javadoc">
+		<mkdir dir="${releasedir}"/>
+		<mkdir dir="${releasedir}/src"/>
+		<mkdir dir="${releasedir}/doc"/>
+		<delete file="${releasefile}"/>
+		<copy todir="${releasedir}" filtering="true">
+    		<fileset dir="${basedir}">
+				<include name="*.txt"/>
+			</fileset>	
+  		</copy>
+  		<copy todir="${releasedir}/src">
+  			<fileset dir="${src}">
+				<include name="**/*"/>
+			</fileset>
+  		</copy>
+  		<copy todir="${releasedir}/doc">
+  			<fileset dir="${doc}">
+				<include name="**/*"/>
+			</fileset>
+  		</copy>
+  		<copy todir="${releasedir}" file="${build}/mockrunner.jar"/>
+  		<zip destfile="${releasefile}" basedir="${bin}"/>
+	</target>
+	
+	<target name="clean" depends="init">
 		<delete dir="${bin}"/>
+		<delete dir="${doc}"/>
         <delete dir="${build}"/>
-        
 	</target>
 
 </project>

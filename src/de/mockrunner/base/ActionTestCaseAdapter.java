@@ -13,7 +13,8 @@ import de.mockrunner.mock.MockPageContext;
 /**
  * Simply delegates to ActionTestModule.
  * The easiest way to write action tests
- * is to extend your testcases from this.
+ * is to extend your testcases from this
+ * class.
  */
 public class ActionTestCaseAdapter extends BaseTestCase
 {
