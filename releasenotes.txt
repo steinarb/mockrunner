@@ -3,6 +3,9 @@ mockrunner-0.3:
 
 - adapted EJBTestModule to new MockEJB 0.6 API (check out
   migratingfrom0.2.9.txt for details)
+- it's now possible to use regular expressions with the JDBC test framework
+  for preparing and verifying SQL statements. You have to enable regular expressions 
+  with setUseRegularExpressions(true). Check out the modified JDBC BookstoreTest.
 
 mockrunner-0.2.9:
 

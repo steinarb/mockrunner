@@ -29,18 +29,18 @@ public class SQLStatementMatcher
 {
     private boolean caseSensitive = false;
     private boolean exactMatch = false;
-    private boolean useRegularExpression = false;
+    private boolean useRegularExpressions = false;
     
     public SQLStatementMatcher(boolean caseSensitive, boolean exactMatch)
     {
         this(caseSensitive, exactMatch, false);
     }
     
-    public SQLStatementMatcher(boolean caseSensitive, boolean exactMatch, boolean useRegularExpression)
+    public SQLStatementMatcher(boolean caseSensitive, boolean exactMatch, boolean useRegularExpressions)
     {
         this.caseSensitive = caseSensitive;
         this.exactMatch = exactMatch;
-        this.useRegularExpression = useRegularExpression;
+        this.useRegularExpressions = useRegularExpressions;
     }
     
     /**
@@ -132,7 +132,7 @@ public class SQLStatementMatcher
     {
         if(null == source) source = "";
         if(null == query) query = "";
-        if(useRegularExpression && !exactMatch)
+        if(useRegularExpressions && !exactMatch)
         {
             return doPerl5Match(source, query);
         }

@@ -33,7 +33,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 	    MockResultSet result = new MockResultSet("id");
 	    preparedStatementHandler.prepareResultSet("select [x]", result, new String[] {"a", "b"});
 	    assertNull(preparedStatementHandler.getResultSet("select x"));
-	    preparedStatementHandler.setUseRegularExpression(true);
+	    preparedStatementHandler.setUseRegularExpressions(true);
 	    assertNull(preparedStatementHandler.getResultSet("select x"));
 	    Map parameter = new HashMap();
 	    parameter.put(new Integer(1), "a");
@@ -46,7 +46,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 	    callableStatementHandler.prepareUpdateCount("insert.*", 2, new HashMap());
 	    assertNull(callableStatementHandler.getUpdateCount("insert.*"));
 	    assertEquals(new Integer(2), callableStatementHandler.getUpdateCount("insert.*", new HashMap()));
-	    callableStatementHandler.setUseRegularExpression(true);
+	    callableStatementHandler.setUseRegularExpressions(true);
 	    assertEquals(new Integer(2), callableStatementHandler.getUpdateCount("INSERT INTO", new HashMap()));
 	    Map parameter = new HashMap();
 	    parameter.put(new Integer(1), "a");
@@ -60,7 +60,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 	{
 	    preparedStatementHandler.prepareThrowsSQLException(".*", new HashMap());
 	    assertFalse(preparedStatementHandler.getThrowsSQLException("select * from", new HashMap()));
-	    preparedStatementHandler.setUseRegularExpression(true);
+	    preparedStatementHandler.setUseRegularExpressions(true);
 	    assertTrue(preparedStatementHandler.getThrowsSQLException("select * from", new HashMap()));
 	    assertFalse(preparedStatementHandler.getThrowsSQLException("select * from"));
 	}

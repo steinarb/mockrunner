@@ -21,18 +21,41 @@ import com.mockrunner.mock.jdbc.MockResultSet;
  * In the third test, we specify that the statement should raise an
  * SQL exception (to simulate a database error) and verify, that
  * the transaction is rolled back.
+ * 
+ * This example uses regular expressions. Per default, regular expressions
+ * are disabled, i.e. the preparation of result sets and verification of
+ * executed SQL statements is based on simple string comparison.
+ * With<br><br>
+ * <code>setUseRegularExpressions(true);</code>
+ * <br><br>and<br><br>
+ * <code>getStatementResultSetHandler().setUseRegularExpressions(true);</code>
+ * <br>
+ * you enable regular expressions for the preparation of result sets and 
+ * verification of executed SQL statements (note that for prepared and
+ * callable statements you would have to enable it seperately).
+ * E.g. <code>prepareResultSet("select.*isbn,.*quantity.*", result)</code>
+ * means that only the words <i>select</i>, <i>isbn,</i>, and <i>quantity</i>
+ * must appear in the specified order, all other characters are irrelevant.
+ * Besides that simple example, you can use any Perl5 compatible expression.
  */
 public class BookstoreTest extends JDBCTestCaseAdapter
 {
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        setUseRegularExpressions(true);
+        getStatementResultSetHandler().setUseRegularExpressions(true);
+    }
+    
     public void testSuccessfulOrder() throws Exception
     {
         FileResultSetFactory factory = new FileResultSetFactory("src/com/mockrunner/example/jdbc/bookstore.txt");
         factory.setFirstLineContainsColumnNames(true);
         MockResultSet result = getPreparedStatementResultSetHandler().createResultSet("bookresult", factory);    
         //System.out.println(result.toString());
-        getStatementResultSetHandler().prepareResultSet("select isbn, quantity", result);
+        getStatementResultSetHandler().prepareResultSet("select.*isbn,.*quantity.*", result);
         List resultList = Bookstore.order(getJDBCMockObjectFactory().getMockConnection(), new ArrayList());
-        assertTrue(resultList.size() == 4);
+        assertEquals(4, resultList.size());
         assertTrue(resultList.contains("1234567890"));
         assertTrue(resultList.contains("1111111111"));
         assertTrue(resultList.contains("1212121212"));
@@ -50,17 +73,17 @@ public class BookstoreTest extends JDBCTestCaseAdapter
     public void testCorrectSQL() throws Exception
     {
         MockResultSet result = getStatementResultSetHandler().createResultSet();    
-        getStatementResultSetHandler().prepareResultSet("select isbn, quantity", result);
+        getStatementResultSetHandler().prepareResultSet("select.*isbn,.*quantity.*", result);
         List orderList = new ArrayList();
         orderList.add("1234567890");
         orderList.add("1111111111");
         Bookstore.order(getJDBCMockObjectFactory().getMockConnection(), orderList);
-        verifySQLStatementExecuted("select isbn, quantity from books where (isbn=1234567890 or isbn=1111111111)");
+        verifySQLStatementExecuted("select.*isbn,.*quantity.*\\(isbn=1234567890.*or.*isbn=1111111111\\)");
     }
     
     public void testException() throws Exception    
     {
-        getStatementResultSetHandler().prepareThrowsSQLException("select isbn, quantity");
+        getStatementResultSetHandler().prepareThrowsSQLException("select.*isbn,.*quantity.*");
         Bookstore.order(getJDBCMockObjectFactory().getMockConnection(), new ArrayList());
         verifyRolledBack();
         verifyAllResultSetsClosed();

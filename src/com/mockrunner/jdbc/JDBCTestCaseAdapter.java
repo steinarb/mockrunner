@@ -84,11 +84,11 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
     
     /**
-     * Delegates to {@link JDBCTestModule#setUseRegularExpression}
+     * Delegates to {@link JDBCTestModule#setUseRegularExpressions}
      */
-    protected void setUseRegularExpression(boolean useRegularExpression)
+    protected void setUseRegularExpressions(boolean useRegularExpressions)
     {
-        jdbcTestModule.setUseRegularExpression(useRegularExpression);
+        jdbcTestModule.setUseRegularExpressions(useRegularExpressions);
     }
     
     /**
