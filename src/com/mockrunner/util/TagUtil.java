@@ -34,21 +34,21 @@ public class TagUtil
      *         instance of <code>TagSupport</code>
      */
     public static TagSupport createNestedTagInstance(Class tag, PageContext pageContext, Map attributes)
-	{
+    {
         if(null == tag) throw new RuntimeException("tag must not be null");
         if(!TagSupport.class.isAssignableFrom(tag)) throw new RuntimeException("tag must be an instance of javax.servlet.jsp.tagext.TagSupport");
-	    TagSupport tagSupport;
-		try
-		{
-		    tagSupport = (TagSupport)tag.newInstance();
-		}
-		catch(Exception exc)
-		{
-			exc.printStackTrace();
-			throw new RuntimeException(exc.getMessage());
-		}
-		return createNestedTagInstance(tagSupport, pageContext, attributes);
-	}
+        TagSupport tagSupport;
+        try
+        {
+            tagSupport = (TagSupport)tag.newInstance();
+        }
+        catch(Exception exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
+        return createNestedTagInstance(tagSupport, pageContext, attributes);
+    }
     
     /**
      * Creates an {@link com.mockrunner.tag.NestedTag} instance wrapping the
@@ -63,20 +63,20 @@ public class TagUtil
      *         instance of <code>TagSupport</code>
      */
     public static TagSupport createNestedTagInstance(TagSupport tag, PageContext pageContext, Map attributes)
-	{
-		if(null == tag) throw new RuntimeException("tag must not be null");
-		TagSupport nestedTag;
-		if(tag instanceof BodyTagSupport)
-		{
-			nestedTag = new NestedBodyTag((BodyTagSupport)tag, pageContext, attributes);
-		}
-		else
-		{
-			nestedTag = new NestedStandardTag(tag, pageContext, attributes);
-		}
-		return nestedTag;
-	}
-	
+    {
+        if(null == tag) throw new RuntimeException("tag must not be null");
+        TagSupport nestedTag;
+        if(tag instanceof BodyTagSupport)
+        {
+            nestedTag = new NestedBodyTag((BodyTagSupport)tag, pageContext, attributes);
+        }
+        else
+        {
+            nestedTag = new NestedStandardTag(tag, pageContext, attributes);
+        }
+        return nestedTag;
+    }
+    
     /**
      * Populates the specified attributes to the specified tag. Calls the
      * <code>release</code> method, if <i>doRelease</i> is set to
@@ -85,53 +85,53 @@ public class TagUtil
      * @param attributes the attribute map
      * @param doRelease should release be called
      */
-	public static void populateTag(TagSupport tag, Map attributes, boolean doRelease)
-	{
-		if(doRelease) tag.release();
-		if(null == attributes || attributes.isEmpty()) return;
-		try
-		{
-			BeanUtils.copyProperties(tag, attributes);
-		}
-		catch(Exception exc)
-		{
-			exc.printStackTrace();
-			throw new RuntimeException(exc.getMessage());
-		}
-	}
-	
+    public static void populateTag(TagSupport tag, Map attributes, boolean doRelease)
+    {
+        if(doRelease) tag.release();
+        if(null == attributes || attributes.isEmpty()) return;
+        try
+        {
+            BeanUtils.copyProperties(tag, attributes);
+        }
+        catch(Exception exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
     /**
      * Handles body evaluation of a tag.
      */
-	public static void evalBody(List bodyList, PageContext pageContext) throws JspException
-	{
-		for(int ii = 0; ii < bodyList.size(); ii++)
-		{
-			Object nextChild = bodyList.get(ii);
+    public static void evalBody(List bodyList, PageContext pageContext) throws JspException
+    {
+        for(int ii = 0; ii < bodyList.size(); ii++)
+        {
+            Object nextChild = bodyList.get(ii);
             if(nextChild instanceof NestedBodyTag)
-			{
+            {
                 int result = ((NestedBodyTag)nextChild).doLifecycle();
                 if(Tag.SKIP_PAGE == result) return;
-			}
-			else if(nextChild instanceof NestedStandardTag)
-			{
+            }
+            else if(nextChild instanceof NestedStandardTag)
+            {
                 int result = ((NestedStandardTag)nextChild).doLifecycle();
                 if(Tag.SKIP_PAGE == result) return;
-			}
-			else
-			{
-				try
-				{
-					pageContext.getOut().print(nextChild.toString());
-				}
-				catch(IOException exc)
-				{
-					exc.printStackTrace();
-					throw new RuntimeException(exc.getMessage());
-				}	
-			}
-		}
-	}
+            }
+            else
+            {
+                try
+                {
+                    pageContext.getOut().print(nextChild.toString());
+                }
+                catch(IOException exc)
+                {
+                    exc.printStackTrace();
+                    throw new RuntimeException(exc.getMessage());
+                }	
+            }
+        }
+    }
     
     /**
      * Helper method to dump tags incl. child tags.
