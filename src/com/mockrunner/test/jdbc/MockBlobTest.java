@@ -77,4 +77,15 @@ public class MockBlobTest extends TestCase
         data = blob.getBytes(1, 16);
         assertTrue(Arrays.equals(data, new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}));
     }
+    
+    public void testClone() throws Exception
+    {
+        MockBlob cloneBlob = (MockBlob)blob.clone();
+        assertTrue(blob.length() == cloneBlob.length());
+        blob.setBytes(1, new byte[] {2});
+        byte[] data = blob.getBytes(1, 11);
+        assertTrue(Arrays.equals(data, new byte[] {2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}));
+        data = cloneBlob.getBytes(1, 11);
+        assertTrue(Arrays.equals(data, new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}));
+    }
 }

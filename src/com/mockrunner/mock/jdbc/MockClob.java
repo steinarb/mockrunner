@@ -13,7 +13,7 @@ import java.sql.SQLException;
 /**
  * Mock implementation of a JDBC 3.0 <code>Clob</code>.
  */
-public class MockClob implements Clob
+public class MockClob implements Clob, Cloneable
 {
     private StringBuffer clobData;
     
@@ -141,5 +141,20 @@ public class MockClob implements Clob
     public String toString()
     {
         return "Clob data: " + clobData.toString();
+    }
+    
+    public Object clone()
+    {
+        try
+        {
+            MockClob clone = (MockClob)super.clone();
+            clone.clobData = new StringBuffer(clobData.toString());
+            return clone;
+        }
+        catch(CloneNotSupportedException exc)
+        {
+
+        }
+        return null;
     }
 }

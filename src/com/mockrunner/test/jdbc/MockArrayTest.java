@@ -63,4 +63,13 @@ public class MockArrayTest extends TestCase
         assertEquals(2, resultSet.getInt(1));
         assertEquals(4, resultSet.getByte(2));
     }
+    
+    public void testClone() throws Exception
+    {
+        MockArray copy = (MockArray)stringArray.clone();
+        assertTrue(Arrays.equals((Object[])stringArray.getArray(), (Object[])copy.getArray()));
+        String[] array = (String[])stringArray.getArray();
+        array[0] = "Test";
+        assertFalse(Arrays.equals((Object[])stringArray.getArray(), (Object[])copy.getArray()));
+    }
 }

@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * Mock implementation of <code>Ref</code>.
  */
-public class MockRef implements Ref
+public class MockRef implements Ref, Cloneable
 {
     private Object object;
     
@@ -39,5 +39,10 @@ public class MockRef implements Ref
     public String toString()
     {
         return "Ref data: " + object.toString();
+    }
+    
+    public Object clone()
+    {
+        return new MockRef(object);
     }
 }

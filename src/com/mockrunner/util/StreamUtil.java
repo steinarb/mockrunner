@@ -1,9 +1,11 @@
 package com.mockrunner.util;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.Arrays;
 
 /**
@@ -102,6 +104,48 @@ public class StreamUtil
     }
     
     /**
+     * Returns a copy of the specified stream. If the specified stream supports
+     * marking, it will be reseted after the copy.
+     * @param sourceStream the stream to copy
+     * @return a copy of the stream
+     */
+    public static InputStream copyStream(InputStream sourceStream)
+    {
+        try
+        {
+            if(sourceStream.markSupported()) sourceStream.mark(sourceStream.available());
+            byte[] sourceData = getStreamAsByteArray(sourceStream);
+            if(sourceStream.markSupported()) sourceStream.reset();
+            return new ByteArrayInputStream(sourceData);
+        }
+        catch(IOException exc)
+        {
+            return null;
+        }
+    }
+    
+    /**
+     * Returns a copy of the specified reader. If the specified reader supports
+     * marking, it will be reseted after the copy.
+     * @param sourceReader the stream to reader
+     * @return a copy of the reader
+     */
+    public static Reader copyReader(Reader sourceReader)
+    {
+        try
+        {
+            if(sourceReader.markSupported()) sourceReader.mark(Integer.MAX_VALUE);
+            String sourceData = getReaderAsString(sourceReader);
+            if(sourceReader.markSupported()) sourceReader.reset();
+            return new StringReader(sourceData);
+        }
+        catch(IOException exc)
+        {
+            return null;
+        }
+    }
+    
+    /**
      * Compares the content of the streams. If the streams support
      * marking, they will be reseted after the comparison.
      * @param sourceStream the source stream
@@ -133,7 +177,7 @@ public class StreamUtil
      * @param targetStream the target stream
      * @return <code>true</code>, if the streams are identical, <code>false</code> otherwise
      */
-    public static boolean compareReader(Reader sourceReader, Reader targetReader)
+    public static boolean compareReaders(Reader sourceReader, Reader targetReader)
     {
         try
         {

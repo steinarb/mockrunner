@@ -1,6 +1,7 @@
 package com.mockrunner.test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.mockrunner.util.ArrayUtil;
@@ -196,5 +197,24 @@ public class ArrayUtilTest extends TestCase
         assertTrue(array instanceof String[]);
         assertTrue(((String[])array).length == 1);
         assertEquals("Test", ((String[])array)[0]);
+    }
+    
+    public void testCopyArray()
+    {
+        byte[] byteArray = new byte[] {1, 2, 3, 4, 5};
+        byte[] copyByteArray = (byte[])ArrayUtil.copyArray(byteArray);
+        assertFalse(byteArray == copyByteArray);
+        assertTrue(Arrays.equals(byteArray, copyByteArray));
+        String testWrong = (String)ArrayUtil.copyArray("testWrong");
+        assertEquals(testWrong, "testWrong");
+        String[] stringArray = new String[] {"This", "is", "an", "array", "of", "strings"};
+        String[] copyStringArray = (String[])ArrayUtil.copyArray(stringArray);
+        assertFalse(stringArray == copyStringArray);
+        assertTrue(Arrays.equals(stringArray, copyStringArray));
+        Object myObject = new Object();
+        Object[] myArray = new Object[] {myObject};
+        Object[] myCopy = (Object[])ArrayUtil.copyArray(myArray);
+        assertFalse(myArray == myCopy);
+        assertTrue(myArray[0] == myCopy[0]);
     }
 }

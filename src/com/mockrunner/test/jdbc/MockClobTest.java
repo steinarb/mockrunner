@@ -66,4 +66,12 @@ public class MockClobTest extends TestCase
         writer.write("This is a Test ClobThis is a Test Clob");
         assertEquals("This is a Test ClobThis is a Test Clob", clob.getSubString(1, 38));
     }
+    
+    public void testClone() throws Exception
+    {
+        MockClob cloneClob = (MockClob)clob.clone();
+        clob.setString(1, "Test");
+        assertEquals("Test is a Test Clob", clob.getSubString(1, 19));
+        assertEquals("This is a Test Clob", cloneClob.getSubString(1, 19));
+    }
 }
