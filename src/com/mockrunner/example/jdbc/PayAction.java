@@ -85,7 +85,7 @@ public class PayAction extends Action
     private String getName(Connection connection, PayForm payForm) throws SQLException
     {
         Statement statement = connection.createStatement();
-        ResultSet result = statement.executeQuery("select name from customers where id=" + payForm.getCustomerId());  
+        ResultSet result = statement.executeQuery("select name from customers where id='" + payForm.getCustomerId() + "'");  
         String name = null;
         if(result.next())
         {
@@ -99,15 +99,15 @@ public class PayAction extends Action
     private void markBillAsPaid(Connection connection, PayForm payForm) throws SQLException
     {
        Statement statement = connection.createStatement();
-       statement.executeUpdate("delete from openbills where id=" + payForm.getBillId());
-       statement.executeUpdate("insert into paidbills values(" + payForm.getBillId() + "," + payForm.getCustomerId() + "," + payForm.getAmount() +  ")");
+       statement.executeUpdate("delete from openbills where id='" + payForm.getBillId() + "'");
+       statement.executeUpdate("insert into paidbills values('" + payForm.getBillId() + "','" + payForm.getCustomerId() + "'," + payForm.getAmount() +  ")");
        statement.close();
     }
     
     private boolean checkBillIntegrity(HttpServletRequest request, Connection connection, ActionMessages errors, PayForm payForm) throws SQLException
     {
         Statement statement = connection.createStatement();
-        ResultSet result = statement.executeQuery("select * from openbills where id=" + payForm.getBillId());
+        ResultSet result = statement.executeQuery("select * from openbills where id='" + payForm.getBillId() + "'");
         try
         {
             if(false == result.next())

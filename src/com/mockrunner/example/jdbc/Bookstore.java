@@ -29,7 +29,7 @@ public class Bookstore
             StringBuffer query = new StringBuffer("select isbn, quantity from books where (");
             for(int ii = 0; ii < isbnNumbers.size(); ii++)
             {
-                query.append("isbn=" + isbnNumbers.get(ii));
+                query.append("isbn='" + isbnNumbers.get(ii)+ "'");
                 if(ii < isbnNumbers.size() - 1)
                 {
                     query.append(" or ");

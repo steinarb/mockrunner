@@ -128,8 +128,8 @@ public class PayActionTest extends JDBCTestCaseAdapter
         actionModule.verifyNoActionErrors();
         verifyCommitted();
         verifyNotRolledBack();
-        verifySQLStatementExecuted("delete from openbills where id=1");
-        verifySQLStatementExecuted("insert into paidbills values(1,1,100.0)");
+        verifySQLStatementExecuted("delete from openbills where id='1'");
+        verifySQLStatementExecuted("insert into paidbills values('1','1',100.0)");
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();
         verifyConnectionClosed();

@@ -86,7 +86,7 @@ public class PaySessionBean implements SessionBean
     private String getName(Connection connection, String customerId) throws SQLException
     {
         Statement statement = connection.createStatement();
-        ResultSet result = statement.executeQuery("select name from customers where id=" + customerId);  
+        ResultSet result = statement.executeQuery("select name from customers where id='" + customerId + "'");  
         String name = null;
         if(result.next())
         {
@@ -100,7 +100,7 @@ public class PaySessionBean implements SessionBean
     private void checkBillIntegrity(Connection connection, String customerId, String billId, double amount) throws SQLException, PaySessionException
     {
         Statement statement = connection.createStatement();
-        ResultSet result = statement.executeQuery("select * from openbills where id=" + billId);
+        ResultSet result = statement.executeQuery("select * from openbills where id='" + billId + "'");
         try
         {
             if(false == result.next())
@@ -129,8 +129,8 @@ public class PaySessionBean implements SessionBean
     private void markBillAsPaid(Connection connection, String customerId, String billId, double amount) throws SQLException
     {
        Statement statement = connection.createStatement();
-       statement.executeUpdate("delete from openbills where id=" + billId);
-       statement.executeUpdate("insert into paidbills values(" + billId + "," + customerId + "," + amount +  ")");
+       statement.executeUpdate("delete from openbills where id='" + billId + "'");
+       statement.executeUpdate("insert into paidbills values('" + billId + "','" + customerId + "'," + amount +  ")");
        statement.close();
     }
     
