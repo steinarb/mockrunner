@@ -1,10 +1,9 @@
-package com.mockrunner.example.test;
+package com.mockrunner.example.servlet;
 
 import com.mockrunner.base.BaseTestCase;
-import com.mockrunner.example.LogoutServlet;
 
 /**
- * Example test for {@link com.mockrunner.example.LogoutServlet}.
+ * Example test for {@link LogoutServlet}.
  * There is no <code>ServletTestModule</code> yet but it will be
  * included in future releases.
  */

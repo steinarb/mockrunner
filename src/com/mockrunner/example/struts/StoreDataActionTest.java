@@ -1,12 +1,11 @@
-package com.mockrunner.example.test;
+package com.mockrunner.example.struts;
 
 import com.mockrunner.base.MockObjectFactory;
-import com.mockrunner.example.StoreDataAction;
 import com.mockrunner.struts.ActionTestCaseAdapter;
 import com.mockrunner.struts.ActionTestModule;
 
 /**
- * Example test for {@link com.mockrunner.example.StoreDataAction}. 
+ * Example test for {@link }. 
  * Demonstrates multithread testing. The use of an inner thread 
  * class and  a single test method is a standard pattern that can 
  * be used in any multithreading test for Servlets and actions.
@@ -16,7 +15,7 @@ import com.mockrunner.struts.ActionTestModule;
  * container behaviour. See the constructor of the thread how
  * to deal with the test module and factory.
  * Remove the <code>synchronized</code> keyword in
- * {@link com.mockrunner.example.StoreDataAction} and the test
+ * {@link StoreDataAction} and the test
  * will fail.
  * {@link com.mockrunner.base.MultiThreadTestSuite} is meant to
  * make multithread testing much easier, but it is not working

@@ -1,4 +1,4 @@
-package com.mockrunner.example;
+package com.mockrunner.example.struts;
 
 /**
  * Interface for different authentication strategies.

@@ -1,4 +1,4 @@
-package com.mockrunner.example;
+package com.mockrunner.example.struts;
 
 /**
  * Example implementation of {@link AuthenticationStrategy}.

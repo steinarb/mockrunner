@@ -1,9 +1,8 @@
-package com.mockrunner.example.test;
+package com.mockrunner.example.struts;
 
-import com.mockrunner.example.AuthenticationStrategy;
 
 /**
- * Mock implementation of {@link com.mockrunner.example.AuthenticationStrategy}
+ * Mock implementation of {@link AuthenticationStrategy}
  * because we do not want a database connection into the tests.
  * Used by {@link AuthenticationActionTest}.
  */
