@@ -4,6 +4,7 @@ mockrunner-0.2.9:
 - fixed bugs 951972 and 951963
 - fixed problem with MockStatement.getMoreResults(), now returns true, if there
   is a ResultSet
+- added excluded-properties to fix classloader problem with JUnit and commons-logging.jar
 - added verifyForwardName() to ActionTestModule
 - fixed problem with ActionTestModule.createDynaActionForm(), now returns
   DynaActionForm instance

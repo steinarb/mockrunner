@@ -121,6 +121,11 @@ NekoHTML Parser 0.9.2:
 http://www.apache.org/~andyc/neko/doc/html/index.html
 nekohtml.jar
 
+IMPORTANT NOTE: There is a problem when using the JUnit GUI testrunners
+together with Jakarta commons logging. If you are facing strange exceptions
+regarding logger configuration, please put mockrunner.jar before junit.jar
+in your classpath.
+
 For suggestions, remarks or questions you can use the forums on
 Sourceforge (http://sourceforge.net/projects/mockrunner/) or 
 write me an email (alwin.ibba AT mockrunner.com).
