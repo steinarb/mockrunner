@@ -26,7 +26,7 @@ public class AbstractOutParameterResultSetHandlerTest extends BaseTestCase
 	    callableStatementHandler.prepareOutParameter("myc[a]ll", outParameter);
 	    assertNull(callableStatementHandler.getOutParameter("acall"));
 	    assertNull(callableStatementHandler.getOutParameter("mycall"));
-	    callableStatementHandler.setUseRegularExpression(true);
+	    callableStatementHandler.setUseRegularExpressions(true);
 	    assertEquals(outParameter, callableStatementHandler.getOutParameter("mycall"));
 	}
 	
@@ -35,7 +35,7 @@ public class AbstractOutParameterResultSetHandlerTest extends BaseTestCase
 	    Map parameter = new HashMap();
 	    parameter.put("name", "value");
 	    callableStatementHandler.prepareOutParameter("myc[a]ll.*", new HashMap(), parameter);
-	    callableStatementHandler.setUseRegularExpression(true);
+	    callableStatementHandler.setUseRegularExpressions(true);
 	    assertNull(callableStatementHandler.getOutParameter("mycall xyz"));
 	    parameter = new HashMap();
 	    parameter.put("name", "value");

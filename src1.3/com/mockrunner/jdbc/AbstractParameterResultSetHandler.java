@@ -91,7 +91,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public Integer getUpdateCount(String sql, Map parameters)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpression());
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
         List list = matcher.getMatchingObjects(updateCountForStatement, sql, true, true);
         for(int ii = 0; ii < list.size(); ii++)
         {
@@ -117,7 +117,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public MockResultSet getResultSet(String sql, Map parameters)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpression());
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
         List list = matcher.getMatchingObjects(resultSetsForStatement, sql, true, true);
         for(int ii = 0; ii < list.size(); ii++)
         {
@@ -141,7 +141,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public boolean getThrowsSQLException(String sql, Map parameters)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpression());
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
         List list = matcher.getMatchingObjects(throwsSQLException, sql, true, true);
         for(int ii = 0; ii < list.size(); ii++)
         {

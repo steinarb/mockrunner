@@ -24,7 +24,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
 	    statementHandler.prepareResultSet("select .*", result);
 	    assertSame(result, statementHandler.getResultSet("select column from table"));
 	    assertNull(statementHandler.getResultSet("select xyz from table"));
-	    statementHandler.setUseRegularExpression(true);
+	    statementHandler.setUseRegularExpressions(true);
 	    assertSame(result, statementHandler.getResultSet("select column from table"));
 	    assertSame(result, statementHandler.getResultSet("SELECT xyz from table"));
 	    statementHandler.setCaseSensitive(true);
@@ -37,7 +37,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
 	    statementHandler.prepareUpdateCount("insert xyz", 4);
 	    assertEquals(new Integer(4), statementHandler.getUpdateCount("insert xyz"));
 	    assertEquals(new Integer(3), statementHandler.getUpdateCount(".*"));
-	    statementHandler.setUseRegularExpression(true);
+	    statementHandler.setUseRegularExpressions(true);
 	    assertEquals(new Integer(3), statementHandler.getUpdateCount("insert xyz"));
 	    assertEquals(new Integer(3), statementHandler.getUpdateCount("insert"));
 	    statementHandler.setExactMatch(true);
@@ -49,7 +49,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
 	{
 	    statementHandler.prepareReturnsResultSet("select.*", false);
 	    assertNull(statementHandler.getReturnsResultSet("select abc"));
-	    statementHandler.setUseRegularExpression(true);
+	    statementHandler.setUseRegularExpressions(true);
 	    assertEquals(new Boolean(false), statementHandler.getReturnsResultSet("select abc"));
 	}
 	
@@ -57,7 +57,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
 	{
 	    statementHandler.prepareThrowsSQLException("[abc] statement");
 	    assertFalse(statementHandler.getThrowsSQLException("a stAtement"));
-	    statementHandler.setUseRegularExpression(true);
+	    statementHandler.setUseRegularExpressions(true);
 	    assertTrue(statementHandler.getThrowsSQLException("a stAtement"));
 	    statementHandler.setCaseSensitive(true);
 	    assertFalse(statementHandler.getThrowsSQLException("a stAtement"));
