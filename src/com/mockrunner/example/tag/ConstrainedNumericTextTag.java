@@ -8,7 +8,7 @@ import org.apache.struts.taglib.html.TextTag;
  * This example tag extends the Struts <code>TextTag</code>
  * and adds a JavaScript handler for checking numeric constraints.
  * Have a look at {@link ConstrainedNumericTextTagTest} to see
- * how to test tags.
+ * how to test simple tags.
  */
 public class ConstrainedNumericTextTag extends TextTag
 {
