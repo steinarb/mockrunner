@@ -1,6 +1,7 @@
 package com.mockrunner.mock.jms;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.jms.ConnectionConsumer;
@@ -61,6 +62,16 @@ public class MockQueueConnection implements QueueConnection
     public void setMetaData(ConnectionMetaData metaData)
     {
         this.metaData = metaData;
+    }
+    
+    /**
+     * Returns the list of {@link MockQueueSession} objects that were created 
+     * with {@link #createQueueSession}.
+     * @return the list
+     */
+    public List getQueueSessionList()
+    {
+        return Collections.unmodifiableList(queueSessions);
     }
     
     /**

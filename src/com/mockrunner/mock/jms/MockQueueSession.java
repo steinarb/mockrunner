@@ -2,6 +2,7 @@ package com.mockrunner.mock.jms;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.jms.BytesMessage;
@@ -70,6 +71,15 @@ public class MockQueueSession implements QueueSession
     public MessageManager getMessageManager()
     {
         return messageManager;
+    }
+    
+    /**
+     * Returns the list of temporary queues.
+     * @return the <code>TemporaryQueue</code> list
+     */
+    public List getTemporaryQueueList()
+    {
+        return Collections.unmodifiableList(tempQueues);
     }
     
     /**
