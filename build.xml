@@ -209,8 +209,6 @@
 	    <copy todir="${releasedir}/jar">
 	        <fileset dir="${lib}">
 	            <include name="**/*" />
-	            <exclude name="xercesImpl.jar" />
-	            <exclude name="xml-apis.jar" />
                 <exclude name="bcel-5.1.jar" />   
 	        </fileset>
 	    </copy>
