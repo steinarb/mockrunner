@@ -46,7 +46,7 @@ public class JDKVersionConsistencyTest extends TestCase
                 }
             }
         }
-        if(!ok) fail("There are errors");
+        assertTrue("There are errors", ok);
     }
     
     private boolean compareFiles(File file1, File file2) throws Exception
