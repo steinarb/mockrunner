@@ -26,9 +26,6 @@ import java.util.Set;
 
 import com.mockrunner.util.StreamUtil;
 
-/**
- * Mock implementation of <code>CallableStatement</code>.
- */
 public class MockCallableStatement extends MockPreparedStatement implements CallableStatement
 {
     private AbstractOutParameterResultSetHandler resultSetHandler;
