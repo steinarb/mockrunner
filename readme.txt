@@ -75,7 +75,7 @@ Mockobjects 0.09:
 http://www.mockobjects.com
 mockobjects-core-0.09.jar
 mockobjects-jdk1.4-0.09.jar
-mockobjects-jdk1.3-j2ee1.3-0.09.jar
+mockobjects-jdk1.4-j2ee1.3-0.09.jar
 
 MockEjb 0.4:
 http://www.mockejb.org

@@ -1,4 +1,9 @@
 
+mockrunner-0.1.6:
+
+- replaced JDK 1.3 mockobjects with 1.4 version
+- addec MockEjb framework for EJB tests
+
 mockrunner-0.1.5:
 
 - reorganized package structure. ActionTestModule and
