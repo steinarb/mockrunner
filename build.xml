@@ -138,6 +138,7 @@
 			    	<include name="com/mockrunner/**"/>
 			    	<exclude name="com/mockrunner/**/*.txt"/>
 			    	<exclude name="com/mockrunner/**/*.properties"/>
+			    	<exclude name="com/mockrunner/**/*.xml"/>
 			    	<exclude name="com/mockrunner/test/**"/>
 			    </fileset>
 
