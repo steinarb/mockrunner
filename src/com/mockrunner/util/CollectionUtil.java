@@ -1,6 +1,7 @@
 package com.mockrunner.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -22,6 +23,51 @@ public class CollectionUtil
             list.add(new Byte(data[ii]));
         }
         return list;
+    }
+    
+    /**
+     * Returns a byte array containing the bytes from the <code>List</code>.
+     * The <code>List</code> must contain <code>Byte</code> objects.
+     * <code>null</code> entries in the <code>List</code> are
+     * allowed, the resulting byte will be 0.
+     * @param data the <code>List</code>
+     * @return the resulting byte array
+     */
+    public static byte[] getByteArrayFromList(List data)
+    {
+        return getByteArrayFromList(data, 0);
+    }
+    
+    /**
+     * Returns a byte array containing the bytes from the <code>List</code>.
+     * The <code>List</code> must contain <code>Byte</code> objects.
+     * <code>null</code> entries in the <code>List</code> are
+     * allowed, the resulting byte will be 0.
+     * @param data the <code>List</code>
+     * @param index the index at which to start
+     * @return the resulting byte array
+     */
+    public static byte[] getByteArrayFromList(List data, int index)
+    {
+        return getByteArrayFromList(data, index, data.size() - index);
+    }
+    
+    public static byte[] getByteArrayFromList(List data, int index, int len)
+    {
+        if(index >= data.size())
+        {
+            throw new IndexOutOfBoundsException("Position " + index + " invalid in List of size " + data.size());
+        }
+        byte[] byteData = new byte[len];
+        for(int ii = index; ii < data.size() && ii < index + len; ii++)
+        {
+            Byte nextValue = (Byte)data.get(ii);
+            if(null != nextValue)
+            {
+                byteData[ii - index] = nextValue.byteValue();
+            }
+        }
+        return byteData;
     }
     
     /**
@@ -63,5 +109,56 @@ public class CollectionUtil
         {
             list.set(ii, new Byte(data[offset + ii - index]));
         }
+    }
+    
+    /**
+     * Returns a truncated version of the specified <code>List</code>.
+     * @param list the <code>List</code>
+     * @param len the truncate length
+     * @return the truncated <code>List</code>
+     */
+    public static List truncateList(List list, int len)
+    {
+        if(len >= list.size()) return list;
+        ArrayList newList = new ArrayList(len);
+        for(int ii = 0; ii < len; ii++)
+        {
+            newList.add(list.get(ii));
+        }
+        return newList;
+    }
+    
+    /**
+     * Returns the index of the first occurence of the
+     * array <i>bytes</i> in the array <i>source</i>.
+     * @param source the array in which to search
+     * @param bytes the array to search
+     * @return the index of the first occurence, resp.
+     *         -1, if <i>source</i> does not contain <i>bytes</i>
+     */
+    public static int contains(byte[] source, byte[] bytes)
+    {
+        return contains(source, bytes, 0);
+    }
+    
+    /**
+     * Returns the index of the first occurence of the
+     * array <i>bytes</i> in the array <i>source</i>.
+     * @param source the array in which to search
+     * @param bytes the array to search
+     * @param the index at which to begin the search
+     * @return the index of the first occurence, resp.
+     *         -1, if <i>source</i> does not contain <i>bytes</i>
+     */
+    public static int contains(byte[] source, byte[] bytes, int index)
+    {
+        if(index + bytes.length > source.length) return -1;
+        for(int ii = index; ii <= source.length - bytes.length; ii++)
+        {
+            int yy = 0; 
+            while(yy < bytes.length && bytes[yy] == source[ii + yy]) yy++;
+            if(yy == bytes.length) return ii;
+        }
+        return -1;
     }
 }
