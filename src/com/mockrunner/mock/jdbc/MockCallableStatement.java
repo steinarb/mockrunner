@@ -256,12 +256,15 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
 
     public Object getObject(int parameterIndex) throws SQLException
     {
+        wasNull = false;
         Map outParameter = getOutParameterMap();
+        Object returnValue = null;
         if(null != outParameter)
         {
-            return outParameter.get(new Integer(parameterIndex));
+            returnValue = outParameter.get(new Integer(parameterIndex));
         }
-        return null;
+        if(null == returnValue) wasNull = true;
+        return returnValue;
     }
 
     public String getString(int parameterIndex) throws SQLException
@@ -534,12 +537,15 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
 
     public Object getObject(String parameterName) throws SQLException
     {
+        wasNull = false;
         Map outParameter = getOutParameterMap();
+        Object returnValue = null;
         if(null != outParameter)
         {
-            return outParameter.get(parameterName);
+            returnValue = outParameter.get(parameterName);
         }
-        return null;
+        if(null == returnValue) wasNull = true;
+        return returnValue;
     }
 
     public void setObject(String parameterName, Object object) throws SQLException

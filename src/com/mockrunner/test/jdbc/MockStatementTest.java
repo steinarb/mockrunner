@@ -467,8 +467,11 @@ public class MockStatementTest extends BaseTestCase
         callableStatementHandler.setExactMatch(true);
         statement.executeUpdate();
         assertEquals("test", statement.getString("1"));
+        assertFalse(statement.wasNull());
         assertNull(statement.getString("TestParam"));
         assertEquals(0, statement.getInt(1));
+        assertTrue(statement.wasNull());
         assertEquals(0, statement.getInt(3));
+        assertTrue(statement.wasNull());
     }
 }

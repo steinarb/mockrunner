@@ -22,25 +22,34 @@ public class StringUtil
     
     /**
      * Splits a string into tokens. Similar to <code>StringTokenizer</code>
-     * except that empty tokens are recognized.
+     * except that empty tokens are recognized and added as <code>null</code>.
      * With a delimiter of <i>";"</i> the string
      * <i>"a;;b;c;;"</i> will split into
-     * <i>[a] [] [b] [c] []</i>.
+     * <i>["a"] [null] ["b"] ["c"] [null]</i>.
      * @param string the String
      * @param delim the delimiter
+     * @param doTrim should each token be trimmed before adding
      * @return the array of tokens
      */
-    public static String[] split(String string, String delim)
+    public static String[] split(String string, String delim, boolean doTrim)
     {
         int pos = 0, begin = 0;
         ArrayList resultList = new ArrayList();
         while((-1 != (pos = string.indexOf(delim, begin))) && (begin < string.length()))
         {
             String token = string.substring(begin, pos);
+            if(doTrim) token = token.trim();
+            if(token.length() == 0) token = null;
             resultList.add(token);
             begin = pos + delim.length();
         }
-        if(begin < string.length()) resultList.add(string.substring(begin));
+        if(begin < string.length())
+        {
+            String token = string.substring(begin);
+            if(doTrim) token = token.trim();
+            if(token.length() == 0) token = null;
+            resultList.add(token);
+        }  
         return (String[])resultList.toArray(new String[resultList.size()]);
     }
 }
