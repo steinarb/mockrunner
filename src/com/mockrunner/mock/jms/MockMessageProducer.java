@@ -76,12 +76,12 @@ public abstract class MockMessageProducer implements MessageProducer
         }
         if(destination instanceof MockQueue)
         {
-            setJMSProperties(message, deliveryMode, priority, timeToLive);
+            setJMSMessageHeaders(message, destination, deliveryMode, priority, timeToLive);
             ((MockQueue)destination).addMessage(message);
         }
         else if(destination instanceof MockTopic)
         {
-            setJMSProperties(message, deliveryMode, priority, timeToLive);
+            setJMSMessageHeaders(message, destination, deliveryMode, priority, timeToLive);
             ((MockTopic)destination).addMessage(message);
         }
         else
@@ -162,10 +162,11 @@ public abstract class MockMessageProducer implements MessageProducer
         return timeToLive;
     }
 
-    private void setJMSProperties(Message message, int deliveryMode, int priority, long timeToLive) throws JMSException
+    private void setJMSMessageHeaders(Message message, Destination destination, int deliveryMode, int priority, long timeToLive) throws JMSException
     {
         message.setJMSDeliveryMode(deliveryMode);
         message.setJMSPriority(priority);
+        message.setJMSDestination(destination);
         long currentTime = System.currentTimeMillis();
         if(!disableTimestamp)
         {
