@@ -20,7 +20,7 @@ public class StockQuotePublisherTest extends JMSTestCaseAdapter
     protected void setUp() throws Exception
     {
         super.setUp();
-        ejbModule = new EJBTestModule(createEJBMockObjectFactory());
+        ejbModule = createEJBTestModule();
         ejbModule.bindToContext("java:/ConnectionFactory", getJMSMockObjectFactory().getMockTopicConnectionFactory());
         topic = getDestinationManager().createTopic("testTopic");
         ejbModule.bindToContext("topic/quoteTopic", topic);

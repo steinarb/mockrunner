@@ -20,7 +20,7 @@ public class PayActionTest extends JDBCTestCaseAdapter
     protected void setUp() throws Exception
     {
         super.setUp();
-        actionModule = new ActionTestModule(createWebMockObjectFactory());
+        actionModule = createActionTestModule();
         statementHandler = getJDBCMockObjectFactory().getMockConnection().getStatementResultSetHandler();
     }
     
