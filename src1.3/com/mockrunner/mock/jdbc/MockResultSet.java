@@ -31,6 +31,7 @@ import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.CaseAwareMap;
 import com.mockrunner.util.CollectionUtil;
 import com.mockrunner.util.ParameterUtil;
+import com.mockrunner.util.SQLUtil;
 import com.mockrunner.util.StreamUtil;
 import com.mockrunner.util.StringUtil;
 
@@ -39,7 +40,7 @@ import com.mockrunner.util.StringUtil;
  * Can be used to add simulated database entries.
  * You can add Java objects of any type. This
  * mock implementation does not care about SQL
- * data types and tries to perform the necessary
+ * data types. It tries to perform the necessary
  * type conversions for the Java objects (e.g. it will convert a 
  * <code>String</code> "1" to <code>int</code> 1). 
  * Please check out the documentation of <code>ResultSet</code> 
@@ -1437,6 +1438,13 @@ public class MockResultSet implements ResultSet, Cloneable
     
     public void setFetchDirection(int fetchDirection) throws SQLException
     {
+        checkFetchDirectionArguments(fetchDirection);
+        if(this.fetchDirection == fetchDirection) return;
+        if(this.fetchDirection == ResultSet.FETCH_UNKNOWN || fetchDirection == ResultSet.FETCH_UNKNOWN)
+        {
+            this.fetchDirection = fetchDirection;
+            return;
+        }
         this.fetchDirection = fetchDirection;
         Iterator columns = columnMapCopy.values().iterator();
         while(columns.hasNext())
@@ -1839,6 +1847,15 @@ public class MockResultSet implements ResultSet, Cloneable
         if(resultSetConcurrency == ResultSet.CONCUR_READ_ONLY)
         {
             throw new SQLException("ResultSet is CONCUR_READ_ONLY");
+        }
+    }
+    
+    private void checkFetchDirectionArguments(int fetchDirection) throws SQLException
+    {
+        SQLUtil.checkFetchDirection(fetchDirection);
+        if(resultSetType == ResultSet.TYPE_FORWARD_ONLY && fetchDirection != ResultSet.FETCH_FORWARD)
+        {
+            throw new SQLException("resultSetType is TYPE_FORWARD_ONLY, only FETCH_FORWARD allowed");
         }
     }
     

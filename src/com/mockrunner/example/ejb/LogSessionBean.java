@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
@@ -54,9 +55,8 @@ public class LogSessionBean implements SessionBean
             connection = dataSource.getConnection();
             statement = connection.createStatement();
             statement.execute("create table logtable(" +
-                              "timestamp bigint not null," +
-                              "threadid varchar not null," + 
-                              "message varchar not null)");
+                              "logtime timestamp not null," +
+                              "message char(255) not null)");
         }
         catch(Exception exc)
         {
@@ -95,10 +95,9 @@ public class LogSessionBean implements SessionBean
             InitialContext context = new InitialContext();
             DataSource dataSource = (DataSource)context.lookup("java:comp/env/jdbc/MySQLDB");
             connection = dataSource.getConnection();
-            statement = connection.prepareStatement("insert into logtable values(?, ?, ?)");
-            statement.setLong(1, System.currentTimeMillis());
-            statement.setString(2, Thread.currentThread().getName());
-            statement.setString(3, message);
+            statement = connection.prepareStatement("insert into logtable values(?, ?)");
+            statement.setTimestamp(1, new Timestamp(System.currentTimeMillis()));
+            statement.setString(2, message);
             statement.executeUpdate();
         }
         catch(Exception exc)

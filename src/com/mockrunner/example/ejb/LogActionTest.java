@@ -33,8 +33,7 @@ public class LogActionTest extends ActionTestCaseAdapter
         addRequestParameter("message", "testmessage");
         actionPerform(LogAction.class);
         jdbcModule.verifySQLStatementExecuted("insert into logtable");
-        jdbcModule.verifyPreparedStatementParameter("insert into logtable", 2, Thread.currentThread().getName());
-        jdbcModule.verifyPreparedStatementParameter("insert into logtable", 3, "testmessage");
+        jdbcModule.verifyPreparedStatementParameter("insert into logtable", 2, "testmessage");
         ejbModule.verifyNotMarkedForRollback();
         ejbModule.verifyCommitted();
         jdbcModule.verifyAllStatementsClosed();
