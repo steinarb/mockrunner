@@ -1,4 +1,4 @@
-package com.mockrunner.test.consistency;
+package com.mockrunner.test.gen;
 
 import java.io.IOException;
 import java.io.LineNumberReader;

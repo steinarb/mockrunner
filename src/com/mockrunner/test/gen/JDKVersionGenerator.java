@@ -1,4 +1,4 @@
-package com.mockrunner.test.consistency;
+package com.mockrunner.test.gen;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,16 +9,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.mockrunner.test.consistency.ConsistencyUtil;
 import com.mockrunner.util.StreamUtil;
 
-public class SynchronizeVersionUtil
+public class JDKVersionGenerator
 {
     private final static String src14Dir = "src";
     private final static String src13Dir = "src1.3";
     
     public static void main(String[] args) throws Exception
     {
-        SynchronizeVersionUtil synchVersionUtil = new SynchronizeVersionUtil();
+        JDKVersionGenerator synchVersionUtil = new JDKVersionGenerator();
         synchVersionUtil.doSynchronize();
     }
     
