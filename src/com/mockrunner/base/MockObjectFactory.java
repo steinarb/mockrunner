@@ -123,8 +123,8 @@ public class MockObjectFactory
     }
 
     /**
-     * Returns the {@link com.mockrunner.mock.MockServletContext}.
-     * @return the {@link com.mockrunner.mock.MockServletContext}
+     * Returns the {@link com.mockrunner.mock.web.MockServletContext}.
+     * @return the {@link com.mockrunner.mock.web.MockServletContext}
      */
     public MockServletContext getMockServletContext()
     {
@@ -132,8 +132,8 @@ public class MockObjectFactory
     }
 
     /**
-     * Returns the {@link com.mockrunner.mock.MockHttpServletRequest}.
-     * @return the {@link com.mockrunner.mock.MockHttpServletRequest}
+     * Returns the {@link com.mockrunner.mock.web.MockHttpServletRequest}.
+     * @return the {@link com.mockrunner.mock.web.MockHttpServletRequest}
      */
     public MockHttpServletRequest getMockRequest()
     {
@@ -141,8 +141,8 @@ public class MockObjectFactory
     }
 
     /**
-     * Returns the {@link com.mockrunner.mock.MockHttpServletResponse}.
-     * @return the {@link com.mockrunner.mock.MockHttpServletResponse}
+     * Returns the {@link com.mockrunner.mock.web.MockHttpServletResponse}.
+     * @return the {@link com.mockrunner.mock.web.MockHttpServletResponse}
      */
     public MockHttpServletResponse getMockResponse()
     {
@@ -150,8 +150,8 @@ public class MockObjectFactory
     }
 
     /**
-     * Returns the {@link com.mockrunner.mock.MockHttpSession}.
-     * @return the {@link com.mockrunner.mock.MockHttpSession}
+     * Returns the {@link com.mockrunner.mock.web.MockHttpSession}.
+     * @return the {@link com.mockrunner.mock.web.MockHttpSession}
      */
     public MockHttpSession getMockSession()
     {
@@ -159,8 +159,8 @@ public class MockObjectFactory
     }
 
     /**
-     * Returns the {@link com.mockrunner.mock.MockHttpSession}.
-     * @return the {@link com.mockrunner.mock.MockHttpSession}
+     * Returns the {@link com.mockrunner.mock.web.MockHttpSession}.
+     * @return the {@link com.mockrunner.mock.web.MockHttpSession}
      * @deprecated use {@link #getMockSession}
      */
     public MockHttpSession getSession()
@@ -169,8 +169,8 @@ public class MockObjectFactory
     }
 
     /**
-     * Returns the {@link com.mockrunner.mock.MockActionMapping}.
-     * @return the {@link com.mockrunner.mock.MockActionMapping}
+     * Returns the {@link com.mockrunner.mock.web.MockActionMapping}.
+     * @return the {@link com.mockrunner.mock.web.MockActionMapping}
      */
     public MockActionMapping getMockActionMapping()
     {
@@ -178,8 +178,8 @@ public class MockObjectFactory
     }
 
     /**
-     * Returns the {@link com.mockrunner.mock.MockPageContext}.
-     * @return the {@link com.mockrunner.mock.MockPageContext}
+     * Returns the {@link com.mockrunner.mock.web.MockPageContext}.
+     * @return the {@link com.mockrunner.mock.web.MockPageContext}
      */
     public MockPageContext getMockPageContext()
     {
@@ -187,8 +187,8 @@ public class MockObjectFactory
     }
     
     /**
-     * Returns the {@link com.mockrunner.mock.MockFilterConfig}.
-     * @return the {@link com.mockrunner.mock.MockFilterConfig}
+     * Returns the {@link com.mockrunner.mock.web.MockFilterConfig}.
+     * @return the {@link com.mockrunner.mock.web.MockFilterConfig}
      */
     public MockFilterConfig getMockFilterConfig()
     {
@@ -196,8 +196,8 @@ public class MockObjectFactory
     }
 
     /**
-     * Returns the {@link com.mockrunner.mock.MockFilterChain}.
-     * @return the {@link com.mockrunner.mock.MockFilterChain}
+     * Returns the {@link com.mockrunner.mock.web.MockFilterChain}.
+     * @return the {@link com.mockrunner.mock.web.MockFilterChain}
      */
     public MockFilterChain getMockFilterChain()
     {
@@ -214,8 +214,8 @@ public class MockObjectFactory
     }
     
     /**
-     * Returns the {@link com.mockrunner.mock.MockConnection}.
-     * @return the {@link com.mockrunner.mock.MockConnection}
+     * Returns the {@link com.mockrunner.mock.jdbc.MockConnection}.
+     * @return the {@link com.mockrunner.mock.jdbc.MockConnection}
      */
     public MockConnection getMockConnection()
     {

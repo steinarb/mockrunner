@@ -19,8 +19,8 @@ public class JDBCTestModule
     }
     
     /**
-     * Returns a {@link com.mockrunner.mock.MockPreparedStatement} that was 
-     * created using a {@link com.mockrunner.mock.MockConnection}.
+     * Returns a {@link com.mockrunner.mock.jdbc.MockPreparedStatement} that was 
+     * created using a {@link com.mockrunner.mock.jdbc.MockConnection}.
      * @param sql the SQL statement used to create the <code>PreparedStatement</code>
      * @return the <code>PreparedStatement</code>
      */
@@ -30,7 +30,7 @@ public class JDBCTestModule
     }
     
     /**
-     * Returns an object that was added to a {@link com.mockrunner.mock.MockPreparedStatement}
+     * Returns an object that was added to a <code>PreparedStatement</code>
      * using its <code>set</code> methods.
      * @param statement the <code>PreparedStatement</code>
      * @param index the index used to set the object
@@ -42,8 +42,8 @@ public class JDBCTestModule
     }
     
     /**
-     * Returns an object that was added to a {@link com.mockrunner.mock.MockPreparedStatement}
-     * using its <code>set</code> methods. Uses the {@link com.mockrunner.mock.MockPreparedStatement}
+     * Returns an object that was added to a <code>PreparedStatement</code>
+     * using its <code>set</code> methods. Uses the <code>PreparedStatement</code>
      * with the specified SQL statement.
      * @param sql the SQL statement
      * @param index the index used to set the object
