@@ -1,6 +1,9 @@
 
 mockrunner-0.3.2:
 
+- JMS MockConnectionFactory now implements MockQueueConnectionFactory and
+  MockTopicConnectionFactory to provide one factory with one JNDI name
+  for both domains
 - renamed ArrayUtil.contains to ArrayUtil.indexOf, contains is misleading
 - fixed bug in MockResultSet.setFetchDirection
 

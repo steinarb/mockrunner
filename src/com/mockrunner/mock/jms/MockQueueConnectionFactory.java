@@ -2,8 +2,6 @@ package com.mockrunner.mock.jms;
 
 import javax.jms.Connection;
 import javax.jms.JMSException;
-import javax.jms.QueueConnection;
-import javax.jms.QueueConnectionFactory;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
@@ -11,7 +9,7 @@ import com.mockrunner.jms.DestinationManager;
 /**
  * Mock implementation of JMS <code>QueueConnectionFactory</code>.
  */
-public class MockQueueConnectionFactory extends MockConnectionFactory implements QueueConnectionFactory
+public class MockQueueConnectionFactory extends MockConnectionFactory
 {
     public MockQueueConnectionFactory(DestinationManager destinationManager, ConfigurationManager configurationManager)
     {
@@ -24,19 +22,6 @@ public class MockQueueConnectionFactory extends MockConnectionFactory implements
     }
 
     public Connection createConnection(String name, String password) throws JMSException
-    {
-        return createQueueConnection();
-    }
-    
-    public QueueConnection createQueueConnection() throws JMSException
-    {
-        MockQueueConnection connection = new MockQueueConnection(destinationManager(), configurationManager());
-        connection.setJMSException(exception());
-        connections().add(connection);
-        return connection;
-    }
-
-    public QueueConnection createQueueConnection(String name, String password) throws JMSException
     {
         return createQueueConnection();
     }

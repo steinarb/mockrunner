@@ -34,6 +34,7 @@ import com.mockrunner.jms.TransmissionManagerWrapper;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockBytesMessage;
 import com.mockrunner.mock.jms.MockConnection;
+import com.mockrunner.mock.jms.MockConnectionFactory;
 import com.mockrunner.mock.jms.MockMapMessage;
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockMessageConsumer;
@@ -2491,6 +2492,27 @@ public class JMSTestModuleTest extends TestCase
         module.verifyCreatedBytesMessageAcknowledged(2, 0);
         module.verifyCreatedStreamMessageAcknowledged(2, 0);
         module.verifyCreatedMessageAcknowledged(2, 0);
+    }
+    
+    public void testGenericFactory() throws Exception
+    {
+        MockConnectionFactory factory = (MockConnectionFactory)mockFactory.getMockConnectionFactory();
+        QueueConnection queueConnection = factory.createQueueConnection();
+        TopicConnection topicConnection = factory.createTopicConnection();
+        MockConnection connection = (MockConnection)factory.createConnection();
+        queueConnection.createQueueSession(true, Session.AUTO_ACKNOWLEDGE);
+        topicConnection.createTopicSession(true, Session.AUTO_ACKNOWLEDGE);
+        topicConnection.createTopicSession(true, Session.AUTO_ACKNOWLEDGE);
+        connection.createSession(true, Session.AUTO_ACKNOWLEDGE);
+        module.verifyNumberSessions(1);
+        module.setCurrentConnectionIndex(1);
+        module.verifyNumberSessions(1);
+        module.setCurrentConnectionIndex(2);
+        module.verifyNumberSessions(2);
+        module.setCurrentConnectionIndex(3);
+        module.verifyNumberSessions(1);
+        module.setCurrentConnectionIndex(0);
+        module.verifyNumberSessions(0);
     }
     
     public static class TestMessageListener implements MessageListener
