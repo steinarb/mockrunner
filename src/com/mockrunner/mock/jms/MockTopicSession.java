@@ -115,7 +115,8 @@ public class MockTopicSession extends MockSession implements TopicSession
  
     public void unsubscribe(String name) throws JMSException
     {
-        // TODO Auto-generated method stub
+        getConnection().throwJMSException();
+        getTransmissionManager().removeTopicDurableSubscriber(name);
     }
     
     private void addSessionToTopic(Topic topic)

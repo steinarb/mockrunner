@@ -187,6 +187,18 @@ public class JMSTestModule
     }
     
     /**
+     * Verifies that the queue connection is closed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyQueueConnectionStarted()
+    {
+        if(!mockFactory.getMockQueueConnection().isStarted())
+        {
+            throw new VerifyFailedException("QueueConnection is not started.");
+        }
+    }
+    
+    /**
      * Verifies that the queue session with the specified index is
      * closed.
      * @param indexOfSession the index of the session
