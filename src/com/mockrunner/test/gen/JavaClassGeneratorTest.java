@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.test.gen.JavaClassGenerator.ConstructorDeclaration;
+import com.mockrunner.test.gen.JavaClassGenerator.MethodDeclaration;
 import com.mockrunner.util.ClassUtil;
+import com.mockrunner.util.CollectionUtil;
 import com.mockrunner.util.FileUtil;
 import com.mockrunner.util.XmlUtil;
 
@@ -39,8 +41,25 @@ public class JavaClassGeneratorTest extends TestCase
         constructor.setCommentLines(new String[] {"A", "comment"});
         constructor.setArguments(new Class[] {String.class, FileUtil.class});
         constructor.setArgumentNames(new String[] {"string1", "util1"});
+        constructor.setCodeLines(new String[] {"Line1", "Line2"});
         generator.addConstructorDeclaration(constructor);
-        System.out.println(generator.generate());
+        MethodDeclaration method1 = new MethodDeclaration();
+        method1.setName("aMethod");
+        method1.setCommentLines(new String[] {"Another", "comment"});
+        method1.setCodeLines(new String[] {"Line1"});
+        generator.addMethodDeclaration(method1);
+        MethodDeclaration method2 = new MethodDeclaration();
+        method2.setName("anotherMethod");
+        method2.setReturnType(CollectionUtil.class);
+        method2.setArguments(new Class[] {String.class, Double.TYPE});
+        method2.setArgumentNames(new String[] {"string1", "double1"});
+        generator.addMethodDeclaration(method2);
+        MethodDeclaration method3 = new MethodDeclaration();
+        method3.setName("thirdMethod");
+        method3.setReturnType(Integer.TYPE);
+        method3.setCommentLines(new String[] {"Comment"});
+        method3.setCodeLines(new String[] {"Line1", "Line2"});
+        generator.addMethodDeclaration(method3);
         assertEquals(getExpected(), generator.generate());
     }
     
@@ -51,7 +70,8 @@ public class JavaClassGeneratorTest extends TestCase
                "import java.util.Map;" + NL +
                "import java.util.List;" + NL +
                "import com.mockrunner.util.XmlUtil;" + NL +
-               "import com.mockrunner.util.FileUtil;" + NL + NL +
+               "import com.mockrunner.util.FileUtil;" + NL +
+               "import com.mockrunner.util.CollectionUtil;" + NL + NL +
                "/**" + NL +
                " * This is" + NL +
                " * a comment" + NL +
@@ -61,7 +81,7 @@ public class JavaClassGeneratorTest extends TestCase
                "    private XmlUtil util;" + NL + 
                "    private String name;" + NL + NL +
                "    public MyClass()" + NL +
-               "    {" + NL +
+               "    {" + NL + NL +
                "    }" + NL + NL +
                "    /*" + NL +
                "     * A" + NL +
@@ -69,6 +89,27 @@ public class JavaClassGeneratorTest extends TestCase
                "     */" + NL +
                "    public MyClass(String string1, FileUtil util1)" + NL +
                "    {" + NL +
+               "        Line1" + NL +
+               "        Line2" + NL +
+               "    }" + NL + NL +
+               "    /*" + NL +
+               "     * Another" + NL +
+               "     * comment" + NL +
+               "     */" + NL +
+               "    public void aMethod()" + NL +
+               "    {" + NL +
+               "        Line1" + NL +
+               "    }" + NL + NL +
+               "    public CollectionUtil anotherMethod(String string1, double double1)" + NL +
+               "    {" + NL + NL +
+               "    }" + NL + NL +
+               "    /*" + NL +
+               "     * Comment" + NL +
+               "     */" + NL +
+               "    public int thirdMethod()" + NL +
+               "    {" + NL +
+               "        Line1" + NL +
+               "        Line2" + NL +
                "    }" + NL +
                "}";
     }

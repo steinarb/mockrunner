@@ -43,6 +43,24 @@ public class JavaLineAssemblerTest extends TestCase
         assertEquals("testLine" + NL, assembler.getResult());
     }
     
+    public void testAppendCodeLines()
+    {
+        assembler.appendCodeLines(null);
+        assertEquals(NL, assembler.getResult());
+        assembler.reset();
+        assembler.appendCodeLines(new String[0]);
+        assertEquals(NL, assembler.getResult());
+        assembler.reset();
+        String[] lines = new String[] {"Line1", "Line2", "Line3", "Line4", "Line5"};
+        assembler.appendCodeLines(lines);
+        String expected = "Line1" + NL +
+                          "Line2" + NL +
+                          "Line3" + NL +
+                          "Line4" + NL +
+                          "Line5" + NL;
+        assertEquals(expected, assembler.getResult());
+    }
+    
     public void testAppendIndent()
     {
         assembler.appendIndent();
