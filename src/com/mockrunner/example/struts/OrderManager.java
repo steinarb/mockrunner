@@ -13,7 +13,7 @@ public class OrderManager
     
     }
     
-    public static OrderManager instance(ServletContext context)
+    public static synchronized OrderManager instance(ServletContext context)
     {
         OrderManager manager = (OrderManager)context.getAttribute(OrderManager.class.getName());
         if(null == manager)
