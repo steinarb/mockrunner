@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,9 +38,26 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         this.sql = sql;
     }
     
+    public MockPreparedStatement(Connection connection, String sql, int resultSetType, int resultSetConcurrency)
+    {
+        super(connection, resultSetType, resultSetConcurrency);
+        this.sql = sql;
+    }
+
+    public MockPreparedStatement(Connection connection, String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability)
+    {
+        super(connection, resultSetType, resultSetConcurrency, resultSetHoldability);
+        this.sql = sql;
+    }
+    
+    public String getSQL()
+    {
+        return sql;
+    }
+    
     public Map getObjectMap()
     {
-        return setObjects;
+        return Collections.unmodifiableMap(setObjects);
     }
     
     public Object getObject(int index)

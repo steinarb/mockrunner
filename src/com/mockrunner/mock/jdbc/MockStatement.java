@@ -13,11 +13,27 @@ public class MockStatement implements Statement
     private int maxFieldSize = 0;
     private int fetchDirection = ResultSet.FETCH_FORWARD;
     private int fetchRows = 0;
+    private int resultSetType = 0;
+    private int resultSetConcurrency = 0;
+    private int resultSetHoldability = 0;
     private Connection connection;
     
     public MockStatement(Connection connection)
     {
+        this(connection, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+    }
+    
+    public MockStatement(Connection connection, int resultSetType, int resultSetConcurrency)
+    {
+        this(connection, resultSetType, resultSetConcurrency, ResultSet.HOLD_CURSORS_OVER_COMMIT);
+    }
+    
+    public MockStatement(Connection connection, int resultSetType, int resultSetConcurrency, int resultSetHoldability)
+    {
         this.connection = connection;
+        this.resultSetType = resultSetType;
+        this.resultSetConcurrency = resultSetConcurrency;
+        this.resultSetHoldability = resultSetHoldability;
     }
     
     public ResultSet executeQuery(String sql) throws SQLException
@@ -130,16 +146,6 @@ public class MockStatement implements Statement
         return fetchRows;
     }
 
-    public int getResultSetConcurrency() throws SQLException
-    {
-        return 0;
-    }
-
-    public int getResultSetType() throws SQLException
-    {
-        return 0;
-    }
-
     public void addBatch(String sql) throws SQLException
     {
 
@@ -199,10 +205,19 @@ public class MockStatement implements Statement
     {
         return false;
     }
-
+    
+    public int getResultSetType() throws SQLException
+    {
+        return resultSetType;
+    }
+    
+    public int getResultSetConcurrency() throws SQLException
+    {
+        return resultSetConcurrency;
+    }
+    
     public int getResultSetHoldability() throws SQLException
     {
-        return 0;
+        return resultSetHoldability;
     }
-
 }

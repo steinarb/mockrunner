@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
+import com.mockrunner.mock.jdbc.MockStatement;
 
 public class JDBCTestCaseAdapater extends BaseTestCase
 {
@@ -64,9 +65,33 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     {
         jdbcTestModule.setExactMatch(exactMatch);
     }
-
+    
     /**
-     * Delegates to {@link JDBCTestModule#getPreparedStatement}
+     * Delegates to {@link JDBCTestModule#getStatement}
+     */
+    protected MockStatement getStatement(int index)
+    {
+        return jdbcTestModule.getStatement(index);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getStatements}
+     */
+    protected List getStatements()
+    {
+        return jdbcTestModule.getStatements();
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getPreparedStatement(int)}
+     */
+    protected MockPreparedStatement getPreparedStatement(int index)
+    {
+        return jdbcTestModule.getPreparedStatement(index);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getPreparedStatement(String)}
      */
     protected MockPreparedStatement getPreparedStatement(String sql)
     {
@@ -74,29 +99,69 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     }
     
     /**
-     * Delegates to {@link JDBCTestModule#getPreparedStatementList}
+     * Delegates to {@link JDBCTestModule#getPreparedStatements}
      */
-    protected List getPreparedStatementList(String sql)
+    protected List getPreparedStatements()
     {
-        return jdbcTestModule.getPreparedStatementList(sql);
+        return jdbcTestModule.getPreparedStatements();
     }
-
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getPreparedStatements(String)}
+     */
+    protected List getPreparedStatements(String sql)
+    {
+        return jdbcTestModule.getPreparedStatements(sql);
+    }
+    
     /**
      * Delegates to {@link JDBCTestModule#getPreparedStatementObject(PreparedStatement, int)}
      */
-    protected Object getPreparedStatementObject(PreparedStatement statement, int index)
+    protected Object getPreparedStatementObject(PreparedStatement statement, int indexOfObject)
     {
-        return jdbcTestModule.getPreparedStatementObject(statement, index);
+        return jdbcTestModule.getPreparedStatementObject(statement, indexOfObject);
     }
-
+    
     /**
      * Delegates to {@link JDBCTestModule#getPreparedStatementObject(String, int)}
      */
-    protected Object getPreparedStatementObject(String sql, int index)
+    protected Object getPreparedStatementObject(String sql, int indexOfObject)
     {
-        return jdbcTestModule.getPreparedStatementObject(sql, index);
+        return jdbcTestModule.getPreparedStatementObject(sql, indexOfObject);
     }
-
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getPreparedStatementObject(int, int)}
+     */
+    protected Object getPreparedStatementObject(int indexOfStatement, int indexOfObject)
+    {
+        return jdbcTestModule.getPreparedStatementObject(indexOfStatement, indexOfObject);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyNumberStatements}
+     */
+    protected void verifyNumberStatements(int number)
+    {
+        jdbcTestModule.verifyNumberStatements(number);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyNumberPreparedStatements(int)}
+     */
+    protected void verifyNumberPreparedStatements(int number)
+    {
+        jdbcTestModule.verifyNumberPreparedStatements(number);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyNumberPreparedStatements(int, String)}
+     */
+    protected void verifyNumberPreparedStatements(int number, String sql)
+    {
+        jdbcTestModule.verifyNumberPreparedStatements(number, sql);
+    }
+    
     /**
      * Delegates to {@link JDBCTestModule#verifyPreparedStatementPresent}
      */
@@ -104,36 +169,84 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     {
         jdbcTestModule.verifyPreparedStatementPresent(sql);
     }
-
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyPreparedStatementNotPresent}
+     */
+    protected void verifyPreparedStatementNotPresent(String sql)
+    {
+        jdbcTestModule.verifyPreparedStatementNotPresent(sql);
+    }
+    
     /**
      * Delegates to {@link JDBCTestModule#verifyPreparedStatementObjectPresent(PreparedStatement, int)}
      */
-    protected void verifyPreparedStatementObjectPresent(PreparedStatement statement, int index)
+    protected void verifyPreparedStatementObjectPresent(PreparedStatement statement, int indexOfObject)
     {
-        jdbcTestModule.verifyPreparedStatementObjectPresent(statement, index);
+        jdbcTestModule.verifyPreparedStatementObjectPresent(statement, indexOfObject);
     }
 
     /**
      * Delegates to {@link JDBCTestModule#verifyPreparedStatementObjectPresent(String, int)}
      */
-    protected void verifyPreparedStatementObjectPresent(String sql, int index)
+    protected void verifyPreparedStatementObjectPresent(String sql, int indexOfObject)
     {
-        jdbcTestModule.verifyPreparedStatementObjectPresent(sql, index);
+        jdbcTestModule.verifyPreparedStatementObjectPresent(sql, indexOfObject);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyPreparedStatementObjectPresent(int, int)}
+     */
+    protected void verifyPreparedStatementObjectPresent(int indexOfStatement, int indexOfObject)
+    {
+        jdbcTestModule.verifyPreparedStatementObjectPresent(indexOfStatement, indexOfObject);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyPreparedStatementObjectNotPresent(PreparedStatement, int)}
+     */
+    protected void verifyPreparedStatementObjectNotPresent(PreparedStatement statement, int indexOfObject)
+    {
+        jdbcTestModule.verifyPreparedStatementObjectNotPresent(statement, indexOfObject);
     }
 
     /**
-     * Delegates to {@link JDBCTestModule#verifyPreparedStatementObject(PreparedStatement, int, Object)}
+     * Delegates to {@link JDBCTestModule#verifyPreparedStatementObjectNotPresent(String, int)}
      */
-    protected void verifyPreparedStatementObject(PreparedStatement statement, int index, Object object)
+    protected void verifyPreparedStatementObjectNotPresent(String sql, int indexOfObject)
     {
-        jdbcTestModule.verifyPreparedStatementObject(statement, index, object);
+        jdbcTestModule.verifyPreparedStatementObjectNotPresent(sql, indexOfObject);
     }
-
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyPreparedStatementObjectNotPresent(int, int)}
+     */
+    protected void verifyPreparedStatementObjectNotPresent(int indexOfStatement, int indexOfObject)
+    {
+        jdbcTestModule.verifyPreparedStatementObjectNotPresent(indexOfStatement, indexOfObject);
+    }
+    
     /**
      * Delegates to {@link JDBCTestModule#verifyPreparedStatementObject(PreparedStatement, int, Object)}
      */
-    protected void verifyPreparedStatementObject(String sql, int index, Object object)
+    protected void verifyPreparedStatementObject(PreparedStatement statement, int indexOfObject, Object object)
     {
-        jdbcTestModule.verifyPreparedStatementObject(sql, index, object);
+        jdbcTestModule.verifyPreparedStatementObject(statement, indexOfObject, object);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyPreparedStatementObject(String, int, Object)}
+     */
+    protected void verifyPreparedStatementObject(String sql, int indexOfObject, Object object)
+    {
+        jdbcTestModule.verifyPreparedStatementObject(sql, indexOfObject, object);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyPreparedStatementObject(int, int, Object)}
+     */
+    protected void verifyPreparedStatementObject(int indexOfStatement, int indexOfObject, Object object)
+    {
+        jdbcTestModule.verifyPreparedStatementObject(indexOfStatement, indexOfObject, object);
     }
 }

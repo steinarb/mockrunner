@@ -28,6 +28,5 @@ public class LogActionTest extends ActionTestCaseAdapter
         actionPerform(LogAction.class);
         jdbcModule.verifyPreparedStatementPresent("insert into logtable");
         jdbcModule.verifyPreparedStatementObject("insert into logtable", 3, "testmessage");
-    }
-    
+    }  
 }
