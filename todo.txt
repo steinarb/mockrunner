@@ -1,6 +1,6 @@
 - write more example tests
 - get MultiThreadTestSuite working
-- write more JavaDoc comments
 - write more tests for frameworks components
 - complete TagTestModule and write tests for it
+- add ServletTestModule
 - refactor mockobjects to fit into www.mockobjects.com concept
