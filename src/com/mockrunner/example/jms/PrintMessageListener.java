@@ -18,14 +18,14 @@ public class PrintMessageListener implements MessageListener
         if(message instanceof TextMessage)
         {
             //do print
-            try
-            {
-                message.acknowledge();
-            }
-            catch(JMSException exc)
-            {
-                exc.printStackTrace();
-            }
+        }
+        try
+        {
+            message.acknowledge();
+        }
+        catch(JMSException exc)
+        {
+            exc.printStackTrace();
         }
     }
 }
