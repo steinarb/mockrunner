@@ -7,17 +7,17 @@ public class MockActionForward extends MockForwardConfig
         this(null, false);
     }
 
-    public MockActionForward(String path)
+    public MockActionForward(String name)
     {
-        this(path, false);
+        this(name, false);
     }
 
-    public MockActionForward(String path, boolean redirect)
+    public MockActionForward(String name, boolean redirect)
     {
 
         super();
-        setName(null);
-        setPath(path);
+        setName(name);
+        setPath(null);
         setRedirect(redirect);
 
     }
@@ -39,11 +39,10 @@ public class MockActionForward extends MockForwardConfig
         setContextRelative(contextRelative);
     }
 
-    public boolean verifyPath(String name)
+    public boolean verifyName(String name)
     {
-        if (null == getPath())
-            return false;
-        if (getPath().equals(name))
+        if (null == getName()) return false;
+        if (getName().equals(name))
         {
             return true;
         }

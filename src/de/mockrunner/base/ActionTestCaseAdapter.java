@@ -11,10 +11,7 @@ import de.mockrunner.mock.MockActionMapping;
 import de.mockrunner.mock.MockPageContext;
 
 /**
- * Simply delegates to ActionTestModule.
- * The easiest way to write action tests
- * is to extend your testcases from this
- * class.
+ * Delegator for {@link ActionTestModule}
  */
 public class ActionTestCaseAdapter extends BaseTestCase
 {
@@ -30,22 +27,22 @@ public class ActionTestCaseAdapter extends BaseTestCase
         super.setUp();
         actionTestModule = createActionTestModule(getMockObjectFactory());
     }
-
+    
     protected ActionTestModule createActionTestModule(MockObjectFactory mockFactory)
     {
         return new ActionTestModule(mockFactory);
     }
-
+    
     protected String addMappedPropertyRequestPrefix(String str)
     {
         return actionTestModule.addMappedPropertyRequestPrefix(str);
     }
-
+    
     protected void setParameter(String parameter)
     {
         actionTestModule.setParameter(parameter);
     }
-
+    
     protected void setValidate(boolean validate)
     {
         actionTestModule.setValidate(validate);
