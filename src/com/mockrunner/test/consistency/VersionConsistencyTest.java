@@ -11,11 +11,11 @@ import com.mockrunner.gen.proc.GeneratorUtil;
 
 import junit.framework.TestCase;
 
-public class JDKVersionConsistencyTest extends TestCase
+public class VersionConsistencyTest extends TestCase
 {
     public void testFileConsistency() throws Exception
     {
-        compareDirTrees("src1.3", "src");
+        compareDirTrees("srcjdk1.3", "src");
     }
     
     private void compareDirTrees(String sourceDir, String destinationDir) throws Exception

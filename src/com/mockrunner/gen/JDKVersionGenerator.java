@@ -20,7 +20,7 @@ public class JDKVersionGenerator extends AbstractVersionGenerator
     
     protected String getRootTargetDir()
     {
-        return "src1.3";
+        return "srcjdk1.3";
     }
     
     protected String getRootSourceDir()
