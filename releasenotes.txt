@@ -12,6 +12,7 @@ mockrunner-0.2.7:
 - fixed problem with restoreDrivers() method of JDBCMockObjectFactory 
   (now clears the list of preserved drivers after restoring them)
 - added registerMockDriver() to JDBCMockObjectFactory
+- added OrderDB example to demonstrate the test of stored procedures
 - added commons-validator.jar and jakarta-oro.jar third party libraries
 - disabled namespace processing of NekoHTML parser, because of
   problems with NekoHTML 0.9
