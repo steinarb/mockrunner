@@ -1,11 +1,11 @@
 package com.mockrunner.util.common;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.List;
 
 import com.mockrunner.base.NestedApplicationException;
@@ -19,27 +19,17 @@ public class FileUtil
      */
     public static List getLinesFromFile(File file)
     {
-        List resultList = new ArrayList();
+        List resultList = null;
         FileReader reader = null;
         try
         {
             reader = new FileReader(file);
-            BufferedReader bufferedReader = new BufferedReader(reader);
-            String line = bufferedReader.readLine();
-            while(line != null)
-            {
-                resultList.add(line);
-                line = bufferedReader.readLine();
-            }
+            resultList = StreamUtil.getLinesFromReader(reader);
         }
         catch(FileNotFoundException exc)
         {
-            throw new RuntimeException("File not found. " + exc.getMessage());
-
-        }
-        catch(IOException exc)
-        {
             throw new NestedApplicationException(exc);
+
         }
         finally
         {
@@ -56,5 +46,31 @@ public class FileUtil
             }
         }
         return resultList;
+    }
+    
+    /**
+     * Tries to open the file from the file system. If the file
+     * doesn't exist, tries to load the file with <code>getResourceAsStream</code>.
+     * Throws a {@link com.mockrunner.base.NestedApplicationException}, if
+     * the file cannot be found.
+     * @param filePath the file path
+     * @return the file as reader
+     */
+    public static Reader findFile(String filePath)
+    {
+        File file = new File(filePath);
+        try
+        {
+            if(file.exists() && file.isFile()) 
+            {
+                return new FileReader(file);
+            }
+            InputStream stream = FileUtil.class.getResourceAsStream(filePath);
+            return new InputStreamReader(stream, "ISO-8859-1");
+        } 
+        catch(Exception exc)
+        {
+            throw new NestedApplicationException(exc);
+        } 
     }
 }

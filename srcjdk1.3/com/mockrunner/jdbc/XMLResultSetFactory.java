@@ -2,15 +2,19 @@ package com.mockrunner.jdbc;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jdom.Document;
 import org.jdom.Element;
-import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.mock.jdbc.MockResultSet;
+import com.mockrunner.util.common.FileUtil;
 
 /**
  * Can be used to create a <code>ResultSet</code> based on
@@ -19,17 +23,24 @@ import com.mockrunner.mock.jdbc.MockResultSet;
  * specify the dialect of the <code>ResultSet</code>, which determines 
  * the expected format of the XML <code>Document</code> and whether or not  
  * the column entries should be trimmed (default is <code>true</code>).
+ * If a <code>File</code> is specified, this file is used. If a file name
+ * is specified, this class tries to find the file in the local
+ * file system and (if not found) to load it with <code>getResourceAsStream</code>.
  */
 public class XMLResultSetFactory implements ResultSetFactory 
 {
-    public static final int SYBASE_DIALECT = 0;
-    private File file;
-    private boolean trim;
-    private int dialect;
+    private final static Log log = LogFactory.getLog(XMLResultSetFactory.class);
+    
+    public final static int SYBASE_DIALECT = 0;
+    
+    private String fileName = null;
+    private File file = null;
+    private boolean trim = true;
+    private int dialect = SYBASE_DIALECT;
     
     public XMLResultSetFactory(String fileName) 
     {
-        this(new File(fileName));
+        this.fileName = fileName;
     }
     
     public XMLResultSetFactory(File file) 
@@ -42,8 +53,6 @@ public class XMLResultSetFactory implements ResultSetFactory
         {
             this.file = null;
         }
-        this.dialect = SYBASE_DIALECT;
-        trim = true;
     }
     
     /**
@@ -71,7 +80,8 @@ public class XMLResultSetFactory implements ResultSetFactory
     
     /**
      * Get the <code>File</code> being used to read in the 
-     * <code>ResultSet</code>.
+     * <code>ResultSet</code>. Returns <code>null</code> if
+     * a file name was specified.
      * @return file 
      */
     public File getXMLFile() 
@@ -135,56 +145,70 @@ public class XMLResultSetFactory implements ResultSetFactory
        SAXBuilder builder = new SAXBuilder();
        Document doc = null;
        
-       if (file != null) 
+       try 
        {
-           try 
+           if(null != file)
            {
                doc = builder.build(file);
-               Element root = doc.getRootElement();
-               List rows = root.getChildren("row");
-               Iterator ri = rows.iterator();
-               boolean firstIteration = true;
-               int colNum = 0;   
-               while (ri.hasNext()) 
+           }
+           else
+           {
+               Reader reader = FileUtil.findFile(fileName);
+               doc = builder.build(reader);
+               tryClose(reader);
+           }
+           Element root = doc.getRootElement();
+           List rows = root.getChildren("row");
+           Iterator ri = rows.iterator();
+           boolean firstIteration = true;
+           int colNum = 0;   
+           while (ri.hasNext()) 
+           {
+               Element cRow = (Element)ri.next();
+               List cRowChildren = cRow.getChildren();
+               Iterator cri = cRowChildren.iterator();   
+               if (firstIteration)
                {
-                   Element cRow = (Element)ri.next();
-                   List cRowChildren = cRow.getChildren();
-                   Iterator cri = cRowChildren.iterator();   
-                   if (firstIteration)
+                   List columns = cRowChildren;
+                   Iterator ci = columns.iterator();
+                   
+                   while (ci.hasNext()) 
                    {
-                       List columns = cRowChildren;
-                       Iterator ci = columns.iterator();
-                       
-                       while (ci.hasNext()) 
-                       {
-                           Element ccRow = (Element)ci.next();
-                           resultSet.addColumn(ccRow.getName());
-                           colNum++;
-                       }
-                       firstIteration = false;
+                       Element ccRow = (Element)ci.next();
+                       resultSet.addColumn(ccRow.getName());
+                       colNum++;
                    }
-                   String[] cRowValues = new String[colNum];
-                   int curCol = 0;
-                   while (cri.hasNext())
-                   {
-                       Element crValue = (Element)cri.next();
-                       String value = trim ? crValue.getTextTrim() : crValue.getText();
-                       cRowValues[curCol] = value;
-                       curCol++;
-                   }
-                   resultSet.addRow(cRowValues);
+                   firstIteration = false;
                }
-           } 
-           catch (IOException ioe) 
-           {
-               ioe.printStackTrace();
-           } 
-           catch (JDOMException jdome) 
-           {
-               jdome.printStackTrace();
-           } 
-       }
+               String[] cRowValues = new String[colNum];
+               int curCol = 0;
+               while (cri.hasNext())
+               {
+                   Element crValue = (Element)cri.next();
+                   String value = trim ? crValue.getTextTrim() : crValue.getText();
+                   cRowValues[curCol] = value;
+                   curCol++;
+               }
+               resultSet.addRow(cRowValues);
+           }
+       } 
+       catch(Exception exc) 
+       {
+           throw new NestedApplicationException(exc);
+       } 
        
        return resultSet;
+    }
+    
+    private void tryClose(Reader reader)
+    {
+        try
+        {
+            reader.close();
+        } 
+        catch(IOException exc)
+        {
+            log.error(exc.getMessage(), exc);
+        }
     }
 }
