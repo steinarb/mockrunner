@@ -15,7 +15,7 @@ public class ServletTestModuleTest extends BaseTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        module = new ServletTestModule(getMockObjectFactory());
+        module = new ServletTestModule(getWebMockObjectFactory());
     }
 
     public void testServletMethodsCalled()
@@ -54,8 +54,8 @@ public class ServletTestModuleTest extends BaseTestCase
         assertTrue(filter1.wasDoFilterCalled());
         assertTrue(filter2.wasDoFilterCalled());
         assertTrue(filter3.wasDoFilterCalled());
-        assertTrue(getMockObjectFactory().getMockFilterChain() == filter1.getLastFilterChain());
-        assertTrue(getMockObjectFactory().getMockFilterChain() == filter2.getLastFilterChain());
-        assertTrue(getMockObjectFactory().getMockFilterChain() == filter3.getLastFilterChain());
+        assertTrue(getWebMockObjectFactory().getMockFilterChain() == filter1.getLastFilterChain());
+        assertTrue(getWebMockObjectFactory().getMockFilterChain() == filter2.getLastFilterChain());
+        assertTrue(getWebMockObjectFactory().getMockFilterChain() == filter3.getLastFilterChain());
     }
 }

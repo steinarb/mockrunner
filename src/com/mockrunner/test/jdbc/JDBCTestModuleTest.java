@@ -9,9 +9,9 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.jdbc.JDBCTestModule;
+import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockClob;
@@ -20,13 +20,13 @@ import com.mockrunner.mock.jdbc.MockStatement;
 
 public class JDBCTestModuleTest extends TestCase
 {
-    private MockObjectFactory mockfactory;
+    private JDBCMockObjectFactory mockfactory;
     private JDBCTestModule module;
 
     protected void setUp() throws Exception
     {
         super.setUp();
-        mockfactory = new MockObjectFactory();
+        mockfactory = new JDBCMockObjectFactory();
         module = new JDBCTestModule(mockfactory);
     }
     

@@ -8,10 +8,10 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.mockrunner.base.HTMLOutputModule;
-import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockJspWriter;
 import com.mockrunner.mock.web.MockPageContext;
+import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.util.TagUtil;
 
 /**
@@ -20,11 +20,11 @@ import com.mockrunner.util.TagUtil;
  */
 public class TagTestModule extends HTMLOutputModule
 {
-    private MockObjectFactory mockFactory;
+    private WebMockObjectFactory mockFactory;
     private TagSupport tag;
     private String body;
 
-    public TagTestModule(MockObjectFactory mockFactory)
+    public TagTestModule(WebMockObjectFactory mockFactory)
     {
         this.mockFactory = mockFactory;
     }
@@ -166,7 +166,7 @@ public class TagTestModule extends HTMLOutputModule
     
     /**
      * Returns the <code>MockPageContext</code> object.
-     * Delegates to {@link MockObjectFactory#getMockPageContext}.
+     * Delegates to {@link com.mockrunner.mock.web.WebMockObjectFactory#getMockPageContext}.
      * @return the MockPageContext
      */
     public MockPageContext getMockPageContext()

@@ -7,8 +7,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 
 import com.mockrunner.base.HTMLOutputModule;
-import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
+import com.mockrunner.mock.web.WebMockObjectFactory;
 
 /**
  * Module for servlet and filter tests. Can test
@@ -17,11 +17,11 @@ import com.mockrunner.base.VerifyFailedException;
  */
 public class ServletTestModule extends HTMLOutputModule
 {
-    private MockObjectFactory mockFactory;
+    private WebMockObjectFactory mockFactory;
     private HttpServlet servlet;
     private boolean doChain;
       
-    public ServletTestModule(MockObjectFactory mockFactory)
+    public ServletTestModule(WebMockObjectFactory mockFactory)
     {
         this.mockFactory = mockFactory;
         doChain = false;
@@ -106,7 +106,7 @@ public class ServletTestModule extends HTMLOutputModule
      * initializing it. 
      * You have to set the <code>FilterConfig</code> on your own.
      * Usually you can use 
-     * {@link com.mockrunner.base.MockObjectFactory#getMockFilterConfig}.
+     * {@link com.mockrunner.mock.web.WebMockObjectFactory#getMockFilterConfig}.
      * @param filter the filter
      */
     public void addFilter(Filter filter)

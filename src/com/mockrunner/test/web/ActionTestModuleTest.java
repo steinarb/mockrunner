@@ -6,20 +6,20 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import junit.framework.TestCase;
-import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockActionForward;
+import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.struts.ActionTestModule;
 
 public class ActionTestModuleTest extends TestCase
 {
-    private MockObjectFactory mockfactory;
+    private WebMockObjectFactory mockfactory;
     private ActionTestModule module;
     
     protected void setUp() throws Exception
     {
         super.setUp();
-        mockfactory = new MockObjectFactory();
+        mockfactory = new WebMockObjectFactory();
         module = new ActionTestModule(mockfactory);
     }
     

@@ -1,5 +1,7 @@
 package com.mockrunner.base;
 
+import com.mockrunner.mock.web.WebMockObjectFactory;
+
 /**
  * Generic implementation of {@link HTMLOutputModule}.
  * Can be used to to test HTML output in modules that
@@ -7,9 +9,9 @@ package com.mockrunner.base;
  */
 public class GenericHTMLOutputModule extends HTMLOutputModule
 {
-    private MockObjectFactory factory;
+    private WebMockObjectFactory factory;
     
-    public GenericHTMLOutputModule(MockObjectFactory factory)
+    public GenericHTMLOutputModule(WebMockObjectFactory factory)
     {
         this.factory = factory;
     }

@@ -41,7 +41,7 @@ public class TableEnumTagTest extends TagTestCaseAdapter
         list.add("Entry1");
         list.add("Entry2");
         list.add("Entry3");
-        getMockObjectFactory().getMockSession().setAttribute("currentCollection", list);
+        getWebMockObjectFactory().getMockSession().setAttribute("currentCollection", list);
     }
     
     public void testNoBody() throws Exception

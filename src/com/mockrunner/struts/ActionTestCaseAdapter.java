@@ -40,7 +40,7 @@ public class ActionTestCaseAdapter extends BaseTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        actionTestModule = createActionTestModule(getMockObjectFactory());
+        actionTestModule = createActionTestModule(getWebMockObjectFactory());
     }
     
     /**

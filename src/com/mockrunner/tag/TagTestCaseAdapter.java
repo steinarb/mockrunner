@@ -36,7 +36,7 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        tagTestModule = createTagTestModule(getMockObjectFactory());
+        tagTestModule = createTagTestModule(getWebMockObjectFactory());
     }
     
     /**

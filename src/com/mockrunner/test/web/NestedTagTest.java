@@ -28,7 +28,7 @@ public class NestedTagTest extends BaseTestCase
         super.setUp();
         testMap = new HashMap();
         testMap.put("testString", "test");
-        context = getMockObjectFactory().getMockPageContext();
+        context = getWebMockObjectFactory().getMockPageContext();
     }
 
     private void prepareStandardTagTest()

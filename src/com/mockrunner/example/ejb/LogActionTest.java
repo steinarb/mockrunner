@@ -19,12 +19,12 @@ public class LogActionTest extends ActionTestCaseAdapter
         jdbcModule = createJDBCTestModule();
         SessionBeanDescriptor beanDescriptor = new SessionBeanDescriptor("com/mockrunner/example/LogSession", LogSessionHome.class, LogSession.class, LogSessionBean.class);
         MockContainer.deploy(beanDescriptor);
-        MockContext.add("java:/DefaultDS", getMockObjectFactory().getMockDataSource());
+        MockContext.add("java:/DefaultDS", getJDBCMockObjectFactory().getMockDataSource());
     }
     
     public void testLogAction()
     {
-        getMockObjectFactory().getMockRequest().setupAddParameter("message", "testmessage");
+        getWebMockObjectFactory().getMockRequest().setupAddParameter("message", "testmessage");
         actionPerform(LogAction.class);
         jdbcModule.verifyPreparedStatementPresent("insert into logtable");
         jdbcModule.verifyPreparedStatementParameter("insert into logtable", 3, "testmessage");

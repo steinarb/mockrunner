@@ -20,7 +20,7 @@ public class ImageButtonFilterTest extends ServletTestCaseAdapter
     {
         super.setUp();
         filter = (ImageButtonFilter)createFilter(ImageButtonFilter.class);
-        request = getMockObjectFactory().getMockRequest();
+        request = getWebMockObjectFactory().getMockRequest();
     }
 
     public void testImageButtonParameter()

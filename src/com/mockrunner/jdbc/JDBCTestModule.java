@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
+import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockSavepoint;
@@ -21,11 +21,11 @@ import com.mockrunner.util.SearchUtil;
  */
 public class JDBCTestModule
 {
-    private MockObjectFactory mockFactory;
+    private JDBCMockObjectFactory mockFactory;
     private boolean caseSensitive = false;
     private boolean exactMatch = false;
       
-    public JDBCTestModule(MockObjectFactory mockFactory)
+    public JDBCTestModule(JDBCMockObjectFactory mockFactory)
     {
         this.mockFactory = mockFactory;
     }

@@ -37,7 +37,7 @@ public class TagLifecycleTest extends BaseTestCase
         super.setUp();
         Map testMap = new HashMap();
         testMap.put("testString", "test");
-        root = new NestedStandardTag(new TestTag(), getMockObjectFactory().getMockPageContext(), testMap);
+        root = new NestedStandardTag(new TestTag(), getWebMockObjectFactory().getMockPageContext(), testMap);
         level1child1 = root.addTagChild(TestBodyTag.class, testMap);
         root.addTextChild("roottext");
         level1child2 = root.addTagChild(TestTag.class, testMap);
@@ -137,11 +137,11 @@ public class TagLifecycleTest extends BaseTestCase
     
     private String getTagOutput()
     {
-        return ((MockJspWriter)(getMockObjectFactory().getMockPageContext().getOut())).getOutputAsString();
+        return ((MockJspWriter)(getWebMockObjectFactory().getMockPageContext().getOut())).getOutputAsString();
     }
     
     private void clearOutput() throws Exception
     {
-        ((MockJspWriter)(getMockObjectFactory().getMockPageContext().getOut())).clearBuffer();
+        ((MockJspWriter)(getWebMockObjectFactory().getMockPageContext().getOut())).clearBuffer();
     }
 }
