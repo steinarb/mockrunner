@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import com.mockrunner.mock.web.MockHttpServletRequest;
+import com.mockrunner.mock.web.MockHttpServletResponse;
 import com.mockrunner.mock.web.MockPageContext;
 import com.mockrunner.mock.web.WebMockObjectFactory;
 
@@ -76,6 +78,17 @@ public class WebMockObjectFactoryTest extends TestCase
         assertSame(factory.getMockResponse(), responseWrapper.getResponse());
     }
     
+    public void testAddRequestAndResponseWrapperClasses()
+    {
+        WebMockObjectFactory factory = new WebMockObjectFactory();
+        factory.addRequestWrapper(TestRequestWrapper.class);
+        assertTrue(factory.getWrappedRequest() instanceof TestRequestWrapper);
+        assertSame(factory.getMockRequest(), ((TestRequestWrapper)factory.getWrappedRequest()).getRequest());
+        factory.addResponseWrapper(TestResponseWrapper.class);
+        assertTrue(factory.getWrappedResponse() instanceof TestResponseWrapper);
+        assertSame(factory.getMockResponse(), ((TestResponseWrapper)factory.getWrappedResponse()).getResponse());
+    }
+    
     public void testRefresh() throws Exception
     {
         WebMockObjectFactory factory = new WebMockObjectFactory();
@@ -90,5 +103,35 @@ public class WebMockObjectFactoryTest extends TestCase
         pageContext = factory.getMockPageContext();
         assertSame(requestWrapper, pageContext.getRequest());
         assertSame(responseWrapper, pageContext.getResponse());
+    }
+    
+    public static class TestRequestWrapper extends MockHttpServletRequest
+    {
+        private HttpServletRequest request;
+        
+        public TestRequestWrapper(HttpServletRequest request)
+        {
+            this.request = request;
+        }
+        
+        public HttpServletRequest getRequest()
+        {
+            return request;
+        }
+    }
+    
+    public static class TestResponseWrapper extends MockHttpServletResponse
+    {
+        private HttpServletResponse response;
+        
+        public TestResponseWrapper(HttpServletResponse response)
+        {
+            this.response = response;
+        }
+        
+        public HttpServletResponse getResponse()
+        {
+            return response;
+        }
     }
 }

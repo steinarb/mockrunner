@@ -1,5 +1,7 @@
 package com.mockrunner.example.servlet;
 
+import javax.servlet.http.HttpServletRequest;
+
 import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 
 /**
@@ -33,5 +35,9 @@ public class LogoutServletTest extends BasicServletTestCaseAdapter
         setDoChain(true);
         doPost();
         assertFalse(getWebMockObjectFactory().getMockSession().isValid());
+        HttpServletRequest filteredRequest = (HttpServletRequest)getFilteredRequest();
+        assertEquals("11", filteredRequest.getParameter("logout"));
+        assertNull(filteredRequest.getParameter("logout.x"));
+        assertNull(filteredRequest.getParameter("logout.y"));
     }
 }

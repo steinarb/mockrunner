@@ -217,11 +217,15 @@ public class WebMockObjectFactory
     }
  
     /**
-     * Can be used to add a wrapper around the mock request. All the
+     * Can be used to add a request wrapper. All the
      * test modules are using the wrapped request returned by
      * {@link #getWrappedRequest}. The method {@link #getMockRequest}
      * returns the mock request without any wrapper.
-     * @param wrapper the wrapper, must be of type <code>HttpServletRequestWrapper</code>
+     * Usually the wrapper is of type <code>javax.servlet.http.HttpServletRequestWrapper</code>.
+     * That's not absolutely necessary but the wrapper must define a constructor
+     * that takes a single <code>javax.servlet.http.HttpServletRequest</code> argument
+     * and must implement <code>javax.servlet.http.HttpServletRequest</code>.
+     * @param wrapper the wrapper class
      */
     public void addRequestWrapper(Class wrapper)
     {
@@ -237,14 +241,15 @@ public class WebMockObjectFactory
     }
     
     /**
-     * Can be used to add a wrapper around the mock request. All the
-     * test modules are using the wrapped request returned by
+     * Can be used to add a request wrapper. 
+     * All the test modules are using the wrapped request returned by
      * {@link #getWrappedRequest}. The method {@link #getMockRequest}
-     * returns the mock request without any wrapper. Please note, that
-     * it's necessary that the specified wrapper wraps the mock request 
-     * of this factory. The test modules won't work properly, if you wrap
-     * another request object.
-     * @param wrapper the wrapper
+     * returns the mock request without any wrapper. Usually the wrapper is
+     * an instance of <code>javax.servlet.http.HttpServletRequestWrapper</code>
+     * and wraps the current request but that's not absolutely necessary. 
+     * However, be careful if you want to add custom mock versions of 
+     * <code>javax.servlet.http.HttpServletRequest</code>.
+     * @param wrapper the request wrapper
      */
     public void addRequestWrapper(HttpServletRequest wrapper)
     {
@@ -252,11 +257,15 @@ public class WebMockObjectFactory
     }
     
     /**
-     * Can be used to add a wrapper around the mock response. All the
+     * Can be used to add a response wrapper. All the
      * test modules are using the wrapped response returned by
      * {@link #getWrappedResponse}. The method {@link #getMockResponse}
-     * returns the mock request without any wrapper.
-     * @param wrapper the wrapper, must be of type <code>HttpServletResponseWrapper</code>
+     * returns the mock response without any wrapper.
+     * Usually the wrapper is of type <code>javax.servlet.http.HttpServletResponseWrapper</code>.
+     * That's not absolutely necessary but the wrapper must define a constructor
+     * that takes a single <code>javax.servlet.http.HttpServletResponse</code> argument
+     * and must implement <code>javax.servlet.http.HttpServletResponse</code>.
+     * @param wrapper the wrapper class
      */
     public void addResponseWrapper(Class wrapper)
     {
@@ -272,13 +281,14 @@ public class WebMockObjectFactory
     }
     
     /**
-     * Can be used to add a wrapper around the mock response. All the
-     * test modules are using the wrapped response returned by
+     * Can be used to add a response wrapper. 
+     * All the test modules are using the wrapped response returned by
      * {@link #getWrappedResponse}. The method {@link #getMockResponse}
-     * returns the mock request without any wrapper. Please note, that
-     * it's necessary that the specified wrapper wraps the mock response 
-     * of this factory. The test modules won't work properly, if you wrap
-     * another response object.
+     * returns the mock response without any wrapper. Usually the wrapper is
+     * an instance of <code>javax.servlet.http.HttpServletResponseWrapper</code>
+     * and wraps the current response but that's not absolutely necessary. 
+     * However, be careful if you want to add custom mock versions of 
+     * <code>javax.servlet.http.HttpServletResponse</code>.
      * @param wrapper the wrapper
      */
     public void addResponseWrapper(HttpServletResponse wrapper)

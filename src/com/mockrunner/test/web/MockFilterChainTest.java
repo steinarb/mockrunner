@@ -77,6 +77,37 @@ public class MockFilterChainTest extends TestCase
         assertNull(chain.getLastResponse());
     }
     
+    public void testRequestAndResponseList() throws Exception
+    {
+        TestFilter filter1 = new TestFilter();
+        TestFilter filter2 = new TestFilter();
+        TestFilter filter3 = new TestFilter();
+        MockHttpServletRequest request1 = new MockHttpServletRequest();
+        MockHttpServletRequest request3 = new MockHttpServletRequest();
+        MockHttpServletResponse response1 = new MockHttpServletResponse();
+        MockHttpServletResponse response2 = new MockHttpServletResponse();
+        filter3.setRequest(request3);
+        filter2.setResponse(response2);
+        chain.addFilter(filter1);
+        chain.addFilter(filter2);
+        chain.addFilter(filter3);
+        TestServlet servlet = new TestServlet();
+        chain.setServlet(servlet);
+        chain.doFilter(request1, response1);
+        assertEquals(4, chain.getRequestList().size());
+        assertEquals(4, chain.getResponseList().size());
+        assertSame(request1, chain.getRequestList().get(0));
+        assertSame(request1, chain.getRequestList().get(1));
+        assertSame(request1, chain.getRequestList().get(2));
+        assertSame(request3, chain.getRequestList().get(3));
+        assertSame(request3, chain.getLastRequest());
+        assertSame(response1, chain.getResponseList().get(0));
+        assertSame(response1, chain.getResponseList().get(1));
+        assertSame(response2, chain.getResponseList().get(2));
+        assertSame(response2, chain.getResponseList().get(3));
+        assertSame(response2, chain.getLastResponse());
+    }
+    
     public void testLastRequestAndResponse() throws Exception
     {
         TestFilter filter1 = new TestFilter();
@@ -96,6 +127,8 @@ public class MockFilterChainTest extends TestCase
     {
         private boolean doFilterCalled  = false;
         private boolean doChain = true;
+        private ServletRequest request;
+        private ServletResponse response;
 
         public void init(FilterConfig config) throws ServletException
         {
@@ -107,6 +140,14 @@ public class MockFilterChainTest extends TestCase
             doFilterCalled = true;
             if(doChain)
             {
+                if(null != this.request)
+                {
+                    request = this.request;
+                }
+                if(null != this.response)
+                {
+                    response = this.response;
+                }
                 chain.doFilter(request, response);
             }
         }
@@ -119,6 +160,16 @@ public class MockFilterChainTest extends TestCase
         public void setDoChain(boolean doChain)
         {
             this.doChain = doChain;
+        }
+        
+        public void setRequest(ServletRequest request)
+        {
+            this.request = request;
+        }
+        
+        public void setResponse(ServletResponse response)
+        {
+            this.response = response;
         }
         
         public boolean wasDoFilterCalled()
