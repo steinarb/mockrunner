@@ -29,6 +29,7 @@ import com.mockrunner.mock.jms.MockTextMessage;
 import com.mockrunner.mock.jms.MockTopic;
 import com.mockrunner.mock.jms.MockTopicConnection;
 import com.mockrunner.mock.jms.MockTopicPublisher;
+import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
 
 public class MockSessionTest extends TestCase
@@ -133,6 +134,25 @@ public class MockSessionTest extends TestCase
         doTestCreateProducer(session, destManager);
     }
     
+    public void testCreateNullProducer() throws Exception
+    {
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        MockQueueConnection queueConnection = new MockQueueConnection(destManager, confManager);
+        MockQueueSession queueSession =(MockQueueSession)queueConnection.createQueueSession(true, Session.AUTO_ACKNOWLEDGE);
+        MockTopicConnection topicConnection = new MockTopicConnection(destManager, confManager);
+        MockTopicSession topicSession =(MockTopicSession)topicConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+        MockConnection connection = new MockConnection(destManager, confManager);
+        MockSession session =(MockSession)connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        assertTrue(queueSession.createProducer(null) instanceof MockQueueSender);
+        assertTrue(topicSession.createProducer(null) instanceof MockTopicPublisher);
+        assertTrue(queueSession.createSender(null) instanceof MockQueueSender);
+        assertTrue(topicSession.createPublisher(null) instanceof MockTopicPublisher);
+        assertTrue(session.createProducer(null) instanceof MockMessageProducer);
+        assertFalse(session.createProducer(null) instanceof MockQueueSender);
+        assertFalse(session.createProducer(null) instanceof MockTopicPublisher);
+    }
+    
     public void testCreateConsumerWithQueueSession() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -164,15 +184,6 @@ public class MockSessionTest extends TestCase
     {
         MockQueue queue = manager.createQueue("Queue");
         MockTopic topic = manager.createTopic("Topic");
-        try
-        {
-            session.createProducer(null);
-            fail();
-        }
-        catch(RuntimeException exc)
-        {
-            //should throw exception
-        }
         MessageProducer producer1 = session.createProducer(queue);
         assertTrue(producer1 instanceof MockQueueSender);
         MessageProducer producer2 = session.createProducer(topic);

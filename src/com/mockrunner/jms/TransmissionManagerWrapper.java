@@ -8,19 +8,21 @@ import com.mockrunner.mock.jms.MockMessageProducer;
 
 /**
  * A wrapper around {@link QueueTransmissionManager} and
- * {@link TopicTransmissionManager}. Can be used to
- * access all senders, publishers, receivers and subscribers
+ * {@link TopicTransmissionManager} and {@link GenericTransmissionManager}. 
+ * Can be used to access all senders, publishers, receivers and subscribers
  * transparently as producers and consumers.
  */
 public class TransmissionManagerWrapper
 { 
     private QueueTransmissionManager queueManager;
     private TopicTransmissionManager topicManager;
+    private GenericTransmissionManager genericManager;
     
-    public TransmissionManagerWrapper(QueueTransmissionManager queueManager, TopicTransmissionManager topicManager)
+    public TransmissionManagerWrapper(QueueTransmissionManager queueManager, TopicTransmissionManager topicManager, GenericTransmissionManager genericManager)
     {
         this.queueManager = queueManager;
         this.topicManager = topicManager;
+        this.genericManager = genericManager;
     }
     
     /**
@@ -39,6 +41,15 @@ public class TransmissionManagerWrapper
     public TopicTransmissionManager getTopicTransmissionManager()
     {
         return topicManager;
+    }
+    
+    /**
+     * Returns the underlying {@link GenericTransmissionManager}.
+     * @return the {@link GenericTransmissionManager}
+     */
+    public GenericTransmissionManager getGenericTransmissionManager()
+    {
+        return genericManager;
     }
     
     /**
@@ -65,6 +76,7 @@ public class TransmissionManagerWrapper
         List resultList = new ArrayList();
         resultList.addAll(queueManager.getQueueSenderList());
         resultList.addAll(topicManager.getTopicPublisherList());
+        resultList.addAll(genericManager.getMessageProducerList());
         return resultList;
     }
     

@@ -10,9 +10,9 @@ import javax.jms.QueueSender;
  */
 public class MockQueueSender extends MockMessageProducer implements QueueSender
 {
-    public MockQueueSender(MockConnection connection, MockQueue queue)
+    public MockQueueSender(MockConnection connection, MockSession session, MockQueue queue)
     {
-        super(connection, queue);
+        super(connection, session, queue);
     }
 
     public Queue getQueue() throws JMSException

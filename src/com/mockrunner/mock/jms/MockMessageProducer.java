@@ -12,10 +12,11 @@ import javax.jms.StreamMessage;
 /**
  * Mock implementation of JMS <code>MessageProducer</code>.
  */
-public abstract class MockMessageProducer implements MessageProducer
+public class MockMessageProducer implements MessageProducer
 {
     private MockConnection connection;
     private MockDestination destination;
+    private MockSession session;
     private boolean closed;
     private boolean disableMessageId;
     private boolean disableTimestamp;
@@ -23,10 +24,11 @@ public abstract class MockMessageProducer implements MessageProducer
     private int priority;
     private long timeToLive;
     
-    public MockMessageProducer(MockConnection connection, MockDestination destination)
+    public MockMessageProducer(MockConnection connection, MockSession session, MockDestination destination)
     {
         this.connection = connection;
         this.destination = destination;
+        this.session = session;
         closed = false;
         disableMessageId = false;
         disableTimestamp = false;
@@ -77,11 +79,13 @@ public abstract class MockMessageProducer implements MessageProducer
         if(destination instanceof MockQueue)
         {
             setJMSMessageHeaders(message, destination, deliveryMode, priority, timeToLive);
+            session.addSessionToQueue((MockQueue)destination);
             ((MockQueue)destination).addMessage(message);
         }
         else if(destination instanceof MockTopic)
         {
             setJMSMessageHeaders(message, destination, deliveryMode, priority, timeToLive);
+            session.addSessionToTopic((MockTopic)destination);
             ((MockTopic)destination).addMessage(message);
         }
         else

@@ -1,15 +1,19 @@
 package com.mockrunner.test.jms;
 
+import java.util.List;
+
 import javax.jms.Session;
 
 import junit.framework.TestCase;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
+import com.mockrunner.jms.GenericTransmissionManager;
 import com.mockrunner.jms.QueueTransmissionManager;
 import com.mockrunner.jms.TopicTransmissionManager;
 import com.mockrunner.jms.TransmissionManagerWrapper;
 import com.mockrunner.mock.jms.MockConnection;
+import com.mockrunner.mock.jms.MockMessageProducer;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueBrowser;
 import com.mockrunner.mock.jms.MockQueueReceiver;
@@ -160,6 +164,22 @@ public class TransmissionManagerTest extends TestCase
         assertTrue(durableSubscriber3.isClosed());
     }
     
+    public void testGenericTransmissionManager()
+    {
+        GenericTransmissionManager manager = session.getGenericTransmissionManager();
+        MockMessageProducer producer1 = manager.createMessageProducer();
+        MockMessageProducer producer2 = manager.createMessageProducer();
+        assertSame(producer1, manager.getMessageProducer(0));
+        assertSame(producer2, manager.getMessageProducer(1));
+        List producerList = manager.getMessageProducerList();
+        assertEquals(2, producerList.size());
+        assertTrue(producerList.contains(producer1));
+        assertTrue(producerList.contains(producer2));
+        manager.closeAll();
+        assertTrue(producer1.isClosed());
+        assertTrue(producer2.isClosed());
+    }
+    
     public void testTransmissionManagerWrapper()
     {
         QueueTransmissionManager queueManager = session.getQueueTransmissionManager();
@@ -173,16 +193,21 @@ public class TransmissionManagerTest extends TestCase
         MockTopicSubscriber subscriber1 = topicManager.createTopicSubscriber(new MockTopic("Topic1"), "", false);
         MockTopicSubscriber subscriber2 = topicManager.createTopicSubscriber(new MockTopic("Topic1"), "", true);
         MockTopicSubscriber durableSubscriber1 = topicManager.createDurableTopicSubscriber(new MockTopic("Topic1"), "subscription1", "", true);
-        TransmissionManagerWrapper manager = new TransmissionManagerWrapper(queueManager, topicManager);
-        assertEquals(3, manager.getMessageProducerList().size());
+        GenericTransmissionManager genericManager = session.getGenericTransmissionManager();
+        MockMessageProducer producer1 = genericManager.createMessageProducer();
+        MockMessageProducer producer2 = genericManager.createMessageProducer();
+        TransmissionManagerWrapper manager = new TransmissionManagerWrapper(queueManager, topicManager, genericManager);
+        assertEquals(5, manager.getMessageProducerList().size());
         assertEquals(5, manager.getMessageConsumerList().size());
         assertNotNull(manager.getMessageProducer(2));
-        assertNull(manager.getMessageProducer(3));
+        assertNull(manager.getMessageProducer(6));
         assertNotNull(manager.getMessageConsumer(4));
         assertNull(manager.getMessageConsumer(5));
         assertTrue(manager.getMessageProducerList().contains(sender1));
         assertTrue(manager.getMessageProducerList().contains(sender2));
         assertTrue(manager.getMessageProducerList().contains(publisher1));
+        assertTrue(manager.getMessageProducerList().contains(producer1));
+        assertTrue(manager.getMessageProducerList().contains(producer2));
         assertTrue(manager.getMessageConsumerList().contains(receiver1));
         assertTrue(manager.getMessageConsumerList().contains(receiver2));
         assertTrue(manager.getMessageConsumerList().contains(subscriber1));

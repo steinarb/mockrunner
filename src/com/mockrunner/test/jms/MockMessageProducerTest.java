@@ -4,6 +4,8 @@ import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.InvalidDestinationException;
 import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageListener;
 import javax.jms.Session;
 
 import junit.framework.TestCase;
@@ -38,7 +40,8 @@ public class MockMessageProducerTest extends TestCase
     {
         DestinationManager destManager = new DestinationManager();
         ConfigurationManager confManager = new ConfigurationManager();
-        MockQueueSender sender = new MockQueueSender(new MockQueueConnection(destManager, confManager), queue);
+        MockQueueConnection connection = new MockQueueConnection(destManager, confManager);
+        MockQueueSender sender = new MockQueueSender(connection, new MockSession(connection, true, Session.CLIENT_ACKNOWLEDGE), queue);
         doTestSendMessage(sender);
         assertEquals(1, queue.getCurrentMessageList().size());
         assertEquals(1, queue.getReceivedMessageList().size());
@@ -52,7 +55,8 @@ public class MockMessageProducerTest extends TestCase
     {
         DestinationManager destManager = new DestinationManager();
         ConfigurationManager confManager = new ConfigurationManager();
-        MockTopicPublisher publisher = new MockTopicPublisher(new MockTopicConnection(destManager, confManager), topic);
+        MockTopicConnection connection = new MockTopicConnection(destManager, confManager);
+        MockTopicPublisher publisher = new MockTopicPublisher(connection, new MockSession(connection, true, Session.CLIENT_ACKNOWLEDGE), topic);
         doTestSendMessage(publisher);
         assertEquals(1, topic.getCurrentMessageList().size());
         assertEquals(1, topic.getReceivedMessageList().size());
@@ -60,6 +64,46 @@ public class MockMessageProducerTest extends TestCase
         assertEquals(0, queue.getReceivedMessageList().size());
         assertEquals(new MockTextMessage("aMessage"), topic.getMessage());
         doTestSendWithInvalidParameters(publisher);
+    }
+    
+    public void testSendWithMessageProducerToTopic() throws Exception
+    {
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        MockConnection connection = new MockConnection(destManager, confManager);
+        MockSession session = new MockSession(connection, true, Session.CLIENT_ACKNOWLEDGE);
+        MockMessageProducer producer = new MockMessageProducer(connection, session, topic);
+        doTestSendMessage(producer);
+        assertEquals(1, topic.getCurrentMessageList().size());
+        assertEquals(1, topic.getReceivedMessageList().size());
+        assertEquals(0, queue.getCurrentMessageList().size());
+        assertEquals(0, queue.getReceivedMessageList().size());
+        assertEquals(new MockTextMessage("aMessage"), topic.getMessage());
+        doTestSendWithInvalidParameters(producer);
+        session.setMessageListener(new TestMessageListener());
+        topic.addMessage(new MockTextMessage("anotherMessage"));
+        assertEquals(0, topic.getCurrentMessageList().size());
+        assertEquals(2, topic.getReceivedMessageList().size());
+    }
+    
+    public void testSendWithMessageProducerToQueue() throws Exception
+    {
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        MockConnection connection = new MockConnection(destManager, confManager);
+        MockSession session = new MockSession(connection, true, Session.CLIENT_ACKNOWLEDGE);
+        MockMessageProducer producer = new MockMessageProducer(connection, session, queue);
+        doTestSendMessage(producer);
+        assertEquals(0, topic.getCurrentMessageList().size());
+        assertEquals(0, topic.getReceivedMessageList().size());
+        assertEquals(1, queue.getCurrentMessageList().size());
+        assertEquals(1, queue.getReceivedMessageList().size());
+        assertEquals(new MockTextMessage("aMessage"), queue.getMessage());
+        doTestSendWithInvalidParameters(producer);
+        session.setMessageListener(new TestMessageListener());
+        queue.addMessage(new MockTextMessage("anotherMessage"));
+        assertEquals(0, queue.getCurrentMessageList().size());
+        assertEquals(2, queue.getReceivedMessageList().size());
     }
     
     private void doTestSendWithInvalidParameters(MockMessageProducer producer) throws Exception
@@ -165,5 +209,13 @@ public class MockMessageProducerTest extends TestCase
         assertEquals(objectMessage, receivedTopicMessage2);
         assertEquals(receivedQueueMessage1, receivedQueueMessage2);
         assertEquals(receivedQueueMessage1, receivedTopicMessage1);
+    }
+    
+    private class TestMessageListener implements MessageListener
+    {
+        public void onMessage(Message message)
+        {
+
+        }
     }
 }
