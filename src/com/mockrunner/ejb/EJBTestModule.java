@@ -378,7 +378,7 @@ public class EJBTestModule
         {
             return Class.forName(classPackage + "." + className);
         }
-        catch (ClassNotFoundException exc)
+        catch(ClassNotFoundException exc)
         {
             throw new RuntimeException("Home interface not found: " + exc.getMessage());
         }
@@ -401,7 +401,7 @@ public class EJBTestModule
         {
             return Class.forName(classPackage + "." + className);
         }
-        catch (ClassNotFoundException exc)
+        catch(ClassNotFoundException exc)
         {
             throw new RuntimeException("Interface not found: " + exc.getMessage());
         }
