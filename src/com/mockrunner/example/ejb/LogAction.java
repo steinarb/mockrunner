@@ -1,0 +1,40 @@
+package com.mockrunner.example.ejb;
+
+import javax.naming.InitialContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+
+import com.mockrunner.example.ejb.interfaces.LogSession;
+import com.mockrunner.example.ejb.interfaces.LogSessionHome;
+
+public class LogAction extends Action
+{
+    public ActionForward execute(ActionMapping mapping,
+                                 ActionForm form,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response) throws Exception
+    {
+        String message = request.getParameter("message");
+        try 
+        {
+            if(null != message)
+            {
+                InitialContext initialContext = new InitialContext();
+                LogSessionHome home = (LogSessionHome)initialContext.lookup("com/mockrunner/example/LogSession");
+                LogSession log = home.create();
+                log.logMessage(message);
+                log.remove();
+            }
+        } 
+        catch(Exception exc)
+        {
+            exc.printStackTrace();
+        }
+        return mapping.findForward("success");
+    }
+}
