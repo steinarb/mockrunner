@@ -51,19 +51,19 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     }
     
     /**
-     * Delegates to {@link JDBCTestModule#setCaseSensitive}
+     * Delegates to {@link JDBCTestModule#setPreparedStatementCaseSensitive}
      */
-    protected void setCaseSensitive(boolean caseSensitive)
+    protected void setPreparedStatementCaseSensitive(boolean caseSensitive)
     {
-        jdbcTestModule.setCaseSensitive(caseSensitive);
+        jdbcTestModule.setPreparedStatementCaseSensitive(caseSensitive);
     }
     
     /**
-     * Delegates to {@link JDBCTestModule#setExactMatch}
+     * Delegates to {@link JDBCTestModule#setPreparedStatementExactMatch}
      */
-    protected void setExactMatch(boolean exactMatch)
+    protected void setPreparedStatementExactMatch(boolean exactMatch)
     {
-        jdbcTestModule.setExactMatch(exactMatch);
+        jdbcTestModule.setPreparedStatementExactMatch(exactMatch);
     }
     
     /**
