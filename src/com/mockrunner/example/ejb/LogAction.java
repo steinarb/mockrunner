@@ -1,6 +1,7 @@
 package com.mockrunner.example.ejb;
 
 import javax.naming.InitialContext;
+import javax.rmi.PortableRemoteObject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,8 +31,9 @@ public class LogAction extends Action
             if(null != message)
             {
                 InitialContext initialContext = new InitialContext();
-                LogSessionHome home = (LogSessionHome)initialContext.lookup("com/mockrunner/example/LogSession");
-                LogSession log = home.create();
+                Object home = initialContext.lookup("com/mockrunner/example/LogSession");
+                LogSessionHome logHome = (LogSessionHome)PortableRemoteObject.narrow(home, LogSessionHome.class);
+                LogSession log = logHome.create();
                 log.logMessage(message);
                 log.remove();
             }

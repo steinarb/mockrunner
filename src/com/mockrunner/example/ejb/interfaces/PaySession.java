@@ -11,6 +11,6 @@ public interface PaySession
 {
 
    public void payBill( java.lang.String customerId,java.lang.String billId,double amount )
-      throws java.lang.Exception, java.rmi.RemoteException;
+      throws com.mockrunner.example.ejb.PaySessionException, java.rmi.RemoteException;
 
 }
