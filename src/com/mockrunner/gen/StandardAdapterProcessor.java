@@ -6,6 +6,7 @@ import java.lang.reflect.Modifier;
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.HTMLOutputTestCase;
+import com.mockrunner.base.WebTestModule;
 import com.mockrunner.gen.JavaClassGenerator.ConstructorDeclaration;
 import com.mockrunner.gen.JavaClassGenerator.MethodDeclaration;
 import com.mockrunner.util.ClassUtil;
@@ -33,6 +34,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         addConstructors(classGenerator);
         addTearDownMethod(classGenerator, memberName);
         addSetUpMethod(classGenerator, module, memberName);
+        addHTMLOutputAndWebTestMethods(classGenerator, module, memberName);
         output = classGenerator.generate();
     }
     
@@ -85,6 +87,32 @@ public class StandardAdapterProcessor implements AdapterProcessor
         codeLines[1] = memberName + " = create" + ClassUtil.getClassName(module) + "(" + factoryCall +"());";
         method.setCodeLines(codeLines);
         classGenerator.addMethodDeclaration(method);
+    }
+    
+    private void addHTMLOutputAndWebTestMethods(JavaClassGenerator classGenerator, Class module, String memberName)
+    {
+        if(!HTMLOutputModule.class.isAssignableFrom(module)) return;
+        String[] codeLines = new String[] {"return " + memberName + ";"};
+        MethodDeclaration webTestMethod = createProtectedMethod();
+        webTestMethod.setName("getWebTestModule");
+        webTestMethod.setReturnType(WebTestModule.class);
+        String[] comment = new String[3];
+        comment[0] = "Returns the {@link " + module.getName() + "} as";
+        comment[1] = "{@link com.mockrunner.base.WebTestModule}.";
+        comment[2] = "@return the {@link com.mockrunner.base.WebTestModule}";
+        webTestMethod.setCommentLines(comment);
+        webTestMethod.setCodeLines(codeLines);
+        classGenerator.addMethodDeclaration(webTestMethod);
+        MethodDeclaration htmlOutputMethod = createProtectedMethod();
+        htmlOutputMethod.setName("getHTMLOutputModule");
+        htmlOutputMethod.setReturnType(HTMLOutputModule.class);
+        comment = new String[3];
+        comment[0] = "Returns the {@link " + module.getName() + "} as";
+        comment[1] = "{@link com.mockrunner.base.HTMLOutputModule}.";
+        comment[2] = "@return the {@link com.mockrunner.base.HTMLOutputModule}";
+        htmlOutputMethod.setCommentLines(comment);
+        htmlOutputMethod.setCodeLines(codeLines);
+        classGenerator.addMethodDeclaration(htmlOutputMethod);
     }
     
     private void addConstructors(JavaClassGenerator classGenerator)
