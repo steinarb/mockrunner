@@ -1,6 +1,7 @@
 package com.mockrunner.mock.jms;
 
 import javax.jms.DeliveryMode;
+import javax.jms.InvalidDestinationException;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Queue;
@@ -38,28 +39,54 @@ public class MockQueueSender implements QueueSender
         return queue;
     }
 
-    public void send(Message arg0) throws JMSException
+    public void send(Message message) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        if(null == queue)
+        {
+            throw new InvalidDestinationException("Queue must not be null");
+        }
+        setJMSProperties(message);
+        queue.addMessage(message);
     }
 
-    public void send(Message arg0, int arg1, int arg2, long arg3) throws JMSException
+    public void send(Message message, int deliveryMode, int priority, long timeToLive) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        if(null == queue)
+        {
+            throw new InvalidDestinationException("Queue must not be null");
+        }
+        setJMSProperties(message, deliveryMode, priority, timeToLive);
+        queue.addMessage(message);
     }
 
-    public void send(Queue arg0, Message arg1) throws JMSException
+    public void send(Queue queue, Message message) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        if(null == queue)
+        {
+            throw new InvalidDestinationException("Queue must not be null");
+        }
+        setJMSProperties(message);
+        if(queue instanceof MockQueue)
+        {
+            ((MockQueue)queue).addMessage(message);
+        }
     }
 
-    public void send(Queue arg0, Message arg1, int arg2, int arg3, long arg4) throws JMSException
+    public void send(Queue queue, Message message, int deliveryMode, int priority, long timeToLive) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        if(null == queue)
+        {
+            throw new InvalidDestinationException("Queue must not be null");
+        }
+        setJMSProperties(message, deliveryMode, priority, timeToLive);
+        if(queue instanceof MockQueue)
+        {
+            ((MockQueue)queue).addMessage(message);
+        }
     }
 
     public void setDisableMessageID(boolean disableMessageId) throws JMSException
@@ -131,5 +158,33 @@ public class MockQueueSender implements QueueSender
     public boolean isClosed()
     {
         return closed;
+    }
+    
+    private void setJMSProperties(Message message) throws JMSException
+    {
+        setJMSProperties(message, deliveryMode, priority, timeToLive);
+    }
+    
+    private void setJMSProperties(Message message, int deliveryMode, int priority, long timeToLive) throws JMSException
+    {
+        message.setJMSDeliveryMode(deliveryMode);
+        message.setJMSPriority(priority);
+        long currentTime = System.currentTimeMillis();
+        if(!disableTimestamp)
+        {
+            message.setJMSTimestamp(currentTime);
+        }
+        if(0 == timeToLive)
+        {
+            message.setJMSExpiration(0);
+        }
+        else
+        {
+            message.setJMSExpiration(currentTime + timeToLive);
+        }
+        if(!disableMessageId)
+        {
+            message.setJMSMessageID(String.valueOf(Math.random()));
+        }
     }
 }

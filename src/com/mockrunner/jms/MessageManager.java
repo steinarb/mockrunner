@@ -56,7 +56,7 @@ public class MessageManager
      */
     public MockMessage getMessage(int index)
     {
-        if(messages.size() <= index) return null;
+        if(messages.size() <= index || index < 0) return null;
         return (MockMessage)messages.get(index);
     }
     
@@ -81,7 +81,7 @@ public class MessageManager
      */
     public MockBytesMessage getBytesMessage(int index)
     {
-        if(byteMessages.size() <= index) return null;
+        if(byteMessages.size() <= index || index < 0) return null;
         return (MockBytesMessage)byteMessages.get(index);
     }
     
@@ -106,7 +106,7 @@ public class MessageManager
      */
     public MockMapMessage getMapMessage(int index)
     {
-        if(mapMessages.size() <= index) return null;
+        if(mapMessages.size() <= index || index < 0) return null;
         return (MockMapMessage)mapMessages.get(index);
     }
     
@@ -139,7 +139,7 @@ public class MessageManager
      */
     public MockTextMessage getTextMessage(int index)
     {
-        if(textMessages.size() <= index) return null;
+        if(textMessages.size() <= index || index < 0) return null;
         return (MockTextMessage)textMessages.get(index);
     }
     
@@ -164,7 +164,7 @@ public class MessageManager
      */
     public MockStreamMessage getStreamMessage(int index)
     {
-        if(streamMessages.size() <= index) return null;
+        if(streamMessages.size() <= index || index < 0) return null;
         return (MockStreamMessage)streamMessages.get(index);
     }
     
@@ -197,7 +197,7 @@ public class MessageManager
      */
     public MockObjectMessage getObjectMessage(int index)
     {
-        if(objectMessages.size() <= index) return null;
+        if(objectMessages.size() <= index || index < 0) return null;
         return (MockObjectMessage)objectMessages.get(index);
     }
 }

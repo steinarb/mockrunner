@@ -86,7 +86,7 @@ public class DestinationManager
      */
     public MockTemporaryQueue getTemporaryQueue(int index)
     {
-        if(tempQueues.size() <= index) return null;
+        if(tempQueues.size() <= index || index < 0) return null;
         return (MockTemporaryQueue)tempQueues.get(index);
     }
 }
