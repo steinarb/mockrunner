@@ -45,14 +45,35 @@ public class StringUtil
      * @param string the string to convert
      * @param index the index where the character is set to lowercase
      * @return the converted string
-     * @throws IndexOutOfBoundsException if the index is negative or 
-     *         greater than or equal to the length of the string
+     * @throws IndexOutOfBoundsException if the index is out of
+     *         range
      */
     public static String lowerCase(String string, int index)
     {
+        return lowerCase(string, index, -1);
+    }
+    
+    /**
+     * Converts the character in the specified index range to
+     * lowercase and returns the resulting string.
+     * If the provided endIndex is smaller or equal to startIndex,
+     * the endIndex is set to startIndex + 1.
+     * @param string the string to convert
+     * @param startIndex the index to start, inclusive
+     * @param endIndex the index to end, exclusive
+     * @return the converted string
+     * @throws IndexOutOfBoundsException if the index is out of
+     *         range
+     */
+    public static String lowerCase(String string, int startIndex, int endIndex)
+    {
         StringBuffer buffer = new StringBuffer(string);
-        char character = buffer.charAt(index);
-        buffer.setCharAt(index, Character.toLowerCase(character));
+        if(endIndex <= startIndex) endIndex = startIndex + 1;
+        for(int ii = startIndex; ii < endIndex; ii++)
+        {
+            char character = buffer.charAt(ii);
+            buffer.setCharAt(ii, Character.toLowerCase(character));
+        }
         return buffer.toString();
     }
     

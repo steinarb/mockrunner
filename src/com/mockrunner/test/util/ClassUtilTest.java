@@ -1,7 +1,9 @@
 package com.mockrunner.test.util;
 
 import java.io.OutputStream;
+import java.net.URL;
 
+import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.util.ClassUtil;
 
 import junit.framework.TestCase;
@@ -38,6 +40,8 @@ public class ClassUtilTest extends TestCase
         assertEquals("booleanValue", ClassUtil.getArgumentName(Boolean.TYPE));
         assertEquals("string", ClassUtil.getArgumentName(String.class));
         assertEquals("classUtilTest", ClassUtil.getArgumentName(ClassUtilTest.class));
+        assertEquals("jmsTestModule", ClassUtil.getArgumentName(JMSTestModule.class));
+        assertEquals("url", ClassUtil.getArgumentName(URL.class));
     }
     
     public static class TestClass
