@@ -13,7 +13,7 @@ mockrunner-0.3.1:
 - updated mockejb.jar from 0.5 to 0.6 beta2
 - replaced jakarta-oro.jar from Struts release with jakarta-oro-2.0.8.jar
   from MockEJB 0.6 beta2 release
-- updated Struts jars from 1.2.1 to 1.2.2
+- updated Struts jars from 1.2.1 to 1.2.4
 - updated jdom.jar from Beta 10 to 1.0
 
 mockrunner-0.3:
