@@ -24,6 +24,22 @@ public class ClassUtilTest extends TestCase
         assertEquals("ClassUtilTest$TestClass", ClassUtil.getClassName(TestClass.class));
     }
     
+    public void testIsKeyword()
+    {
+        assertTrue(ClassUtil.isKeyword("void"));
+        assertTrue(ClassUtil.isKeyword("volatile"));
+        assertFalse(ClassUtil.isKeyword("Boolean"));
+        assertFalse(ClassUtil.isKeyword("xyz"));
+    }
+    
+    public void testGetArgumentName()
+    {
+        assertEquals("voidValue", ClassUtil.getArgumentName(Void.class));
+        assertEquals("booleanValue", ClassUtil.getArgumentName(Boolean.TYPE));
+        assertEquals("string", ClassUtil.getArgumentName(String.class));
+        assertEquals("classUtilTest", ClassUtil.getArgumentName(ClassUtilTest.class));
+    }
+    
     public static class TestClass
     {
     

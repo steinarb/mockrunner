@@ -158,6 +158,22 @@ public class JavaClassGenerator
         return names;
     }
     
+    private String[] getArgumentNames(Class[] arguments, String[] argumentNames)
+    {
+        if(null == arguments || arguments.length <= 0) return null;
+        if(null != argumentNames && argumentNames.length >= arguments.length) return argumentNames;
+        String[] newNames = new String[arguments.length];
+        for(int ii = 0; ii < argumentNames.length; ii++)
+        {
+            newNames[ii] = argumentNames[ii];
+        }
+        for(int ii = argumentNames.length; ii < arguments.length; ii++)
+        {
+            newNames[ii] = ClassUtil.getArgumentName(arguments[ii]);
+        }
+        return newNames;
+    }
+    
     private void appendImportBlocks(JavaLineAssembler assembler)
     {
         List importBlocks = processImports();
@@ -201,7 +217,8 @@ public class JavaClassGenerator
             String returnType = getClassName(declaration.getReturnType());
             String[] argumentTypes = getClassNames(declaration.getArguments());
             String[] exceptionTypes = getClassNames(declaration.getExceptions());
-            assembler.appendMethodDeclaration(modifiers, returnType, declaration.getName(), argumentTypes, declaration.getArgumentNames(), exceptionTypes);
+            String[] argumentNames = getArgumentNames(declaration.getArguments(), declaration.getArgumentNames());
+            assembler.appendMethodDeclaration(modifiers, returnType, declaration.getName(), argumentTypes, argumentNames, exceptionTypes);
             appendMethodBody(assembler, declaration);
         }
     }
@@ -214,7 +231,8 @@ public class JavaClassGenerator
             appendMethodHeader(assembler, declaration);
             String[] argumentTypes = getClassNames(declaration.getArguments());
             String[] exceptionTypes = getClassNames(declaration.getExceptions());
-            assembler.appendConstructorDeclaration(className, argumentTypes, declaration.getArgumentNames(), exceptionTypes);
+            String[] argumentNames = getArgumentNames(declaration.getArguments(), declaration.getArgumentNames());
+            assembler.appendConstructorDeclaration(className, argumentTypes, argumentNames, exceptionTypes);
             appendMethodBody(assembler, declaration);
         }
     }
