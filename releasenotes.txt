@@ -13,6 +13,8 @@ mockrunner-0.3:
   for preparing and verifying SQL statements. You have to enable regular expressions 
   with setUseRegularExpressions(true). Check out the modified JDBC BookstoreTest.
 - improved version of MockDatabaseMetaData
+- replaced verifySavepointRollbacked methods with verifySavepointRolledBack,
+  old ones are deprecated now
 - added verifyNumberCommits and verifyNumberRollbacks methods for JMS sessions to 
   JMSTestModule
 - MapMessageResources.clear now clears cached values also

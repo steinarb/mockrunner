@@ -1042,7 +1042,7 @@ public class JDBCTestModule
         int number = mockFactory.getMockConnection().getNumberRollbacks();
         if(number > 0)
         {
-            throw new VerifyFailedException("Connection was rollbacked.");
+            throw new VerifyFailedException("Connection was rolled back.");
         }
     }
     
@@ -2220,59 +2220,91 @@ public class JDBCTestModule
     
     /**
      * Verifies that the <code>Savepoint</code> with the specified index
-     * is rollbacked. The index is the number of the created <code>Savepoint</code>
+     * is rolled back. The index is the number of the created <code>Savepoint</code>
      * starting with 0 for the first <code>Savepoint</code>.
      * @param index the index of the <code>Savepoint</code>
      */
-    public void verifySavepointRollbacked(int index)
+    public void verifySavepointRolledBack(int index)
     {
         verifySavepointPresent(index);
         if(!getSavepoint(index).isRollbacked())
         {
-            throw new VerifyFailedException("Savepoint with index " + index + " not rollbacked.");
+            throw new VerifyFailedException("Savepoint with index " + index + " not rolled back.");
         }
     }
 
     /**
      * Verifies that the <code>Savepoint</code> with the specified name
-     * is rollbacked.
+     * is rolled back.
      * @param name the name of the <code>Savepoint</code>
      */
-    public void verifySavepointRollbacked(String name)
+    public void verifySavepointRolledBack(String name)
     {
         verifySavepointPresent(name);
         if(!getSavepoint(name).isRollbacked())
         {
-            throw new VerifyFailedException("Savepoint with name " + name + " not rollbacked.");
+            throw new VerifyFailedException("Savepoint with name " + name + " not rolled back.");
         }
     }
-
+    
     /**
      * Verifies that the <code>Savepoint</code> with the specified index
-     * is not rollbacked. The index is the number of the created <code>Savepoint</code>
+     * is not rolled back. The index is the number of the created <code>Savepoint</code>
      * starting with 0 for the first <code>Savepoint</code>.
      * @param index the index of the <code>Savepoint</code>
      */
-    public void verifySavepointNotRollbacked(int index)
+    public void verifySavepointNotRolledBack(int index)
     {
         verifySavepointPresent(index);
         if(getSavepoint(index).isRollbacked())
         {
-            throw new VerifyFailedException("Savepoint with index " + index + " is rollbacked.");
+            throw new VerifyFailedException("Savepoint with index " + index + " is rolled back.");
         }
     }
 
     /**
      * Verifies that the <code>Savepoint</code> with the specified name
-     * is not rollbacked.
+     * is not rolled back.
      * @param name the name of the <code>Savepoint</code>
      */
-    public void verifySavepointNotRollbacked(String name)
+    public void verifySavepointNotRolledBack(String name)
     {
         verifySavepointPresent(name);
         if(getSavepoint(name).isRollbacked())
         {
-            throw new VerifyFailedException("Savepoint with name " + name + " is rollbacked.");
+            throw new VerifyFailedException("Savepoint with name " + name + " is rolled back.");
         }
+    }
+    
+    /**
+     * @deprecated use {@link #verifySavepointRolledBack(int)}
+     */
+    public void verifySavepointRollbacked(int index)
+    {
+        verifySavepointRolledBack(index);
+    }
+
+    /**
+     * @deprecated use {@link #verifySavepointRolledBack(String)}
+     */
+    public void verifySavepointRollbacked(String name)
+    {
+        verifySavepointRolledBack(name);
+    }
+
+    /**
+     * @deprecated use {@link #verifySavepointNotRollbacked(int)}
+     */
+    public void verifySavepointNotRollbacked(int index)
+    {
+        verifySavepointNotRolledBack(index);
+    }
+
+    /**
+     * @deprecated use {@link #verifySavepointNotRollbacked(String)}
+     */
+    public void verifySavepointNotRollbacked(String name)
+    {
+        verifySavepointNotRolledBack(name);
     }
 }

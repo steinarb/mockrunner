@@ -79,7 +79,7 @@ public class JavaLineProcessor
                     int lastNonWhitespace = nextLine.length() - 1;
                     while(lastNonWhitespace > 0 && Character.isWhitespace(nextLine.charAt(lastNonWhitespace)))
                     {
-                        firstNonWhitespace--;
+                        lastNonWhitespace--;
                     }
                     nextLine.insert(lastNonWhitespace + 1, "*/");
                     output.println(nextLine);

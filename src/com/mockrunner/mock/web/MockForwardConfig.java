@@ -11,7 +11,8 @@ public class MockForwardConfig extends ActionForward
 	private String path = null;
 	private boolean redirect = false;
 	private boolean contextRelative = false;
-	
+	private String module = null;
+
 	public MockForwardConfig() 
 	{
 
@@ -34,6 +35,15 @@ public class MockForwardConfig extends ActionForward
         setRedirect(redirect);
         setContextRelative(contextRelative);
     }
+    
+    public MockForwardConfig(String name, String path, boolean redirect, String module) 
+    {
+        super();
+        setName(name);
+        setPath(path);
+        setRedirect(redirect);
+        setModule(module);
+    }
 
     public boolean getContextRelative() 
     {
@@ -43,6 +53,16 @@ public class MockForwardConfig extends ActionForward
     public void setContextRelative(boolean contextRelative) 
     {
         this.contextRelative = contextRelative;
+    }
+    
+    public String getModule() 
+    {
+        return module;
+    }
+    
+    public void setModule(String module) 
+    {
+        this.module = module;
     }
 
     public String getName() 

@@ -1,5 +1,7 @@
 package com.mockrunner.mock.web;
 
+import org.apache.struts.action.ActionForward;
+
 /**
  * Mock implementation of <code>ActionForward</code>.
  */
@@ -9,22 +11,22 @@ public class MockActionForward extends MockForwardConfig
     {
         this(null, false);
     }
-
+    
     public MockActionForward(String name)
     {
         this(name, false);
     }
-
+    
     public MockActionForward(String name, boolean redirect)
     {
-
+        
         super();
         setName(name);
         setPath(null);
         setRedirect(redirect);
-
+        
     }
-
+    
     public MockActionForward(String name, String path, boolean redirect)
     {
         super();
@@ -32,7 +34,7 @@ public class MockActionForward extends MockForwardConfig
         setPath(path);
         setRedirect(redirect);
     }
-
+    
     public MockActionForward(String name, String path, boolean redirect, boolean contextRelative)
     {
         super();
@@ -41,7 +43,15 @@ public class MockActionForward extends MockForwardConfig
         setRedirect(redirect);
         setContextRelative(contextRelative);
     }
-
+    
+    public MockActionForward(ActionForward copyMe) 
+    {
+        setName(copyMe.getName());
+        setPath(copyMe.getPath());
+        setRedirect(copyMe.getRedirect());
+        setContextRelative(copyMe.getContextRelative());
+    }
+    
     public boolean verifyName(String name)
     {
         if (null == getName()) return false;
