@@ -63,9 +63,9 @@ Struts 1.1. Older versions are not supported.
 
 To start with Mockrunner check out the JavaDoc and the examples
 in the com.mockrunner.example packages.
-Most methods are self-explanatory. Just subclass one of the Adapters
+Most methods are self-explanatory. Just subclass one of the adapters
 (e.g. ActionTestCaseAdapter) and start testing. If you have your
-own base class for tests, you can use the Modules (e.g. ActionTestModule).
+own base class for tests, you can use the modules (e.g. ActionTestModule).
 
 Mockrunner uses some classes from ActiveMQ project (http://activemq.codehaus.org/)
 for JMS message selector parsing. The classes are modified in order to
@@ -73,18 +73,30 @@ fit the needs of Mockrunner. The corresponding classes are in a different packag
 than the original ActiveMQ classes, so you should not face classloading problems
 when using ActiveMQ in your project.
 
-Mockrunner uses the following libraries and software components.
-You have to download them. Please add the specified jars to the classpath.
+Mockrunner depends on some third-party libraries. Most of them are included
+in the release. Not included are the following libraries.
+You have to download them. Please add the specified jars to the classpath:
 
 Xerces XML Parser 2.0.0 (or higher):
 http://xml.apache.org/xerces2-j/index.html
 xml-apis.jar
 xercesImpl.jar
 
-The following libraries are included in the Mockrunner release.
-Just add them to the classpath. Please note that you have to
-add struts.jar even if you only use the test modules that are
-not Struts related (e.g ServletTestModule or JDBCTestModule).
+The following libraries are included in the Mockrunner release. Just add them 
+to the classpath. 
+If you extend one of the test adapters (e.g. JDBCTestCaseAdapter), you have 
+to add all third-party libraries to the classpath, because the base class 
+for all adapters, BaseTestCase, depends on them. If you only use one test 
+module, e.g. JDBCTestModule, it's also possible, to create the test module 
+using:
+
+JDBCMockObjectFactory factory = new JDBCMockObjectFactory();
+JDBCTestModule module = new JDBCTestModule(factory);
+
+In this case you don't have to add all libraries, just those that are
+related to the test module you use.
+
+The third-party libraries included in the Mockrunner release are:
 
 Struts 1.1
 http://jakarta.apache.org/struts
