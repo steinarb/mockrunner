@@ -1,4 +1,4 @@
-package com.mockrunner.test;
+package com.mockrunner.test.web;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;

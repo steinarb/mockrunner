@@ -1,4 +1,4 @@
-package com.mockrunner.test;
+package com.mockrunner.test.web;
 
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;

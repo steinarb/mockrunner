@@ -1,4 +1,4 @@
-package com.mockrunner.test;
+package com.mockrunner.test.web;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.servlet.ServletTestModule;
