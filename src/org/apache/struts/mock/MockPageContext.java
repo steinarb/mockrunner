@@ -1,7 +1,7 @@
 /*
- * $Header: /cvsroot/mockrunner/mockrunner/src/org/apache/struts/mock/Attic/MockPageContext.java,v 1.1 2003/07/16 17:09:31 aibba Exp $
- * $Revision: 1.1 $
- * $Date: 2003/07/16 17:09:31 $
+ * $Header: /cvsroot/mockrunner/mockrunner/src/org/apache/struts/mock/Attic/MockPageContext.java,v 1.2 2004/05/30 12:32:37 aibba Exp $
+ * $Revision: 1.2 $
+ * $Date: 2004/05/30 12:32:37 $
  *
  * ====================================================================
  *
@@ -94,10 +94,10 @@ import javax.servlet.jsp.tagext.BodyContent;
  * threaded environment, no synchronization is performed.</p>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.1 $ $Date: 2003/07/16 17:09:31 $
+ * @version $Revision: 1.2 $ $Date: 2004/05/30 12:32:37 $
  */
 
-public class MockPageContext extends PageContext {
+public abstract class MockPageContext extends PageContext {
 
 
 
