@@ -1,4 +1,4 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.web;
 
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -10,8 +10,6 @@ import com.mockobjects.servlet.MockRequestDispatcher;
 
 /**
  * Mock implementation of <code>ServletContext</code>.
- * @deprecated use {@link com.mockrunner.mock.web.MockServletContext}
- * this class will be removed in the next release
  */
 public class MockServletContext extends com.mockobjects.servlet.MockServletContext
 {

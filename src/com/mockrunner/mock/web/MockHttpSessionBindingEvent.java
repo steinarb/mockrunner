@@ -1,12 +1,10 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.web;
 
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingEvent;
 
 /**
  * Mock implementation of <code>HttpSessionBindingEvent</code>.
- * @deprecated use {@link com.mockrunner.mock.web.MockHttpSessionBindingEvent}
- * this class will be removed in the next release
  */
 public class MockHttpSessionBindingEvent extends HttpSessionBindingEvent
 {

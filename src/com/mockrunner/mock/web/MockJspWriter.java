@@ -1,4 +1,4 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,8 +10,6 @@ import javax.servlet.jsp.JspWriter;
  * Mock implementation of <code>JspWriter</code>.
  * Collects the output data. Use {@link #getOutputAsString}
  * to get it.
- * @deprecated use {@link com.mockrunner.mock.web.MockJspWriter}
- * this class will be removed in the next release
  */
 public class MockJspWriter extends JspWriter
 {

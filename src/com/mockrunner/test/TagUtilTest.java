@@ -6,7 +6,7 @@ import java.util.Map;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.mockrunner.base.BaseTestCase;
-import com.mockrunner.mock.MockPageContext;
+import com.mockrunner.mock.web.MockPageContext;
 import com.mockrunner.tag.NestedBodyTag;
 import com.mockrunner.tag.NestedStandardTag;
 import com.mockrunner.tag.NestedTag;

@@ -3,7 +3,7 @@ package com.mockrunner.test;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
-import com.mockrunner.mock.MockHttpSession;
+import com.mockrunner.mock.web.MockHttpSession;
 
 import junit.framework.TestCase;
 

@@ -8,7 +8,7 @@ import org.apache.struts.action.ActionMessages;
 import junit.framework.TestCase;
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
-import com.mockrunner.mock.MockActionForward;
+import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.struts.ActionTestModule;
 
 public class ActionTestModuleTest extends TestCase

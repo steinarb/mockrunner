@@ -7,8 +7,8 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.mockrunner.base.BaseTestCase;
-import com.mockrunner.mock.MockBodyContent;
-import com.mockrunner.mock.MockJspWriter;
+import com.mockrunner.mock.web.MockBodyContent;
+import com.mockrunner.mock.web.MockJspWriter;
 import com.mockrunner.tag.NestedStandardTag;
 import com.mockrunner.tag.NestedTag;
 

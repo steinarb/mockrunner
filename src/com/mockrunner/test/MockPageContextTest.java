@@ -5,9 +5,9 @@ import java.io.StringWriter;
 import javax.servlet.jsp.JspWriter;
 
 import com.mockrunner.base.BaseTestCase;
-import com.mockrunner.mock.MockBodyContent;
-import com.mockrunner.mock.MockJspWriter;
-import com.mockrunner.mock.MockPageContext;
+import com.mockrunner.mock.web.MockBodyContent;
+import com.mockrunner.mock.web.MockJspWriter;
+import com.mockrunner.mock.web.MockPageContext;
 
 public class MockPageContextTest extends BaseTestCase
 {

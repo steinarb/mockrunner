@@ -1,4 +1,4 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.jdbc;
 
 import java.io.InputStream;
 import java.io.Reader;

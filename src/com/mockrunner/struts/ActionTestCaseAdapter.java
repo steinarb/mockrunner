@@ -8,9 +8,9 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import com.mockrunner.base.BaseTestCase;
-import com.mockrunner.mock.MockActionForward;
-import com.mockrunner.mock.MockActionMapping;
-import com.mockrunner.mock.MockPageContext;
+import com.mockrunner.mock.web.MockActionForward;
+import com.mockrunner.mock.web.MockActionMapping;
+import com.mockrunner.mock.web.MockPageContext;
 
 /**
  * Delegator for {@link ActionTestModule}. You can

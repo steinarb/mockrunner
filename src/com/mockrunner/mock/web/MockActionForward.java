@@ -1,9 +1,7 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.web;
 
 /**
  * Mock implementation of <code>ActionForward</code>.
- * @deprecated use {@link com.mockrunner.mock.web.MockActionForward}
- * this class will be removed in the next release
  */
 public class MockActionForward extends MockForwardConfig
 {

@@ -2,15 +2,15 @@ package com.mockrunner.base;
 
 import com.mockobjects.servlet.MockServletConfig;
 import com.mockobjects.sql.MockDataSource;
-import com.mockrunner.mock.MockActionMapping;
-import com.mockrunner.mock.MockConnection;
-import com.mockrunner.mock.MockFilterChain;
-import com.mockrunner.mock.MockFilterConfig;
-import com.mockrunner.mock.MockHttpServletRequest;
-import com.mockrunner.mock.MockHttpServletResponse;
-import com.mockrunner.mock.MockHttpSession;
-import com.mockrunner.mock.MockPageContext;
-import com.mockrunner.mock.MockServletContext;
+import com.mockrunner.mock.jdbc.MockConnection;
+import com.mockrunner.mock.web.MockActionMapping;
+import com.mockrunner.mock.web.MockFilterChain;
+import com.mockrunner.mock.web.MockFilterConfig;
+import com.mockrunner.mock.web.MockHttpServletRequest;
+import com.mockrunner.mock.web.MockHttpServletResponse;
+import com.mockrunner.mock.web.MockHttpSession;
+import com.mockrunner.mock.web.MockPageContext;
+import com.mockrunner.mock.web.MockServletContext;
 
 /**
  * Used to create all types of mock objects. Maintains
@@ -109,7 +109,7 @@ public class MockObjectFactory
         request.setSession(session);
         session.setupServletContext(context);
         pageContext = new MockPageContext(config, request, response);
-        filterConfig.setupGetServletContext(context);
+        filterConfig.setupServletContext(context);
         dataSource.setupConnection(connection);
     }
     

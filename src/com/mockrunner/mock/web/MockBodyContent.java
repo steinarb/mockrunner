@@ -1,4 +1,4 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.web;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -10,8 +10,6 @@ import javax.servlet.jsp.tagext.BodyContent;
 
 /**
  * Mock implementation of <code>BodyContent</code>.
- * @deprecated use {@link com.mockrunner.mock.web.MockBodyContent}
- * this class will be removed in the next release
  */
 public class MockBodyContent extends BodyContent
 {

@@ -2,7 +2,7 @@ package com.mockrunner.example.servlet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.mockrunner.mock.MockHttpServletRequest;
+import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.servlet.ServletTestCaseAdapter;
 
 /**

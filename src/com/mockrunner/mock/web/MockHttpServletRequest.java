@@ -1,4 +1,4 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.web;
 
 import java.util.Collections;
 import java.util.Enumeration;
@@ -14,8 +14,6 @@ import com.mockobjects.servlet.MockRequestDispatcher;
 
 /**
  * Mock implementation of <code>HttpServletRequest</code>.
- * @deprecated use {@link com.mockrunner.mock.web.MockHttpServletRequest}
- * this class will be removed in the next release
  */
 public class MockHttpServletRequest extends com.mockobjects.servlet.MockHttpServletRequest
 {

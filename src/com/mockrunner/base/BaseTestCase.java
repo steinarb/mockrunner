@@ -1,11 +1,11 @@
 package com.mockrunner.base;
 
+import junit.framework.TestCase;
+
 import com.mockrunner.jdbc.JDBCTestModule;
 import com.mockrunner.servlet.ServletTestModule;
-import com.mockrunner.struts.*;
-import com.mockrunner.tag.*;
-
-import junit.framework.TestCase;
+import com.mockrunner.struts.ActionTestModule;
+import com.mockrunner.tag.TagTestModule;
 
 /**
  * Base class for all adapters.

@@ -1,4 +1,4 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.web;
 
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -11,8 +11,6 @@ import javax.servlet.http.HttpSessionBindingListener;
 
 /**
  * Mock implementation of <code>HttpSession</code>.
- * @deprecated use {@link com.mockrunner.mock.web.MockHttpSession}
- * this class will be removed in the next release
  */
 public class MockHttpSession extends com.mockobjects.servlet.MockHttpSession
 {

@@ -1,6 +1,5 @@
 package com.mockrunner.example.struts;
 
-
 /**
  * Mock implementation of {@link AuthenticationStrategy}
  * because we do not want a database connection into the tests.

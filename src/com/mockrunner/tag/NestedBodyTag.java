@@ -16,7 +16,7 @@ import javax.servlet.jsp.tagext.IterationTag;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import com.mockrunner.mock.MockBodyContent;
+import com.mockrunner.mock.web.MockBodyContent;
 import com.mockrunner.util.TagUtil;
 
 /**
