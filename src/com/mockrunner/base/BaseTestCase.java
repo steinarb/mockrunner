@@ -66,8 +66,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected WebMockObjectFactory createWebMockObjectFactory()
     {
-        WebMockObjectFactory factory = new WebMockObjectFactory();
-        return factory;
+        return new WebMockObjectFactory();
     }
 
     /**
@@ -75,8 +74,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected WebMockObjectFactory createWebMockObjectFactory(WebMockObjectFactory otherFactory)
     {
-        WebMockObjectFactory factory = new WebMockObjectFactory(otherFactory);
-        return factory;
+        return new WebMockObjectFactory(otherFactory);
     }
     
     /**
@@ -95,8 +93,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected WebMockObjectFactory createWebMockObjectFactory(WebMockObjectFactory otherFactory, boolean createNewSession)
     {
-        WebMockObjectFactory factory = new WebMockObjectFactory(otherFactory, createNewSession);
-        return factory;
+        return new WebMockObjectFactory(otherFactory, createNewSession);
     }
 
     /**
@@ -123,8 +120,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected JDBCMockObjectFactory createJDBCMockObjectFactory()
     {
-        JDBCMockObjectFactory factory = new JDBCMockObjectFactory();
-        return factory;
+        return new JDBCMockObjectFactory();
     }
     
     /**
@@ -151,8 +147,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected EJBMockObjectFactory createEJBMockObjectFactory()
     {
-        EJBMockObjectFactory factory = new EJBMockObjectFactory();
-        return factory;
+        return new EJBMockObjectFactory();
     }
 
     /**
