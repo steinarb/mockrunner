@@ -64,6 +64,8 @@ public class MockArray implements Array
         Object[] secondColumn = ArrayUtil.convertToObjectArray(array);
         secondColumn = (Object[])ArrayUtil.truncateArray(secondColumn, (int)(index - 1), count);
         MockResultSet resultSet = new MockResultSet();
+        resultSet.setResultSetType(ResultSet.TYPE_SCROLL_INSENSITIVE);
+        resultSet.setResultSetConcurrency(ResultSet.CONCUR_READ_ONLY);
         resultSet.addColumn(firstColumn);
         resultSet.addColumn(secondColumn);
         return resultSet;
