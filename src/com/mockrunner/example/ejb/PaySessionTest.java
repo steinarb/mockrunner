@@ -153,8 +153,8 @@ public class PaySessionTest extends EJBTestCaseAdapter
         bean.payBill("1", "1", 100);
         verifyNotMarkedForRollback();
         verifyCommitted();
-        jdbcModule.verifySQLStatementExecuted("delete from openbills where id=1");
-        jdbcModule.verifySQLStatementExecuted("insert into paidbills values(1,1,100.0)");
+        jdbcModule.verifySQLStatementExecuted("delete from openbills where id='1'");
+        jdbcModule.verifySQLStatementExecuted("insert into paidbills values('1','1',100.0)");
         jdbcModule.verifyAllResultSetsClosed();
         jdbcModule.verifyAllStatementsClosed();
         jdbcModule.verifyConnectionClosed();
