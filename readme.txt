@@ -42,7 +42,19 @@ Most methods are self-explanatory. Just subclass one of the Adapters
 own TestCase base class, you can use the Modules (e.g. ActionTestModule).
 
 Mockrunner uses the following libraries and software components.
-You have to add them to the classpath:
+You have to download them. Please add the specified jars to the classpath.
+
+Struts 1.1 (or higher):
+http://jakarta.apache.org/struts
+struts.jar
+
+Xerces XML Parser 2.0.0 (or higher):
+http://xml.apache.org/xerces2-j/index.html
+xml-apis.jar
+xercesImpl.jar
+
+The following libraries are included in the Mockrunner release.
+Just add them to the classpath.
 
 JUnit 3.8.1:
 http://www.junit.org
@@ -52,11 +64,7 @@ Servlet J2EE:
 http://jakarta.apache.org/tomcat
 servlet.jar                            
 
-Struts 1.1:
-http://jakarta.apache.org/struts
-struts.jar
-
-Commons (also included in Struts release):
+Commons:
 http://jakarta.apache.org/commons       
 commons-logging.jar
 commons-collections.jar
@@ -70,11 +78,6 @@ mockobjects-jdk1.3-j2ee1.3-0.09.jar
 JDOM Beta 9 (or higher):
 http://www.jdom.org
 jdom.jar
-
-Xerces XML Parser 2.0.0 (or higher):
-http://xml.apache.org/xerces2-j/index.html
-xml-apis.jar
-xercesImpl.jar
 
 NekoHTML Parser:
 http://www.apache.org/~andyc/neko/doc/html/index.html
