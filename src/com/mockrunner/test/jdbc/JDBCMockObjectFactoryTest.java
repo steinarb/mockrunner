@@ -117,6 +117,5 @@ public class JDBCMockObjectFactoryTest extends TestCase
         {
             return false;
         }
-
     }
 }
