@@ -31,6 +31,7 @@ import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueBrowser;
+import com.mockrunner.mock.jms.MockQueueConnection;
 import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
 import com.mockrunner.mock.jms.MockQueueSession;
@@ -38,6 +39,7 @@ import com.mockrunner.mock.jms.MockTemporaryQueue;
 import com.mockrunner.mock.jms.MockTemporaryTopic;
 import com.mockrunner.mock.jms.MockTextMessage;
 import com.mockrunner.mock.jms.MockTopic;
+import com.mockrunner.mock.jms.MockTopicConnection;
 import com.mockrunner.mock.jms.MockTopicPublisher;
 import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
@@ -46,12 +48,77 @@ public class JMSTestModuleTest extends TestCase
 {
     private JMSMockObjectFactory mockFactory;
     private JMSTestModule module;
+    private MockQueueConnection queueConnection;
+    private MockTopicConnection topicConnection;
     
     protected void setUp() throws Exception
     {
         super.setUp();
         mockFactory = new JMSMockObjectFactory();
         module = new JMSTestModule(mockFactory);
+        queueConnection = (MockQueueConnection)mockFactory.getMockQueueConnectionFactory().createQueueConnection();
+        topicConnection = (MockTopicConnection)mockFactory.getMockTopicConnectionFactory().createTopicConnection();
+    }
+    
+    public void testSetAndGetCurrentConnection() throws Exception
+    {
+        assertEquals(queueConnection, module.getCurrentQueueConnection());
+        assertEquals(topicConnection, module.getCurrentTopicConnection());
+        module.setCurrentQueueConnectionIndex(1);
+        module.setCurrentTopicConnectionIndex(1);
+        assertNull(module.getCurrentQueueConnection());
+        assertNull(module.getCurrentTopicConnection());
+        MockQueueConnection queueConnection1 = (MockQueueConnection)mockFactory.getMockQueueConnectionFactory().createQueueConnection();
+        assertEquals(queueConnection1, module.getCurrentQueueConnection());
+        assertNull(module.getCurrentTopicConnection());
+        MockTopicConnection topicConnection1 = (MockTopicConnection)mockFactory.getMockTopicConnectionFactory().createTopicConnection();
+        assertEquals(topicConnection1, module.getCurrentTopicConnection());
+        queueConnection1.close();
+        module.verifyQueueConnectionClosed();
+        module.setCurrentQueueConnectionIndex(0);
+        try
+        {
+            module.verifyQueueConnectionClosed();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        topicConnection.close();
+        try
+        {
+            module.verifyTopicConnectionClosed();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.setCurrentTopicConnectionIndex(0);
+        module.verifyTopicConnectionClosed();
+        queueConnection1.stop();
+        module.verifyQueueConnectionStarted();
+        module.setCurrentQueueConnectionIndex(1);
+        try
+        {
+            module.verifyQueueConnectionStarted();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        TopicSession topicSession = topicConnection.createTopicSession(true, Session.AUTO_ACKNOWLEDGE);
+        assertEquals(topicSession, module.getTopicSession(0));
+        module.setCurrentTopicConnectionIndex(1);
+        assertNull(module.getTopicSession(0));
+        QueueSession queueSession0 = queueConnection1.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+        QueueSession queueSession1 = queueConnection1.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+        assertEquals(queueSession0, module.getQueueSession(0));
+        assertEquals(queueSession1, module.getQueueSession(1));
+        module.setCurrentQueueConnectionIndex(0);
+        assertNull(module.getQueueSession(0));
     }
     
     public void testGetQueue() throws Exception
@@ -62,7 +129,7 @@ public class JMSTestModuleTest extends TestCase
         assertNotNull(module.getQueue("test1"));
         assertNotNull(module.getQueue("test2"));
         assertNull(module.getQueue("xyz"));
-        QueueSession session = mockFactory.getMockQueueConnection().createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+        QueueSession session = queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
         session.createQueue("test2");
         manager.removeQueue("test2");
         assertNull(module.getQueue("test2"));
@@ -85,7 +152,7 @@ public class JMSTestModuleTest extends TestCase
         assertNotNull(module.getTopic("myTopic1"));
         assertNotNull(module.getTopic("myTopic2"));
         assertNull(module.getTopic("xyz"));
-        TopicSession session = mockFactory.getMockTopicConnection().createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+        TopicSession session = topicConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
         session.createTopic("myTopic1");
         manager.removeTopic("myTopic1");
         assertNull(module.getTopic("myTopic1"));
@@ -102,7 +169,7 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyTemporaryQueue() throws Exception
     {
-        mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         MockTemporaryQueue queue1 = (MockTemporaryQueue)module.getQueueSession(0).createTemporaryQueue();
         MockTemporaryQueue queue2 = (MockTemporaryQueue)module.getQueueSession(0).createTemporaryQueue();
         assertNotNull(module.getTemporaryQueue(0, 0));
@@ -163,7 +230,7 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyTemporaryTopic() throws Exception
     {
-        mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
         MockTemporaryTopic topic1 = (MockTemporaryTopic)module.getTopicSession(0).createTemporaryTopic();
         MockTemporaryTopic topic2 = (MockTemporaryTopic)module.getTopicSession(0).createTemporaryTopic();
         assertNotNull(module.getTemporaryTopic(0, 0));
@@ -224,7 +291,7 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyQueueSender() throws Exception
     {
-        mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         DestinationManager manager = mockFactory.getDestinationManager();
         manager.createQueue("queue");
         module.getQueueSession(0).createSender(manager.getQueue("queue"));
@@ -274,7 +341,7 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyTopicPublishers() throws Exception
     {
-        mockFactory.getMockTopicConnection().createTopicSession(true, Session.AUTO_ACKNOWLEDGE);
+        topicConnection.createTopicSession(true, Session.AUTO_ACKNOWLEDGE);
         DestinationManager manager = mockFactory.getDestinationManager();
         manager.createTopic("topic");
         module.getTopicSession(0).createPublisher(manager.getTopic("topic"));
@@ -342,7 +409,7 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyQueueReceiver() throws Exception
     {
-        mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         DestinationManager manager = mockFactory.getDestinationManager();
         Queue queue1 = manager.createQueue("queue");
         Queue queue2 = manager.createQueue("otherQueue");
@@ -384,7 +451,7 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyTopicSubscriber() throws Exception
     {
-        mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
         DestinationManager manager = mockFactory.getDestinationManager();
         Topic topic1 = manager.createTopic("topic1");
         Topic topic2 = manager.createTopic("topic2");
@@ -435,7 +502,7 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyDurableTopicSubscriber() throws Exception
     {
-        mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
         module.verifyNumberDurableTopicSubscribers(0, 0);
         try
         {
@@ -485,7 +552,7 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyQueueBrowser() throws Exception
     {
-        mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         DestinationManager manager = mockFactory.getDestinationManager();
         manager.createQueue("queue");
         module.getQueueSession(0).createBrowser(manager.getQueue("queue"));
@@ -535,7 +602,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyQueueSession() throws Exception
     {
         assertNull(module.getQueueSession(0));
-        mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         assertNotNull(module.getQueueSession(0));
         assertNull(module.getQueueSession(1));
         module.verifyNumberQueueSessions(1);
@@ -548,7 +615,7 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
-        mockFactory.getMockQueueConnection().createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
+        queueConnection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
         assertNotNull(module.getQueueSession(1));
         module.verifyNumberQueueSessions(2);
     }
@@ -557,7 +624,7 @@ public class JMSTestModuleTest extends TestCase
     {
         module.verifyNumberTopicSessions(0);
         assertNull(module.getTopicSession(0));
-        mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
         assertNotNull(module.getTopicSession(0));
         assertNull(module.getTopicSession(1));
         module.verifyNumberTopicSessions(1);
@@ -579,14 +646,14 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
-        mockFactory.getMockTopicConnection().createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);
+        topicConnection.createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);
         assertNotNull(module.getTopicSession(1));
         module.getTopicSession(2);
     }
     
     public void testVerifyNumberQueueMessages() throws Exception
     {
-        mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         DestinationManager manager = mockFactory.getDestinationManager();
         manager.createQueue("queue");
         QueueSender sender1 = module.getQueueSession(0).createSender(manager.getQueue("queue"));
@@ -655,7 +722,7 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyNumberTopicMessages() throws Exception
     {
-        mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
         DestinationManager manager = mockFactory.getDestinationManager();
         manager.createTopic("topic");
         TopicPublisher publisher1 = module.getTopicSession(0).createPublisher(manager.getTopic("topic"));
@@ -724,7 +791,7 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyQueueMessageEquals() throws Exception
     {
-        mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         DestinationManager manager = mockFactory.getDestinationManager();
         manager.createQueue("queue");
         QueueSender sender = module.getQueueSession(0).createSender(manager.getQueue("queue"));
@@ -848,7 +915,7 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyTopicMessageEquals() throws Exception
     {
-        mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
         DestinationManager manager = mockFactory.getDestinationManager();
         manager.createTopic("topic");
         TopicPublisher publisher = module.getTopicSession(0).createPublisher(manager.getTopic("topic"));
@@ -980,9 +1047,9 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyQueueClosed() throws Exception
     {
-        MockQueueSession session1 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-        MockQueueSession session2 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-        MockQueueSession session3 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session1 = (MockQueueSession)queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session2 = (MockQueueSession)queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session3 = (MockQueueSession)queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         DestinationManager manager = mockFactory.getDestinationManager();
         Queue queue = manager.createQueue("queue");
         MockQueueSender sender1 = (MockQueueSender)session1.createSender(queue);
@@ -1046,7 +1113,7 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
-        mockFactory.getMockQueueConnection().close();
+        queueConnection.close();
         module.verifyQueueConnectionClosed();
         module.verifyAllQueueSessionsClosed();  
         module.verifyAllQueueReceiversClosed(2);
@@ -1058,9 +1125,9 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyTopicClosed() throws Exception
     {
-        MockTopicSession session1 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
-        MockTopicSession session2 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
-        MockTopicSession session3 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockTopicSession session1 = (MockTopicSession)topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockTopicSession session2 = (MockTopicSession)topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockTopicSession session3 = (MockTopicSession)topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
         DestinationManager manager = mockFactory.getDestinationManager();
         Topic topic = manager.createTopic("topic");
         MockTopicPublisher publisher1 = (MockTopicPublisher)session1.createPublisher(topic);
@@ -1128,7 +1195,7 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
-        mockFactory.getMockTopicConnection().close();
+        topicConnection.close();
         module.verifyTopicConnectionClosed();
         module.verifyAllTopicSessionsClosed();
         module.verifyDurableTopicSubscriberClosed(2, "myDurable");
@@ -1145,9 +1212,9 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyQueueSessionComitted() throws Exception
     {
-        MockQueueSession session1 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-        MockQueueSession session2 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-        MockQueueSession session3 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session1 = (MockQueueSession)queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session2 = (MockQueueSession)queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session3 = (MockQueueSession)queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         session1.commit();
         session2.rollback();
         module.verifyQueueSessionCommitted(0);
@@ -1221,9 +1288,9 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyTopicSessionComitted() throws Exception
     {
-        MockTopicSession session1 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
-        MockTopicSession session2 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
-        MockTopicSession session3 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockTopicSession session1 = (MockTopicSession)topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockTopicSession session2 = (MockTopicSession)topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockTopicSession session3 = (MockTopicSession)topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
         session1.commit();
         session2.rollback();
         module.verifyTopicSessionCommitted(0);
@@ -1299,8 +1366,8 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyQueueMessagesAcknowledged() throws Exception
     {
-        MockQueueSession session1 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-        MockQueueSession session2 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.AUTO_ACKNOWLEDGE);
+        MockQueueSession session1 = (MockQueueSession)queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session2 = (MockQueueSession)queueConnection.createQueueSession(true, Session.AUTO_ACKNOWLEDGE);
         DestinationManager manager = mockFactory.getDestinationManager();
         Queue queue = manager.createQueue("queue");
         MockQueueSender sender1 = (MockQueueSender)session1.createSender(queue);
@@ -1441,8 +1508,8 @@ public class JMSTestModuleTest extends TestCase
     
     public void testVerifyTopicMessagesAcknowledged() throws Exception
     {
-        MockTopicSession session1 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
-        MockTopicSession session2 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.DUPS_OK_ACKNOWLEDGE);
+        MockTopicSession session1 = (MockTopicSession)topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockTopicSession session2 = (MockTopicSession)topicConnection.createTopicSession(true, Session.DUPS_OK_ACKNOWLEDGE);
         DestinationManager manager = mockFactory.getDestinationManager();
         Topic topic = manager.createTopic("topic");
         MockTopicPublisher publisher1 = (MockTopicPublisher)session1.createPublisher(topic);

@@ -13,9 +13,7 @@ public class JMSMockObjectFactory
 {
     private DestinationManager destinationManager;
     private MockQueueConnectionFactory queueConnectionFactory;
-    private MockQueueConnection queueConnection;
     private MockTopicConnectionFactory topicConnectionFactory;
-    private MockTopicConnection topicConnection;
     
     /**
      * Creates a new set of mock objects.
@@ -23,17 +21,8 @@ public class JMSMockObjectFactory
     public JMSMockObjectFactory()
     {
         destinationManager = new DestinationManager();
-        queueConnectionFactory = new MockQueueConnectionFactory();
-        queueConnection = new MockQueueConnection(destinationManager);
-        topicConnectionFactory = new MockTopicConnectionFactory();
-        topicConnection = new MockTopicConnection(destinationManager);
-        setUpDependencies();
-    }
-    
-    private void setUpDependencies()
-    {
-        queueConnectionFactory.setQueueConnection(queueConnection);
-        topicConnectionFactory.setTopicConnection(topicConnection);
+        queueConnectionFactory = new MockQueueConnectionFactory(destinationManager);
+        topicConnectionFactory = new MockTopicConnectionFactory(destinationManager);
     }
     
     /**
@@ -46,15 +35,6 @@ public class JMSMockObjectFactory
     }
     
     /**
-     * Returns the {@link com.mockrunner.mock.jms.MockQueueConnection}.
-     * @return the {@link com.mockrunner.mock.jms.MockQueueConnection}
-     */
-    public MockQueueConnection getMockQueueConnection()
-    {
-        return queueConnection;
-    }
-
-    /**
      * Returns the {@link com.mockrunner.mock.jms.MockQueueConnectionFactory}.
      * @return the {@link com.mockrunner.mock.jms.MockQueueConnectionFactory}
      */
@@ -64,20 +44,11 @@ public class JMSMockObjectFactory
     }
     
     /**
-     * Returns the {@link com.mockrunner.mock.jms.MockTopicConnection}.
-     * @return the {@link com.mockrunner.mock.jms.MockTopicConnection}
-     */
-    public MockTopicConnection getMockTopicConnection()
-    {
-        return topicConnection;
-    }
-
-    /**
      * Returns the {@link com.mockrunner.mock.jms.MockTopicConnectionFactory}.
      * @return the {@link com.mockrunner.mock.jms.MockTopicConnectionFactory}
      */
-    public MockQueueConnectionFactory getMockTopicConnectionFactory()
+    public MockTopicConnectionFactory getMockTopicConnectionFactory()
     {
-        return queueConnectionFactory;
+        return topicConnectionFactory;
     }
 }

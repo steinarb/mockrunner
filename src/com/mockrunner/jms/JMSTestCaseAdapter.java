@@ -5,10 +5,12 @@ import java.util.List;
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockQueue;
+import com.mockrunner.mock.jms.MockQueueConnection;
 import com.mockrunner.mock.jms.MockQueueSession;
 import com.mockrunner.mock.jms.MockTemporaryQueue;
 import com.mockrunner.mock.jms.MockTemporaryTopic;
 import com.mockrunner.mock.jms.MockTopic;
+import com.mockrunner.mock.jms.MockTopicConnection;
 import com.mockrunner.mock.jms.MockTopicSession;
 
 /**
@@ -64,6 +66,38 @@ public class JMSTestCaseAdapter extends BaseTestCase
     protected void setJMSTestModule(JMSTestModule jmsTestModule)
     {
         this.jmsTestModule = jmsTestModule;
+    }
+    
+    /**
+     * Delegates to {@link JMSTestModule#setCurrentQueueConnectionIndex}
+     */
+    public void setCurrentQueueConnectionIndex(int connectionIndex)
+    {
+        jmsTestModule.setCurrentQueueConnectionIndex(connectionIndex);
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#getCurrentQueueConnection}
+     */
+    public MockQueueConnection getCurrentQueueConnection()
+    {
+        return jmsTestModule.getCurrentQueueConnection();
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#setCurrentTopicConnectionIndex}
+     */
+    public void setCurrentTopicConnectionIndex(int connectionIndex)
+    {
+        jmsTestModule.setCurrentTopicConnectionIndex(connectionIndex);
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#getCurrentTopicConnection}
+     */
+    public MockTopicConnection getCurrentTopicConnection()
+    {
+        return jmsTestModule.getCurrentTopicConnection();
     }
     
     /**

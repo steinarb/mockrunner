@@ -1,28 +1,70 @@
 package com.mockrunner.mock.jms;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.jms.JMSException;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
+
+import com.mockrunner.jms.DestinationManager;
 
 /**
  * Mock implementation of JMS <code>QueueConnectionFactory</code>.
  */
 public class MockQueueConnectionFactory implements QueueConnectionFactory
 {
-    private QueueConnection queueConnection;
+    private DestinationManager destinationManager;
+    private List queueConnections;
     
-    public void setQueueConnection(QueueConnection queueConnection)
+    public MockQueueConnectionFactory(DestinationManager destinationManager)
     {
-        this.queueConnection = queueConnection;
+        queueConnections = new ArrayList();
+        this.destinationManager = destinationManager;
     }
     
     public QueueConnection createQueueConnection() throws JMSException
     {
-        return queueConnection;
+        QueueConnection connection = new MockQueueConnection(destinationManager);
+        queueConnections.add(connection);
+        return connection;
     }
 
     public QueueConnection createQueueConnection(String name, String password) throws JMSException
     {
-        return queueConnection;
+        return createQueueConnection();
+    }
+    
+    /**
+     * Clears the list of connections
+     */
+    public void clearConnections()
+    {
+        queueConnections.clear();
+    }
+    
+    /**
+     * Returns the connection with the specified index
+     * resp. <code>null</code> if no such connection
+     * exists.
+     * @param index the index
+     * @return the connection
+     */
+    public MockQueueConnection getQueueConnection(int index)
+    {
+        if(queueConnections.size() <= index) return null;
+        return (MockQueueConnection)queueConnections.get(index);
+    }
+    
+    /**
+     * Returns the latest created connection
+     * resp. <code>null</code> if no such connection
+     * exists.
+     * @return the connection
+     */
+    public MockQueueConnection getLatestQueueConnection()
+    {
+        if(queueConnections.size() == 0) return null;
+        return (MockQueueConnection)queueConnections.get(queueConnections.size() - 1);
     }
 }

@@ -8,12 +8,14 @@ import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueBrowser;
+import com.mockrunner.mock.jms.MockQueueConnection;
 import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
 import com.mockrunner.mock.jms.MockQueueSession;
 import com.mockrunner.mock.jms.MockTemporaryQueue;
 import com.mockrunner.mock.jms.MockTemporaryTopic;
 import com.mockrunner.mock.jms.MockTopic;
+import com.mockrunner.mock.jms.MockTopicConnection;
 import com.mockrunner.mock.jms.MockTopicPublisher;
 import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
@@ -25,10 +27,56 @@ import com.mockrunner.mock.jms.MockTopicSubscriber;
 public class JMSTestModule
 {
     private JMSMockObjectFactory mockFactory;
+    private int currentQueueConnectionIndex;
+    private int currentTopicConnectionIndex;
   
     public JMSTestModule(JMSMockObjectFactory mockFactory)
     {
         this.mockFactory = mockFactory;
+        currentQueueConnectionIndex = 0;
+        currentTopicConnectionIndex = 0;
+    }
+    
+    /**
+     * Sets the index of the queue connection that should be used
+     * for the current test.
+     * @param connectionIndex the index of the connection
+     */
+    public void setCurrentQueueConnectionIndex(int connectionIndex)
+    {
+        this.currentQueueConnectionIndex = connectionIndex;
+    }
+    
+    /**
+     * Returns the current queue connection based on its
+     * index resp. <code>null</code> if no queue connection
+     * was created.
+     * @return the queue connection
+     */
+    public MockQueueConnection getCurrentQueueConnection()
+    {
+        return mockFactory.getMockQueueConnectionFactory().getQueueConnection(currentQueueConnectionIndex);
+    }
+    
+    /**
+     * Sets the index of the topic connection that should be used
+     * for the current test.
+     * @param connectionIndex the index of the connection
+     */
+    public void setCurrentTopicConnectionIndex(int connectionIndex)
+    {
+        this.currentTopicConnectionIndex = connectionIndex;
+    }
+
+    /**
+     * Returns the current topic connection based on its
+     * index resp. <code>null</code> if no topic connection
+     * was created.
+     * @return the topic connection
+     */
+    public MockTopicConnection getCurrentTopicConnection()
+    {
+        return mockFactory.getMockTopicConnectionFactory().getTopicConnection(currentTopicConnectionIndex);
     }
     
     /**
@@ -102,7 +150,7 @@ public class JMSTestModule
      */
     public List getQueueSessionList()
     {
-        return mockFactory.getMockQueueConnection().getQueueSessionList();
+        return getCurrentQueueConnection().getQueueSessionList();
     }
     
     /**
@@ -111,7 +159,7 @@ public class JMSTestModule
      */
     public List getTopicSessionList()
     {
-        return mockFactory.getMockTopicConnection().getTopicSessionList();
+        return getCurrentTopicConnection().getTopicSessionList();
     }
     
     /**
@@ -122,7 +170,7 @@ public class JMSTestModule
      */
     public MockQueueSession getQueueSession(int indexOfSession)
     {
-        return mockFactory.getMockQueueConnection().getQueueSession(indexOfSession);
+        return getCurrentQueueConnection().getQueueSession(indexOfSession);
     }
     
     /**
@@ -133,7 +181,7 @@ public class JMSTestModule
      */
     public MockTopicSession getTopicSession(int indexOfSession)
     {
-        return mockFactory.getMockTopicConnection().getTopicSession(indexOfSession);
+        return getCurrentTopicConnection().getTopicSession(indexOfSession);
     }
     
     /**
@@ -328,7 +376,7 @@ public class JMSTestModule
      */
     public void verifyQueueConnectionClosed()
     {
-        if(!mockFactory.getMockQueueConnection().isClosed())
+        if(!getCurrentQueueConnection().isClosed())
         {
             throw new VerifyFailedException("QueueConnection is not closed.");
         }
@@ -340,7 +388,7 @@ public class JMSTestModule
      */
     public void verifyQueueConnectionStarted()
     {
-        if(!mockFactory.getMockQueueConnection().isStarted())
+        if(!getCurrentQueueConnection().isStarted())
         {
             throw new VerifyFailedException("QueueConnection is not started.");
         }
@@ -352,7 +400,7 @@ public class JMSTestModule
      */
     public void verifyQueueConnectionStopped()
     {
-        if(!mockFactory.getMockQueueConnection().isStopped())
+        if(!getCurrentQueueConnection().isStopped())
         {
             throw new VerifyFailedException("QueueConnection is not stopped.");
         }
@@ -364,7 +412,7 @@ public class JMSTestModule
      */
     public void verifyTopicConnectionClosed()
     {
-        if(!mockFactory.getMockTopicConnection().isClosed())
+        if(!getCurrentTopicConnection().isClosed())
         {
             throw new VerifyFailedException("TopicConnection is not closed.");
         }
@@ -376,7 +424,7 @@ public class JMSTestModule
      */
     public void verifyTopicConnectionStarted()
     {
-        if(!mockFactory.getMockTopicConnection().isStarted())
+        if(!getCurrentTopicConnection().isStarted())
         {
             throw new VerifyFailedException("TopicConnection is not started.");
         }
@@ -388,7 +436,7 @@ public class JMSTestModule
      */
     public void verifyTopicConnectionStopped()
     {
-        if(!mockFactory.getMockTopicConnection().isStopped())
+        if(!getCurrentTopicConnection().isStopped())
         {
             throw new VerifyFailedException("TopicConnection is not stopped.");
         }
