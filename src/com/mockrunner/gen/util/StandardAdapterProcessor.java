@@ -24,6 +24,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
     {
         JavaClassGenerator classGenerator = new JavaClassGenerator();
         BCELClassAnalyzer analyzer = new BCELClassAnalyzer(module);
+        Class factoryClass = determineFactoryClass(module);
         classGenerator.setCreateJavaDocComments(true);
         classGenerator.setPackage(module.getPackage());
         classGenerator.setClassName(prepareName(module));
@@ -33,11 +34,10 @@ public class StandardAdapterProcessor implements AdapterProcessor
             classGenerator.setSuperClass(getSuperClass(module));
         }
         classGenerator.setClassComment(getClassComment(module));
-        String memberName = ClassUtil.getArgumentName(module);
-        classGenerator.addMemberDeclaration(module, memberName);
+        String memberName = addMemberDeclarations(module, classGenerator, factoryClass);
         addConstructors(classGenerator);
         addTearDownMethod(classGenerator, memberName);
-        addSetUpMethod(classGenerator, module, memberName);
+        addSetUpMethod(classGenerator, module, memberName, factoryClass);
         addAdditionalControlMethods(module, classGenerator, memberName);
         addDelegatorMethods(classGenerator, analyzer, module, excludedMethods, memberName);
         output = classGenerator.generate();
@@ -76,7 +76,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         classGenerator.addMethodDeclaration(method);
     }
     
-    private void addSetUpMethod(JavaClassGenerator classGenerator, Class module, String memberName)
+    private void addSetUpMethod(JavaClassGenerator classGenerator, Class module, String memberName, Class factoryClass)
     {
         MethodDeclaration method = createProtectedMethod();
         method.setName("setUp");
@@ -85,7 +85,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         comment[0] = "Creates the " + getJavaDocModuleLink(module) + ". If you";
         comment[1] = "overwrite this method, you must call <code>super.setUp()</code>.";
         method.setCommentLines(comment);
-        method.setCodeLines(getSetUpMethodCodeLines(module, memberName));
+        method.setCodeLines(getSetUpMethodCodeLines(module, memberName, factoryClass));
         classGenerator.addMethodDeclaration(method);
     }
     
@@ -296,11 +296,18 @@ public class StandardAdapterProcessor implements AdapterProcessor
         return className;
     }
     
-    protected String[] getSetUpMethodCodeLines(Class module, String memberName)
+    protected String addMemberDeclarations(Class module, JavaClassGenerator classGenerator, Class factoryClass)
+    {
+        String memberName = ClassUtil.getArgumentName(module);
+        classGenerator.addMemberDeclaration(module, memberName);
+        return memberName;
+    }
+    
+    protected String[] getSetUpMethodCodeLines(Class module, String memberName, Class factoryClass)
     {
         String[] codeLines = new String[2];
         codeLines[0] = "super.setUp();";
-        String factoryCall = "get" + ClassUtil.getClassName(determineFactoryClass(module));
+        String factoryCall = "get" + ClassUtil.getClassName(factoryClass);
         codeLines[1] = memberName + " = create" + ClassUtil.getClassName(module) + "(" + factoryCall +"());";
         return codeLines;
     }

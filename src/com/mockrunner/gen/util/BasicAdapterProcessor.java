@@ -5,9 +5,14 @@ import com.mockrunner.base.HTMLOutputModule;
 
 public class BasicAdapterProcessor extends StandardAdapterProcessor
 {
-    protected String[] getSetUpMethodCodeLines(Class module, String memberName)
+    protected String addMemberDeclarations(Class module, JavaClassGenerator classGenerator, Class factoryClass)
     {
-        return super.getSetUpMethodCodeLines(module, memberName);
+        return super.addMemberDeclarations(module, classGenerator, factoryClass);
+    }
+    
+    protected String[] getSetUpMethodCodeLines(Class module, String memberName, Class factoryMethod)
+    {
+        return super.getSetUpMethodCodeLines(module, memberName, factoryMethod);
     }
     
     protected String[] getTearDownMethodCodeLines(String memberName)
