@@ -25,6 +25,7 @@ public class MockStatement implements Statement
     private int resultSetType = ResultSet.TYPE_FORWARD_ONLY;
     private int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
     private int resultSetHoldability = ResultSet.HOLD_CURSORS_OVER_COMMIT;
+    private boolean closed = false;
     private Connection connection;
     
     public MockStatement(Connection connection)
@@ -43,6 +44,11 @@ public class MockStatement implements Statement
         this.resultSetType = resultSetType;
         this.resultSetConcurrency = resultSetConcurrency;
         this.resultSetHoldability = resultSetHoldability;
+    }
+    
+    public boolean isClosed()
+    {
+        return closed;
     }
     
     public void setResultSetHandler(AbstractResultSetHandler resultSetHandler)
@@ -87,7 +93,7 @@ public class MockStatement implements Statement
 
     public void close() throws SQLException
     {
-
+        closed = true;
     }
 
     public int getMaxFieldSize() throws SQLException

@@ -1,11 +1,13 @@
 package com.mockrunner.test.jdbc;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.jdbc.JDBCTestModule;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
+import com.mockrunner.mock.jdbc.MockStatement;
 
 import junit.framework.TestCase;
 
@@ -120,5 +122,36 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyPreparedStatementParameterPresent(statement, 2);
         module.verifyPreparedStatementParameterNotPresent(statement, 3);
         module.verifyPreparedStatementParameter(0, 1, "test1");
+    }
+    
+    public void testStatementsClosed() throws Exception
+    {
+        prepareStatements();
+        preparePreparedStatements();
+        MockStatement statement = module.getStatement(0);
+        MockPreparedStatement preparedStatement = module.getPreparedStatement("update");
+        statement.close();
+        preparedStatement.close();
+        module.verifyStatementClosed(0);
+        module.verifyPreparedStatementClosed("update");
+        try
+        {
+            module.verifyAllStatementsClosed();
+            fail();
+        }
+        catch(Exception exc)
+        {
+            //should throw Exception
+        }
+        List statements = new ArrayList();
+        statements.addAll(module.getStatements());
+        statements.addAll(module.getPreparedStatements());
+        for(int ii = 0; ii < statements.size(); ii++)
+        {
+            ((MockStatement)statements.get(ii)).close();
+        }
+        module.verifyAllStatementsClosed();
+        mockfactory.getMockConnection().close();
+        module.verifyConnectionClosed();
     }
 }
