@@ -10,14 +10,16 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 /**
- * This example tag creates an html table with multiple rows. It iterates
- * through a <code>Collection</code> which must be stored in the session
- * (attribute key is <i>currentCollection</i>). The elements are stored
- * in the request (attribute key is <i>currentObject</i>) one after another.
- * The body of the tag will evaluated multiple times, and if it's not empty,
- * an html row will be created.
+ * This example tag creates an HTML table with multiple rows. It takes
+ * a <code>Collection</code> from the session (attribute key is 
+ * <i>currentCollection</i>) and iterates through the elements. 
+ * The elements are stored in the request (attribute key is <i>currentObject</i>).
+ * The body of the tag will be evaluated multiple times, and if it's not empty,
+ * an HTML row will be created.
+ * A <i>bean:write</i> tag can be used to write the elements from the
+ * <code>Collection</code> as a string to the page.
  * If you store a <code>List</code> with one entry <i>Entry1</i> in the session 
- * and specify the following JSP code (<i>enumtag</i> is our tag):
+ * and specify the following JSP code (<i>enumtag</i> is our tag)
  * 
  * <pre>
  * &lt;mytags:enumtag label="myLabel"&gt;
@@ -25,7 +27,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  * &lt;/mytags:enumtag&gt;
  * </pre>
  * 
- * then the html output is:
+ * then the html output will be
  * 
  * <pre>
  * &lt;table&gt;
