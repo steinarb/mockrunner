@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.validator.ValidatorResources;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -123,7 +124,7 @@ public class ActionTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link ActionTestModule#setResources(MessageResources)}
      */
-    public void setResources(MessageResources resources)
+    protected void setResources(MessageResources resources)
     {
         actionTestModule.setResources(resources);
     }
@@ -131,7 +132,7 @@ public class ActionTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link ActionTestModule#setResources(String, MessageResources)}
      */
-    public void setResources(String key, MessageResources resources)
+    protected void setResources(String key, MessageResources resources)
     {
         actionTestModule.setResources(key, resources);
     }
@@ -139,7 +140,7 @@ public class ActionTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link ActionTestModule#setDataSource(DataSource)}
      */
-    public void setDataSource(DataSource dataSource)
+    protected void setDataSource(DataSource dataSource)
     {
         actionTestModule.setDataSource(dataSource);
     }
@@ -147,7 +148,7 @@ public class ActionTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link ActionTestModule#setDataSource(String, DataSource)}
      */
-    public void setDataSource(String key, DataSource dataSource)
+    protected void setDataSource(String key, DataSource dataSource)
     {
         actionTestModule.setDataSource(key, dataSource);
     }
@@ -155,9 +156,25 @@ public class ActionTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link ActionTestModule#setLocale}
      */
-    public void setLocale(Locale locale)
+    protected void setLocale(Locale locale)
     {
         actionTestModule.setLocale(locale);
+    }
+    
+    /**
+     * Delegates to {@link ActionTestModule#createValidatorResources}
+     */
+    protected ValidatorResources createValidatorResources(String[] resourcesFiles)
+    {
+        return actionTestModule.createValidatorResources(resourcesFiles);
+    }
+    
+    /**
+     * Delegates to {@link ActionTestModule#setValidatorResources}
+     */
+    protected void setValidatorResources(ValidatorResources validatorResources)
+    {
+        actionTestModule.setValidatorResources(validatorResources);
     }
 
     /**

@@ -3,10 +3,12 @@ package com.mockrunner.struts;
 import java.util.Iterator;
 import java.util.Locale;
 
+import javax.servlet.ServletException;
 import javax.sql.DataSource;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.DynaBean;
+import org.apache.commons.validator.ValidatorResources;
 import org.apache.struts.Globals;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -20,6 +22,7 @@ import org.apache.struts.config.FormBeanConfig;
 import org.apache.struts.config.MessageResourcesConfig;
 import org.apache.struts.taglib.html.Constants;
 import org.apache.struts.util.MessageResources;
+import org.apache.struts.validator.ValidatorPlugIn;
 
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockActionForward;
@@ -188,6 +191,50 @@ public class ActionTestModule
     public void setLocale(Locale locale)
     {
         mockFactory.getMockSession().setAttribute(Globals.LOCALE_KEY, locale);
+    }
+    
+    /**
+     * Creates a valid <code>ValidatorResources</code> object based
+     * on the specified config files. Since the parsing of the files
+     * is time consuming, it makes sense to cache the result.
+     * You can set the returned <code>ValidatorResources</code> object
+     * with {@link #setValidatorResources}. It is then used in
+     * all validations.
+     * @param resourcesFiles the array of config files
+     */
+    public ValidatorResources createValidatorResources(String[] resourcesFiles)
+    {
+        if(resourcesFiles.length == 0) return null;
+        String resourceString = resourcesFiles[0];
+        for(int ii = 1; ii < resourcesFiles.length; ii++)
+        {
+            resourceString += "," + resourcesFiles[ii];
+        }
+        ValidatorPlugIn plugIn = new ValidatorPlugIn();
+        plugIn.setPathnames(resourceString);
+        try
+        {
+            plugIn.init(mockFactory.getMockActionServlet(), mockFactory.getMockModuleConfig());
+        }
+        catch(ServletException exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException("Error initializing ValidatorPlugIn: " + exc.getMessage());
+        }
+        String key = ValidatorPlugIn.VALIDATOR_KEY + mockFactory.getMockModuleConfig().getPrefix();
+        return (ValidatorResources)mockFactory.getMockServletContext().getAttribute(key);
+    }
+    
+    /**
+     * Sets the specified <code>ValidatorResources</code>. The easiest
+     * way to create <code>ValidatorResources</code> is the method
+     * {@link #createValidatorResources}.
+     * @param validatorResources the <code>ValidatorResources</code>
+     */
+    public void setValidatorResources(ValidatorResources validatorResources)
+    {
+        String key = ValidatorPlugIn.VALIDATOR_KEY + mockFactory.getMockModuleConfig().getPrefix();
+        mockFactory.getMockServletContext().setAttribute(key, validatorResources);
     }
 
     /**
