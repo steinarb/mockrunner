@@ -16,8 +16,8 @@ For that purpose you can use StrutsTestCase or Cactus
 It is planned to include support for other frameworks in the J2EE
 environment in future releases.
 
-Please look at the examples and example tests to see how to use
-Mockrunner.
+For usage examples have a look at the de.mockrunner.example and 
+de.mockrunner.example.test package.
 
 Mockrunner uses the following libraries and software components.
 You have to add them to the classpath:
@@ -26,9 +26,9 @@ JUnit 3.8.1:
 http://www.junit.org
 junit.jar
 
-J2EE 1.3.1:
-http://java.sun.com/j2ee
-j2ee.jar                            
+Servlet J2EE:
+http://jakarta.apache.org/tomcat
+servlet.jar                            
 
 Struts 1.1:
 http://jakarta.apache.org/struts

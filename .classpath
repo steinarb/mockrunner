@@ -9,6 +9,6 @@
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/commons-beanutils.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/commons-collections.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/commons-logging.jar"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/j2ee.jar"/>
+    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/servlet.jar"/>
     <classpathentry kind="output" path="classes"/>
 </classpath>

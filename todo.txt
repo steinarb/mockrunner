@@ -1,0 +1,5 @@
+- add action message support
+- write more example tests
+- write multithreading example
+- complete TagtestModule and write tests for it
+- refactor mockobjects to fit into www.mockobjects.com concept
