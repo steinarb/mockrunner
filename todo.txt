@@ -2,6 +2,5 @@
 - add better support of HTML fragments
 - get MultiThreadTestSuite working
 - make MockObjectFactory more generic (custom mock objects)
-- ant integration
 - improve JavaDoc descriptions
 
