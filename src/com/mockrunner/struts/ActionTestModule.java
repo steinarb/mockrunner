@@ -9,6 +9,8 @@ import javax.servlet.ServletException;
 import javax.sql.DataSource;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.ValidatorResources;
 import org.apache.struts.Globals;
 import org.apache.struts.action.Action;
@@ -40,6 +42,7 @@ import com.mockrunner.util.StreamUtil;
  */
 public class ActionTestModule
 {
+    private final static Log log = LogFactory.getLog(ActionTestModule.class);
     private WebMockObjectFactory mockFactory;
     private MockActionForward forward;
     private ActionForm formObj;
@@ -232,7 +235,7 @@ public class ActionTestModule
         }
         catch(ServletException exc)
         {
-            exc.printStackTrace();
+            log.error("Error initializing ValidatorPlugIn", exc);
             throw new RuntimeException("Error initializing ValidatorPlugIn: " + exc.getMessage());
         }
         String key = ValidatorPlugIn.VALIDATOR_KEY + mockFactory.getMockModuleConfig().getPrefix();
@@ -252,7 +255,7 @@ public class ActionTestModule
             }
             catch(FileNotFoundException exc)
             {
-                exc.printStackTrace();
+                log.error("File not found", exc);
                 throw new RuntimeException(exc.getMessage());
             }
         }
@@ -930,9 +933,9 @@ public class ActionTestModule
             formObj = (ActionForm)form.newInstance();
             return formObj;
         }
-        catch (Exception exc)
+        catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -955,9 +958,9 @@ public class ActionTestModule
             formObj = (DynaActionForm)formClass.newInstance();
             return (DynaActionForm)formObj;
         }
-        catch (Exception exc)
+        catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -976,9 +979,9 @@ public class ActionTestModule
         {
             handleActionForm();
         }
-        catch (Exception exc)
+        catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -995,9 +998,9 @@ public class ActionTestModule
         {
             return actionPerform(action, (ActionForm) null);
         }
-        catch (Exception exc)
+        catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -1014,9 +1017,9 @@ public class ActionTestModule
         {
             return actionPerform(action, (ActionForm) null);
         }
-        catch (Exception exc)
+        catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -1042,9 +1045,9 @@ public class ActionTestModule
             createActionForm(form);
             return actionPerform(action, formObj);
         }
-        catch (Exception exc)
+        catch(Exception exc)
         {
-            exc.printStackTrace(System.out);
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -1070,9 +1073,9 @@ public class ActionTestModule
             createActionForm(form);
             return actionPerform(action, formObj);
         }
-        catch (Exception exc)
+        catch(Exception exc)
         {
-            exc.printStackTrace(System.out);
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -1099,9 +1102,9 @@ public class ActionTestModule
         {
             return actionPerform((Action)action.newInstance(), form);
         }
-        catch (Exception exc)
+        catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -1145,9 +1148,9 @@ public class ActionTestModule
                 setResult(getMockActionMapping().getInputForward());
             }
         }
-        catch (Exception exc)
+        catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
         return getActionForward();

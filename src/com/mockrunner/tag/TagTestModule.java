@@ -7,6 +7,9 @@ import java.util.Map;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockJspWriter;
@@ -21,6 +24,7 @@ import com.mockrunner.util.TagUtil;
  */
 public class TagTestModule extends HTMLOutputModule
 {
+    private final static Log log = LogFactory.getLog(TagTestModule.class);
     private WebMockObjectFactory mockFactory;
     private TagSupport tag;
     private boolean caseSensitive;
@@ -113,7 +117,7 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -154,7 +158,7 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -273,7 +277,7 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(JspException exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -294,7 +298,7 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(JspException exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -320,7 +324,7 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(JspException exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -341,7 +345,7 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(JspException exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -374,7 +378,7 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(JspException exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -391,7 +395,7 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(IOException exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }

@@ -3,6 +3,8 @@ package com.mockrunner.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -13,6 +15,8 @@ import org.apache.oro.text.regex.Perl5Matcher;
  */
 public class StringUtil
 {
+    private final static Log log = LogFactory.getLog(StringUtil.class);
+    
     /**
      * Appends the entries in the specified <code>List</code> as strings
      * with a terminating <i>"\n"</i> after each row.
@@ -136,7 +140,7 @@ public class StringUtil
         } 
         catch(MalformedPatternException exc)
         {
-            exc.printStackTrace();
+            log.error("Malformed pattern", exc);
             throw new RuntimeException(exc.getMessage());
         }
     }

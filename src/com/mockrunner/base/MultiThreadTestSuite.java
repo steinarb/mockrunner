@@ -10,6 +10,9 @@ import junit.framework.TestCase;
 import junit.framework.TestResult;
 import junit.framework.TestSuite;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * This TestSuite starts all test methods in
  * a number of seperate threads. <b>Doesn't
@@ -17,7 +20,8 @@ import junit.framework.TestSuite;
  */
 public class MultiThreadTestSuite extends TestSuite
 {
-	private int numberThreads;
+	private final static Log log = LogFactory.getLog(MultiThreadTestSuite.class);
+    private int numberThreads;
 	private boolean doClone;
 	
 	public MultiThreadTestSuite(Class theClass, String name)
@@ -75,7 +79,7 @@ public class MultiThreadTestSuite extends TestSuite
 		}
 		catch(Exception exc)
 		{
-			exc.printStackTrace();
+			log.error(exc.getMessage(), exc);
 		}
 		return newTest;
 	}
@@ -109,7 +113,7 @@ public class MultiThreadTestSuite extends TestSuite
 			}
 			catch(InterruptedException exc)
 			{
-				exc.printStackTrace();
+				log.error("Interrupted", exc);
 			}
 		}
 	}

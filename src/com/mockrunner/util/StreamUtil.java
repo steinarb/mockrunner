@@ -8,11 +8,16 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Simple util class for manipulating streams
  */
 public class StreamUtil
 {
+    private final static Log log = LogFactory.getLog(StreamUtil.class);
+    
     /**
      * Returns the contents of the input stream as byte array.
      * @param stream the <code>InputStream</code>
@@ -53,7 +58,7 @@ public class StreamUtil
         }
         catch(IOException exc)
         {
-            System.out.println(exc.getMessage());
+            log.error("Exception while reading from stream", exc);
         }
         return byteStream.toByteArray();
     }
@@ -98,7 +103,7 @@ public class StreamUtil
         }
         catch(IOException exc)
         {
-            System.out.println(exc.getMessage());
+            log.error("Exception while reading from reader", exc);
         }
         return buffer.toString();
     }
@@ -120,6 +125,7 @@ public class StreamUtil
         }
         catch(IOException exc)
         {
+            log.error("Exception while copying stream", exc);
             return null;
         }
     }
@@ -141,6 +147,7 @@ public class StreamUtil
         }
         catch(IOException exc)
         {
+            log.error("Exception while copying reader", exc);
             return null;
         }
     }
@@ -166,6 +173,7 @@ public class StreamUtil
         }
         catch(IOException exc)
         {
+            log.error("Exception while comparing streams", exc);
             return false;
         }
     }
@@ -191,6 +199,7 @@ public class StreamUtil
         }
         catch(IOException exc)
         {
+            log.error("Exception while comparing readers", exc);
             return false;
         }
     }

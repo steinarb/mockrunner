@@ -11,6 +11,8 @@ import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.mockrunner.tag.NestedBodyTag;
 import com.mockrunner.tag.NestedStandardTag;
@@ -21,6 +23,8 @@ import com.mockrunner.tag.NestedTag;
  */
 public class TagUtil
 {
+    private final static Log log = LogFactory.getLog(TagUtil.class);
+    
     /**
      * Creates an {@link com.mockrunner.tag.NestedTag} instance wrapping the
      * specified tag. Returns an instance of {@link com.mockrunner.tag.NestedStandardTag}
@@ -44,7 +48,7 @@ public class TagUtil
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
         return createNestedTagInstance(tagSupport, pageContext, attributes);
@@ -95,7 +99,7 @@ public class TagUtil
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -126,7 +130,7 @@ public class TagUtil
                 }
                 catch(IOException exc)
                 {
-                    exc.printStackTrace();
+                    log.error(exc.getMessage(), exc);
                     throw new RuntimeException(exc.getMessage());
                 }	
             }

@@ -6,6 +6,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.WebMockObjectFactory;
@@ -18,6 +21,7 @@ import com.mockrunner.util.StringUtil;
  */
 public class ServletTestModule extends HTMLOutputModule
 {
+    private final static Log log = LogFactory.getLog(ServletTestModule.class);
     private WebMockObjectFactory mockFactory;
     private HttpServlet servlet;
     private boolean doChain;
@@ -63,9 +67,9 @@ public class ServletTestModule extends HTMLOutputModule
             setServlet(theServlet, true);
             return theServlet;
         }
-        catch (Exception exc)
+        catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -99,9 +103,9 @@ public class ServletTestModule extends HTMLOutputModule
 	        }
 	        mockFactory.getMockFilterChain().setServlet(servlet);
         }
-        catch (Exception exc)
+        catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -141,9 +145,9 @@ public class ServletTestModule extends HTMLOutputModule
             addFilter(theFilter, true);
             return theFilter;
         }
-        catch (Exception exc)
+        catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -175,9 +179,9 @@ public class ServletTestModule extends HTMLOutputModule
             {
                 filter.init(mockFactory.getMockFilterConfig());
             }
-            catch (Exception exc)
+            catch(Exception exc)
             {
-                exc.printStackTrace();
+                log.error(exc.getMessage(), exc);
                 throw new RuntimeException(exc.getMessage());
             }
         }
@@ -254,7 +258,7 @@ public class ServletTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -271,7 +275,7 @@ public class ServletTestModule extends HTMLOutputModule
         }
         catch(ServletException exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }
@@ -404,7 +408,7 @@ public class ServletTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-        
+            log.error(exc.getMessage(), exc);
         }
         return mockFactory.getMockResponse().getOutputStreamContent();
     }
@@ -475,7 +479,7 @@ public class ServletTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
+            log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
     }  
