@@ -28,7 +28,8 @@ public class DestinationManager
      * calls. Creating queues is an administrative act.
      * Before {@link com.mockrunner.mock.jms.MockQueueSession#createQueue}
      * can be sucessfully called, you have to create a <code>Queue</code>
-     * with this method.
+     * with this method. The <code>Queue</code> object is cloned when
+     * calling {@link com.mockrunner.mock.jms.MockQueueSession#createQueue}.
      * @param name the name of the Queue
      * @return the created <code>Queue</code>
      */

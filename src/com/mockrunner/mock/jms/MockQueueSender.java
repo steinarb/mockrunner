@@ -1,5 +1,6 @@
 package com.mockrunner.mock.jms;
 
+import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Queue;
@@ -12,11 +13,23 @@ public class MockQueueSender implements QueueSender
 {
     private MockQueueConnection connection;
     private MockQueue queue;
+    private boolean disableMessageId;
+    private boolean disableTimestamp;
+    private int deliveryMode;
+    private int priority;
+    private long timeToLive;
+    private boolean closed;
 
     public MockQueueSender(MockQueueConnection connection, MockQueue queue)
     {
         this.connection = connection;
         this.queue = queue;
+        disableMessageId = false;
+        disableTimestamp = false;
+        deliveryMode = DeliveryMode.NON_PERSISTENT;
+        priority = 4;
+        timeToLive = 0;
+        closed = false;
     }
     
     public Queue getQueue() throws JMSException
@@ -49,74 +62,74 @@ public class MockQueueSender implements QueueSender
         connection.throwJMSException();
     }
 
-    public void setDisableMessageID(boolean arg0) throws JMSException
+    public void setDisableMessageID(boolean disableMessageId) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        this.disableMessageId = disableMessageId;
     }
 
     public boolean getDisableMessageID() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return false;
+        return disableMessageId;
     }
 
-    public void setDisableMessageTimestamp(boolean arg0) throws JMSException
+    public void setDisableMessageTimestamp(boolean disableTimestamp) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        this.disableTimestamp = disableTimestamp;
     }
 
     public boolean getDisableMessageTimestamp() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return false;
+        return disableTimestamp;
     }
 
-    public void setDeliveryMode(int arg0) throws JMSException
+    public void setDeliveryMode(int deliveryMode) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        this.deliveryMode = deliveryMode;
     }
 
     public int getDeliveryMode() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return 0;
+        return deliveryMode;
     }
 
-    public void setPriority(int arg0) throws JMSException
+    public void setPriority(int priority) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        this.priority = priority;
     }
 
     public int getPriority() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return 0;
+        return priority;
     }
 
-    public void setTimeToLive(long arg0) throws JMSException
+    public void setTimeToLive(long timeToLive) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        this.timeToLive = timeToLive;
     }
 
     public long getTimeToLive() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return 0;
+        return timeToLive;
     }
 
     public void close() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        closed = true;
+    }
+    
+    public boolean isClosed()
+    {
+        return closed;
     }
 }
