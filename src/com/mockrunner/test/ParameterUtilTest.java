@@ -38,4 +38,14 @@ public class ParameterUtilTest extends TestCase
         assertTrue(ParameterUtil.compareParameter(new MockClob(""), new MockClob("")));
         assertFalse(ParameterUtil.compareParameter(new MockClob("1"), new MockClob("")));
     }
+    
+    public void testCreateHashCodeForParameter()
+    {
+        assertTrue(ParameterUtil.createHashCodeForParameter("Test") == ParameterUtil.createHashCodeForParameter("Test"));
+        assertTrue(ParameterUtil.createHashCodeForParameter(new Long(2)) == ParameterUtil.createHashCodeForParameter(new Long(2)));
+        assertTrue(ParameterUtil.createHashCodeForParameter(new Integer(-1)) == ParameterUtil.createHashCodeForParameter(new Integer(-1)));
+        assertTrue(ParameterUtil.createHashCodeForParameter(new byte[] {1, 2, 3}) == ParameterUtil.createHashCodeForParameter(new byte[] {1, 2, 3}));
+        assertTrue(ParameterUtil.createHashCodeForParameter(new MockClob("123")) == ParameterUtil.createHashCodeForParameter(new MockClob("123")));
+        assertTrue(ParameterUtil.createHashCodeForParameter(new MockBlob(new byte[] {1})) == ParameterUtil.createHashCodeForParameter(new MockBlob(new byte[] {1})));
+    }
 }

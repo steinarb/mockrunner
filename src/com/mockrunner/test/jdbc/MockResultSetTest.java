@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockResultSet;
 
 import junit.framework.TestCase;
@@ -437,5 +438,82 @@ public class MockResultSetTest extends TestCase
         assertEquals(11, resultSet.getInt(2));
         assertEquals(12, resultSet.getInt(3));
         assertFalse(resultSet.rowUpdated());
+    }
+    
+    public void testEquals() throws Exception
+    {
+        resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
+        resultSet.addColumn("col1");
+        resultSet.addRow(new String[] {"test1", "test2"});
+        resultSet.addRow(new String[] {"test3", "test4"});
+        resultSet.addRow(new String[] {"test5", "test6"});
+        List row1 = resultSet.getRow(1);
+        assertEquals("test1", row1.get(0));
+        assertEquals("test2", row1.get(1));
+        List row3 = resultSet.getRow(3);
+        assertEquals("test5", row3.get(0));
+        assertEquals("test6", row3.get(1));
+        List column2 = resultSet.getColumn(2);
+        assertEquals("test2", column2.get(0));
+        assertEquals("test4", column2.get(1));
+        assertEquals("test6", column2.get(2));
+        List column1 = resultSet.getColumn("col1");
+        assertEquals("test1", column1.get(0));
+        assertEquals("test3", column1.get(1));
+        assertEquals("test5", column1.get(2));
+        MockResultSet otherResult = new MockResultSet("");
+        otherResult.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
+        otherResult.addRow(new String[] {"test1", "test2"});
+        otherResult.addRow(new String[] {"test3", "test4"});
+        otherResult.addRow(new String[] {"test5", "test6"});
+        assertFalse(resultSet.equals(otherResult));
+        assertFalse(otherResult.equals(resultSet));
+        List testList = new ArrayList();
+        testList.add("test3");
+        testList.add("test4");
+        assertTrue(otherResult.equalsRow(2, testList));
+        assertFalse(otherResult.equalsRow(1, testList));
+        assertFalse(otherResult.equalsColumn(1, testList));
+        otherResult.addColumn("col1");
+        otherResult = new MockResultSet("");
+        otherResult.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
+        otherResult.addColumn("col1");
+        otherResult.addRow(new String[] {"test1", "test2"});
+        otherResult.addRow(new String[] {"test3", "test4"});
+        otherResult.addRow(new String[] {"test5", "test6"});
+        assertTrue(resultSet.equals(otherResult));
+        assertTrue(otherResult.equals(resultSet));
+        assertEquals(resultSet.hashCode(), otherResult.hashCode());
+        testList = new ArrayList();
+        testList.add("test1");
+        testList.add("test3");
+        testList.add("test5");
+        assertTrue(otherResult.equalsColumn(1, testList));
+        assertTrue(otherResult.equalsColumn("col1", testList));
+        resultSet.next();
+        resultSet.next();
+        resultSet.updateClob(1, new MockClob("Test"));
+        testList = new ArrayList();
+        testList.add("test1");
+        testList.add(new MockClob("Test"));
+        testList.add("test5");
+        assertTrue(resultSet.equalsColumn("col1", testList));
+        resultSet.setDatabaseView(true);
+        assertFalse(resultSet.equalsColumn("col1", testList));
+        resultSet.updateRow();
+        assertTrue(resultSet.equalsColumn("col1", testList));
+        otherResult.next();
+        otherResult.next();
+        otherResult.updateClob(1, new MockClob("Test"));
+        assertTrue(resultSet.equals(otherResult));
+        assertTrue(otherResult.equals(resultSet));
+        assertEquals(resultSet.hashCode(), otherResult.hashCode());
+        otherResult.setDatabaseView(true);
+        assertFalse(resultSet.equals(otherResult));
+        assertFalse(otherResult.equals(resultSet));
+        otherResult.updateRow();
+        assertTrue(resultSet.equals(otherResult));
+        assertTrue(otherResult.equals(resultSet));
+        assertEquals(resultSet.hashCode(), otherResult.hashCode());
     }
 }
