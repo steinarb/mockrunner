@@ -90,6 +90,22 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
+     * Delegates to {@link ServletTestModule#setServlet(HttpServlet)}
+     */
+    protected void setServlet(HttpServlet servlet)
+    {
+        servletTestModule.setServlet(servlet);
+    }
+    
+    /**
+     * Delegates to {@link ServletTestModule#setServlet(HttpServlet, boolean)}
+     */
+    protected void setServlet(HttpServlet servlet, boolean doInit)
+    {
+        servletTestModule.setServlet(servlet, doInit);
+    }
+    
+    /**
      * Delegates to {@link ServletTestModule#getServlet}
      */
     protected HttpServlet getServlet()
@@ -111,6 +127,14 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     protected void addFilter(Filter filter)
     {
         servletTestModule.addFilter(filter);
+    }
+    
+    /**
+     * Delegates to {@link ServletTestModule#addFilter(Filter, boolean)}
+     */
+    protected void addFilter(Filter filter, boolean doInit)
+    {
+        servletTestModule.addFilter(filter, doInit);
     }
     
     /**
