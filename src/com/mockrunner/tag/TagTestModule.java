@@ -10,8 +10,8 @@ import javax.servlet.jsp.tagext.TagSupport;
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
-import com.mockrunner.mock.MockJspWriter;
-import com.mockrunner.mock.MockPageContext;
+import com.mockrunner.mock.web.MockJspWriter;
+import com.mockrunner.mock.web.MockPageContext;
 import com.mockrunner.util.TagUtil;
 
 /**

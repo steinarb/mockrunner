@@ -1,4 +1,4 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.web;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,8 +13,6 @@ import javax.servlet.ServletResponse;
 
 /**
  * Mock implementation of <code>FilterChain</code>.
- * @deprecated use {@link com.mockrunner.mock.web.MockFilterChain}
- * this class will be removed in the next release
  */
 public class MockFilterChain implements FilterChain
 {

@@ -15,9 +15,9 @@ import org.apache.struts.taglib.html.Constants;
 
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
-import com.mockrunner.mock.MockActionForward;
-import com.mockrunner.mock.MockActionMapping;
-import com.mockrunner.mock.MockPageContext;
+import com.mockrunner.mock.web.MockActionForward;
+import com.mockrunner.mock.web.MockActionMapping;
+import com.mockrunner.mock.web.MockPageContext;
 
 /**
  * Module for Struts action tests. Simulates Struts

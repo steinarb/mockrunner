@@ -1,4 +1,4 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.web;
 
 import java.util.Enumeration;
 
@@ -7,8 +7,6 @@ import javax.servlet.ServletContext;
 
 /**
  * Mock implementation of <code>FilterConfig</code>.
- * @deprecated use {@link com.mockrunner.mock.web.MockFilterConfig}
- * this class will be removed in the next release
  */
 public class MockFilterConfig implements FilterConfig
 {

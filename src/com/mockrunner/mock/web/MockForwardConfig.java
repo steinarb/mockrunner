@@ -1,11 +1,9 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.web;
 
 import org.apache.struts.action.ActionForward;
 
 /**
  * Mock implementation of <code>ForwardConfig</code>.
- * @deprecated use {@link com.mockrunner.mock.web.MockForwardConfig}
- * this class will be removed in the next release
  */
 public class MockForwardConfig extends ActionForward
 {

@@ -1,4 +1,4 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.web;
 
 import java.util.Stack;
 
@@ -11,8 +11,6 @@ import javax.servlet.jsp.tagext.BodyContent;
 
 /**
  * Mock implementation of <code>PageContext</code>.
- * @deprecated use {@link com.mockrunner.mock.web.MockPageContext}
- * this class will be removed in the next release
  */
 public class MockPageContext extends org.apache.struts.mock.MockPageContext
 {

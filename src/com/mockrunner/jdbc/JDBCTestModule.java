@@ -4,7 +4,7 @@ import java.sql.PreparedStatement;
 
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
-import com.mockrunner.mock.MockPreparedStatement;
+import com.mockrunner.mock.jdbc.MockPreparedStatement;
 
 /**
  * Module for JDBC tests. Not complete yet.

@@ -3,7 +3,7 @@ package com.mockrunner.jdbc;
 import java.sql.PreparedStatement;
 
 import com.mockrunner.base.BaseTestCase;
-import com.mockrunner.mock.MockPreparedStatement;
+import com.mockrunner.mock.jdbc.MockPreparedStatement;
 
 public class JDBCTestCaseAdapater extends BaseTestCase
 {

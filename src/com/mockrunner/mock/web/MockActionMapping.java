@@ -1,4 +1,4 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.web;
 
 import java.util.ArrayList;
 
@@ -8,8 +8,6 @@ import org.apache.struts.action.ActionMapping;
 
 /**
  * Mock implementation of <code>ActionMapping</code>.
- * @deprecated use {@link com.mockrunner.mock.web.MockActionMapping}
- * this class will be removed in the next release
  */
 public class MockActionMapping extends ActionMapping
 {

@@ -6,7 +6,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.HTMLOutputTestCase;
-import com.mockrunner.mock.MockPageContext;
+import com.mockrunner.mock.web.MockPageContext;
 
 /**
  * Delegator for {@link TagTestModule}. You can

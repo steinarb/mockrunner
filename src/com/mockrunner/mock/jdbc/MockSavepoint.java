@@ -1,4 +1,4 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.jdbc;
 
 import java.sql.SQLException;
 import java.sql.Savepoint;

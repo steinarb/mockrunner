@@ -1,12 +1,10 @@
-package com.mockrunner.mock;
+package com.mockrunner.mock.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 
 /**
  * Mock implementation of <code>HttpServletResponse</code>.
- * @deprecated use {@link com.mockrunner.mock.web.MockHttpServletResponse}
- * this class will be removed in the next release
  */
 public class MockHttpServletResponse extends com.mockobjects.servlet.MockHttpServletResponse
 {
