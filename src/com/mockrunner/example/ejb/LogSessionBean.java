@@ -60,7 +60,6 @@ public class LogSessionBean implements SessionBean
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
             sessionContext.setRollbackOnly();
             throw new EJBException(exc.getMessage());
         }
