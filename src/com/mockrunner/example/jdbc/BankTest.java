@@ -5,7 +5,9 @@ import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockResultSet;
 
 /**
- * Example test for {@link Bank}.
+ * Example test for {@link Bank}. Demonstrates the usage of 
+ * {@link com.mockrunner.jdbc.JDBCTestModule} 
+ * resp. {@link com.mockrunner.jdbc.JDBCTestCaseAdapter}.
  * Please note that the framework does not execute any SQL statements.
  * We have to specify the <code>MockResultSet</code> of the <i>select</i>
  * statement. Since there is only one <i>select</i>, we can set

@@ -24,7 +24,7 @@ public class RedirectServletTest extends ServletTestCaseAdapter
     
     public void testServletOutput() throws Exception
     {
-        getWebMockObjectFactory().getMockRequest().setupAddParameter("redirecturl", "http://www.mockrunner.com");
+        addRequestParameter("redirecturl", "http://www.mockrunner.com");
         doPost();
         BufferedReader reader = getOutputAsBufferedReader();
         assertEquals("<html>", reader.readLine().trim());
@@ -40,7 +40,7 @@ public class RedirectServletTest extends ServletTestCaseAdapter
     
     public void testServletOutputAsXML() throws Exception
     {
-        getWebMockObjectFactory().getMockRequest().setupAddParameter("redirecturl", "http://www.mockrunner.com");
+        addRequestParameter("redirecturl", "http://www.mockrunner.com");
         doPost();
         Element root = getOutputAsJDOMDocument().getRootElement();
         assertEquals("html", root.getName());

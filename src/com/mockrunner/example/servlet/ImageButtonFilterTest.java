@@ -2,7 +2,6 @@ package com.mockrunner.example.servlet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.servlet.ServletTestCaseAdapter;
 
 /**
@@ -14,20 +13,18 @@ import com.mockrunner.servlet.ServletTestCaseAdapter;
 public class ImageButtonFilterTest extends ServletTestCaseAdapter
 {
     private ImageButtonFilter filter;
-    private MockHttpServletRequest request;
     
     protected void setUp() throws Exception
     {
         super.setUp();
         filter = (ImageButtonFilter)createFilter(ImageButtonFilter.class);
-        request = getWebMockObjectFactory().getMockRequest();
     }
 
     public void testImageButtonParameter()
     {
-        request.setupAddParameter("param", "value");
-        request.setupAddParameter("image.x", "123");
-        request.setupAddParameter("image.y", "456");
+        addRequestParameter("param", "value");
+        addRequestParameter("image.x", "123");
+        addRequestParameter("image.y", "456");
         doFilter();
         HttpServletRequest filteredRequest = (HttpServletRequest)getFilteredRequest();
         assertEquals("value", filteredRequest.getParameter("param"));

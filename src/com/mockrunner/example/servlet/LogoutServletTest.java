@@ -18,15 +18,15 @@ public class LogoutServletTest extends ServletTestCaseAdapter
     
     public void testDoLogout() throws Exception
     {
-        getWebMockObjectFactory().getMockRequest().setupAddParameter("logout", "true");
+        addRequestParameter("logout", "true");
         doPost();
         assertFalse(getWebMockObjectFactory().getMockSession().isValid());
     }
     
     public void testDoLogoutWithFilteredImageButton() throws Exception
     {
-        getWebMockObjectFactory().getMockRequest().setupAddParameter("logout.x", "11");
-        getWebMockObjectFactory().getMockRequest().setupAddParameter("logout.y", "11");
+        addRequestParameter("logout.x", "11");
+        addRequestParameter("logout.y", "11");
         doPost();
         assertTrue(getWebMockObjectFactory().getMockSession().isValid());
         createFilter(ImageButtonFilter.class);

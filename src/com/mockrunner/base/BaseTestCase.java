@@ -14,7 +14,6 @@ import com.mockrunner.tag.TagTestModule;
  */
 public abstract class BaseTestCase extends TestCase
 {
-    private MockObjectFactory mockFactory;
     private WebMockObjectFactory webMockFactory;
     private JDBCMockObjectFactory jdbcMockFactory;
     
@@ -36,7 +35,6 @@ public abstract class BaseTestCase extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        mockFactory = createMockObjectFactory();
         webMockFactory = createWebMockObjectFactory();
         jdbcMockFactory = createJDBCMockObjectFactory();
     }
@@ -47,7 +45,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected WebMockObjectFactory createWebMockObjectFactory()
     {
-        WebMockObjectFactory factory = new WebMockObjectFactory();
+        MockObjectFactory factory = new MockObjectFactory();
         return factory;
     }
 
@@ -56,7 +54,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected WebMockObjectFactory createWebMockObjectFactory(WebMockObjectFactory otherFactory)
     {
-        WebMockObjectFactory factory = new WebMockObjectFactory(otherFactory);
+        MockObjectFactory factory = new MockObjectFactory(otherFactory);
         return factory;
     }
     
@@ -76,7 +74,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected WebMockObjectFactory createWebMockObjectFactory(WebMockObjectFactory otherFactory, boolean createNewSession)
     {
-        WebMockObjectFactory factory = new WebMockObjectFactory(otherFactory, createNewSession);
+        MockObjectFactory factory = new MockObjectFactory(otherFactory, createNewSession);
         return factory;
     }
 
@@ -104,7 +102,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected MockObjectFactory createMockObjectFactory()
     {
-        return new MockObjectFactory();
+        return (MockObjectFactory)createWebMockObjectFactory();
     }
 
     /**
@@ -113,7 +111,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected MockObjectFactory createMockObjectFactory(MockObjectFactory otherFactory)
     {
-        return new MockObjectFactory(otherFactory);
+        return (MockObjectFactory)createWebMockObjectFactory(otherFactory);
     }
 
     /**
@@ -122,7 +120,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected MockObjectFactory createMockObjectFactory(MockObjectFactory otherFactory, boolean createNewSession)
     {
-        return new MockObjectFactory(otherFactory, createNewSession);
+        return (MockObjectFactory)createWebMockObjectFactory(otherFactory, createNewSession);
     }
 
     /**
@@ -131,7 +129,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected MockObjectFactory getMockObjectFactory()
     {
-        return mockFactory;
+        return (MockObjectFactory)getWebMockObjectFactory();
     }
 
     /**
@@ -140,7 +138,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected void setMockObjectFactory(MockObjectFactory mockFactory)
     {
-        this.mockFactory = mockFactory;
+        setWebMockObjectFactory(mockFactory);
     }
     
     /**
