@@ -40,58 +40,93 @@ public class JavaLineParser
     public List parse(String source)
     {
         List resultList = new ArrayList();
+        List tempLinesToParse = new ArrayList(linesToParse);
+        List tempBlocksToParse = new ArrayList(blocksToParse);
         LineNumberReader input = new LineNumberReader(new StringReader(source));
         String currentLine = null;
         try
         {
             while(null != (currentLine = input.readLine()))
             {
-                if(checkLine(currentLine))
+                int lineIndex = checkLine(currentLine, tempLinesToParse);
+                if(lineIndex >= 0)
                 {
                     resultList.add(new Line(currentLine, input.getLineNumber()));
+                    tempLinesToParse.remove(lineIndex);
                 }
-                else if(checkBlock(currentLine))
+                else
                 {
-                    int startLineNumber = input.getLineNumber();
-                    int endLineNumber = determineEndLineNumber(input);
-                    if(endLineNumber > startLineNumber)
+                    int blockIndex = checkBlock(currentLine, tempBlocksToParse);
+                    if(blockIndex >= 0)
                     {
-                        resultList.add(new Block(currentLine, startLineNumber, endLineNumber));
+	                    int startLineNumber = input.getLineNumber();
+	                    int endLineNumber = determineEndLineNumber(input);
+	                    if(endLineNumber > startLineNumber)
+	                    {
+	                        resultList.add(new Block(currentLine, startLineNumber, endLineNumber));
+	                        tempBlocksToParse.remove(blockIndex);
+	                    }
                     }
                 }
             }
-        } 
+        }
         catch(IOException exc)
         {
             throw new RuntimeException(exc);
         }
+        checkLinesOrBlocksLeft(tempLinesToParse, tempBlocksToParse);
         return resultList;
     }
     
-    private boolean checkLine(String currentLine)
+    private void checkLinesOrBlocksLeft(List tempLinesToParse, List tempBlocksToParse)
     {
-        for(int ii = 0; ii < linesToParse.size(); ii++)
+        StringBuffer message = new StringBuffer("");
+        if(tempLinesToParse.size() > 0)
         {
-            String nextLine = (String)linesToParse.get(ii);
-            if(currentLine.trim().indexOf(nextLine) != -1)
+            message.append("Lines not found:\n");
+            for(int ii = 0; ii < tempLinesToParse.size(); ii++)
             {
-                return true;
+                message.append(tempLinesToParse.get(ii).toString() + "\n");
             }
         }
-        return false;
+        if(tempBlocksToParse.size() > 0)
+        {
+            message.append("Blocks not found:\n");
+            for(int ii = 0; ii < tempBlocksToParse.size(); ii++)
+            {
+                message.append(tempBlocksToParse.get(ii).toString() + "\n");
+            }
+        }
+        if(message.length() > 0)
+        {
+            throw new RuntimeException(message.toString());
+        }
     }
     
-    private boolean checkBlock(String currentLine)
+    private int checkLine(String currentLine, List tempLinesToParse)
     {
-        for(int ii = 0; ii < blocksToParse.size(); ii++)
+        for(int ii = 0; ii < tempLinesToParse.size(); ii++)
         {
-            String nextLine = (String)blocksToParse.get(ii);
+            String nextLine = (String)tempLinesToParse.get(ii);
             if(currentLine.trim().indexOf(nextLine) != -1)
             {
-                return true;
+                return ii;
             }
         }
-        return false;
+        return -1;
+    }
+    
+    private int checkBlock(String currentLine, List tempBlocksToParse)
+    {
+        for(int ii = 0; ii < tempBlocksToParse.size(); ii++)
+        {
+            String nextLine = (String)tempBlocksToParse.get(ii);
+            if(currentLine.trim().indexOf(nextLine) != -1)
+            {
+                return ii;
+            }
+        }
+        return -1;
     }
     
     private int determineEndLineNumber(LineNumberReader input)
