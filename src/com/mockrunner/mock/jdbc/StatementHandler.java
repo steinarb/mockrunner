@@ -60,9 +60,41 @@ public class StatementHandler
     }
     
     /**
+     * Clears all specified <code>ResultSet</code> objects.
+     */
+    public void clearResultSets()
+    {
+        resultSetsForStatement.clear();
+        resultSetsForStatementMap.clear();
+    }
+    
+    /**
+     * Returns the <code>Map</code> of all <code>ResultSet</code>
+     * objects, that were added with {@link #prepareResultSet(String, MockResultSet)}.
+     * The SQL strings map to the corresponding <code>ResultSet</code>.
+     * @return the <code>Map</code> of <code>ResultSet</code> objects
+     */
+    public Map getResultSetMap()
+    {
+        return Collections.unmodifiableMap(resultSetsForStatementMap);
+    }
+    
+    /**
+     * Returns the <code>List</code> of all <code>ResultSet</code>
+     * objects, that were added with {@link #prepareResultSet(int, MockResultSet)}
+     * resp. {@link #prepareResultSet(MockResultSet)}.
+     * @return the <code>List</code> of <code>ResultSet</code> objects
+     */
+    public List getResultSets()
+    {
+        return Collections.unmodifiableList(resultSetsForStatement);
+    }
+    
+    /**
      * Prepare a <code>ResultSet</code> for a specified SQL string.
      * If a statement does not have a unique <code>ResultSet</code>
-     * set with {@link #prepareResultSet(int, MockResultSet)}, it
+     * set with {@link #prepareResultSet(int, MockResultSet)} or
+     * {@link #prepareResultSet(MockResultSet)}, it
      * iterates through the <code>Map</code> of <code>ResultSet</code>
      * objects and returns the one that matches the specifed SQL.
      * @param sql the SQL string
@@ -71,6 +103,22 @@ public class StatementHandler
     public void prepareResultSet(String sql, MockResultSet resultSet)
     {
         resultSetsForStatementMap.put(sql, resultSet);
+    }
+    
+    /**
+     * Prepares a <code>ResultSet</code> for all statements.
+     * If a statement has a <code>ResultSet</code> specified with
+     * this method, it always returns that, regardless of any
+     * SQL strings.
+     * @param resultSet the {@link MockResultSet}
+     */
+    public void prepareResultSet(MockResultSet resultSet)
+    {
+        resultSetsForStatement.clear();
+        for(int ii = 0; ii < statements.size(); ii++)
+        {
+            resultSetsForStatement.add(resultSet);
+        }
     }
     
     /**
@@ -88,5 +136,17 @@ public class StatementHandler
             CollectionUtil.fillList(resultSetsForStatement, index + 1);
         }
         resultSetsForStatement.set(index, resultSet);
+    }
+    
+    /**
+     * Resets the <code>ResultSet</code> for a specified index.
+     * @param index the index of the statement
+     */
+    public void resetResultSet(int index)
+    {
+        if(index < resultSetsForStatement.size())
+        {
+            resultSetsForStatement.set(index, null);
+        }
     }
 }

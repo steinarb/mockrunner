@@ -1,4 +1,4 @@
-package com.mockrunner.test;
+package com.mockrunner.test.jdbc;
 
 import java.sql.ResultSet;
 import java.util.List;

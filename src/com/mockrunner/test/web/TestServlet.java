@@ -1,4 +1,4 @@
-package com.mockrunner.test;
+package com.mockrunner.test.web;
 
 import java.io.IOException;
 

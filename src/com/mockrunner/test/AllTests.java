@@ -12,6 +12,8 @@ import com.mockrunner.example.struts.OrderActionTest;
 import com.mockrunner.example.struts.StoreDataActionTest;
 import com.mockrunner.example.tag.ConstrainedNumericTextTagTest;
 import com.mockrunner.example.tag.TableEnumTagTest;
+import com.mockrunner.test.jdbc.AllJDBCTests;
+import com.mockrunner.test.web.AllWebTests;
 
 public class AllTests
 {
@@ -19,20 +21,10 @@ public class AllTests
     public static Test suite()
     {
         TestSuite suite = new TestSuite("Test for com.mockrunner.test");
-        //$JUnit-BEGIN$
-        suite.addTest(new TestSuite(ActionTestModuleTest.class));
-        suite.addTest(new TestSuite(JDBCTestModuleTest.class));
-        suite.addTest(new TestSuite(MockHttpSessionTest.class));
+        //$JUnit-BEGIN$ 
+        suite.addTest(AllWebTests.suite());
+        suite.addTest(AllJDBCTests.suite());
         suite.addTest(new TestSuite(MockObjectFactoryTest.class));
-        suite.addTest(new TestSuite(TagUtilTest.class));
-        suite.addTest(new TestSuite(NestedTagTest.class));
-        suite.addTest(new TestSuite(TagLifecycleTest.class));
-        suite.addTest(new TestSuite(ServletTestModuleTest.class));
-        suite.addTest(new TestSuite(MockPageContextTest.class));
-        suite.addTest(new TestSuite(MockBlobTest.class));
-        suite.addTest(new TestSuite(MockClobTest.class));
-        suite.addTest(new TestSuite(MockArrayTest.class));
-        suite.addTest(new TestSuite(MockResultSetTest.class));
         suite.addTest(new TestSuite(XmlUtilTest.class));
         suite.addTest(new TestSuite(StreamUtilTest.class));
         suite.addTest(new TestSuite(ArrayUtilTest.class));
