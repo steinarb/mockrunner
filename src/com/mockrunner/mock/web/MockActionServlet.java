@@ -44,7 +44,7 @@ public class MockActionServlet extends ActionServlet
 
     /**
      * Set the <code>ServletContext</code>.
-     * @param config the <code>ServletContext</code>
+     * @param context the <code>ServletContext</code>
      */
     public void setServletContext(ServletContext context)
     {
