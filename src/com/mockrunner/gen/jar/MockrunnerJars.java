@@ -14,6 +14,7 @@ public class MockrunnerJars
     private static Set strutsJars;
     private static Set webJ2EEJars;
     private static Set otherJ2EEJars;
+    private static Set mockEJBJars;
     private static Set xmlJars;
     
     static
@@ -30,15 +31,15 @@ public class MockrunnerJars
         mockrunnerJars.add("mockrunner-struts.jar");
         
         permissions = new HashMap();
-        permissions.put("mockrunner.jar", new Permission(true, true, true, true));
-        permissions.put("mockrunner-jdk1.3.jar", new Permission(true, true, true, true));
-        permissions.put("mockrunner-ejb.jar", new Permission(false, false, true, false));
-        permissions.put("mockrunner-jdbc.jar", new Permission(false, false, false, false));
-        permissions.put("mockrunner-jdbc-jdk1.3.jar", new Permission(false, false, false, false));
-        permissions.put("mockrunner-jms.jar", new Permission(false, false, true, false));
-        permissions.put("mockrunner-servlet.jar", new Permission(false, true, false, true));
-        permissions.put("mockrunner-tag.jar", new Permission(false, true, false, true));
-        permissions.put("mockrunner-struts.jar", new Permission(true, true, false, true));
+        permissions.put("mockrunner.jar", new Permission(true, true, true, true, true));
+        permissions.put("mockrunner-jdk1.3.jar", new Permission(true, true, true, true, true));
+        permissions.put("mockrunner-ejb.jar", new Permission(false, false, true, true, false));
+        permissions.put("mockrunner-jdbc.jar", new Permission(false, false, false, false, false));
+        permissions.put("mockrunner-jdbc-jdk1.3.jar", new Permission(false, false, false, false, false));
+        permissions.put("mockrunner-jms.jar", new Permission(false, false, true, false, false));
+        permissions.put("mockrunner-servlet.jar", new Permission(false, true, false, false, true));
+        permissions.put("mockrunner-tag.jar", new Permission(false, true, false, false, true));
+        permissions.put("mockrunner-struts.jar", new Permission(true, true, false, false, true));
     
         strutsJars = new HashSet();
         strutsJars.add("struts.jar");
@@ -48,6 +49,10 @@ public class MockrunnerJars
         
         otherJ2EEJars = new HashSet();
         otherJ2EEJars.add("jboss-j2ee.jar");
+        
+        mockEJBJars = new HashSet();
+        mockEJBJars.add("mockejb.jar");
+        mockEJBJars.add("cglib-full-2.0-RC2.jar");
         
         xmlJars = new HashSet();
         xmlJars.add("xercesImpl.jar");
@@ -71,16 +76,19 @@ public class MockrunnerJars
         private boolean isStrutsDependencyAllowed = false;
         private boolean isWebJ2EEDependencyAllowed = false;
         private boolean isOtherJ2EEDependencyAllowed = false;
+        private boolean isMockEJBDependencyAllowed = false;
         private boolean isXMLDependencyAllowed = false;
         
         public Permission(boolean isStrutsDependencyAllowed,
                           boolean isWebJ2EEDependencyAllowed,
                           boolean isOtherJ2EEDependencyAllowed,
+                          boolean isMockEJBDependencyAllowed,
                           boolean isXMLDependencyAllowed)
         {
             this.isStrutsDependencyAllowed = isStrutsDependencyAllowed;
             this.isWebJ2EEDependencyAllowed = isWebJ2EEDependencyAllowed;
             this.isOtherJ2EEDependencyAllowed = isOtherJ2EEDependencyAllowed;
+            this.isMockEJBDependencyAllowed = isMockEJBDependencyAllowed;
             this.isXMLDependencyAllowed = isXMLDependencyAllowed;
         }
         
@@ -99,12 +107,17 @@ public class MockrunnerJars
             return isWebJ2EEDependencyAllowed;
         }
         
+        public boolean isMockEJBDependencyAllowed()
+        {
+            return isMockEJBDependencyAllowed;
+        }
+        
         public boolean isXMLDependencyAllowed()
         {
             return isXMLDependencyAllowed;
         }
         
-        public boolean isValid(Set dependentJars)
+        public Set getProhibited(Set dependentJars)
         {
             Set jars = new HashSet(dependentJars);
             if(!isStrutsDependencyAllowed)
@@ -119,11 +132,17 @@ public class MockrunnerJars
             {
                 jars.removeAll(otherJ2EEJars);
             }
+            if(!isMockEJBDependencyAllowed)
+            {
+                jars.removeAll(mockEJBJars);
+            }
             if(!isXMLDependencyAllowed)
             {
                 jars.removeAll(xmlJars);
             }
-            return (jars.size() == dependentJars.size());
+            Set finalSet = new HashSet(dependentJars);
+            finalSet.removeAll(jars);
+            return finalSet;
         }
     }
 }

@@ -8,14 +8,20 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import junit.framework.TestCase;
 
-import com.kirkk.analyzer.textui.XMLUISummary;
+import com.kirkk.analyzer.framework.Analyzer;
+import com.kirkk.analyzer.framework.JarBundle;
+import com.mockrunner.gen.jar.JarFileExtractor;
 import com.mockrunner.gen.jar.MockrunnerJars;
+import com.mockrunner.gen.jar.MockrunnerJars.Permission;
 
-public class JarFileConsistencyTest extends TestCase
+public class JarFileDependenciesTest extends TestCase
 {
     private final static String RELEASE_DIR = "bin";
     private final static String LIB_DIR = "lib";
@@ -60,7 +66,7 @@ public class JarFileConsistencyTest extends TestCase
         assertTrue(jarFileNames.containsAll(mockrunnerJars));
     }
     
-    public void testJarFileConsistency() throws Exception
+    public void testJarFileDependencies() throws Exception
     {  
         File tempDir = new File("temp");
         tempDir.mkdir();
@@ -73,18 +79,52 @@ public class JarFileConsistencyTest extends TestCase
             File nextCopyFile = new File(tempDir, nextFile.getName());   
             copyFile(nextFile, nextCopyFile);
         }
-        doTestJarFileConsistency(tempDir, new File(tempDir, "output.txt"));
-        delete(tempDir);
-    }
-    
-    private void doTestJarFileConsistency(File srcDir, File destFile) throws Exception
-    {
-        XMLUISummary summary = new XMLUISummary();
-        summary.createSummary(srcDir, destFile);
-        summary = null;
+        boolean failure = doFilesContainIllegalDependencies(tempDir);
         System.gc();
+        delete(tempDir);
+        assertFalse("There are illegal dependencies", failure);
     }
     
+    private boolean doFilesContainIllegalDependencies(File srcDir) throws Exception
+    {
+        Analyzer analyzer = new Analyzer();
+        JarBundle jarBundle[] = analyzer.analyze(srcDir);
+        JarFileExtractor extractor = new JarFileExtractor(MockrunnerJars.getMockrunnerJars());
+        Map dependencyMap = extractor.createDependencies(jarBundle);
+        Iterator jarNames = dependencyMap.keySet().iterator();
+        boolean failure = false;
+        while(jarNames.hasNext())
+        {
+            String nextJarName = (String)jarNames.next();
+            if(!isJarOk(dependencyMap, nextJarName))
+            {
+                failure = true;
+            }
+        }
+        analyzer = null;
+        System.gc();
+        return failure;
+    }
+    
+    private boolean isJarOk(Map dependencyMap, String nextJarName)
+    {
+        Set nextJarSet = (Set)dependencyMap.get(nextJarName);
+        Permission permission = MockrunnerJars.getPermission(nextJarName);
+        Set prohibited = permission.getProhibited(nextJarSet);
+        if(!prohibited.isEmpty())
+        {
+            System.out.println("Illegal dependencies for " + nextJarName);
+            Iterator iterator = prohibited.iterator();
+            while(iterator.hasNext())
+            {
+                System.out.println(iterator.next());
+            }
+            System.out.println();
+            return false;
+        }
+        return true;
+    }
+
     private void copyFile(File source, File destination) throws IOException
     {
         FileChannel sourceChannel = new FileInputStream(source).getChannel();
