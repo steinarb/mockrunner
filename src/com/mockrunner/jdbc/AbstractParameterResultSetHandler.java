@@ -34,27 +34,35 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
 	{
 		if(null != parameters)
 		{
-			executedStatementParameters.put(sql, parameters);
+			if(null == executedStatementParameters.get(sql))
+			{
+				executedStatementParameters.put(sql, new ArrayList());
+			}
+			List theList = (List)executedStatementParameters.get(sql);
+			theList.add(parameters);
 		}
 	}
 	
 	/**
-	 * Returns the <code>Map</code> of parameters for a specified
-	 * SQL string.
+	 * Returns the <code>List</code> of parameters for a specified
+	 * SQL string. The <code>List</code> contains <code>Map</code>
+	 * objects with the actual parameters.
+	 * @param sql the SQL string
 	 * @return the <code>Map</code> of parameters
 	 */
-	public Map getParameterMapForExecutedStatement(String sql)
+	public List getParameterListForExecutedStatement(String sql)
 	{
-		return (Map)executedStatementParameters.get(sql);
+		return (List)executedStatementParameters.get(sql);
 	}
 	
 	/**
 	 * Returns the <code>Map</code> of executed SQL strings.
-	 * Each string maps to the corresponding <code>Map</code>
-	 * of parameters.
+	 * Each string maps to the corresponding <code>List</code>
+	 * of parameters. The <code>List</code> contains <code>Map</code>
+	 * objects with the actual parameters.
 	 * @return the <code>Map</code> of parameters
 	 */
-	public Map getExecutedStatementParameters()
+	public Map getExecutedStatementParameter()
 	{
 		return Collections.unmodifiableMap(executedStatementParameters);
 	}
@@ -86,7 +94,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public Integer getUpdateCount(String sql, Map parameters)
     {
-        List list = SearchUtil.getMatchingObjects(updateCountForStatement, sql, getCaseSensitive(), getExactMatch(), true);
+        List list = SearchUtil.getMatchingObjectsResolveCollection(updateCountForStatement, sql, getCaseSensitive(), getExactMatch(), true);
         for(int ii = 0; ii < list.size(); ii++)
         {
             MockUpdateCountWrapper wrapper = (MockUpdateCountWrapper)list.get(ii);
@@ -111,7 +119,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public MockResultSet getResultSet(String sql, Map parameters)
     {
-        List list = SearchUtil.getMatchingObjects(resultSetsForStatement, sql, getCaseSensitive(), getExactMatch(), true);
+        List list = SearchUtil.getMatchingObjectsResolveCollection(resultSetsForStatement, sql, getCaseSensitive(), getExactMatch(), true);
         for(int ii = 0; ii < list.size(); ii++)
         {
             MockResultSetWrapper wrapper = (MockResultSetWrapper)list.get(ii);
@@ -134,7 +142,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public boolean getThrowsSQLException(String sql, Map parameters)
     {
-        List list = SearchUtil.getMatchingObjects(throwsSQLException, sql, getCaseSensitive(), getExactMatch(), true);
+        List list = SearchUtil.getMatchingObjectsResolveCollection(throwsSQLException, sql, getCaseSensitive(), getExactMatch(), true);
         for(int ii = 0; ii < list.size(); ii++)
         {
             if(doParameterMatch((Map)list.get(ii), parameters))
