@@ -1,12 +1,28 @@
 package com.mockrunner.util;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Simple util class for <code>String</code> related methods.
  */
 public class StringUtil
 {
+    /**
+     * Appends the entried in the specified <code>List</code> as strings
+     * with a terminating <i>"\n"</i> after each row.
+     * @param buffer the buffer
+     * @param data the <code>List</code> with the data
+     */
+    public static void appendObjectsAsString(StringBuffer buffer, List data)
+    {
+        for(int ii = 0; ii < data.size(); ii++)
+        {
+            buffer.append(data.get(ii));
+            buffer.append("\n");
+        }
+    }
+    
     /**
      * Appends <i>number</i> tabs (\t) to the buffer.
      * @param buffer the buffer

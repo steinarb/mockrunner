@@ -1,8 +1,11 @@
 package com.mockrunner.test;
 
-import com.mockrunner.util.StringUtil;
+import java.util.ArrayList;
+import java.util.List;
 
 import junit.framework.TestCase;
+
+import com.mockrunner.util.StringUtil;
 
 public class StringUtilTest extends TestCase
 {
@@ -24,5 +27,18 @@ public class StringUtilTest extends TestCase
         assertTrue(tokens.length == 2);
         assertEquals("This;;is;a;;  ;", tokens[0]);
         assertEquals("; String;;", tokens[1]);
+    }
+    
+    public void testAppendObjectsAsString()
+    {
+        List list = new ArrayList();
+        list.add("Test");
+        list.add("Test");
+        list.add(new Integer(1000));
+        list.add(null);
+        list.add(new Long(3));
+        StringBuffer buffer = new StringBuffer();
+        StringUtil.appendObjectsAsString(buffer, list);
+        assertEquals("Test\nTest\n1000\nnull\n3\n", buffer.toString());
     }
 }
