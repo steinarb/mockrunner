@@ -8,6 +8,7 @@ mockrunner-0.2.8:
 - added MockEJBs MockContextFactory.revertSetAsInitial() to BaseTestCase.tearDown()
   for a proper cleanup
 - removed examples from JavaDoc
+- updated jboss-j2ee.jar from 3.2.2 to 3.2.3
 - updated nekohtml.jar from 0.9 to 0.9.2
 - namespace processing is fixed in NekoHTML 0.9.2
 

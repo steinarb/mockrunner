@@ -92,7 +92,7 @@ J2EE 1.3:
 Tomcat 4.1.30:
 http://jakarta.apache.org/tomcat
 servlet.jar
-JBoss 3.2.2:
+JBoss 3.2.3:
 http://www.jboss.org
 jboss-j2ee.jar                
 
