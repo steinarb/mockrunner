@@ -1,11 +1,15 @@
-Mockrunner is a lightweight framework for testing struts actions
-and forms, servlets, filters and tag classes. It extends JUnit and 
-simulates  the necessary behaviour without calling the real infrastructure.
-It does not call the webcontainer or the Struts ActionServlet.
-This makes it very fast and enables the user to manipulate all involved 
-classes and mockobjects in all steps  of the test making it possible to 
-write very sophisticated unit-tests for web based applications without 
-any overhead.
+Mockrunner is a lightweight framework for testing applications in
+the J2EE environment. It supports Struts actions and forms, servlets, 
+filters and tag classes. Furthermore it includes a JDBC test framework
+an can be used in conjunction with MockEJB to test EJB based applications.
+
+It extends JUnit and simulates the necessary behaviour without calling 
+the real infrastructure. It does not need a running application server or
+a database. Furthermore it does not call the webcontainer or the
+Struts ActionServlet. This makes it very fast and enables the user to 
+manipulate all involved classes and mockobjects in all steps of the test 
+making it possible to write very sophisticated unit-tests for J2EE based 
+applications without any overhead.
 
 Mockrunner does not read any configuration file like web.xml 
 or struts-config.xml. You can specify all parameters using the 
@@ -15,6 +19,16 @@ you use in one or another application. It is not possible to test the
 definitions in the configuration files. If you want to do that you can
 use StrutsTestCase (http://strutstestcase.sourceforge.net/) for
 Struts based applications or Cactus (http://jakarta.apache.org/cactus/).
+
+The JDBC test framework simulates a database but it does not execute any
+SQL statements. You can use the Mockrunner API to specify the result the 
+database would provide when executing different SQL statements. The
+framework is meant for testing the Java part of JDBC based applications.
+If you want to test SQL code you can use SQLUnit (http://sqlunit.sourceforge.net/)
+or dbUnit (http://dbunit.sourceforge.net) which runs against a real database.
+
+All test modules in Mockrunner can be combined. E.g., you can test a Servlet
+that calls a SessionBean that uses some JDBC code to read data from a database.
 
 Mockrunner is a pure mock based solution for unit tests. It's purpose
 is to write very fast unit tests without overhead. It is not meant 
@@ -43,17 +57,19 @@ own base class for tests, you can use the Modules (e.g. ActionTestModule).
 Mockrunner uses the following libraries and software components.
 You have to download them. Please add the specified jars to the classpath.
 
-Struts 1.1 (or higher):
-http://jakarta.apache.org/struts
-struts.jar
-
 Xerces XML Parser 2.0.0 (or higher):
 http://xml.apache.org/xerces2-j/index.html
 xml-apis.jar
 xercesImpl.jar
 
 The following libraries are included in the Mockrunner release.
-Just add them to the classpath.
+Just add them to the classpath. Please note that you have to
+add struts.jar even if you only use the test modules that are
+not Struts related (e.g ServletTestModule or JDBCTestModule).
+
+Struts 1.1 (or higher):
+http://jakarta.apache.org/struts
+struts.jar
 
 JUnit 3.8.1:
 http://www.junit.org
@@ -95,4 +111,3 @@ nekohtml.jar
 For suggestions, remarks or questions you can use the forums on
 Sourceforge (http://sourceforge.net/projects/mockrunner/) or 
 write me an email (alwin.ibba AT mockrunner.com).
-

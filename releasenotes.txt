@@ -23,6 +23,9 @@ mockrunner-0.2:
 - added addRequestParameter() methods to ServletTestModule and
   ServletTestCaseAdapter
 - updated nekohtml.jar from 0.7.7 to 0.8.1
+- added struts.jar to third party jars. You have to include this
+  in the classpath even if you only use the test modules that are
+  not Struts related (e.g ServletTestModule or JDBCTestModule)
 
 mockrunner-0.1.5:
 
