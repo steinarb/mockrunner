@@ -10,6 +10,7 @@ public class AllJMSTests
         TestSuite suite = new TestSuite("Test for com.mockrunner.jms.test");
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(MockQueueConnectionTest.class));
+        suite.addTest(new TestSuite(MockMessageTest.class));
         //$JUnit-END$
         return suite;
     }
