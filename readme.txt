@@ -70,6 +70,7 @@ http://jakarta.apache.org/commons
 commons-logging.jar
 commons-collections.jar
 commons-beanutils.jar
+commons-lang.jar
 
 Mockobjects 0.09:
 http://www.mockobjects.com
