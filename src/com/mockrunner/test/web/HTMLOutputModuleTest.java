@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionMapping;
 import org.jdom.Element;
 
 import com.mockrunner.base.HTMLOutputModule;
+import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.base.WebTestModule;
 import com.mockrunner.mock.web.ActionMockObjectFactory;
 import com.mockrunner.mock.web.MockActionForward;
@@ -44,7 +45,10 @@ public class HTMLOutputModuleTest extends TestCase
         module.actionPerform(TestOutputAction.class);
         doTestOutputAsString(module);
         doTestOutputAsBufferedReader(module);
-        doTestOutputAsJDOMDocument(module);      
+        doTestOutputAsJDOMDocument(module);
+        doTestVerifyOutput(module);
+        doTestVerifyOutputContains(module);
+        doTestVerifyOutputRegularExpression(module);
     }
     
     public void testActionTestModuleAttributes()
@@ -60,7 +64,10 @@ public class HTMLOutputModuleTest extends TestCase
         module.doGet();
         doTestOutputAsString(module);
         doTestOutputAsBufferedReader(module);
-        doTestOutputAsJDOMDocument(module);      
+        doTestOutputAsJDOMDocument(module);
+        doTestVerifyOutput(module);
+        doTestVerifyOutputContains(module);
+        doTestVerifyOutputRegularExpression(module);
     }
     
     public void testServletTestModuleAttributes()
@@ -76,7 +83,10 @@ public class HTMLOutputModuleTest extends TestCase
         module.doStartTag();
         doTestOutputAsString(module);
         doTestOutputAsBufferedReader(module);
-        doTestOutputAsJDOMDocument(module);      
+        doTestOutputAsJDOMDocument(module);
+        doTestVerifyOutput(module);
+        doTestVerifyOutputContains(module);
+        doTestVerifyOutputRegularExpression(module);
     }
     
     public void testTagTestModuleAttributes()
@@ -105,6 +115,84 @@ public class HTMLOutputModuleTest extends TestCase
         assertNotNull(tag);
     }
     
+    private void doTestVerifyOutput(HTMLOutputModule module)
+    {
+        module.setCaseSensitive(true);
+        module.verifyOutput("<html><body><tag></body></html>");
+        try
+        {
+            module.verifyOutput("<HTml><body><tAg></body></html>");
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.setCaseSensitive(false);
+        module.verifyOutput("<HTml><body><tAg></body></html>");
+        try
+        {
+            module.verifyOutput("xyz");
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    
+    private void doTestVerifyOutputContains(HTMLOutputModule module)
+    {
+        module.setCaseSensitive(true);
+        module.verifyOutputContains("<body>");
+        try
+        {
+            module.verifyOutputContains("<BODY>");
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.setCaseSensitive(false);
+        module.verifyOutputContains("<BODY>");
+        try
+        {
+            module.verifyOutputContains("boddy");
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    
+    private void doTestVerifyOutputRegularExpression(HTMLOutputModule module)
+    {
+        module.setCaseSensitive(true);
+        module.verifyOutputRegularExpression(".*<body.*");
+        try
+        {
+            module.verifyOutputRegularExpression(".*<BO.*");
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.setCaseSensitive(false);
+        module.verifyOutputRegularExpression(".*<BO.*");
+        try
+        {
+            module.verifyOutputRegularExpression(".*<BOG.*");
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    
     private void doTestAttributes(WebTestModule module)
     {
         module.setSessionAttribute("sessionatt", new Integer(3));
@@ -127,7 +215,6 @@ public class HTMLOutputModuleTest extends TestCase
     
     public static class TestOutputServlet extends HttpServlet
     {
-        
         protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
         {
             response.getWriter().write(testHTML);

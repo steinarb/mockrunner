@@ -11,9 +11,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.NestedApplicationException;
-import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.WebMockObjectFactory;
-import com.mockrunner.util.common.StringUtil;
 
 /**
  * Module for servlet and filter tests. Can test
@@ -26,24 +24,12 @@ public class ServletTestModule extends HTMLOutputModule
     private WebMockObjectFactory mockFactory;
     private HttpServlet servlet;
     private boolean doChain;
-    private boolean caseSensitive;
       
     public ServletTestModule(WebMockObjectFactory mockFactory)
     {
         super(mockFactory);
         this.mockFactory = mockFactory;
         doChain = false;
-        caseSensitive = true;
-    }
-    
-    /**
-     * Set if {@link #verifyOutput} and {@link #verifyOutputContains}
-     * should compare case sensitive. Default is <code>true</code>.
-     * @param caseSensitive enable or disable case sensitivity
-     */
-    public void setCaseSensitive(boolean caseSensitive)
-    {
-        this.caseSensitive = caseSensitive;
     }
     
     /**
@@ -354,13 +340,13 @@ public class ServletTestModule extends HTMLOutputModule
     }
     
     /**
-     * Returns the last resposne from the filter chain. Since
-     * filters can replace the resposne with a resposne wrapper,
+     * Returns the last response from the filter chain. Since
+     * filters can replace the response with a response wrapper,
      * this method makes only sense after calling at least
      * one filter, i.e. after calling {@link #doFilter} or
      * after calling one servlet method with <i>doChain</i> 
      * set to <code>true</code>.
-     * @return the filtered resposne
+     * @return the filtered response
      */  
     public ServletResponse getFilteredResponse()
     {
@@ -391,49 +377,6 @@ public class ServletTestModule extends HTMLOutputModule
     public void clearOutput()
     {
         mockFactory.getMockResponse().resetBuffer();
-    }
-   
-    /**
-     * Verifies the servlet output.
-     * @param expectedOutput the expected output.
-     * @throws VerifyFailedException if verification fails
-     */
-    public void verifyOutput(String expectedOutput)
-    {
-        String actualOutput = getOutput();
-        if(!StringUtil.matchesExact(actualOutput, expectedOutput, caseSensitive))
-        {
-            throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");
-        }
-    }
-    
-    /**
-     * Verifies if the servlet output contains the specified data.
-     * @param expectedOutput the data
-     * @throws VerifyFailedException if verification fails
-     */
-    public void verifyOutputContains(String expectedOutput)
-    {
-        String actualOutput = getOutput();
-        if(!StringUtil.matchesContains(actualOutput, expectedOutput, caseSensitive))
-        {
-            throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");
-        }
-    }
-    
-    /**
-     * Verifies if the servlet output matches the specified
-     * regular expression.
-     * @param expression the data
-     * @throws VerifyFailedException if verification fails
-     */
-    public void verifyOutputRegularExpression(String expression)
-    {
-        String actualOutput = getOutput();
-        if(!StringUtil.matchesPerl5(actualOutput, expression, caseSensitive))
-        {
-            throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");
-        }
     }
     
     private void callService()

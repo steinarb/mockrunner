@@ -53,6 +53,8 @@ mockrunner-0.3.2:
   org.apache.struts.mock.MockPageContext
 - changed session creation in MockHttpServletRequest. If getSession(false)
   is called without a previous created session, this method returns null
+- moved verifyOutput methods to HTMLOutputModule avoiding redundancy in
+  subclasses
 - fixed bug with parameter sets in batch updates, always the latest parameter
   set has been stored
 - it's now possible to set the JNDI name for the UserTransaction using

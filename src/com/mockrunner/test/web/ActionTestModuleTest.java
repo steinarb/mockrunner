@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
-import junit.framework.TestCase;
-
 import org.apache.struts.Globals;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -27,6 +25,7 @@ import org.apache.struts.config.FormPropertyConfig;
 import org.apache.struts.util.MessageResources;
 import org.apache.struts.validator.ValidatorForm;
 
+import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.ActionMockObjectFactory;
@@ -34,16 +33,14 @@ import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.struts.ActionTestModule;
 import com.mockrunner.struts.MapMessageResources;
 
-public class ActionTestModuleTest extends TestCase
+public class ActionTestModuleTest extends BaseTestCase
 {
-    private ActionMockObjectFactory mockFactory;
     private ActionTestModule module;
     
     protected void setUp() throws Exception
     {
         super.setUp();
-        mockFactory = new ActionMockObjectFactory();
-        module = new ActionTestModule(mockFactory);
+        module = new ActionTestModule(getActionMockObjectFactory());
     }
     
     private ActionErrors createTestActionErrors()
@@ -76,6 +73,43 @@ public class ActionTestModuleTest extends TestCase
     private ActionMessages createEmptyTestActionMessages()
     {
         return new ActionMessages();
+    }
+    
+    public void testVerifyOutput() throws Exception
+    {
+        getActionMockObjectFactory().getMockResponse().getWriter().write("This is a test");
+        try
+        {
+            module.verifyOutput("this is a test");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.setCaseSensitive(false);
+        module.verifyOutput("this is a test");
+        module.verifyOutputContains("TeSt");
+        module.verifyOutputRegularExpression("THIS.*");
+        module.setCaseSensitive(true);
+        try
+        {
+            module.verifyOutputContains("THIS");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyOutputRegularExpression(".*TEST");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
     }
     
     public void testGetActionErrorByKey()
@@ -136,15 +170,15 @@ public class ActionTestModuleTest extends TestCase
     {
         ActionMessages messages = createTestActionMessages();
         module.setActionMessages(messages);
-        assertSame(messages, mockFactory.getMockRequest().getAttribute(Globals.MESSAGE_KEY));
+        assertSame(messages, getActionMockObjectFactory().getMockRequest().getAttribute(Globals.MESSAGE_KEY));
         module.setActionMessagesToSession(messages);
-        assertSame(messages, mockFactory.getMockSession().getAttribute(Globals.MESSAGE_KEY));
+        assertSame(messages, getActionMockObjectFactory().getMockSession().getAttribute(Globals.MESSAGE_KEY));
         ActionMessages otherMessages = createTestActionMessages();
         module.setMessageAttributeKey("mymessages");
         module.setActionMessages(otherMessages);
-        assertSame(otherMessages, mockFactory.getMockRequest().getAttribute("mymessages"));
+        assertSame(otherMessages, getActionMockObjectFactory().getMockRequest().getAttribute("mymessages"));
         module.setActionMessagesToSession(otherMessages);
-        assertSame(otherMessages, mockFactory.getMockSession().getAttribute("mymessages"));
+        assertSame(otherMessages, getActionMockObjectFactory().getMockSession().getAttribute("mymessages"));
         assertSame(otherMessages, module.getActionMessages());
         module.verifyActionMessagePresent("key1");
         module.verifyActionMessageNotPresent("key3");
@@ -171,15 +205,15 @@ public class ActionTestModuleTest extends TestCase
     {
         ActionErrors errors = createTestActionErrors();
         module.setActionErrors(errors);
-        assertSame(errors, mockFactory.getMockRequest().getAttribute(Globals.ERROR_KEY));
+        assertSame(errors, getActionMockObjectFactory().getMockRequest().getAttribute(Globals.ERROR_KEY));
         module.setActionErrorsToSession(errors);
-        assertSame(errors, mockFactory.getMockSession().getAttribute(Globals.ERROR_KEY));
+        assertSame(errors, getActionMockObjectFactory().getMockSession().getAttribute(Globals.ERROR_KEY));
         ActionErrors otherErrors = createTestActionErrors();
         module.setErrorAttributeKey("othereerrors");
         module.setActionErrors(otherErrors);
-        assertSame(otherErrors, mockFactory.getMockRequest().getAttribute("othereerrors"));
+        assertSame(otherErrors, getActionMockObjectFactory().getMockRequest().getAttribute("othereerrors"));
         module.setActionErrorsToSession(otherErrors);
-        assertSame(otherErrors, mockFactory.getMockSession().getAttribute("othereerrors"));
+        assertSame(otherErrors, getActionMockObjectFactory().getMockSession().getAttribute("othereerrors"));
         assertSame(otherErrors, module.getActionErrors());
         module.verifyActionErrorPresent("key2");
         module.verifyActionErrorNotPresent("key4");
@@ -677,16 +711,16 @@ public class ActionTestModuleTest extends TestCase
     {
         TestForm form = (TestForm)module.createActionForm(TestForm.class);
         module.actionPerform(TestAction.class, form);   
-        assertEquals(mockFactory.getMockActionServlet(), form.getServlet());
-        assertEquals(mockFactory.getMockActionServlet(), ((TestForm)module.getActionForm()).getServlet());
-        assertEquals(mockFactory.getMockActionServlet(), module.getLastAction().getServlet());
+        assertEquals(getActionMockObjectFactory().getMockActionServlet(), form.getServlet());
+        assertEquals(getActionMockObjectFactory().getMockActionServlet(), ((TestForm)module.getActionForm()).getServlet());
+        assertEquals(getActionMockObjectFactory().getMockActionServlet(), module.getLastAction().getServlet());
         TestAction testAction = new TestAction();
         module.actionPerform(testAction, form);
-        assertEquals(mockFactory.getMockActionServlet(), form.getServlet());
-        assertEquals(mockFactory.getMockActionServlet(), testAction.getServlet());
+        assertEquals(getActionMockObjectFactory().getMockActionServlet(), form.getServlet());
+        assertEquals(getActionMockObjectFactory().getMockActionServlet(), testAction.getServlet());
         module.actionPerform(TestAction.class, TestForm.class);
-        assertEquals(mockFactory.getMockActionServlet(), module.getLastAction().getServlet());
-        assertEquals(mockFactory.getMockActionServlet(), ((TestForm)module.getActionForm()).getServlet());
+        assertEquals(getActionMockObjectFactory().getMockActionServlet(), module.getLastAction().getServlet());
+        assertEquals(getActionMockObjectFactory().getMockActionServlet(), ((TestForm)module.getActionForm()).getServlet());
     }
     
     public void testVerifyForwardPathAndName()
@@ -717,12 +751,12 @@ public class ActionTestModuleTest extends TestCase
     
     public void testVerifyForwardWithPresetForward()
     {
-        mockFactory.getMockActionMapping().addForward("success", "myPath");
+        getActionMockObjectFactory().getMockActionMapping().addForward("success", "myPath");
         TestForwardAction action = new TestForwardAction();
         module.actionPerform(action);
         module.verifyForward("myPath");
         module.verifyForwardName("success");
-        mockFactory.getMockActionMapping().addForward("success", "anotherPath");
+        getActionMockObjectFactory().getMockActionMapping().addForward("success", "anotherPath");
         module.actionPerform(action);
         module.verifyForward("anotherPath");
         module.verifyForwardName("success");
@@ -731,12 +765,12 @@ public class ActionTestModuleTest extends TestCase
     public void testActionPerformMappingTypeSet()
     {
         module.actionPerform(TestAction.class);
-        assertEquals(TestAction.class.getName(), mockFactory.getMockActionMapping().getType());
+        assertEquals(TestAction.class.getName(), getActionMockObjectFactory().getMockActionMapping().getType());
     }
     
     public void testSetResourcesAndLocale()
     {
-        mockFactory.getMockRequest().getSession(true);
+        getActionMockObjectFactory().getMockRequest().getSession(true);
         MapMessageResources resources1 = new MapMessageResources();
         MapMessageResources resources2 = new MapMessageResources();
         module.setResources(resources1);
@@ -758,10 +792,10 @@ public class ActionTestModuleTest extends TestCase
         module.setResources("test1", resources1);
         module.setResources("test2", resources2);
         module.setResources("test3", resources3);
-        assertEquals(3, mockFactory.getMockModuleConfig().findMessageResourcesConfigs().length);
-        assertNotNull(mockFactory.getMockModuleConfig().findMessageResourcesConfig("test1"));
-        assertNotNull(mockFactory.getMockModuleConfig().findMessageResourcesConfig("test2"));
-        assertNotNull(mockFactory.getMockModuleConfig().findMessageResourcesConfig("test3"));
+        assertEquals(3, getActionMockObjectFactory().getMockModuleConfig().findMessageResourcesConfigs().length);
+        assertNotNull(getActionMockObjectFactory().getMockModuleConfig().findMessageResourcesConfig("test1"));
+        assertNotNull(getActionMockObjectFactory().getMockModuleConfig().findMessageResourcesConfig("test2"));
+        assertNotNull(getActionMockObjectFactory().getMockModuleConfig().findMessageResourcesConfig("test3"));
     }
     
     public void testDynaActionForm()
@@ -804,18 +838,18 @@ public class ActionTestModuleTest extends TestCase
         files[1] = "src/com/mockrunner/test/web/validation.xml";
         module.createValidatorResources(files);
         TestValidatorForm form = new TestValidatorForm();
-        form.setServlet(mockFactory.getMockActionServlet());
-        mockFactory.getMockActionMapping().setName("testForm");
+        form.setServlet(getActionMockObjectFactory().getMockActionServlet());
+        getActionMockObjectFactory().getMockActionMapping().setName("testForm");
         form.setFirstName("ABCDEF");
         form.setLastName("ABCDEF");
-        ActionErrors errors = form.validate(mockFactory.getMockActionMapping(), mockFactory.getMockRequest());
+        ActionErrors errors = form.validate(getActionMockObjectFactory().getMockActionMapping(), getActionMockObjectFactory().getMockRequest());
         assertTrue(errors.isEmpty());;
         form.setFirstName("ABCD");
         form.setLastName("12345678901");
-        errors = form.validate(mockFactory.getMockActionMapping(), mockFactory.getMockRequest());
+        errors = form.validate(getActionMockObjectFactory().getMockActionMapping(), getActionMockObjectFactory().getMockRequest());
         assertTrue(errors.size() == 2);
         form.setLastName("ABCDEF");
-        errors = form.validate(mockFactory.getMockActionMapping(), mockFactory.getMockRequest());
+        errors = form.validate(getActionMockObjectFactory().getMockActionMapping(), getActionMockObjectFactory().getMockRequest());
         assertTrue(errors.size() == 1);
         ActionMessage error = (ActionMessage)errors.get().next();
         assertEquals("errors.minlength", error.getKey());
@@ -823,10 +857,10 @@ public class ActionTestModuleTest extends TestCase
     
     public void testWrappedRequest()
     {
-        HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(mockFactory.getMockRequest());
-        HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(mockFactory.getMockResponse());
-        mockFactory.addRequestWrapper(requestWrapper);
-        mockFactory.addResponseWrapper(responseWrapper);
+        HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(getActionMockObjectFactory().getMockRequest());
+        HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(getActionMockObjectFactory().getMockResponse());
+        getActionMockObjectFactory().addRequestWrapper(requestWrapper);
+        getActionMockObjectFactory().addResponseWrapper(responseWrapper);
         TestAction action = new TestAction();
         module.actionPerform(action);
         assertSame(requestWrapper, action.getRequest());
