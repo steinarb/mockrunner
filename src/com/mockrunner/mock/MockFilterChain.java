@@ -11,6 +11,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+/**
+ * Mock implementation of <code>FilterChain</code>.
+ */
 public class MockFilterChain implements FilterChain
 {
 	private ArrayList filters = new ArrayList();
