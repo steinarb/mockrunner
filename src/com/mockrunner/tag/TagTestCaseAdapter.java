@@ -90,6 +90,14 @@ public class TagTestCaseAdapter extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link TagTestModule#setDoRelease}
+     */
+    public void setDoRelease(boolean doRelease)
+    {
+        tagTestModule.setDoRelease(doRelease);
+    }
+    
+    /**
      * Delegates to {@link TagTestModule#populateAttributes}
      */
     protected void populateAttributes()
