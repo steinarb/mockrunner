@@ -12,6 +12,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.taglib.html.Constants;
+import org.apache.struts.util.MessageResources;
 
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockActionForward;
@@ -107,6 +108,21 @@ public class ActionTestModule
     public void setInput(String input)
     {
         getMockActionMapping().setInput(input);
+    }
+    
+    /**
+     * Sets the specified messages resources as a request attribute
+     * using <code>Globals.MESSAGES_KEY</code> as the key. You can
+     * use this method, if your action calls 
+     * <code>Action.getResources(HttpServletRequest)</code>.
+     * The deprecated method <code>Action.getResources()</code>
+     * takes the resources from the servlet context with the same key.
+     * If your action uses this method, you have to set the resources
+     * manually to the servlet context.
+     */
+    public void setResources(MessageResources resources)
+    {
+        mockFactory.getMockRequest().setAttribute(Globals.MESSAGES_KEY, resources);
     }
 
     /**

@@ -1,6 +1,9 @@
 
 mockrunner-0.3:
 
+- added MapMessageResources to Struts test framework in order
+  to support messages resources.
+
 mockrunner-0.2.5:
 
 - first version of the JMS test framework
