@@ -11,6 +11,12 @@ import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
 
+/**
+ * Delegator for {@link JDBCTestModule}. You can
+ * subclass this adapter or use {@link JDBCTestModule}
+ * directly (so your test case can use another base
+ * class).
+ */
 public class JDBCTestCaseAdapter extends BaseTestCase
 {
     private JDBCTestModule jdbcTestModule;

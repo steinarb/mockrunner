@@ -3,9 +3,9 @@ package com.mockrunner.example.ejb;
 import org.mockejb.MockEjbObject;
 import org.mockejb.TransactionPolicy;
 
-import com.mockrunner.ejb.EJBTestModule;
+import com.mockrunner.ejb.EJBTestCaseAdapter;
 import com.mockrunner.example.ejb.interfaces.PaySession;
-import com.mockrunner.jdbc.JDBCTestCaseAdapter;
+import com.mockrunner.jdbc.JDBCTestModule;
 import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockResultSet;
 
@@ -17,9 +17,9 @@ import com.mockrunner.mock.jdbc.MockResultSet;
  * but instead of an action we test an EJB. This example works with the simulated 
  * JDBC environment of Mockrunner.
  */
-public class PaySessionTest extends JDBCTestCaseAdapter
+public class PaySessionTest extends EJBTestCaseAdapter
 {
-    private EJBTestModule ejbModule;
+    private JDBCTestModule jdbcModule;
     private MockEjbObject ejbObject;
     private PaySession bean;
     private StatementResultSetHandler statementHandler;
@@ -27,12 +27,11 @@ public class PaySessionTest extends JDBCTestCaseAdapter
     protected void setUp() throws Exception
     {
         super.setUp();
-        ejbModule = createEJBTestModule();
-        ejbModule.setInterfacePackage("com.mockrunner.example.ejb.interfaces");
-        ejbObject = ejbModule.deploy("com/mockrunner/example/PaySession", PaySessionBean.class);
-        ejbObject.setTransactionPolicy(TransactionPolicy.REQUIRED);    
-        ejbModule.addToContext("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
-        bean = (PaySession)ejbModule.lookupBean("com/mockrunner/example/PaySession");
+        jdbcModule = createJDBCTestModule();
+        setInterfacePackage("com.mockrunner.example.ejb.interfaces");
+        ejbObject = deploy("com/mockrunner/example/PaySession", PaySessionBean.class, TransactionPolicy.REQUIRED);  
+        addToContext("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
+        bean = (PaySession)lookupBean("com/mockrunner/example/PaySession");
         statementHandler = getJDBCMockObjectFactory().getMockConnection().getStatementResultSetHandler();
     }
     
@@ -66,14 +65,14 @@ public class PaySessionTest extends JDBCTestCaseAdapter
         {
             assertEquals(PaySessionException.UNKNOWN_CUSTOMER, exc.getCode());
         }
-        ejbModule.verifyMarkedForRollback();
-        ejbModule.verifyRolledBack();
-        verifySQLStatementExecuted("select name");
-        verifySQLStatementNotExecuted("delete from openbills");
-        verifySQLStatementNotExecuted("insert into paidbills");
-        verifyAllResultSetsClosed();
-        verifyAllStatementsClosed();
-        verifyConnectionClosed();
+        verifyMarkedForRollback();
+        verifyRolledBack();
+        jdbcModule.verifySQLStatementExecuted("select name");
+        jdbcModule.verifySQLStatementNotExecuted("delete from openbills");
+        jdbcModule.verifySQLStatementNotExecuted("insert into paidbills");
+        jdbcModule.verifyAllResultSetsClosed();
+        jdbcModule.verifyAllStatementsClosed();
+        jdbcModule.verifyConnectionClosed();
     }
     
     public void testUnknownBill() throws Exception
@@ -93,14 +92,14 @@ public class PaySessionTest extends JDBCTestCaseAdapter
         {
             assertEquals(PaySessionException.UNKNOWN_BILL, exc.getCode());
         }
-        ejbModule.verifyMarkedForRollback();
-        ejbModule.verifyRolledBack();
-        verifySQLStatementExecuted("select * from openbills");
-        verifySQLStatementNotExecuted("delete from openbills");
-        verifySQLStatementNotExecuted("insert into paidbills");
-        verifyAllResultSetsClosed();
-        verifyAllStatementsClosed();
-        verifyConnectionClosed();
+        verifyMarkedForRollback();
+        verifyRolledBack();
+        jdbcModule.verifySQLStatementExecuted("select * from openbills");
+        jdbcModule.verifySQLStatementNotExecuted("delete from openbills");
+        jdbcModule.verifySQLStatementNotExecuted("insert into paidbills");
+        jdbcModule.verifyAllResultSetsClosed();
+        jdbcModule.verifyAllStatementsClosed();
+        jdbcModule.verifyConnectionClosed();
     }
     
     public void testCustomerIdMismatch() throws Exception
@@ -116,14 +115,14 @@ public class PaySessionTest extends JDBCTestCaseAdapter
         {
             assertEquals(PaySessionException.WRONG_BILL_FOR_CUSTOMER, exc.getCode());
         }
-        ejbModule.verifyMarkedForRollback();
-        ejbModule.verifyRolledBack();
-        verifySQLStatementExecuted("select * from openbills");
-        verifySQLStatementNotExecuted("delete from openbills");
-        verifySQLStatementNotExecuted("insert into paidbills");
-        verifyAllResultSetsClosed();
-        verifyAllStatementsClosed();
-        verifyConnectionClosed();
+        verifyMarkedForRollback();
+        verifyRolledBack();
+        jdbcModule.verifySQLStatementExecuted("select * from openbills");
+        jdbcModule.verifySQLStatementNotExecuted("delete from openbills");
+        jdbcModule.verifySQLStatementNotExecuted("insert into paidbills");
+        jdbcModule.verifyAllResultSetsClosed();
+        jdbcModule.verifyAllStatementsClosed();
+        jdbcModule.verifyConnectionClosed();
     }
     
     public void testAmountMismatch() throws Exception
@@ -139,14 +138,14 @@ public class PaySessionTest extends JDBCTestCaseAdapter
         {
             assertEquals(PaySessionException.WRONG_AMOUNT_FOR_BILL, exc.getCode());
         }
-        ejbModule.verifyMarkedForRollback();
-        ejbModule.verifyRolledBack();
-        verifySQLStatementExecuted("select * from openbills");
-        verifySQLStatementNotExecuted("delete from openbills");
-        verifySQLStatementNotExecuted("insert into paidbills");
-        verifyAllResultSetsClosed();
-        verifyAllStatementsClosed();
-        verifyConnectionClosed();
+        verifyMarkedForRollback();
+        verifyRolledBack();
+        jdbcModule.verifySQLStatementExecuted("select * from openbills");
+        jdbcModule.verifySQLStatementNotExecuted("delete from openbills");
+        jdbcModule.verifySQLStatementNotExecuted("insert into paidbills");
+        jdbcModule.verifyAllResultSetsClosed();
+        jdbcModule.verifyAllStatementsClosed();
+        jdbcModule.verifyConnectionClosed();
     }
 
     public void testValidTransaction() throws Exception
@@ -154,12 +153,12 @@ public class PaySessionTest extends JDBCTestCaseAdapter
         createValidCustomerResult();
         createValidBillResult();
         bean.payBill("1", "1", 100);
-        ejbModule.verifyNotMarkedForRollback();
-        ejbModule.verifyCommitted();
-        verifySQLStatementExecuted("delete from openbills where id=1");
-        verifySQLStatementExecuted("insert into paidbills values(1,1,100.0)");
-        verifyAllResultSetsClosed();
-        verifyAllStatementsClosed();
-        verifyConnectionClosed();
+        verifyNotMarkedForRollback();
+        verifyCommitted();
+        jdbcModule.verifySQLStatementExecuted("delete from openbills where id=1");
+        jdbcModule.verifySQLStatementExecuted("insert into paidbills values(1,1,100.0)");
+        jdbcModule.verifyAllResultSetsClosed();
+        jdbcModule.verifyAllStatementsClosed();
+        jdbcModule.verifyConnectionClosed();
     }
 }
