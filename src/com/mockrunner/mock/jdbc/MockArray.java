@@ -102,7 +102,7 @@ public class MockArray implements Array, Cloneable
         }
         catch(CloneNotSupportedException exc)
         {
-        
+            exc.printStackTrace();
         }
         return null;
     }

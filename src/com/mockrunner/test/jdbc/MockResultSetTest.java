@@ -584,4 +584,37 @@ public class MockResultSetTest extends TestCase
         assertFalse(resultSet.rowUpdated(3));
         assertTrue(resultSet.rowUpdated(4));
     }
+    
+    public void testClone() throws Exception
+    {
+        resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
+        resultSet.addRow(new String[] {"test1", "test2"});
+        resultSet.addRow(new String[] {"test3", "test4"});
+        resultSet.addRow(new Object[] {new MockClob("test5"), new MockClob("test6")});
+        MockResultSet cloneResult = (MockResultSet)resultSet.clone();
+        assertTrue(resultSet.isEqual(cloneResult));
+        resultSet.next();
+        resultSet.next();
+        resultSet.next();
+        resultSet.updateClob(1, new MockClob("test"));
+        assertFalse(resultSet.isEqual(cloneResult));
+        resultSet.setDatabaseView(true);
+        assertTrue(resultSet.isEqual(cloneResult));
+        resultSet.updateRow();
+        assertFalse(resultSet.isEqual(cloneResult));
+        resultSet.setDatabaseView(false);
+        MockClob clob = (MockClob)resultSet.getClob(1);
+        assertEquals("test", clob.getSubString(1, 4));
+        clob.setString(1, "xyzx");
+        assertEquals("xyzx", clob.getSubString(1, 4));
+        List list = new ArrayList();
+        list.add(new MockClob("xyzx"));
+        list.add(new MockClob("test6"));
+        assertTrue(resultSet.isRowEqual(3, list));
+        assertFalse(cloneResult.isRowEqual(3, list));
+        list = new ArrayList();
+        list.add(new MockClob("test5"));
+        list.add(new MockClob("test6"));
+        assertTrue(cloneResult.isRowEqual(3, list));
+    }
 }
