@@ -3,11 +3,9 @@ package com.mockrunner.test.consistency;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -18,75 +16,29 @@ import junit.framework.TestCase;
 import com.kirkk.analyzer.framework.Analyzer;
 import com.kirkk.analyzer.framework.JarBundle;
 import com.mockrunner.gen.jar.JarFileExtractor;
+import com.mockrunner.gen.jar.MockrunnerJarTestConfiguration;
 import com.mockrunner.gen.jar.MockrunnerJars;
 import com.mockrunner.gen.jar.MockrunnerJars.Permission;
 
 public class JarFileDependenciesTest extends TestCase
 {
-    private final static String RELEASE_DIR = "bin";
-    private final static String LIB_DIR = "lib";
-    private final static String J2EE13_DIR = "j2ee1.3";
-    private final static String THIRD_PARTY_DIR = "jar";
+    private MockrunnerJarTestConfiguration configuration;
     
-    private List getThirdPartyJarsJ2EE14()
+    protected void setUp() throws Exception
     {
-        String jarDirName = getBaseDir() + THIRD_PARTY_DIR;
-        return new ArrayList(Arrays.asList(new File(jarDirName).listFiles(new JarFileFilter())));
+        super.setUp();
+        configuration = new MockrunnerJarTestConfiguration();
     }
     
-    private List getThirdPartyJarsJ2EE13()
-    {
-        List fileList = getThirdPartyJarsJ2EE14();
-        List resultList = new ArrayList();
-        for(int ii = 0; ii < fileList.size(); ii++)
-        {
-            File currentFile = (File)fileList.get(ii);
-            if(!MockrunnerJars.getStandardInterfaceJ2EE14Jars().contains(currentFile.getName()))
-            {
-                resultList.add(currentFile);
-            }
-        }
-        String jarDirName = getBaseDir() + THIRD_PARTY_DIR + File.separator + J2EE13_DIR;
-        resultList.addAll(Arrays.asList(new File(jarDirName).listFiles(new JarFileFilter())));
-        return resultList;
-    }
-    
-    private List getReleasedJars()
-    {
-        List jarFiles = new ArrayList();
-        jarFiles.addAll(getJ2EE13Jars());
-        jarFiles.addAll(getJ2EE14Jars());
-        return jarFiles;
-    }
-    
-    private List getJ2EE13Jars()
-    {
-        String jarDirName = getBaseDir() + LIB_DIR + File.separator + J2EE13_DIR;
-        return listFiles(jarDirName);
-    }
-    
-    private List getJ2EE14Jars()
-    {
-        String jarDirName = getBaseDir() + LIB_DIR;
-        return listFiles(jarDirName);
-    }
-    
-    private List listFiles(String jarDirName)
-    {
-        File[] jarFiles = new File(jarDirName).listFiles(new JarFileFilter());
-        return Arrays.asList(jarFiles);
-    }
-
-    private String getBaseDir()
-    {
-        File releaseDir = new File(RELEASE_DIR);
-        String jarDirName = releaseDir.getAbsolutePath() + File.separator;
-        return jarDirName + releaseDir.list()[0] + File.separator;
+    protected void tearDown() throws Exception
+    {   
+        super.tearDown();
+        configuration = null;
     }
     
     public void testAllJarsReleased()
     {
-        List jarFiles = getReleasedJars();
+        List jarFiles = configuration.getReleasedJars();
         List mockrunnerJars = MockrunnerJars.getMockrunnerJars();
         List jarFileNames = new ArrayList();
         for(int ii = 0; ii < jarFiles.size(); ii++)
@@ -112,8 +64,8 @@ public class JarFileDependenciesTest extends TestCase
         delete(tempDir);
         tempDir.mkdir();
         List allJars = new ArrayList();
-        allJars.addAll(getJ2EE14Jars());
-        allJars.addAll(getThirdPartyJarsJ2EE14());
+        allJars.addAll(configuration.getJ2EE14Jars());
+        allJars.addAll(configuration.getThirdPartyJarsJ2EE14());
         copyFiles(tempDir, allJars);
         boolean failure = doFilesContainIllegalDependencies(tempDir);
         delete(tempDir);
@@ -126,8 +78,8 @@ public class JarFileDependenciesTest extends TestCase
         delete(tempDir);
         tempDir.mkdir();
         List allJars = new ArrayList();
-        allJars.addAll(getJ2EE13Jars());
-        allJars.addAll(getThirdPartyJarsJ2EE13());
+        allJars.addAll(configuration.getJ2EE13Jars());
+        allJars.addAll(configuration.getThirdPartyJarsJ2EE13());
         copyFiles(tempDir, allJars);
         boolean failure = doFilesContainIllegalDependencies(tempDir);
         delete(tempDir);
@@ -221,15 +173,6 @@ public class JarFileDependenciesTest extends TestCase
                 delete(files[ii]);
             }
             file.delete();
-        }
-    }
-    
-    private class JarFileFilter implements FilenameFilter
-    {
-        public boolean accept(File dir, String name)
-        {
-            if(name.endsWith(".jar")) return true;
-            return false;
         }
     }
 }
