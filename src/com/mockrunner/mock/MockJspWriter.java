@@ -22,9 +22,8 @@ public class MockJspWriter extends JspWriter
         initWriters();
     }
 
-    public String getOutputAsString() throws IOException
+    public String getOutputAsString()
     {
-        flush();
         return stringWriter.toString();
     }
 
@@ -32,6 +31,7 @@ public class MockJspWriter extends JspWriter
     {
         try
         {
+            flush();
             return getOutputAsString();
         }
         catch (IOException exc)
@@ -55,15 +55,15 @@ public class MockJspWriter extends JspWriter
         flush();
         printWriter.close();
     }
+    
+    public int getRemaining()
+    {
+        return 0;
+    }
 
     public void flush() throws IOException
     {
         printWriter.flush();
-    }
-
-    public int getRemaining()
-    {
-        return 0;
     }
 
     public void newLine() throws IOException

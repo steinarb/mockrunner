@@ -1,7 +1,5 @@
 package com.mockrunner.base;
 
-import java.io.IOException;
-
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -161,7 +159,6 @@ public class TagTestModule
     {
         //TODO: implement me
     }
-
     
     /**
      * Gets the output data the current tag has rendered. Makes only sense
@@ -170,16 +167,8 @@ public class TagTestModule
      */
     public String getOutput()
     {
-        try
-        {
-            MockJspWriter writer = (MockJspWriter)mockFactory.getMockPageContext().getOut();
-            return writer.getOutputAsString();
-        }
-        catch(IOException exc)
-        {
-            exc.printStackTrace();
-            throw new RuntimeException(exc.getMessage());
-        }
+        MockJspWriter writer = (MockJspWriter)mockFactory.getMockPageContext().getOut();
+        return writer.getOutputAsString();
     }
     
     /**
@@ -214,5 +203,4 @@ public class TagTestModule
     {
         return (tag instanceof BodyTagSupport);
     }
-
 }
