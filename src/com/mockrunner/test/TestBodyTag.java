@@ -11,6 +11,7 @@ public class TestBodyTag extends BodyTagSupport
     private Integer testInteger;
     private double testDouble;
     private PageContext context;
+    private boolean releaseCalled = false;
     private int doStartTagReturnValue = TagSupport.EVAL_BODY_INCLUDE;
     private int doEndTagReturnValue = TagSupport.EVAL_PAGE;
     private int doAfterBodyReturnValue = TagSupport.SKIP_BODY;
@@ -96,6 +97,16 @@ public class TestBodyTag extends BodyTagSupport
     public PageContext getPageContext()
     {
         return context;
+    }
+    
+    public void release()
+    {
+        releaseCalled = true;
+    }
+    
+    public boolean wasReleaseCalled()
+    {
+        return releaseCalled;
     }
     
     public boolean wasDoInitBodyCalled()
