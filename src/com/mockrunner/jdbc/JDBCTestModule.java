@@ -963,14 +963,6 @@ public class JDBCTestModule
     }
     
     /**
-     * @deprecated use {@link #verifyCommitted}
-     */
-    public void verifyCommited()
-    {
-        verifyCommitted();
-    }
-    
-    /**
      * Verifies that the changes were not commited.
      * Makes only sense, if the <code>Connection</code> is not in
      * autocommit mode. Automatic commits are not recognized.
@@ -983,14 +975,6 @@ public class JDBCTestModule
         {
             throw new VerifyFailedException("Connection was committed");
         }
-    }
-    
-    /**
-     * @deprecated use {@link #verifyNotCommitted}
-     */
-    public void verifyNotCommited()
-    {
-        verifyNotCommitted();
     }
     
     /**

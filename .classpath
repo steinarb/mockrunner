@@ -8,7 +8,6 @@
     <classpathentry kind="lib" path="lib/commons-logging.jar"/>
     <classpathentry kind="lib" path="lib/jdom.jar"/>
     <classpathentry kind="lib" path="lib/junit.jar"/>
-    <classpathentry kind="lib" path="lib/mockejb.jar"/>
     <classpathentry kind="lib" path="lib/nekohtml.jar"/>
     <classpathentry kind="lib" path="lib/struts.jar"/>
     <classpathentry kind="lib" path="lib/commons-digester.jar"/>
@@ -18,5 +17,7 @@
     <classpathentry kind="lib" path="lib/servlet.jar"/>
     <classpathentry kind="lib" path="lib/jboss-j2ee.jar"/>
     <classpathentry kind="lib" path="lib/xml-apis.jar"/>
+    <classpathentry kind="lib" path="lib/cglib-full-2.0-RC2.jar"/>
+    <classpathentry kind="lib" path="lib/mockejb.jar" sourcepath="H:/mockejb-0.6-beta1/src"/>
     <classpathentry kind="output" path="classes"/>
 </classpath>

@@ -1,10 +1,9 @@
 package com.mockrunner.example.jms;
 
 import javax.jms.JMSException;
-import javax.jms.MessageListener;
 import javax.jms.Queue;
+import javax.jms.QueueConnectionFactory;
 
-import org.mockejb.MockEjbObject;
 import org.mockejb.TransactionPolicy;
 
 import com.mockrunner.ejb.EJBTestModule;
@@ -33,11 +32,10 @@ public class PrintSessionBeanTest extends JMSTestCaseAdapter
         Queue queue = getDestinationManager().createQueue("testQueue");
         ejbModule.bindToContext("queue/testQueue", queue);
         ejbModule.setInterfacePackage("com.mockrunner.example.jms.interfaces");
-        ejbModule.deploy("com/mockrunner/example/PrintSession", PrintSessionBean.class, TransactionPolicy.REQUIRED);
+        ejbModule.deploySessionBean("com/mockrunner/example/PrintSession", PrintSessionBean.class, TransactionPolicy.REQUIRED);
         bean = (PrintSession)ejbModule.lookupBean("com/mockrunner/example/PrintSession");
-        MockEjbObject ejbObject = ejbModule.deployMessageBean(PrintMessageDrivenBean.class, TransactionPolicy.REQUIRED);
-        MessageListener listener = ejbModule.createMessageBean(ejbObject);
-        registerTestMessageListenerForQueue("testQueue", listener);
+		QueueConnectionFactory factory = getJMSMockObjectFactory().getMockQueueConnectionFactory();
+		ejbModule.deployMessageBean("java:/ConnectionFactory", "queue/testQueue", factory, queue, new PrintMessageDrivenBean());
     }
     
     public void testSuccessfulDelivery() throws Exception
