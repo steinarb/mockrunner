@@ -67,6 +67,14 @@ http://www.mockobjects.com
 mockobjects-core-0.09.jar
 mockobjects-jdk1.3-j2ee1.3-0.09.jar
 
+Xerces XML Parser 2.0.0 (or higher):
+http://xml.apache.org/xerces2-j/index.html
+xercesImpl.jar
+
+NekoHTML Parser:
+http://www.apache.org/~andyc/neko/doc/html/index.html
+nekohtml.jar
+
 For suggestions, remarks or questions you can use the forums on
 Sourceforge (http://sourceforge.net/projects/mockrunner/) or 
 write me an email (alwin.ibba@mockrunner.com).
