@@ -1,9 +1,15 @@
 package com.mockrunner.base;
 
+import java.io.IOException;
+
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.jsp.tagext.IterationTag;
+import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import com.mockrunner.mock.MockBodyContent;
 import com.mockrunner.mock.MockJspWriter;
 import com.mockrunner.mock.MockPageContext;
 
@@ -15,6 +21,7 @@ public class TagTestModule
 {
     private MockObjectFactory mockFactory;
     private TagSupport tag;
+    private String body;
 
     public TagTestModule(MockObjectFactory mockFactory)
     {
@@ -22,7 +29,8 @@ public class TagTestModule
     }
     
     /**
-     * Creates a tag with the specified type.
+     * Creates a tag with the specified type. Sets the correct
+     * <code>MockPageContext</code> and calls <code>release()</code>.
      * @param tagClass the <code>Class</code> of the tag
      * @return the tag
      */
@@ -32,6 +40,7 @@ public class TagTestModule
         {
             tag = (TagSupport)tagClass.newInstance();
             tag.setPageContext(getMockPageContext());
+            release();
             return tag;
         }
         catch(Exception exc)
@@ -39,6 +48,33 @@ public class TagTestModule
             exc.printStackTrace();
             throw new RuntimeException(exc.getMessage());
         }
+    }
+    
+    /**
+     * Sets the body of the tag.
+     * @param body the body
+     */
+    public void setBody(String body)
+    {
+        this.body = body;
+    }
+    
+    /**
+     * Gets the body of the tag.
+     * @param body the body
+     */
+    public String getBody()
+    {
+        return body;
+    }
+    
+    /**
+     * Returns the current tag.
+     * @return the tag
+     */
+    public TagSupport getTag()
+    {
+        return tag;
     }
     
     /**
@@ -52,22 +88,14 @@ public class TagTestModule
     }
     
     /**
-     * Returns the current tag.
-     * @return the tag
-     */
-    public TagSupport getTag()
-    {
-        return tag;
-    }
-    
-    /**
      * Calls the <code>doStartTag</code> method of the current tag.
+     * @return the result of <code>doStartTag</code>
      */
-    public void doStartTag()
+    public int doStartTag()
     {
         try
         {
-            tag.doStartTag();
+            return tag.doStartTag();
         }
         catch(JspException exc)
         {
@@ -78,12 +106,13 @@ public class TagTestModule
     
     /**
      * Calls the <code>doEndTag</code> method of the current tag.
+     * @return the result of <code>doEndTag</code>
      */
-    public void doEndTag()
+    public int doEndTag()
     {
         try
         {
-            tag.doEndTag();
+            return tag.doEndTag();
         }
         catch(JspException exc)
         {
@@ -113,15 +142,13 @@ public class TagTestModule
 
     /**
      * Calls the <code>doAfterBody</code> method of the current tag.
-     * @throws RuntimeException if the current tag is no body tag
+     * @return the result of <code>doAfterBody</code>
      */
-    public void doAfterBody()
+    public int doAfterBody()
     {
-        if(!isBodyTag()) throw new RuntimeException("current tag is no body tag");
         try
         {
-            BodyTagSupport bodyTag = (BodyTagSupport)tag;
-            bodyTag.doAfterBody();
+            return tag.doAfterBody();
         }
         catch(JspException exc)
         {
@@ -138,26 +165,57 @@ public class TagTestModule
         tag.release();
     }
 
-    public void processTagLifecycle()
+    public int processSimpleTagLifecycle()
     {
-        if(isBodyTag())
+        int result = doStartTag();
+        if(Tag.EVAL_BODY_INCLUDE == result)
         {
-            processBodyTagLifecycle();
+            dumpBodyToOutput();
         }
-        else
-        {
-            processSimpleTagLifecycle();
-        }
+        return doEndTag();
     }
 
-    public void processSimpleTagLifecycle()
+    public int processIterationTagLifecycle()
     {
-        //TODO: implement me
+        int result = doStartTag();
+        if(Tag.EVAL_BODY_INCLUDE == result)
+        {
+            dumpBodyToOutput();
+            while(IterationTag.EVAL_BODY_AGAIN == doAfterBody())
+            {
+                dumpBodyToOutput();
+            }
+        }
+        return doEndTag();
     }
 
-    public void processBodyTagLifecycle()
+    public int processBodyTagLifecycle()
     {
-        //TODO: implement me
+        if(!isBodyTag()) throw new RuntimeException("current tag is no body tag");
+        int result = doStartTag();
+        if(Tag.EVAL_BODY_INCLUDE == result)
+        {
+            dumpBodyToOutput();
+            while(IterationTag.EVAL_BODY_AGAIN == doAfterBody())
+            {
+                dumpBodyToOutput();
+            }
+        }
+        else if(BodyTag.EVAL_BODY_BUFFERED == result)
+        {
+            BodyTagSupport bodyTag = (BodyTagSupport)tag;
+            MockBodyContent bodyContent = (MockBodyContent)getMockPageContext().pushBody();
+            bodyContent.setBody(getBody());
+            bodyTag.setBodyContent(bodyContent);
+            doInitBody();
+            dumpBodyToOutput();
+            while(IterationTag.EVAL_BODY_AGAIN == doAfterBody())
+            {
+                dumpBodyToOutput();
+            }
+            getMockPageContext().popBody();
+        }
+        return doEndTag();
     }
     
     /**
@@ -198,6 +256,21 @@ public class TagTestModule
             throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");
         }
     }
+    
+    private void dumpBodyToOutput()
+    { 
+        try
+        {
+            if(null == getBody()) return;
+            getMockPageContext().getOut().print(getBody());
+        }
+        catch(IOException exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+
     
     private boolean isBodyTag()
     {
