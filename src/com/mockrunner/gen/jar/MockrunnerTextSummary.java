@@ -15,6 +15,7 @@ import java.util.Set;
 
 import com.kirkk.analyzer.framework.Analyzer;
 import com.kirkk.analyzer.framework.JarBundle;
+import com.kirkk.analyzer.textui.Summary;
 
 public class MockrunnerTextSummary implements Summary
 {

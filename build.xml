@@ -152,7 +152,7 @@
     
     <target name="dependencies" depends="jar,jar1.3">
         <mkdir dir="${dependencies}" />
-        <taskdef name="jaranalyzer" classname="com.mockrunner.gen.jar.JarAnalyzerTask">
+        <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
             <classpath>
                 <pathelement location="${build}" />
                 <pathelement location="${config}" />
