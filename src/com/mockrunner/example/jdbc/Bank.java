@@ -19,7 +19,6 @@ import java.sql.Statement;
  */
 public class Bank
 {
-    private String dbURL;
     private Connection connection;
     
     public void connect() throws SQLException

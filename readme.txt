@@ -1,10 +1,10 @@
 Mockrunner is a lightweight framework for unit testing applications in
 the J2EE environment. It supports Struts actions and forms, servlets, 
-filters and tag classes. Furthermore it includes a JDBC test framework
-an can be used in conjunction with MockEJB (http://mockejb.sourceforge.net/) 
-to test EJB based applications.
+filters and tag classes. Furthermore it includes a JDBC test framework. 
+The JDBC test framework can be used standalone or in conjunction with MockEJB 
+(http://mockejb.sourceforge.net/) to test EJB based applications.
 
-It extends JUnit and simulates the necessary behaviour without calling 
+Mockrunner extends JUnit and simulates the necessary behaviour without calling 
 the real infrastructure. It does not need a running application server or
 a database. Furthermore it does not call the webcontainer or the
 Struts ActionServlet. This makes it very fast and enables the user to 
@@ -58,7 +58,9 @@ own base class for tests, you can use the Modules (e.g. ActionTestModule).
 Mockrunner requires at least Java 1.3 to run. If you are using Java 1.3
 you have to use the mockrunner-jkd1.3.jar. The JDBCTestModule is limited
 to JDBC API 2.1 in this case. If you are running Java 1.4 you can use
-JDBC 3.0. You have to use mockrunner.jar in this case.
+JDBC 3.0. You have to use mockrunner.jar in this case. The other test modules
+are identical in both versions. Mockrunner supports Servlet API 2.3 and
+Struts 1.1. Older versions are not supported.
 
 Mockrunner uses the following libraries and software components.
 You have to download them. Please add the specified jars to the classpath.
