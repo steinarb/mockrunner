@@ -37,8 +37,8 @@ public class MockrunnerJarTestConfiguration
         {
             List j2ee14Jars = getJ2EE14Jars();
             List j2ee13Jars = getJ2EE13Jars();
-            List j2ee14ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJ2EE14());
-            List j2ee13ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJ2EE13());
+            List j2ee14ThirdPartyJarURLs = getURLFromFileList(getThirdPartyStandardJarsJ2EE14());
+            List j2ee13ThirdPartyJarURLs = getURLFromFileList(getThirdPartyStandardJarsJ2EE13());
             List j2ee14mappings = createMappings(j2ee14Jars, j2ee14ThirdPartyJarURLs);
             List j2ee13mappings = createMappings(j2ee13Jars, j2ee13ThirdPartyJarURLs);
             List resultList = new ArrayList();
@@ -108,6 +108,30 @@ public class MockrunnerJarTestConfiguration
             urlList.add(currentFile.toURL());
         }
         return urlList;
+    }
+    
+    public List getThirdPartyStandardJarsJ2EE14()
+    {
+        String jarDirName = getBaseDir() + THIRD_PARTY_DIR;
+        List resultList = new ArrayList();
+        File[] files = new File(jarDirName).listFiles(new JarFileFilter());
+        for(int ii = 0; ii < files.length; ii++)
+        {
+            File currentFile = files[ii];
+            if(MockrunnerJars.getStandardInterfaceJ2EE14Jars().contains(currentFile.getName()))
+            {
+                resultList.add(currentFile);
+            }
+        }
+        return resultList;
+    }
+    
+    public List getThirdPartyStandardJarsJ2EE13()
+    {
+        List resultList = new ArrayList();
+        String jarDirName = getBaseDir() + THIRD_PARTY_DIR + File.separator + J2EE13_DIR;
+        resultList.addAll(Arrays.asList(new File(jarDirName).listFiles(new JarFileFilter())));
+        return resultList;
     }
     
     public List getThirdPartyJarsJ2EE14()
