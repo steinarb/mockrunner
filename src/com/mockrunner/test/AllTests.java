@@ -4,6 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import com.mockrunner.example.servlet.LogoutServletTest;
+import com.mockrunner.example.servlet.RedirectServletTest;
 import com.mockrunner.example.struts.AuthenticationActionTest;
 import com.mockrunner.example.struts.OrderActionTest;
 import com.mockrunner.example.struts.StoreDataActionTest;
@@ -27,6 +28,7 @@ public class AllTests
         suite.addTest(new TestSuite(ConstrainedNumericTextTagTest.class));
         suite.addTest(new TestSuite(TableEnumTagTest.class));
         suite.addTest(new TestSuite(LogoutServletTest.class));
+        suite.addTest(new TestSuite(RedirectServletTest.class));
         suite.addTest(new TestSuite(AuthenticationActionTest.class));
         suite.addTest(new TestSuite(StoreDataActionTest.class));
         suite.addTest(new TestSuite(OrderActionTest.class));

@@ -1,34 +1,29 @@
 package com.mockrunner.example.servlet;
 
-import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.servlet.ServletTestCaseAdapter;
 
 /**
  * Example test for {@link LogoutServlet}.
- * There is no <code>ServletTestModule</code> yet but it will be
- * included in future releases.
  */
-public class LogoutServletTest extends BaseTestCase
+public class LogoutServletTest extends ServletTestCaseAdapter
 {
-    private LogoutServlet servlet;
-    
     protected void setUp() throws Exception
     {
         super.setUp();
-        servlet = new LogoutServlet();
-        servlet.init(getMockObjectFactory().getMockServletConfig());
+        createServlet(LogoutServlet.class);
     }
     
     public void testDoNoLogout() throws Exception
     {
         getMockObjectFactory().getMockRequest().setupAddParameter("logout", "false");
-        servlet.doPost(getMockObjectFactory().getMockRequest(), getMockObjectFactory().getMockResponse());
+        doPost();
         assertTrue(getMockObjectFactory().getMockSession().isValid());
     }
     
     public void testDoLogout() throws Exception
     {
         getMockObjectFactory().getMockRequest().setupAddParameter("logout", "true");
-        servlet.doPost(getMockObjectFactory().getMockRequest(), getMockObjectFactory().getMockResponse());
+        doPost();
         assertFalse(getMockObjectFactory().getMockSession().isValid());
     }
 }

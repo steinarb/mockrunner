@@ -1,5 +1,6 @@
 package com.mockrunner.base;
 
+import com.mockrunner.servlet.ServletTestModule;
 import com.mockrunner.struts.*;
 import com.mockrunner.tag.*;
 
@@ -131,5 +132,26 @@ public abstract class BaseTestCase extends TestCase
     protected TagTestModule createTagTestModule()
     {
         return new TagTestModule(getMockObjectFactory());
+    }
+    
+    /**
+     * Creates an <code>ServletTestModule</code> with the specified
+     * <code>MockObjectFactory</code>.
+     * @return the created <code>TagTestModule</code>
+     */
+    protected ServletTestModule createServletTestModule(MockObjectFactory mockFactory)
+    {
+        return new ServletTestModule(mockFactory);
+    }
+
+    /**
+     * Creates an <code>ServletTestModule</code> based on the current
+     * <code>MockObjectFactory</code>.
+     * Same as <code>createTagTestModule(getMockObjectFactory())</code>.
+     * @return the created <code>TagTestModule</code>
+     */
+    protected ServletTestModule createServletTestModule()
+    {
+        return new ServletTestModule(getMockObjectFactory());
     }
 }
