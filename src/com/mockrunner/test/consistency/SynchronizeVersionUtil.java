@@ -131,7 +131,7 @@ public class SynchronizeVersionUtil
         System.out.println("Sucessfully finished processing for JDBC JDK1.3");
     }
     
-    private void processFiles(Map jdbcProcMap, Map map, String targetDir) throws FileNotFoundException, IOException
+    private void processFiles(Map procMap, Map map, String targetDir) throws FileNotFoundException, IOException
     {
         Iterator sourceIterator = map.keySet().iterator();
         while(sourceIterator.hasNext())
@@ -141,7 +141,7 @@ public class SynchronizeVersionUtil
             File currentDestFile = new File(targetDir + currentFileName);
             String sourceFileContent = StreamUtil.getReaderAsString(new FileReader(currentSourceFile));
             System.out.println("Processing file " + currentSourceFile);
-            String processedFileContent = processFile(currentFileName, sourceFileContent, jdbcProcMap);
+            String processedFileContent = processFile(currentFileName, sourceFileContent, procMap);
             if(null != processedFileContent)
             {
                 writeFileContent(processedFileContent, currentDestFile);
