@@ -135,10 +135,10 @@
             	</classpath>
             	
 			    <fileset dir="${src}" defaultexcludes="yes">
-			    	<include name="com/mockrunner/**" />
-			    	<exclude name="com/mockrunner/**/*.txt" />
-			    	<exclude name="com/mockrunner/test/**" />
-			    	<exclude name="com/mockrunner/example/ejb/interfaces/**" />
+			    	<include name="com/mockrunner/**"/>
+			    	<exclude name="com/mockrunner/**/*.txt"/>
+			    	<exclude name="com/mockrunner/**/*.properties"/>
+			    	<exclude name="com/mockrunner/test/**"/>
 			    </fileset>
 
     			 <doctitle><![CDATA[<h1>Mockrunner</h1>]]></doctitle>

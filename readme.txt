@@ -102,6 +102,7 @@ commons-logging.jar
 commons-collections.jar
 commons-beanutils.jar
 commons-lang.jar
+commons-digester.jar
 
 MockEJB 0.5:
 http://mockejb.sourceforge.net

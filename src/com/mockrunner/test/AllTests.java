@@ -15,6 +15,7 @@ import com.mockrunner.example.servlet.ImageButtonFilterTest;
 import com.mockrunner.example.servlet.LogoutServletTest;
 import com.mockrunner.example.servlet.RedirectServletTest;
 import com.mockrunner.example.struts.AuthenticationActionTest;
+import com.mockrunner.example.struts.GreetingsActionTest;
 import com.mockrunner.example.struts.LogoutActionTest;
 import com.mockrunner.example.struts.OrderActionTest;
 import com.mockrunner.example.struts.StoreDataActionTest;
@@ -50,6 +51,7 @@ public class AllTests
         suite.addTest(new TestSuite(RedirectServletTest.class));
         suite.addTest(new TestSuite(AuthenticationActionTest.class));
         suite.addTest(new TestSuite(StoreDataActionTest.class));
+        suite.addTest(new TestSuite(GreetingsActionTest.class));
         suite.addTest(new TestSuite(OrderActionTest.class));
         suite.addTest(new TestSuite(LogoutActionTest.class));
         suite.addTest(new TestSuite(ImageButtonFilterTest.class));
