@@ -181,7 +181,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * parameter with index 1.
      * @param sql the SQL string
      * @param resultSet the corresponding {@link MockResultSet}
-     * @param paramters the parameters
+     * @param parameters the parameters
      */
     public void prepareResultSet(String sql, MockResultSet resultSet, Object[] parameters)
     {
@@ -198,7 +198,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * parameter with index 1.
      * @param sql the SQL string
      * @param resultSet the corresponding {@link MockResultSet}
-     * @param paramters the parameters
+     * @param parameters the parameters
      */
     public void prepareResultSet(String sql, MockResultSet resultSet, List parameters)
     {
@@ -219,7 +219,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * there are allowed also <code>String</code> keys for named parameters.
      * @param sql the SQL string
      * @param resultSet the corresponding {@link MockResultSet}
-     * @param paramters the parameters
+     * @param parameters the parameters
      */
     public void prepareResultSet(String sql, MockResultSet resultSet, Map parameters)
     {
@@ -242,7 +242,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * objects start with 1 as the first parameter. So <code>parameters[0]</code> 
      * maps to the parameter with index 1.
      * @param sql the SQL string
-     * @param paramters the parameters
+     * @param parameters the parameters
      */
     public void prepareThrowsSQLException(String sql, Object[] parameters)
     {
@@ -260,7 +260,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * parameter. So <code>parameters.get(0)</code> maps to the parameter 
      * with index 1.
      * @param sql the SQL string
-     * @param paramters the parameters
+     * @param parameters the parameters
      */
     public void prepareThrowsSQLException(String sql, List parameters)
     {
@@ -277,7 +277,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * should raise an exception.
      * This can be used to simulate database exceptions.
      * @param sql the SQL string
-     * @param paramters the parameters
+     * @param parameters the parameters
      */
     public void prepareThrowsSQLException(String sql, Map parameters)
     {
@@ -300,7 +300,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * parameter with index 1.
      * @param sql the SQL string
      * @param updateCount the update count
-     * @param paramters the parameters
+     * @param parameters the parameters
      */
     public void prepareUpdateCount(String sql, int updateCount, Object[] parameters)
     {
@@ -317,7 +317,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * parameter with index 1.
      * @param sql the SQL string
      * @param updateCount the update count
-     * @param paramters the parameters
+     * @param parameters the parameters
      */
     public void prepareUpdateCount(String sql, int updateCount, List parameters)
     {
@@ -337,8 +337,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * is the index of the parameter. In the case of a <code>CallableStatement</code>
      * there are allowed also <code>String</code> keys for named parameters.
      * @param sql the SQL string
-     * @param paramters the parameters
-     * @param resultSet the corresponding {@link MockResultSet}
+     * @param updateCount the update count
+     * @param parameters the parameters
      */
     public void prepareUpdateCount(String sql, int updateCount, Map parameters)
     {

@@ -5,7 +5,7 @@ import com.mockrunner.struts.ActionTestCaseAdapter;
 import com.mockrunner.struts.ActionTestModule;
 
 /**
- * Example test for {@link }. 
+ * Example test for {@link StoreDataAction}. 
  * Demonstrates multithread testing. The use of an inner thread 
  * class and  a single test method is a standard pattern that can 
  * be used in any multithreading test for Servlets and actions.

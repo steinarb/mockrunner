@@ -135,7 +135,7 @@ public abstract class AbstractResultSetHandler
     
     /**
      * Returns the <code>List</code> of all executed SQL strings.
-     * @param the <code>List</code> of executed SQL strings
+     * @return the <code>List</code> of executed SQL strings
      */
     public List getExecutedStatements()
     {
@@ -144,7 +144,7 @@ public abstract class AbstractResultSetHandler
     
     /**
      * Returns the <code>List</code> of all returned <code>ResultSet</code> objects.
-     * @param the <code>List</code> of returned <code>ResultSet</code> objects
+     * @return the <code>List</code> of returned <code>ResultSet</code> objects
      */
     public List getReturnedResultSets()
     {

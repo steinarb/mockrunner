@@ -53,7 +53,7 @@ public class EJBTestModule
      * Sets the suffix of the remote (resp. local) interface. The
      * default is an empty string, i.e. if the implementation class is
      * <code>TestBean</code>, the remote interface is <code>Test</code>
-     * @param remoteSuffix the bean remote interface suffix
+     * @param businessInterfaceSuffix the bean remote interface suffix
      */
     public void setBusinessInterfaceSuffix(String businessInterfaceSuffix)
     {
@@ -246,8 +246,6 @@ public class EJBTestModule
      * Resets the {@link com.mockrunner.mock.ejb.MockUserTransaction}.
      * Note: If you do not use the {@link com.mockrunner.mock.ejb.MockUserTransaction}
      * implementation, this method does nothing.
-     * @param name the name of the object
-     * @param object the object to add
      */
     public void resetUserTransaction()
     {

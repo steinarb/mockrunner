@@ -524,7 +524,7 @@ public class MockResultSet implements ResultSet, Cloneable
      * {@link com.mockrunner.util.ParameterUtil#compareParameter} method) they
      * will be converted to a string with the <code>toString()</code> method before
      * comparison.
-     * @param number the number of the column
+     * @param name the name of the column
      * @param columnData the column data
      * @return <code>true</code> if the column is equal to the specified data,
      *         <code>false</code> otherwise

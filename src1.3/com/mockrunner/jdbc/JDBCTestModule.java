@@ -406,7 +406,7 @@ public class JDBCTestModule
      * Returns a parameter that was added to a <code>CallableStatement</code>
      * using its <code>set</code> methods.
      * @param statement the <code>CallableStatement</code>
-     * @param indexOfParameter the index used to set the parameter
+     * @param nameOfParameter the name of the parameter
      * @return the corresponding object
      */
     public Object getCallableStatementParameter(CallableStatement statement, String nameOfParameter)
@@ -420,7 +420,7 @@ public class JDBCTestModule
      * using its <code>set</code> methods. Uses the first <code>CallableStatement</code>
      * with the specified SQL statement.
      * @param sql the SQL statement
-     * @param indexOfParameter the index used to set the object
+     * @param nameOfParameter the name of the parameter
      * @return the corresponding object
      */
     public Object getCallableStatementParameter(String sql, String nameOfParameter)
@@ -432,7 +432,7 @@ public class JDBCTestModule
      * Returns an object that was added to a <code>CallableStatement</code>
      * using its <code>set</code> methods.
      * @param indexOfStatement the index of the statement
-     * @param indexOfParameter the index used to set the object
+     * @param nameOfParameter the name of the parameter
      * @return the corresponding object
      */
     public Object getCallableStatementParameter(int indexOfStatement, String nameOfParameter)
@@ -444,10 +444,10 @@ public class JDBCTestModule
      * Returns a list of all <code>Savepoint</code> objects.
      * @return the <code>List</code> of {@link com.mockrunner.mock.jdbc.MockSavepoint} objects
      */
-    /*public List getSavepoints()
+    public List getSavepoints()
     {
         return new ArrayList(mockFactory.getMockConnection().getSavepointMap().values());
-    }*/
+    }
     
     /**
      * Returns the <code>Savepoint</code> with the specified index.
@@ -811,7 +811,7 @@ public class JDBCTestModule
      * autocommit mode. Automatic commits are not recognized.
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyCommited()
+    public void verifyCommitted()
     {
         int number = mockFactory.getMockConnection().getNumberCommits();
         if(number <= 0)
@@ -821,18 +821,34 @@ public class JDBCTestModule
     }
     
     /**
+     * @deprecated use {@link #verifyCommitted}
+     */
+    public void verifyCommited()
+    {
+        verifyCommitted();
+    }
+    
+    /**
      * Verifies that the changes were not commited.
      * Makes only sense, if the <code>Connection</code> is not in
      * autocommit mode. Automatic commits are not recognized.
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNotCommited()
+    public void verifyNotCommitted()
     {
         int number = mockFactory.getMockConnection().getNumberCommits();
         if(number > 0)
         {
-            throw new VerifyFailedException("Connection was commited");
+            throw new VerifyFailedException("Connection was committed");
         }
+    }
+    
+    /**
+     * @deprecated use {@link #verifyNotCommitted}
+     */
+    public void verifyNotCommited()
+    {
+        verifyNotCommitted();
     }
     
     /**
@@ -1478,7 +1494,7 @@ public class JDBCTestModule
      * Verifies that a parameter was added to a <code>CallableStatement</code> with
      * the specified index.
      * @param statement the <code>CallableStatement</code>
-     * @param indexOfObject the index used to set the object
+     * @param indexOfParameter the index used to set the object
      * @throws VerifyFailedException if verification fails
      */
     public void verifyCallableStatementParameterPresent(CallableStatement statement, int indexOfParameter)
@@ -1567,7 +1583,7 @@ public class JDBCTestModule
      * Verifies that a parameter was added to a <code>CallableStatement</code> with
      * the specified index.
      * @param statement the <code>CallableStatement</code>
-     * @param indexOfObject the index used to set the object
+     * @param nameOfParameter the name of the parameter
      * @throws VerifyFailedException if verification fails
      */
     public void verifyCallableStatementParameterPresent(CallableStatement statement, String nameOfParameter)
@@ -1583,7 +1599,7 @@ public class JDBCTestModule
      * the specified index. Uses the first <code>CallableStatement</code> with
      * the specified SQL.
      * @param sql the SQL statement of the <code>CallableStatement</code>
-     * @param indexOfParameter the index used to set the object
+     * @param nameOfParameter the name of the parameter
      * @throws VerifyFailedException if verification fails
      */
     public void verifyCallableStatementParameterPresent(String sql, String nameOfParameter)
@@ -1598,7 +1614,7 @@ public class JDBCTestModule
      * Verifies that a parameter was added to a <code>CallableStatement</code> with
      * the specified index.
      * @param indexOfStatement the index of the statement
-     * @param indexOfParameter the index used to set the object
+     * @param nameOfParameter the name of the parameter
      * @throws VerifyFailedException if verification fails
      */
     public void verifyCallableStatementParameterPresent(int indexOfStatement, String nameOfParameter)
@@ -1612,7 +1628,7 @@ public class JDBCTestModule
     /**
      * Verifies that a parameter with the specified index is not present.
      * @param statement the <code>CallableStatement</code>
-     * @param indexOfParameter the index used to set the object
+     * @param nameOfParameter the name of the parameter
      * @throws VerifyFailedException if verification fails
      */
     public void verifyCallableStatementParameterNotPresent(CallableStatement statement, String nameOfParameter)
@@ -1627,7 +1643,7 @@ public class JDBCTestModule
      * Verifies that a parameter with the specified index is not present.
      * Uses the first <code>CallableStatement</code> with the specified SQL.
      * @param sql the SQL statement of the <code>CallableStatement</code>
-     * @param indexOfParameter the index used to set the object
+     * @param nameOfParameter the name of the parameter
      * @throws VerifyFailedException if verification fails
      */
     public void verifyCallableStatementParameterNotPresent(String sql, String nameOfParameter)
@@ -1641,7 +1657,7 @@ public class JDBCTestModule
     /**
      * Verifies that a parameter with the specified index is not present.
      * @param indexOfStatement the index of the statement
-     * @param indexOfParameter the index used to set the object
+     * @param nameOfParameter the name of the parameter
      * @throws VerifyFailedException if verification fails
      */
     public void verifyCallableStatementParameterNotPresent(int indexOfStatement, String nameOfParameter)
@@ -1697,7 +1713,7 @@ public class JDBCTestModule
      * Verifies that a parameter from the <code>PreparedStatement</code> with the
      * specified SQL statement is equal to the specified object.
      * Please use the corresponding wrapper type for primitive data types.
-     * @param sql the SQL statement of the <code>PreparedStatement</code>
+     * @param indexOfStatement the index of the statement
      * @param indexOfParameter the index used to set the object
      * @param object the expected object
      * @throws VerifyFailedException if verification fails
@@ -1758,7 +1774,7 @@ public class JDBCTestModule
      * Verifies that a parameter from the <code>CallableStatement</code> with the
      * specified SQL statement is equal to the specified object.
      * Please use the corresponding wrapper type for primitive data types.
-     * @param sql the SQL statement of the <code>CallableStatement</code>
+     * @param indexOfStatement the index of the statement
      * @param indexOfParameter the index used to set the object
      * @param object the expected object
      * @throws VerifyFailedException if verification fails
@@ -1779,7 +1795,7 @@ public class JDBCTestModule
      * to the specified object. Please use the corresponding wrapper type 
      * for primitive data types.
      * @param statement the <code>CallableStatement</code>
-     * @param indexOfParameter the index used to set the object
+     * @param nameOfParameter the name of the parameter
      * @param object the expected object
      * @throws VerifyFailedException if verification fails
      */
@@ -1800,7 +1816,7 @@ public class JDBCTestModule
      * Uses the first <code>CallableStatement</code> with the specified SQL.
      * Please use the corresponding wrapper type for primitive data types.
      * @param sql the SQL statement of the <code>CallableStatement</code>
-     * @param indexOfParameter the index used to set the object
+     * @param nameOfParameter the name of the parameter
      * @param object the expected object
      * @throws VerifyFailedException if verification fails
      */
@@ -1819,8 +1835,8 @@ public class JDBCTestModule
      * Verifies that a parameter from the <code>CallableStatement</code> with the
      * specified SQL statement is equal to the specified object.
      * Please use the corresponding wrapper type for primitive data types.
-     * @param sql the SQL statement of the <code>CallableStatement</code>
-     * @param indexOfParameter the index used to set the object
+     * @param indexOfStatement the index of the statement
+     * @param nameOfParameter the name of the parameter
      * @param object the expected object
      * @throws VerifyFailedException if verification fails
      */
