@@ -51,7 +51,7 @@ public class BookstoreTest extends JDBCTestCaseAdapter
     {
         FileResultSetFactory factory = new FileResultSetFactory("src/com/mockrunner/example/jdbc/bookstore.txt");
         factory.setFirstLineContainsColumnNames(true);
-        MockResultSet result = getPreparedStatementResultSetHandler().createResultSet("bookresult", factory);    
+        MockResultSet result = getStatementResultSetHandler().createResultSet("bookresult", factory);    
         //System.out.println(result.toString());
         getStatementResultSetHandler().prepareResultSet("select.*isbn,.*quantity.*", result);
         List resultList = Bookstore.order(getJDBCMockObjectFactory().getMockConnection(), new ArrayList());

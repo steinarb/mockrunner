@@ -9,6 +9,7 @@ mockrunner-0.3.1:
 - replaced all System.out and exc.printStackTrace with commons-logging
   statements in all framework classes
 - improved version of UserTransaction
+- fixed getPreparedStatementResultSetHandler() problem in BookstoreTest
 - UserTransaction is now automatically bound to java:comp/UserTransaction
 - updated mockejb.jar from 0.5 to 0.6 beta2
 - replaced jakarta-oro.jar from Struts release with jakarta-oro-2.0.8.jar
