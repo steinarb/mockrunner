@@ -171,7 +171,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     
     /**
      * Delegates to {@link ServletTestModule#doGet}
-     */  
+     */
     protected void doGet()
     {
         servletTestModule.doGet();
@@ -179,7 +179,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     
     /**
      * Delegates to {@link ServletTestModule#doOptions}
-     */  
+     */
     protected void doOptions()
     {
         servletTestModule.doOptions();
@@ -187,7 +187,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
      
     /**
      * Delegates to {@link ServletTestModule#doPost}
-     */      
+     */   
     protected void doPost()
     {
         servletTestModule.doPost();
@@ -195,7 +195,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     
     /**
      * Delegates to {@link ServletTestModule#doPut}
-     */      
+     */ 
     protected void doPut()
     {
         servletTestModule.doPut();
@@ -203,10 +203,18 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     
     /**
      * Delegates to {@link ServletTestModule#doTrace}
-     */    
+     */
     protected void doTrace()
     {
         servletTestModule.doTrace();
+    }
+    
+    /**
+     * Delegates to {@link ServletTestModule#doHead}
+     */
+    protected void doHead()
+    {
+        servletTestModule.doHead();
     }
     
     /**

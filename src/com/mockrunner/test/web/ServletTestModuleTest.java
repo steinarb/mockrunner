@@ -61,6 +61,8 @@ public class ServletTestModuleTest extends BaseTestCase
         assertTrue(servlet.wasDoPutCalled());
         module.doTrace();
         assertTrue(servlet.wasDoTraceCalled());
+        module.doHead();
+        assertTrue(servlet.wasDoHeadCalled());
     }
     
     public void testFilterChain()

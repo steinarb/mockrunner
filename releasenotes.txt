@@ -1,6 +1,8 @@
 
 mockrunner-0.2.8:
 
+- added doHead() to ServletTestModule 
+
 mockrunner-0.2.7:
 
 - applied patch 910699 (MockUserPrincipal by Lance Lavandowska)
