@@ -29,10 +29,12 @@ import com.mockobjects.sql.MockResultSetMetaData;
 public class MockPreparedStatement extends MockStatement implements PreparedStatement
 {
     private Map setObjects = new HashMap();
+    private String sql;
     
-    public MockPreparedStatement(Connection connection)
+    public MockPreparedStatement(Connection connection, String sql)
     {
         super(connection);
+        this.sql = sql;
     }
     
     public Map getObjectMap()

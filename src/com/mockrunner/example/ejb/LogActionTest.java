@@ -26,8 +26,8 @@ public class LogActionTest extends ActionTestCaseAdapter
     {
         getMockObjectFactory().getMockRequest().setupAddParameter("message", "testmessage");
         actionPerform(LogAction.class);
-        jdbcModule.verifyPreparedStatementPresent("insert into logtable values(?, ?, ?)");
-        jdbcModule.verifyPreparedStatementObject("insert into logtable values(?, ?, ?)", 3, "testmessage");
+        jdbcModule.verifyPreparedStatementPresent("insert into logtable");
+        jdbcModule.verifyPreparedStatementObject("insert into logtable", 3, "testmessage");
     }
     
 }
