@@ -1,9 +1,9 @@
-package com.mockrunner.test.gen;
+package com.mockrunner.test.gen.util;
 
 import java.lang.reflect.Method;
 import java.net.URL;
 
-import com.mockrunner.gen.BCELClassAnalyzer;
+import com.mockrunner.gen.util.BCELClassAnalyzer;
 
 import junit.framework.TestCase;
 

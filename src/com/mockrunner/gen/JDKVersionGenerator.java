@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.mockrunner.gen.util.GeneratorUtil;
+import com.mockrunner.gen.util.JavaLineProcessor;
 import com.mockrunner.util.StreamUtil;
 
 public class JDKVersionGenerator

@@ -1,4 +1,4 @@
-package com.mockrunner.gen;
+package com.mockrunner.gen.util;
 
 import java.io.IOException;
 import java.io.LineNumberReader;

@@ -1,11 +1,11 @@
-package com.mockrunner.test.gen;
+package com.mockrunner.test.gen.util;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import com.mockrunner.gen.PackageImportSorter;
+import com.mockrunner.gen.util.PackageImportSorter;
 
 import junit.framework.TestCase;
 

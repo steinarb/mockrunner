@@ -1,4 +1,4 @@
-package com.mockrunner.gen;
+package com.mockrunner.gen.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -10,8 +10,8 @@ import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.HTMLOutputTestCase;
 import com.mockrunner.base.WebTestModule;
-import com.mockrunner.gen.JavaClassGenerator.ConstructorDeclaration;
-import com.mockrunner.gen.JavaClassGenerator.MethodDeclaration;
+import com.mockrunner.gen.util.JavaClassGenerator.ConstructorDeclaration;
+import com.mockrunner.gen.util.JavaClassGenerator.MethodDeclaration;
 import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.ClassUtil;
 
@@ -163,8 +163,12 @@ public class StandardAdapterProcessor implements AdapterProcessor
             if(parameters.length > 0)
             {
                 delegationMethod.setArguments(parameters);
-                argumentNames = getArgumentNames(parameters);
-                delegationMethod.setArgumentNames(getArgumentNames(parameters));
+                argumentNames = analyzer.getArgumentNames(method);
+                if(null == argumentNames || argumentNames.length <= 0)
+                {
+                    argumentNames = prepareSuitableArgumentNames(parameters);
+                }
+                delegationMethod.setArgumentNames(argumentNames);
             }
             String delegationCodeLine = createDelegationCodeLine(method, memberName, argumentNames);
             delegationMethod.setCodeLines(new String[] {delegationCodeLine});
@@ -184,7 +188,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         classGenerator.addConstructorDeclaration(constructor);
     }
     
-    private String[] getArgumentNames(Class[] arguments)
+    private String[] prepareSuitableArgumentNames(Class[] arguments)
     {
         String[] names = new String[arguments.length];
         for(int ii = 0; ii < arguments.length; ii++)

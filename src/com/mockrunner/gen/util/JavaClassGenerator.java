@@ -1,4 +1,4 @@
-package com.mockrunner.gen;
+package com.mockrunner.gen.util;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.mockrunner.test.gen;
+package com.mockrunner.test.gen.util;
 
 import java.beans.IntrospectionException;
 import java.util.List;
@@ -8,9 +8,9 @@ import javax.servlet.http.HttpServlet;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.gen.JavaClassGenerator;
-import com.mockrunner.gen.JavaClassGenerator.ConstructorDeclaration;
-import com.mockrunner.gen.JavaClassGenerator.MethodDeclaration;
+import com.mockrunner.gen.util.JavaClassGenerator;
+import com.mockrunner.gen.util.JavaClassGenerator.ConstructorDeclaration;
+import com.mockrunner.gen.util.JavaClassGenerator.MethodDeclaration;
 import com.mockrunner.util.ClassUtil;
 import com.mockrunner.util.CollectionUtil;
 import com.mockrunner.util.XmlUtil;
@@ -72,7 +72,7 @@ public class JavaClassGeneratorTest extends TestCase
     
     private String getExpected()
     {
-        return "package com.mockrunner.test.gen;" + NL + NL +
+        return "package com.mockrunner.test.gen.util;" + NL + NL +
                "import java.beans.IntrospectionException;" + NL +
                "import java.util.List;" + NL +
                "import java.util.Map;" + NL + NL +
