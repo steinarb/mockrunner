@@ -11,6 +11,7 @@ mockrunner-0.2.1:
   com.mockrunner.mock.ejb package now.
 - introduced EJBTestModule
 - updated jboss-j2ee.jar from JBoss 3.2.2 rc2 to JBoss 3.2.2 final
+- updated nekohtml.jar from 0.8.1 to 0.8.2
 
 mockrunner-0.2:
 
