@@ -1317,7 +1317,9 @@ public class MockResultSet implements ResultSet, Cloneable
 
     public boolean isBeforeFirst() throws SQLException
     {
-        return cursor == -1;
+        // Counterintuitively, this method is supposed to return false when the
+        // result set is empty.
+        return (getRowCount() != 0) && (cursor == -1);
     }
 
     public boolean isAfterLast() throws SQLException
@@ -1332,7 +1334,7 @@ public class MockResultSet implements ResultSet, Cloneable
 
     public boolean isLast() throws SQLException
     {
-        return cursor == getRowCount() - 1;
+        return (cursor != -1) && (cursor == getRowCount() - 1);
     }
 
     public void beforeFirst() throws SQLException

@@ -281,16 +281,24 @@ public class MockResultSetTest extends TestCase
     public void testEmptyResultSet() throws Exception
     {
         resultSet.addColumn("test");
+
+        assertFalse(resultSet.isFirst());
+        assertFalse(resultSet.isAfterLast());
+        assertFalse(resultSet.isBeforeFirst());
+        assertFalse(resultSet.isLast());
+        
         assertFalse(resultSet.next());
         assertFalse(resultSet.first());
         assertFalse(resultSet.last());
         assertFalse(resultSet.previous());
         assertFalse(resultSet.absolute(1));
         assertFalse(resultSet.relative(1));
+
         assertFalse(resultSet.isFirst());
         assertFalse(resultSet.isAfterLast());
-        assertTrue(resultSet.isBeforeFirst());
-        assertTrue(resultSet.isLast());
+        assertFalse(resultSet.isBeforeFirst());
+        assertFalse(resultSet.isLast());
+        
         assertNull(resultSet.getString("test"));
         assertNull(resultSet.getString(1));
     }

@@ -2,6 +2,9 @@
 mockrunner-0.2.8:
 
 - added doHead() to ServletTestModule
+- applied patch (by Steven Blundy), MockResultSet.isBeforeFirst() now returns 
+  false, if the ResultSet is empty. MockResultSet.isLast() also returns false
+  in case of an empty ResultSet.
 - updated nekohtml.jar from 0.9 to 0.9.2
 - namespace processing is fixed in NekoHTML 0.9.2
 
