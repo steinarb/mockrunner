@@ -2,11 +2,11 @@ package com.mockrunner.test.jdbc;
 
 import java.sql.Date;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.jdbc.CallableStatementResultSetHandler;
+import com.mockrunner.jdbc.ParameterSets;
 import com.mockrunner.jdbc.PreparedStatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockConnection;
@@ -31,10 +31,10 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 	{
 		MockPreparedStatement preparedStatement = (MockPreparedStatement)connection.prepareStatement("select");
 		preparedStatement.execute();
-		assertNull(preparedStatementHandler.getParameterListForExecutedStatement("select abc"));
+		assertNull(preparedStatementHandler.getParametersForExecutedStatement("select abc"));
 		MockCallableStatement callableStatement = (MockCallableStatement)connection.prepareCall("select");
 		callableStatement.execute();
-		assertNull(callableStatementHandler.getParameterListForExecutedStatement("select abc"));
+		assertNull(callableStatementHandler.getParametersForExecutedStatement("select abc"));
 	}
 	
 	public void testGetParameterMapForExecutedStatementEmptyMapQuery() throws Exception
@@ -42,18 +42,18 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 		MockPreparedStatement preparedStatement = (MockPreparedStatement)connection.prepareStatement("select");
 		preparedStatement.execute();
 		assertTrue(preparedStatementHandler.getExecutedStatements().contains("select"));
-		assertNotNull(preparedStatementHandler.getParameterListForExecutedStatement("select"));
-		assertEquals(1, preparedStatementHandler.getParameterListForExecutedStatement("select").size());
-		Map parameterMap = (Map)preparedStatementHandler.getParameterListForExecutedStatement("select").get(0);
+		assertNotNull(preparedStatementHandler.getParametersForExecutedStatement("select"));
+		assertEquals(1, preparedStatementHandler.getParametersForExecutedStatement("select").getNumberParameterSets());
+		Map parameterMap = preparedStatementHandler.getParametersForExecutedStatement("select").getParameterSet(0);
 		assertEquals(0, parameterMap.size());
 		preparedStatement.setByte(1, (byte)2);
 		assertEquals(0, parameterMap.size());
 		MockCallableStatement callableStatement = (MockCallableStatement)connection.prepareCall("select");
 		callableStatement.execute();
 		assertTrue(callableStatementHandler.getExecutedStatements().contains("select"));
-		assertNotNull(callableStatementHandler.getParameterListForExecutedStatement("select"));
-		assertEquals(1, callableStatementHandler.getParameterListForExecutedStatement("select").size());
-		parameterMap = (Map)callableStatementHandler.getParameterListForExecutedStatement("select").get(0);
+		assertNotNull(callableStatementHandler.getParametersForExecutedStatement("select"));
+		assertEquals(1, callableStatementHandler.getParametersForExecutedStatement("select").getNumberParameterSets());
+		parameterMap = (Map)callableStatementHandler.getParametersForExecutedStatement("select").getParameterSet(0);
 		assertEquals(0, parameterMap.size());
 	}
 	
@@ -62,18 +62,18 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 		MockPreparedStatement preparedStatement = (MockPreparedStatement)connection.prepareStatement("update");
 		preparedStatement.execute();
 		assertTrue(preparedStatementHandler.getExecutedStatements().contains("update"));
-		assertNotNull(preparedStatementHandler.getParameterListForExecutedStatement("update"));
-		assertEquals(1, preparedStatementHandler.getParameterListForExecutedStatement("update").size());
-		Map parameterMap = (Map)preparedStatementHandler.getParameterListForExecutedStatement("update").get(0);
+		assertNotNull(preparedStatementHandler.getParametersForExecutedStatement("update"));
+		assertEquals(1, preparedStatementHandler.getParametersForExecutedStatement("update").getNumberParameterSets());
+		Map parameterMap = (Map)preparedStatementHandler.getParametersForExecutedStatement("update").getParameterSet(0);
 		assertEquals(0, parameterMap.size());
 		preparedStatement.setString(1, "test");
 		assertEquals(0, parameterMap.size());
 		MockCallableStatement callableStatement = (MockCallableStatement)connection.prepareCall("insert");
 		callableStatement.execute();
 		assertTrue(callableStatementHandler.getExecutedStatements().contains("insert"));
-		assertNotNull(callableStatementHandler.getParameterListForExecutedStatement("insert"));
-		assertEquals(1, callableStatementHandler.getParameterListForExecutedStatement("insert").size());
-		parameterMap = (Map)callableStatementHandler.getParameterListForExecutedStatement("insert").get(0);
+		assertNotNull(callableStatementHandler.getParametersForExecutedStatement("insert"));
+		assertEquals(1, callableStatementHandler.getParametersForExecutedStatement("insert").getNumberParameterSets());
+		parameterMap = (Map)callableStatementHandler.getParametersForExecutedStatement("insert").getParameterSet(0);
 		assertEquals(0, parameterMap.size());
 	}
 	
@@ -85,7 +85,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 		preparedStatement.setInt(2, 3);
 		preparedStatement.executeQuery();
 		assertTrue(preparedStatementHandler.getExecutedStatements().contains("select"));
-		Map parameterMap = (Map)preparedStatementHandler.getParameterListForExecutedStatement("select").get(0);
+		Map parameterMap = (Map)preparedStatementHandler.getParametersForExecutedStatement("select").getParameterSet(0);
 		assertEquals(2, parameterMap.size());
 		assertEquals("test", parameterMap.get(new Integer(1)));
 		assertEquals(new Integer(3), parameterMap.get(new Integer(2)));
@@ -95,7 +95,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 		MockCallableStatement callableStatement = (MockCallableStatement)connection.prepareCall("select");
 		callableStatement.setBoolean(1, true);
 		callableStatement.execute();
-		parameterMap = (Map)callableStatementHandler.getParameterListForExecutedStatement("select").get(0);
+		parameterMap = (Map)callableStatementHandler.getParametersForExecutedStatement("select").getParameterSet(0);
 		assertEquals(1, parameterMap.size());
 		assertEquals(new Boolean(true), parameterMap.get(new Integer(1)));
 	}
@@ -107,7 +107,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 		preparedStatement.setBytes(1, new byte[] {1, 2, 3});
 		preparedStatement.execute();
 		assertTrue(preparedStatementHandler.getExecutedStatements().contains("delete"));
-		Map parameterMap = (Map)preparedStatementHandler.getParameterListForExecutedStatement("delete").get(0);
+		Map parameterMap = (Map)preparedStatementHandler.getParametersForExecutedStatement("delete").getParameterSet(0);
 		assertEquals(1, parameterMap.size());
 		assertTrue(Arrays.equals(new byte[] {1, 2, 3}, (byte[])parameterMap.get(new Integer(1))));
 		callableStatementHandler.prepareResultSet("insert", new MockResultSet("id"));
@@ -115,7 +115,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 		callableStatement.setDate("1", new Date(1));
 		callableStatement.setString(2, "test");
 		callableStatement.executeUpdate();
-		parameterMap = (Map)callableStatementHandler.getParameterListForExecutedStatement("insert").get(0);
+		parameterMap = (Map)callableStatementHandler.getParametersForExecutedStatement("insert").getParameterSet(0);
 		assertEquals(2, parameterMap.size());
 		assertEquals(new Date(1), parameterMap.get("1"));
 		assertEquals("test", parameterMap.get(new Integer(2)));
@@ -131,9 +131,9 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 		preparedStatement2.execute();
 		Map parameterMap = preparedStatementHandler.getExecutedStatementParameter();
 		assertEquals(2, parameterMap.size());
-		Map deleteParameters = (Map)((List)parameterMap.get("delete")).get(0);
+		Map deleteParameters = ((ParameterSets)parameterMap.get("delete")).getParameterSet(0);
 		assertEquals(0, deleteParameters.size());
-		Map updateParameters = (Map)((List)parameterMap.get("update")).get(0);
+		Map updateParameters = ((ParameterSets)parameterMap.get("update")).getParameterSet(0);
 		assertEquals(2, updateParameters.size());
 		assertEquals("1", updateParameters.get(new Integer(1)));
 		assertEquals("2", updateParameters.get(new Integer(2)));
@@ -155,14 +155,14 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 		callableStatement3.execute();
 		Map parameterMap = callableStatementHandler.getExecutedStatementParameter();
 		assertEquals(3, parameterMap.size());
-		Map insertParameters = (Map)((List)parameterMap.get("insert")).get(0);
+		Map insertParameters = (Map)((ParameterSets)parameterMap.get("insert")).getParameterSet(0);
 		assertEquals(1, insertParameters.size());
 		assertEquals(new Integer(1), insertParameters.get("1"));
-		Map selectXParameters = (Map)((List)parameterMap.get("select x")).get(0);
+		Map selectXParameters = (Map)((ParameterSets)parameterMap.get("select x")).getParameterSet(0);
 		assertEquals(2, selectXParameters.size());
 		assertEquals("1", selectXParameters.get("1"));
 		assertEquals("2", selectXParameters.get("2"));
-		Map selectYParameters = (Map)((List)parameterMap.get("select y")).get(0);
+		Map selectYParameters = (Map)((ParameterSets)parameterMap.get("select y")).getParameterSet(0);
 		assertEquals(3, selectYParameters.size());
 		assertEquals(new Integer(1), selectYParameters.get("1"));
 		assertEquals(new Integer(2), selectYParameters.get("2"));
@@ -185,22 +185,22 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 		preparedStatement2.execute();
 		Map parameterMap = preparedStatementHandler.getExecutedStatementParameter();
 		assertEquals(2, parameterMap.size());
-		List listFor1 = (List)parameterMap.get("select");
-		assertEquals(3, listFor1.size());
-		Map mapFor1 = (Map)listFor1.get(0);
+		ParameterSets setsFor1 = (ParameterSets)parameterMap.get("select");
+		assertEquals(3, setsFor1.getNumberParameterSets());
+		Map mapFor1 = (Map)setsFor1.getParameterSet(0);
 		assertEquals(0, mapFor1.size());
-		mapFor1 = (Map)listFor1.get(1);
+		mapFor1 = (Map)setsFor1.getParameterSet(1);
 		assertEquals(2, mapFor1.size());
 		assertEquals("test", mapFor1.get(new Integer(1)));
 		assertEquals(new Integer(3), mapFor1.get(new Integer(2)));
-		mapFor1 = (Map)listFor1.get(2);
+		mapFor1 = (Map)setsFor1.getParameterSet(2);
 		assertEquals(1, mapFor1.size());
 		assertEquals("xyz", mapFor1.get(new Integer(1)));
-		List listFor2 = (List)parameterMap.get("insert");
-		assertEquals(2, listFor2.size());
-		Map mapFor2 = (Map)listFor2.get(0);
+		ParameterSets setsFor2 = (ParameterSets)parameterMap.get("insert");
+		assertEquals(2, setsFor2.getNumberParameterSets());
+		Map mapFor2 = (Map)setsFor2.getParameterSet(0);
 		assertEquals(0, mapFor2.size());
-		mapFor2 = (Map)listFor2.get(1);
+		mapFor2 = (Map)setsFor2.getParameterSet(1);
 		assertEquals("anothertest", mapFor2.get(new Integer(1)));
 	}
 }

@@ -36,30 +36,28 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
 		{
 			if(null == executedStatementParameters.get(sql))
 			{
-				executedStatementParameters.put(sql, new ArrayList());
+				executedStatementParameters.put(sql, new ParameterSets(sql));
 			}
-			List theList = (List)executedStatementParameters.get(sql);
-			theList.add(parameters);
+			ParameterSets sets = (ParameterSets)executedStatementParameters.get(sql);
+			sets.addParameterSet(parameters);
 		}
 	}
 	
 	/**
-	 * Returns the <code>List</code> of parameters for a specified
-	 * SQL string. The <code>List</code> contains <code>Map</code>
-	 * objects with the actual parameters.
+	 * Returns the <code>ParameterSets</code> for a specified
+	 * SQL string.
 	 * @param sql the SQL string
 	 * @return the <code>Map</code> of parameters
 	 */
-	public List getParameterListForExecutedStatement(String sql)
+	public ParameterSets getParametersForExecutedStatement(String sql)
 	{
-		return (List)executedStatementParameters.get(sql);
+		return (ParameterSets)executedStatementParameters.get(sql);
 	}
 	
 	/**
 	 * Returns the <code>Map</code> of executed SQL strings.
-	 * Each string maps to the corresponding <code>List</code>
-	 * of parameters. The <code>List</code> contains <code>Map</code>
-	 * objects with the actual parameters.
+	 * Each string maps to the corresponding {@link ParameterSets}
+	 * object.
 	 * @return the <code>Map</code> of parameters
 	 */
 	public Map getExecutedStatementParameter()
