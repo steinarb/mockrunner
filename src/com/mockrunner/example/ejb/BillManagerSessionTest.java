@@ -44,7 +44,7 @@ public class BillManagerSessionTest extends EJBTestCaseAdapter
         aspectSystem.add(new MethodPatternPointcut("BillEntityHome\\.findUnpaid"), interceptor);
         bean.markAsPaid();
         BillEntity entity1 = (BillEntity)findByPrimaryKey("java:comp/env/ejb/BillEntity", new Integer(1));
-        BillEntity entity2 = (BillEntity)findByPrimaryKey("java:comp/env/ejb/BillEntity", new Integer(1));
+        BillEntity entity2 = (BillEntity)findByPrimaryKey("java:comp/env/ejb/BillEntity", new Integer(2));
         assertTrue(entity1.getPaid());
         assertTrue(entity2.getPaid());
     }
