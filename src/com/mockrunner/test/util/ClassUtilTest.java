@@ -4,7 +4,7 @@ import java.io.OutputStream;
 import java.net.URL;
 
 import com.mockrunner.jms.JMSTestModule;
-import com.mockrunner.util.ClassUtil;
+import com.mockrunner.util.common.ClassUtil;
 
 import junit.framework.TestCase;
 

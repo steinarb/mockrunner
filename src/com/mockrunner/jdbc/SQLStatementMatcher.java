@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.mockrunner.util.StringUtil;
+import com.mockrunner.util.common.StringUtil;
 
 /**
  * Helper class for finding matching SQL statements based on various

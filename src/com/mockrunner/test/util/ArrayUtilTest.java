@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mockrunner.util.ArrayUtil;
+import com.mockrunner.util.common.ArrayUtil;
 
 import junit.framework.TestCase;
 

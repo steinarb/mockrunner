@@ -1,0 +1,369 @@
+package com.mockrunner.util.common;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Util class for arrays
+ */
+public class ArrayUtil
+{
+    /**
+     * Returns a <code>List</code> containing the bytes from the
+     * specified array as <code>Byte</code> objects.
+     * @param data the byte data
+     * @return the <code>List</code> with the <code>Byte</code> objects
+     */
+    public static List getListFromByteArray(byte[] data)
+    {
+        ArrayList list = new ArrayList(data.length);
+        for(int ii = 0; ii < data.length; ii++)
+        {
+            list.add(new Byte(data[ii]));
+        }
+        return list;
+    }
+    
+    /**
+     * Returns a <code>List</code> containing the objects from the
+     * specified array.
+     * @param data the data
+     * @return the <code>List</code> with the objects
+     */
+    public static List getListFromObjectArray(Object[] data)
+    {
+        ArrayList list = new ArrayList(data.length);
+        for(int ii = 0; ii < data.length; ii++)
+        {
+            list.add(data[ii]);
+        }
+        return list;
+    }
+    
+    /**
+     * Returns a byte array containing the bytes from the <code>List</code>.
+     * The <code>List</code> must contain <code>Byte</code> objects.
+     * <code>null</code> entries in the <code>List</code> are
+     * allowed, the resulting byte will be 0.
+     * @param data the <code>List</code>
+     * @return the resulting byte array
+     */
+    public static byte[] getByteArrayFromList(List data)
+    {
+        return getByteArrayFromList(data, 0);
+    }
+    
+    /**
+     * Returns a byte array containing the bytes from the <code>List</code>.
+     * The <code>List</code> must contain <code>Byte</code> objects.
+     * <code>null</code> entries in the <code>List</code> are
+     * allowed, the resulting byte will be 0.
+     * @param data the <code>List</code>
+     * @param index the index at which to start
+     * @return the resulting byte array
+     */
+    public static byte[] getByteArrayFromList(List data, int index)
+    {
+        return getByteArrayFromList(data, index, data.size() - index);
+    }
+    
+    /**
+     * Returns a byte array containing the bytes from the <code>List</code>.
+     * The <code>List</code> must contain <code>Byte</code> objects.
+     * <code>null</code> entries in the <code>List</code> are
+     * allowed, the resulting byte will be 0.
+     * @param data the <code>List</code>
+     * @param index the index at which to start
+     * @param len the number of bytes
+     * @return the resulting byte array
+     */
+    public static byte[] getByteArrayFromList(List data, int index, int len)
+    {
+        if(data.size() == 0) return new byte[0];
+        if(index >= data.size())
+        {
+            throw new IndexOutOfBoundsException("Position " + index + " invalid in List of size " + data.size());
+        }
+        byte[] byteData = new byte[len];
+        for(int ii = index; ii < data.size() && ii < index + len; ii++)
+        {
+            Byte nextValue = (Byte)data.get(ii);
+            if(null != nextValue)
+            {
+                byteData[ii - index] = nextValue.byteValue();
+            }
+        }
+        return byteData;
+    }
+    
+    /**
+     * Copies the bytes from the specified array to the specified
+     * <code>List</code> as <code>Byte</code> objects starting
+     * at the specified index. Grows the list if necessary.
+     * <i>index</i> must be a valid index in the list.
+     * @param data the byte data
+     * @param list the <code>List</code>
+     * @param index the index at which to start copying
+     */
+    public static void addBytesToList(byte[] data, List list, int index)
+    {
+        addBytesToList(data, 0, data.length, list, index);
+    }
+    
+    /**
+     * Copies the bytes from the specified array to the specified
+     * <code>List</code> as <code>Byte</code> objects starting
+     * at the specified index. Grows the list if necessary.
+     * <i>index</i> must be a valid index in the list.
+     * @param data the byte data
+     * @param offset the offset into the byte array at which to start
+     * @param len the number of bytes to copy
+     * @param list the <code>List</code>
+     * @param index the index at which to start copying
+     */
+    public static void addBytesToList(byte[] data, int offset, int len, List list, int index)
+    {
+        int bytesToIncrease = index + len - list.size();
+        if(bytesToIncrease > 0)
+        {
+            for(int ii = 0; ii < bytesToIncrease; ii++)
+            {
+                list.add(null);
+            }
+        }
+        for(int ii = index; ii < index + len; ii++)
+        {
+            list.set(ii, new Byte(data[offset + ii - index]));
+        }
+    }
+
+    /**
+     * Returns a truncated copy of <i>sourceArray</i>. <i>len</i>
+     * entries are copied.
+     * @param sourceArray the source array
+     * @param len the truncate length
+     * @return the truncated array
+     * @throws IllegalArgumentException if the specified object
+     *         is not an array (either of reference or primitive
+     *         component type)
+     */
+    public static Object truncateArray(Object sourceArray, int len)
+    {
+        return truncateArray(sourceArray, 0, len);
+    }
+    
+    /**
+     * Returns a truncated copy of <i>sourceArray</i>. <i>len</i>
+     * entries are copied starting at the specified index.
+     * @param sourceArray the source array
+     * @param index the start index
+     * @param len the truncate length
+     * @return the truncated array
+     * @throws IllegalArgumentException if the specified object
+     *         is not an array (either of reference or primitive
+     *         component type)
+     */
+    public static Object truncateArray(Object sourceArray, int index, int len)
+    {
+        if(!sourceArray.getClass().isArray())
+        {
+            throw new IllegalArgumentException("sourceArray must be an array");
+        }
+        Object targetArray = Array.newInstance(sourceArray.getClass().getComponentType(), len);
+        System.arraycopy(sourceArray, index, targetArray, 0, len);
+        return targetArray;
+    }
+    
+    /**
+     * Returns a copy of the specified array. If <i>array</i>
+     * is not an array, the object itself will be returned.
+     * Otherwise a copy of the array will be returned. The components
+     * themselves are not cloned.
+     * @param array the array
+     * @return the copy of the array
+     */
+    public static Object copyArray(Object array)
+    {
+        if(!array.getClass().isArray()) return array;
+        Class componentType = array.getClass().getComponentType();
+        int length = Array.getLength(array);
+        Object copy = Array.newInstance(componentType, Array.getLength(array));
+        for(int ii = 0; ii < length; ii++)
+        {
+            Array.set(copy, ii, Array.get(array, ii));
+        }
+        return copy;
+    }
+    
+    /**
+     * Returns an object array by wrapping primitive types. If the 
+     * specified array is of primitive component type, an <code>Object[]</code>
+     * with the corresponding wrapper component type is returned.
+     * If the specified array is already an object array, the instance is
+     * returned unchanged.
+     * @param sourceArray the array
+     * @return the corresponding object array
+     * @throws IllegalArgumentException if the specified object
+     *         is not an array (either of reference or primitive
+     *         component type)
+     */
+    public static Object[] convertToObjectArray(Object sourceArray)
+    {
+        if(!sourceArray.getClass().isArray())
+        {
+            throw new IllegalArgumentException("sourceArray must be an array");
+        }
+        Class componentType = sourceArray.getClass().getComponentType();
+        if(!componentType.isPrimitive())
+        {
+            return (Object[])sourceArray;
+        }
+        if(componentType.equals(Boolean.TYPE))
+        {
+            componentType = Boolean.class;
+        }
+        else if(componentType.equals(Byte.TYPE)) 
+        {
+            componentType = Byte.class;
+        }
+        else if(componentType.equals(Character.TYPE))
+        {
+            componentType = Character.class;
+        }
+        else if(componentType.equals(Short.TYPE))
+        {
+            componentType = Short.class;
+        }
+        else if(componentType.equals(Integer.TYPE))
+        {
+            componentType = Integer.class;
+        }
+        else if(componentType.equals(Long.TYPE))
+        {
+            componentType = Long.class;
+        }
+        else if(componentType.equals(Float.TYPE))
+        {
+            componentType = Float.class;
+        }
+        else if(componentType.equals(Double.TYPE))
+        {
+            componentType = Double.class;
+        }
+        int length = Array.getLength(sourceArray);
+        Object[] targetArray = (Object[])Array.newInstance(componentType, length);
+        for(int ii = 0; ii < length; ii++)
+        {
+            targetArray[ii] = Array.get(sourceArray, ii);
+        }
+        return targetArray;
+    }
+    
+    /**
+     * Creates an array with a single object as component.
+     * If the specified object is an array, it will be returned
+     * unchanged. Otherwise an array with the specified object
+     * as the single element will be returned.
+     * @param object the object
+     * @return the corresponding array
+     */
+    public static Object convertToArray(Object object)
+    {
+        if(object.getClass().isArray()) return object;
+        Object array = Array.newInstance(object.getClass(), 1);
+        Array.set(array, 0, object);
+        return array;
+    }
+    
+    /**
+     * Returns the index of the first occurence of the
+     * array <i>bytes</i> in the array <i>source</i>.
+     * @param source the array in which to search
+     * @param bytes the array to search
+     * @return the index of the first occurence, resp.
+     *         -1, if <i>source</i> does not contain <i>bytes</i>
+     */
+    public static int indexOf(byte[] source, byte[] bytes)
+    {
+        return indexOf(source, bytes, 0);
+    }
+    
+    /**
+     * Returns the index of the first occurence of the
+     * array <i>bytes</i> in the array <i>source</i>.
+     * @param source the array in which to search
+     * @param bytes the array to search
+     * @param index the index where to begin the search
+     * @return the index of the first occurence, resp.
+     *         -1, if <i>source</i> does not contain <i>bytes</i>
+     */
+    public static int indexOf(byte[] source, byte[] bytes, int index)
+    {
+        if(index + bytes.length > source.length) return -1;
+        for(int ii = index; ii <= source.length - bytes.length; ii++)
+        {
+            int yy = 0; 
+            while(yy < bytes.length && bytes[yy] == source[ii + yy]) yy++;
+            if(yy == bytes.length) return ii;
+        }
+        return -1;
+    }
+    
+    /**
+     * Ensures that each entry in the specified string array
+     * is unique by adding a number to duplicate entries.
+     * I.e. if the string <code>"entry"</code> occurs three
+     * times, the three entries will be renamed to <code>"entry1"</code>,
+     * <code>"entry2"</code> and <code>"entry3"</code>.
+     * @param values the array of strings
+     */
+    public static void ensureUnique(String[] values)
+    {
+        Map nameMap = collectOccurences(values);
+        renameDuplicates(values, nameMap);
+    }
+    
+    private static void renameDuplicates(String[] names, Map nameMap)
+    {
+        Iterator iterator = nameMap.keySet().iterator();
+        while(iterator.hasNext())
+        {
+            String nextName = (String)iterator.next();
+            Integer nextValue = (Integer)nameMap.get(nextName);
+            if(nextValue.intValue() > 1)
+            {
+                int number = 1;
+                for(int ii = 0; ii < names.length; ii++)
+                {
+                    if(names[ii].equals(nextName))
+                    {
+                        names[ii] = nextName + number;
+                        number++;
+                    }
+                }
+            }
+        }
+    }
+
+    private static Map collectOccurences(String[] names)
+    {
+        Map nameMap = new HashMap();
+        for(int ii = 0; ii < names.length; ii++)
+        {
+            Integer currentValue = (Integer)nameMap.get(names[ii]);            
+            if(null == currentValue)
+            {
+                nameMap.put(names[ii], new Integer(1));
+            }
+            else
+            {
+                nameMap.put(names[ii], new Integer(currentValue.intValue() + 1));
+            }
+        }
+        return nameMap;
+    }
+}

@@ -33,7 +33,7 @@ import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.mock.web.MockActionMapping;
 import com.mockrunner.mock.web.MockPageContext;
 import com.mockrunner.mock.web.WebMockObjectFactory;
-import com.mockrunner.util.StreamUtil;
+import com.mockrunner.util.common.StreamUtil;
 
 /**
  * Module for Struts action tests. Simulates Struts

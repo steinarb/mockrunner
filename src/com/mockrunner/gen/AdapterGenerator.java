@@ -12,9 +12,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.mockrunner.ejb.EJBTestModule;
-import com.mockrunner.gen.util.AdapterProcessor;
-import com.mockrunner.gen.util.BasicAdapterProcessor;
-import com.mockrunner.gen.util.StandardAdapterProcessor;
+import com.mockrunner.gen.proc.AdapterProcessor;
+import com.mockrunner.gen.proc.BasicAdapterProcessor;
+import com.mockrunner.gen.proc.StandardAdapterProcessor;
 import com.mockrunner.jdbc.JDBCTestModule;
 import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.servlet.ServletTestModule;

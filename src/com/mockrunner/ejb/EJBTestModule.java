@@ -23,7 +23,7 @@ import org.mockejb.interceptor.ClassPointcut;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 import com.mockrunner.mock.ejb.MockUserTransaction;
-import com.mockrunner.util.ClassUtil;
+import com.mockrunner.util.common.ClassUtil;
 
 /**
  * Module for EJB tests.

@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.mockrunner.util.CaseAwareMap;
+import com.mockrunner.util.common.CaseAwareMap;
 
 import junit.framework.TestCase;
 

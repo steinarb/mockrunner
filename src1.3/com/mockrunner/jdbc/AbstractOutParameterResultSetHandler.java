@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mockrunner.util.ArrayUtil;
+import com.mockrunner.util.common.ArrayUtil;
 
 /**
  * Abstract base class for all statement types

@@ -3,7 +3,7 @@ package com.mockrunner.test.util;
 import java.io.File;
 import java.util.List;
 
-import com.mockrunner.util.FileUtil;
+import com.mockrunner.util.common.FileUtil;
 
 import junit.framework.TestCase;
 

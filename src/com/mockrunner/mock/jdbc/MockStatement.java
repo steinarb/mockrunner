@@ -11,7 +11,7 @@ import java.util.List;
 
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.jdbc.AbstractResultSetHandler;
-import com.mockrunner.util.SQLUtil;
+import com.mockrunner.jdbc.SQLUtil;
 
 /**
  * Mock implementation of <code>Statement</code>.

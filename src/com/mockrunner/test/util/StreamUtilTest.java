@@ -7,7 +7,7 @@ import java.io.StringReader;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.util.StreamUtil;
+import com.mockrunner.util.common.StreamUtil;
 
 public class StreamUtilTest extends TestCase
 {

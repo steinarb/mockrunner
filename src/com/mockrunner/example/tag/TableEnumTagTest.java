@@ -10,7 +10,7 @@ import org.jdom.Element;
 
 import com.mockrunner.tag.NestedTag;
 import com.mockrunner.tag.TagTestCaseAdapter;
-import com.mockrunner.util.XmlUtil;
+import com.mockrunner.util.web.XmlUtil;
 
 /**
  * Example test for the {@link TableEnumTag}.

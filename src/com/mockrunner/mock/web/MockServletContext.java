@@ -22,8 +22,8 @@ import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextAttributeListener;
 import javax.servlet.ServletException;
 
-import com.mockrunner.util.ArrayUtil;
-import com.mockrunner.util.StreamUtil;
+import com.mockrunner.util.common.ArrayUtil;
+import com.mockrunner.util.common.StreamUtil;
 
 /**
  * Mock implementation of <code>ServletContext</code>.

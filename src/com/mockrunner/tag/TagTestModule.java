@@ -16,8 +16,7 @@ import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockJspWriter;
 import com.mockrunner.mock.web.MockPageContext;
 import com.mockrunner.mock.web.WebMockObjectFactory;
-import com.mockrunner.util.StringUtil;
-import com.mockrunner.util.TagUtil;
+import com.mockrunner.util.common.StringUtil;
 
 /**
  * Module for custom tag tests. Simulates the container by

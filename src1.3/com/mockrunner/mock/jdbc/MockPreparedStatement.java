@@ -29,7 +29,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.mockrunner.jdbc.AbstractParameterResultSetHandler;
-import com.mockrunner.util.ParameterUtil;
+import com.mockrunner.jdbc.ParameterUtil;
 
 /**
  * Mock implementation of <code>PreparedStatement</code>.

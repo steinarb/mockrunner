@@ -17,9 +17,8 @@ import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
 //import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
-import com.mockrunner.util.ArrayUtil;
-import com.mockrunner.util.ParameterUtil;
-import com.mockrunner.util.StringUtil;
+import com.mockrunner.util.common.ArrayUtil;
+import com.mockrunner.util.common.StringUtil;
 
 /**
  * Module for JDBC tests.
@@ -1495,7 +1494,7 @@ public class JDBCTestModule
     
     /**
      * Verifies that a <code>ResultSet</code> is equal to another one.
-     * Compares all the rows with {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * Compares all the rows with {@link com.mockrunner.jdbc.ParameterUtil#compareParameter}.
      * @param id the id of the source <code>ResultSet</code>
      * @param target the target <code>ResultSet</code>
      * @throws VerifyFailedException if verification fails

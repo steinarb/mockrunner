@@ -13,7 +13,7 @@ import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.WebMockObjectFactory;
-import com.mockrunner.util.StringUtil;
+import com.mockrunner.util.common.StringUtil;
 
 /**
  * Module for servlet and filter tests. Can test

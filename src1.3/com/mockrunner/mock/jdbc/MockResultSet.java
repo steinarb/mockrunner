@@ -28,13 +28,13 @@ import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.base.NestedApplicationException;
-import com.mockrunner.util.ArrayUtil;
-import com.mockrunner.util.CaseAwareMap;
-import com.mockrunner.util.CollectionUtil;
-import com.mockrunner.util.ParameterUtil;
-import com.mockrunner.util.SQLUtil;
-import com.mockrunner.util.StreamUtil;
-import com.mockrunner.util.StringUtil;
+import com.mockrunner.jdbc.ParameterUtil;
+import com.mockrunner.jdbc.SQLUtil;
+import com.mockrunner.util.common.ArrayUtil;
+import com.mockrunner.util.common.CaseAwareMap;
+import com.mockrunner.util.common.CollectionUtil;
+import com.mockrunner.util.common.StreamUtil;
+import com.mockrunner.util.common.StringUtil;
 
 /**
  * Mock implementation of <code>ResultSet</code>.
@@ -117,7 +117,7 @@ public class MockResultSet implements ResultSet, Cloneable
     /**
      * Copies this <code>ResultSet</code>. The data of the
      * <code>ResultSet</code> is copied using the
-     * {@link com.mockrunner.util.ParameterUtil#copyParameter}
+     * {@link com.mockrunner.jdbc.ParameterUtil#copyParameter}
      * method.
      * @return a copy of this <code>ResultSet</code>
      */
@@ -469,10 +469,10 @@ public class MockResultSet implements ResultSet, Cloneable
     
     /**
      * Returns if the row with the specified number is
-     * equal to the specified data. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * equal to the specified data. Uses {@link com.mockrunner.jdbc.ParameterUtil#compareParameter}.
      * The first row has the number 1. If the compared parameters are not of
      * the same type (and cannot be equal according to the 
-     * {@link com.mockrunner.util.ParameterUtil#compareParameter} method) they
+     * {@link com.mockrunner.jdbc.ParameterUtil#compareParameter} method) they
      * will be converted to a string with the <code>toString()</code> method before
      * comparison.
      * @param number the number of the row
@@ -504,10 +504,10 @@ public class MockResultSet implements ResultSet, Cloneable
     
     /**
      * Returns if the column with the specified number is
-     * equal to the specified data. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * equal to the specified data. Uses {@link com.mockrunner.jdbc.ParameterUtil#compareParameter}.
      * The first column has the number 1. If the compared parameters are not of
      * the same type (and cannot be equal according to the 
-     * {@link com.mockrunner.util.ParameterUtil#compareParameter} method) they
+     * {@link com.mockrunner.jdbc.ParameterUtil#compareParameter} method) they
      * will be converted to a string with the <code>toString()</code> method before
      * comparison.
      * @param number the number of the column
@@ -539,10 +539,10 @@ public class MockResultSet implements ResultSet, Cloneable
     
     /**
      * Returns if the column with the specified name is
-     * equal to the specified data. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * equal to the specified data. Uses {@link com.mockrunner.jdbc.ParameterUtil#compareParameter}.
      * The first column has the number 1. If the compared parameters are not of
      * the same type (and cannot be equal according to the 
-     * {@link com.mockrunner.util.ParameterUtil#compareParameter} method) they
+     * {@link com.mockrunner.jdbc.ParameterUtil#compareParameter} method) they
      * will be converted to a string with the <code>toString()</code> method before
      * comparison.
      * @param name the name of the column
@@ -576,7 +576,7 @@ public class MockResultSet implements ResultSet, Cloneable
      * Returns if the specified <code>ResultSet</code> is equal to
      * this <code>ResultSet</code>. If the compared parameters are not of
      * the same type (and cannot be equal according to the 
-     * {@link com.mockrunner.util.ParameterUtil#compareParameter} method) they
+     * {@link com.mockrunner.jdbc.ParameterUtil#compareParameter} method) they
      * will be converted to a string with the <code>toString()</code> method before
      * comparison.
      * @return <code>true</code> if the two <code>ResultSet</code> objects are equal,

@@ -22,7 +22,7 @@ import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.servlet.ServletTestModule;
 import com.mockrunner.struts.ActionTestModule;
 import com.mockrunner.tag.TagTestModule;
-import com.mockrunner.util.StreamUtil;
+import com.mockrunner.util.common.StreamUtil;
 
 import junit.framework.TestCase;
 
