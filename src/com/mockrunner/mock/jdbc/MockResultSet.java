@@ -30,6 +30,7 @@ import java.util.Map;
 
 import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.CollectionUtil;
+import com.mockrunner.util.ParameterUtil;
 import com.mockrunner.util.StreamUtil;
 
 /**
@@ -387,6 +388,232 @@ public class MockResultSet implements ResultSet, Cloneable
     public int getColumnCount()
     {
         return columnMapCopy.size();
+    }
+    
+    /**
+     * Returns if the row with the specified number is
+     * equal to the specified data. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * The first row has the number 1.
+     * @param number the number of the row
+     * @param rowData the row data
+     * @return <code>true</code> if the row is equal to the specified data,
+     *         <code>false</code> otherwise
+     */
+    public boolean equalsRow(int number, List rowData)
+    {
+        List currentRow = getRow(number);
+        if(null == currentRow) return false;
+        if(currentRow.size() != rowData.size()) return false;
+        for(int ii = 0; ii < currentRow.size(); ii++)
+        {
+            if(!ParameterUtil.compareParameter(currentRow.get(ii), rowData.get(ii)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Returns if the column with the specified number is
+     * equal to the specified data. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * The first column has the number 1.
+     * @param number the number of the column
+     * @param columnData the column data
+     * @return <code>true</code> if the column is equal to the specified data,
+     *         <code>false</code> otherwise
+     */
+    public boolean equalsColumn(int number, List columnData)
+    {
+        List currentColumn = getColumn(number);
+        if(null == currentColumn) return false;
+        if(currentColumn.size() != columnData.size()) return false;
+        for(int ii = 0; ii < currentColumn.size(); ii++)
+        {
+            if(!ParameterUtil.compareParameter(currentColumn.get(ii), columnData.get(ii)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Returns if the column with the specified name is
+     * equal to the specified data. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * The first column has the number 1.
+     * @param number the number of the column
+     * @param columnData the column data
+     * @return <code>true</code> if the column is equal to the specified data,
+     *         <code>false</code> otherwise
+     */
+    public boolean equalsColumn(String name, List columnData)
+    {
+        List currentColumn = getColumn(name);
+        if(null == currentColumn) return false;
+        if(currentColumn.size() != columnData.size()) return false;
+        for(int ii = 0; ii < currentColumn.size(); ii++)
+        {
+            if(!ParameterUtil.compareParameter(currentColumn.get(ii), columnData.get(ii)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Returns if the specified <code>ResultSet</code> is equal to
+     * this <code>ResultSet</code>.
+     * @return <code>true</code> if the two <code>ResultSet</code> objects are equal,
+     *         <code>false</code> otherwise
+     */
+    public boolean equals(Object object)
+    {
+        if(null == object) return false;
+        if(!(object instanceof MockResultSet)) return false;
+        if(object == this) return true;
+        MockResultSet other = (MockResultSet)object;
+        Map thisMap;
+        Map otherMap;
+        if(isDatabaseView)
+        {
+            thisMap = columnMap;    
+        }
+        else
+        {
+            thisMap = columnMapCopy;  
+        }
+        if(other.isDatabaseView)
+        {
+            otherMap = other.columnMap;
+        }
+        else
+        {
+            otherMap = other.columnMapCopy;
+        }
+        Iterator keys = thisMap.keySet().iterator();
+        while(keys.hasNext())
+        {
+            String currentKey = (String)keys.next();
+            List thisList =  (List)thisMap.get(currentKey);
+            List otherList =  (List)otherMap.get(currentKey);
+            if(null == otherList) return false;
+            if(thisList.size() != otherList.size()) return false;
+            for(int ii = 0; ii < thisList.size(); ii++)
+            {
+                if(!ParameterUtil.compareParameter(thisList.get(ii), otherList.get(ii)))
+                {
+                    return false;
+                }    
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Suitable implementation of <code>hashCode()</code>
+     * @return the hashcode
+     */
+    public int hashCode()
+    {
+        int hashCode = 0;
+        Map dataMap;
+        if(isDatabaseView)
+        {
+            dataMap = columnMap;
+        }
+        else
+        {
+            dataMap = columnMapCopy;
+        }
+        Iterator keys = dataMap.keySet().iterator();
+        while(keys.hasNext())
+        {
+            String currentKey = (String)keys.next();
+            List dataList =  (List)dataMap.get(currentKey);      
+            for(int ii = 0; ii < dataList.size(); ii++)
+            {
+                hashCode += ParameterUtil.createHashCodeForParameter(dataList.get(ii));  
+            }
+        }
+        return hashCode;
+    }
+    
+    /**
+     * Returns the row with the specified number.
+     * The first row has the number 1.
+     * If number is less than 1 or higher than the
+     * current row count, <code>null</code> will
+     * be returned. The result of this method depends
+     * on the setting of <i>databaseView</i>. 
+     * See {@link #setDatabaseView}.
+     * @param number the number of the row
+     * @return the row data as <code>List</code>
+     */
+    public List getRow(int number)
+    {
+        if(number > getRowCount()) return null;
+        if(number < 1) return null;
+        int index = number - 1;
+        List list = new ArrayList();
+        for(int ii = 0; ii < columnNameList.size(); ii++)
+        {
+            String nextColumnName = (String)columnNameList.get(ii);
+            List nextColumnList;
+            if(isDatabaseView)
+            {
+                nextColumnList = (List)columnMap.get(nextColumnName);
+            }
+            else
+            {
+                nextColumnList = (List)columnMapCopy.get(nextColumnName);
+            }
+            list.add(nextColumnList.get(index));
+        }
+        return list;
+    }
+    
+    /**
+     * Returns the column with the specified number.
+     * The first column has the number 1.
+     * If number is less than 1 or higher than the
+     * current column count, <code>null</code> will
+     * be returned.
+     * @param number the number of the column
+     * @return the column data as <code>List</code>
+     */
+    public List getColumn(int number)
+    {
+        if(number > getColumnCount()) return null;
+        if(number < 1) return null;
+        int index = number - 1;
+        String columnName = (String)columnNameList.get(index);
+        return getColumn(columnName);
+    }
+    
+    /**
+     * Returns the column with the specified name.
+     * If a column with that name does not exist, 
+     * <code>null</code> will be returned.
+     * @param name the name of the column
+     * @return the column data as <code>List</code>
+     */
+    public List getColumn(String name)
+    {
+        List list = new ArrayList();
+        List columnList;
+        if(isDatabaseView)
+        {
+            columnList = (List)columnMap.get(name);
+        }
+        else
+        {
+            columnList = (List)columnMapCopy.get(name);
+        }
+        if(null == columnList) return null;
+        list.addAll(columnList);
+        return list;
     }
     
     public void close() throws SQLException
