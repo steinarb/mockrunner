@@ -1,4 +1,4 @@
-package com.mockrunner.test;
+package com.mockrunner.test.util;
 
 import java.io.OutputStream;
 
@@ -10,10 +10,10 @@ public class ClassUtilTest extends TestCase
 {
     public void testGetPackageName()
     {
-        assertEquals("com.mockrunner.test", ClassUtil.getPackageName(this.getClass()));
+        assertEquals("com.mockrunner.test.util", ClassUtil.getPackageName(this.getClass()));
         assertEquals("java.lang", ClassUtil.getPackageName("".getClass()));
         assertEquals("java.io", ClassUtil.getPackageName(OutputStream.class));
-        assertEquals("com.mockrunner.test", ClassUtil.getPackageName(TestClass.class));
+        assertEquals("com.mockrunner.test.util", ClassUtil.getPackageName(TestClass.class));
     }
     
     public void testGetClassName()
