@@ -14,5 +14,7 @@
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/jdom.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/xml-apis.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/xercesImpl.jar"/>
+    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/mockejb.jar"/>
+    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/jboss-j2ee.jar"/>
     <classpathentry kind="output" path="classes"/>
 </classpath>

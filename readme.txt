@@ -59,9 +59,11 @@ JUnit 3.8.1:
 http://www.junit.org
 junit.jar
 
-Servlet J2EE:
+J2EE:
 http://jakarta.apache.org/tomcat
-servlet.jar                            
+servlet.jar
+http://www.jboss.org
+jboss-j2ee.jar                
 
 Commons:
 http://jakarta.apache.org/commons       
@@ -73,6 +75,10 @@ Mockobjects 0.09:
 http://www.mockobjects.com
 mockobjects-core-0.09.jar
 mockobjects-jdk1.3-j2ee1.3-0.09.jar
+
+MockEjb 0.4:
+http://www.mockejb.org
+mockejb.jar
 
 JDOM Beta 9 (or higher):
 http://www.jdom.org
