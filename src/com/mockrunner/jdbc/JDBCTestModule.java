@@ -429,7 +429,7 @@ public class JDBCTestModule
      */
     public void verifySQLStatementExecuted(String sql)
     {
-        if(!SearchUtil.contains(getExecutedSQLStatements(), sql, caseSensitive, exactMatch))
+        if(!SearchUtil.contains(getExecutedSQLStatements(), sql, caseSensitive, exactMatch, false))
         {
             throw new VerifyFailedException("Statement " + sql + " not executed.");
         }
@@ -441,7 +441,7 @@ public class JDBCTestModule
      */
     public void verifySQLStatementNotExecuted(String sql)
     {
-        if(SearchUtil.contains(getExecutedSQLStatements(), sql, caseSensitive, exactMatch))
+        if(SearchUtil.contains(getExecutedSQLStatements(), sql, caseSensitive, exactMatch, false))
         {
             throw new VerifyFailedException("Statement " + sql + " not executed.");
         }

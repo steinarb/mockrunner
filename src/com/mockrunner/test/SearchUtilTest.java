@@ -65,12 +65,16 @@ public class SearchUtilTest extends TestCase
         list.add("TestString1");
         list.add("TestString2");
         list.add("TestString3");
-        assertTrue(SearchUtil.contains(list, "TESTSTRING", false, false));
-        assertFalse(SearchUtil.contains(list, "TESTSTRING", true, false));
-        assertFalse(SearchUtil.contains(list, "TESTSTRING", false, true));
-        assertTrue(SearchUtil.contains(list, "TestString3", true, true));
-        assertFalse(SearchUtil.contains(list, "TestString4", true, true));
-        assertFalse(SearchUtil.contains(list, "TestString4", false, false));
+        assertTrue(SearchUtil.contains(list, "TESTSTRING", false, false, false));
+        assertFalse(SearchUtil.contains(list, "TESTSTRING", true, false, false));
+        assertFalse(SearchUtil.contains(list, "TESTSTRING", false, true, false));
+        assertTrue(SearchUtil.contains(list, "TestString3", true, true, false));
+        assertFalse(SearchUtil.contains(list, "TestString4", true, true, false));
+        assertFalse(SearchUtil.contains(list, "TestString4", false, false, false));
+        assertFalse(SearchUtil.contains(list, "TESTSTRING1XYZ", false, false, false));
+        assertTrue(SearchUtil.contains(list, "TESTSTRING1XYZ", false, false, true));
+        assertFalse(SearchUtil.contains(list, "TEstString3Test", true, false, true));
+        assertTrue(SearchUtil.contains(list, "TEstString3Test", false, false, true));
     }
     
     public void testDoesStringMatch()

@@ -1,6 +1,7 @@
 package com.mockrunner.test.jdbc;
 
 import java.sql.BatchUpdateException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -141,6 +142,27 @@ public class MockStatementTest extends BaseTestCase
         statement.clearBatch();
         updateCounts = statement.executeBatch();
         assertTrue(updateCounts.length == 0);
+    }
+    
+    public void testPrepareThrowsSQLException() throws Exception
+    {
+        statementHandler.prepareThrowsSQLException("insert into test");
+        MockStatement statement = (MockStatement)connection.createStatement();
+        statement.executeUpdate("update xy");
+        try
+        {
+            statement.executeUpdate("insert into test values");
+            fail();
+        }
+        catch(SQLException exc)
+        {
+            //should throw Exception
+        }
+        statementHandler.setExactMatch(true);
+        statement.executeUpdate("insert into test values");
+        statementHandler.setExactMatch(false);
+        statementHandler.setCaseSensitive(true);
+        statement.executeUpdate("iNsert into test values");
     }
     
     public void testPrepareResultSetPreparedStatement() throws Exception
@@ -312,6 +334,66 @@ public class MockStatementTest extends BaseTestCase
         updateCounts = statement.executeBatch();
         assertTrue(updateCounts.length == 1);
         assertEquals(7, updateCounts[0]);
+        preparedStatementHandler.prepareThrowsSQLException("update", paramMap);
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(SQLException exc)
+        {
+            //should throw Exception
+        }
+    }
+    
+    public void testPrepareThrowsSQLExceptionPreparedStatement() throws Exception
+    {
+        preparedStatementHandler.prepareThrowsSQLException("insert into");
+        List params = new ArrayList();
+        params.add("test");
+        preparedStatementHandler.prepareThrowsSQLException("UPDATE", params);
+        preparedStatementHandler.prepareThrowsSQLException("UPDATE", new Object[] {"1", "2"});
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("insert into x(y) values(?)");
+        try
+        {
+            statement.execute();
+            fail();
+        }
+        catch(SQLException exc)
+        {
+            //should throw Exception
+        }
+        preparedStatementHandler.setExactMatch(true);
+        statement.execute();
+        statement = (MockPreparedStatement)connection.prepareStatement("update");
+        statement.execute();
+        statement.setString(1, "test");
+        try
+        {
+            statement.execute();
+            fail();
+        }
+        catch(SQLException exc)
+        {
+            //should throw Exception
+        }
+        preparedStatementHandler.setCaseSensitive(true);
+        statement.execute();
+        preparedStatementHandler.setCaseSensitive(false);
+        statement.setString(1, "1");
+        statement.setString(2, "2");
+        statement.setString(3, "3");
+        try
+        {
+            statement.execute();
+            fail();
+        }
+        catch(SQLException exc)
+        {
+            //should throw Exception
+        }
+        preparedStatementHandler.setExactMatchParameter(true);
+        statement.execute();
     }
     
     public void testClearResultSetsAndUpdateCounts() throws Exception
@@ -433,6 +515,55 @@ public class MockStatementTest extends BaseTestCase
         {
             //should throw Exception
         }
+    }
+    
+    public void testPrepareThrowsSQLExceptionCallableStatement() throws Exception
+    {
+        callableStatementHandler.prepareThrowsSQLException("doValues");
+        Map params = new HashMap();
+        params.put("1", "Test");
+        params.put(new Integer(5), new Long(2));
+        params.put("3", new byte[] {1, 2, 3});
+        callableStatementHandler.prepareThrowsSQLException("doTest", params);
+        MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doTEST(?, ?, ?)}");
+        statement.executeQuery();
+        statement.setLong(5, 2);
+        statement.setString("1", "Test");
+        statement.executeQuery();
+        statement.setBytes("3", new byte[] {1, 2, 3});
+        try
+        {
+            statement.executeUpdate();
+            fail();
+        }
+        catch(SQLException exc)
+        {
+            //should throw Exception
+        }
+        callableStatementHandler.setExactMatchParameter(true);
+        try
+        {
+            statement.executeUpdate();
+            fail();
+        }
+        catch(SQLException exc)
+        {
+            //should throw Exception
+        }
+        callableStatementHandler.setCaseSensitive(true);
+        statement.execute();
+        statement = (MockCallableStatement)connection.prepareCall("{call doValues(?, ?, ?)}");
+        try
+        {
+            statement.executeQuery();
+            fail();
+        }
+        catch(SQLException exc)
+        {
+            //should throw Exception
+        }
+        callableStatementHandler.setExactMatch(true);
+        statement.executeQuery();
     }
     
     public void testPrepareOutParameterCallableStatement() throws Exception
