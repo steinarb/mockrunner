@@ -1,10 +1,13 @@
 package com.mockrunner.mock.jdbc;
 
+import java.sql.BatchUpdateException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mockrunner.util.SQLUtil;
 
@@ -16,6 +19,8 @@ public class MockStatement implements Statement
     private AbstractResultSetHandler resultSetHandler;
     private ResultSet nextResultSet = null;
     private int nextUpdateCount = -1;
+    private List batches = new ArrayList();
+    private boolean executesBatch = false;
     private String cursorName = "";
     private int querySeconds = 0;
     private int maxRows = 0;
@@ -64,6 +69,11 @@ public class MockStatement implements Statement
     protected void setNextUpdateCount(int updateCount)
     {
         this.nextUpdateCount = updateCount;
+    }
+    
+    protected boolean doesExecuteBatch()
+    {
+        return executesBatch;
     }
     
     public String getCursorName()
@@ -220,17 +230,26 @@ public class MockStatement implements Statement
 
     public void addBatch(String sql) throws SQLException
     {
-
+        batches.add(sql);
     }
 
     public void clearBatch() throws SQLException
     {
-
+        batches.clear();
     }
 
     public int[] executeBatch() throws SQLException
     {
-        return null;
+        int[] results = new int[batches.size()];
+        for(int ii = 0; ii < results.length; ii++)
+        {
+            if(execute((String)batches.get(ii)))
+            {
+                throw new BatchUpdateException("SQL " + batches.get(ii) + " in ths list of batches returned a ResultSet.", null);
+            }
+            results[ii] = getUpdateCount();
+        }
+        return results;
     }
 
     public Connection getConnection() throws SQLException
