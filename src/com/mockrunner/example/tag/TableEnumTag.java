@@ -16,8 +16,8 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  * The elements are stored in the request (attribute key is <i>currentObject</i>).
  * The body of the tag will be evaluated multiple times, and if it's not empty,
  * an HTML row will be created.
- * A <i>bean:write</i> tag can be used to write the elements from the
- * <code>Collection</code> as a string to the page.
+ * A Struts <i>bean:write</i> or JSTL<i>c:out</i>tag can be used to write the 
+ * elements from the <code>Collection</code> as a string to the page.
  * If you store a <code>List</code> with one entry <i>Entry1</i> in the session 
  * and specify the following JSP code (<i>enumtag</i> is our tag)
  * 
