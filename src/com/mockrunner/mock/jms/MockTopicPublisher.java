@@ -10,9 +10,9 @@ import javax.jms.TopicPublisher;
  */
 public class MockTopicPublisher extends MockMessageProducer implements TopicPublisher
 {
-    public MockTopicPublisher(MockConnection connection, MockTopic topic)
+    public MockTopicPublisher(MockConnection connection, MockSession session, MockTopic topic)
     {
-        super(connection, topic);
+        super(connection, session, topic);
     }
 
     public Topic getTopic() throws JMSException

@@ -25,6 +25,7 @@ import javax.jms.TextMessage;
 import javax.jms.Topic;
 import javax.jms.TopicSubscriber;
 
+import com.mockrunner.jms.GenericTransmissionManager;
 import com.mockrunner.jms.MessageManager;
 import com.mockrunner.jms.QueueTransmissionManager;
 import com.mockrunner.jms.TopicTransmissionManager;
@@ -51,6 +52,7 @@ public class MockSession implements Session
     private MockConnection connection;
     private QueueTransmissionManager queueTransManager;
     private TopicTransmissionManager topicTransManager;
+    private GenericTransmissionManager genericTransManager;
     private TransmissionManagerWrapper transManager;
     private MessageManager messageManager;
     private MessageListener messageListener;
@@ -70,7 +72,8 @@ public class MockSession implements Session
         this.acknowledgeMode = acknowledgeMode;
         queueTransManager = new QueueTransmissionManager(connection, this);
         topicTransManager = new TopicTransmissionManager(connection, this);
-        transManager = new TransmissionManagerWrapper(queueTransManager, topicTransManager);
+        genericTransManager = new GenericTransmissionManager(connection, this);
+        transManager = new TransmissionManagerWrapper(queueTransManager, topicTransManager, genericTransManager);
         messageManager = new MessageManager();
         tempQueues = new ArrayList();
         tempTopics = new ArrayList();
@@ -97,6 +100,15 @@ public class MockSession implements Session
     public TopicTransmissionManager getTopicTransmissionManager()
     {
         return topicTransManager;
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.jms.GenericTransmissionManager}.
+     * @return the {@link com.mockrunner.jms.GenericTransmissionManager}
+     */
+    public GenericTransmissionManager getGenericTransmissionManager()
+    {
+        return genericTransManager;
     }
     
     /**
@@ -335,6 +347,7 @@ public class MockSession implements Session
         }
         getQueueTransmissionManager().closeAll();
         getTopicTransmissionManager().closeAll();
+        getGenericTransmissionManager().closeAll();
         closed = true;
     }
 
@@ -410,15 +423,14 @@ public class MockSession implements Session
 		{
 			throw new RuntimeException("destination must not be null");
 		}
+        getConnection().throwJMSException();      
         if(destination instanceof MockQueue)
         {
-            getConnection().throwJMSException();      
             addSessionToQueue((Queue)destination);
             return getQueueTransmissionManager().createQueueReceiver((MockQueue)destination, messageSelector);
         }
         else if(destination instanceof MockTopic)
         {
-            getConnection().throwJMSException();
             addSessionToTopic((Topic)destination);
             return getTopicTransmissionManager().createTopicSubscriber((MockTopic)destination, messageSelector, noLocal);
         }
@@ -430,19 +442,18 @@ public class MockSession implements Session
     
     public MessageProducer createProducer(Destination destination) throws JMSException
     {
+        getConnection().throwJMSException();
         if(null == destination)
         {
-        	throw new RuntimeException("destination must not be null");
+            return createProducerForNullDestination(destination);
         }
         if(destination instanceof MockQueue)
         {
-            getConnection().throwJMSException();
             addSessionToQueue((Queue)destination);
             return getQueueTransmissionManager().createQueueSender((MockQueue)destination);
         }
         else if(destination instanceof MockTopic)
         {
-            getConnection().throwJMSException();
             addSessionToTopic((Topic)destination);
             return getTopicTransmissionManager().createTopicPublisher((MockTopic)destination);
         }
@@ -491,7 +502,7 @@ public class MockSession implements Session
         return connection;
     }
     
-    protected void addSessionToQueue(Queue queue)
+    public void addSessionToQueue(Queue queue)
     {
         if(queue instanceof MockQueue)
         {
@@ -499,11 +510,16 @@ public class MockSession implements Session
         }
     }
     
-    protected void addSessionToTopic(Topic topic)
+    public void addSessionToTopic(Topic topic)
     {
         if(topic instanceof MockTopic)
         {
             ((MockTopic)topic).addSession(this);
         }
+    }
+    
+    protected MessageProducer createProducerForNullDestination(Destination destination)
+    {
+        return getGenericTransmissionManager().createMessageProducer();
     }
 }

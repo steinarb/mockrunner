@@ -115,7 +115,7 @@ public class TopicTransmissionManager
      */
     public MockTopicPublisher createTopicPublisher(MockTopic topic)
     {
-        MockTopicPublisher publisher = new MockTopicPublisher(connection, topic);
+        MockTopicPublisher publisher = new MockTopicPublisher(connection, session, topic);
         topicPublisherList.add(publisher);
         return publisher;
     }

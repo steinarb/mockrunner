@@ -27,6 +27,7 @@ import junit.framework.TestCase;
 
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.jms.DestinationManager;
+import com.mockrunner.jms.GenericTransmissionManager;
 import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.jms.QueueTransmissionManager;
 import com.mockrunner.jms.TopicTransmissionManager;
@@ -624,9 +625,10 @@ public class JMSTestModuleTest extends TestCase
         manager.createTopic("topic");
         module.getSession(0).createProducer(manager.getQueue("queue"));
         module.getSession(0).createProducer(manager.getTopic("topic"));
+        module.getSession(0).createProducer(null);
         module.verifyNumberQueueSenders(0, 0);
         module.verifyNumberTopicPublishers(0, 0);
-        module.verifyNumberMessageProducers(0, 2);
+        module.verifyNumberMessageProducers(0, 3);
         try
         {
             module.verifyNumberMessageProducers(0, 1);
@@ -639,11 +641,13 @@ public class JMSTestModuleTest extends TestCase
         TransmissionManagerWrapper manager1 = module.getTransmissionManager(0);
         QueueTransmissionManager manager2 = manager1.getQueueTransmissionManager();
         TopicTransmissionManager manager3 = manager1.getTopicTransmissionManager();
+        GenericTransmissionManager manager4 = manager1.getGenericTransmissionManager();
         QueueTransmissionManager queueManager = module.getQueueTransmissionManager(0);
         TopicTransmissionManager topicManager = module.getTopicTransmissionManager(0);
-        assertEquals(2, manager1.getMessageProducerList().size());
+        assertEquals(3, manager1.getMessageProducerList().size());
         assertEquals(1, manager2.getQueueSenderList().size());
         assertEquals(1, manager3.getTopicPublisherList().size());
+        assertEquals(1, manager4.getMessageProducerList().size());
         assertEquals(0, queueManager.getQueueSenderList().size());
         assertEquals(0, topicManager.getTopicPublisherList().size());
         assertTrue(manager1.getMessageProducer(0) instanceof MockQueueSender);
@@ -1728,7 +1732,7 @@ public class JMSTestModuleTest extends TestCase
         Topic topic = manager.createTopic("topic");
         Queue queue = manager.createQueue("queue");
         MockMessageProducer producer1 = (MockMessageProducer)session1.createProducer(topic);
-        session2.createProducer(queue);
+        session2.createProducer(null);
         MockMessageConsumer consumer1 = (MockMessageConsumer)session3.createConsumer(queue);
         session3.createConsumer(topic);
         session3.createDurableSubscriber(topic, "myDurable");

@@ -113,7 +113,7 @@ public class QueueTransmissionManager
      */
     public MockQueueSender createQueueSender(MockQueue queue)
     {
-        MockQueueSender sender = new MockQueueSender(connection, queue);
+        MockQueueSender sender = new MockQueueSender(connection, session, queue);
         queueSenderList.add(sender);
         return sender;
     }
