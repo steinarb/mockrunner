@@ -11,6 +11,11 @@ import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockStreamMessage;
 import com.mockrunner.mock.jms.MockTextMessage;
 
+/**
+ * Can be used to create and access all type of messages.
+ * The create methods are usually called by
+ * {@link com.mockrunner.mock.jms.MockSession}.
+ */
 public class MessageManager
 {
     private List messages;
@@ -32,7 +37,7 @@ public class MessageManager
 
     /**
      * Creates a new <code>Message</code>. Usually this method is called
-     * by {@link com.mockrunner.mock.jms.MockQueueSession#createMessage}.
+     * by {@link com.mockrunner.mock.jms.MockSession#createMessage}.
      * @return the created <code>Message</code>
      */
     public MockMessage createMessage()
@@ -66,7 +71,7 @@ public class MessageManager
     
     /**
      * Creates a new <code>BytesMessage</code>. Usually this method is called
-     * by {@link com.mockrunner.mock.jms.MockQueueSession#createBytesMessage}.
+     * by {@link com.mockrunner.mock.jms.MockSession#createBytesMessage}.
      * @return the created <code>BytesMessage</code>
      */
     public MockBytesMessage createBytesMessage()
@@ -100,7 +105,7 @@ public class MessageManager
     
     /**
      * Creates a new <code>MapMessage</code>. Usually this method is called
-     * by {@link com.mockrunner.mock.jms.MockQueueSession#createMapMessage}.
+     * by {@link com.mockrunner.mock.jms.MockSession#createMapMessage}.
      * @return the created <code>MapMessage</code>
      */
     public MockMapMessage createMapMessage()
@@ -134,7 +139,7 @@ public class MessageManager
     
     /**
      * Creates a new <code>TextMessage</code>. Usually this method is called
-     * by {@link com.mockrunner.mock.jms.MockQueueSession#createTextMessage}.
+     * by {@link com.mockrunner.mock.jms.MockSession#createTextMessage}.
      * @return the created <code>TextMessage</code>
      */
     public MockTextMessage createTextMessage(String text)
@@ -168,7 +173,7 @@ public class MessageManager
     
     /**
      * Creates a new <code>StreamMessage</code>. Usually this method is called
-     * by {@link com.mockrunner.mock.jms.MockQueueSession#createStreamMessage}.
+     * by {@link com.mockrunner.mock.jms.MockSession#createStreamMessage}.
      * @return the created <code>StreamMessage</code>
      */
     public MockStreamMessage createStreamMessage()
@@ -202,7 +207,7 @@ public class MessageManager
     
     /**
      * Creates a new <code>ObjectMessage</code>. Usually this method is called
-     * by {@link com.mockrunner.mock.jms.MockQueueSession#createObjectMessage}.
+     * by {@link com.mockrunner.mock.jms.MockSession#createObjectMessage}.
      * @return the created <code>ObjectMessage</code>
      */
     public MockObjectMessage createObjectMessage(java.io.Serializable object)

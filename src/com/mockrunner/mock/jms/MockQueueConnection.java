@@ -10,6 +10,7 @@ import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueSession;
 import javax.jms.ServerSessionPool;
+import javax.jms.Session;
 
 /**
  * Mock implementation of JMS <code>QueueConnection</code>.
@@ -62,5 +63,15 @@ public class MockQueueConnection extends MockConnection implements QueueConnecti
     {
         throwJMSException();
         return new MockConnectionConsumer(this, sessionPool);
+    }
+    
+    public void close() throws JMSException
+    {
+        for(int ii = 0; ii < queueSessions.size(); ii++)
+        {
+            Session session = (Session)queueSessions.get(ii);
+            session.close();
+        }
+        super.close();
     }
 }

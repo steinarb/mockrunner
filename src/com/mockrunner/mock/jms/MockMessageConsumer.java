@@ -34,12 +34,13 @@ public abstract class MockMessageConsumer implements MessageConsumer
     
     /**
      * Returns if this consumer can consume an incoming message,
-     * i.e. if a <code>MessageListener</code> is registered.
+     * i.e. if a <code>MessageListener</code> is registered and
+     * the receiver isn't closed.
      * @return <code>true</code> if this receiver can consume the message
      */
     public boolean canConsume()
     {
-        return messageListener != null;
+        return (messageListener != null) && (!isClosed());
     }
     
     /**

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.jms.InvalidDestinationException;
 import javax.jms.JMSException;
 import javax.jms.TemporaryTopic;
 import javax.jms.Topic;
@@ -69,32 +70,47 @@ public class MockTopicSession extends MockSession implements TopicSession
     
     public TopicPublisher createPublisher(Topic topic) throws JMSException
     {
-        // TODO Auto-generated method stub
-        return null;
+        getConnection().throwJMSException();
+        if(!(topic instanceof MockTopic))
+        {
+            throw new InvalidDestinationException("topic must be an instance of MockTopic");
+        }
+        addSessionToTopic(topic);
+        return getTransmissionManager().createTopicPublisher((MockTopic)topic);
     }
 
     public TopicSubscriber createSubscriber(Topic topic) throws JMSException
     {
-        // TODO Auto-generated method stub
-        return null;
+        getConnection().throwJMSException();
+        return createSubscriber(topic, null, false);
     }
 
     public TopicSubscriber createSubscriber(Topic topic, String messageSelector, boolean noLocal) throws JMSException
     {
-        // TODO Auto-generated method stub
-        return null;
+        getConnection().throwJMSException();
+        if(!(topic instanceof MockTopic))
+        {
+            throw new InvalidDestinationException("topic must be an instance of MockTopic");
+        }
+        addSessionToTopic(topic);
+        return getTransmissionManager().createTopicSubscriber((MockTopic)topic, messageSelector, noLocal);
     }
 
     public TopicSubscriber createDurableSubscriber(Topic topic, String name) throws JMSException
     {
-        // TODO Auto-generated method stub
-        return null;
+        getConnection().throwJMSException();
+        return createDurableSubscriber(topic, name, null, false);
     }
 
     public TopicSubscriber createDurableSubscriber(Topic topic, String name, String messageSelector, boolean noLocal) throws JMSException
     {
-        // TODO Auto-generated method stub
-        return null;
+        getConnection().throwJMSException();
+        if(!(topic instanceof MockTopic))
+        {
+            throw new InvalidDestinationException("topic must be an instance of MockTopic");
+        }
+        addSessionToTopic(topic);
+        return getTransmissionManager().createTopicDurableSubscriber((MockTopic)topic, name, messageSelector, noLocal);
     }
  
     public void unsubscribe(String name) throws JMSException

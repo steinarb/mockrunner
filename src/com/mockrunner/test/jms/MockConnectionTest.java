@@ -6,29 +6,57 @@ import javax.jms.JMSException;
 import javax.jms.QueueSession;
 
 import com.mockrunner.mock.jms.MockQueueConnection;
+import com.mockrunner.mock.jms.MockQueueSession;
+import com.mockrunner.mock.jms.MockTopicConnection;
+import com.mockrunner.mock.jms.MockTopicSession;
 
 import junit.framework.TestCase;
 
 public class MockConnectionTest extends TestCase
 {
-    private MockQueueConnection connection;
+    private MockQueueConnection queueConnection;
+    private MockTopicConnection topicConnection;
      
     protected void setUp() throws Exception
     {
         super.setUp();
-        connection = new MockQueueConnection();
+        queueConnection = new MockQueueConnection();
+        topicConnection = new MockTopicConnection();
+    }
+    
+    public void testClose() throws Exception
+    {
+        MockQueueSession queueSession1 = (MockQueueSession)queueConnection.createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        MockQueueSession queueSession2 = (MockQueueSession)queueConnection.createQueueSession(false, QueueSession.CLIENT_ACKNOWLEDGE);
+        MockQueueSession queueSession3 = (MockQueueSession)queueConnection.createQueueSession(false, QueueSession.CLIENT_ACKNOWLEDGE);
+        queueConnection.close();
+        assertTrue(queueConnection.isClosed());
+        assertTrue(queueSession1.isClosed());
+        assertTrue(queueSession2.isClosed());
+        assertTrue(queueSession3.isClosed());
+        assertTrue(queueSession1.isRolledBack());
+        assertFalse(queueSession2.isRolledBack());
+        assertFalse(queueSession3.isRolledBack());
+        MockTopicSession topicSession1 = (MockTopicSession)topicConnection.createTopicSession(false, QueueSession.CLIENT_ACKNOWLEDGE);
+        MockTopicSession topicSession2 = (MockTopicSession)topicConnection.createTopicSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        topicConnection.close();
+        assertTrue(topicConnection.isClosed());
+        assertTrue(topicSession1.isClosed());
+        assertTrue(topicSession2.isClosed());
+        assertFalse(topicSession1.isRolledBack());
+        assertTrue(topicSession2.isRolledBack());
     }
 
     public void testException() throws Exception
     {
-        connection.createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        queueConnection.createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
         JMSException exception = new JMSException("MyReason");
         TestExceptionListener listener = new TestExceptionListener();
-        connection.setExceptionListener(listener);
-        connection.setJMSException(exception);
+        queueConnection.setExceptionListener(listener);
+        queueConnection.setJMSException(exception);
         try
         {
-            connection.createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+            queueConnection.createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
             fail();
         }
         catch(JMSException exc)
@@ -36,11 +64,11 @@ public class MockConnectionTest extends TestCase
             assertTrue(exception == exc);
             assertTrue(exception == listener.getException());
         }
-        connection.start();
-        ConnectionConsumer consumer = connection.createConnectionConsumer(null, null, null, 0);
+        queueConnection.start();
+        ConnectionConsumer consumer = queueConnection.createConnectionConsumer(null, null, null, 0);
         consumer.getServerSessionPool();
         exception = new JMSException("MyReason");
-        connection.setJMSException(exception);
+        queueConnection.setJMSException(exception);
         try
         {
             consumer.getServerSessionPool();

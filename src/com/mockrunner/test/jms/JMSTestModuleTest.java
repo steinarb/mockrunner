@@ -437,13 +437,9 @@ public class JMSTestModuleTest extends TestCase
         MockQueueReceiver receiver1 = (MockQueueReceiver)session3.createReceiver(queue);
         MockQueueReceiver receiver2 = (MockQueueReceiver)session3.createReceiver(queue);
         MockQueueBrowser browser1 = (MockQueueBrowser)session2.createBrowser(queue);
-        session1.close();
-        session2.close();
         sender1.close();
         receiver1.close();
         receiver2.close();
-        module.verifyQueueSessionClosed(0);
-        module.verifyQueueSessionClosed(1);
         module.verifyQueueSenderClosed(0, "queue", 0);
         module.verifyQueueReceiverClosed(2, "queue", 0);
         module.verifyQueueReceiverClosed(2, "queue", 1);
@@ -497,11 +493,8 @@ public class JMSTestModuleTest extends TestCase
             //should throw exception
         }
         mockFactory.getMockQueueConnection().close();
-        session3.close();
-        sender2.close();
-        sender3.close();
-        browser1.close();
         module.verifyQueueConnectionClosed();
+        module.verifyAllQueueSessionsClosed();  
         module.verifyAllQueueReceiversClosed(2);
         module.verifyAllQueueBrowsersClosed(1);
         module.verifyQueueBrowserClosed(1, "queue", 0);

@@ -194,6 +194,11 @@ public class MockSession implements Session
     public void close() throws JMSException
     {
         connection.throwJMSException();
+        getTransmissionManager().closeAll();
+        if(getTransacted() && !isCommitted())
+        {
+            rollback();
+        }
         closed = true;
     }
 
