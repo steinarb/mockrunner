@@ -51,12 +51,9 @@ public class StreamUtil
         }
         catch(IOException exc)
         {
-       
+            System.out.println(exc.getMessage());
         }
-        finally
-        {
-            return byteStream.toByteArray();
-        }
+        return byteStream.toByteArray();
     }
     
     /**
@@ -99,12 +96,9 @@ public class StreamUtil
         }
         catch(IOException exc)
         {
-   
+            System.out.println(exc.getMessage());
         }
-        finally
-        {
-            return buffer.toString();
-        }
+        return buffer.toString();
     }
     
     /**
