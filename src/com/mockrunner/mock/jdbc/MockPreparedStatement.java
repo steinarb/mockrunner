@@ -81,7 +81,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return sql;
     }
     
-    public Map getParameterMap()
+    public Map getIndexedParameterMap()
     {
         return Collections.unmodifiableMap(paramObjects);
     }
