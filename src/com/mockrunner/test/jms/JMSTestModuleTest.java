@@ -28,7 +28,9 @@ import com.mockrunner.jms.TopicManager;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockBytesMessage;
 import com.mockrunner.mock.jms.MockMapMessage;
+import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockObjectMessage;
+import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueBrowser;
 import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
@@ -36,6 +38,7 @@ import com.mockrunner.mock.jms.MockQueueSession;
 import com.mockrunner.mock.jms.MockTemporaryQueue;
 import com.mockrunner.mock.jms.MockTemporaryTopic;
 import com.mockrunner.mock.jms.MockTextMessage;
+import com.mockrunner.mock.jms.MockTopic;
 import com.mockrunner.mock.jms.MockTopicPublisher;
 import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
@@ -1293,5 +1296,323 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         } 
+    }
+    
+    public void testVerifyQueueMessagesAcknowledged() throws Exception
+    {
+        MockQueueSession session1 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session2 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.AUTO_ACKNOWLEDGE);
+        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
+        Queue queue = manager.createQueue("queue");
+        MockQueueSender sender1 = (MockQueueSender)session1.createSender(queue);
+        MockQueueSender sender2 = (MockQueueSender)session2.createSender(queue);
+        MockQueueReceiver receiver1 = (MockQueueReceiver)session1.createReceiver(queue);
+        MockQueueReceiver receiver2 = (MockQueueReceiver)session2.createReceiver(queue);
+        MockMessage message1 = (MockMessage)session1.createTextMessage();
+        MockMessage message2 = (MockMessage)session1.createMapMessage();
+        MockMessage message3 = (MockMessage)session1.createObjectMessage();
+        MockMessage message4 = (MockMessage)session2.createBytesMessage();
+        MockMessage message5 = (MockMessage)session2.createStreamMessage();
+        MockMessage message6 = (MockMessage)session2.createMessage();
+        module.verifyCreatedQueueTextMessageNotAcknowledged(0, 0);
+        module.verifyCreatedQueueMapMessageNotAcknowledged(0, 0);
+        module.verifyCreatedQueueObjectMessageNotAcknowledged(0, 0);
+        module.verifyCreatedQueueBytesMessageNotAcknowledged(1, 0);
+        module.verifyCreatedQueueStreamMessageNotAcknowledged(1, 0);
+        module.verifyCreatedQueueMessageNotAcknowledged(1, 0);
+        module.verifyAllReceivedQueueMessagesAcknowledged("queue");
+        try
+        {
+            module.verifyCreatedQueueTextMessageAcknowledged(0, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        try
+        {
+            module.verifyCreatedQueueMessageAcknowledged(1, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        try
+        {
+            module.verifyCreatedQueueMessageAcknowledged(1, 2);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        try
+        {
+            module.verifyCreatedQueueMessageNotAcknowledged(2, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        sender1.send(message1);
+        sender1.send(message2);
+        sender1.send(message3);
+        sender2.send(message4);
+        sender2.send(message5);
+        sender2.send(message6);
+        module.verifyCreatedQueueTextMessageNotAcknowledged(0, 0);
+        module.verifyCreatedQueueMapMessageNotAcknowledged(0, 0);
+        module.verifyCreatedQueueObjectMessageNotAcknowledged(0, 0);
+        module.verifyCreatedQueueBytesMessageNotAcknowledged(1, 0);
+        module.verifyCreatedQueueStreamMessageNotAcknowledged(1, 0);
+        module.verifyCreatedQueueMessageNotAcknowledged(1, 0);
+        try
+        {
+            module.verifyAllReceivedQueueMessagesAcknowledged("queue");
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        receiver1.receive();
+        receiver1.receive();
+        receiver1.receive();
+        receiver2.receive();
+        receiver2.receive();
+        receiver2.receive();
+        module.verifyCreatedQueueTextMessageNotAcknowledged(0, 0);
+        module.verifyCreatedQueueMapMessageNotAcknowledged(0, 0);
+        module.verifyCreatedQueueObjectMessageNotAcknowledged(0, 0);
+        module.verifyCreatedQueueBytesMessageAcknowledged(1, 0);
+        module.verifyCreatedQueueStreamMessageAcknowledged(1, 0);
+        module.verifyCreatedQueueMessageAcknowledged(1, 0);
+        ((MockQueue)queue).reset();
+        message1 = (MockMessage)session1.createObjectMessage();
+        message2 = (MockMessage)session1.createMessage();
+        receiver1.setMessageListener(new TestMessageListener(true));
+        sender1.send(message1);
+        sender1.send(message2);
+        module.verifyAllReceivedQueueMessagesAcknowledged("queue");
+        module.verifyCreatedQueueObjectMessageAcknowledged(0, 1);
+        module.verifyCreatedQueueMessageAcknowledged(0, 0);
+        message1 = (MockMessage)session2.createTextMessage();
+        message2 = (MockMessage)session2.createTextMessage();
+        receiver2.setMessageListener(new TestMessageListener(false));
+        sender2.send(message1);
+        sender2.send(message2);
+        module.verifyAllReceivedQueueMessagesAcknowledged("queue");
+        module.verifyCreatedQueueTextMessageAcknowledged(1, 1);
+        module.verifyCreatedQueueTextMessageAcknowledged(1, 1);
+        TemporaryQueue tempQueue = session2.createTemporaryQueue();
+        message1 = (MockMessage)session2.createTextMessage();
+        MockQueueSender sender3 = (MockQueueSender)session2.createSender(tempQueue);
+        MockQueueReceiver receiver3 = (MockQueueReceiver)session2.createReceiver(tempQueue);
+        sender3.send(message1);
+        module.verifyReceivedQueueMessageNotAcknowledged(1, 0, 0);
+        try
+        {
+            module.verifyReceivedQueueMessageAcknowledged(1, 0, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        try
+        {
+            module.verifyAllReceivedQueueMessagesAcknowledged(1, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        receiver3.receive();
+        module.verifyReceivedQueueMessageAcknowledged(1, 0, 0);
+        receiver3.setMessageListener(new TestMessageListener(false));
+        message1 = (MockMessage)session2.createTextMessage();
+        sender3.send(message1);
+        module.verifyReceivedQueueMessageAcknowledged(1, 0, 1);
+        module.verifyAllReceivedQueueMessagesAcknowledged(1, 0);
+    }
+    
+    public void testVerifyTopicMessagesAcknowledged() throws Exception
+    {
+        MockTopicSession session1 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockTopicSession session2 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.DUPS_OK_ACKNOWLEDGE);
+        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        Topic topic = manager.createTopic("topic");
+        MockTopicPublisher publisher1 = (MockTopicPublisher)session1.createPublisher(topic);
+        MockTopicPublisher publisher2 = (MockTopicPublisher)session2.createPublisher(topic);
+        MockTopicSubscriber subscriber1 = (MockTopicSubscriber)session1.createSubscriber(topic);
+        MockTopicSubscriber subscriber2 = (MockTopicSubscriber)session2.createSubscriber(topic);
+        MockMessage message1 = (MockMessage)session1.createTextMessage();
+        MockMessage message2 = (MockMessage)session2.createMapMessage();
+        MockMessage message3 = (MockMessage)session2.createObjectMessage();
+        MockMessage message4 = (MockMessage)session2.createBytesMessage();
+        MockMessage message5 = (MockMessage)session2.createStreamMessage();
+        MockMessage message6 = (MockMessage)session2.createMessage();
+        module.verifyCreatedTopicTextMessageNotAcknowledged(0, 0);
+        module.verifyCreatedTopicMapMessageNotAcknowledged(1, 0);
+        module.verifyCreatedTopicObjectMessageNotAcknowledged(1, 0);
+        module.verifyCreatedTopicBytesMessageNotAcknowledged(1, 0);
+        module.verifyCreatedTopicStreamMessageNotAcknowledged(1, 0);
+        module.verifyCreatedTopicMessageNotAcknowledged(1, 0);
+        module.verifyAllReceivedTopicMessagesAcknowledged("topic");
+        try
+        {
+            module.verifyCreatedTopicTextMessageAcknowledged(1, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        try
+        {
+            module.verifyCreatedTopicMessageAcknowledged(1, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        try
+        {
+            module.verifyCreatedTopicMessageAcknowledged(1, 1);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        try
+        {
+            module.verifyCreatedTopicMessageNotAcknowledged(2, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        publisher1.publish(message1);
+        publisher2.publish(message2);
+        publisher2.publish(message3);
+        publisher2.publish(message4);
+        publisher2.publish(message5);
+        publisher2.publish(message6);
+        module.verifyCreatedTopicTextMessageNotAcknowledged(0, 0);
+        module.verifyCreatedTopicMapMessageNotAcknowledged(1, 0);
+        module.verifyCreatedTopicObjectMessageNotAcknowledged(1, 0);
+        module.verifyCreatedTopicBytesMessageNotAcknowledged(1, 0);
+        module.verifyCreatedTopicStreamMessageNotAcknowledged(1, 0);
+        module.verifyCreatedTopicMessageNotAcknowledged(1, 0);
+        try
+        {
+            module.verifyAllReceivedTopicMessagesAcknowledged("topic");
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        subscriber1.receive();
+        subscriber2.receive();
+        subscriber2.receive();
+        subscriber2.receive();
+        subscriber2.receive();
+        module.verifyCreatedTopicTextMessageNotAcknowledged(0, 0);
+        module.verifyCreatedTopicMapMessageAcknowledged(1, 0);
+        module.verifyCreatedTopicObjectMessageAcknowledged(1, 0);
+        module.verifyCreatedTopicBytesMessageAcknowledged(1, 0);
+        module.verifyCreatedTopicStreamMessageAcknowledged(1, 0);
+        module.verifyCreatedTopicMessageNotAcknowledged(1, 0);
+        ((MockTopic)topic).reset();
+        message1 = (MockTextMessage)session1.createTextMessage();
+        message2 = (MockTextMessage)session1.createTextMessage();
+        subscriber1.setMessageListener(new TestMessageListener(true));
+        publisher1.publish(message1);
+        publisher1.publish(message2);
+        module.verifyAllReceivedTopicMessagesAcknowledged("topic");
+        module.verifyCreatedTopicTextMessageAcknowledged(0, 1);
+        module.verifyCreatedTopicTextMessageAcknowledged(0, 2);
+        message1 = (MockMessage)session2.createTextMessage();
+        message2 = (MockMessage)session2.createTextMessage();
+        subscriber2.setMessageListener(new TestMessageListener(false));
+        publisher2.publish(message1);
+        publisher2.publish(message2);
+        module.verifyAllReceivedTopicMessagesAcknowledged("topic");
+        module.verifyCreatedTopicTextMessageAcknowledged(1, 0);
+        module.verifyCreatedTopicTextMessageAcknowledged(1, 1);
+        TemporaryTopic tempTopic = session2.createTemporaryTopic();
+        message1 = (MockMessage)session2.createObjectMessage();
+        MockTopicPublisher publisher3 = (MockTopicPublisher)session2.createPublisher(tempTopic);
+        MockTopicSubscriber subscriber3 = (MockTopicSubscriber)session2.createSubscriber(tempTopic);
+        publisher3.publish(message1);
+        module.verifyReceivedTopicMessageNotAcknowledged(1, 0, 0);
+        try
+        {
+            module.verifyReceivedTopicMessageAcknowledged(1, 0, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        try
+        {
+            module.verifyAllReceivedTopicMessagesAcknowledged(1, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        subscriber3.receive();
+        module.verifyReceivedTopicMessageAcknowledged(1, 0, 0);
+        subscriber3.setMessageListener(new TestMessageListener(false));
+        message1 = (MockMessage)session2.createTextMessage();
+        publisher3.publish(message1);
+        module.verifyReceivedTopicMessageAcknowledged(1, 0, 1);
+        module.verifyAllReceivedTopicMessagesAcknowledged(1, 0);
+    }
+    
+    public static class TestMessageListener implements MessageListener
+    {
+        private Message message;
+        private boolean doAcknowledge;
+    
+        public TestMessageListener(boolean doAcknowledge)
+        {
+            this.doAcknowledge = doAcknowledge;
+        }
+
+        public Message getMessage()
+        {
+            return message;
+        }
+    
+        public void reset()
+        {
+            message = null;
+        }
+    
+        public void onMessage(Message message)
+        {
+            this.message = message;
+            try
+            {
+                if(doAcknowledge) message.acknowledge();
+            }
+            catch(JMSException exc)
+            {
+                exc.printStackTrace();
+                throw new RuntimeException("Unexpected failure");
+            }
+        }
     }
 }
