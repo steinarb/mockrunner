@@ -13,6 +13,11 @@ import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
+import com.mockrunner.mock.jms.MockQueueBrowser;
+import com.mockrunner.mock.jms.MockQueueReceiver;
+import com.mockrunner.mock.jms.MockQueueSender;
+import com.mockrunner.mock.jms.MockQueueSession;
+import com.mockrunner.mock.jms.MockTemporaryQueue;
 
 public class JMSTestModuleTest extends TestCase
 {
@@ -41,8 +46,8 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyTemporaryQueue() throws Exception
     {
         mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
-        module.getQueueSession(0).createTemporaryQueue();
-        module.getQueueSession(0).createTemporaryQueue();
+        MockTemporaryQueue queue1 = (MockTemporaryQueue)module.getQueueSession(0).createTemporaryQueue();
+        MockTemporaryQueue queue2 = (MockTemporaryQueue)module.getQueueSession(0).createTemporaryQueue();
         assertNotNull(module.getTemporaryQueue(0, 0));
         assertNotNull(module.getTemporaryQueue(0, 1));
         assertNull(module.getTemporaryQueue(0, 2));
@@ -56,6 +61,47 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
+        try
+        {
+            module.verifyNumberTemporaryQueues(1, 3);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyTemporaryQueueDeleted(0, 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyAllTemporaryQueuesDeleted(0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        queue1.delete();
+        module.verifyTemporaryQueueDeleted(0, 0);
+        try
+        {
+            module.verifyAllTemporaryQueuesDeleted(0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        queue2.delete();
+        module.verifyTemporaryQueueDeleted(0, 1);
+        module.verifyAllTemporaryQueuesDeleted(0);
     }
     
     public void testVerifyQueueSender() throws Exception
@@ -65,7 +111,6 @@ public class JMSTestModuleTest extends TestCase
         manager.createQueue("queue");
         module.getQueueSession(0).createSender(manager.getQueue("queue"));
         module.verifyNumberQueueSenders(0, 1);
-        module.verifyQueueSenderPresent(0, "queue");
         try
         {
             module.verifyNumberQueueSenders(0, 2);
@@ -86,7 +131,7 @@ public class JMSTestModuleTest extends TestCase
         }
         try
         {
-            module.verifyQueueSenderPresent(0, "otherQueue");
+            module.verifyNumberQueueSenders(1, "queue", 0);
             fail();
         }
         catch(VerifyFailedException exc)
@@ -107,7 +152,6 @@ public class JMSTestModuleTest extends TestCase
         module.getQueueSession(0).createReceiver(queue1);
         module.verifyNumberQueueReceivers(0, 1);
         module.verifyNumberQueueReceivers(0, "queue", 1);
-        module.verifyQueueReceiverPresent(0, "queue");
         try
         {
             module.verifyNumberQueueReceivers(0, 2);
@@ -126,19 +170,9 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
-        try
-        {
-            module.verifyQueueReceiverPresent(0, "otherQueue");
-            fail();
-        }
-        catch(VerifyFailedException exc)
-        {
-            //should throw exception
-        }
         module.getQueueSession(0).createReceiver(queue2);
         module.verifyNumberQueueReceivers(0, 2);
         module.verifyNumberQueueReceivers(0, "otherQueue", 1);
-        module.verifyQueueReceiverPresent(0, "otherQueue");
     }
     
     public void testVerifyQueueBrowser() throws Exception
@@ -150,7 +184,6 @@ public class JMSTestModuleTest extends TestCase
         module.getQueueSession(0).createBrowser(manager.getQueue("queue"));
         module.verifyNumberQueueBrowsers(0, 2);
         module.verifyNumberQueueBrowsers(0, "queue", 2);
-        module.verifyQueueBrowserPresent(0, "queue");
         try
         {
             module.verifyNumberQueueBrowsers(0, 3);
@@ -163,15 +196,6 @@ public class JMSTestModuleTest extends TestCase
         try
         {
             module.verifyNumberQueueBrowsers(0, "queue", 1);
-            fail();
-        }
-        catch(VerifyFailedException exc)
-        {
-            //should throw exception
-        }
-        try
-        {
-            module.verifyQueueBrowserPresent(0, "otherQueue");
             fail();
         }
         catch(VerifyFailedException exc)
@@ -261,6 +285,146 @@ public class JMSTestModuleTest extends TestCase
         try
         {
             module.verifyNumberOfCurrentMessages(0, 0, 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    
+    public void testVerifyClosed() throws Exception
+    {
+        MockQueueSession session1 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session2 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session3 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        DestinationManager manager = mockFactory.getMockQueueConnection().getDestinationManager();
+        Queue queue = manager.createQueue("queue");
+        MockQueueSender sender1 = (MockQueueSender)session1.createSender(queue);
+        MockQueueSender sender2 = (MockQueueSender)session1.createSender(queue);
+        MockQueueSender sender3 = (MockQueueSender)session2.createSender(queue);
+        MockQueueReceiver receiver1 = (MockQueueReceiver)session3.createReceiver(queue);
+        MockQueueReceiver receiver2 = (MockQueueReceiver)session3.createReceiver(queue);
+        MockQueueBrowser browser1 = (MockQueueBrowser)session2.createBrowser(queue);
+        session1.close();
+        session2.close();
+        sender1.close();
+        receiver1.close();
+        receiver2.close();
+        module.verifyQueueSessionClosed(0);
+        module.verifyQueueSessionClosed(1);
+        module.verifyQueueSenderClosed(0, "queue", 0);
+        module.verifyQueueReceiverClosed(2, "queue", 0);
+        module.verifyQueueReceiverClosed(2, "queue", 1);
+        module.verifyAllQueueReceiversClosed(2);
+        module.verifyAllQueueBrowsersClosed(0);
+        module.verifyAllQueueSendersClosed(2);
+        module.verifyAllQueueReceiversClosed(1);
+        try
+        {
+            module.verifyQueueConnectionClosed();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyQueueSessionClosed(2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyAllQueueSessionsClosed();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyQueueBrowserClosed(1, "queue", 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyAllQueueBrowsersClosed(1);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        mockFactory.getMockQueueConnection().close();
+        session3.close();
+        sender2.close();
+        sender3.close();
+        browser1.close();
+        module.verifyQueueConnectionClosed();
+        module.verifyAllQueueReceiversClosed(2);
+        module.verifyAllQueueBrowsersClosed(1);
+        module.verifyQueueBrowserClosed(1, "queue", 0);
+        module.verifyAllQueueSendersClosed(0);
+        module.verifyAllQueueSendersClosed(1);
+    }
+    
+    public void testVerifySessionComitted() throws Exception
+    {
+        MockQueueSession session1 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session2 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session3 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        session1.commit();
+        session2.rollback();
+        module.verifyQueueSessionCommitted(0);
+        module.verifyQueueSessionNotRolledBack(0);
+        module.verifyQueueSessionNotCommitted(1);
+        module.verifyQueueSessionRolledBack(1);
+        module.verifyQueueSessionNotCommitted(2);
+        module.verifyQueueSessionNotRolledBack(2);
+        try
+        {
+            module.verifyQueueSessionNotCommitted(0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyQueueSessionRolledBack(2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyAllQueueSessionsCommitted();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        session2.commit();
+        session3.commit();
+        module.verifyQueueSessionCommitted(1);
+        module.verifyAllQueueSessionsCommitted();
+        try
+        {
+            module.verifyQueueSessionNotCommitted(2);
             fail();
         }
         catch(VerifyFailedException exc)
