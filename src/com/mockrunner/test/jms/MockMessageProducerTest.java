@@ -32,29 +32,29 @@ public class MockMessageProducerTest extends TestCase
     {
         DestinationManager manager = new DestinationManager();
         MockQueueSender sender = new MockQueueSender(new MockQueueConnection(manager), queue);  
-        testSendMessage(sender);
+        doTestSendMessage(sender);
         assertEquals(1, queue.getCurrentMessageList().size());
         assertEquals(1, queue.getReceivedMessageList().size());
         assertEquals(0, topic.getCurrentMessageList().size());
         assertEquals(0, topic.getReceivedMessageList().size());
         assertEquals(new MockTextMessage("aMessage"), queue.getMessage());
-        testSendWithInvalidParameters(sender);
+        doTestSendWithInvalidParameters(sender);
     }
     
     public void testSendWithTopicPublisher() throws Exception
     {
         DestinationManager manager = new DestinationManager();
         MockTopicPublisher publisher = new MockTopicPublisher(new MockTopicConnection(manager), topic);
-        testSendMessage(publisher);
+        doTestSendMessage(publisher);
         assertEquals(1, topic.getCurrentMessageList().size());
         assertEquals(1, topic.getReceivedMessageList().size());
         assertEquals(0, queue.getCurrentMessageList().size());
         assertEquals(0, queue.getReceivedMessageList().size());
         assertEquals(new MockTextMessage("aMessage"), topic.getMessage());
-        testSendWithInvalidParameters(publisher);
+        doTestSendWithInvalidParameters(publisher);
     }
     
-    private void testSendWithInvalidParameters(MockMessageProducer producer) throws Exception
+    private void doTestSendWithInvalidParameters(MockMessageProducer producer) throws Exception
     {
         try
         {
@@ -86,7 +86,7 @@ public class MockMessageProducerTest extends TestCase
         }
     }
     
-    private void testSendMessage(MockMessageProducer producer) throws Exception
+    private void doTestSendMessage(MockMessageProducer producer) throws Exception
     {
         producer.send(new MockTextMessage("aMessage"));
     }

@@ -723,17 +723,17 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberConnectionProducers}
      */
-    protected void verifyNumberConnectionProducers(int indexOfSession, int numberOfProducers)
+    protected void verifyNumberMessageProducers(int indexOfSession, int numberOfProducers)
     {
-        jmsTestModule.verifyNumberConnectionProducers(indexOfSession, numberOfProducers);
+        jmsTestModule.verifyNumberMessageProducers(indexOfSession, numberOfProducers);
     }
 
     /**
      * Delegates to {@link JMSTestModule#verifyAllConnectionProducersClosed}
      */
-    protected void verifyAllConnectionProducersClosed(int indexOfSession)
+    protected void verifyAllMessageProducersClosed(int indexOfSession)
     {
-        jmsTestModule.verifyAllConnectionProducersClosed(indexOfSession);
+        jmsTestModule.verifyAllMessageProducersClosed(indexOfSession);
     }
 
     /**
