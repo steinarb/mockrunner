@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
 
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.util.common.FileUtil;
 import com.mockrunner.util.common.StreamUtil;
 
@@ -29,6 +30,15 @@ public class FileUtilTest extends TestCase
         lineList = StreamUtil.getLinesFromReader(reader);
         doTestLines(lineList);
         reader.close();
+        try
+        {
+            FileUtil.findFile("notfound");
+            fail();
+        } 
+        catch(NestedApplicationException exc)
+        {
+            //should throw exception
+        }
     }
     
     private void doTestLines(List lineList)

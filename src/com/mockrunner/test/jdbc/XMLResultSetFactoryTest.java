@@ -40,8 +40,7 @@ public class XMLResultSetFactoryTest extends TestCase
     
     /**
      * Test for a bad create where there is no actual file 
-     * passed to the XMLResultSetFactory constructure resulting 
-     * in defaults.
+     * passed to the XMLResultSetFactory
      */
     public void testBadCreate() 
     {
@@ -49,6 +48,7 @@ public class XMLResultSetFactoryTest extends TestCase
         {
             XMLResultSetFactory badXMLRSF = new XMLResultSetFactory("src/com/mockrunner/test/jdbc/nonexisting.xml");
             badXMLRSF.create("Bad-ResultSet-ID");
+            fail();
         } 
         catch(NestedApplicationException exc)
         {

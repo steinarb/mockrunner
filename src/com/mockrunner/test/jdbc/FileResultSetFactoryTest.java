@@ -3,6 +3,7 @@ package com.mockrunner.test.jdbc;
 import java.io.File;
 import java.sql.SQLException;
 
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.jdbc.FileResultSetFactory;
 import com.mockrunner.mock.jdbc.MockResultSet;
 
@@ -21,6 +22,16 @@ public class FileResultSetFactoryTest extends TestCase
         factory = new FileResultSetFactory(new File("src/com/mockrunner/test/jdbc/testresult.txt"));
         resultSet = factory.create("");
         doTestResultSet(factory, resultSet);
+        factory = new FileResultSetFactory("not found");
+        try
+        {
+            factory.create("");
+            fail();
+        } 
+        catch(NestedApplicationException exc)
+        {
+            //should throw exception
+        }
     }
 
     private void doTestResultSet(FileResultSetFactory factory, MockResultSet resultSet) throws SQLException
