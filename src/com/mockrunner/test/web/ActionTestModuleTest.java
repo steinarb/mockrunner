@@ -495,4 +495,18 @@ public class ActionTestModuleTest extends TestCase
         assertEquals(resources2, testAction.getTestResourcesForKey());
         assertEquals(Locale.TRADITIONAL_CHINESE, testAction.getTestLocale());
     }
+    
+    public void testSResourcesAddToModuleConfig()
+    {
+        MapMessageResources resources1 = new MapMessageResources();
+        MapMessageResources resources2 = new MapMessageResources();
+        MapMessageResources resources3 = new MapMessageResources();
+        module.setResources("test1", resources1);
+        module.setResources("test2", resources2);
+        module.setResources("test3", resources3);
+        assertEquals(3, mockfactory.getMockModuleConfig().findMessageResourcesConfigs().length);
+        assertNotNull(mockfactory.getMockModuleConfig().findMessageResourcesConfig("test1"));
+        assertNotNull(mockfactory.getMockModuleConfig().findMessageResourcesConfig("test2"));
+        assertNotNull(mockfactory.getMockModuleConfig().findMessageResourcesConfig("test3"));
+    }
 }
