@@ -2,10 +2,11 @@ package com.mockrunner.example.struts;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 /**
  * The <code>ActionForm</code> for the {@link AuthenticationAction}.
@@ -54,7 +55,7 @@ public class AuthenticationForm extends ActionForm
 
     private void addMissingValueError(ActionErrors errors, String field)
     {
-        ActionError error = new ActionError("field.value.missing", field);
-        errors.add(ActionErrors.GLOBAL_ERROR, error);
+        ActionMessage error = new ActionMessage("field.value.missing", field);
+        errors.add(ActionMessages.GLOBAL_MESSAGE, error);
     }
 }

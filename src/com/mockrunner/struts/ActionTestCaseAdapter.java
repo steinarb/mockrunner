@@ -6,8 +6,6 @@ import javax.sql.DataSource;
 
 import org.apache.commons.validator.ValidatorResources;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMessage;
@@ -114,6 +112,14 @@ public class ActionTestCaseAdapter extends BaseTestCase
     protected void setDoPopulate(boolean doPopulate)
     {
         actionTestModule.setDoPopulate(doPopulate);
+    }
+    
+    /**
+     * Delegates to {@link ActionTestModule#setRecognizeMessagesInSession}
+     */
+    protected void setRecognizeMessagesInSession(boolean recognizeInSession)
+    {
+        actionTestModule.setRecognizeMessagesInSession(recognizeInSession);
     }
     
     /**
@@ -351,7 +357,7 @@ public class ActionTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link ActionTestModule#getActionErrorByKey}
      */
-    protected ActionError getActionErrorByKey(String errorKey)
+    protected ActionMessage getActionErrorByKey(String errorKey)
     {
         return actionTestModule.getActionErrorByKey(errorKey);
     }
@@ -367,17 +373,41 @@ public class ActionTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link ActionTestModule#setActionErrors}
      */
-    protected void setActionErrors(ActionErrors errors)
+    protected void setActionErrors(ActionMessages errors)
     {
         actionTestModule.setActionErrors(errors);
+    }
+    
+    /**
+     * Delegates to {@link ActionTestModule#setActionErrorsToSession}
+     */
+    protected void setActionErrorsToSession(ActionMessages errors)
+    {
+        actionTestModule.setActionErrorsToSession(errors);
     }
 
     /**
      * Delegates to {@link ActionTestModule#getActionErrors}
      */
-    protected ActionErrors getActionErrors()
+    protected ActionMessages getActionErrors()
     {
         return actionTestModule.getActionErrors();
+    }
+    
+    /**
+     * Delegates to {@link ActionTestModule#getActionErrorsFromRequest}
+     */
+    protected ActionMessages getActionErrorsFromRequest()
+    {
+        return actionTestModule.getActionErrorsFromRequest();
+    }    
+    
+    /**
+     * Delegates to {@link ActionTestModule#getActionErrorsFromSession}
+     */
+    protected ActionMessages getActionErrorsFromSession()
+    {
+        return actionTestModule.getActionErrorsFromSession();
     }
 
     /**
@@ -395,6 +425,14 @@ public class ActionTestCaseAdapter extends BaseTestCase
     {
         actionTestModule.setActionMessages(messages);
     }
+    
+    /**
+     * Delegates to {@link ActionTestModule#setActionMessagesToSession}
+     */
+    protected void setActionMessagesToSession(ActionMessages messages)
+    {
+        actionTestModule.setActionMessagesToSession(messages);
+    }
 
     /**
      * Delegates to {@link ActionTestModule#getActionMessages}
@@ -402,6 +440,22 @@ public class ActionTestCaseAdapter extends BaseTestCase
     protected ActionMessages getActionMessages()
     {
         return actionTestModule.getActionMessages();
+    }
+    
+    /**
+     * Delegates to {@link ActionTestModule#getActionMessagesFromRequest}
+     */
+    protected ActionMessages getActionMessagesFromRequest()
+    {
+        return actionTestModule.getActionMessagesFromRequest();
+    }
+    
+    /**
+     * Delegates to {@link ActionTestModule#getActionMessagesFromSession}
+     */
+    protected ActionMessages getActionMessagesFromSession()
+    {
+        return actionTestModule.getActionMessagesFromSession();
     }
 
     /**

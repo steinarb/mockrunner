@@ -5,12 +5,17 @@ mockrunner-0.3:
 - applied patch 988200 (RequestDispatcher by Brian Sanders)
 - adapted EJBTestModule to new MockEJB 0.6 API (check out
   migratingfrom0.2.9.txt for details)
+- adapted ActionTestModule to Struts 1.2 (Struts 1.1 is still supported,
+  check out migratingfrom0.2.9.txt for details), added methods to get
+  action errors and messages from request and session
+- changed example tests to confirm with Struts 1.2 requirements
 - it's now possible to use regular expressions with the JDBC test framework
   for preparing and verifying SQL statements. You have to enable regular expressions 
   with setUseRegularExpressions(true). Check out the modified JDBC BookstoreTest.
 - improved version of MockDatabaseMetaData
 - added verifyNumberCommits and verifyNumberRollbacks methods for JMS sessions to 
   JMSTestModule
+- MapMessageResources.clear now clears cached values also
 - added methods to ServletTestModule to set a servlet directly and to
   optionally initialize servlets and filters
 - added verifyOutputRegularExpression to ServletTestModule and TagTestModule
@@ -19,6 +24,8 @@ mockrunner-0.3:
 - added getExecutedSQLStatementParameterSets method to JDBCTestModule
 - added JDBC MockStruct implementation
 - added Java2HTML version of examples source code
+- updated all jar files in the Struts release to the versions of Struts 1.2.1
+- replaced commons-lang.jar with commons-lang-2.0.jar (no longer included in Struts 1.2.1)
 - updated nekohtml.jar from 0.9.2 to 0.9.3
 
 mockrunner-0.2.9:

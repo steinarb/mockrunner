@@ -134,6 +134,7 @@ public class MapMessageResources extends MessageResources
      */
     public void clear()
     {
+        super.formats.clear();
         messages.clear();
     }
 }

@@ -12,8 +12,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.validator.ValidatorResources;
 import org.apache.struts.Globals;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMessage;
@@ -48,12 +46,14 @@ public class ActionTestModule
     private Action actionObj;
     private boolean reset;
     private boolean doPopulate;
+    private boolean recognizeInSession;
     
     public ActionTestModule(WebMockObjectFactory mockFactory)
     {
         this.mockFactory = mockFactory;
         reset = true;
         doPopulate = true;
+        recognizeInSession = true;
     }
     
     /**
@@ -78,6 +78,17 @@ public class ActionTestModule
     public void setDoPopulate(boolean doPopulate)
     {
         this.doPopulate = doPopulate;
+    }
+    
+    /**
+     * Set if messages that are saved to the session (instead of
+     * the request) should be recognized.
+     * Default is <code>true</code>.
+     * @param recognizeInSession should messages in the session be recognized
+     */
+    public void setRecognizeMessagesInSession(boolean recognizeInSession)
+    {
+        this.recognizeInSession = recognizeInSession;
     }
 
     /**
@@ -439,6 +450,7 @@ public class ActionTestModule
     
     private void verifyActionMessageNotPresent(String messageKey, ActionMessages messages)
     {
+        if(!containsMessages(messages)) return;
         Iterator iterator = messages.get();
         while(iterator.hasNext())
         {
@@ -496,7 +508,7 @@ public class ActionTestModule
      */
     public void verifyActionErrorValues(String errorKey, Object[] values)
     {
-        ActionError error = getActionErrorByKey(errorKey);
+        ActionMessage error = getActionErrorByKey(errorKey);
         if(null == error) throw new VerifyFailedException("action error " + errorKey + " not present");
         verifyActionMessageValues(error, values);
     }
@@ -630,9 +642,9 @@ public class ActionTestModule
      * @param errorKey the error key
      * @return the action error with the specified key
      */
-    public ActionError getActionErrorByKey(String errorKey)
+    public ActionMessage getActionErrorByKey(String errorKey)
     {
-        return (ActionError)getActionMessageByKey(errorKey, getActionErrors());
+        return getActionMessageByKey(errorKey, getActionErrors());
     }
     
     /**
@@ -663,23 +675,59 @@ public class ActionTestModule
     
     /**
      * Sets the specified <code>ActionMessages</code> object 
-     * as the currently present messages.
+     * as the currently present messages to the request.
      * @param messages the ActionMessages object
      */
     public void setActionMessages(ActionMessages messages)
     {
         mockFactory.getWrappedRequest().setAttribute(Globals.MESSAGE_KEY, messages);
     }
+    
+    /**
+     * Sets the specified <code>ActionMessages</code> object 
+     * as the currently present messages to the session.
+     * @param messages the ActionMessages object
+     */
+    public void setActionMessagesToSession(ActionMessages messages)
+    {
+        mockFactory.getMockSession().setAttribute(Globals.MESSAGE_KEY, messages);
+    }
 
     /**
      * Get the currently present action messages. Can be called
      * after {@link #actionPerform} to get the messages the action
-     * has set.
+     * has set. This method checks the request first. If there are 
+     * no messages in the request and messages in the session should 
+     * be recognized (use {@link #setRecognizeMessagesInSession}), it checks
+     * the session next.
      * @return the action messages
      */
     public ActionMessages getActionMessages()
     {
+        ActionMessages messages = getActionMessagesFromRequest();
+        if(null == messages && recognizeInSession)
+        {
+            messages = getActionMessagesFromSession();
+        }
+        return messages;
+    }
+    
+    /**
+     * Get the currently present action messages from the request.
+     * @return the action messages
+     */
+    public ActionMessages getActionMessagesFromRequest()
+    {
         return (ActionMessages)mockFactory.getWrappedRequest().getAttribute(Globals.MESSAGE_KEY);
+    }
+    
+    /**
+     * Get the currently present action messages from the session.
+     * @return the action messages
+     */
+    public ActionMessages getActionMessagesFromSession()
+    {
+        return (ActionMessages)mockFactory.getMockSession().getAttribute(Globals.MESSAGE_KEY);
     }
     
     /**
@@ -694,23 +742,59 @@ public class ActionTestModule
 
     /**
      * Sets the specified <code>ActionErrors</code> object 
-     * as the currently present errors.
+     * as the currently present errors to the request.
      * @param errors the ActionErrors object
      */
-    public void setActionErrors(ActionErrors errors)
+    public void setActionErrors(ActionMessages errors)
     {
         mockFactory.getWrappedRequest().setAttribute(Globals.ERROR_KEY, errors);
+    }
+    
+    /**
+     * Sets the specified <code>ActionErrors</code> object 
+     * as the currently present errors to the session.
+     * @param errors the ActionErrors object
+     */
+    public void setActionErrorsToSession(ActionMessages errors)
+    {
+        mockFactory.getMockSession().setAttribute(Globals.ERROR_KEY, errors);
     }
 
     /**
      * Get the currently present action errors. Can be called
      * after {@link #actionPerform} to get the errors the action
-     * has set.
+     * has set. This method checks the request first. If there are 
+     * no errors in the request and messages in the session should 
+     * be recognized (use {@link #setRecognizeMessagesInSession}), it checks
+     * the session next.
      * @return the action errors
      */
-    public ActionErrors getActionErrors()
+    public ActionMessages getActionErrors()
     {
-        return (ActionErrors) mockFactory.getWrappedRequest().getAttribute(Globals.ERROR_KEY);
+        ActionMessages errors = getActionErrorsFromRequest();
+        if(null == errors && recognizeInSession)
+        {
+            errors = getActionErrorsFromSession();
+        }
+        return errors;
+    }
+    
+    /**
+     * Get the currently present action errors from the request.
+     * @return the action messages
+     */
+    public ActionMessages getActionErrorsFromRequest()
+    {
+        return (ActionMessages)mockFactory.getWrappedRequest().getAttribute(Globals.ERROR_KEY);
+    }
+    
+    /**
+     * Get the currently present action errors from the session.
+     * @return the action messages
+     */
+    public ActionMessages getActionErrorsFromSession()
+    {
+        return (ActionMessages)mockFactory.getMockSession().getAttribute(Globals.ERROR_KEY);
     }
 
     /**
@@ -719,7 +803,7 @@ public class ActionTestModule
      */
     public boolean hasActionErrors()
     {
-        ActionErrors errors = getActionErrors();
+        ActionMessages errors = getActionErrors();
         return containsMessages(errors);
     }
 
@@ -1076,7 +1160,7 @@ public class ActionTestModule
         formObj.setServlet(mockFactory.getMockActionServlet());
         if(getMockActionMapping().getValidate())
         {
-            ActionErrors errors = formObj.validate(getMockActionMapping(), mockFactory.getWrappedRequest());
+            ActionMessages errors = formObj.validate(getMockActionMapping(), mockFactory.getWrappedRequest());
             if (containsMessages(errors))
             {
                 mockFactory.getWrappedRequest().setAttribute(Globals.ERROR_KEY, errors);

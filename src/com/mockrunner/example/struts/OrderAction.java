@@ -4,11 +4,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 /**
  * This action fulfils the order for some type of product. 
@@ -29,9 +29,9 @@ public class OrderAction extends Action
         OrderManager orderManager = OrderManager.instance(request.getSession().getServletContext());
         if(orderManager.getStock(id) < amount)
         {
-            ActionErrors errors = new ActionErrors();
-            ActionError error = new ActionError("not.enough.in.stock", id);
-            errors.add(ActionErrors.GLOBAL_ERROR, error);
+            ActionMessages errors = new ActionMessages();
+            ActionMessage error = new ActionMessage("not.enough.in.stock", id);
+            errors.add(ActionMessages.GLOBAL_MESSAGE, error);
             saveErrors(request, errors);
             return mapping.findForward("failure");
         }

@@ -1,7 +1,9 @@
 
+There are some changes in Mockrunner 0.3 that breaks the Mockrunner 0.2.9 API.
+Affected are EJB, JMS and Struts.
+
 Starting with version 0.3, Mockrunner supports the MockEJB 0.6 API
-and the new features of MockEJB. This breaks the Mockrunner API in a
-few cases.
+and the new features of MockEJB.
 
 If you don't use the EJBTestModule and do not test JMS code with
 message driven beans, everything should be fine.
@@ -34,4 +36,25 @@ Otherwise, please consider the following changes:
   com.mockrunner.example.jms.PrintSessionBeanTest for an example.
   The PrintSessionBeanTest also shows how to test message driven beans
   without deploying the bean to the mock container.
+  
+Starting with version 0.3, Mockrunner includes and supports Struts 1.2.
+Struts 1.1 is still supported. The struts.jar library and all other libraries
+from Struts release (refer to readme.txt) were upgraded to the versions included
+in Struts 1.2.1. If you want to test applications using Struts 1.1, just replace
+all the jar files with the versions that ship with Struts 1.1 release.
+
+However, a few things may affect your Struts tests:
+
+- Struts 1.2 can store action errors and messages in the request and the session.
+  The methods ActionTestModule.getActionErrors and ActionTestModule.getActionMessages 
+  check the request and the session for errors resp. messages objects by default. 
+  Struts 1.1 stores these objects in the request, so this should not affect your tests. 
+  You can disable this behavior by calling ActionTestModule.setRecognizeMessagesInSession(false).
+  If this property is set to false, errors and messages in the session are not recognized.
+
+- Struts 1.2 deprecates the use of ActionErrors objects in favor of ActionMessages.
+  The method ActionTestModule.getActionErrors now returns an ActionMessages object.
+  ActionTestModule.getActionErrorByKey now returns an ActionMessage object. This
+  is necessary, because Struts 1.2 stores ActionMessages instead of ActionErrors.
+  If you are using Struts 1.1 you can cast these objects to ActionErrors if necessary.
   

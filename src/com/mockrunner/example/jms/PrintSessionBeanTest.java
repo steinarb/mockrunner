@@ -39,9 +39,9 @@ public class PrintSessionBeanTest extends JMSTestCaseAdapter
     //The following commented out setUp method is an alternative approach to
     //test a message driven bean. The message bean is not deployed to the
     //mock container but instantiated directly, which means that you cannot 
-    //test JTA transactions when receiving the message and you cannot use the 
+    //test JTA transactions when *receiving* the message and you cannot use the 
     //MockEJB interceptor framework for the onMessage method.
-    //In this case we only test JTA transactions while sending the message,
+    //In this test case we only test JTA transactions while *sending* the message,
     //so this approach works quite well.
 	/*protected void setUp() throws Exception
 	{
