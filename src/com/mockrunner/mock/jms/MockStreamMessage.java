@@ -363,6 +363,11 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
+        if(null == data)
+        {
+            writeObject(null);
+            return;
+        }
         writeObject(ArrayUtil.truncateArray(data, offset, length));
     }
 
