@@ -1,4 +1,4 @@
-package com.mockrunner.test;
+package com.mockrunner.test.util;
 
 import java.io.File;
 import java.util.List;
@@ -11,7 +11,7 @@ public class FileUtilTest extends TestCase
 {
     public void testGetLinesFromFile()
     {
-        File file = new File("src/com/mockrunner/test/testlines.txt");
+        File file = new File("src/com/mockrunner/test/util/testlines.txt");
         List lineList = FileUtil.getLinesFromFile(file);
         assertTrue(lineList.size() == 6);
         assertEquals("line1", lineList.get(0));

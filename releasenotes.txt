@@ -20,6 +20,7 @@ mockrunner-0.2.9:
 - added support for HttpSessionAttributeListener and ServletContextAttributeListener
 - added Servlet 2.4 methods to MockHttpServletRequest and MockHttpServletResponse
 - fixed some problems with MockPageContext
+- reorganized package structure for tests
 - mockrunner jars are now compiled with debug information (line numbers)
 - updated jdom.jar from Beta 9 to Beta 10
 
