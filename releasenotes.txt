@@ -21,11 +21,14 @@ mockrunner-0.3.2:
 - introduced NestedApplicationException, which is thrown instead of
   RuntimeException and nests the original exception
 - renamed ArrayUtil.contains to ArrayUtil.indexOf, contains is misleading
-- added getBinaryContent to MockServletOutputStream, in addition,
-  getContent now respects the character encoding of the response
+- added getBinaryContent to MockServletOutputStream
+- MockServletOutputStream.getContent now respects the character encoding of 
+  the response
 - refactored the JMS test framework, introduced GenericTransmissionManager
   for creating producers that are not associated with a destination
   (check out bug report 1077690)
+- fixed bug 1077690 (JMS spec allows MessageProducers with null destination)
+  reported by Peter Ryan
 - TransmissionManagerWrapper now allows transparent access to senders and
   receivers
 - refactored MockPageContext, it does no longer depend on 
@@ -34,10 +37,9 @@ mockrunner-0.3.2:
   is called without a previous created session, this method returns null
 - fixed bug with parameter sets in batch updates, always the latest parameter
   set has been stored
-- fixed bug 1077690 (JMS spec allows MessageProducers with null destination)
-  reported by Peter Ryan
 - fixed bug in MockHttpServletResponse.getWriter()
 - fixed bug in MockResultSet.setFetchDirection
+- fixed minor classloading bug in EJBTestModule
 - removed commons-lang-2.0.jar, no longer necessary
 - replaced ActiveMQ classes with latest 1.5 version fixing some issues
   with selector parsing
