@@ -116,11 +116,11 @@ jboss-j2ee.jar
 
 Commons:
 http://jakarta.apache.org/commons       
-commons-logging.jar (from Struts 1.2.2 release)
-commons-collections.jar (from Struts 1.2.2 release)
-commons-beanutils.jar (from Struts 1.2.2 release)
-commons-digester.jar (from Struts 1.2.2 release)
-commons-validator.jar (from Struts 1.2.2 release)
+commons-logging.jar (from Struts 1.2.4 release)
+commons-collections.jar (from Struts 1.2.4 release)
+commons-beanutils.jar (from Struts 1.2.4 release)
+commons-digester.jar (from Struts 1.2.4 release)
+commons-validator.jar (from Struts 1.2.4 release)
 commons-lang-2.0.jar
 
 MockEJB 0.6 beta2:
