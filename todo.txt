@@ -1,4 +1,4 @@
-- complete JMS test framework
+- add Struts message resource support
 - add support for mulitple ResultSet returns
 - add better support of HTML fragments
 - get MultiThreadTestSuite working

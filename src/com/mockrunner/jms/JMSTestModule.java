@@ -265,20 +265,22 @@ public class JMSTestModule
     }
     
     /**
-     * Returns the list of {@link MockQueueSession} obejcts.
+     * Returns the list of {@link MockQueueSession} objects.
      * @return the {@link MockQueueSession} list
      */
     public List getQueueSessionList()
     {
+        if(null == getCurrentQueueConnection()) return null;
         return getCurrentQueueConnection().getQueueSessionList();
     }
     
     /**
-     * Returns the list of {@link MockTopicSession} obejcts.
+     * Returns the list of {@link MockTopicSession} objects.
      * @return the {@link MockTopicSession} list
      */
     public List getTopicSessionList()
     {
+        if(null == getCurrentTopicConnection()) return null;
         return getCurrentTopicConnection().getTopicSessionList();
     }
     
@@ -290,6 +292,7 @@ public class JMSTestModule
      */
     public MockQueueSession getQueueSession(int indexOfSession)
     {
+        if(null == getCurrentQueueConnection()) return null;
         return getCurrentQueueConnection().getQueueSession(indexOfSession);
     }
     
@@ -301,6 +304,7 @@ public class JMSTestModule
      */
     public MockTopicSession getTopicSession(int indexOfSession)
     {
+        if(null == getCurrentTopicConnection()) return null;
         return getCurrentTopicConnection().getTopicSession(indexOfSession);
     }
     
@@ -496,6 +500,10 @@ public class JMSTestModule
      */
     public void verifyQueueConnectionClosed()
     {
+        if(null == getCurrentQueueConnection())
+        {
+            throw new VerifyFailedException("No QueueConnection present.");
+        }
         if(!getCurrentQueueConnection().isClosed())
         {
             throw new VerifyFailedException("QueueConnection is not closed.");
@@ -508,6 +516,10 @@ public class JMSTestModule
      */
     public void verifyQueueConnectionStarted()
     {
+        if(null == getCurrentQueueConnection())
+        {
+            throw new VerifyFailedException("No QueueConnection present.");
+        }
         if(!getCurrentQueueConnection().isStarted())
         {
             throw new VerifyFailedException("QueueConnection is not started.");
@@ -520,6 +532,10 @@ public class JMSTestModule
      */
     public void verifyQueueConnectionStopped()
     {
+        if(null == getCurrentQueueConnection())
+        {
+            throw new VerifyFailedException("No QueueConnection present.");
+        }
         if(!getCurrentQueueConnection().isStopped())
         {
             throw new VerifyFailedException("QueueConnection is not stopped.");
@@ -532,6 +548,10 @@ public class JMSTestModule
      */
     public void verifyTopicConnectionClosed()
     {
+        if(null == getCurrentTopicConnection())
+        {
+            throw new VerifyFailedException("No TopicConnection present.");
+        }
         if(!getCurrentTopicConnection().isClosed())
         {
             throw new VerifyFailedException("TopicConnection is not closed.");
@@ -544,6 +564,10 @@ public class JMSTestModule
      */
     public void verifyTopicConnectionStarted()
     {
+        if(null == getCurrentTopicConnection())
+        {
+            throw new VerifyFailedException("No TopicConnection present.");
+        }
         if(!getCurrentTopicConnection().isStarted())
         {
             throw new VerifyFailedException("TopicConnection is not started.");
@@ -556,6 +580,10 @@ public class JMSTestModule
      */
     public void verifyTopicConnectionStopped()
     {
+        if(null == getCurrentTopicConnection())
+        {
+            throw new VerifyFailedException("No TopicConnection present.");
+        }
         if(!getCurrentTopicConnection().isStopped())
         {
             throw new VerifyFailedException("TopicConnection is not stopped.");
@@ -2903,6 +2931,10 @@ public class JMSTestModule
     
     private MockQueueSession checkAndGetQueueSessionByIndex(int indexOfSession)
     {
+        if(null == getCurrentQueueConnection())
+        {
+            throw new VerifyFailedException("No QueueConnection present.");
+        }
         MockQueueSession session = getQueueSession(indexOfSession);
         if(null == session)
         {
@@ -2913,6 +2945,10 @@ public class JMSTestModule
     
     private MockTopicSession checkAndGetTopicSessionByIndex(int indexOfSession)
     {
+        if(null == getCurrentTopicConnection())
+        {
+            throw new VerifyFailedException("No TopicConnection present.");
+        }
         MockTopicSession session = getTopicSession(indexOfSession);
         if(null == session)
         {

@@ -2,6 +2,7 @@ package com.mockrunner.example.jms;
 
 import java.io.IOException;
 
+import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
@@ -54,24 +55,37 @@ public class PrintMessageServlet extends HttpServlet
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         String customerId = request.getParameter("customerId");
+        QueueConnection queueConnection = null;
+        QueueSession queueSession = null;
+        QueueSender queueSender = null;
         try
         {   
             InitialContext initialContext = new InitialContext();
             QueueConnectionFactory queueFactory = (QueueConnectionFactory)initialContext.lookup("java:/ConnectionFactory");
-            QueueConnection queueConnection = queueFactory.createQueueConnection();
-            QueueSession queueSession = queueConnection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
+            queueConnection = queueFactory.createQueueConnection();
+            queueSession = queueConnection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
             Queue queue = (Queue)initialContext.lookup("queue/testQueue");
             TextMessage message = queueSession.createTextMessage(customerId);
-            QueueSender queueSender = queueSession.createSender(queue);
+            queueSender = queueSession.createSender(queue);
             queueSender.send(message);
-            queueSender.close();
-            queueSession.close();
-            queueConnection.close();
             response.getWriter().write("Print request for " + customerId + " successfully sent");
         }
         catch(Exception exc)
         {
             response.getWriter().write("Error sending print request for " + customerId);
+        }
+        finally
+        {
+            try
+            {
+                if(null != queueSender) queueSender.close();
+                if(null != queueSession) queueSession.close();
+                if(null != queueConnection) queueConnection.close();
+            }
+            catch(JMSException exc)
+            {
+                exc.printStackTrace();
+            }
         }
     }
 }
