@@ -24,6 +24,15 @@ public class MockServerSession implements ServerSession
         started = false;
     }
     
+    /**
+     * Returns if this server session was started.
+     * @return <code>true</code> if this server session is started
+     */
+    public boolean isStarted()
+    {
+        return started;
+    }
+    
     public void setSession(Session session)
     {
         this.session = session;

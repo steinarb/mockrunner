@@ -28,7 +28,6 @@ import org.mockejb.TransactionPolicy;
 import org.mockejb.jndi.MockContextFactory;
 
 import com.mockrunner.ejb.EJBTestModule;
-import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockQueue;
@@ -48,7 +47,6 @@ public class EJBTestModuleTest extends TestCase
     private EJBMockObjectFactory ejbMockFactory;
     private EJBTestModule ejbModule;
     private JMSMockObjectFactory jmsMockFactory;
-    private JMSTestModule jmsModule;
     
     protected void setUp() throws Exception
     {
@@ -56,7 +54,6 @@ public class EJBTestModuleTest extends TestCase
         ejbMockFactory = new EJBMockObjectFactory();
         ejbModule = new EJBTestModule(ejbMockFactory);
         jmsMockFactory = new JMSMockObjectFactory();
-        jmsModule = new JMSTestModule(jmsMockFactory);
     }
     
 	protected void tearDown() throws Exception
