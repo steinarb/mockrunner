@@ -4,6 +4,7 @@ import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
 import javax.transaction.RollbackException;
+import javax.transaction.Status;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
@@ -57,7 +58,10 @@ public class MockUserTransaction implements UserTransaction
 
     public int getStatus() throws SystemException
     {
-        return 0;
+        if(rollbackCalled) return Status.STATUS_ROLLEDBACK;
+        if(commitCalled) return Status.STATUS_COMMITTED;
+        if(rollbackOnlyCalled) return Status.STATUS_MARKED_ROLLBACK;
+        return Status.STATUS_ACTIVE;
     }
 
     public void rollback() throws IllegalStateException, SecurityException, SystemException
