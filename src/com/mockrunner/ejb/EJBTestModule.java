@@ -137,7 +137,7 @@ public class EJBTestModule
     }
     
     /**
-     * Deploys a bean to the mock container. You have to specify
+     * Deploys a stateless bean to the mock container. You have to specify
      * the implementation class and the JNDI name. The frameworks
      * determines the home and remote interfaces based on the
      * information specified with the <code>setSuffix</code>
@@ -149,11 +149,28 @@ public class EJBTestModule
      */
     public MockEjbObject deploy(String jndiName, Class beanClass)
     {
-        return deploy(jndiName, beanClass, TransactionPolicy.SUPPORTS);
+        return deploy(jndiName, beanClass, false, TransactionPolicy.SUPPORTS);
     }
     
     /**
      * Deploys a bean to the mock container. You have to specify
+     * the implementation class and the JNDI name. The frameworks
+     * determines the home and remote interfaces based on the
+     * information specified with the <code>setSuffix</code>
+     * and <code>setPackage</code> methods.
+     * Sets the transaction policy <i>SUPPORTS</i>.
+     * @param jndiName the JNDI name
+     * @param beanClass the bean implementation class
+     * @param stateful is the bean stateful
+     * @return the <code>MockEjbObject</code> of the deployed bean
+     */
+    public MockEjbObject deploy(String jndiName, Class beanClass, boolean stateful)
+    {
+        return deploy(jndiName, beanClass, stateful, TransactionPolicy.SUPPORTS);
+    }
+    
+    /**
+     * Deploys a stateless bean to the mock container. You have to specify
      * the implementation class and the JNDI name. The frameworks
      * determines the home and remote interfaces based on the
      * information specified with the <code>setSuffix</code>
@@ -166,7 +183,26 @@ public class EJBTestModule
      */
     public MockEjbObject deploy(String jndiName, Class beanClass, TransactionPolicy policy)
     {
+        return deploy(jndiName, beanClass, false, policy);
+    }
+    
+    /**
+     * Deploys a bean to the mock container. You have to specify
+     * the implementation class and the JNDI name. The frameworks
+     * determines the home and remote interfaces based on the
+     * information specified with the <code>setSuffix</code>
+     * and <code>setPackage</code> methods.
+     * The specified transaction policy will be automatically set.
+     * @param jndiName the JNDI name
+     * @param beanClass the bean implementation class
+     * @param stateful is the bean stateful
+     * @param policy the transaction policy
+     * @return the <code>MockEjbObject</code> of the deployed bean
+     */
+    public MockEjbObject deploy(String jndiName, Class beanClass, boolean stateful, TransactionPolicy policy)
+    {
         SessionBeanDescriptor descriptor = new SessionBeanDescriptor(jndiName, getHomeClass(beanClass), getRemoteClass(beanClass), beanClass);
+        descriptor.setStateful(stateful);
         MockEjbObject bean = deploy(descriptor);
         bean.setTransactionPolicy(policy);
         return bean;
