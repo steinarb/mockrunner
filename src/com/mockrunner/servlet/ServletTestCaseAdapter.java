@@ -1,18 +1,23 @@
 package com.mockrunner.servlet;
 
-import java.io.BufferedReader;
-
 import javax.servlet.http.HttpServlet;
 
-import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.base.HTMLOutputModule;
+import com.mockrunner.base.HTMLOutputTestCase;
 
-public class ServletTestCaseAdapter extends BaseTestCase
+/**
+ * Delegator for {@link ServletTestModule}. You can
+ * subclass this adapter or use {@link ServletTestModule}
+ * directly (so your test case can use another base
+ * class).
+ */
+public class ServletTestCaseAdapter extends HTMLOutputTestCase
 {
     private ServletTestModule servletTestModule;
     
     public ServletTestCaseAdapter()
     {
-    
+
     }
 
     public ServletTestCaseAdapter(String arg0)
@@ -29,6 +34,16 @@ public class ServletTestCaseAdapter extends BaseTestCase
     {
         super.setUp();
         servletTestModule = createServletTestModule(getMockObjectFactory());
+    }
+    
+    /**
+     * Returns the <code>ServletTestModule</code> as 
+     * <code>HTMLOutputModule</code>.
+     * @return the <code>HTMLOutputModule</code>
+     */
+    protected HTMLOutputModule getHTMLOutputModule()
+    {
+        return servletTestModule;
     }
     
     /**
@@ -121,22 +136,6 @@ public class ServletTestCaseAdapter extends BaseTestCase
         servletTestModule.doTrace();
     }
     
-    /**
-     * Delegates to {@link ServletTestModule#getOutput}
-     */ 
-    public String getOutput()
-    {
-        return servletTestModule.getOutput();
-    }
-
-    /**
-     * Delegates to {@link ServletTestModule#getOutputAsBufferedReader}
-     */ 
-    public BufferedReader getOutputAsBufferedReader()
-    {
-        return servletTestModule.getOutputAsBufferedReader();  
-    }
-  
     /**
      * Delegates to {@link ServletTestModule#verifyOutput}
      */ 

@@ -1,25 +1,24 @@
 package com.mockrunner.tag;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.MockJspWriter;
 import com.mockrunner.mock.MockPageContext;
-import com.mockrunner.util.*;
+import com.mockrunner.util.TagUtil;
 
 /**
  * Module for custom tag tests. Simulates the container by
  * performing the tag lifecycle.
  */
-public class TagTestModule
+public class TagTestModule extends HTMLOutputModule
 {
     private MockObjectFactory mockFactory;
     private TagSupport tag;
@@ -301,17 +300,7 @@ public class TagTestModule
         MockJspWriter writer = (MockJspWriter)mockFactory.getMockPageContext().getOut();
         return writer.getOutputAsString();
     }
-    
-    /**
-     * Gets the output data the current tag has rendered as a <code>BufferedReader</code>. 
-     * Makes only sense after calling at least [@link #doStartTag} or [@link #processTagLifecycle}
-     * @return the output data as <code>BufferedReader</code>
-     */
-    public BufferedReader getOutputAsBufferedReader()
-    {
-        return new BufferedReader(new StringReader(getOutput()));
-    }
-    
+
     /**
      * Verifies the tag output.
      * @param output the expected output.
