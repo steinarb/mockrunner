@@ -19,23 +19,39 @@
          to your JDK1.4 installation.
         </fail>
     </target>
+    
+    <target name="checkBuildJ2EE1.3" unless="dobuild.j2ee1.3">
+        <echo>
+         Property "build.j2ee1.3" not set or set to false. Please 
+         create a file ".ant.properties" in this directory and set 
+         "build.j2ee1.3" to true in order to build the J2EE 1.3
+         compatible jars.
+        </echo>
+    </target>
 
     <target name="checkJava2HTML" unless="java2html.home">
-        <echo>
+	    <echo>
 	     Property "java2html.home" not set. Please create a file
 	     ".ant.properties" in this directory and set "java2html.home"
 	     to your Java2HTML installation (location of j2h.jar) if you
-         would like to generate the documentation.
-		</echo>
-    </target>
+	     would like to generate the documentation.
+	    </echo>
+	</target>
 
-    <target name="checkenvironment">
+    <target name="prepareenvironment">
+        <condition property="dobuild.j2ee1.3">
+            <and>
+                <isset property="build.j2ee1.3" />
+                <istrue value="${build.j2ee1.3}" />
+            </and>
+        </condition>
         <antcall target="checkJDK1.3" />
         <antcall target="checkJDK1.4" />
+        <antcall target="checkBuildJ2EE1.3" />
         <antcall target="checkJava2HTML" />
     </target>
 
-    <target name="init" depends="checkenvironment">
+    <target name="init" depends="prepareenvironment">
 
         <property name="version" value="0.3.2" />
         
@@ -45,9 +61,12 @@
 
         <property name="build" value="build" />
         <property name="buildjdk1.3" value="buildjdk1.3" />
+        <property name="buildj2ee1.3" value="buildj2ee1.3" />
+        <property name="buildjdk1.3j2ee1.3" value="buildjdk1.3j2ee1.3" />
         <property name="dependencies" value="dependencies" />
         <property name="src" value="src" />
         <property name="srcjdk1.3" value="srcjdk1.3" />
+        <property name="srcj2ee1.3" value="srcj2ee1.3" />
         <property name="doc" value="doc" />
         <property name="bin" value="bin" />
         <property name="lib" value="lib" />
