@@ -18,7 +18,7 @@ import javax.sql.DataSource;
  *           display-name="TestSessionBean"
  *           type="Stateless"
  *           transaction-type="Container"
- *           jndi-name="de/test/TestSession"
+ *           jndi-name="com/mockrunner/example/LogSession"
  * 
  * @ejb:resource-ref res-ref-name="jdbc/MySQLDB"
  *                   res-type="javax.sql.DataSource"
