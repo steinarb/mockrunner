@@ -15,7 +15,11 @@ public class TestConfigurationClassLoader extends URLClassLoader
         Class clazz = null;
         try
         {
-            clazz = findClass(name);
+            clazz = findLoadedClass(name);
+            if(null == clazz)
+            {
+                clazz = findClass(name);
+            }
         }
         catch (ClassNotFoundException exc)
         {
