@@ -23,6 +23,15 @@ public class MockResultSetTest extends TestCase
         super.setUp();
         resultSet = new MockResultSet("");
     }
+    
+    public void testGetColumnCountMetaData() throws Exception
+    {   
+        assertEquals(0, resultSet.getMetaData().getColumnCount());
+        resultSet.addColumn("firstColumn");
+        resultSet.addColumn("secondColumn");
+        resultSet.addColumn("thirdColumn");
+        assertEquals(3, resultSet.getMetaData().getColumnCount());
+    }
 
     public void testAddRow() throws Exception
     {
