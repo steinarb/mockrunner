@@ -5,6 +5,9 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Mock implementation of <code>DatabaseMetaData</code>.
+ */
 public class MockDatabaseMetaData implements DatabaseMetaData
 {
     private int databaseMajorVersion = 1;

@@ -8,6 +8,9 @@ import javax.transaction.Status;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
+/**
+ * Mock implementation of <code>UserTransaction</code>.
+ */
 public class MockUserTransaction implements UserTransaction
 {
     private boolean beginCalled = false;

@@ -22,7 +22,7 @@ import com.mockrunner.util.SearchUtil;
  * So you cannot rely on object identity. You have to use the id
  * of the <code>ResultSet</code> to identify it.
  * The <code>ResultSet</code> objects returned by {@link #getReturnedResultSets}
- * are actually the instances the excuted statements returned.
+ * are actually the instances the executed statements returned.
  */
 public abstract class AbstractResultSetHandler
 {

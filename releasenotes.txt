@@ -1,5 +1,5 @@
 
-mockrunner-0.1.6:
+mockrunner-0.2:
 
 - reorganized package structure for mockobjects. The
   mockobjects of mockrunner-0.1.5 are in com.mockrunner.mock.web
@@ -15,12 +15,14 @@ mockrunner-0.1.6:
   http://mockejb.sourceforge.net.
 - replaced JDK 1.3 mockobjects with 1.4 version
 - added some jars from Jakarta Commons
+- added jboss-j2ee.jar
 - added methods to WebMockObjectFactory in order to specify
   custom request wrappers. This makes it possible to
   use filters in conjunction with Struts actions
   (among other things)
 - added addRequestParameter() methods to ServletTestModule and
   ServletTestCaseAdapter
+- updated nekohtml.jar from 0.7.7 to 0.8.1
 
 mockrunner-0.1.5:
 

@@ -1,5 +1,7 @@
 - add support for mulitple ResultSet returns
 - add better support of HTML fragments
 - get MultiThreadTestSuite working
-- write more tests for framework components
 - make MockObjectFactory more generic (custom mock objects)
+- ant integration
+- add more ResultSetFactories (e.g. with type based definitions)
+- add EJBTestModule that utilizes MockEJB
