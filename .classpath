@@ -17,5 +17,6 @@
     <classpathentry kind="lib" path="lib/xercesImpl.jar"/>
     <classpathentry kind="lib" path="lib/xml-apis.jar"/>
     <classpathentry kind="lib" path="lib/commons-validator.jar"/>
+    <classpathentry kind="lib" path="lib/jakarta-oro.jar"/>
     <classpathentry kind="output" path="classes"/>
 </classpath>

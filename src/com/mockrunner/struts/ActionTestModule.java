@@ -1,5 +1,7 @@
 package com.mockrunner.struts;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.Locale;
 
@@ -29,6 +31,7 @@ import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.mock.web.MockActionMapping;
 import com.mockrunner.mock.web.MockPageContext;
 import com.mockrunner.mock.web.WebMockObjectFactory;
+import com.mockrunner.util.StreamUtil;
 
 /**
  * Module for Struts action tests. Simulates Struts
@@ -203,8 +206,9 @@ public class ActionTestModule
      * @param resourcesFiles the array of config files
      */
     public ValidatorResources createValidatorResources(String[] resourcesFiles)
-    {
+    {  
         if(resourcesFiles.length == 0) return null;
+        setUpServletContextResourcePath(resourcesFiles);
         String resourceString = resourcesFiles[0];
         for(int ii = 1; ii < resourcesFiles.length; ii++)
         {
@@ -223,6 +227,25 @@ public class ActionTestModule
         }
         String key = ValidatorPlugIn.VALIDATOR_KEY + mockFactory.getMockModuleConfig().getPrefix();
         return (ValidatorResources)mockFactory.getMockServletContext().getAttribute(key);
+    }
+    
+    private void setUpServletContextResourcePath(String[] resourcesFiles)
+    {
+        for(int ii = 0; ii < resourcesFiles.length; ii++)
+        {
+            String file = resourcesFiles[ii];
+            try
+            {
+                FileInputStream stream = new FileInputStream(file);
+                byte[] fileData = StreamUtil.getStreamAsByteArray(stream);
+                mockFactory.getMockServletContext().setResourceAsStream(file, fileData);
+            }
+            catch(FileNotFoundException exc)
+            {
+                exc.printStackTrace();
+                throw new RuntimeException(exc.getMessage());
+            }
+        }
     }
     
     /**
@@ -984,11 +1007,12 @@ public class ActionTestModule
             actionObj.setServlet(mockFactory.getMockActionServlet());
             formObj = form;
             setActionErrors(null);
-            if (null != formObj)
+            getMockActionMapping().setType(action.getClass().getName());
+            if(null != formObj)
             {
                 handleActionForm();
             }
-            if (!hasActionErrors())
+            if(!hasActionErrors())
             {
                 ActionForward currentForward = (ActionForward) actionObj.execute(getMockActionMapping(), formObj, mockFactory.getWrappedRequest(), mockFactory.getWrappedResponse());
                 setResult(currentForward);
@@ -1022,6 +1046,7 @@ public class ActionTestModule
     {
         if(reset) getActionForm().reset(getMockActionMapping(), mockFactory.getWrappedRequest());
         if(doPopulate) populateMockRequest();
+        formObj.setServlet(mockFactory.getMockActionServlet());
         if(getMockActionMapping().getValidate())
         {
             ActionErrors errors = formObj.validate(getMockActionMapping(), mockFactory.getWrappedRequest());

@@ -3,6 +3,7 @@ package com.mockrunner.test.web;
 import java.util.Locale;
 
 import org.apache.commons.beanutils.DynaBean;
+import org.apache.commons.validator.ValidatorResources;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMessage;
@@ -19,14 +20,14 @@ import com.mockrunner.struts.MapMessageResources;
 
 public class ActionTestModuleTest extends TestCase
 {
-    private WebMockObjectFactory mockfactory;
+    private WebMockObjectFactory mockFactory;
     private ActionTestModule module;
     
     protected void setUp() throws Exception
     {
         super.setUp();
-        mockfactory = new WebMockObjectFactory();
-        module = new ActionTestModule(mockfactory);
+        mockFactory = new WebMockObjectFactory();
+        module = new ActionTestModule(mockFactory);
     }
     
     private ActionErrors createTestActionErrors()
@@ -476,13 +477,23 @@ public class ActionTestModuleTest extends TestCase
     public void testActionPerformServletSet()
     {
         TestForm form = (TestForm)module.createActionForm(TestForm.class);
-        module.actionPerform(TestAction.class, form);
-        assertEquals(mockfactory.getMockActionServlet(), module.getLastAction().getServlet());
+        module.actionPerform(TestAction.class, form);   
+        assertEquals(mockFactory.getMockActionServlet(), form.getServlet());
+        assertEquals(mockFactory.getMockActionServlet(), ((TestForm)module.getActionForm()).getServlet());
+        assertEquals(mockFactory.getMockActionServlet(), module.getLastAction().getServlet());
         TestAction testAction = new TestAction();
         module.actionPerform(testAction, form);
-        assertEquals(mockfactory.getMockActionServlet(), testAction.getServlet());
+        assertEquals(mockFactory.getMockActionServlet(), form.getServlet());
+        assertEquals(mockFactory.getMockActionServlet(), testAction.getServlet());
         module.actionPerform(TestAction.class, TestForm.class);
-        assertEquals(mockfactory.getMockActionServlet(), module.getLastAction().getServlet());
+        assertEquals(mockFactory.getMockActionServlet(), module.getLastAction().getServlet());
+        assertEquals(mockFactory.getMockActionServlet(), ((TestForm)module.getActionForm()).getServlet());
+    }
+    
+    public void testActionPerformMappingTypeSet()
+    {
+        module.actionPerform(TestAction.class);
+        assertEquals("com.mockrunner.test.web.TestAction", mockFactory.getMockActionMapping().getType());
     }
     
     public void testSetResourcesAndLocale()
@@ -507,10 +518,10 @@ public class ActionTestModuleTest extends TestCase
         module.setResources("test1", resources1);
         module.setResources("test2", resources2);
         module.setResources("test3", resources3);
-        assertEquals(3, mockfactory.getMockModuleConfig().findMessageResourcesConfigs().length);
-        assertNotNull(mockfactory.getMockModuleConfig().findMessageResourcesConfig("test1"));
-        assertNotNull(mockfactory.getMockModuleConfig().findMessageResourcesConfig("test2"));
-        assertNotNull(mockfactory.getMockModuleConfig().findMessageResourcesConfig("test3"));
+        assertEquals(3, mockFactory.getMockModuleConfig().findMessageResourcesConfigs().length);
+        assertNotNull(mockFactory.getMockModuleConfig().findMessageResourcesConfig("test1"));
+        assertNotNull(mockFactory.getMockModuleConfig().findMessageResourcesConfig("test2"));
+        assertNotNull(mockFactory.getMockModuleConfig().findMessageResourcesConfig("test3"));
     }
     
     public void testCreateDynaActionForm()
@@ -542,5 +553,29 @@ public class ActionTestModuleTest extends TestCase
         {
             //should throw exception
         }
+    }
+
+    public void testCreateValidatorResources()
+    {
+        String[] files = new String[2];
+        files[0] = "src/com/mockrunner/test/web/validator-rules.xml";
+        files[1] = "src/com/mockrunner/test/web/validation.xml";
+        ValidatorResources resources = module.createValidatorResources(files);
+        TestValidatorForm form = new TestValidatorForm();
+        form.setServlet(mockFactory.getMockActionServlet());
+        mockFactory.getMockActionMapping().setName("testForm");
+        form.setFirstName("ABCDEF");
+        form.setLastName("ABCDEF");
+        ActionErrors errors = form.validate(mockFactory.getMockActionMapping(), mockFactory.getMockRequest());
+        assertTrue(errors.isEmpty());;
+        form.setFirstName("ABCD");
+        form.setLastName("12345678901");
+        errors = form.validate(mockFactory.getMockActionMapping(), mockFactory.getMockRequest());
+        assertTrue(errors.size() == 2);
+        form.setLastName("ABCDEF");
+        errors = form.validate(mockFactory.getMockActionMapping(), mockFactory.getMockRequest());
+        assertTrue(errors.size() == 1);
+        ActionError error = (ActionError)errors.get().next();
+        assertEquals("errors.minlength", error.getKey());
     }
 }
