@@ -28,6 +28,7 @@ public class AllTests
         suite.addTest(new TestSuite(TagLifecycleTest.class));
         suite.addTest(new TestSuite(ServletTestModuleTest.class));
         suite.addTest(new TestSuite(MockPageContextTest.class));
+        suite.addTest(new TestSuite(MockBlobTest.class));
         suite.addTest(new TestSuite(XmlUtilTest.class));
         suite.addTest(new TestSuite(StreamUtilTest.class));
         suite.addTest(new TestSuite(CollectionUtilTest.class));
