@@ -7,6 +7,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import javax.jms.JMSException;
+import javax.jms.MessageNotWriteableException;
 import javax.jms.ObjectMessage;
 
 import com.mockrunner.base.NestedApplicationException;
@@ -20,7 +21,7 @@ public class MockObjectMessage extends MockMessage implements ObjectMessage
     
     public MockObjectMessage()
     {
-        
+        this(null);
     }
     
     public MockObjectMessage(Serializable object)
@@ -30,6 +31,10 @@ public class MockObjectMessage extends MockMessage implements ObjectMessage
 
     public void setObject(Serializable object) throws JMSException
     {
+        if(!isInWriteMode())
+        {
+            throw new MessageNotWriteableException("Message is in read mode");
+        }
         this.object = object;
     }
 

@@ -11,6 +11,7 @@ import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageFormatException;
+import javax.jms.MessageNotWriteableException;
 
 import com.mockrunner.base.NestedApplicationException;
 
@@ -31,6 +32,8 @@ public class MockMessage implements Message, Cloneable
     private int priority;
     private boolean acknowledged;
     private Map properties;
+    private boolean isInWriteMode;
+    private boolean isInWriteModeProperties;
     
     public MockMessage()
     {
@@ -42,6 +45,8 @@ public class MockMessage implements Message, Cloneable
         priority = 4;
         acknowledged = false;
         properties = new HashMap();
+        isInWriteMode = true;
+        isInWriteModeProperties = true;
     }
     
     public boolean isAcknowledged()
@@ -183,6 +188,7 @@ public class MockMessage implements Message, Cloneable
 
     public void clearProperties() throws JMSException
     {
+        isInWriteModeProperties = true;
         properties.clear();
     }
 
@@ -196,7 +202,7 @@ public class MockMessage implements Message, Cloneable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            throw new MessageFormatException("Property " + name + " is null");
+            return Boolean.valueOf(null).booleanValue();
         }
         if(value instanceof String)
         {
@@ -214,7 +220,7 @@ public class MockMessage implements Message, Cloneable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            throw new MessageFormatException("Property " + name + " is null");
+            return Byte.valueOf(null).byteValue();
         }
         if(value instanceof String)
         {
@@ -232,7 +238,7 @@ public class MockMessage implements Message, Cloneable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            throw new MessageFormatException("Property " + name + " is null");
+            return Short.valueOf(null).shortValue();
         }
         if(value instanceof String)
         {
@@ -250,7 +256,7 @@ public class MockMessage implements Message, Cloneable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            throw new MessageFormatException("Property " + name + " is null");
+            return Integer.valueOf(null).intValue();
         }
         if(value instanceof String)
         {
@@ -268,7 +274,7 @@ public class MockMessage implements Message, Cloneable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            throw new MessageFormatException("Property " + name + " is null");
+            return Long.valueOf(null).longValue();
         }
         if(value instanceof String)
         {
@@ -286,7 +292,7 @@ public class MockMessage implements Message, Cloneable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            throw new MessageFormatException("Property " + name + " is null");
+            return Float.valueOf(null).floatValue();
         }
         if(value instanceof String)
         {
@@ -304,7 +310,7 @@ public class MockMessage implements Message, Cloneable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            throw new MessageFormatException("Property " + name + " is null");
+            return Double.valueOf(null).doubleValue();
         }
         if(value instanceof String)
         {
@@ -376,11 +382,15 @@ public class MockMessage implements Message, Cloneable
 
     public void setObjectProperty(String name, Object object) throws JMSException
     {
-        if(null == object)
+        if(!isInWriteModeProperties)
         {
-            properties.put(name, object);
-            return;
+            throw new MessageNotWriteableException("Message is in read mode");
         }
+        if(null == name || name.length() <= 0)
+        {
+            throw new IllegalArgumentException("Property names must not be null or empty strings");
+        }
+        if(null == object) return;
         if((object instanceof String) || (object instanceof Number) || (object instanceof Boolean))
         {
             properties.put(name, object);
@@ -396,7 +406,17 @@ public class MockMessage implements Message, Cloneable
 
     public void clearBody() throws JMSException
     {
-
+        isInWriteMode = true;
+    }
+    
+    public void setReadOnly()
+    {
+        isInWriteMode = false;
+    }
+    
+    public void setReadOnlyProperties()
+    {
+        isInWriteModeProperties = false;
     }
     
     public Object clone()
@@ -411,5 +431,10 @@ public class MockMessage implements Message, Cloneable
         {
             throw new NestedApplicationException(exc);
         }
+    }
+    
+    protected boolean isInWriteMode()
+    {
+        return isInWriteMode;
     }
 }

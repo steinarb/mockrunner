@@ -34,6 +34,9 @@ mockrunner-0.3.2:
   (check out bug report 1077690)
 - fixed bug 1077690 (JMS spec allows MessageProducers with null destination)
   reported by Peter Ryan
+- refactored JMS messages to be closer to spec, message read and write mode
+  is now handled properly and it's no longer possible to set properties
+  with null name
 - TransmissionManagerWrapper now allows transparent access to senders and
   receivers
 - added createBean methods with Class[] parameter to EJBTestModule in order

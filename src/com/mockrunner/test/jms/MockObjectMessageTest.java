@@ -2,6 +2,8 @@ package com.mockrunner.test.jms;
 
 import java.io.Serializable;
 
+import javax.jms.MessageNotWriteableException;
+
 import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockTextMessage;
 
@@ -22,6 +24,27 @@ public class MockObjectMessageTest extends TestCase
         assertTrue(new MockObjectMessage(null).equals(new MockObjectMessage(null)));
         assertEquals(new MockObjectMessage(new Double(1.1)).hashCode(), new MockObjectMessage(new Double(1.1)).hashCode());
         assertEquals(new MockObjectMessage(null).hashCode(), new MockObjectMessage(null).hashCode());
+    }
+    
+    public void testReadOnly() throws Exception
+    {
+        MockObjectMessage message = new MockObjectMessage("test");
+        message.setObject(new Integer(2));
+        assertEquals(new Integer(2), message.getObject());
+        message.setReadOnly();
+        try
+        {
+            message.setObject(new Integer(3));
+            fail();
+        } 
+        catch(MessageNotWriteableException exc)
+        {
+            //should throw exception
+        }
+        assertEquals(new Integer(2), message.getObject());
+        message.clearBody();
+        message.setObject(new Integer(3));
+        assertEquals(new Integer(3), message.getObject());
     }
     
     public void testClone() throws Exception
