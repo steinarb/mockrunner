@@ -557,25 +557,45 @@ public class MockResultSet implements ResultSet
     
     public Blob getBlob(int columnIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getObject(columnIndex);
+        if(null != value)
+        {
+            if(value instanceof Blob) return (Blob)value;
+            return new MockBlob(getBytes(columnIndex));
+        }
         return null;
     }
     
     public Blob getBlob(String columnName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getObject(columnName);
+        if(null != value)
+        {
+            if(value instanceof Blob) return (Blob)value;
+            return new MockBlob(getBytes(columnName));
+        }
         return null;
     }
 
     public Clob getClob(int columnIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getObject(columnIndex);
+        if(null != value)
+        {
+            if(value instanceof Clob) return (Clob)value;
+            return new MockClob(getString(columnIndex));
+        }
         return null;
     }
     
     public Clob getClob(String columnName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getObject(columnName);
+        if(null != value)
+        {
+            if(value instanceof Clob) return (Clob)value;
+            return new MockClob(getString(columnName));
+        }
         return null;
     }
     
