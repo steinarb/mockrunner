@@ -66,6 +66,22 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
 	{
 		this.doRelease = doRelease;
 	}
+	
+	/**
+     * Implementation of {@link NestedTag#setDoReleaseRecursive}.
+     */
+	public void setDoReleaseRecursive(boolean doRelease)
+	{
+		this.doRelease = doRelease;
+		for(int ii = 0; ii < childs.size(); ii++)
+		{
+			Object child = childs.get(ii);
+            if(child instanceof NestedTag)
+            {
+                ((NestedTag)child).setDoReleaseRecursive(doRelease);
+            }
+		}
+	}
     
     /**
      * Implementation of {@link NestedTag#populateAttributes}.

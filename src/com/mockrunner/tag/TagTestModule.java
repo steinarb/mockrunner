@@ -128,7 +128,28 @@ public class TagTestModule extends HTMLOutputModule
      */
     public void setDoRelease(boolean doRelease)
     {
+        if(null == tag)
+        {
+            throw new RuntimeException("Not current tag set");
+        }
         ((NestedTag)tag).setDoRelease(doRelease);
+    }
+    
+    /**
+     * Specify if the <code>release</code> method should be called
+     * before populating a tag. Delegates to {@link NestedTag#setDoReleaseRecursive}
+     * Defaults to <code>false</code>. It's the container behaviour to call 
+     * <code>release</code>, but it's usually not necessary in the tests, 
+     * because the tag instances are not reused during a test run.
+     * @param doRelease should release be called
+     */
+    public void setDoReleaseRecursive(boolean doRelease)
+    {
+        if(null == tag)
+        {
+            throw new RuntimeException("Not current tag set");
+        }
+        ((NestedTag)tag).setDoReleaseRecursive(doRelease);
     }
     
     /**
@@ -139,6 +160,10 @@ public class TagTestModule extends HTMLOutputModule
      */
     public void populateAttributes()
     {
+        if(null == tag)
+        {
+            throw new RuntimeException("Not current tag set");
+        }
         ((NestedTag)tag).populateAttributes();
     }
     
@@ -152,6 +177,10 @@ public class TagTestModule extends HTMLOutputModule
      */
     public void setBody(String body)
     {
+        if(null == tag)
+        {
+            throw new RuntimeException("Not current tag set");
+        }
         ((NestedTag)tag).removeChilds();
         ((NestedTag)tag).addTextChild(body);
     }
@@ -162,6 +191,7 @@ public class TagTestModule extends HTMLOutputModule
      */
     public TagSupport getTag()
     {
+        if(null == tag) return null;
         return ((NestedTag)tag).getTag();
     }
     
@@ -192,6 +222,10 @@ public class TagTestModule extends HTMLOutputModule
      */
     public int doStartTag()
     {
+        if(null == tag)
+        {
+            throw new RuntimeException("Not current tag set");
+        }
         try
         {
             return tag.doStartTag();
@@ -209,6 +243,10 @@ public class TagTestModule extends HTMLOutputModule
      */
     public int doEndTag()
     {
+        if(null == tag)
+        {
+            throw new RuntimeException("Not current tag set");
+        }
         try
         {
             return tag.doEndTag();
@@ -226,7 +264,14 @@ public class TagTestModule extends HTMLOutputModule
      */
     public void doInitBody()
     {
-        if(!isBodyTag()) throw new RuntimeException("current tag is no body tag");
+        if(null == tag)
+        {
+            throw new RuntimeException("Not current tag set");
+        }
+        if(!isBodyTag()) 
+        {
+            throw new RuntimeException("current tag is no body tag");
+        }
         try
         {
             NestedBodyTag bodyTag = (NestedBodyTag)tag;
@@ -245,6 +290,10 @@ public class TagTestModule extends HTMLOutputModule
      */
     public int doAfterBody()
     {
+        if(null == tag)
+        {
+            throw new RuntimeException("Not current tag set");
+        }
         try
         {
             return tag.doAfterBody();
@@ -274,6 +323,10 @@ public class TagTestModule extends HTMLOutputModule
      */
     public int processTagLifecycle()
     {
+        if(null == tag)
+        {
+            throw new RuntimeException("Not current tag set");
+        }
         try
         {
             return ((NestedTag)tag).doLifecycle();

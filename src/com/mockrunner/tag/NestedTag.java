@@ -27,9 +27,23 @@ public interface NestedTag
      * the container behaviour to call <code>release</code>, but it's
      * usually not necessary in the tests, because the tag instances
      * are not reused during a test run.
+     * Only sets the <code>doRelease</code> flag for this tag and
+     * leaves the flag for child tags.
      * @param doRelease should release be called
      */
     public void setDoRelease(boolean doRelease);
+    
+    /**
+     * Specify if the <code>release</code> method should be called
+     * before populating a tag. Defaults to <code>false</code>. It's
+     * the container behaviour to call <code>release</code>, but it's
+     * usually not necessary in the tests, because the tag instances
+     * are not reused during a test run.
+     * Recursively sets the <code>doRelease</code> flag for this
+     * tag and all childs.
+     * @param doRelease should release be called
+     */
+    public void setDoReleaseRecursive(boolean doRelease);
     
     /**
      * Populates the attributes of the underlying tag. The setters

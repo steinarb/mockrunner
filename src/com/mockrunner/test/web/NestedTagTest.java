@@ -90,4 +90,34 @@ public class NestedTagTest extends BaseTestCase
         assertTrue(((TestTag)testTag1).getPageContext() == newContext);
         assertTrue(((TestBodyTag)testTag11).getPageContext() == newContext);
     }
+    
+    public void testSetDoReleaseStandard() throws Exception
+    {
+        prepareStandardTagTest();
+        nestedTagRoot.setDoRelease(true);
+        nestedTagRoot.doLifecycle();
+        assertTrue(((TestTag)testTag).wasReleaseCalled());
+        assertFalse(((TestTag)testTag1).wasReleaseCalled());
+        assertFalse(((TestTag)testTag11).wasReleaseCalled());
+        nestedTagRoot.setDoReleaseRecursive(true);
+        nestedTagRoot.doLifecycle();
+        assertTrue(((TestTag)testTag).wasReleaseCalled());
+        assertTrue(((TestTag)testTag1).wasReleaseCalled());
+        assertTrue(((TestTag)testTag11).wasReleaseCalled());
+    }
+    
+    public void testSetDoReleaseBody() throws Exception
+    {
+        prepareBodyTagTest();
+        nestedTagRoot.setDoRelease(true);
+        nestedTagRoot.doLifecycle();
+        assertTrue(((TestBodyTag)testTag).wasReleaseCalled());
+        assertFalse(((TestTag)testTag1).wasReleaseCalled());
+        assertFalse(((TestBodyTag)testTag11).wasReleaseCalled());
+        nestedTagRoot.setDoReleaseRecursive(true);
+        nestedTagRoot.doLifecycle();
+        assertTrue(((TestBodyTag)testTag).wasReleaseCalled());
+        assertTrue(((TestTag)testTag1).wasReleaseCalled());
+        assertTrue(((TestBodyTag)testTag11).wasReleaseCalled());
+    }
 }

@@ -116,9 +116,17 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link TagTestModule#setDoRelease}
      */
-    public void setDoRelease(boolean doRelease)
+    protected void setDoRelease(boolean doRelease)
     {
         tagTestModule.setDoRelease(doRelease);
+    }
+    
+    /**
+     * Delegates to {@link TagTestModule#setDoReleaseRecursive}
+     */
+    protected void setDoReleaseRecursive(boolean doRelease)
+    {
+        tagTestModule.setDoReleaseRecursive(doRelease);
     }
     
     /**
