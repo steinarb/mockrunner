@@ -33,6 +33,7 @@ public class AllTests
         suite.addTest(AllJDBCTests.suite());
         suite.addTest(AllEJBTests.suite());
         suite.addTest(AllJMSTests.suite());
+        suite.addTest(new TestSuite(BaseTestCaseTest.class));
         suite.addTest(new TestSuite(XmlUtilTest.class));
         suite.addTest(new TestSuite(StreamUtilTest.class));
         suite.addTest(new TestSuite(ArrayUtilTest.class));

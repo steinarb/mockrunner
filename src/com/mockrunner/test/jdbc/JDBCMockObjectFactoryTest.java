@@ -1,9 +1,16 @@
 package com.mockrunner.test.jdbc;
 
+import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
+import java.sql.DriverPropertyInfo;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Properties;
 
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
+import com.mockrunner.mock.jdbc.MockDriver;
 
 import junit.framework.TestCase;
 
@@ -11,12 +18,71 @@ public class JDBCMockObjectFactoryTest extends TestCase
 {
     public void testCreate() throws Exception
     {
-        JDBCMockObjectFactory factory =  new JDBCMockObjectFactory();
+        JDBCMockObjectFactory factory = new JDBCMockObjectFactory();
         assertTrue(factory.getMockDriver().connect("", null) == factory.getMockDataSource().getConnection());
         assertNotNull(DriverManager.getConnection("test"));
         assertTrue(factory.getMockDriver().connect("", null) == DriverManager.getConnection("test"));
         Enumeration drivers = DriverManager.getDrivers();
         drivers.nextElement();
         assertFalse(drivers.hasMoreElements());
+    }
+    
+    public void testRestoreDivers() throws Exception
+    {
+        DriverManager.registerDriver(new TestDriver());
+        DriverManager.registerDriver(new TestDriver());
+        ArrayList oldDrivers = new ArrayList();
+        Enumeration drivers = DriverManager.getDrivers();
+        while(drivers.hasMoreElements())
+        {
+            oldDrivers.add(drivers.nextElement());
+        }
+        JDBCMockObjectFactory factory = new JDBCMockObjectFactory();
+        new JDBCMockObjectFactory();
+        new JDBCMockObjectFactory();
+        drivers = DriverManager.getDrivers();
+        assertTrue(drivers.nextElement() instanceof MockDriver);
+        assertFalse(drivers.hasMoreElements());
+        factory.restoreDrivers();
+        drivers = DriverManager.getDrivers();
+        while(drivers.hasMoreElements())
+        {
+            assertTrue(oldDrivers.contains(drivers.nextElement()));
+        }
+    }
+    
+    public static class TestDriver implements Driver
+    {
+    
+        public boolean acceptsURL(String url) throws SQLException
+        {
+            return false;
+        }
+
+        public Connection connect(String url, Properties info) throws SQLException
+        {
+            return null;
+        }
+
+        public int getMajorVersion()
+        {
+            return 0;
+        }
+
+        public int getMinorVersion()
+        {
+            return 0;
+        }
+
+        public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) throws SQLException
+        {
+            return null;
+        }
+
+        public boolean jdbcCompliant()
+        {
+            return false;
+        }
+
     }
 }
