@@ -32,6 +32,15 @@ public abstract class BaseTestCase extends TestCase
     {
         super(arg0);
     }
+    
+    protected void tearDown() throws Exception
+    {
+        super.tearDown();
+        webMockFactory = null;
+        jdbcMockFactory = null;
+        ejbMockFactory = null;
+        jmsMockFactory  = null;
+    }
 
     /**
      * Creates the mock object factories. If you
@@ -45,7 +54,7 @@ public abstract class BaseTestCase extends TestCase
         jdbcMockFactory = createJDBCMockObjectFactory();
         ejbMockFactory = createEJBMockObjectFactory();
         jmsMockFactory = createJMSMockObjectFactory();
-    }
+    } 
 
     /**
      * Creates a {@link WebMockObjectFactory}. 
