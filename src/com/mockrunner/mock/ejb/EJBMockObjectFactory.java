@@ -27,6 +27,7 @@ import org.mockejb.jndi.MockContextFactory;
 public class EJBMockObjectFactory
 {
     private final static Log log = LogFactory.getLog(EJBMockObjectFactory.class);
+    private static String transactionJNDIName = "javax.transaction.UserTransaction";
     private UserTransaction transaction;
     private MockContainer container;
     
@@ -35,9 +36,15 @@ public class EJBMockObjectFactory
      */
     public EJBMockObjectFactory()
     { 
+        
         initializeMockEJB();
     }
 
+    public static void setTransactionJNDIName(String transactionJNDIName)
+    {
+        EJBMockObjectFactory.transactionJNDIName = transactionJNDIName;
+    }
+    
     private void initializeMockEJB()
     {
         try
@@ -47,11 +54,12 @@ public class EJBMockObjectFactory
             container = new MockContainer(context);
             try
             {
-                transaction = (UserTransaction)context.lookup("javax.transaction.UserTransaction");
+                transaction = (UserTransaction)context.lookup(transactionJNDIName);
             }
-            catch(NameNotFoundException nameExc)
+            catch(NameNotFoundException nameExc1)
             {
                 transaction = new MockUserTransaction();
+                context.rebind(transactionJNDIName, transaction);
                 context.rebind("javax.transaction.UserTransaction", transaction);
                 context.rebind("java:comp/UserTransaction", transaction);
             }
