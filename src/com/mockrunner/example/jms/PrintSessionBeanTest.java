@@ -36,6 +36,26 @@ public class PrintSessionBeanTest extends JMSTestCaseAdapter
 		ejbModule.deployMessageBean("java:/ConnectionFactory", "queue/testQueue", factory, queue, new PrintMessageDrivenBean());
     }
     
+    //The following commented out setUp method is an alternative approach to
+    //test a message driven bean. The message bean is not deployed to the
+    //mock container but instantiated directly, which means that you cannot 
+    //test JTA transactions when receiving the message and you cannot use the 
+    //MockEJB interceptor framework for the onMessage method.
+    //In this case we only test JTA transactions while sending the message,
+    //so this approach works quite well.
+	/*protected void setUp() throws Exception
+	{
+		super.setUp();
+		ejbModule = createEJBTestModule();
+		ejbModule.bindToContext("java:/ConnectionFactory", getJMSMockObjectFactory().getMockQueueConnectionFactory());
+		Queue queue = getDestinationManager().createQueue("testQueue");
+		ejbModule.bindToContext("queue/testQueue", queue);
+		registerTestMessageListenerForQueue("testQueue", new PrintMessageDrivenBean());
+		ejbModule.setInterfacePackage("com.mockrunner.example.jms.interfaces");
+		ejbModule.deploySessionBean("com/mockrunner/example/PrintSession", PrintSessionBean.class, TransactionPolicy.REQUIRED);
+		bean = (PrintSession)ejbModule.lookupBean("com/mockrunner/example/PrintSession");
+	}*/
+    
     public void testSuccessfulDelivery() throws Exception
     {
         bean.sendMessage("123");
