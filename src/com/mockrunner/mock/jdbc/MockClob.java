@@ -71,7 +71,7 @@ public class MockClob implements Clob, Cloneable
 
     public long position(String searchstr, long start) throws SQLException
     {
-        int index = clobData.indexOf(searchstr, (int)(start - 1));
+        int index = clobData.toString().indexOf(searchstr, (int)(start - 1));
         if(-1 != index) index += 1;
         return index;
     }

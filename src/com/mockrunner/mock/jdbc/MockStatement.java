@@ -60,7 +60,7 @@ public class MockStatement implements Statement
         catch(SQLException exc)
         {
             throw new RuntimeException(exc.getMessage());
-        }        
+        } 
     }
     
     public MockStatement(Connection connection, int resultSetType, int resultSetConcurrency, int resultSetHoldability)
