@@ -43,11 +43,21 @@ public class MockQueueSession implements QueueSession
         return acknowledgeMode;
     }
     
-    public Queue createQueue(String arg0) throws JMSException
+    public Queue createQueue(String name) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        MockQueue queue = connection.getDestinationManager().getQueue(name);
+        if(null == queue)
+        {
+            throw new JMSException("Queue with name " + name + " not found");
+        }
+        return queue;
+    }
+    
+    public TemporaryQueue createTemporaryQueue() throws JMSException
+    {
+        connection.throwJMSException();
+        return connection.getDestinationManager().createTemporaryQueue();
     }
 
     public QueueReceiver createReceiver(Queue arg0) throws JMSException
@@ -79,13 +89,6 @@ public class MockQueueSession implements QueueSession
     }
 
     public QueueBrowser createBrowser(Queue arg0, String arg1) throws JMSException
-    {
-        // TODO Auto-generated method stub
-        connection.throwJMSException();
-        return null;
-    }
-
-    public TemporaryQueue createTemporaryQueue() throws JMSException
     {
         // TODO Auto-generated method stub
         connection.throwJMSException();
