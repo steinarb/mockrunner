@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.base.BaseTestCase;
-import com.mockrunner.mock.jdbc.CallableStatementResultSetHandler;
+import com.mockrunner.jdbc.CallableStatementResultSetHandler;
+import com.mockrunner.jdbc.PreparedStatementResultSetHandler;
+import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockClob;
@@ -16,8 +18,6 @@ import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockStatement;
-import com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler;
-import com.mockrunner.mock.jdbc.StatementResultSetHandler;
 
 public class MockStatementTest extends BaseTestCase
 {

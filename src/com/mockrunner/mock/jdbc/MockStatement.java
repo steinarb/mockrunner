@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mockrunner.jdbc.AbstractResultSetHandler;
 import com.mockrunner.util.SQLUtil;
 
 /**

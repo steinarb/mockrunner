@@ -1,8 +1,10 @@
-package com.mockrunner.mock.jdbc;
+package com.mockrunner.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.mockrunner.mock.jdbc.MockStatement;
 
 /**
  * Concrete handler for {@link AbstractResultSetHandler}.

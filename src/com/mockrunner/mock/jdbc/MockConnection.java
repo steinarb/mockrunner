@@ -14,6 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.mockobjects.sql.MockDatabaseMetaData;
+import com.mockrunner.jdbc.CallableStatementResultSetHandler;
+import com.mockrunner.jdbc.PreparedStatementResultSetHandler;
+import com.mockrunner.jdbc.StatementResultSetHandler;
 
 /**
  * Mock implementation of <code>Connection</code>.

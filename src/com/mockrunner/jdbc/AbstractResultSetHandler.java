@@ -1,4 +1,4 @@
-package com.mockrunner.mock.jdbc;
+package com.mockrunner.jdbc;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.util.SearchUtil;
 
 /**

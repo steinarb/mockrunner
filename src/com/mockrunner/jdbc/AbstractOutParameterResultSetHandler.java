@@ -1,4 +1,4 @@
-package com.mockrunner.mock.jdbc;
+package com.mockrunner.jdbc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
