@@ -13,7 +13,7 @@ public class MockQueueSender extends MockMessageProducer implements QueueSender
 {
     private MockQueue queue;
 
-    public MockQueueSender(MockQueueConnection connection, MockQueue queue)
+    public MockQueueSender(MockConnection connection, MockQueue queue)
     {
         super(connection);
         this.queue = queue; 

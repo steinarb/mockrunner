@@ -1,6 +1,9 @@
 package com.mockrunner.mock.jms;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
@@ -8,11 +11,17 @@ import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+import javax.jms.Queue;
 import javax.jms.Session;
 import javax.jms.StreamMessage;
+import javax.jms.TemporaryQueue;
+import javax.jms.TemporaryTopic;
 import javax.jms.TextMessage;
+import javax.jms.Topic;
 
 import com.mockrunner.jms.MessageManager;
+import com.mockrunner.jms.QueueTransmissionManager;
+import com.mockrunner.jms.TopicTransmissionManager;
 
 /**
  * Mock implementation of JMS <code>Session</code>.
@@ -33,8 +42,12 @@ import com.mockrunner.jms.MessageManager;
 public class MockSession implements Session
 {
     private MockConnection connection;
+    private QueueTransmissionManager queueTransManager;
+    private TopicTransmissionManager topicTransManager;
     private MessageManager messageManager;
     private MessageListener messageListener;
+    private List tempQueues;
+    private List tempTopics;
     private boolean transacted;
     private int acknowledgeMode;
     private boolean committed;
@@ -47,12 +60,34 @@ public class MockSession implements Session
         this.connection = connection;
         this.transacted = transacted;
         this.acknowledgeMode = acknowledgeMode;
+        queueTransManager = new QueueTransmissionManager(connection, this);
+        topicTransManager = new TopicTransmissionManager(connection, this);
         messageManager = new MessageManager();
+        tempQueues = new ArrayList();
+        tempTopics = new ArrayList();
         messageListener = null;
         committed = false;
         rolledback = false;
         recovered = false;
         closed = false;
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.jms.QueueTransmissionManager}.
+     * @return the {@link com.mockrunner.jms.QueueTransmissionManager}
+     */
+    public QueueTransmissionManager getQueueTransmissionManager()
+    {
+        return queueTransManager;
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.jms.TopicTransmissionManager}.
+     * @return the {@link com.mockrunner.jms.TopicTransmissionManager}
+     */
+    public TopicTransmissionManager getTopicTransmissionManager()
+    {
+        return topicTransManager;
     }
     
     /**
@@ -62,6 +97,50 @@ public class MockSession implements Session
     public MessageManager getMessageManager()
     {
         return messageManager;
+    }
+    
+    /**
+     * Returns the list of temporary queues.
+     * @return the <code>TemporaryQueue</code> list
+     */
+    public List getTemporaryQueueList()
+    {
+        return Collections.unmodifiableList(tempQueues);
+    }
+
+    /**
+     * Returns a <code>TemporaryQueue</code> by its index. The
+     * index represent the number of the queue. Returns <code>null</code>
+     * if no such <code>TemporaryQueue</code> is present.
+     * @param index the index
+     * @return the <code>TemporaryQueue</code>
+     */
+    public MockTemporaryQueue getTemporaryQueue(int index)
+    {
+        if(tempQueues.size() <= index || index < 0) return null;
+        return (MockTemporaryQueue)tempQueues.get(index);
+    }
+    
+    /**
+     * Returns the list of temporary topics.
+     * @return the <code>TemporaryTopic</code> list
+     */
+    public List getTemporaryTopicList()
+    {
+        return Collections.unmodifiableList(tempTopics);
+    }
+
+    /**
+     * Returns a <code>TemporaryTopic</code> by its index. The
+     * index represent the number of the topic. Returns <code>null</code>
+     * if no such <code>TemporaryTopic</code> is present.
+     * @param index the index
+     * @return the <code>TemporaryTopic</code>
+     */
+    public MockTemporaryTopic getTemporaryTopic(int index)
+    {
+        if(tempTopics.size() <= index || index < 0) return null;
+        return (MockTemporaryTopic)tempTopics.get(index);
     }
     
     /**
@@ -226,8 +305,66 @@ public class MockSession implements Session
         recovered = true;
     }
     
+    public Queue createQueue(String name) throws JMSException
+    {
+        getConnection().throwJMSException();
+        MockQueue queue = ((MockQueueConnection)getConnection()).getDestinationManager().getQueue(name);
+        if(null == queue)
+        {
+            throw new JMSException("Queue with name " + name + " not found");
+        }
+        addSessionToQueue(queue);
+        return queue;
+    }
+
+    public TemporaryQueue createTemporaryQueue() throws JMSException
+    {
+        getConnection().throwJMSException();
+        MockTemporaryQueue queue = new MockTemporaryQueue();
+        tempQueues.add(queue);
+        addSessionToQueue(queue);
+        return queue;
+    }
+    
+    public Topic createTopic(String name) throws JMSException
+    {
+        getConnection().throwJMSException();
+        MockTopic topic = ((MockTopicConnection)getConnection()).getDestinationManager().getTopic(name);
+        if(null == topic)
+        {
+            throw new JMSException("Topic with name " + name + " not found");
+        }
+        addSessionToTopic(topic);
+        return topic;
+    }
+
+    public TemporaryTopic createTemporaryTopic() throws JMSException
+    {
+        getConnection().throwJMSException();
+        MockTemporaryTopic topic = new MockTemporaryTopic();
+        tempTopics.add(topic);
+        addSessionToTopic(topic);
+        return topic;
+    }
+    
     protected MockConnection getConnection()
     {
         return connection;
+    }
+    
+    protected void addSessionToQueue(Queue queue)
+    {
+        if(queue instanceof MockQueue)
+        {
+            ((MockQueue)queue).addSession(this);
+        }
+    }
+    
+    protected void addSessionToTopic(Topic topic)
+    {
+        if(topic instanceof MockTopic)
+        {
+            ((MockTopic)topic).addSession(this);
+        }
     }
 }

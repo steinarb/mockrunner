@@ -57,7 +57,7 @@ public class MockTopicTest extends TestCase
     public void testAddMessage() throws Exception
     {
         MockTopicSession session = new MockTopicSession(connection, false, Session.CLIENT_ACKNOWLEDGE);
-        topic.addTopicSession(session);
+        topic.addSession(session);
         topic.addMessage(new MockTextMessage("test"));
         assertEquals(1, topic.getCurrentMessageList().size());
         assertEquals(1, topic.getReceivedMessageList().size());
@@ -146,7 +146,7 @@ public class MockTopicTest extends TestCase
     
     private void doTestAcknowledge(MockTopicSession session) throws Exception
     {
-        topic.addTopicSession(session);
+        topic.addSession(session);
         MockTextMessage message = new MockTextMessage("text");
         topic.addMessage(message);
         assertFalse(message.isAcknowledged());

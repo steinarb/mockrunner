@@ -57,7 +57,7 @@ public class MockQueueTest extends TestCase
     public void testAddMessage() throws Exception
     {
         MockQueueSession session = new MockQueueSession(connection, false, Session.CLIENT_ACKNOWLEDGE);
-        queue.addQueueSession(session);
+        queue.addSession(session);
         queue.addMessage(new MockTextMessage("test"));
         assertEquals(1, queue.getCurrentMessageList().size());
         assertEquals(1, queue.getReceivedMessageList().size());
@@ -137,7 +137,7 @@ public class MockQueueTest extends TestCase
     
     private void doTestAcknowledge(MockQueueSession session) throws Exception
     {
-        queue.addQueueSession(session);
+        queue.addSession(session);
         MockTextMessage message = new MockTextMessage("text");
         queue.addMessage(message);
         assertFalse(message.isAcknowledged());

@@ -1,0 +1,121 @@
+package com.mockrunner.mock.jms;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Session;
+
+public abstract class MockDestination implements Destination
+{
+    private Set sessions;
+    private List currentMessages;
+    private List receivedMessages;
+
+    public MockDestination()
+    {
+        sessions = new HashSet();
+        currentMessages = new ArrayList();
+        receivedMessages = new ArrayList();
+    }
+    
+    /**
+     * Adds a message. Implemented by {@link MockQueue}
+     * and {@link MockTopic}.
+     */
+    public abstract void addMessage(Message message) throws JMSException;
+ 
+    /**
+     * Returns if this destination contains messages.
+     * @return <code>false</code> if there's at least one message,
+     *         <code>true</code> otherwise
+     */
+    public boolean isEmpty()
+    {
+        return currentMessages.size() <= 0;
+    }
+
+    /**
+     * Clears all current messages.
+     */
+    public void clear()
+    {
+        currentMessages.clear();
+    }
+
+    /**
+     * Clears all current messages and resets the list of received messages.
+     */
+    public void reset()
+    {
+        currentMessages.clear();
+        receivedMessages.clear();
+    }
+
+    /**
+     * Returns the next message. The message will be deleted. 
+     * If there's no message <code>null</code> will be returned.
+     * @return the <code>Message</code>
+     */
+    public Message getMessage()
+    {
+        if(currentMessages.size() <= 0) return null;
+        return (Message)currentMessages.remove(0);
+    }
+
+    /**
+     * Returns a <code>List</code> of all messages. 
+     * No messages will be deleted.
+     * @return the <code>List</code> of messages
+     */
+    public List getCurrentMessageList()
+    {
+        return Collections.unmodifiableList(currentMessages);
+    }
+
+    /**
+     * Returns a <code>List</code> of all received messages.
+     * @return the <code>List</code> of messages
+     */
+    public List getReceivedMessageList()
+    {
+        return Collections.unmodifiableList(receivedMessages);
+    }
+
+    /**
+     * Adds a <code>Session</code>.
+     * @param session the session
+     */
+    public void addSession(Session session)
+    {
+        sessions.add(session);
+    }
+    
+    protected List receivedMessageList()
+    {
+        return receivedMessages;
+    }
+    
+    protected List currentMessageList()
+    {
+        return currentMessages;
+    }
+    
+    protected Set sessionSet()
+    {
+        return sessions;
+    }
+    
+    protected void acknowledgeMessage(Message message, MockSession session) throws JMSException
+    {
+        if(session.isAutoAcknowledge())
+        {
+            message.acknowledge();
+        }
+    }
+}
