@@ -1,6 +1,7 @@
 package com.mockrunner.jms;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.mockrunner.mock.jms.MockBytesMessage;
@@ -55,6 +56,15 @@ public class MessageManager
     }
     
     /**
+     * Returns the list of <code>Message</code> objects.
+     * @return the <code>Message</code> list
+     */
+    public List getMessageList()
+    {
+        return Collections.unmodifiableList(messages);
+    }
+    
+    /**
      * Creates a new <code>BytesMessage</code>. Usually this method is called
      * by {@link com.mockrunner.mock.jms.MockQueueSession#createBytesMessage}.
      * @return the created <code>BytesMessage</code>
@@ -77,6 +87,15 @@ public class MessageManager
     {
         if(byteMessages.size() <= index || index < 0) return null;
         return (MockBytesMessage)byteMessages.get(index);
+    }
+    
+    /**
+     * Returns the list of <code>BytesMessage</code> objects.
+     * @return the <code>BytesMessage</code> list
+     */
+    public List getBytesMessageList()
+    {
+        return Collections.unmodifiableList(byteMessages);
     }
     
     /**
@@ -105,6 +124,15 @@ public class MessageManager
     }
     
     /**
+     * Returns the list of <code>MapMessage</code> objects.
+     * @return the <code>MapMessage</code> list
+     */
+    public List getMapMessageList()
+    {
+        return Collections.unmodifiableList(mapMessages);
+    }
+    
+    /**
      * Creates a new <code>TextMessage</code>. Usually this method is called
      * by {@link com.mockrunner.mock.jms.MockQueueSession#createTextMessage}.
      * @return the created <code>TextMessage</code>
@@ -127,6 +155,15 @@ public class MessageManager
     {
         if(textMessages.size() <= index || index < 0) return null;
         return (MockTextMessage)textMessages.get(index);
+    }
+    
+    /**
+     * Returns the list of <code>TextMessage</code> objects.
+     * @return the <code>TextMessage</code> list
+     */
+    public List getTextMessageList()
+    {
+        return Collections.unmodifiableList(textMessages);
     }
     
     /**
@@ -155,6 +192,15 @@ public class MessageManager
     }
     
     /**
+     * Returns the list of <code>StreamMessage</code> objects.
+     * @return the <code>StreamMessage</code> list
+     */
+    public List getStreamMessageList()
+    {
+        return Collections.unmodifiableList(streamMessages);
+    }
+    
+    /**
      * Creates a new <code>ObjectMessage</code>. Usually this method is called
      * by {@link com.mockrunner.mock.jms.MockQueueSession#createObjectMessage}.
      * @return the created <code>ObjectMessage</code>
@@ -177,5 +223,14 @@ public class MessageManager
     {
         if(objectMessages.size() <= index || index < 0) return null;
         return (MockObjectMessage)objectMessages.get(index);
+    }
+    
+    /**
+     * Returns the list of <code>ObjectMessage</code> objects.
+     * @return the <code>ObjectMessage</code> list
+     */
+    public List getObjectMessageList()
+    {
+        return Collections.unmodifiableList(objectMessages);
     }
 }
