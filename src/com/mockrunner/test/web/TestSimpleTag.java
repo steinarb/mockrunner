@@ -1,8 +1,19 @@
 package com.mockrunner.test.web;
 
-public class TestSimpleTag //extends SimpleTagSupport implements DynamicAttributes
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.jsp.JspContext;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.DynamicAttributes;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
+
+import com.mockrunner.tag.DynamicAttribute;
+
+public class TestSimpleTag extends SimpleTagSupport implements DynamicAttributes
 {
-    /*private boolean booleanProperty;
+    private boolean booleanProperty;
     private float floatProperty;
     private String stringProperty;
     private String testString;
@@ -78,5 +89,5 @@ public class TestSimpleTag //extends SimpleTagSupport implements DynamicAttribut
     public void setTestString(String testString)
     {
         this.testString = testString;
-    }*/
+    }
 }

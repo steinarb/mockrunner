@@ -13,6 +13,8 @@ import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.IterationTag;
+import javax.servlet.jsp.tagext.JspTag;
+import javax.servlet.jsp.tagext.SimpleTag;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -162,10 +164,10 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     /**
      * Implementation of {@link NestedTag#getWrappedTag}.
      */
-    /*public JspTag getWrappedTag()
+    public JspTag getWrappedTag()
     {
         return tag;
-    }*/
+    }
     
     /**
      * Implementation of {@link NestedTag#removeChilds}.
@@ -245,20 +247,20 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     
     /**
      * Implementation of {@link NestedTag#addTagChild(JspTag)}.
-     *//*
+     */
     public NestedTag addTagChild(JspTag tag)
     {
         return addTagChild(tag, new HashMap());
     }
     
-    *//**
+    /**
      * Implementation of {@link NestedTag#addTagChild(JspTag, Map)}.
-     *//*
+     */
     public NestedTag addTagChild(JspTag tag, Map attributeMap)
     {
         Object childTag = TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);   
         return (NestedTag)addChild(childTag);
-    }*/
+    }
     
     /**
      * Delegates to wrapped tag.
@@ -370,10 +372,10 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
             {
                 ((Tag)child).setPageContext(pageContext);
             }
-            /*else if(child instanceof SimpleTag)
+            else if(child instanceof SimpleTag)
             {
                 ((SimpleTag)child).setJspContext(pageContext);
-            }*/
+            }
         }
     }
     
@@ -448,10 +450,10 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
         {
             ((Tag)childTag).setParent(this.tag);
         }
-        /*else if(childTag instanceof SimpleTag)
+        else if(childTag instanceof SimpleTag)
         {
             ((SimpleTag)childTag).setParent(this.tag);
-        }*/
+        }
         childs.add(childTag);
         return (NestedTag)childTag;
     }

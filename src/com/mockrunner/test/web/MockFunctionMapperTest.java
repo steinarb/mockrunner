@@ -1,14 +1,14 @@
 package com.mockrunner.test.web;
 
-/*import java.lang.reflect.Method;
+import java.lang.reflect.Method;
 
-import com.mockrunner.mock.web.MockFunctionMapper;*/
+import com.mockrunner.mock.web.MockFunctionMapper;
 
 import junit.framework.TestCase;
 
 public class MockFunctionMapperTest extends TestCase
 {
-    /*private MockFunctionMapper mapper;
+    private MockFunctionMapper mapper;
     private Method method1;
     private Method method2;
     private Method method3;
@@ -47,7 +47,7 @@ public class MockFunctionMapperTest extends TestCase
     public void method3()
     {
 
-    }*/
+    }
     
     public void testDummy(){}
 }

@@ -31,7 +31,7 @@ public class JarFileDependenciesTest extends TestCase
     private List getThirdPartyJars()
     {
         String jarDirName = getBaseDir() + THIRD_PARTY_DIR;
-        return new ArrayList(Arrays.asList(new File(jarDirName).listFiles()));
+        return new ArrayList(Arrays.asList(new File(jarDirName).listFiles(new JarFileFilter())));
     }
     
     private List getReleasedJars()
@@ -97,7 +97,7 @@ public class JarFileDependenciesTest extends TestCase
     {
         Analyzer analyzer = new Analyzer();
         JarBundle jarBundle[] = analyzer.analyze(srcDir);
-        JarFileExtractor extractor = new JarFileExtractor(MockrunnerJars.getMockrunnerJars());
+        JarFileExtractor extractor = new JarFileExtractor(MockrunnerJars.getMockrunnerJars(), MockrunnerJars.getStandardInterfaceJars());
         Map dependencyMap = extractor.createDependencies(jarBundle);
         Iterator jarNames = dependencyMap.keySet().iterator();
         boolean failure = false;

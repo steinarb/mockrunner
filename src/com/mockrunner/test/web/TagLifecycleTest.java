@@ -1,10 +1,21 @@
 package com.mockrunner.test.web;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.jsp.tagext.TagSupport;
+
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.mock.web.MockBodyContent;
+import com.mockrunner.mock.web.MockJspWriter;
+import com.mockrunner.tag.DynamicChild;
+import com.mockrunner.tag.NestedStandardTag;
+import com.mockrunner.tag.NestedTag;
 
 public class TagLifecycleTest extends BaseTestCase
 {
-    /*private NestedTag root;
+    private NestedTag root;
     private NestedTag level1child1;
     private NestedTag level1child2;
     private NestedTag level1child3;
@@ -176,5 +187,5 @@ public class TagLifecycleTest extends BaseTestCase
         {
             return value;
         }
-    }*/
+    }
 }

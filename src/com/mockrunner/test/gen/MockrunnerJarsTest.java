@@ -13,7 +13,7 @@ public class MockrunnerJarsTest extends TestCase
     {
         Set dependencies = new HashSet();
         dependencies.add("struts.jar");
-        dependencies.add("servlet.jar");
+        dependencies.add("servlet-api.jar");
         dependencies.add("jboss-j2ee.jar");
         dependencies.add("nekohtml.jar");
         dependencies.add("xercesImpl.jar");
@@ -37,7 +37,7 @@ public class MockrunnerJarsTest extends TestCase
         prohibited = permission.getProhibited(getTestDependencies());
         assertEquals(4, prohibited.size());
         assertTrue(prohibited.contains("struts.jar"));
-        assertTrue(prohibited.contains("servlet.jar"));
+        assertTrue(prohibited.contains("servlet-api.jar"));
         assertTrue(prohibited.contains("nekohtml.jar"));
         assertTrue(prohibited.contains("xercesImpl.jar"));
         permission = new Permission(false, false, false, false, false);

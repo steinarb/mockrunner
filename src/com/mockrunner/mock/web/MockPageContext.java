@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.el.ExpressionEvaluator;
+import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.tagext.BodyContent;
 
 /**
@@ -36,8 +38,8 @@ public class MockPageContext extends PageContext
     private Exception exception;
     private Object page;
     private HashMap attributes;
-    /*private ExpressionEvaluator evaluator;
-    private VariableResolver resolver;*/
+    private ExpressionEvaluator evaluator;
+    private VariableResolver resolver;
     
     public MockPageContext()
     {
@@ -394,7 +396,7 @@ public class MockPageContext extends PageContext
         outStack = new Stack();
     }
     
-    /*public void setExpressionEvaluator(ExpressionEvaluator evaluator)
+    public void setExpressionEvaluator(ExpressionEvaluator evaluator)
     {
         this.evaluator = evaluator;
     }
@@ -412,7 +414,7 @@ public class MockPageContext extends PageContext
     public VariableResolver getVariableResolver()
     {
         return resolver;
-    }*/
+    }
     
     private class NullEnumeration implements Enumeration 
     {

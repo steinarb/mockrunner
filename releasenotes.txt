@@ -57,6 +57,7 @@ mockrunner-0.3.2:
 - removed commons-lang-2.0.jar, no longer necessary
 - replaced ActiveMQ classes with 2.0 version fixing some issues
   with selector parsing
+- added J2EE 1.4 servlet-api.jar, jsp-api.jar and jboss-j2ee.jar
 
 mockrunner-0.3.1:
 

@@ -1,17 +1,17 @@
 package com.mockrunner.test.web;
 
-/*import javax.servlet.jsp.el.ELException;
+import javax.servlet.jsp.el.ELException;
 import javax.servlet.jsp.el.Expression;
-
-import com.mockrunner.mock.web.MockExpressionEvaluator;
-import com.mockrunner.mock.web.MockFunctionMapper;
-import com.mockrunner.mock.web.MockVariableResolver;*/
 
 import junit.framework.TestCase;
 
+import com.mockrunner.mock.web.MockExpressionEvaluator;
+import com.mockrunner.mock.web.MockFunctionMapper;
+import com.mockrunner.mock.web.MockVariableResolver;
+
 public class MockExpressionEvaluatorTest extends TestCase
 {
-    /*private MockExpressionEvaluator evaluator;
+    private MockExpressionEvaluator evaluator;
 
     protected void setUp() throws Exception
     {
@@ -75,7 +75,7 @@ public class MockExpressionEvaluatorTest extends TestCase
         {
             //should throw exception
         }
-    }*/
+    }
     
     public void testDummy(){}
 }

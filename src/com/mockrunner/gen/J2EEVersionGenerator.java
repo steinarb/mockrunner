@@ -48,6 +48,21 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
         mockPageContextProc.addBlock("public VariableResolver getVariableResolver()");
         webFiles.put("com.mockrunner.mock.web.MockPageContext", mockPageContextProc);
         
+        JavaLineProcessor mockRequestProc = new JavaLineProcessor();
+        mockRequestProc.addLine("import javax.servlet.ServletRequestAttributeEvent;");
+        mockRequestProc.addLine("import javax.servlet.ServletRequestAttributeListener;");
+        mockRequestProc.addLine("private List attributeListener;");
+        mockRequestProc.addLine("attributeListener = new ArrayList();");
+        mockRequestProc.addLine("callAttributeListenersRemovedMethod(key, value);");
+        mockRequestProc.addLine("handleAttributeListenerCalls(key, value, oldValue);");
+        mockRequestProc.addBlock("public synchronized void addAttributeListener(ServletRequestAttributeListener listener)");
+        mockRequestProc.addBlock("private synchronized void handleAttributeListenerCalls(String key, Object value, Object oldValue)");
+        mockRequestProc.addBlock("private synchronized void callAttributeListenersAddedMethod(String key, Object value)");
+        mockRequestProc.addBlock("private synchronized void callAttributeListenersReplacedMethod(String key, Object value)");
+        mockRequestProc.addBlock("private synchronized void callAttributeListenersRemovedMethod(String key, Object value)");
+        mockRequestProc.addBlock("private ServletContext getServletContext()");
+        webFiles.put("com.mockrunner.mock.web.MockHttpServletRequest", mockRequestProc);
+        
         JavaLineProcessor nestedTagProc = new JavaLineProcessor();
         nestedTagProc.addLine("import javax.servlet.jsp.tagext.JspTag;");
         nestedTagProc.addLine("public JspTag getWrappedTag();");

@@ -1,18 +1,17 @@
 package com.mockrunner.mock.web;
 
-/*import java.lang.reflect.Method;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.jsp.el.FunctionMapper;*/
+import javax.servlet.jsp.el.FunctionMapper;
 
 /**
  * Mock implementation of <code>FunctionMapper</code>.
- * <b>Ommited in J2EE 1.3 version</b>
  */
-public class MockFunctionMapper //implements FunctionMapper
+public class MockFunctionMapper implements FunctionMapper
 {
-    /*private Map functions = new HashMap();
+    private Map functions = new HashMap();
     
     public void addFunction(String prefix, String localName, Method function)
     {
@@ -92,5 +91,5 @@ public class MockFunctionMapper //implements FunctionMapper
             }
             return (prefixHash + localHash);
         }
-    }*/
+    }
 }

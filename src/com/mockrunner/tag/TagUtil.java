@@ -5,9 +5,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTag;
+import javax.servlet.jsp.tagext.DynamicAttributes;
+import javax.servlet.jsp.tagext.SimpleTag;
 import javax.servlet.jsp.tagext.Tag;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -83,11 +86,11 @@ public class TagUtil
             checkPageContext(pageContext);
             nestedTag = new NestedStandardTag((Tag)tag, (PageContext)pageContext, attributes);
         }
-        /*else if(tag instanceof SimpleTag)
+        else if(tag instanceof SimpleTag)
         {
             checkJspContext(pageContext);
             nestedTag = new NestedSimpleTag((SimpleTag)tag, (JspContext)pageContext, attributes);
-        }*/
+        }
         else
         {
             throw new IllegalArgumentException("tag must be an instance of Tag or SimpleTag");
@@ -101,11 +104,11 @@ public class TagUtil
         throw new IllegalArgumentException("pageContext must be an instance of PageContext");
     }
     
-    /*private static void checkJspContext(Object pageContext)
+    private static void checkJspContext(Object pageContext)
     {
         if(pageContext instanceof JspContext) return;
         throw new IllegalArgumentException("pageContext must be an instance of JspContext");
-    }*/
+    }
     
     /**
      * Populates the specified attributes to the specified tag. Calls the
@@ -125,20 +128,20 @@ public class TagUtil
             while(names.hasNext()) 
             {
                 String currentName = (String)names.next();
-                /*Object currentValue = attributes.get(currentName);
+                Object currentValue = attributes.get(currentName);
                 if(currentValue instanceof DynamicAttribute)
                 {
                     populateDynamicAttribute(tag, currentName, (DynamicAttribute)currentValue);
                     return;
-                }*/
+                }
                 if(PropertyUtils.isWriteable(tag, currentName)) 
                 {
                     BeanUtils.copyProperty(tag, currentName, attributes.get(currentName));
                 }
-                /*else if(tag instanceof DynamicAttributes)
+                else if(tag instanceof DynamicAttributes)
                 {
                     populateDynamicAttribute(tag, currentName, new DynamicAttribute(null, currentValue));
-                }*/
+                }
             }
         }
         catch(IllegalArgumentException exc)
@@ -152,7 +155,7 @@ public class TagUtil
         }
     }
     
-    /*private static void populateDynamicAttribute(Object tag, String name, DynamicAttribute attribute) throws JspException
+    private static void populateDynamicAttribute(Object tag, String name, DynamicAttribute attribute) throws JspException
     {
         if(!(tag instanceof DynamicAttributes))
         {
@@ -161,7 +164,7 @@ public class TagUtil
             throw new IllegalArgumentException(message);
         }
         ((DynamicAttributes)tag).setDynamicAttribute(attribute.getUri(), name, attribute.getValue());
-    }*/
+    }
     
     /**
      * Handles body evaluation of a tag. Iterated through the childs.
@@ -192,10 +195,10 @@ public class TagUtil
                 int result = ((NestedStandardTag)nextChild).doLifecycle();
                 if(Tag.SKIP_PAGE == result) return;
             }
-            /*else if(nextChild instanceof NestedSimpleTag)
+            else if(nextChild instanceof NestedSimpleTag)
             {
                 ((NestedSimpleTag)nextChild).doLifecycle();
-            }*/
+            }
             else
             {
                 try
@@ -204,10 +207,10 @@ public class TagUtil
                     {
                         ((PageContext)pageContext).getOut().print(getChildText(nextChild));
                     }
-                    /*else if(pageContext instanceof JspContext)
+                    else if(pageContext instanceof JspContext)
                     {
                         ((JspContext)pageContext).getOut().print(getChildText(nextChild));
-                    }*/
+                    }
                     else
                     {
                         throw new IllegalArgumentException("pageContext must be an instance of JspContext");

@@ -20,8 +20,8 @@ import java.util.Vector;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletInputStream;
-//import javax.servlet.ServletRequestAttributeEvent;
-//import javax.servlet.ServletRequestAttributeListener;
+import javax.servlet.ServletRequestAttributeEvent;
+import javax.servlet.ServletRequestAttributeListener;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -94,10 +94,10 @@ public class MockHttpServletRequest implements HttpServletRequest
         attributeListener = new ArrayList();
     }
     
-    /*public synchronized void addAttributeListener(ServletRequestAttributeListener listener)
+    public synchronized void addAttributeListener(ServletRequestAttributeListener listener)
     {
         attributeListener.add(listener);
-    }*/
+    }
     
     public String getParameter(String key)
     {
@@ -162,7 +162,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         attributes.remove(key);
         if(null != value)
         {
-            //callAttributeListenersRemovedMethod(key, value);
+            callAttributeListenersRemovedMethod(key, value);
         }
     }
 
@@ -170,7 +170,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         Object oldValue = attributes.get(key);
         attributes.put(key, value);
-        //handleAttributeListenerCalls(key, value, oldValue);
+        handleAttributeListenerCalls(key, value, oldValue);
     }
     
     public HttpSession getSession()
@@ -637,7 +637,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         this.remotePort = remotePort;
     }
     
-    /*private synchronized void handleAttributeListenerCalls(String key, Object value, Object oldValue)
+    private synchronized void handleAttributeListenerCalls(String key, Object value, Object oldValue)
     {
         if(null != oldValue)
         {
@@ -658,34 +658,34 @@ public class MockHttpServletRequest implements HttpServletRequest
             }
     
         }
-    }*/
+    }
     
-    /*private synchronized void callAttributeListenersAddedMethod(String key, Object value)
+    private synchronized void callAttributeListenersAddedMethod(String key, Object value)
     {
         for(int ii = 0; ii < attributeListener.size(); ii++)
         {
             ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key, value);
             ((ServletRequestAttributeListener)attributeListener.get(ii)).attributeAdded(event);
         }
-    }*/
+    }
     
-    /*private synchronized void callAttributeListenersReplacedMethod(String key, Object value)
+    private synchronized void callAttributeListenersReplacedMethod(String key, Object value)
     {
         for(int ii = 0; ii < attributeListener.size(); ii++)
         {
             ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key, value);
             ((ServletRequestAttributeListener)attributeListener.get(ii)).attributeReplaced(event);
         }
-    }*/
+    }
 
-    /*private synchronized void callAttributeListenersRemovedMethod(String key, Object value)
+    private synchronized void callAttributeListenersRemovedMethod(String key, Object value)
     {
         for(int ii = 0; ii < attributeListener.size(); ii++)
         {
             ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key, value);
             ((ServletRequestAttributeListener)attributeListener.get(ii)).attributeRemoved(event);
         }
-    }*/
+    }
     
     private ServletContext getServletContext()
     {

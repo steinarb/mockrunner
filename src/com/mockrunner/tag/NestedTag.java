@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.JspTag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 /**
@@ -71,7 +72,7 @@ public interface NestedTag
      * Returns the wrapped tag (the testee).
      * @return the wrapped tag
      */
-    //public JspTag getWrappedTag();
+    public JspTag getWrappedTag();
     
     /**
      * Removes all childs.
@@ -153,7 +154,7 @@ public interface NestedTag
      * will be used for the tag.
      * @param tag the tag
      */  
-    //public NestedTag addTagChild(JspTag tag);
+    public NestedTag addTagChild(JspTag tag);
      
     /**
      * Adds a tag child simulating nested tags.
@@ -164,5 +165,5 @@ public interface NestedTag
      * @param tag the tag
      * @param attributeMap the attribute map
      */     
-    //public NestedTag addTagChild(JspTag tag, Map attributeMap);
+    public NestedTag addTagChild(JspTag tag, Map attributeMap);
 }
