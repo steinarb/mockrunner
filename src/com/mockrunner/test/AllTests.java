@@ -18,6 +18,7 @@ import com.mockrunner.example.struts.AuthenticationActionTest;
 import com.mockrunner.example.struts.GreetingsActionTest;
 import com.mockrunner.example.struts.LogoutActionTest;
 import com.mockrunner.example.struts.OrderActionTest;
+import com.mockrunner.example.struts.ShoppingCartActionTest;
 import com.mockrunner.example.struts.StoreDataActionTest;
 import com.mockrunner.example.tag.ConstrainedNumericTextTagTest;
 import com.mockrunner.example.tag.TableEnumTagTest;
@@ -52,6 +53,7 @@ public class AllTests
         suite.addTest(new TestSuite(AuthenticationActionTest.class));
         suite.addTest(new TestSuite(StoreDataActionTest.class));
         suite.addTest(new TestSuite(GreetingsActionTest.class));
+        suite.addTest(new TestSuite(ShoppingCartActionTest.class));
         suite.addTest(new TestSuite(OrderActionTest.class));
         suite.addTest(new TestSuite(LogoutActionTest.class));
         suite.addTest(new TestSuite(ImageButtonFilterTest.class));

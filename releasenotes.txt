@@ -1,4 +1,9 @@
 
+mockrunner-0.3:
+
+- improved setResources() in Struts test module to support module config
+- added example test for LookupDispatchAction
+
 mockrunner-0.2.6:
 
 - removed XMLUtil.parse(org.w3c.dom.ls.DOMParser parser, DOMInput data) method
