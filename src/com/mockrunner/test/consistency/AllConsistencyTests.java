@@ -10,7 +10,7 @@ public class AllConsistencyTests
         TestSuite suite = new TestSuite("Test for com.mockrunner.test.consistency");
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(AdapterConsistencyTest.class));
-        suite.addTest(new TestSuite(JDKVersionConsistencyTest.class));
+        suite.addTest(new TestSuite(VersionConsistencyTest.class));
         suite.addTest(new TestSuite(JarFileDependenciesTest.class));
         //$JUnit-END$
         return suite;
