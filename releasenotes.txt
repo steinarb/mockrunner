@@ -1,6 +1,7 @@
 
 mockrunner-0.3:
 
+- fixed bug 983552 (valueUnbound bug in MockHttpSession)
 - adapted EJBTestModule to new MockEJB 0.6 API (check out
   migratingfrom0.2.9.txt for details)
 - it's now possible to use regular expressions with the JDBC test framework

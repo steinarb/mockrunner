@@ -39,6 +39,18 @@ public class MockHttpSessionTest extends TestCase
         assertFalse(listener2.wasValueUnboundCalled());
     }
     
+    public void testBindingListenerOverwriteSameAttribute()
+    {
+        MockHttpSession session = new MockHttpSession();
+        TestSessionListener listener = new TestSessionListener();
+        session.setAttribute("key", listener);
+        listener.reset();
+        session.setAttribute("key", listener);
+        assertTrue(listener.wasValueUnboundCalled());
+        assertTrue(listener.wasValueBoundCalled());
+        assertTrue(listener.wasValueUnboundBeforeBoundCalled());
+    }
+    
     public void testBindingListenerCorrectOrder()
     {
         MockHttpSession session = new MockHttpSession();
@@ -47,7 +59,7 @@ public class MockHttpSessionTest extends TestCase
         session.setAttribute("key", listener);
         assertEquals("key", listener.getBoundEventKey());
         assertEquals(listener, listener.getBoundEventValue());
-        assertEquals("test", listener.getBoundSessionValue());
+        assertEquals(listener, listener.getBoundSessionValue());
         session.setAttribute("key", "xyz");
         assertEquals("key", listener.getUnboundEventKey());
         assertEquals(listener, listener.getUnboundEventValue());
@@ -137,6 +149,14 @@ public class MockHttpSessionTest extends TestCase
     {
         private boolean valueBoundCalled = false;
         private boolean valueUnboundCalled = false;
+        private boolean valueUnboundBeforeBoundCalled = false;
+        
+        public void reset()
+        {
+            valueBoundCalled = false;
+            valueUnboundCalled = false;
+            valueUnboundBeforeBoundCalled = false;
+        }
         
         public void valueBound(HttpSessionBindingEvent event)
         {
@@ -146,6 +166,10 @@ public class MockHttpSessionTest extends TestCase
         public void valueUnbound(HttpSessionBindingEvent event)
         {
             valueUnboundCalled = true;
+            if(!valueBoundCalled)
+            {
+                valueUnboundBeforeBoundCalled = true;
+            }
         }
         
         public boolean wasValueBoundCalled()
@@ -156,6 +180,11 @@ public class MockHttpSessionTest extends TestCase
         public boolean wasValueUnboundCalled()
         {
             return valueUnboundCalled;
+        }
+        
+        public boolean wasValueUnboundBeforeBoundCalled()
+        {
+            return valueUnboundBeforeBoundCalled;
         }
     }
     
