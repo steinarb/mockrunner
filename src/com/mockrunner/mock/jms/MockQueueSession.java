@@ -45,7 +45,7 @@ public class MockQueueSession extends MockSession implements QueueSession
     {
         if(tempQueues.size() <= index || index < 0) return null;
         return (MockTemporaryQueue)tempQueues.get(index);
-    } 
+    }
     
     public Queue createQueue(String name) throws JMSException
     {
