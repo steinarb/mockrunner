@@ -1,7 +1,8 @@
-Mockrunner is a lightweight framework for testing applications in
+Mockrunner is a lightweight framework for unit testing applications in
 the J2EE environment. It supports Struts actions and forms, servlets, 
 filters and tag classes. Furthermore it includes a JDBC test framework
-an can be used in conjunction with MockEJB to test EJB based applications.
+an can be used in conjunction with MockEJB (http://mockejb.sourceforge.net/) 
+to test EJB based applications.
 
 It extends JUnit and simulates the necessary behaviour without calling 
 the real infrastructure. It does not need a running application server or
@@ -21,13 +22,13 @@ use StrutsTestCase (http://strutstestcase.sourceforge.net/) for
 Struts based applications or Cactus (http://jakarta.apache.org/cactus/).
 
 The JDBC test framework simulates a database but it does not execute any
-SQL statements. You can use the Mockrunner API to specify the result the 
+SQL statements. You can use the Mockrunner API to specify the results the 
 database would provide when executing different SQL statements. The
 framework is meant for testing the Java part of JDBC based applications.
 If you want to test SQL code you can use SQLUnit (http://sqlunit.sourceforge.net/)
 or dbUnit (http://dbunit.sourceforge.net) which runs against a real database.
 
-All test modules in Mockrunner can be combined. E.g., you can test a Servlet
+All test modules in Mockrunner can be combined. You can test a Servlet
 that calls a SessionBean that uses some JDBC code to read data from a database.
 
 Mockrunner is a pure mock based solution for unit tests. It's purpose
@@ -53,6 +54,11 @@ in the com.mockrunner.example packages.
 Most methods are self-explanatory. Just subclass one of the Adapters
 (e.g. ActionTestCaseAdapter) and start testing. If you have your
 own base class for tests, you can use the Modules (e.g. ActionTestModule).
+
+Mockrunner requires at least Java 1.3 to run. If you are using Java 1.3
+you have to use the mockrunner-jkd1.3.jar. The JDBCTestModule is limited
+to JDBC API 2.1 in this case. If you are running Java 1.4 you can use
+JDBC 3.0. You have to use mockrunner.jar in this case.
 
 Mockrunner uses the following libraries and software components.
 You have to download them. Please add the specified jars to the classpath.
