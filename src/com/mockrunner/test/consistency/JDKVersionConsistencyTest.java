@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.mockrunner.gen.ConsistencyUtil;
+import com.mockrunner.gen.GeneratorUtil;
 
 import junit.framework.TestCase;
 
@@ -20,7 +20,7 @@ public class JDKVersionConsistencyTest extends TestCase
     
     private void compareDirTrees(String sourceDir, String destinationDir) throws Exception
     {
-        ConsistencyUtil util = new ConsistencyUtil();
+        GeneratorUtil util = new GeneratorUtil();
         File sourceFile = new File(sourceDir);
         File destFile = new File(destinationDir);
         Map sourceMap = new HashMap();
