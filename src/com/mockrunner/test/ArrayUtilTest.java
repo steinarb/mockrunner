@@ -183,6 +183,12 @@ public class ArrayUtilTest extends TestCase
         String[] stringArray = new String[] {"This", "is", "an", "array", "of", "strings"};
         Object[] stringTargetArray = ArrayUtil.convertToObjectArray(stringArray);
         assertTrue(stringArray == stringTargetArray);
+        boolean[] booleanArray = new boolean[] {true, true, false};
+        Object[] booleanWrappedArray = ArrayUtil.convertToObjectArray(booleanArray);
+        assertTrue(booleanWrappedArray instanceof Boolean[]);
+        assertEquals(new Boolean(true), booleanWrappedArray[0]);
+        assertEquals(new Boolean(true), booleanWrappedArray[1]);
+        assertEquals(new Boolean(false), booleanWrappedArray[2]);
     }
     
     public void testConvertToArray()
