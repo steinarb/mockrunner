@@ -214,6 +214,14 @@ public class EJBTestCaseAdapter extends BaseTestCase
     {
         return ejbTestModule.lookupBean(name, parameters);
     }
+    
+    /**
+     * Delegates to {@link EJBTestModule#lookupBean(String, String, Object[])}
+     */
+    protected Object lookupBean(String name, String createMethod, Object[] parameters)
+    {
+        return ejbTestModule.lookupBean(name, createMethod, parameters);
+    }
 
     /**
      * Delegates to {@link EJBTestModule#resetUserTransaction}
