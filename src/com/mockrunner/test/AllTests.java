@@ -24,7 +24,6 @@ public class AllTests
         //$JUnit-BEGIN$ 
         suite.addTest(AllWebTests.suite());
         suite.addTest(AllJDBCTests.suite());
-        suite.addTest(new TestSuite(WebMockObjectFactoryTest.class));
         suite.addTest(new TestSuite(XmlUtilTest.class));
         suite.addTest(new TestSuite(StreamUtilTest.class));
         suite.addTest(new TestSuite(ArrayUtilTest.class));

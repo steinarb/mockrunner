@@ -1,6 +1,10 @@
 package com.mockrunner.mock.jdbc;
 
-import com.mockobjects.sql.MockDataSource;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Enumeration;
+
 
 /**
  * Used to create all types of JDBC and EJB mock objects. 
@@ -12,6 +16,7 @@ import com.mockobjects.sql.MockDataSource;
 public class JDBCMockObjectFactory
 {
     private MockDataSource dataSource;
+    private MockDriver driver;
     private MockConnection connection;
     
     /**
@@ -20,8 +25,28 @@ public class JDBCMockObjectFactory
     public JDBCMockObjectFactory()
     {
         dataSource = new MockDataSource();
+        driver = new MockDriver();
         connection = new MockConnection();
+        setUpDependencies();
+    }
+    
+    private void setUpDependencies()
+    {
         dataSource.setupConnection(connection);
+        driver.setupConnection(connection);
+        try
+        {
+            Enumeration drivers = DriverManager.getDrivers();
+            while(drivers.hasMoreElements())
+            {
+                DriverManager.deregisterDriver((Driver)drivers.nextElement());
+            }
+            DriverManager.registerDriver(driver);
+        }
+        catch(SQLException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
     }
 
     /**
@@ -31,6 +56,15 @@ public class JDBCMockObjectFactory
     public MockDataSource getMockDataSource()
     {
         return dataSource;
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.mock.jdbc.MockDriver}.
+     * @return the {@link com.mockrunner.mock.jdbc.MockDriver}
+     */
+    public MockDriver getMockDriver()
+    {
+        return driver;
     }
 
     /**
