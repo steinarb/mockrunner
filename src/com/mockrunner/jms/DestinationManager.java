@@ -7,7 +7,6 @@ import java.util.Map;
 
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueConnection;
-import com.mockrunner.mock.jms.MockTemporaryQueue;
 
 public class DestinationManager
 {
@@ -59,34 +58,5 @@ public class DestinationManager
     public MockQueue getQueue(String name)
     {
         return (MockQueue)queues.get(name);
-    }
-    
-    /**
-     * Creates a new <code>TemporaryQueue</code>. Unlike normal
-     * queues, you do not have to create temporary queues directly.
-     * The {@link com.mockrunner.mock.jms.MockQueueSession#createTemporaryQueue}
-     * method calls this method to create the queue. Creating temporary queues
-     * is not an administrative act, so we do not have to simulate the
-     * available temporary queues.
-     * @return the created <code>TemporaryQueue</code>
-     */
-    public MockTemporaryQueue createTemporaryQueue()
-    {
-        MockTemporaryQueue queue = new MockTemporaryQueue(connection);
-        tempQueues.add(queue);
-        return queue;
-    }
-
-    /**
-     * Returns a <code>TemporaryQueue</code> by its index. The
-     * index represent the number of the queue. Returns <code>null</code>
-     * if no such <code>TemporaryQueue</code> is present.
-     * @param index the index
-     * @return the <code>TemporaryQueue</code>
-     */
-    public MockTemporaryQueue getTemporaryQueue(int index)
-    {
-        if(tempQueues.size() <= index || index < 0) return null;
-        return (MockTemporaryQueue)tempQueues.get(index);
     }
 }

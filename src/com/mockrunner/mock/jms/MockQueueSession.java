@@ -1,6 +1,8 @@
 package com.mockrunner.mock.jms;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
@@ -35,6 +37,7 @@ public class MockQueueSession implements QueueSession
     private boolean recovered;
     private boolean closed;
     private MessageListener messageListener;
+    private List tempQueues;
     
     public MockQueueSession(MockQueueConnection connection, boolean transacted, int acknowledgeMode)
     {
@@ -48,6 +51,7 @@ public class MockQueueSession implements QueueSession
         recovered = false;
         closed = false;
         messageListener = null;
+        tempQueues = new ArrayList();
     }
     
     /**
@@ -66,6 +70,19 @@ public class MockQueueSession implements QueueSession
     public MessageManager getMessageManager()
     {
         return messageManager;
+    }
+    
+    /**
+     * Returns a <code>TemporaryQueue</code> by its index. The
+     * index represent the number of the queue. Returns <code>null</code>
+     * if no such <code>TemporaryQueue</code> is present.
+     * @param index the index
+     * @return the <code>TemporaryQueue</code>
+     */
+    public MockTemporaryQueue getTemporaryQueue(int index)
+    {
+        if(tempQueues.size() <= index || index < 0) return null;
+        return (MockTemporaryQueue)tempQueues.get(index);
     }
     
     /**
@@ -128,7 +145,8 @@ public class MockQueueSession implements QueueSession
     public TemporaryQueue createTemporaryQueue() throws JMSException
     {
         connection.throwJMSException();
-        MockTemporaryQueue queue = connection.getDestinationManager().createTemporaryQueue();
+        MockTemporaryQueue queue = new MockTemporaryQueue(connection);
+        tempQueues.add(queue);
         addSessionToQueue(queue);
         return queue;
     }

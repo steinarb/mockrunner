@@ -8,6 +8,8 @@ import com.mockrunner.mock.jms.MockTemporaryQueue;
 
 /**
  * Module for JMS tests.
+ * Note that all indices are zero based numbers,
+ * i.e. the n-th created session, sender etc.
  */
 public class JMSTestModule
 {
@@ -77,13 +79,17 @@ public class JMSTestModule
     
     /**
      * Returns the {@link MockTemporaryQueue} with the specified index
-     * or <code>null<(/code> if no such queue exists.
-     * @param index the name of the temporary queue
-     * @return the {@link MockQueue}
+     * for the specified session. Returns <code>null</code> if no such
+     * temporary queue exists.
+     * @param indexOfSession the index of the session
+     * @param indexOfQueue the index of the temporary queue
+     * @return the {@link MockTemporaryQueue}
      */
-    public MockTemporaryQueue getTemporaryQueue(int index)
+    public MockTemporaryQueue getTemporaryQueue(int indexOfSession, int indexOfQueue)
     {
-        return getDestinationManager().getTemporaryQueue(index);
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session) return null;
+        return session.getTemporaryQueue(indexOfQueue);
     }
     
     /**
@@ -124,7 +130,7 @@ public class JMSTestModule
      * Verifies that a receiver with the specified index was
      * created for the specified session.
      * @param indexOfSession the index of the session
-     * @param indexOfSender the index of the receiver
+     * @param indexOfReceiver the index of the receiver
      * @throws VerifyFailedException if verification fails
      */
     public void verifyQueueReceiverPresent(int indexOfSession, int indexOfReceiver)
@@ -158,7 +164,7 @@ public class JMSTestModule
      * Verifies that a browser with the specified index was
      * created for the specified session.
      * @param indexOfSession the index of the session
-     * @param indexOfSender the index of the browser
+     * @param indexOfBrowser the index of the browser
      * @throws VerifyFailedException if verification fails
      */
     public void verifyQueueBrowserPresent(int indexOfSession, int indexOfBrowser)
@@ -202,13 +208,15 @@ public class JMSTestModule
     }
     
     /**
-     * Verifies that a temporary queue with the specified index is present.
-     * @param indexOfQueue the index of the queue
+     * Verifies that a temporary queue with the specified index is present
+     * for the specified session.
+     * @param indexOfSession the index of the session
+     * @param indexOfQueue the index of the temporary queue
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyTemporaryQueuePresent(int indexOfQueue)
+    public void verifyTemporaryQueuePresent(int indexOfSession, int indexOfQueue)
     {
-        if(null == getTemporaryQueue(indexOfQueue))
+        if(null == getTemporaryQueue(indexOfSession, indexOfQueue))
         {
             throw new VerifyFailedException("A temporary queue with index " + indexOfQueue + " does not exist");
         }
