@@ -2,7 +2,11 @@ package com.mockrunner.mock.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -15,11 +19,13 @@ public class MockHttpServletResponse implements HttpServletResponse
 {
     private PrintWriter writer;
     private MockServletOutputStream outputStream;
+    private Map headers;
     
     public MockHttpServletResponse()
     {
         outputStream = new MockServletOutputStream();
         writer = new PrintWriter(outputStream);
+		headers = new HashMap();
     }
     
     public String encodeURL(String url)
@@ -69,10 +75,15 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     }
 
-    public void addHeader(String arg0, String arg1)
+    public void addHeader(String key, String value)
     {
-        // TODO Auto-generated method stub
-
+		List valueList = (List)headers.get(key);
+		if(null == valueList)
+		{
+			valueList = new ArrayList();
+			headers.put(key, valueList);
+		}
+		valueList.add(value);
     }
 
     public void addIntHeader(String arg0, int arg1)
@@ -81,10 +92,9 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     }
 
-    public boolean containsHeader(String arg0)
+    public boolean containsHeader(String key)
     {
-        // TODO Auto-generated method stub
-        return false;
+        return headers.containsKey(key);
     }
 
     public void sendError(int arg0, String arg1) throws IOException
@@ -137,8 +147,8 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public void flushBuffer() throws IOException
     {
-        // TODO Auto-generated method stub
-
+		writer.flush();
+		outputStream.flush();
     }
 
     public int getBufferSize()
@@ -167,14 +177,13 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public void reset()
     {
-        // TODO Auto-generated method stub
-
+		headers.clear();
+		resetBuffer();
     }
 
     public void resetBuffer()
     {
-        // TODO Auto-generated method stub
-
+		outputStream.clearContent();
     }
 
     public void setBufferSize(int arg0)
@@ -200,5 +209,4 @@ public class MockHttpServletResponse implements HttpServletResponse
         // TODO Auto-generated method stub
 
     }
-
 }
