@@ -1,8 +1,11 @@
 package com.mockrunner.mock.jdbc;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Array;
 import java.sql.Blob;
@@ -15,11 +18,24 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import com.mockrunner.util.StreamUtil;
+
+/**
+ * Mock implementation of <code>CallableStatement</code>.
+ */
 public class MockCallableStatement extends MockPreparedStatement implements CallableStatement
 {
     private AbstractOutParameterResultSetHandler resultSetHandler;
+    private Map paramObjects = new HashMap();
+    private Set outParameterSetIndexed = new HashSet();
+    private Set outParameterSetNamed = new HashSet(); 
+    private boolean wasNull = false;
     
     public MockCallableStatement(Connection connection, String sql)
     {
@@ -42,484 +58,661 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         this.resultSetHandler = resultSetHandler;
     }
     
+    public Map getNamedParameterMap()
+    {
+        return Collections.unmodifiableMap(paramObjects);
+    }
+    
+    public Object getParameter(int index)
+    {
+        Object value = super.getParameter(index);
+        wasNull = (value == null);
+        return value;
+    }
+    
     public Object getParameter(String name)
     {
-        //TODO: implement me
-        return null;
+        Object value =  paramObjects.get(name);
+        wasNull = (value == null);
+        return value;
+    }
+    
+    public Set getNamedRegisteredOutParameterSet()
+    {
+        return Collections.unmodifiableSet(outParameterSetNamed);
+    }
+    
+    public boolean isOutParameterRegistered(int index)
+    {
+        return outParameterSetIndexed.contains(new Integer(index));
+    }
+    
+    public Set getIndexedRegisteredOutParameterSet()
+    {
+        return Collections.unmodifiableSet(outParameterSetIndexed);
+    }
+    
+    public boolean isOutParameterRegistered(String parameterName)
+    {
+        return outParameterSetNamed.contains(parameterName);
+    }
+    
+    public void registerOutParameter(int parameterIndex, int sqlType) throws SQLException
+    {
+        outParameterSetIndexed.add(new Integer(parameterIndex));
+    }
+
+    public void registerOutParameter(int parameterIndex, int sqlType, int scale) throws SQLException
+    {
+        registerOutParameter(parameterIndex, sqlType);
+    }
+
+    public void registerOutParameter(int parameterIndex, int sqlType, String typeName) throws SQLException
+    {
+        registerOutParameter(parameterIndex, sqlType);
+    }
+    
+    public void registerOutParameter(String parameterName, int sqlType) throws SQLException
+    {
+        outParameterSetNamed.add(parameterName);
+    }
+    
+    public void registerOutParameter(String parameterName, int sqlType, int scale) throws SQLException
+    {
+        registerOutParameter(parameterName, sqlType);
+    }
+    
+    public void registerOutParameter(String parameterName, int sqlType, String typeName) throws SQLException
+    {
+        registerOutParameter(parameterName, sqlType);
     }
         
     public boolean wasNull() throws SQLException
     {
-        // TODO Auto-generated method stub
-        return false;
+        return wasNull;
     }
 
     public byte getByte(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Number) return ((Number)value).byteValue();
+            return new Byte(value.toString()).byteValue();
+        }
         return 0;
     }
 
     public double getDouble(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Number) return ((Number)value).doubleValue();
+            return new Double(value.toString()).doubleValue();
+        }
         return 0;
     }
 
     public float getFloat(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Number) return ((Number)value).floatValue();
+            return new Float(value.toString()).floatValue();
+        }
         return 0;
     }
 
     public int getInt(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Number) return ((Number)value).intValue();
+            return new Integer(value.toString()).intValue();
+        }
         return 0;
     }
 
     public long getLong(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Number) return ((Number)value).longValue();
+            return new Long(value.toString()).longValue();
+        }
         return 0;
     }
 
     public short getShort(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Number) return ((Number)value).shortValue();
+            return new Short(value.toString()).shortValue();
+        }
         return 0;
     }
 
     public boolean getBoolean(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Boolean) return ((Boolean)value).booleanValue();
+            return new Boolean(value.toString()).booleanValue();
+        }
         return false;
     }
 
     public byte[] getBytes(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof byte[]) return (byte[])value;
+            return value.toString().getBytes();
+        }
         return null;
-    }
-
-    public void registerOutParameter(int parameterIndex, int sqlType) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void registerOutParameter(int parameterIndex, int sqlType, int scale) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
     }
 
     public Object getObject(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getParameter(parameterIndex);
     }
 
     public String getString(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value) return value.toString();
         return null;
     }
-
-    public void registerOutParameter(int paramIndex, int sqlType, String typeName) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
+    
     public byte getByte(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Number) return ((Number)value).byteValue();
+            return new Byte(value.toString()).byteValue();
+        }
         return 0;
     }
 
     public double getDouble(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Number) return ((Number)value).doubleValue();
+            return new Double(value.toString()).doubleValue();
+        }
         return 0;
     }
 
     public float getFloat(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Number) return ((Number)value).floatValue();
+            return new Float(value.toString()).floatValue();
+        }
         return 0;
     }
 
     public int getInt(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Number) return ((Number)value).intValue();
+            return new Integer(value.toString()).intValue();
+        }
         return 0;
     }
 
     public long getLong(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Number) return ((Number)value).longValue();
+            return new Long(value.toString()).longValue();
+        }
         return 0;
     }
 
     public short getShort(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Number) return ((Number)value).shortValue();
+            return new Short(value.toString()).shortValue();
+        }
         return 0;
     }
 
     public boolean getBoolean(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Boolean) return ((Boolean)value).booleanValue();
+            return new Boolean(value.toString()).booleanValue();
+        }
         return false;
     }
 
     public byte[] getBytes(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof byte[]) return (byte[])value;
+            return value.toString().getBytes();
+        }
         return null;
     }
 
-    public void setByte(String parameterName, byte x) throws SQLException
+    public void setByte(String parameterName, byte byteValue) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, new Byte(byteValue));
     }
 
-    public void setDouble(String parameterName, double x) throws SQLException
+    public void setDouble(String parameterName, double doubleValue) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, new Double(doubleValue));
     }
 
-    public void setFloat(String parameterName, float x) throws SQLException
+    public void setFloat(String parameterName, float floatValue) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, new Float(floatValue));
     }
 
-    public void registerOutParameter(String parameterName, int sqlType) throws SQLException
+    public void setInt(String parameterName, int intValue) throws SQLException
     {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void setInt(String parameterName, int x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, new Integer(intValue));
     }
 
     public void setNull(String parameterName, int sqlType) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, null);
     }
 
-    public void registerOutParameter(String parameterName, int sqlType, int scale) throws SQLException
+    public void setLong(String parameterName, long longValue) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, new Long(longValue));
     }
 
-    public void setLong(String parameterName, long x) throws SQLException
+    public void setShort(String parameterName, short shortValue) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, new Short(shortValue));
     }
 
-    public void setShort(String parameterName, short x) throws SQLException
+    public void setBoolean(String parameterName, boolean booleanValue) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, new Boolean(booleanValue));
     }
 
-    public void setBoolean(String parameterName, boolean x) throws SQLException
+    public void setBytes(String parameterName, byte[] byteArray) throws SQLException
     {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void setBytes(String parameterName, byte[] x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, byteArray);
     }
 
     public BigDecimal getBigDecimal(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Number) return new BigDecimal(((Number)value).doubleValue());
+            return new BigDecimal(value.toString());
+        }
         return null;
     }
 
     public BigDecimal getBigDecimal(int parameterIndex, int scale) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getBigDecimal(parameterIndex);
     }
 
     public URL getURL(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof URL) return (URL)value;
+            try
+            {
+                return new URL(value.toString());
+            }
+            catch(MalformedURLException exc)
+            {
+            
+            }
+        }
         return null;
     }
 
-    public Array getArray(int i) throws SQLException
+    public Array getArray(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Array) return (Array)value;
+            return new MockArray(value);
+        }
         return null;
     }
 
-    public Blob getBlob(int i) throws SQLException
+    public Blob getBlob(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Blob) return (Blob)value;
+            return new MockBlob(getBytes(parameterIndex));
+        }
         return null;
     }
 
-    public Clob getClob(int i) throws SQLException
+    public Clob getClob(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Clob) return (Clob)value;
+            return new MockClob(getString(parameterIndex));
+        }
         return null;
     }
 
     public Date getDate(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Date) return (Date)value;
+            return Date.valueOf(value.toString());
+        }
         return null;
     }
 
-    public Ref getRef(int i) throws SQLException
+    public Ref getRef(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Ref) return (Ref)value;
+            return new MockRef(value);
+        }
         return null;
     }
 
     public Time getTime(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Time) return (Time)value;
+            return Time.valueOf(value.toString());
+        }
         return null;
     }
 
     public Timestamp getTimestamp(int parameterIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof Timestamp) return (Timestamp)value;
+            return Timestamp.valueOf(value.toString());
+        }
         return null;
     }
 
-    public void setAsciiStream(String parameterName, InputStream x, int length) throws SQLException
+    public void setAsciiStream(String parameterName, InputStream stream, int length) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setBinaryStream(parameterName, stream, length);
     }
 
-    public void setBinaryStream(String parameterName, InputStream x, int length) throws SQLException
+    public void setBinaryStream(String parameterName, InputStream stream, int length) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        byte[] data = StreamUtil.getStreamAsByteArray(stream, length);
+        setObject(parameterName, new ByteArrayInputStream(data));
     }
 
     public void setCharacterStream(String parameterName, Reader reader, int length) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        String data = StreamUtil.getReaderAsString(reader, length);
+        setObject(parameterName, new StringReader(data));
     }
 
     public Object getObject(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getParameter(parameterName);
     }
 
-    public void setObject(String parameterName, Object x) throws SQLException
+    public void setObject(String parameterName, Object object) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        paramObjects.put(parameterName, object);
     }
 
-    public void setObject(String parameterName, Object x, int targetSqlType) throws SQLException
+    public void setObject(String parameterName, Object object, int targetSqlType) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, object);
     }
 
-    public void setObject(String parameterName, Object x, int targetSqlType, int scale) throws SQLException
+    public void setObject(String parameterName, Object object, int targetSqlType, int scale) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, object);
     }
 
-    public Object getObject(int i, Map map) throws SQLException
+    public Object getObject(int parameterIndex, Map map) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getObject(parameterIndex);
     }
 
     public String getString(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value) return value.toString();
         return null;
-    }
-
-    public void registerOutParameter(String parameterName, int sqlType, String typeName) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
     }
 
     public void setNull(String parameterName, int sqlType, String typeName) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setNull(parameterName, sqlType);
     }
 
-    public void setString(String parameterName, String x) throws SQLException
+    public void setString(String parameterName, String string) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, string);
     }
 
     public BigDecimal getBigDecimal(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Number) return new BigDecimal(((Number)value).doubleValue());
+            return new BigDecimal(value.toString());
+        }
         return null;
     }
 
-    public void setBigDecimal(String parameterName, BigDecimal x) throws SQLException
+    public void setBigDecimal(String parameterName, BigDecimal bigDecimal) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, bigDecimal);
     }
 
     public URL getURL(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof URL) return (URL)value;
+            try
+            {
+                return new URL(value.toString());
+            }
+            catch(MalformedURLException exc)
+            {
+            
+            }
+        }
         return null;
     }
 
-    public void setURL(String parameterName, URL val) throws SQLException
+    public void setURL(String parameterName, URL url) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, url);
     }
 
     public Array getArray(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Array) return (Array)value;
+            return new MockArray(value);
+        }
         return null;
     }
 
     public Blob getBlob(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Blob) return (Blob)value;
+            return new MockBlob(getBytes(parameterName));
+        }
         return null;
     }
 
     public Clob getClob(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Clob) return (Clob)value;
+            return new MockClob(getString(parameterName));
+        }
         return null;
     }
 
     public Date getDate(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Date) return (Date)value;
+            return Date.valueOf(value.toString());
+        }
         return null;
     }
 
-    public void setDate(String parameterName, Date x) throws SQLException
+    public void setDate(String parameterName, Date date) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, date);
     }
 
-    public Date getDate(int parameterIndex, Calendar cal) throws SQLException
+    public Date getDate(int parameterIndex, Calendar calendar) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getDate(parameterIndex);
     }
 
     public Ref getRef(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Ref) return (Ref)value;
+            return new MockRef(value);
+        }
         return null;
     }
 
     public Time getTime(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Time) return (Time)value;
+            return Time.valueOf(value.toString());
+        }
         return null;
     }
 
-    public void setTime(String parameterName, Time x) throws SQLException
+    public void setTime(String parameterName, Time time) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, time);
     }
 
-    public Time getTime(int parameterIndex, Calendar cal) throws SQLException
+    public Time getTime(int parameterIndex, Calendar calendar) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getTime(parameterIndex);
     }
 
     public Timestamp getTimestamp(String parameterName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getParameter(parameterName);
+        if(null != value)
+        {
+            if(value instanceof Timestamp) return (Timestamp)value;
+            return Timestamp.valueOf(value.toString());
+        }
         return null;
     }
 
-    public void setTimestamp(String parameterName, Timestamp x) throws SQLException
+    public void setTimestamp(String parameterName, Timestamp timestamp) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setObject(parameterName, timestamp);
     }
 
-    public Timestamp getTimestamp(int parameterIndex, Calendar cal) throws SQLException
+    public Timestamp getTimestamp(int parameterIndex, Calendar calendar) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getTimestamp(parameterIndex);
     }
 
     public Object getObject(String parameterName, Map map) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getObject(parameterName);
     }
 
-    public Date getDate(String parameterName, Calendar cal) throws SQLException
+    public Date getDate(String parameterName, Calendar calendar) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getDate(parameterName);
     }
 
-    public Time getTime(String parameterName, Calendar cal) throws SQLException
+    public Time getTime(String parameterName, Calendar calendar) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getTime(parameterName);
     }
 
-    public Timestamp getTimestamp(String parameterName, Calendar cal) throws SQLException
+    public Timestamp getTimestamp(String parameterName, Calendar calendar) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return null;
+        return getTimestamp(parameterName);
     }
 
-    public void setDate(String parameterName, Date x, Calendar cal) throws SQLException
+    public void setDate(String parameterName, Date date, Calendar calendar) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setDate(parameterName, date);
     }
 
-    public void setTime(String parameterName, Time x, Calendar cal) throws SQLException
+    public void setTime(String parameterName, Time time, Calendar calendar) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setTime(parameterName, time);
     }
 
-    public void setTimestamp(String parameterName, Timestamp x, Calendar cal) throws SQLException
+    public void setTimestamp(String parameterName, Timestamp timestamp, Calendar calendar) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        setTimestamp(parameterName, timestamp);
     }
-
 }

@@ -4,7 +4,6 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -257,7 +256,8 @@ public class JDBCTestModule
     
     /**
      * Returns a parameter that was added to a <code>PreparedStatement</code>
-     * using its <code>set</code> methods.
+     * using its <code>set</code> methods. Simple data types are returned as
+     * the corresponsing wrapper type.
      * @param statement the <code>PreparedStatement</code>
      * @param indexOfParameter the index used to set the parameter
      * @return the corresponding object
@@ -271,7 +271,8 @@ public class JDBCTestModule
     /**
      * Returns a parameter that was added to a <code>PreparedStatement</code>
      * using its <code>set</code> methods. Uses the first <code>PreparedStatement</code>
-     * with the specified SQL statement.
+     * with the specified SQL statement. Simple data types are returned as
+     * the corresponsing wrapper type.
      * @param sql the SQL statement
      * @param indexOfParameter the index used to set the object
      * @return the corresponding object
@@ -283,7 +284,8 @@ public class JDBCTestModule
     
     /**
      * Returns an object that was added to a <code>PreparedStatement</code>
-     * using its <code>set</code> methods.
+     * using its <code>set</code> methods. Simple data types are returned as
+     * the corresponsing wrapper type.
      * @param indexOfStatement the index of the statement
      * @param indexOfParameter the index used to set the object
      * @return the corresponding object
@@ -295,7 +297,8 @@ public class JDBCTestModule
     
     /**
      * Returns a parameter that was added to a <code>CallableStatement</code>
-     * using its <code>set</code> methods.
+     * using its <code>set</code> methods. Simple data types are returned as
+     * the corresponsing wrapper type.
      * @param statement the <code>CallableStatement</code>
      * @param indexOfParameter the index used to set the parameter
      * @return the corresponding object
@@ -309,7 +312,8 @@ public class JDBCTestModule
     /**
      * Returns a parameter that was added to a <code>CallableStatement</code>
      * using its <code>set</code> methods. Uses the first <code>CallableStatement</code>
-     * with the specified SQL statement.
+     * with the specified SQL statement. Simple data types are returned as
+     * the corresponsing wrapper type.
      * @param sql the SQL statement
      * @param indexOfParameter the index used to set the object
      * @return the corresponding object
@@ -321,7 +325,8 @@ public class JDBCTestModule
 
     /**
      * Returns an object that was added to a <code>CallableStatement</code>
-     * using its <code>set</code> methods.
+     * using its <code>set</code> methods. Simple data types are returned as
+     * the corresponsing wrapper type.
      * @param indexOfStatement the index of the statement
      * @param indexOfParameter the index used to set the object
      * @return the corresponding object
@@ -1045,7 +1050,8 @@ public class JDBCTestModule
     
     /**
      * Verifies that a parameter from the specified <code>PreparedStatement</code> is equal
-     * to the specified object.
+     * to the specified object. Please use the corresponding wrapper type for
+     * primitive data types.
      * @param statement the <code>PreparedStatement</code>
      * @param indexOfParameter the index used to set the object
      * @param object the expected object
@@ -1066,6 +1072,7 @@ public class JDBCTestModule
      * Verifies that a parameter from the <code>PreparedStatement</code> with the
      * specified SQL statement is equal to the specified object.
      * Uses the first <code>PreparedStatement</code> with the specified SQL.
+     * Please use the corresponding wrapper type for primitive data types.
      * @param sql the SQL statement of the <code>PreparedStatement</code>
      * @param indexOfParameter the index used to set the object
      * @param object the expected object
@@ -1085,6 +1092,7 @@ public class JDBCTestModule
     /**
      * Verifies that a parameter from the <code>PreparedStatement</code> with the
      * specified SQL statement is equal to the specified object.
+     * Please use the corresponding wrapper type for primitive data types.
      * @param sql the SQL statement of the <code>PreparedStatement</code>
      * @param indexOfParameter the index used to set the object
      * @param object the expected object
@@ -1103,7 +1111,8 @@ public class JDBCTestModule
     
     /**
      * Verifies that a parameter from the specified <code>CallableStatement</code> is equal
-     * to the specified object.
+     * to the specified object. Please use the corresponding wrapper type 
+     * for primitive data types.
      * @param statement the <code>CallableStatement</code>
      * @param indexOfParameter the index used to set the object
      * @param object the expected object
@@ -1124,6 +1133,7 @@ public class JDBCTestModule
      * Verifies that a parameter from the <code>CallableStatement</code> with the
      * specified SQL statement is equal to the specified object.
      * Uses the first <code>CallableStatement</code> with the specified SQL.
+     * Please use the corresponding wrapper type for primitive data types.
      * @param sql the SQL statement of the <code>CallableStatement</code>
      * @param indexOfParameter the index used to set the object
      * @param object the expected object
@@ -1143,6 +1153,7 @@ public class JDBCTestModule
     /**
      * Verifies that a parameter from the <code>CallableStatement</code> with the
      * specified SQL statement is equal to the specified object.
+     * Please use the corresponding wrapper type for primitive data types.
      * @param sql the SQL statement of the <code>CallableStatement</code>
      * @param indexOfParameter the index used to set the object
      * @param object the expected object
@@ -1161,7 +1172,8 @@ public class JDBCTestModule
     
     /**
      * Verifies that a parameter from the specified <code>CallableStatement</code> is equal
-     * to the specified object.
+     * to the specified object. Please use the corresponding wrapper type 
+     * for primitive data types.
      * @param statement the <code>CallableStatement</code>
      * @param indexOfParameter the index used to set the object
      * @param object the expected object
@@ -1182,6 +1194,7 @@ public class JDBCTestModule
      * Verifies that a parameter from the <code>CallableStatement</code> with the
      * specified SQL statement is equal to the specified object.
      * Uses the first <code>CallableStatement</code> with the specified SQL.
+     * Please use the corresponding wrapper type for primitive data types.
      * @param sql the SQL statement of the <code>CallableStatement</code>
      * @param indexOfParameter the index used to set the object
      * @param object the expected object
@@ -1201,6 +1214,7 @@ public class JDBCTestModule
     /**
      * Verifies that a parameter from the <code>CallableStatement</code> with the
      * specified SQL statement is equal to the specified object.
+     * Please use the corresponding wrapper type for primitive data types.
      * @param sql the SQL statement of the <code>CallableStatement</code>
      * @param indexOfParameter the index used to set the object
      * @param object the expected object

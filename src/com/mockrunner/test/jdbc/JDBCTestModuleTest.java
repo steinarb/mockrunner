@@ -4,10 +4,12 @@ import java.sql.ResultSet;
 import java.sql.Savepoint;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import junit.framework.TestCase;
 
 import com.mockrunner.base.MockObjectFactory;
+import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.jdbc.JDBCTestModule;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
@@ -114,7 +116,7 @@ public class JDBCTestModuleTest extends TestCase
     public void testGetPreparedStatementObjects() throws Exception
     {
         preparePreparedStatements();
-        MockPreparedStatement statement = module.getPreparedStatement("update");  
+        MockPreparedStatement statement = module.getPreparedStatement("update");
         statement.setInt(1, 3);
         statement.setLong(2, 10000);
         assertEquals(new Integer(3), statement.getParameter(1));
@@ -167,10 +169,45 @@ public class JDBCTestModuleTest extends TestCase
     
     public void testGetCallableStatementObjects() throws Exception
     {
-        //TODO: implement me
+        prepareCallableStatements();
+        MockCallableStatement statement = module.getCallableStatement("{call setData(?, ?, ?, ?)}");
+        statement.setInt("xyz", 1);
+        statement.setString("3", "xyz");
+        statement.setString(1, "xyz");
+        Map namedParameter = statement.getNamedParameterMap();
+        Map indexedParameter = statement.getIndexedParameterMap();
+        assertTrue(namedParameter.size() == 2);
+        assertEquals(new Integer(1), namedParameter.get("xyz"));
+        assertEquals("xyz", namedParameter.get("3"));
+        assertTrue(indexedParameter.size() == 1);
+        assertEquals("xyz", indexedParameter.get(new Integer(1)));
+        module.verifyCallableStatementParameterPresent(1, 1);
+        try
+        {
+            module.verifyCallableStatementParameterNotPresent(statement, "3");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw Exception
+        }
+        module.verifyCallableStatementParameterNotPresent(1, 2);
+        module.verifyCallableStatementParameterPresent(statement, "3");
+        module.verifyCallableStatementParameterNotPresent(statement, "31"); 
+        module.verifyCallableStatementParameter("{call setData(?, ?, ?, ?)}", "xyz", new Integer(1));
+        module.verifyCallableStatementParameter(1, 1, "xyz");
+        try
+        {
+            module.verifyCallableStatementParameter(1, 1, "zzz");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw Exception
+        }
     }
     
-    public void testGetExecutedSQlStatements() throws Exception
+    public void testGetExecutedSQLStatements() throws Exception
     {
         prepareStatements();
         preparePreparedStatements();

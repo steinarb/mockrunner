@@ -1309,25 +1309,25 @@ public class MockResultSet implements ResultSet, Cloneable
 
     public void updateBinaryStream(int columnIndex, InputStream stream, int length) throws SQLException
     {
-        byte[] data = StreamUtil.getStreamAsByteArray(stream);
+        byte[] data = StreamUtil.getStreamAsByteArray(stream, length);
         updateObject(columnIndex, new ByteArrayInputStream(data));
     }
     
     public void updateBinaryStream(String columnName, InputStream stream, int length) throws SQLException
     {
-        byte[] data = StreamUtil.getStreamAsByteArray(stream);
+        byte[] data = StreamUtil.getStreamAsByteArray(stream, length);
         updateObject(columnName, new ByteArrayInputStream(data));
     }
 
     public void updateCharacterStream(int columnIndex, Reader reader, int length) throws SQLException
     {
-        String data = StreamUtil.getReaderAsString(reader);
+        String data = StreamUtil.getReaderAsString(reader, length);
         updateObject(columnIndex, new StringReader(data));
     }
 
     public void updateCharacterStream(String columnName, Reader reader, int length) throws SQLException
     {
-        String data = StreamUtil.getReaderAsString(reader);
+        String data = StreamUtil.getReaderAsString(reader, length);
         updateObject(columnName, new StringReader(data));
     }
     

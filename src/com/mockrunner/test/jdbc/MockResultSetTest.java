@@ -1,5 +1,7 @@
 package com.mockrunner.test.jdbc;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.sql.Clob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -182,6 +184,13 @@ public class MockResultSetTest extends TestCase
         resultSet.next();
         resultSet.updateObject(1, new String("3"));
         assertEquals(3, resultSet.getLong(1));
+        ByteArrayInputStream stream = new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5});
+        resultSet.updateBinaryStream(1, stream, 3);
+        InputStream inputStream = resultSet.getBinaryStream(1);
+        assertEquals(1, inputStream.read());
+        assertEquals(2, inputStream.read());
+        assertEquals(3, inputStream.read());
+        assertEquals(-1, inputStream.read());
     }
     
     public void testError()
