@@ -19,10 +19,12 @@ public class AllJDBCTests
         suite.addTest(new TestSuite(FileResultSetFactoryTest.class));
         suite.addTest(new TestSuite(JDBCMockObjectFactoryTest.class));
         suite.addTest(new TestSuite(AbstractResultSetHandlerTest.class));
-		suite.addTest(new TestSuite(AbstractParameterResultSetHandlerTest.class));
-		suite.addTest(new TestSuite(AbstractOutParameterResultSetHandlerTest.class));
-		suite.addTest(new TestSuite(ParameterSetsTest.class));
-		suite.addTest(new TestSuite(SQLStatementMatcherTest.class));	
+        suite.addTest(new TestSuite(AbstractParameterResultSetHandlerTest.class));
+        suite.addTest(new TestSuite(AbstractOutParameterResultSetHandlerTest.class));
+        suite.addTest(new TestSuite(ParameterSetsTest.class));
+        suite.addTest(new TestSuite(SQLStatementMatcherTest.class));
+        suite.addTest(new TestSuite(MockConnectionTest.class));
+        suite.addTest(new TestSuite(MockDatabaseMetaDataTest.class));
         //$JUnit-END$
         return suite;
     }

@@ -1053,7 +1053,7 @@ public class JMSTestModule
     /**
      * Verifies the number of rollbacks of the topic session with the specified index.
      * @param indexOfSession the index of the session
-     * @param numberOfCommits the expected number of rollbacks
+     * @param numberOfRollbacks the expected number of rollbacks
      * @throws VerifyFailedException if verification fails
      */
     public void verifyTopicSessionNumberRollbacks(int indexOfSession, int numberOfRollbacks)
@@ -1188,7 +1188,7 @@ public class JMSTestModule
     /**
      * Verifies the number of rollbacks of session with the specified index.
      * @param indexOfSession the index of the session
-     * @param numberOfCommits the expected number of rollbacks
+     * @param numberOfRollbacks the expected number of rollbacks
      * @throws VerifyFailedException if verification fails
      */
     public void verifySessionNumberRollbacks(int indexOfSession, int numberOfRollbacks)
