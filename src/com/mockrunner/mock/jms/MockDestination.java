@@ -11,6 +11,9 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
+/**
+ * Mock implementation of JMS <code>Destination</code>.
+ */
 public abstract class MockDestination implements Destination
 {
     private Set sessions;
