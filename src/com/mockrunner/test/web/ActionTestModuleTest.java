@@ -390,6 +390,7 @@ public class ActionTestModuleTest extends TestCase
         module.addRequestParameter("value(key2)", "value2");
         module.addRequestParameter("property", "value3");
         module.addRequestParameter("indexedProperty[1]", "indexedValue");
+        module.addRequestParameter("nested.property", "nestedValue");
         module.createActionForm(TestForm.class);
         module.populateRequestToForm();
         TestForm form = (TestForm)module.getActionForm();
@@ -397,6 +398,7 @@ public class ActionTestModuleTest extends TestCase
         assertEquals("value2", form.getValue("key2"));
         assertEquals("value3", form.getProperty());
         assertEquals("indexedValue", form.getIndexedProperty(1));
+        assertEquals("nestedValue", form.getNested().getProperty());
         assertEquals(null, form.getValue("key3"));
     }
     
