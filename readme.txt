@@ -58,8 +58,8 @@ Mockrunner requires at least Java 1.3 to run. If you are using Java 1.3
 you have to use the mockrunner-jkd1.3.jar. The JDBCTestModule is limited
 to JDBC API 2.1 in this case. If you are running Java 1.4 you can use
 JDBC 3.0. You have to use mockrunner.jar in this case. The other test modules
-are identical in both versions. Mockrunner supports Servlet API 2.3 and
-Struts 1.1. Older versions are not supported.
+are identical in both versions. Struts versions 1.1 and 1.2 are supported.
+It's not possible to use Mockrunner with Struts 1.0.
 
 To start with Mockrunner check out the JavaDoc and the examples
 in the com.mockrunner.example packages.
@@ -98,7 +98,7 @@ related to the test module you use.
 
 The third-party libraries included in the Mockrunner release are:
 
-Struts 1.1
+Struts 1.2.1
 http://jakarta.apache.org/struts
 struts.jar
 
@@ -114,16 +114,17 @@ JBoss 3.2.3:
 http://www.jboss.org
 jboss-j2ee.jar                
 
-Commons (from Struts 1.1 release):
+Commons (from Struts 1.2.1 release):
 http://jakarta.apache.org/commons       
 commons-logging.jar
+commons-logging-api.jar
 commons-collections.jar
 commons-beanutils.jar
-commons-lang.jar
 commons-digester.jar
 commons-validator.jar
+commons-lang-2.0.jar (not included in Struts 1.2.1 release)
 
-ORO (from Struts 1.1 release):
+ORO (from Struts 1.2.1 release):
 http://jakarta.apache.org/oro
 jakarta-oro.jar
 

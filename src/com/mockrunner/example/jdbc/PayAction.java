@@ -10,11 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
 /**
  * This example simulates the paying of a bill. It checks the id of the customer,
@@ -36,7 +36,7 @@ public class PayAction extends Action
                                  HttpServletResponse response) throws Exception
     {
         PayForm payForm = (PayForm)form;
-        ActionErrors errors = new ActionErrors();
+        ActionMessages errors = new ActionMessages();
         Connection connection = initializeDatabase(); 
         try
         {
@@ -74,10 +74,10 @@ public class PayAction extends Action
         return connection;
     }
 
-    private void createErrorAndRollback(HttpServletRequest request, Connection connection ,ActionErrors errors, String errorKey) throws SQLException
+    private void createErrorAndRollback(HttpServletRequest request, Connection connection, ActionMessages errors, String errorKey) throws SQLException
     {
-        ActionError error = new ActionError(errorKey);
-        errors.add(ActionErrors.GLOBAL_ERROR, error);
+        ActionMessage error = new ActionMessage(errorKey);
+        errors.add(ActionMessages.GLOBAL_MESSAGE, error);
         saveErrors(request, errors);
         connection.rollback();
     }
@@ -104,7 +104,7 @@ public class PayAction extends Action
        statement.close();
     }
     
-    private boolean checkBillIntegrity(HttpServletRequest request, Connection connection, ActionErrors errors, PayForm payForm) throws SQLException
+    private boolean checkBillIntegrity(HttpServletRequest request, Connection connection, ActionMessages errors, PayForm payForm) throws SQLException
     {
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("select * from openbills where id=" + payForm.getBillId());

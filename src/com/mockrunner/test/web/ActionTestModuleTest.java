@@ -46,8 +46,8 @@ public class ActionTestModuleTest extends TestCase
     {
         ActionErrors errors = new ActionErrors();
         ActionError error1 = new ActionError("key1");
-        ActionError error2 = new ActionError("key2", new String[]{"value1" , "value2"});
-        ActionError error3 = new ActionError("key3", "value");
+        ActionMessage error2 = new ActionMessage("key2", new String[]{"value1" , "value2"});
+        ActionMessage error3 = new ActionMessage("key3", "value");
         errors.add(ActionErrors.GLOBAL_ERROR, error1);
         errors.add(ActionErrors.GLOBAL_ERROR, error2);
         errors.add(ActionErrors.GLOBAL_ERROR, error3);
@@ -79,7 +79,7 @@ public class ActionTestModuleTest extends TestCase
         assertFalse(module.hasActionErrors());
         module.setActionErrors(createTestActionErrors());
         assertTrue(module.hasActionErrors());
-        ActionError error = module.getActionErrorByKey("key3");
+        ActionMessage error = module.getActionErrorByKey("key3");
         assertEquals("value", error.getValues()[0]);
     }
     
@@ -90,6 +90,42 @@ public class ActionTestModuleTest extends TestCase
         assertTrue(module.hasActionMessages());
         ActionMessage message = module.getActionMessageByKey("key2");
         assertEquals("value2", message.getValues()[1]);
+    }
+    
+    public void testGetActionMessagesInSession()
+    {
+        assertFalse(module.hasActionMessages());
+        ActionMessages theMessages1 = createTestActionMessages();
+        module.setActionMessagesToSession(theMessages1);
+        assertTrue(module.hasActionMessages());
+        module.setRecognizeMessagesInSession(false);
+        assertFalse(module.hasActionMessages());
+        ActionMessages theMessages2 = createTestActionMessages();
+        module.setActionMessages(theMessages2);
+        assertTrue(module.hasActionMessages());
+        assertSame(theMessages2, module.getActionMessages());
+        module.setRecognizeMessagesInSession(true);
+        assertSame(theMessages2, module.getActionMessages());
+        module.setActionMessages(null);
+        assertSame(theMessages1, module.getActionMessages());
+    }
+    
+    public void testGetActionErrorsInSession()
+    {
+        assertFalse(module.hasActionErrors());
+        ActionErrors theErrors1 = createTestActionErrors();
+        module.setActionErrorsToSession(theErrors1);
+        assertTrue(module.hasActionErrors());
+        module.setRecognizeMessagesInSession(false);
+        assertFalse(module.hasActionErrors());
+        ActionErrors theErrors2 = createTestActionErrors();
+        module.setActionErrors(theErrors2);
+        assertTrue(module.hasActionErrors());
+        assertSame(theErrors2, module.getActionErrors());
+        module.setRecognizeMessagesInSession(true);
+        assertSame(theErrors2, module.getActionErrors());
+        module.setActionErrors(null);
+        assertSame(theErrors1, module.getActionErrors());
     }
     
     public void testVerifyHasActionErrors()
@@ -116,6 +152,12 @@ public class ActionTestModuleTest extends TestCase
         {
             //should throw exception
         }
+        module.setActionErrors(null);
+        module.verifyNoActionErrors();
+        module.setActionErrorsToSession(createTestActionErrors());
+        module.verifyHasActionErrors();
+        module.setRecognizeMessagesInSession(false);
+        module.verifyNoActionErrors();
     }
     
     public void testVerifyHasActionMessages()
@@ -142,10 +184,18 @@ public class ActionTestModuleTest extends TestCase
         {
             //should throw exception
         }
+        module.setActionMessages(null);
+        module.verifyNoActionMessages();
+        module.setActionMessagesToSession(createTestActionMessages());
+        module.verifyHasActionMessages();
+        module.setRecognizeMessagesInSession(false);
+        module.verifyNoActionMessages();
     }
     
     public void testVerifyActionErrorPresent()
     {
+        module.setActionErrors(createEmptyTestActionErrors());
+        module.verifyActionErrorNotPresent("key1");
         module.setActionErrors(createTestActionErrors());
         module.verifyActionErrorPresent("key1");
         module.verifyActionErrorNotPresent("key4");
@@ -167,10 +217,16 @@ public class ActionTestModuleTest extends TestCase
         {
             //should throw exception
         }
+        module.setActionErrors(null);
+        module.verifyActionErrorNotPresent("key1");
+        module.setActionErrorsToSession(createTestActionErrors());
+        module.verifyActionErrorPresent("key1");
     }
     
     public void testVerifyActionMessagePresent()
     {
+        module.setActionMessages(createEmptyTestActionMessages());
+        module.verifyActionMessageNotPresent("key1");
         module.setActionMessages(createTestActionMessages());
         module.verifyActionMessagePresent("key1");
         module.verifyActionMessageNotPresent("key3");
@@ -192,6 +248,10 @@ public class ActionTestModuleTest extends TestCase
         {
             //should throw exception
         }
+        module.setActionMessages(null);
+        module.verifyActionMessageNotPresent("key1");
+        module.setActionMessagesToSession(createTestActionMessages());
+        module.verifyActionMessagePresent("key1");
     }
     
     public void testVerifyNumberActionErrors()
@@ -209,6 +269,10 @@ public class ActionTestModuleTest extends TestCase
         {
             //should throw exception
         }
+        module.setActionErrors(null);
+        module.verifyNumberActionErrors(0);
+        module.setActionErrorsToSession(createTestActionErrors());
+        module.verifyNumberActionErrors(3);
     }
     
     public void testVerifyNumberActionMessages()
@@ -226,6 +290,10 @@ public class ActionTestModuleTest extends TestCase
         {
             //should throw exception
         }
+        module.setActionMessages(null);
+        module.verifyNumberActionMessages(0);
+        module.setActionMessagesToSession(createTestActionMessages());
+        module.verifyNumberActionMessages(2);
     }
     
     public void testVerifyActionErrors()
@@ -259,6 +327,19 @@ public class ActionTestModuleTest extends TestCase
         {
             //should throw exception
         }
+        module.setActionErrors(null);
+        module.setActionErrorsToSession(createTestActionErrors());
+        module.verifyActionErrors(new String[]{"key1", "key2", "key3"});
+        module.setRecognizeMessagesInSession(false);
+        try
+        {
+            module.verifyActionErrors(new String[]{"key1", "key2", "key3"});
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
     }
     public void testVerifyActionMessages()
     {
@@ -276,6 +357,19 @@ public class ActionTestModuleTest extends TestCase
         try
         {
             module.verifyActionMessages(new String[]{"key1"});
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.setActionMessages(null);
+        module.setActionMessagesToSession(createTestActionMessages());
+        module.verifyActionMessages(new String[]{"key1", "key2"});
+        module.setRecognizeMessagesInSession(false);
+        try
+        {
+            module.verifyActionMessages(new String[]{"key1", "key2"});
             fail();
         }
         catch(VerifyFailedException exc)
@@ -319,6 +413,19 @@ public class ActionTestModuleTest extends TestCase
         try
         {
             module.verifyActionErrorValue("key2", new String[]{"value2", "value1"});
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.setActionErrors(null);
+        module.setActionErrorsToSession(createTestActionErrors());
+        module.verifyActionErrorValues("key2", new String[]{"value1", "value2"});
+        module.setRecognizeMessagesInSession(false);
+        try
+        {
+            module.verifyActionErrorValues("key2", new String[]{"value1", "value2"});
             fail();
         }
         catch(VerifyFailedException exc)
@@ -370,6 +477,9 @@ public class ActionTestModuleTest extends TestCase
             //should throw exception
         }
         module.verifyActionErrorProperty("error2", ActionErrors.GLOBAL_ERROR);
+        module.setActionErrors(null);
+        module.setActionErrorsToSession(errors);
+        module.verifyActionErrorProperty("error1", "property");
     }
     
     public void testVerifyActionMessageProperty()
@@ -391,6 +501,9 @@ public class ActionTestModuleTest extends TestCase
         {
             //should throw exception
         }
+        module.setActionMessages(null);
+        module.setActionMessagesToSession(messages);
+        module.verifyActionMessageProperty("message1", "property");
     }
     
     public void testCreateActionForm()
@@ -615,7 +728,7 @@ public class ActionTestModuleTest extends TestCase
         form.setLastName("ABCDEF");
         errors = form.validate(mockFactory.getMockActionMapping(), mockFactory.getMockRequest());
         assertTrue(errors.size() == 1);
-        ActionError error = (ActionError)errors.get().next();
+        ActionMessage error = (ActionMessage)errors.get().next();
         assertEquals("errors.minlength", error.getKey());
     }
     

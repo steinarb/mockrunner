@@ -48,6 +48,7 @@ public class MapMessageResourcesTest extends TestCase
         assertEquals("TestTwo 0 1", resources.getMessage("test.property.two", "0", "1"));
         assertEquals("TestTestThree", resources.getMessage("test.property.three", "Test"));
         resources.clear();
+        System.out.println(resources.getMessage("test.property.one"));
         assertNull(resources.getMessage("test.property.one"));
         assertFalse(resources.isPresent("test.property.one"));
         assertFalse(resources.isPresent(Locale.GERMAN, "test.property.one"));
