@@ -12,6 +12,7 @@ public class AllWebTests
         suite.addTest(new TestSuite(ActionTestModuleTest.class));
         suite.addTest(new TestSuite(MockHttpSessionTest.class));
         suite.addTest(new TestSuite(MockHttpServletResponseTest.class));
+        suite.addTest(new TestSuite(MockServletContextTest.class));
         suite.addTest(new TestSuite(TagUtilTest.class));
         suite.addTest(new TestSuite(NestedTagTest.class));
         suite.addTest(new TestSuite(TagLifecycleTest.class));
