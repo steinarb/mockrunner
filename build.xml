@@ -107,6 +107,7 @@
             <fileset dir="${build}">
                 <exclude name="com/mockrunner/example/**" />
                 <exclude name="com/mockrunner/test/**" />
+                <exclude name="com/mockrunner/gen/**" />
             </fileset>
             <fileset dir="${config}">
                 <include name="**" />
@@ -128,6 +129,7 @@
             <fileset dir="${build1.3}">
                 <exclude name="com/mockrunner/example/**" />
                 <exclude name="com/mockrunner/test/**" />
+                <exclude name="com/mockrunner/gen/**" />
             </fileset>
             <fileset dir="${config}">
                 <include name="**" />
@@ -154,6 +156,7 @@
                 <exclude name="com/mockrunner/**/*.xml" />
                 <exclude name="com/mockrunner/test/**" />
                 <exclude name="com/mockrunner/example/**" />
+                <exclude name="com/mockrunner/gen/**" />
             </fileset>
 
             <doctitle><![CDATA[<h1>Mockrunner</h1>]]></doctitle>

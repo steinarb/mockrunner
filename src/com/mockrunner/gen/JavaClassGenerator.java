@@ -1,13 +1,9 @@
-package com.mockrunner.test.gen;
+package com.mockrunner.gen;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 
 import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.ClassUtil;
@@ -255,116 +251,8 @@ public class JavaClassGenerator
     private List processImports()
     {
         addMissingImports();
-        Map blocks = prepareImportBlocks();
-        return sortImportBlocks(blocks);
-    }
-    
-    private List sortImportBlocks(Map blocks)
-    {
-        List sortedBlockKeys = new ArrayList();
-        addDefaultDomains(blocks, sortedBlockKeys);
-        addNonDefaultDomains(blocks, sortedBlockKeys);
-        List sortedBlocks = new ArrayList();
-        for(int ii = 0; ii < sortedBlockKeys.size(); ii++)
-        {
-            String key = (String)sortedBlockKeys.get(ii);
-            Set currentBlock = (Set)blocks.get(key);
-            sortedBlocks.add(currentBlock);
-        }
-        return sortedBlocks;
-    }
-    
-    private void addNonDefaultDomains(Map blocks, List sortedBlockKeys)
-    {
-        Iterator keys = blocks.keySet().iterator();
-        while(keys.hasNext())
-        {
-            String key = (String)keys.next();
-            if(!(key.equals("java") || key.equals("javax") || key.equals("org") || key.equals("com")))
-            {
-                addLexicographically(sortedBlockKeys, key);
-            }
-        }
-    }
-    
-    private void addDefaultDomains(Map blocks, List sortedBlockKeys)
-    {
-        Iterator keys = blocks.keySet().iterator();
-        while(keys.hasNext())
-        {
-            String key = (String)keys.next();
-            if(key.equals("java"))
-            {
-                addAtIndex(sortedBlockKeys, 0, key);
-            }
-            if(key.equals("javax"))
-            {
-                addAtIndex(sortedBlockKeys, 1, key);
-            }
-            if(key.equals("org"))
-            {
-                addAtIndex(sortedBlockKeys, 2, key);
-            }
-            if(key.equals("com"))
-            {
-                addAtIndex(sortedBlockKeys, 3, key);
-            }
-        }
-    }
-    
-    private void addLexicographically(List sortedBlockKeys, String key)
-    {
-        for(int ii = 0; ii < sortedBlockKeys.size(); ii++)
-        {
-            String currentBlockKey = (String)sortedBlockKeys.get(ii);
-            if(currentBlockKey.compareTo(key) > 0)
-            {
-                addAtIndex(sortedBlockKeys, ii - 1, key);
-                return;
-            }
-        }
-        sortedBlockKeys.add(key);
-    }
-
-    private void addAtIndex(List list, int index, Object object)
-    {
-        if(index < 0)
-        {
-            index = 0;
-        }
-        if(index < list.size())
-        {
-            list.add(index, object);
-        }
-        else
-        {
-            list.add(object);
-        }
-    }
-    
-    private Map prepareImportBlocks()
-    {
-        Map importBlockMap = new HashMap();
-        for(int ii = 0; ii < imports.size(); ii++)
-        {
-            String blockKey = getBlockKey((String)imports.get(ii));
-            Set blockSet = (Set)importBlockMap.get(blockKey);
-            if(null == blockSet)
-            {
-                blockSet = new TreeSet();
-                importBlockMap.put(blockKey, blockSet);
-            }
-            blockSet.add(imports.get(ii));
-        }
-        return importBlockMap;
-    }
-    
-    private String getBlockKey(String packageInfo)
-    {
-        if(null == packageInfo || packageInfo.trim().length() <= 0) return "";
-        int index = packageInfo.indexOf('.');
-        if(index < 0) return packageInfo;
-        return packageInfo.substring(0, index);
+        PackageImportSorter sorter = new PackageImportSorter();
+        return sorter.sortBlocks(imports);
     }
     
     private void addMissingImports()

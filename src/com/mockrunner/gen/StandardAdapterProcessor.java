@@ -1,4 +1,4 @@
-package com.mockrunner.test.gen;
+package com.mockrunner.gen;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.base.HTMLOutputModule;

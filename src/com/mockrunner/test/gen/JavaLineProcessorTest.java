@@ -7,8 +7,10 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.test.gen.JavaLineParser.Block;
-import com.mockrunner.test.gen.JavaLineParser.Line;
+import com.mockrunner.gen.JavaLineParser;
+import com.mockrunner.gen.JavaLineProcessor;
+import com.mockrunner.gen.JavaLineParser.Block;
+import com.mockrunner.gen.JavaLineParser.Line;
 
 public class JavaLineProcessorTest extends TestCase
 {

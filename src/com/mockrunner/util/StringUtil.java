@@ -22,12 +22,12 @@ public class StringUtil
     /**
      * Compares two strings and returns the last
      * index where the two string are equal. If
-     * the first character of the two string does
+     * the first characters of the two string do
      * not match or if at least one of the two strings
      * is empty, -1 is returned.
      * @param string1 the first string
      * @param string2 the second string
-     * @return the last index, where the strings are equal
+     * @return the last index where the strings are equal
      */
     public static int compare(String string1, String string2)
     {

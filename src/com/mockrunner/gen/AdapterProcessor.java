@@ -1,4 +1,4 @@
-package com.mockrunner.test.gen;
+package com.mockrunner.gen;
 
 public interface AdapterProcessor
 {

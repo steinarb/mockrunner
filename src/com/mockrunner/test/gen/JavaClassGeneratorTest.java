@@ -7,8 +7,9 @@ import javax.servlet.http.HttpServlet;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.test.gen.JavaClassGenerator.ConstructorDeclaration;
-import com.mockrunner.test.gen.JavaClassGenerator.MethodDeclaration;
+import com.mockrunner.gen.JavaClassGenerator;
+import com.mockrunner.gen.JavaClassGenerator.ConstructorDeclaration;
+import com.mockrunner.gen.JavaClassGenerator.MethodDeclaration;
 import com.mockrunner.util.ClassUtil;
 import com.mockrunner.util.CollectionUtil;
 import com.mockrunner.util.XmlUtil;
@@ -63,7 +64,6 @@ public class JavaClassGeneratorTest extends TestCase
         method3.setCommentLines(new String[] {"Comment"});
         method3.setCodeLines(new String[] {"Line1", "Line2"});
         generator.addMethodDeclaration(method3);
-        System.out.println(generator.generate());
         assertEquals(getExpected(), generator.generate());
     }
     
@@ -73,10 +73,10 @@ public class JavaClassGeneratorTest extends TestCase
                "import java.util.List;" + NL +
                "import java.util.Map;" + NL + NL +
                "import javax.servlet.http.HttpServlet;" + NL + NL +
+               "import junit.framework.TestCase;" + NL + NL +
                "import com.mockrunner.util.ClassUtil;" + NL +
                "import com.mockrunner.util.CollectionUtil;" + NL +
                "import com.mockrunner.util.XmlUtil;" + NL + NL +
-               "import junit.framework.TestCase;" + NL + NL +
                "/**" + NL +
                " * This is" + NL +
                " * a comment" + NL +

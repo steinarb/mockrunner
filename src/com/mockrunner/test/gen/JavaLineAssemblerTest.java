@@ -3,6 +3,8 @@ package com.mockrunner.test.gen;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mockrunner.gen.JavaLineAssembler;
+
 import junit.framework.TestCase;
 
 public class JavaLineAssemblerTest extends TestCase
