@@ -2,10 +2,13 @@ package com.mockrunner.test.web;
 
 import java.util.Locale;
 
+import org.apache.commons.beanutils.DynaBean;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.config.FormBeanConfig;
+import org.apache.struts.config.FormPropertyConfig;
 
 import junit.framework.TestCase;
 import com.mockrunner.base.VerifyFailedException;
@@ -508,5 +511,36 @@ public class ActionTestModuleTest extends TestCase
         assertNotNull(mockfactory.getMockModuleConfig().findMessageResourcesConfig("test1"));
         assertNotNull(mockfactory.getMockModuleConfig().findMessageResourcesConfig("test2"));
         assertNotNull(mockfactory.getMockModuleConfig().findMessageResourcesConfig("test3"));
+    }
+    
+    public void testCreateDynaActionForm()
+    {
+        FormBeanConfig config = new FormBeanConfig();
+        config.setType("com.mockrunner.test.web.TestDynaForm");
+        FormPropertyConfig property1 = new FormPropertyConfig();
+        property1.setName("property1");
+        property1.setType("java.lang.String");
+        property1.setInitial("testValue1");
+        FormPropertyConfig property2 = new FormPropertyConfig();
+        property2.setName("property2");
+        property2.setType("java.lang.Integer");
+        property2.setInitial("2");
+        config.addFormPropertyConfig(property1);
+        config.addFormPropertyConfig(property2);
+        DynaBean bean = module.createDynaActionForm(config);
+        assertTrue(bean instanceof TestDynaForm);
+        String prop1Value = (String)bean.get("property1");
+        assertEquals("testValue1", prop1Value);
+        Integer prop2Value = (Integer)bean.get("property2");
+        assertEquals(new Integer(2), prop2Value);
+        try
+        {
+            bean.set("property3", "3");
+            fail();
+        }
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
     }
 }

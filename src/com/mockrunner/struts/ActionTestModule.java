@@ -6,6 +6,7 @@ import java.util.Locale;
 import javax.sql.DataSource;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.DynaBean;
 import org.apache.struts.Globals;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -14,6 +15,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.DynaActionFormClass;
+import org.apache.struts.config.FormBeanConfig;
 import org.apache.struts.config.MessageResourcesConfig;
 import org.apache.struts.taglib.html.Constants;
 import org.apache.struts.util.MessageResources;
@@ -720,8 +723,7 @@ public class ActionTestModule
 
     /**
      * Creates a new <code>ActionForm</code> object of the specified
-     * type and sets it as the current <code>ActionForm</code>. Will be 
-     * used in next test.
+     * type and sets it as the current <code>ActionForm</code>.
      * @param form the <code>Class</code> of the form
      */
     public ActionForm createActionForm(Class form)
@@ -733,8 +735,32 @@ public class ActionTestModule
                 formObj = null;
                 return null;
             }
-            formObj = (ActionForm) form.newInstance();
+            formObj = (ActionForm)form.newInstance();
             return formObj;
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
+    /**
+     * Creates a new <code>DynaActionForm</code> based on the specified
+     * form config.
+     * @param formConfig the <code>FormBeanConfig</code>
+     */
+    public DynaBean createDynaActionForm(FormBeanConfig formConfig)
+    {
+        try
+        {
+            if (null == formConfig)
+            {
+                formObj = null;
+                return null;
+            }
+            DynaActionFormClass formClass = DynaActionFormClass.createDynaActionFormClass(formConfig);
+            return formClass.newInstance();
         }
         catch (Exception exc)
         {
