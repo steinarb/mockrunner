@@ -13,6 +13,7 @@ import junit.framework.TestCase;
 
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.jdbc.JDBCTestModule;
+import com.mockrunner.jdbc.ParameterSets;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
@@ -410,8 +411,8 @@ public class JDBCTestModuleTest extends TestCase
     
     public void testSavepoints() throws Exception
     {
-        Savepoint savepoint0 = mockfactory.getMockConnection().setSavepoint();
-        Savepoint savepoint1 = mockfactory.getMockConnection().setSavepoint("test");
+        mockfactory.getMockConnection().setSavepoint();
+        mockfactory.getMockConnection().setSavepoint("test");
         Savepoint savepoint2 = mockfactory.getMockConnection().setSavepoint("xyz");
         Savepoint savepoint3 = mockfactory.getMockConnection().setSavepoint();
         module.verifySavepointNotReleased(0);
@@ -637,18 +638,18 @@ public class JDBCTestModuleTest extends TestCase
 		module.getCallableStatement(1).execute();
 		Map parameterMap = module.getExecutedSQLStatementParameter();
 		assertEquals(5, parameterMap.size());
-		Map preparedStatementMap1 = (Map)((List)parameterMap.get("INSERT INTO TEST (COL1, COL2) VALUES(?, ?)")).get(0);
+		Map preparedStatementMap1 = ((ParameterSets)parameterMap.get("INSERT INTO TEST (COL1, COL2) VALUES(?, ?)")).getParameterSet(0);
 		assertEquals(2, preparedStatementMap1.size());
 		assertEquals("test", preparedStatementMap1.get(new Integer(1)));
 		assertEquals(new Short((short)2), preparedStatementMap1.get(new Integer(2)));
-		Map preparedStatementMap2 = (Map)((List)parameterMap.get("insert into test (col1, col2, col3) values(?, ?, ?)")).get(0);
+		Map preparedStatementMap2 = ((ParameterSets)parameterMap.get("insert into test (col1, col2, col3) values(?, ?, ?)")).getParameterSet(0);
 		assertEquals(1, preparedStatementMap2.size());
 		assertTrue(Arrays.equals(new byte[]{1}, (byte[])preparedStatementMap2.get(new Integer(1))));
-		Map preparedStatementMap3 = (Map)((List)parameterMap.get("update mytable set test = test + ? where id = ?")).get(0);
+		Map preparedStatementMap3 = ((ParameterSets)parameterMap.get("update mytable set test = test + ? where id = ?")).getParameterSet(0);
 		assertEquals(0, preparedStatementMap3.size());
-		Map callableStatementMap1 = (Map)((List)parameterMap.get("{call getData(?, ?, ?, ?)}")).get(0);
+		Map callableStatementMap1 = (Map)((ParameterSets)parameterMap.get("{call getData(?, ?, ?, ?)}")).getParameterSet(0);
 		assertEquals(0, callableStatementMap1.size());
-		Map callableStatementMap2 = (Map)((List)parameterMap.get("{call setData(?, ?, ?, ?)}")).get(0);
+		Map callableStatementMap2 = (Map)((ParameterSets)parameterMap.get("{call setData(?, ?, ?, ?)}")).getParameterSet(0);
 		assertEquals(1, callableStatementMap2.size());
 		assertEquals(new Boolean(false), callableStatementMap2.get("name"));
     }

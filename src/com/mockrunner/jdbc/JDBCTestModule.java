@@ -146,8 +146,8 @@ public class JDBCTestModule
 	 * by calling an <code>execute</code> method of a
      * {@link com.mockrunner.mock.jdbc.MockPreparedStatement} or
      * {@link com.mockrunner.mock.jdbc.MockCallableStatement}.
-	 * Each SQL string maps to the corresponding <code>List</code>
-	 * of parameter maps.
+	 * Each SQL string maps to the corresponding <code>ParameterSets</code>
+	 * object.
 	 * @return the <code>List</code> of SQL statements
 	 */
 	public Map getExecutedSQLStatementParameter()
@@ -542,7 +542,7 @@ public class JDBCTestModule
 	 * first one. You can specify the number of the parameter set, i.e.
 	 * if a <code>PreparedStatement</code> is reused several times, the
 	 * number of the parameter sets corresponds to the actual parameters
-	 * at a specific <code>execute()</code> call.
+	 * at a specific <code>execute</code> call.
 	 * @param sql the SQL string
 	 * @param indexOfParameterSet the number of the parameter set
 	 * @param number the expected number of parameters
@@ -550,12 +550,7 @@ public class JDBCTestModule
 	 */
 	public void verifySQLStatementParameterNumber(String sql, int indexOfParameterSet, int number)
 	{
-		List actualParameterList = verifyAndGetParametersForSQL(sql);
-		if(null == actualParameterList || indexOfParameterSet >= actualParameterList.size())
-		{
-			throw new VerifyFailedException("Statement " + sql + " has no parameter set with index " + indexOfParameterSet);
-		}
-		Map actualParameterMap = (Map)actualParameterList.get(indexOfParameterSet);
+		Map actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
 		if(actualParameterMap.size() != number)
 		{
 			throw new VerifyFailedException("Expected " + number + " parameter, actual " + actualParameterMap.size() + " parameter");
@@ -571,7 +566,7 @@ public class JDBCTestModule
 	 * You can specify the number of the parameter set, i.e.
 	 * if a <code>PreparedStatement</code> is reused several times, the
 	 * number of the parameter sets corresponds to the actual parameters
-	 * at a specific <code>execute()</code> call.
+	 * at a specific <code>execute</code> call.
 	 * @param sql the SQL string
 	 * @param indexOfParameterSet the number of the parameter set
 	 * @param parameterMap the map of expected parameters
@@ -580,8 +575,7 @@ public class JDBCTestModule
 	public void verifySQLStatementParameter(String sql, int indexOfParameterSet, Map parameterMap)
 	{
 		verifySQLStatementParameterNumber(sql, indexOfParameterSet, parameterMap.size());
-		List actualParameterList = verifyAndGetParametersForSQL(sql);
-		Map actualParameterMap = (Map)actualParameterList.get(indexOfParameterSet);
+		Map actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
 		Iterator keys = parameterMap.keySet().iterator();
 		while(keys.hasNext())
 		{
@@ -606,7 +600,7 @@ public class JDBCTestModule
 	 * You can specify the number of the parameter set, i.e.
 	 * if a <code>PreparedStatement</code> is reused several times, the
 	 * number of the parameter sets corresponds to the actual parameters
-	 * at a specific <code>execute()</code> call.
+	 * at a specific <code>execute</code> call.
 	 * @param sql the SQL string
 	 * @param indexOfParameterSet the number of the parameter set
 	 * @param indexOfParameter the index of the parameter
@@ -615,12 +609,7 @@ public class JDBCTestModule
 	 */
 	public void verifySQLStatementParameter(String sql, int indexOfParameterSet, int indexOfParameter, Object expectedParameter)
 	{
-		List actualParameterList = verifyAndGetParametersForSQL(sql);
-		if(null == actualParameterList || indexOfParameterSet >= actualParameterList.size())
-		{
-			throw new VerifyFailedException("Statement " + sql + " has no parameter set with index " + indexOfParameterSet);
-		}
-		Map actualParameterMap = (Map)actualParameterList.get(indexOfParameterSet);
+		Map actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
 		Object actualParameter = actualParameterMap.get(new Integer(indexOfParameter));
 		if(!ParameterUtil.compareParameter(expectedParameter, actualParameter))
 		{
@@ -635,7 +624,7 @@ public class JDBCTestModule
 	 * You can specify the number of the parameter set, i.e.
 	 * if a <code>PreparedStatement</code> is reused several times, the
 	 * number of the parameter sets corresponds to the actual parameters
-	 * at a specific <code>execute()</code> call.
+	 * at a specific <code>execute</code> call.
 	 * @param sql the SQL string
 	 * @param indexOfParameterSet the number of the parameter set
 	 * @param nameOfParameter the name of the parameter
@@ -644,12 +633,7 @@ public class JDBCTestModule
 	 */
 	public void verifySQLStatementParameter(String sql, int indexOfParameterSet, String nameOfParameter, Object expectedParameter)
 	{
-		List actualParameterList = verifyAndGetParametersForSQL(sql);
-		if(null == actualParameterList || indexOfParameterSet >= actualParameterList.size())
-		{
-			throw new VerifyFailedException("Statement " + sql + " has no parameter set with index " + indexOfParameterSet);
-		}
-		Map actualParameterMap = (Map)actualParameterList.get(indexOfParameterSet);
+		Map actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
 		Object actualParameter = actualParameterMap.get(nameOfParameter);
 		if(!ParameterUtil.compareParameter(expectedParameter, actualParameter))
 		{
@@ -657,7 +641,7 @@ public class JDBCTestModule
 		}
 	}
 
-	private List verifyAndGetParametersForSQL(String sql)
+	private Map verifyAndGetParametersForSQL(String sql, int indexOfParameterSet)
 	{
 		verifySQLStatementExecuted(sql);
 		List matchingParameterList = SearchUtil.getMatchingObjects(getExecutedSQLStatementParameter(), sql, caseSensitive, exactMatch, false);
@@ -665,7 +649,12 @@ public class JDBCTestModule
 		{
 			throw new VerifyFailedException("No parameters for SQL " + sql + " found.");
 		}
-		return (List)matchingParameterList.get(0);
+		ParameterSets actualParameterSets = (ParameterSets)matchingParameterList.get(0);
+		if(null == actualParameterSets || indexOfParameterSet >= actualParameterSets.getNumberParameterSets())
+		{
+			throw new VerifyFailedException("Statement " + sql + " has no parameter set with index " + indexOfParameterSet);
+		}
+		return (Map)actualParameterSets.getParameterSet(indexOfParameterSet);
 	}
     
     /**
