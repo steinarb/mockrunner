@@ -26,6 +26,7 @@ mockrunner-0.3.2:
 - added getBinaryContent to MockServletOutputStream
 - MockServletOutputStream.getContent now respects the character encoding of 
   the response
+- removed MockHttpSessionBindingEvent, using HttpSessionBindingEvent directly
 - refactored the JMS test framework, introduced GenericTransmissionManager
   for creating producers that are not associated with a destination
   (check out bug report 1077690)

@@ -29,6 +29,71 @@ public class MockHttpServletRequestTest extends TestCase
         request = new MockHttpServletRequest();
     }
     
+    /*public void testAttributeListenerCalled()
+    {
+        TestAttributeListener listener1 = new TestAttributeListener();
+        TestAttributeListener listener2 = new TestAttributeListener();
+        TestAttributeListener listener3 = new TestAttributeListener();
+        request.addAttributeListener(listener1);
+        request.addAttributeListener(listener2);
+        request.addAttributeListener(listener3);
+        request.setAttribute("key", "value");
+        assertTrue(listener1.wasAttributeAddedCalled());
+        assertTrue(listener2.wasAttributeAddedCalled());
+        assertTrue(listener3.wasAttributeAddedCalled());
+        assertFalse(listener1.wasAttributeReplacedCalled());
+        assertFalse(listener2.wasAttributeReplacedCalled());
+        assertFalse(listener3.wasAttributeReplacedCalled());
+        listener1.reset();
+        listener2.reset();
+        listener3.reset();
+        request.setAttribute("key", "value1");
+        assertFalse(listener1.wasAttributeAddedCalled());
+        assertFalse(listener2.wasAttributeAddedCalled());
+        assertFalse(listener3.wasAttributeAddedCalled());
+        assertTrue(listener1.wasAttributeReplacedCalled());
+        assertTrue(listener2.wasAttributeReplacedCalled());
+        assertTrue(listener3.wasAttributeReplacedCalled());
+        request.removeAttribute("key");
+        assertTrue(listener1.wasAttributeRemovedCalled());
+        assertTrue(listener2.wasAttributeRemovedCalled());
+        assertTrue(listener3.wasAttributeRemovedCalled());
+    }
+
+    public void testAttributeListenerValues()
+    {
+        TestAttributeOrderListener listener = new TestAttributeOrderListener();
+        request.addAttributeListener(listener);
+        request.setAttribute("key", "value");
+        assertEquals("key", listener.getAddedEventKey());
+        assertEquals("value", listener.getAddedEventValue());
+        request.setAttribute("key", "anotherValue");
+        assertEquals("key", listener.getReplacedEventKey());
+        assertEquals("value", listener.getReplacedEventValue());
+        request.removeAttribute("key");
+        assertEquals("key", listener.getRemovedEventKey());
+        assertEquals("anotherValue", listener.getRemovedEventValue());
+    }
+
+    public void testAttributeListenerNullValue()
+    {
+        TestAttributeListener listener = new TestAttributeListener();
+        request.addAttributeListener(listener);
+        request.setAttribute("key", null);
+        assertFalse(listener.wasAttributeAddedCalled());
+        request.setAttribute("key", "xyz");
+        assertTrue(listener.wasAttributeAddedCalled());
+        request.setAttribute("key", null);
+        assertTrue(listener.wasAttributeRemovedCalled());
+        assertFalse(listener.wasAttributeReplacedCalled());
+        listener.reset();
+        request.setAttribute("key", "xyz");
+        assertTrue(listener.wasAttributeAddedCalled());
+        assertFalse(listener.wasAttributeReplacedCalled());
+        request.removeAttribute("myKey");
+        assertFalse(listener.wasAttributeRemovedCalled());
+    }*/
+    
     public void testAddRequestParameter() throws Exception
     {
         request.setupAddParameter("abc", "abc");
@@ -176,6 +241,108 @@ public class MockHttpServletRequestTest extends TestCase
         assertNotNull(request.getSession(true));
         assertNotNull(request.getSession(false));
     }
+    
+    /*private class TestAttributeListener implements ServletRequestAttributeListener
+    {
+        private boolean wasAttributeAddedCalled = false;
+        private boolean wasAttributeReplacedCalled = false;
+        private boolean wasAttributeRemovedCalled = false;
+    
+        public void attributeAdded(ServletRequestAttributeEvent event)
+        {
+            wasAttributeAddedCalled = true;
+        }
+
+        public void attributeRemoved(ServletRequestAttributeEvent event)
+        {
+            wasAttributeRemovedCalled = true;
+        }
+
+        public void attributeReplaced(ServletRequestAttributeEvent event)
+        {
+            wasAttributeReplacedCalled = true;
+        }
+    
+        public void reset()
+        {
+            wasAttributeAddedCalled = false;
+            wasAttributeReplacedCalled = false;
+            wasAttributeRemovedCalled = false;
+        }
+    
+        public boolean wasAttributeAddedCalled()
+        {
+            return wasAttributeAddedCalled;
+        }
+
+        public boolean wasAttributeRemovedCalled()
+        {
+            return wasAttributeRemovedCalled;
+        }
+
+        public boolean wasAttributeReplacedCalled()
+        {
+            return wasAttributeReplacedCalled;
+        }
+    }
+
+    private class TestAttributeOrderListener implements ServletRequestAttributeListener
+    {
+        private String addedEventKey;
+        private Object addedEventValue;
+        private String replacedEventKey;
+        private Object replacedEventValue;
+        private String removedEventKey;
+        private Object removedEventValue;
+    
+        public void attributeAdded(ServletRequestAttributeEvent event)
+        {
+            addedEventKey = event.getName();
+            addedEventValue = event.getValue();
+        }
+
+        public void attributeRemoved(ServletRequestAttributeEvent event)
+        {
+            removedEventKey = event.getName();
+            removedEventValue = event.getValue();
+        }
+
+        public void attributeReplaced(ServletRequestAttributeEvent event)
+        {
+            replacedEventKey = event.getName();
+            replacedEventValue = event.getValue();
+        }
+    
+        public String getAddedEventKey()
+        {
+            return addedEventKey;
+        }
+
+        public Object getAddedEventValue()
+        {
+            return addedEventValue;
+        }
+
+        public String getRemovedEventKey()
+        {
+            return removedEventKey;
+        }
+
+        public Object getRemovedEventValue()
+        {
+            return removedEventValue;
+        }
+
+        public String getReplacedEventKey()
+        {
+            return replacedEventKey;
+        }
+
+        public Object getReplacedEventValue()
+        {
+            return replacedEventValue;
+        }
+    }*/
     
     private class TestRequestDispatcher implements RequestDispatcher
     {
