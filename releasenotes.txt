@@ -4,6 +4,10 @@ mockrunner-0.2.1:
 - removed deprecated methods and classes.
 - removed dependencies from www.mockobjects.com mock objects,
   the mockobjects jars are no longer necessary.
+- introduced EJBMockObjectFactory which performs all
+  the MockUserTransaction handling. Removed the getMockUserTransaction
+  method from JDBCMockObjectFactory (it wasn't useful anyway, because
+  it always recreated the transaction)
 
 mockrunner-0.2:
 

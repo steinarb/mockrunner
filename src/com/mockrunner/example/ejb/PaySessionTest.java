@@ -13,7 +13,6 @@ import com.mockrunner.example.ejb.interfaces.PaySessionHome;
 import com.mockrunner.jdbc.JDBCTestCaseAdapter;
 import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockResultSet;
-import com.mockrunner.mock.jdbc.MockUserTransaction;
 
 /**
  * Example test for {@link PaySessionBean}. This example demonstrates
@@ -21,35 +20,17 @@ import com.mockrunner.mock.jdbc.MockUserTransaction;
  * framework in conjunction. The tests are similar to 
  * {@link com.mockrunner.example.jdbc.PayActionTest} but instead of
  * an action we test an EJB. This example works with the simulated JDBC
- * environment of Mockrunner. Note that you have to deploy a
- * <code>UserTransaction</code> into the mock container.
- * This has to be done in a static initializer, because MockEJB stores
- * the <code>UserTransaction</code> in a static field and always
- * uses this instance. So the Mockrunner practice to create
- * the mock objects in the <code>setUp</code> method cannot
- * be used in this case. In order to reset the state before
- * executing a test method, {@link com.mockrunner.mock.jdbc.MockUserTransaction#reset}
- * has to be called in the <code>setUp</code> method.
- * Since the <code>UserTransaction</code> is only a mock implementation, 
- * it will not work with a real database.
+ * environment of Mockrunner.
  */
 public class PaySessionTest extends JDBCTestCaseAdapter
 {
-    private static MockUserTransaction transaction;
     private MockEjbObject ejbObject;
     private PaySession bean;
     private StatementResultSetHandler statementHandler;
     
-    static
-    {
-        transaction = new MockUserTransaction();
-        MockContext.add("javax.transaction.UserTransaction", transaction);
-    }
-    
     protected void setUp() throws Exception
     {
         super.setUp();
-        transaction.reset();
         SessionBeanDescriptor beanDescriptor = new SessionBeanDescriptor("com/mockrunner/example/PaySession", PaySessionHome.class, PaySession.class, PaySessionBean.class);
         ejbObject = MockContainer.deploy(beanDescriptor);
         MockContext.add("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
