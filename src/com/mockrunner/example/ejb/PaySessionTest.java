@@ -1,6 +1,5 @@
 package com.mockrunner.example.ejb;
 
-import org.mockejb.MockEjbObject;
 import org.mockejb.TransactionPolicy;
 
 import com.mockrunner.ejb.EJBTestCaseAdapter;
@@ -20,7 +19,6 @@ import com.mockrunner.mock.jdbc.MockResultSet;
 public class PaySessionTest extends EJBTestCaseAdapter
 {
     private JDBCTestModule jdbcModule;
-    private MockEjbObject ejbObject;
     private PaySession bean;
     private StatementResultSetHandler statementHandler;
     
@@ -29,7 +27,7 @@ public class PaySessionTest extends EJBTestCaseAdapter
         super.setUp();
         jdbcModule = createJDBCTestModule();
         setInterfacePackage("com.mockrunner.example.ejb.interfaces");
-        ejbObject = deploy("com/mockrunner/example/PaySession", PaySessionBean.class, TransactionPolicy.REQUIRED);
+        deploySessionBean("com/mockrunner/example/PaySession", PaySessionBean.class, TransactionPolicy.REQUIRED);
         bindToContext("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
         bean = (PaySession)lookupBean("com/mockrunner/example/PaySession");
         statementHandler = getJDBCMockObjectFactory().getMockConnection().getStatementResultSetHandler();

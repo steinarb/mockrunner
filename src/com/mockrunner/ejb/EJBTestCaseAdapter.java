@@ -1,9 +1,9 @@
 package com.mockrunner.ejb;
 
-import javax.jms.MessageListener;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
 
-import org.mockejb.MockEjbObject;
-import org.mockejb.SessionBeanDescriptor;
+import org.mockejb.BasicEjbDescriptor;
 import org.mockejb.TransactionPolicy;
 
 import com.mockrunner.base.BaseTestCase;
@@ -112,69 +112,117 @@ public class EJBTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link EJBTestModule#deploy(SessionBeanDescriptor)}
+     * Delegates to {@link EJBTestModule#deploy(BasicEjbDescriptor)}
      */
-    protected MockEjbObject deploy(SessionBeanDescriptor descriptor)
+    protected void deploy(BasicEjbDescriptor descriptor)
     {
-        return ejbTestModule.deploy(descriptor);
+        ejbTestModule.deploy(descriptor);
     }
 
     /**
-     * Delegates to {@link EJBTestModule#deploy(SessionBeanDescriptor, TransactionPolicy)}
+     * Delegates to {@link EJBTestModule#deploy(BasicEjbDescriptor, TransactionPolicy)}
      */
-    protected MockEjbObject deploy(SessionBeanDescriptor descriptor, TransactionPolicy policy)
+    protected void deploy(BasicEjbDescriptor descriptor, TransactionPolicy policy)
     {
-        return ejbTestModule.deploy(descriptor, policy);
+        ejbTestModule.deploy(descriptor, policy);
     }
 
     /**
-     * Delegates to {@link EJBTestModule#deploy(String, Class)}
+     * Delegates to {@link EJBTestModule#deploySessionBean(String, Class)}
      */
-    protected MockEjbObject deploy(String jndiName, Class beanClass)
+    protected void deploySessionBean(String jndiName, Class beanClass)
     {
-        return ejbTestModule.deploy(jndiName, beanClass);
+        ejbTestModule.deploySessionBean(jndiName, beanClass);
     }
     
     /**
-     * Delegates to {@link EJBTestModule#deploy(String, Class, boolean)}
+     * Delegates to {@link EJBTestModule#deploySessionBean(String, Class, boolean)}
      */
-    protected MockEjbObject deploy(String jndiName, Class beanClass, boolean stateful)
+    protected void deploySessionBean(String jndiName, Class beanClass, boolean stateful)
     {
-        return ejbTestModule.deploy(jndiName, beanClass, stateful);
+        ejbTestModule.deploySessionBean(jndiName, beanClass, stateful);
     }
 
     /**
-     * Delegates to {@link EJBTestModule#deploy(String, Class, TransactionPolicy)}
+     * Delegates to {@link EJBTestModule#deploySessionBean(String, Class, TransactionPolicy)}
      */
-    protected MockEjbObject deploy(String jndiName, Class beanClass, TransactionPolicy policy)
+    protected void deploySessionBean(String jndiName, Class beanClass, TransactionPolicy policy)
     {
-        return ejbTestModule.deploy(jndiName, beanClass, policy);
+        ejbTestModule.deploySessionBean(jndiName, beanClass, policy);
     }
     
     /**
-     * Delegates to {@link EJBTestModule#deploy(String, Class, boolean, TransactionPolicy)}
+     * Delegates to {@link EJBTestModule#deploySessionBean(String, Class, boolean, TransactionPolicy)}
      */
-    protected MockEjbObject deploy(String jndiName, Class beanClass, boolean stateful, TransactionPolicy policy)
+    protected void deploySessionBean(String jndiName, Class beanClass, boolean stateful, TransactionPolicy policy)
     {
-        return ejbTestModule.deploy(jndiName, beanClass, stateful, policy);
+        ejbTestModule.deploySessionBean(jndiName, beanClass, stateful, policy);
     }
     
-    /**
-     * Delegates to {@link EJBTestModule#deployMessageBean(Class)}
-     */
-    protected MockEjbObject deployMessageBean(Class messageBeanClass)
-    {
-        return ejbTestModule.deployMessageBean(messageBeanClass);
-    }
-    
-    /**
-     * Delegates to {@link EJBTestModule#deployMessageBean(Class, TransactionPolicy)}
-     */
-    protected MockEjbObject deployMessageBean(Class messageBeanClass, TransactionPolicy policy)
-    {
-        return ejbTestModule.deployMessageBean(messageBeanClass, policy);
-    }
+	/**
+	 * Delegates to {@link EJBTestModule#deploySessionBean(String, Object)}
+	 */
+	protected void deploySessionBean(String jndiName, Object bean)
+	{
+		ejbTestModule.deploySessionBean(jndiName, bean);
+	}
 
+	/**
+	 * Delegates to {@link EJBTestModule#deploySessionBean(String, Object, boolean)}
+	 */
+	protected void deploySessionBean(String jndiName, Object bean, boolean stateful)
+	{
+		ejbTestModule.deploySessionBean(jndiName, bean, stateful);
+	}
+
+	/**
+	 * Delegates to {@link EJBTestModule#deploySessionBean(String, Object, TransactionPolicy)}
+	 */
+	protected void deploySessionBean(String jndiName, Object bean, TransactionPolicy policy)
+	{
+		ejbTestModule.deploySessionBean(jndiName, bean, policy);
+	}
+
+	/**
+	 * Delegates to {@link EJBTestModule#deploySessionBean(String, Object, boolean, TransactionPolicy)}
+	 */
+	protected void deploySessionBean(String jndiName, Object bean, boolean stateful, TransactionPolicy policy)
+	{
+		ejbTestModule.deploySessionBean(jndiName, bean, stateful, policy);
+	}
+    
+	/**
+	 * Delegates to {@link EJBTestModule#deployEntityBean(String, Class)}
+	 */
+	protected void deployEntityBean(String jndiName, Class beanClass)
+	{
+		ejbTestModule.deployEntityBean(jndiName, beanClass);
+	}
+    
+	/**
+	 * Delegates to {@link EJBTestModule#deployEntityBean(String, Class, TransactionPolicy)}
+	 */
+	protected void deployEntityBean(String jndiName, Class beanClass, TransactionPolicy policy)
+	{
+		ejbTestModule.deployEntityBean(jndiName, beanClass, policy);
+	}
+	
+	/**
+	 * Delegates to {@link EJBTestModule#deployMessageBean(String, String, ConnectionFactory, Destination, Object)}
+	 */
+	protected void deployMessageBean(String connectionFactoryJndiName, String destinationJndiName, ConnectionFactory connectionFactory, Destination destination, Object bean)
+	{
+		ejbTestModule.deployMessageBean(connectionFactoryJndiName, destinationJndiName, connectionFactory, destination, bean);
+	}
+	
+	/**
+	 * Delegates to {@link EJBTestModule#deployMessageBean(String, String, ConnectionFactory, Destination, Object, TransactionPolicy)}
+	 */
+	protected void deployMessageBean(String connectionFactoryJndiName, String destinationJndiName, ConnectionFactory connectionFactory, Destination destination, Object bean, TransactionPolicy policy)
+	{
+		ejbTestModule.deployMessageBean(connectionFactoryJndiName, destinationJndiName, connectionFactory, destination, bean, policy);
+	}
+	
     /**
      * Delegates to {@link EJBTestModule#bindToContext}
      */
@@ -183,14 +231,6 @@ public class EJBTestCaseAdapter extends BaseTestCase
         ejbTestModule.bindToContext(name, object);
     }
     
-    /**
-     * Delegates to {@link EJBTestModule#createMessageBean}
-     */
-    protected MessageListener createMessageBean(MockEjbObject ejbObject)
-    {
-        return ejbTestModule.createMessageBean(ejbObject);
-    }
-
     /**
      * Delegates to {@link EJBTestModule#lookup}
      */

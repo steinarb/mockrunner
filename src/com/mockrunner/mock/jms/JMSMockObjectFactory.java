@@ -10,7 +10,7 @@ import com.mockrunner.jms.DestinationManager;
  * factory in your tests you can be sure, they are all
  * up to date. If you are using JNDI for obtaining the
  * factories you have to bind them to the mock context
- * with the help of {@link com.mockrunner.ejb.EJBTestModule#bindToContext}.
+ * with {@link com.mockrunner.ejb.EJBTestModule#bindToContext}.
  */
 public class JMSMockObjectFactory
 {
