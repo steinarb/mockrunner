@@ -1,5 +1,7 @@
 package com.mockrunner.ejb;
 
+import javax.jms.MessageListener;
+
 import org.mockejb.MockEjbObject;
 import org.mockejb.SessionBeanDescriptor;
 import org.mockejb.TransactionPolicy;
@@ -156,6 +158,22 @@ public class EJBTestCaseAdapter extends BaseTestCase
     {
         return ejbTestModule.deploy(jndiName, beanClass, stateful, policy);
     }
+    
+    /**
+     * Delegates to {@link EJBTestModule#deployMessageBean(Class)}
+     */
+    protected MockEjbObject deployMessageBean(Class messageBeanClass)
+    {
+        return ejbTestModule.deployMessageBean(messageBeanClass);
+    }
+    
+    /**
+     * Delegates to {@link EJBTestModule#deployMessageBean(Class, TransactionPolicy)}
+     */
+    protected MockEjbObject deployMessageBean(Class messageBeanClass, TransactionPolicy policy)
+    {
+        return ejbTestModule.deployMessageBean(messageBeanClass, policy);
+    }
 
     /**
      * Delegates to {@link EJBTestModule#bindToContext}
@@ -163,6 +181,14 @@ public class EJBTestCaseAdapter extends BaseTestCase
     protected void bindToContext(String name, Object object)
     {
         ejbTestModule.bindToContext(name, object);
+    }
+    
+    /**
+     * Delegates to {@link EJBTestModule#createMessageBean}
+     */
+    protected MessageListener createMessageBean(MockEjbObject ejbObject)
+    {
+        return ejbTestModule.createMessageBean(ejbObject);
     }
 
     /**

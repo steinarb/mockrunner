@@ -2,6 +2,7 @@
 mockrunner-0.2.5:
 
 - all TestCaseAdapter methods are protected now
+- added methods to EJBTestModule to deploy message driven beans
 - added clearOutput and setCaseSensitive methods to ServletTestModule
 - added setCaseSensitive method to ServletTestModule and TagTestModule
 - added JDBC Driver preserve mechanism to JDBCMockObjectFactory
@@ -9,6 +10,7 @@ mockrunner-0.2.5:
   to make them thread safe. Note, that the other mock objects are
   not thread safe at the moment.
 - updated nekohtml.jar from 0.8.2 to 0.8.3
+- updated servlet.jar from Tomcat 4.1.27 to 4.1.29
 
 mockrunner-0.2.1:
 
