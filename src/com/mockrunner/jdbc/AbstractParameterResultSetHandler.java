@@ -26,7 +26,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
     /**
      * Sets if the specified parameters must match exactly
      * in order and number.
-     * Defaults to <code>false</code>, i.e. the spcified
+     * Defaults to <code>false</code>, i.e. the specified
      * parameters must be present in the actual parameter
      * list of the prepared statement with the correct index
      * but it's ok if there are more actual parameters.
@@ -216,7 +216,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * must contain the parameters by mapping <code>Integer</code> objects
      * to the corresponding parameter. The <code>Integer</code> object
      * is the index of the parameter. In the case of a <code>CallableStatement</code>
-     * there are allowed also <code>String</code> keys for named parameters.
+     * there are also allowed <code>String</code> keys for named parameters.
      * @param sql the SQL string
      * @param resultSet the corresponding {@link MockResultSet}
      * @param parameters the parameters
@@ -335,7 +335,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * must contain the parameters by mapping <code>Integer</code> objects
      * to the corresponding parameter. The <code>Integer</code> object
      * is the index of the parameter. In the case of a <code>CallableStatement</code>
-     * there are allowed also <code>String</code> keys for named parameters.
+     * there are also allowed <code>String</code> keys for named parameters.
      * @param sql the SQL string
      * @param updateCount the update count
      * @param parameters the parameters
