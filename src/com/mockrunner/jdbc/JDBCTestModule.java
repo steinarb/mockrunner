@@ -131,41 +131,41 @@ public class JDBCTestModule
     }
     
     /**
-     * Returns an object that was added to a <code>PreparedStatement</code>
+     * Returns a parameter that was added to a <code>PreparedStatement</code>
      * using its <code>set</code> methods.
      * @param statement the <code>PreparedStatement</code>
-     * @param indexOfObject the index used to set the object
+     * @param indexOfParameter the index used to set the parameter
      * @return the corresponding object
      */
-    public Object getPreparedStatementObject(PreparedStatement statement, int indexOfObject)
+    public Object getPreparedStatementParameter(PreparedStatement statement, int indexOfParameter)
     {
         if(null == statement) return null;
-        return ((MockPreparedStatement)statement).getObject(indexOfObject);
+        return ((MockPreparedStatement)statement).getParameter(indexOfParameter);
     }
     
     /**
-     * Returns an object that was added to a <code>PreparedStatement</code>
+     * Returns a parameter that was added to a <code>PreparedStatement</code>
      * using its <code>set</code> methods. Uses the first <code>PreparedStatement</code>
      * with the specified SQL statement.
      * @param sql the SQL statement
-     * @param indexOfObject the index used to set the object
+     * @param indexOfParameter the index used to set the object
      * @return the corresponding object
      */
-    public Object getPreparedStatementObject(String sql, int indexOfObject)
+    public Object getPreparedStatementParameter(String sql, int indexOfParameter)
     {
-        return getPreparedStatementObject(getPreparedStatement(sql), indexOfObject);
+        return getPreparedStatementParameter(getPreparedStatement(sql), indexOfParameter);
     }
     
     /**
      * Returns an object that was added to a <code>PreparedStatement</code>
      * using its <code>set</code> methods.
      * @param indexOfStatement the index of the statement
-     * @param indexOfObject the index used to set the object
+     * @param indexOfParameter the index used to set the object
      * @return the corresponding object
      */
-    public Object getPreparedStatementObject(int indexOfStatement, int indexOfObject)
+    public Object getPreparedStatementParameter(int indexOfStatement, int indexOfParameter)
     {
-        return getPreparedStatementObject(getPreparedStatement(indexOfStatement), indexOfObject);
+        return getPreparedStatementParameter(getPreparedStatement(indexOfStatement), indexOfParameter);
     }
     
     /**
@@ -242,146 +242,146 @@ public class JDBCTestModule
     }
     
     /**
-     * Verifies that an object was added to a <code>PreparedStatement</code> with
+     * Verifies that a parameter was added to a <code>PreparedStatement</code> with
      * the specified index.
      * @param statement the <code>PreparedStatement</code>
      * @param indexOfObject the index used to set the object
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyPreparedStatementObjectPresent(PreparedStatement statement, int indexOfObject)
+    public void verifyPreparedStatementParameterPresent(PreparedStatement statement, int indexOfObject)
     {
-        if(null == getPreparedStatementObject(statement, indexOfObject))
+        if(null == getPreparedStatementParameter(statement, indexOfObject))
         {
-            throw new VerifyFailedException("Prepared statement object with index " + indexOfObject + " not present.");
+            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfObject + " not present.");
         }
     }
 
     /**
-     * Verifies that an object was added to a <code>PreparedStatement</code> with
+     * Verifies that a parameter was added to a <code>PreparedStatement</code> with
      * the specified index. Uses the first <code>PreparedStatement</code> with
      * the specified SQL.
      * @param sql the SQL statement of the <code>PreparedStatement</code>
-     * @param indexOfObject the index used to set the object
+     * @param indexOfParameter the index used to set the object
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyPreparedStatementObjectPresent(String sql, int indexOfObject)
+    public void verifyPreparedStatementParameterPresent(String sql, int indexOfParameter)
     {
-        if(null == getPreparedStatementObject(sql, indexOfObject))
+        if(null == getPreparedStatementParameter(sql, indexOfParameter))
         {
-            throw new VerifyFailedException("Prepared statement object with index " + indexOfObject + " not present.");
+            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " not present.");
         }
     }
     
     /**
-     * Verifies that an object was added to a <code>PreparedStatement</code> with
+     * Verifies that a parameter was added to a <code>PreparedStatement</code> with
      * the specified index.
      * @param indexOfStatement the index of the statement
-     * @param indexOfObject the index used to set the object
+     * @param indexOfParameter the index used to set the object
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyPreparedStatementObjectPresent(int indexOfStatement, int indexOfObject)
+    public void verifyPreparedStatementParameterPresent(int indexOfStatement, int indexOfParameter)
     {
-        if(null == getPreparedStatementObject(indexOfStatement, indexOfObject))
+        if(null == getPreparedStatementParameter(indexOfStatement, indexOfParameter))
         {
-            throw new VerifyFailedException("Prepared statement object with index " + indexOfObject + " not present.");
+            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " not present.");
         }
     }
     
     /**
-     * erifies that an object with the specified index is not present.
+     * erifies that a parameter with the specified index is not present.
      * @param statement the <code>PreparedStatement</code>
-     * @param indexOfObject the index used to set the object
+     * @param indexOfParameter the index used to set the object
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyPreparedStatementObjectNotPresent(PreparedStatement statement, int indexOfObject)
+    public void verifyPreparedStatementParameterNotPresent(PreparedStatement statement, int indexOfParameter)
     {
-        if(null != getPreparedStatementObject(statement, indexOfObject))
+        if(null != getPreparedStatementParameter(statement, indexOfParameter))
         {
-            throw new VerifyFailedException("Prepared statement object with index " + indexOfObject + " present.");
+            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " present.");
         }
     }
 
     /**
-     * Verifies that an object with the specified index is not present.
+     * Verifies that a parameter with the specified index is not present.
      * Uses the first <code>PreparedStatement</code> with the specified SQL.
      * @param sql the SQL statement of the <code>PreparedStatement</code>
-     * @param indexOfObject the index used to set the object
+     * @param indexOfParameter the index used to set the object
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyPreparedStatementObjectNotPresent(String sql, int indexOfObject)
+    public void verifyPreparedStatementParameterNotPresent(String sql, int indexOfParameter)
     {
-        if(null != getPreparedStatementObject(sql, indexOfObject))
+        if(null != getPreparedStatementParameter(sql, indexOfParameter))
         {
-            throw new VerifyFailedException("Prepared statement object with index " + indexOfObject + " present.");
+            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " present.");
         }
     }
 
     /**
-     * Verifies that an object with the specified index is not present.
+     * Verifies that a parameter with the specified index is not present.
      * @param indexOfStatement the index of the statement
-     * @param indexOfObject the index used to set the object
+     * @param indexOfParameter the index used to set the object
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyPreparedStatementObjectNotPresent(int indexOfStatement, int indexOfObject)
+    public void verifyPreparedStatementParameterNotPresent(int indexOfStatement, int indexOfParameter)
     {
-        if(null != getPreparedStatementObject(indexOfStatement, indexOfObject))
+        if(null != getPreparedStatementParameter(indexOfStatement, indexOfParameter))
         {
-            throw new VerifyFailedException("Prepared statement object with index " + indexOfObject + " present.");
+            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " present.");
         }
     }
     
     /**
-     * Verifies that an object from the specified <code>PreparedStatement</code> is equal
+     * Verifies that a parameter from the specified <code>PreparedStatement</code> is equal
      * to the specified object.
      * @param statement the <code>PreparedStatement</code>
-     * @param indexOfObject the index used to set the object
+     * @param indexOfParameter the index used to set the object
      * @param object the expected object
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyPreparedStatementObject(PreparedStatement statement, int indexOfObject, Object object)
+    public void verifyPreparedStatementParameter(PreparedStatement statement, int indexOfParameter, Object object)
     {
-        verifyPreparedStatementObjectPresent(statement, indexOfObject);
-        Object actualObject = getPreparedStatementObject(statement, indexOfObject);
+        verifyPreparedStatementParameterPresent(statement, indexOfParameter);
+        Object actualObject = getPreparedStatementParameter(statement, indexOfParameter);
         if(!actualObject.equals(object))
         {
-            throw new VerifyFailedException("Prepared statement object with index " + indexOfObject + " not equal with specified object.");
+            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " not equal with specified object.");
         }
     }
     
     /**
-     * Verifies that an object from the <code>PreparedStatement</code> with the
+     * Verifies that a parameter from the <code>PreparedStatement</code> with the
      * specified SQL statement is equal to the specified object.
      * Uses the first <code>PreparedStatement</code> with the specified SQL.
      * @param sql the SQL statement of the <code>PreparedStatement</code>
-     * @param indexOfObject the index used to set the object
+     * @param indexOfParameter the index used to set the object
      * @param object the expected object
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyPreparedStatementObject(String sql, int indexOfObject, Object object)
+    public void verifyPreparedStatementParameter(String sql, int indexOfParameter, Object object)
     {
-        verifyPreparedStatementObjectPresent(sql, indexOfObject);
-        Object actualObject = getPreparedStatementObject(sql, indexOfObject);
+        verifyPreparedStatementParameterPresent(sql, indexOfParameter);
+        Object actualObject = getPreparedStatementParameter(sql, indexOfParameter);
         if(!actualObject.equals(object))
         {
-            throw new VerifyFailedException("Prepared statement object with index " + indexOfObject + " not equal with specified object.");
+            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " not equal with specified object.");
         }
     }
     
     /**
-     * Verifies that an object from the <code>PreparedStatement</code> with the
+     * Verifies that a parameter from the <code>PreparedStatement</code> with the
      * specified SQL statement is equal to the specified object.
      * @param sql the SQL statement of the <code>PreparedStatement</code>
-     * @param indexOfObject the index used to set the object
+     * @param indexOfParameter the index used to set the object
      * @param object the expected object
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyPreparedStatementObject(int indexOfStatement, int indexOfObject, Object object)
+    public void verifyPreparedStatementParameter(int indexOfStatement, int indexOfParameter, Object object)
     {
-        verifyPreparedStatementObjectPresent(indexOfStatement, indexOfObject);
-        Object actualObject = getPreparedStatementObject(indexOfStatement, indexOfObject);
+        verifyPreparedStatementParameterPresent(indexOfStatement, indexOfParameter);
+        Object actualObject = getPreparedStatementParameter(indexOfStatement, indexOfParameter);
         if(!actualObject.equals(object))
         {
-            throw new VerifyFailedException("Prepared statement object with index " + indexOfObject + " not equal with specified object.");
+            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " not equal with specified object.");
         }
     }
 }
