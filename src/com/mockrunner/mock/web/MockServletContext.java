@@ -90,7 +90,7 @@ public class MockServletContext implements ServletContext
     {
         Object oldValue = attributes.get(key);
         attributes.put(key, value);
-        handleListenerCalls(key, value, oldValue);
+        handleAttributeListenerCalls(key, value, oldValue);
     }
     
     public synchronized RequestDispatcher getNamedDispatcher(String arg0)
@@ -251,7 +251,7 @@ public class MockServletContext implements ServletContext
 
     }
     
-    private void handleListenerCalls(String key, Object value, Object oldValue)
+    private void handleAttributeListenerCalls(String key, Object value, Object oldValue)
     {
         if(null != oldValue)
         {
