@@ -10,7 +10,7 @@ import com.mockrunner.mock.jdbc.MockResultSet;
 /**
  * Example test for {@link OrderDB}. Demonstrates the usage of 
  * {@link com.mockrunner.jdbc.JDBCTestModule} 
- * resp. {@link com.mockrunner.jdbc.JDBCTestCaseAdapter} with
+ * resp. {@link com.mockrunner.jdbc.BasicJDBCTestCaseAdapter} with
  * stored procdures.
  */
 public class OrderDBTest extends BasicJDBCTestCaseAdapter

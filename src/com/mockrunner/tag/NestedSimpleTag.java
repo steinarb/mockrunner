@@ -112,7 +112,7 @@ public class NestedSimpleTag //extends SimpleTagSupport implements NestedTag
      *//*
     public TagSupport getTag()
     {
-        throw new RuntimeException("This method cannot be called for simple tags.");
+        throw new RuntimeException("getTag() method cannot be called for simple tags.");
     }
     
     *//**
@@ -166,6 +166,17 @@ public class NestedSimpleTag //extends SimpleTagSupport implements NestedTag
         if(null != jspBody && jspBody instanceof MockJspFragment)
         {
             ((MockJspFragment)jspBody).addTextChild(text);
+        }
+    }
+    
+    *//**
+     * Implementation of {@link NestedTag#addDynamicChild}.
+     *//*
+    public void addDynamicChild(DynamicChild child)
+    {
+        if(null != jspBody && jspBody instanceof MockJspFragment)
+        {
+            ((MockJspFragment)jspBody).addDynamicChild(child);
         }
     }
     

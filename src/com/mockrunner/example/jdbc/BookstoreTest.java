@@ -10,7 +10,7 @@ import com.mockrunner.mock.jdbc.MockResultSet;
 /**
  * Example test for {@link Bookstore}. Demonstrates the usage of 
  * {@link com.mockrunner.jdbc.JDBCTestModule} 
- * resp. {@link com.mockrunner.jdbc.JDBCTestCaseAdapter}.
+ * resp. {@link com.mockrunner.jdbc.BasicJDBCTestCaseAdapter}.
  * This is an example for the handling of {@link com.mockrunner.mock.jdbc.MockResultSet}.
  * The data that the JDBC code should receive when executing the <i>select</i>
  * statement is specified in the file <i>bookstore.txt</i>. Please note that we

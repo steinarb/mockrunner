@@ -9,7 +9,7 @@ import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 /**
  * Example test for {@link RedirectServlet}.
  * Demonstrates the usage of {@link com.mockrunner.servlet.ServletTestModule} 
- * resp. {@link com.mockrunner.servlet.ServletTestCaseAdapter}.
+ * resp. {@link com.mockrunner.servlet.BasicServletTestCaseAdapter}.
  * Demonstrates the testing of output data as string as well as parsed
  * HTML data (<code>testServletOutputAsXML</code>).
  * 

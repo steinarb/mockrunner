@@ -148,19 +148,19 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.tag.TagTestModule#createNestedTag(Class)}
-     */
-    protected NestedTag createNestedTag(Class tagClass)
-    {
-        return tagTestModule.createNestedTag(tagClass);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.tag.TagTestModule#createNestedTag(Class, Map)}
      */
     protected NestedTag createNestedTag(Class tagClass, Map attributes)
     {
         return tagTestModule.createNestedTag(tagClass, attributes);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#createNestedTag(Class)}
+     */
+    protected NestedTag createNestedTag(Class tagClass)
+    {
+        return tagTestModule.createNestedTag(tagClass);
     }
 
     /**
@@ -170,6 +170,30 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     {
         return tagTestModule.getTag();
     }
+
+    /**
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#createWrappedTag(Class)}
+     *//*
+    protected JspTag createWrappedTag(Class tagClass)
+    {
+        return tagTestModule.createWrappedTag(tagClass);
+    }
+
+    *//**
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#createWrappedTag(Class, Map)}
+     *//*
+    protected JspTag createWrappedTag(Class tagClass, Map attributes)
+    {
+        return tagTestModule.createWrappedTag(tagClass, attributes);
+    }
+
+    *//**
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#getWrappedTag}
+     *//*
+    protected JspTag getWrappedTag()
+    {
+        return tagTestModule.getWrappedTag();
+    }*/
 
     /**
      * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(TagSupport)}
@@ -186,6 +210,22 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     {
         return tagTestModule.setTag(tag, attributes);
     }
+
+    /**
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(JspTag)}
+     *//*
+    protected NestedTag setTag(JspTag tag)
+    {
+        return tagTestModule.setTag(tag);
+    }
+
+    *//**
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(JspTag, Map)}
+     *//*
+    protected NestedTag setTag(JspTag tag, Map attributes)
+    {
+        return tagTestModule.setTag(tag, attributes);
+    }*/
 
     /**
      * Delegates to {@link com.mockrunner.tag.TagTestModule#setDoRelease(boolean)}
@@ -226,6 +266,14 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     {
         return tagTestModule.getNestedTag();
     }
+
+    /**
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#doTag}
+     */
+    /*protected void doTag()
+    {
+        tagTestModule.doTag();
+    }*/
 
     /**
      * Delegates to {@link com.mockrunner.tag.TagTestModule#doStartTag}

@@ -96,6 +96,15 @@ public interface NestedTag
      * @param text the static text
      */
     public void addTextChild(String text);
+    
+    /**
+     * Adds a dynamic child simulating scriptlets and
+     * EL expressions. Check out
+     * {@link com.mockrunner.tag.TagUtil#evalBody(List, Object)}
+     * for details about child handling.
+     * @param child the dynamic child instance
+     */
+    public void addDynamicChild(DynamicChild child);
      
     /**
      * Adds a tag child simulating nested tags.

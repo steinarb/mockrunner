@@ -1,29 +1,19 @@
 package com.mockrunner.test.web;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.jsp.tagext.BodyTagSupport;
-import javax.servlet.jsp.tagext.Tag;
-
 import com.mockrunner.base.BaseTestCase;
-import com.mockrunner.mock.web.MockPageContext;
-import com.mockrunner.tag.NestedBodyTag;
-import com.mockrunner.tag.NestedStandardTag;
-import com.mockrunner.tag.NestedTag;
 
 public class NestedTagTest extends BaseTestCase
 {
-    private NestedTag nestedTagRoot;
+    /*private NestedTag nestedTagRoot;
     private MockPageContext context;
     private Tag testTag;
     private Tag testTag1;
     private Tag testTag11;
-    //private SimpleTag testTag111;
+    private SimpleTag testTag111;
     private NestedTag testTagChild1;
     private NestedTag testTagChild11;
-    //private NestedTag testTagChild111;
-    //private SimpleTag rootSimpleTag;
+    private NestedTag testTagChild111;
+    private SimpleTag rootSimpleTag;
     private Map testMap;
     
     protected void setUp() throws Exception
@@ -56,7 +46,7 @@ public class NestedTagTest extends BaseTestCase
         testTag11 = (TestBodyTag)testTagChild11.getTag();
     }
     
-    /*private void prepareSimpleTagTest()
+    private void prepareSimpleTagTest()
     {
         Map map = new HashMap();
         map.put("stringProperty", "test");
@@ -70,9 +60,9 @@ public class NestedTagTest extends BaseTestCase
         testTag11 = (TestBodyTag)testTagChild11.getTag();
         testTagChild111 = testTagChild11.addTagChild(TestSimpleTag.class);
         testTag111 = (SimpleTag)testTagChild111.getWrappedTag();
-    }*/
+    }
     
-    /*public void testGetWrappedTag()
+    public void testGetWrappedTag()
     {
         BodyTag testBodyTag = new TestBodyTag();
         Tag testStandardTag = new TestTag();
@@ -94,9 +84,9 @@ public class NestedTagTest extends BaseTestCase
         {
             //should throw exception
         }
-    }*/
+    }
     
-    /*public void testAddTagChild()
+    public void testAddTagChild()
     {
         testTag = new TestBodyTag();
         nestedTagRoot = new NestedBodyTag((BodyTagSupport)testTag, context, testMap);
@@ -126,9 +116,9 @@ public class NestedTagTest extends BaseTestCase
         assertEquals(2, simpleTag.getChilds().size());
         assertTrue(((NestedTag)simpleTag.getChild(0)).getWrappedTag() instanceof TestBodyTag);
         assertTrue(((NestedTag)simpleTag.getChild(1)).getWrappedTag() instanceof TestSimpleTag);
-    }*/
+    }
     
-    /*public void testFindTag()
+    public void testFindTag()
     {
         AnotherTestTag anotherTestTag = new AnotherTestTag();
         NestedStandardTag root = new NestedStandardTag(anotherTestTag, context);
@@ -136,7 +126,7 @@ public class NestedTagTest extends BaseTestCase
         NestedTag child11 = child1.addTagChild(TestTag.class, testMap);
         Tag foundTag = TagSupport.findAncestorWithClass((Tag)child11.getWrappedTag(), AnotherTestTag.class);
         assertNotNull(foundTag);
-    }*/
+    }
     
     public void testPopulateAttributesStandard()
     {
@@ -156,13 +146,44 @@ public class NestedTagTest extends BaseTestCase
         assertNull(((TestBodyTag)testTag11).getTestString());
     }
     
-    /*public void testPopulateAttributesSimple()
+    public void testPopulateAttributesSimple()
     {
         prepareSimpleTagTest();
         nestedTagRoot.populateAttributes();
         assertEquals("test", ((TestSimpleTag)rootSimpleTag).getStringProperty());
         assertEquals(1, ((TestSimpleTag)rootSimpleTag).getFloatProperty(), 0.0);
-    }*/
+    }
+    
+    public void testPopulateDynamicAttributes()
+    {
+        Map map = new HashMap();
+        map.put("dynamicAttribute1", "test");
+        map.put("dynamicAttribute2", new Integer(1));
+        TestSimpleTag simpleTag = new TestSimpleTag();
+        NestedTag nestedTag = new NestedSimpleTag(simpleTag, context, map);
+        nestedTag.populateAttributes();
+        assertEquals(2, simpleTag.getDynamicAttributesMap().size());
+        DynamicAttribute attribute1 = (DynamicAttribute)simpleTag.getDynamicAttributesMap().get("dynamicAttribute1");
+        DynamicAttribute attribute2 = (DynamicAttribute)simpleTag.getDynamicAttributesMap().get("dynamicAttribute2");
+        assertNull(attribute1.getUri());
+        assertEquals("test", attribute1.getValue());
+        assertNull(attribute2.getUri());
+        assertEquals(new Integer(1), attribute2.getValue());
+        TestBodyTag bodyTag = new TestBodyTag();
+        nestedTag = new NestedBodyTag(bodyTag, context, map);
+        nestedTag.populateAttributes();
+        map.put("dynamicAttribute3", new DynamicAttribute("test", "test"));
+        try
+        {
+            nestedTag.populateAttributes();
+            fail();
+        }
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+    }
+    
 
     public void testSetPageContextStandard()
     {
@@ -184,7 +205,7 @@ public class NestedTagTest extends BaseTestCase
         assertTrue(((TestBodyTag)testTag11).getPageContext() == newContext);
     }
     
-    /*public void testSetJspContextSimple()
+    public void testSetJspContextSimple()
     {
         prepareSimpleTagTest();
         MockPageContext newContext = new MockPageContext(null, null, null);
@@ -193,7 +214,7 @@ public class NestedTagTest extends BaseTestCase
         assertTrue(((TestTag)testTag1).getPageContext() == newContext);
         assertTrue(((TestBodyTag)testTag11).getPageContext() == newContext);
         assertTrue(((TestSimpleTag)testTag111).getJspContext() == newContext);
-    }*/
+    }
     
     public void testSetDoReleaseStandard() throws Exception
     {
@@ -225,7 +246,7 @@ public class NestedTagTest extends BaseTestCase
         assertTrue(((TestBodyTag)testTag11).wasReleaseCalled());
     }
     
-    /*public void testChildsWithCustomFragmentSimpleTag() throws Exception
+    public void testChildsWithCustomFragmentSimpleTag() throws Exception
     {
         TestSimpleTag testSimpleTag = new TestSimpleTag();
         NestedSimpleTag nestedSimpleTag = new NestedSimpleTag(testSimpleTag, context);
@@ -237,9 +258,9 @@ public class NestedTagTest extends BaseTestCase
         nestedSimpleTag.removeChilds();
         assertNull(nestedSimpleTag.getChilds());
         assertNull(nestedSimpleTag.getChild(0));
-    }*/
+    }
     
-    /*public void testNotTagSupportInstanceStandard() throws Exception
+    public void testNotTagSupportInstanceStandard() throws Exception
     {
         MyTestTag myTag = new MyTestTag();
         NestedStandardTag tag = new NestedStandardTag(myTag, context);
@@ -332,9 +353,9 @@ public class NestedTagTest extends BaseTestCase
         {
             //should throw exception
         }
-    }*/
+    }
     
-    /*private class TestJspFragment extends JspFragment
+    private class TestJspFragment extends JspFragment
     {
         public JspContext getJspContext()
         {
@@ -345,9 +366,9 @@ public class NestedTagTest extends BaseTestCase
         {
 
         }
-    }*/
+    }
     
-    /*private class AnotherTestTag extends TagSupport
+    private class AnotherTestTag extends TagSupport
     {
         
     }
@@ -381,7 +402,6 @@ public class NestedTagTest extends BaseTestCase
         
         public void setParent(Tag parent)
         {
-            // TODO Auto-generated method stub
 
         }
         
