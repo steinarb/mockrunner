@@ -100,6 +100,22 @@ public class JarFileDependenciesTest extends TestCase
                 failure = true;
             }
         }
+        JarBundle filteredBundle[] = extractor.filterBundles(jarBundle);
+        for(int ii = 0; ii < filteredBundle.length; ii++)
+        {
+            JarBundle currentBundle = filteredBundle[ii];
+            List extRefList = currentBundle.getAllUnidentifiableExternallyReferencedPackages();
+            if(null != extRefList && !extRefList.isEmpty())
+            {
+                System.out.println("Unidentifiable dependencies for " + currentBundle.getJarFileName());
+                for(int yy = 0; yy < extRefList.size(); yy++)
+                {
+                    System.out.println(extRefList.get(yy));
+                }
+                System.out.println();
+                failure = true;
+            }
+        }
         return failure;
     }
     
