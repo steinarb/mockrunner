@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import junit.framework.TestCase;
 
+import org.apache.struts.Globals;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -127,6 +128,76 @@ public class ActionTestModuleTest extends TestCase
         assertSame(theErrors2, module.getActionErrors());
         module.setActionErrors(null);
         assertSame(theErrors1, module.getActionErrors());
+    }
+    
+    public void testSetMessageAttributeKey()
+    {
+        ActionMessages messages = createTestActionMessages();
+        module.setActionMessages(messages);
+        assertSame(messages, mockFactory.getMockRequest().getAttribute(Globals.MESSAGE_KEY));
+        module.setActionMessagesToSession(messages);
+        assertSame(messages, mockFactory.getMockSession().getAttribute(Globals.MESSAGE_KEY));
+        ActionMessages otherMessages = createTestActionMessages();
+        module.setMessageAttributeKey("mymessages");
+        module.setActionMessages(otherMessages);
+        assertSame(otherMessages, mockFactory.getMockRequest().getAttribute("mymessages"));
+        module.setActionMessagesToSession(otherMessages);
+        assertSame(otherMessages, mockFactory.getMockSession().getAttribute("mymessages"));
+        assertSame(otherMessages, module.getActionMessages());
+        module.verifyActionMessagePresent("key1");
+        module.verifyActionMessageNotPresent("key3");
+        module.setMessageAttributeKey("test");
+        module.verifyActionMessageNotPresent("key1");
+        assertNull(module.getActionMessages());
+        try
+        {
+            module.verifyHasActionMessages();
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.setMessageAttributeKey("mymessages");
+        module.verifyHasActionMessages();
+        module.verifyActionMessages(new String[]{"key1", "key2"});
+        module.verifyNumberActionMessages(2);
+        module.verifyActionMessageValues("key2", new String[]{"value1", "value2"});
+    }
+    
+    public void testSetErrorAttributeKey()
+    {
+        ActionErrors errors = createTestActionErrors();
+        module.setActionErrors(errors);
+        assertSame(errors, mockFactory.getMockRequest().getAttribute(Globals.ERROR_KEY));
+        module.setActionErrorsToSession(errors);
+        assertSame(errors, mockFactory.getMockSession().getAttribute(Globals.ERROR_KEY));
+        ActionErrors otherErrors = createTestActionErrors();
+        module.setErrorAttributeKey("othereerrors");
+        module.setActionErrors(otherErrors);
+        assertSame(otherErrors, mockFactory.getMockRequest().getAttribute("othereerrors"));
+        module.setActionErrorsToSession(otherErrors);
+        assertSame(otherErrors, mockFactory.getMockSession().getAttribute("othereerrors"));
+        assertSame(otherErrors, module.getActionErrors());
+        module.verifyActionErrorPresent("key2");
+        module.verifyActionErrorNotPresent("key4");
+        module.setErrorAttributeKey("test");
+        module.verifyActionErrorNotPresent("key2");
+        assertNull(module.getActionErrors());
+        try
+        {
+            module.verifyHasActionErrors();
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.setErrorAttributeKey("othereerrors");
+        module.verifyHasActionErrors();
+        module.verifyActionErrors(new String[]{"key1", "key2", "key3"});
+        module.verifyNumberActionErrors(3);
+        module.verifyActionErrorValues("key3", new String[]{"value"});
     }
     
     public void testVerifyHasActionErrors()

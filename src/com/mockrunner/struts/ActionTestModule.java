@@ -54,6 +54,8 @@ public class ActionTestModule extends HTMLOutputModule
     private boolean reset;
     private boolean doPopulate;
     private boolean recognizeInSession;
+    private String messageAttributeKey;
+    private String errorAttributeKey;
     
     public ActionTestModule(ActionMockObjectFactory mockFactory)
     {
@@ -62,6 +64,8 @@ public class ActionTestModule extends HTMLOutputModule
         reset = true;
         doPopulate = true;
         recognizeInSession = true;
+        messageAttributeKey = Globals.MESSAGE_KEY;
+        errorAttributeKey = Globals.ERROR_KEY;
     }
     
     /**
@@ -97,6 +101,26 @@ public class ActionTestModule extends HTMLOutputModule
     public void setRecognizeMessagesInSession(boolean recognizeInSession)
     {
         this.recognizeInSession = recognizeInSession;
+    }
+    
+    /**
+     * Name of the key under which messages are stored. Default is
+     * <code>Globals.MESSAGE_KEY</code>.
+     * @param messageAttributeKey the message key
+     */
+    public void setMessageAttributeKey(String messageAttributeKey)
+    {
+        this.messageAttributeKey = messageAttributeKey;
+    }
+    
+    /**
+     * Name of the key under which errors are stored. Default is
+     * <code>Globals.ERROR_KEY</code>.
+     * @param messageAttributeKey the message key
+     */
+    public void setErrorAttributeKey(String errorAttributeKey)
+    {
+        this.errorAttributeKey = errorAttributeKey;
     }
 
     /**
@@ -688,7 +712,7 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public void setActionMessages(ActionMessages messages)
     {
-        mockFactory.getWrappedRequest().setAttribute(Globals.MESSAGE_KEY, messages);
+        mockFactory.getWrappedRequest().setAttribute(messageAttributeKey, messages);
     }
     
     /**
@@ -698,7 +722,7 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public void setActionMessagesToSession(ActionMessages messages)
     {
-        mockFactory.getMockSession().setAttribute(Globals.MESSAGE_KEY, messages);
+        mockFactory.getMockSession().setAttribute(messageAttributeKey, messages);
     }
 
     /**
@@ -726,7 +750,7 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public ActionMessages getActionMessagesFromRequest()
     {
-        return (ActionMessages)mockFactory.getWrappedRequest().getAttribute(Globals.MESSAGE_KEY);
+        return (ActionMessages)mockFactory.getWrappedRequest().getAttribute(messageAttributeKey);
     }
     
     /**
@@ -735,7 +759,7 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public ActionMessages getActionMessagesFromSession()
     {
-        return (ActionMessages)mockFactory.getMockSession().getAttribute(Globals.MESSAGE_KEY);
+        return (ActionMessages)mockFactory.getMockSession().getAttribute(messageAttributeKey);
     }
     
     /**
@@ -755,7 +779,7 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public void setActionErrors(ActionMessages errors)
     {
-        mockFactory.getWrappedRequest().setAttribute(Globals.ERROR_KEY, errors);
+        mockFactory.getWrappedRequest().setAttribute(errorAttributeKey, errors);
     }
     
     /**
@@ -765,7 +789,7 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public void setActionErrorsToSession(ActionMessages errors)
     {
-        mockFactory.getMockSession().setAttribute(Globals.ERROR_KEY, errors);
+        mockFactory.getMockSession().setAttribute(errorAttributeKey, errors);
     }
 
     /**
@@ -793,7 +817,7 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public ActionMessages getActionErrorsFromRequest()
     {
-        return (ActionMessages)mockFactory.getWrappedRequest().getAttribute(Globals.ERROR_KEY);
+        return (ActionMessages)mockFactory.getWrappedRequest().getAttribute(errorAttributeKey);
     }
     
     /**
@@ -802,7 +826,7 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public ActionMessages getActionErrorsFromSession()
     {
-        return (ActionMessages)mockFactory.getMockSession().getAttribute(Globals.ERROR_KEY);
+        return (ActionMessages)mockFactory.getMockSession().getAttribute(errorAttributeKey);
     }
 
     /**
@@ -1161,7 +1185,7 @@ public class ActionTestModule extends HTMLOutputModule
             ActionMessages errors = formObj.validate(getMockActionMapping(), mockFactory.getWrappedRequest());
             if (containsMessages(errors))
             {
-                mockFactory.getWrappedRequest().setAttribute(Globals.ERROR_KEY, errors);
+                mockFactory.getWrappedRequest().setAttribute(errorAttributeKey, errors);
             }
         }
     }
