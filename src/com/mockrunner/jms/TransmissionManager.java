@@ -48,7 +48,7 @@ public class TransmissionManager
      */
     public MockQueueSender getQueueSender(int index)
     {
-        if(queueSender.size() <= index) return null;
+        if(queueSender.size() <= index || index < 0) return null;
         return (MockQueueSender)queueSender.get(index);
     }
     
@@ -85,7 +85,7 @@ public class TransmissionManager
      */
     public MockQueueReceiver getQueueReceiver(int index)
     {
-        if(queueReceiver.size() <= index) return null;
+        if(queueReceiver.size() <= index || index < 0) return null;
         return (MockQueueReceiver)queueReceiver.get(index);
     }
     
@@ -122,7 +122,7 @@ public class TransmissionManager
      */
     public MockQueueBrowser getQueueBrowser(int index)
     {
-        if(queueBrowser.size() <= index) return null;
+        if(queueBrowser.size() <= index || index < 0) return null;
         return (MockQueueBrowser)queueBrowser.get(index);
     }
     

@@ -1,5 +1,7 @@
 package com.mockrunner.mock.jms;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.jms.JMSException;
@@ -17,6 +19,9 @@ public class MockQueueReceiver implements QueueReceiver
     private MockQueue queue;
     private String messageSelector;
     private boolean closed;
+    private MessageListener messageListener;
+    private List messages;
+    private List receivedMessages;
 
     public MockQueueReceiver(MockQueueConnection connection, MockQueue queue, String messageSelector)
     {
@@ -24,6 +29,9 @@ public class MockQueueReceiver implements QueueReceiver
         this.queue = queue;
         this.messageSelector = messageSelector;
         closed = false;
+        messageListener = null;
+        messages = new ArrayList();
+        receivedMessages = new ArrayList();
     }
     
     public boolean isClosed()
@@ -33,12 +41,20 @@ public class MockQueueReceiver implements QueueReceiver
     
     public void receiveMessage(Message message)
     {
-
+        receivedMessages.add(message);
+        if(null != messageListener)
+        {
+            messageListener.onMessage(message);
+        }
+        else
+        {
+            messages.add(message);
+        }
     }
     
     public List getReceivedMessageList()
     {
-        return null;
+        return Collections.unmodifiableList(receivedMessages);
     }
 
     public Queue getQueue() throws JMSException
@@ -55,36 +71,33 @@ public class MockQueueReceiver implements QueueReceiver
 
     public MessageListener getMessageListener() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return messageListener;
     }
 
-    public void setMessageListener(MessageListener arg0) throws JMSException
+    public void setMessageListener(MessageListener messageListener) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
+        this.messageListener = messageListener;
     }
 
     public Message receive() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        if(messages.size() <= 0) return null;
+        return (Message)messages.remove(0);
     }
 
-    public Message receive(long arg0) throws JMSException
+    public Message receive(long timeout) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return receive();
     }
 
     public Message receiveNoWait() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return receive();
     }
 
     public void close() throws JMSException
