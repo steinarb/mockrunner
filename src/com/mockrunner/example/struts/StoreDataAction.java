@@ -26,11 +26,11 @@ public class StoreDataAction extends Action
         ServletContext context = request.getSession().getServletContext();
         synchronized(context)
         {
-            MemoryBasedRepository repository = MemoryBasedRepository.instance(context);
-            if(repository.get("id") != null) return mapping.findForward("failure");
-            System.out.println("Thread " + Thread.currentThread().getName() + " wins the race");
             String id = request.getParameter("id");
             String data = request.getParameter("data");
+            MemoryBasedRepository repository = MemoryBasedRepository.instance(context);
+            if(repository.get(id) != null) return mapping.findForward("failure");
+            System.out.println("Thread " + Thread.currentThread().getName() + " wins the race");
             repository.set(id, data);
             return mapping.findForward("success");
         }
