@@ -42,18 +42,9 @@ public class JDBCMockObjectFactory
     {
         dataSource.setupConnection(connection);
         driver.setupConnection(connection);
-        try
-        {
-            preserveDrivers();
-            deregisterDrivers();
-            DriverManager.registerDriver(driver);
-        }
-        catch(SQLException exc)
-        {
-            throw new RuntimeException(exc.getMessage());
-        }
+        registerMockDriver();
     }
-    
+
     private void deregisterDrivers()
     {
         try
@@ -98,8 +89,27 @@ public class JDBCMockObjectFactory
             Driver currentDriver = (Driver)drivers.nextElement();
             if(!(currentDriver instanceof MockDriver))
             {
-                preservedDrivers.add(drivers.nextElement());
+                preservedDrivers.add(currentDriver);
             }
+        }
+    }
+    
+    /**
+     * Removes all JDBC drivers from the <code>DriveManager</code> and
+     * registers the mock driver. The removed drivers are preserved and
+     * can be restored with {@link #restoreDrivers}.
+     */
+    public void registerMockDriver()
+    {
+        try
+        {
+            preserveDrivers();
+            deregisterDrivers();
+            DriverManager.registerDriver(driver);
+        }
+        catch(SQLException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
         }
     }
     
@@ -125,6 +135,7 @@ public class JDBCMockObjectFactory
         {
             throw new RuntimeException(exc.getMessage());
         }
+        preservedDrivers.clear();
     }
 
     /**
