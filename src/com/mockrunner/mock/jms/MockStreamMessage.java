@@ -1,5 +1,6 @@
 package com.mockrunner.mock.jms;
 
+import java.util.Collections;
 import java.util.Stack;
 
 import javax.jms.JMSException;
@@ -35,7 +36,17 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageEOFException("No more data");
         }
-        return false;
+        Object value = readObject();
+        if(null == value) return Boolean.valueOf(null).booleanValue();
+        if(value instanceof Boolean)
+        {
+            return ((Boolean)value).booleanValue();
+        }
+        if(value instanceof String)
+        {
+            return Boolean.valueOf((String)value).booleanValue();
+        }
+        throw new MessageFormatException(value.getClass().getName() + " cannot be converted to boolean");
     }
 
     public byte readByte() throws JMSException
@@ -48,7 +59,17 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageEOFException("No more data");
         }
-        return 0;
+        Object value = readObject();
+        if(null == value) return Byte.valueOf(null).byteValue();
+        if(value instanceof Byte)
+        {
+            return ((Byte)value).byteValue();
+        }
+        if(value instanceof String)
+        {
+            return Byte.valueOf((String)value).byteValue();
+        }
+        throw new MessageFormatException(value.getClass().getName() + " cannot be converted to byte");
     }
 
     public short readShort() throws JMSException
@@ -61,7 +82,17 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageEOFException("No more data");
         }
-        return 0;
+        Object value = readObject();
+        if(null == value) return Short.valueOf(null).shortValue();
+        if((value instanceof Byte) || (value instanceof Short))
+        {
+            return ((Number)value).shortValue();
+        }
+        if(value instanceof String)
+        {
+            return Short.valueOf((String)value).shortValue();
+        }
+        throw new MessageFormatException(value.getClass().getName() + " cannot be converted to short");
     }
 
     public char readChar() throws JMSException
@@ -74,7 +105,16 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageEOFException("No more data");
         }
-        return 0;
+        Object value = readObject();
+        if(null == value)
+        {
+            throw new NullPointerException();
+        }
+        if(value instanceof Character)
+        {
+            return ((Character)value).charValue();
+        }
+        throw new MessageFormatException(value.getClass().getName() + " cannot be converted to char");
     }
 
     public int readInt() throws JMSException
@@ -87,7 +127,17 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageEOFException("No more data");
         }
-        return 0;
+        Object value = readObject();
+        if(null == value) return Integer.valueOf(null).intValue();
+        if((value instanceof Byte) || (value instanceof Short) || (value instanceof Integer))
+        {
+            return ((Number)value).intValue();
+        }
+        if(value instanceof String)
+        {
+            return Integer.valueOf((String)value).intValue();
+        }
+        throw new MessageFormatException(value.getClass().getName() + " cannot be converted to int");
     }
 
     public long readLong() throws JMSException
@@ -100,7 +150,17 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageEOFException("No more data");
         }
-        return 0;
+        Object value = readObject();
+        if(null == value) return Long.valueOf(null).longValue();
+        if((value instanceof Byte) || (value instanceof Short) || (value instanceof Integer) || (value instanceof Long))
+        {
+            return ((Number)value).longValue();
+        }
+        if(value instanceof String)
+        {
+            return Long.valueOf((String)value).longValue();
+        }
+        throw new MessageFormatException(value.getClass().getName() + " cannot be converted to long");
     }
 
     public float readFloat() throws JMSException
@@ -113,7 +173,17 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageEOFException("No more data");
         }
-        return 0;
+        Object value = readObject();
+        if(null == value) return Float.valueOf(null).floatValue();
+        if(value instanceof Float)
+        {
+            return ((Float)value).floatValue();
+        }
+        if(value instanceof String)
+        {
+            return Float.valueOf((String)value).floatValue();
+        }
+        throw new MessageFormatException(value.getClass().getName() + " cannot be converted to float");
     }
 
     public double readDouble() throws JMSException
@@ -126,7 +196,17 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageEOFException("No more data");
         }
-        return 0;
+        Object value = readObject();
+        if(null == value) return Double.valueOf(null).doubleValue();
+        if((value instanceof Float) || (value instanceof Double))
+        {
+            return ((Number)value).doubleValue();
+        }
+        if(value instanceof String)
+        {
+            return Double.valueOf((String)value).doubleValue();
+        }
+        throw new MessageFormatException(value.getClass().getName() + " cannot be converted to double");
     }
 
     public String readString() throws JMSException
@@ -141,14 +221,14 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         }
         Object value = readObject();
         if(null == value) return null;
-        if((value instanceof Character ) || (value instanceof byte[]))
+        if(value instanceof byte[])
         {
             throw new MessageFormatException(value.getClass().getName() + " cannot be converted to String");
         }
         return value.toString();
     }
 
-    public int readBytes(byte[] arg0) throws JMSException
+    public int readBytes(byte[] byteData) throws JMSException
     {
         if(isInWriteMode)
         {
@@ -158,7 +238,20 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageEOFException("No more data");
         }
-        return 0;
+        if(null == byteData) return -1;
+        if(0 == byteData.length) return 0;
+        Object value = readObject();
+        if(null == value)
+        {
+            throw new NullPointerException();
+        }
+        if(!(value instanceof byte[]))
+        {
+            throw new MessageFormatException(value.getClass().getName() + " cannot be converted to byte[]");
+        }
+        int length = Math.min(byteData.length, ((byte[])value).length);
+        System.arraycopy(value, 0, byteData, 0, length);
+        return length;
     }
 
     public Object readObject() throws JMSException
@@ -279,6 +372,11 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
+        if(null == object)
+        {
+            data.push(object);
+            return;
+        }
         if((object instanceof String) || (object instanceof Number) || (object instanceof Character) || (object instanceof Boolean))
         {
             data.push(object);
@@ -296,6 +394,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
     public void reset() throws JMSException
     {
         isInWriteMode = false;
+        Collections.reverse(data);
     }
 
     public void clearBody() throws JMSException

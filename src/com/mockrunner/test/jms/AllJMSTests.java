@@ -12,6 +12,7 @@ public class AllJMSTests
         suite.addTest(new TestSuite(MockQueueConnectionTest.class));
         suite.addTest(new TestSuite(MockMessageTest.class));
         suite.addTest(new TestSuite(MockBytesMessageTest.class));
+        suite.addTest(new TestSuite(MockStreamMessageTest.class));
         //$JUnit-END$
         return suite;
     }

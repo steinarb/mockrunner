@@ -177,7 +177,7 @@ public class MockMessage implements Message
         }
         if(value instanceof String)
         {
-            return new Boolean((String)value).booleanValue();
+            return Boolean.valueOf((String)value).booleanValue();
         }
         if(value instanceof Boolean)
         {
@@ -195,14 +195,7 @@ public class MockMessage implements Message
         }
         if(value instanceof String)
         {
-            try
-            {
-                return new Byte((String)value).byteValue();
-            }
-            catch(NumberFormatException exc)
-            {
-                throw new MessageFormatException("Cannot convert property " + name + " with value " + value + " to byte");
-            }
+            return Byte.valueOf((String)value).byteValue();
         }
         if(value instanceof Byte)
         {
@@ -220,14 +213,7 @@ public class MockMessage implements Message
         }
         if(value instanceof String)
         {
-            try
-            {
-                return new Short((String)value).shortValue();
-            }
-            catch(NumberFormatException exc)
-            {
-                throw new MessageFormatException("Cannot convert property " + name + " with value " + value + " to short");
-            }
+            return Short.valueOf((String)value).shortValue();
         }
         if((value instanceof Short) || (value instanceof Byte))
         {
@@ -245,14 +231,7 @@ public class MockMessage implements Message
         }
         if(value instanceof String)
         {
-            try
-            {
-                return new Integer((String)value).intValue();
-            }
-            catch(NumberFormatException exc)
-            {
-                throw new MessageFormatException("Cannot convert property " + name + " with value " + value + " to int");
-            }
+            return Integer.valueOf((String)value).intValue();
         }
         if((value instanceof Integer) || (value instanceof Short) || (value instanceof Byte))
         {
@@ -270,14 +249,7 @@ public class MockMessage implements Message
         }
         if(value instanceof String)
         {
-            try
-            {
-                return new Long((String)value).longValue();
-            }
-            catch(NumberFormatException exc)
-            {
-                throw new MessageFormatException("Cannot convert property " + name + " with value " + value + " to long");
-            }
+            return Long.valueOf((String)value).longValue();
         }
         if((value instanceof Long) || (value instanceof Integer) || (value instanceof Short) || (value instanceof Byte))
         {
@@ -295,14 +267,7 @@ public class MockMessage implements Message
         }
         if(value instanceof String)
         {
-            try
-            {
-                return new Float((String)value).floatValue();
-            }
-            catch(NumberFormatException exc)
-            {
-                throw new MessageFormatException("Cannot convert property " + name + " with value " + value + " to float");
-            }
+            return Float.valueOf((String)value).floatValue();
         }
         if(value instanceof Float)
         {
@@ -320,14 +285,7 @@ public class MockMessage implements Message
         }
         if(value instanceof String)
         {
-            try
-            {
-                return new Double((String)value).doubleValue();
-            }
-            catch(NumberFormatException exc)
-            {
-                throw new MessageFormatException("Cannot convert property " + name + " with value " + value + " to double");
-            }
+           return Double.valueOf((String)value).doubleValue();
         }
         if((value instanceof Double) || (value instanceof Float))
         {
@@ -395,6 +353,11 @@ public class MockMessage implements Message
 
     public void setObjectProperty(String name, Object object) throws JMSException
     {
+        if(null == object)
+        {
+            properties.put(name, object);
+            return;
+        }
         if((object instanceof String) || (object instanceof Number) || (object instanceof Boolean))
         {
             properties.put(name, object);
