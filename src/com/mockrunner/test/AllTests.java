@@ -3,6 +3,7 @@ package com.mockrunner.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import com.mockrunner.example.servlet.ImageButtonFilterTest;
 import com.mockrunner.example.servlet.LogoutServletTest;
 import com.mockrunner.example.servlet.RedirectServletTest;
 import com.mockrunner.example.struts.AuthenticationActionTest;
@@ -34,6 +35,7 @@ public class AllTests
         suite.addTest(new TestSuite(AuthenticationActionTest.class));
         suite.addTest(new TestSuite(StoreDataActionTest.class));
         suite.addTest(new TestSuite(OrderActionTest.class));
+        suite.addTest(new TestSuite(ImageButtonFilterTest.class));
         //$JUnit-END$
         return suite;
     }

@@ -24,7 +24,7 @@ public class LogoutServlet extends HttpServlet
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         String logout = request.getParameter("logout");
-        if(null != logout && logout.equals("true"))
+        if(null != logout)
         {
             request.getSession().invalidate();
             request.getRequestDispatcher("/html/goodbye.html").forward(request, response);

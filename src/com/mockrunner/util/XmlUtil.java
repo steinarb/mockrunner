@@ -9,6 +9,7 @@ import org.cyberneko.html.HTMLConfiguration;
 import org.jdom.Element;
 import org.jdom.input.DOMBuilder;
 import org.jdom.output.XMLOutputter;
+import org.w3c.dom.ls.DOMInput;
 import org.xml.sax.InputSource;
 
 /**
@@ -112,7 +113,7 @@ public class XmlUtil
      * Parses the specified HTML with the NekoHTML parser.
      * If you want to use another HTML parser or configure
      * the NekoHTML parser with special features, you can use
-     * the {@link #parse} method.
+     * the <code>parse</code> methods.
      * @param source the HTML as String
      * @return the parsed document as org.w3c.dom.Document
      */
@@ -131,11 +132,13 @@ public class XmlUtil
     
     /**
      * Parses the specified XML with the specified parser.
-     * The main purpose of this method is to use a custom
-     * HTML parser. If you can live with the NekoHTML parser
-     * and its default features, you can use {@link #parseHTML}.
-     * @param parser the <code>DOMParser</code>, e.g. the one
-     *        returned by {@link #getHTMLParser}
+     * The main purpose of this method is to use the NekoHTML 
+     * parser with custom features and properties. If you can live
+     * with the settings provided by Mockrunner, you can use 
+     * {@link #parseHTML}.
+     * @param parser the parser (must extend 
+     *               <code>org.apache.xerces.parsers.DOMParser</code>), 
+     *               e.g. the one returned by {@link #getHTMLParser}
      * @param source the XML as String
      * @return the parsed document as org.w3c.dom.Document
      */
@@ -145,6 +148,26 @@ public class XmlUtil
         {
             parser.parse(new InputSource(new StringReader(source)));
             return parser.getDocument();
+        }
+        catch(Exception exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
+    /**
+     * Parses the specified XML with the specified parser.
+     * The main purpose of this method is to use a custom parser.
+     * @param parser the parser
+     * @param data the data as <code>DOMInput</code>
+     * @return the parsed document as org.w3c.dom.Document
+     */
+    public static org.w3c.dom.Document parse(org.w3c.dom.ls.DOMParser parser, DOMInput data)
+    {
+        try
+        {
+            return parser.parse(data);
         }
         catch(Exception exc)
         {
