@@ -1,6 +1,0 @@
-- add support for mulitple ResultSet returns
-- add better support of HTML fragments
-- get MultiThreadTestSuite working
-- make MockObjectFactory more generic (custom mock objects)
-- improve JavaDoc descriptions
-
