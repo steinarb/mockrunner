@@ -2,3 +2,4 @@
 - add better support of HTML fragments
 - get MultiThreadTestSuite working
 - write more tests for framework components
+- make MockObjectFactory more generic (custom mock objects)
