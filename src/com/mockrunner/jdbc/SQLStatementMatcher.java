@@ -6,26 +6,31 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.oro.text.regex.MalformedPatternException;
+import org.apache.oro.text.regex.Pattern;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
+
 /**
  * Helper class for finding matching SQL statements based on various
  * search parameters.
  */
 public class SQLStatementMatcher
 {
-    private boolean isCaseSensitive = false;
-    private boolean isExactMatch = false;
-    private boolean isUseRegularExpression = false;
+    private boolean caseSensitive = false;
+    private boolean exactMatch = false;
+    private boolean useRegularExpression = false;
     
-    public SQLStatementMatcher(boolean isCaseSensitive, boolean isExactMatch)
+    public SQLStatementMatcher(boolean caseSensitive, boolean exactMatch)
     {
-        this(isCaseSensitive, isExactMatch, false);
+        this(caseSensitive, exactMatch, false);
     }
     
-    public SQLStatementMatcher(boolean isCaseSensitive, boolean isExactMatch, boolean isUseRegularExpression)
+    public SQLStatementMatcher(boolean caseSensitive, boolean exactMatch, boolean useRegularExpression)
     {
-        this.isCaseSensitive = isCaseSensitive;
-        this.isExactMatch = isExactMatch;
-        this.isUseRegularExpression = isUseRegularExpression;
+        this.caseSensitive = caseSensitive;
+        this.exactMatch = exactMatch;
+        this.useRegularExpression = useRegularExpression;
     }
     
     /**
@@ -59,7 +64,7 @@ public class SQLStatementMatcher
 				source = nextKey;
 				currentQuery = query;
 			}
-			if(doesStringMatch(source, currentQuery))
+			if(doStringsMatch(source, currentQuery))
 			{
 				Object matchingObject = dataMap.get(nextKey);
 				if(resolveCollection && (matchingObject instanceof Collection))
@@ -102,7 +107,7 @@ public class SQLStatementMatcher
                 source = nextKey;
                 currentQuery = query;
             }
-            if(doesStringMatch(source, currentQuery)) return true;
+            if(doStringsMatch(source, currentQuery)) return true;
         }
         return false;
     }
@@ -113,16 +118,28 @@ public class SQLStatementMatcher
      * @param source the source string
      * @return <code>true</code> of the strings match, <code>false</code> otherwise
      */
-    public boolean doesStringMatch(String source, String query)
+    public boolean doStringsMatch(String source, String query)
     {
         if(null == source) source = "";
         if(null == query) query = "";
-        if(!isCaseSensitive)
+        if(useRegularExpression && !exactMatch)
+        {
+            return doPerl5Match(source, query);
+        }
+        else
+        {
+            return doSimpleMatch(source, query);
+        }
+    }
+
+    private boolean doSimpleMatch(String source, String query)
+    {
+        if(!caseSensitive)
         {
             source = source.toLowerCase();
             query = query.toLowerCase();
         }
-        if(isExactMatch)
+        if(exactMatch)
         {
             if(source.equals(query)) return true;
         }
@@ -131,5 +148,24 @@ public class SQLStatementMatcher
             if(-1 != source.indexOf(query)) return true;
         }
         return false;
+    }
+    
+    private boolean doPerl5Match(String source, String query)
+    {
+        int mask = Perl5Compiler.CASE_INSENSITIVE_MASK;
+        if(caseSensitive)
+        {
+            mask = Perl5Compiler.DEFAULT_MASK;
+        }
+        try
+        {
+            Pattern pattern = new Perl5Compiler().compile(query, mask);
+            return (new Perl5Matcher().matches(source, pattern));
+        } 
+        catch(MalformedPatternException exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
     }
 }
