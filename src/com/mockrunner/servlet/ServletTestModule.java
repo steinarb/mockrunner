@@ -203,7 +203,7 @@ public class ServletTestModule extends HTMLOutputModule
      */
     public void doDelete()
     {
-        mockFactory.getMockRequest().setupGetMethod("DELETE");
+        mockFactory.getMockRequest().setMethod("DELETE");
         callService();
     }
     
@@ -214,7 +214,7 @@ public class ServletTestModule extends HTMLOutputModule
      */          
     public void doGet()
     {
-        mockFactory.getMockRequest().setupGetMethod("GET");
+        mockFactory.getMockRequest().setMethod("GET");
         callService();
     }
     
@@ -225,7 +225,7 @@ public class ServletTestModule extends HTMLOutputModule
      */          
     public void doOptions()
     {
-        mockFactory.getMockRequest().setupGetMethod("OPTIONS");
+        mockFactory.getMockRequest().setMethod("OPTIONS");
         callService();
     }
     
@@ -236,7 +236,7 @@ public class ServletTestModule extends HTMLOutputModule
      */         
     public void doPost()
     {
-        mockFactory.getMockRequest().setupGetMethod("POST");
+        mockFactory.getMockRequest().setMethod("POST");
         callService();
     }
     
@@ -247,7 +247,7 @@ public class ServletTestModule extends HTMLOutputModule
      */         
     public void doPut()
     {
-        mockFactory.getMockRequest().setupGetMethod("PUT");
+        mockFactory.getMockRequest().setMethod("PUT");
         callService();
     }
     
@@ -258,7 +258,7 @@ public class ServletTestModule extends HTMLOutputModule
      */          
     public void doTrace()
     {
-        mockFactory.getMockRequest().setupGetMethod("TRACE");
+        mockFactory.getMockRequest().setMethod("TRACE");
         callService();
     }
     
