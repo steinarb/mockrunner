@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
+import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueBrowser;
 import com.mockrunner.mock.jms.MockQueueReceiver;
@@ -691,12 +692,130 @@ public class JMSTestModule
     }
     
     /**
+     * Verifies that the specified messages are equal by calling the
+     * <code>equals()</code> method. All mock messages provide a
+     * suitable implementation of mock message.
+     * @param message1 the first message
+     * @param message2 the second message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyMessageEquals(MockMessage message1, MockMessage message2)
+    {
+        if(null == message1)
+        {
+            throw new VerifyFailedException("message1 is null");
+        }
+        if(null == message2)
+        {
+            throw new VerifyFailedException("message2 is null");
+        }
+        if(!message1.equals(message2))
+        {
+            throw new VerifyFailedException("messages not equal: message1: " + message1.toString() + ", message2: " + message2.toString());
+        }
+    }
+    
+    /**
+     * Verifies that a message in the specified queue is equal to
+     * the specified message by calling the <code>equals()</code> method. 
+     * All mock messages provide a suitable implementation of mock message.
+     * @param nameOfQueue the name of the queue
+     * @param indexOfSourceMessage the index of the message in the queue
+     * @param targetMessage the message that will be used for comparison
+     */
+    public void verifyCurrentQueueMessageEquals(String nameOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
+    {
+        List messageList = getCurrentMessageListFromQueue(nameOfQueue);
+        if(null == messageList)
+        {
+            throw new VerifyFailedException("No queue with name " + nameOfQueue + " exists");
+        }
+        if(indexOfSourceMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Queue " + nameOfQueue + " contains only " + messageList.size() + " messages");
+        }
+        MockMessage sourceMessage = (MockMessage)messageList.get(indexOfSourceMessage);
+        verifyMessageEquals(sourceMessage, targetMessage);
+    }
+    
+    /**
+     * Verifies that a received message is equal to the specified message 
+     * by calling the <code>equals()</code> method. 
+     * All mock messages provide a suitable implementation of mock message.
+     * @param nameOfQueue the name of the queue
+     * @param indexOfSourceMessage the index of the received message
+     * @param targetMessage the message that will be used for comparison
+     */
+    public void verifyReceivedQueueMessageEquals(String nameOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
+    {
+        List messageList = getReceivedMessageListFromQueue(nameOfQueue);
+        if(null == messageList)
+        {
+            throw new VerifyFailedException("No queue with name " + nameOfQueue + " exists");
+        }
+        if(indexOfSourceMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Queue " + nameOfQueue + " received only " + messageList.size() + " messages");
+        }
+        MockMessage sourceMessage = (MockMessage)messageList.get(indexOfSourceMessage);
+        verifyMessageEquals(sourceMessage, targetMessage);
+    }
+    
+    /**
+     * Verifies that a message in the specified temporary queue is equal to
+     * the specified message by calling the <code>equals()</code> method. 
+     * All mock messages provide a suitable implementation of mock message.
+     * @param indexOfSession the index of the session
+     * @param indexOfQueue the index of the temporary queue
+     * @param indexOfSourceMessage the index of the message in the queue
+     * @param targetMessage the message that will be used for comparison
+     */
+    public void verifyCurrentQueueMessageEquals(int indexOfSession, int indexOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
+    {
+        List messageList = getCurrentMessageListFromTemporaryQueue(indexOfSession, indexOfQueue);
+        if(null == messageList)
+        {
+            throw new VerifyFailedException("Temporary queue with index " + indexOfQueue + " of session with index " + indexOfSession +  " does not exist");
+        }
+        if(indexOfSourceMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Temporary queue with index " + indexOfQueue + " contains only " + messageList.size() + " messages");
+        }
+        MockMessage sourceMessage = (MockMessage)messageList.get(indexOfSourceMessage);
+        verifyMessageEquals(sourceMessage, targetMessage);
+    }
+
+    /**
+     * Verifies that a received message is equal to the specified message 
+     * by calling the <code>equals()</code> method. 
+     * All mock messages provide a suitable implementation of mock message.
+     * @param indexOfSession the index of the session
+     * @param indexOfQueue the index of the temporary queue
+     * @param indexOfSourceMessage the index of the received message
+     * @param targetMessage the message that will be used for comparison
+     */
+    public void verifyReceivedQueueMessageEquals(int indexOfSession, int indexOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
+    {
+        List messageList = getReceivedMessageListFromTemporaryQueue(indexOfSession, indexOfQueue);
+        if(null == messageList)
+        {
+            throw new VerifyFailedException("Temporary queue with index " + indexOfQueue + " of session with index " + indexOfSession +  " does not exist");
+        }
+        if(indexOfSourceMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Temporary queue with index " + indexOfQueue + " received only " + messageList.size() + " messages");
+        }
+        MockMessage sourceMessage = (MockMessage)messageList.get(indexOfSourceMessage);
+        verifyMessageEquals(sourceMessage, targetMessage);
+    }
+    
+    /**
      * Verifies the number of messages in a queue.
      * @param nameOfQueue the name of the queue
      * @param numberOfMessages the expected number of messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfCurrentMessages(String nameOfQueue, int numberOfMessages)
+    public void verifyNumberOfCurrentQueueMessages(String nameOfQueue, int numberOfMessages)
     {
         List list = getCurrentMessageListFromQueue(nameOfQueue);
         if(null == list)
@@ -715,7 +834,7 @@ public class JMSTestModule
      * @param numberOfMessages the expected number of messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfReceivedMessages(String nameOfQueue, int numberOfMessages)
+    public void verifyNumberOfReceivedQueueMessages(String nameOfQueue, int numberOfMessages)
     {
         List list = getReceivedMessageListFromQueue(nameOfQueue);
         if(null == list)
@@ -735,7 +854,7 @@ public class JMSTestModule
      * @param numberOfMessages the expected number of messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfCurrentMessages(int indexOfSession, int indexOfQueue, int numberOfMessages)
+    public void verifyNumberOfCurrentQueueMessages(int indexOfSession, int indexOfQueue, int numberOfMessages)
     {
         List list = getCurrentMessageListFromTemporaryQueue(indexOfSession, indexOfQueue);
         if(null == list)
@@ -755,7 +874,7 @@ public class JMSTestModule
      * @param numberOfMessages the expected number of messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfReceivedMessages(int indexOfSession, int indexOfQueue, int numberOfMessages)
+    public void verifyNumberOfReceivedQueueMessages(int indexOfSession, int indexOfQueue, int numberOfMessages)
     {
         List list = getReceivedMessageListFromTemporaryQueue(indexOfSession, indexOfQueue);
         if(null == list)
@@ -775,7 +894,7 @@ public class JMSTestModule
      * @param number the expected number of messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfMessages(int indexOfSession, int number)
+    public void verifyNumberOfQueueMessages(int indexOfSession, int number)
     {
         MockQueueSession session = getQueueSession(indexOfSession);
         if(null == session)
@@ -795,7 +914,7 @@ public class JMSTestModule
      * @param number the expected number of bytes messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfBytesMessages(int indexOfSession, int number)
+    public void verifyNumberOfQueueBytesMessages(int indexOfSession, int number)
     {
         MockQueueSession session = getQueueSession(indexOfSession);
         if(null == session)
@@ -815,7 +934,7 @@ public class JMSTestModule
      * @param number the expected number of map messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfMapMessages(int indexOfSession, int number)
+    public void verifyNumberOfQueueMapMessages(int indexOfSession, int number)
     {
         MockQueueSession session = getQueueSession(indexOfSession);
         if(null == session)
@@ -835,7 +954,7 @@ public class JMSTestModule
      * @param number the expected number of text messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfTextMessages(int indexOfSession, int number)
+    public void verifyNumberOfQueueTextMessages(int indexOfSession, int number)
     {
         MockQueueSession session = getQueueSession(indexOfSession);
         if(null == session)
@@ -855,7 +974,7 @@ public class JMSTestModule
      * @param number the expected number of stream messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfStreamMessages(int indexOfSession, int number)
+    public void verifyNumberOfQueueStreamMessages(int indexOfSession, int number)
     {
         MockQueueSession session = getQueueSession(indexOfSession);
         if(null == session)
@@ -875,7 +994,7 @@ public class JMSTestModule
      * @param number the expected number of object messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfObjectMessages(int indexOfSession, int number)
+    public void verifyNumberOfQueueObjectMessages(int indexOfSession, int number)
     {
         MockQueueSession session = getQueueSession(indexOfSession);
         if(null == session)
