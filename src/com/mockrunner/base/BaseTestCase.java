@@ -16,7 +16,7 @@ import com.mockrunner.struts.ActionTestModule;
 import com.mockrunner.tag.TagTestModule;
 
 /**
- * Base class for all adapters.
+ * Base class for all standard adapters. Not used for basic adapters.
  */
 public abstract class BaseTestCase extends TestCase
 {
