@@ -135,7 +135,7 @@ cglib:
 http://cglib.sourceforge.net
 cglib-full-2.0-RC2.jar (from MockEJB 0.6 beta2 release)
 
-JDOM Beta 10:
+JDOM 1.0:
 http://www.jdom.org
 jdom.jar
 
