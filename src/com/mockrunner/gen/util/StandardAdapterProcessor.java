@@ -23,8 +23,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
     public void process(Class module, List excludedMethods)
     {
         JavaClassGenerator classGenerator = new JavaClassGenerator();
-        BCELClassAnalyzer analyzer = new BCELClassAnalyzer(module);
-        Class factoryClass = determineFactoryClass(module);
+        BCELClassAnalyzer analyzer = new BCELClassAnalyzer(module); 
         classGenerator.setCreateJavaDocComments(true);
         classGenerator.setPackage(module.getPackage());
         classGenerator.setClassName(prepareName(module));
@@ -34,12 +33,16 @@ public class StandardAdapterProcessor implements AdapterProcessor
             classGenerator.setSuperClass(getSuperClass(module));
         }
         classGenerator.setClassComment(getClassComment(module));
-        String memberName = addMemberDeclarations(module, classGenerator, factoryClass);
+        Class factoryClass = determineFactoryClass(module);
+        MemberInfo memberInfo = new MemberInfo();
+        memberInfo.setModule(module);
+        memberInfo.setFactory(factoryClass);
+        addMemberDeclarations(classGenerator, memberInfo);
         addConstructors(classGenerator);
-        addTearDownMethod(classGenerator, memberName);
-        addSetUpMethod(classGenerator, module, memberName, factoryClass);
-        addAdditionalControlMethods(module, classGenerator, memberName);
-        addDelegatorMethods(classGenerator, analyzer, module, excludedMethods, memberName);
+        addTearDownMethod(classGenerator, memberInfo);
+        addSetUpMethod(classGenerator, memberInfo);
+        addAdditionalControlMethods(classGenerator, memberInfo);
+        addDelegatorMethods(classGenerator, analyzer, excludedMethods, memberInfo);
         output = classGenerator.generate();
     }
 
@@ -67,32 +70,33 @@ public class StandardAdapterProcessor implements AdapterProcessor
         throw new RuntimeException("Module " + module.getName() + " has no constructor with mock object factory argument");
     }
     
-    private void addTearDownMethod(JavaClassGenerator classGenerator, String memberName)
+    private void addTearDownMethod(JavaClassGenerator classGenerator, MemberInfo memberInfo)
     {
         MethodDeclaration method = createProtectedMethod();
         method.setName("tearDown");
         method.setExceptions(new Class[] {Exception.class});
-        method.setCodeLines(getTearDownMethodCodeLines(memberName));
+        method.setCodeLines(getTearDownMethodCodeLines(memberInfo));
         classGenerator.addMethodDeclaration(method);
     }
     
-    private void addSetUpMethod(JavaClassGenerator classGenerator, Class module, String memberName, Class factoryClass)
+    private void addSetUpMethod(JavaClassGenerator classGenerator, MemberInfo memberInfo)
     {
         MethodDeclaration method = createProtectedMethod();
         method.setName("setUp");
         method.setExceptions(new Class[] {Exception.class});
         String[] comment = new String[2];
-        comment[0] = "Creates the " + getJavaDocModuleLink(module) + ". If you";
+        comment[0] = "Creates the " + getJavaDocModuleLink(memberInfo.getModule()) + ". If you";
         comment[1] = "overwrite this method, you must call <code>super.setUp()</code>.";
         method.setCommentLines(comment);
-        method.setCodeLines(getSetUpMethodCodeLines(module, memberName, factoryClass));
+        method.setCodeLines(getSetUpMethodCodeLines(memberInfo));
         classGenerator.addMethodDeclaration(method);
     }
     
-    private void addHTMLOutputAndWebTestMethods(JavaClassGenerator classGenerator, Class module, String memberName)
+    private void addHTMLOutputAndWebTestMethods(JavaClassGenerator classGenerator, MemberInfo memberInfo)
     {
+        Class module = memberInfo.getModule();
         if(!HTMLOutputModule.class.isAssignableFrom(module)) return;
-        String[] codeLines = new String[] {"return " + memberName + ";"};
+        String[] codeLines = new String[] {"return " + memberInfo.getModuleMember() + ";"};
         MethodDeclaration webTestMethod = createProtectedMethod();
         webTestMethod.setName("getWebTestModule");
         webTestMethod.setReturnType(WebTestModule.class);
@@ -115,8 +119,10 @@ public class StandardAdapterProcessor implements AdapterProcessor
         classGenerator.addMethodDeclaration(htmlOutputMethod);
     }
     
-    private void addGetAndSetModuleMethods(JavaClassGenerator classGenerator, Class module, String memberName)
+    private void addGetAndSetModuleMethods(JavaClassGenerator classGenerator, MemberInfo memberInfo)
     {
+        Class module = memberInfo.getModule();
+        String memberName = memberInfo.getModuleMember();
         MethodDeclaration getMethod = createProtectedMethod();
         getMethod.setName("get" + ClassUtil.getClassName(module));
         getMethod.setReturnType(module);
@@ -138,9 +144,9 @@ public class StandardAdapterProcessor implements AdapterProcessor
         classGenerator.addMethodDeclaration(setMethod);
     }
     
-    private void addDelegatorMethods(JavaClassGenerator classGenerator, BCELClassAnalyzer analyzer, Class module, List excludedMethods, String memberName)
+    private void addDelegatorMethods(JavaClassGenerator classGenerator, BCELClassAnalyzer analyzer, List excludedMethods, MemberInfo memberInfo)
     {
-        Method[] moduleMethods = getDelegateMethods(module, excludedMethods);
+        Method[] moduleMethods = getDelegateMethods(memberInfo.getModule(), excludedMethods);
         for(int ii = 0; ii < moduleMethods.length; ii++)
         {
             Method method = moduleMethods[ii];
@@ -164,9 +170,9 @@ public class StandardAdapterProcessor implements AdapterProcessor
                 }
                 delegationMethod.setArgumentNames(argumentNames);
             }
-            String delegationCodeLine = createDelegationCodeLine(method, memberName, argumentNames);
+            String delegationCodeLine = createDelegationCodeLine(method, memberInfo.getModuleMember(), argumentNames);
             delegationMethod.setCodeLines(new String[] {delegationCodeLine});
-            String[] delegationMethodComment = createDelegationMethodComment(analyzer, module, method);
+            String[] delegationMethodComment = createDelegationMethodComment(analyzer, memberInfo.getModule(), method);
             delegationMethod.setCommentLines(delegationMethodComment);
             classGenerator.addMethodDeclaration(delegationMethod);
         }
@@ -296,31 +302,31 @@ public class StandardAdapterProcessor implements AdapterProcessor
         return className;
     }
     
-    protected String addMemberDeclarations(Class module, JavaClassGenerator classGenerator, Class factoryClass)
+    protected void addMemberDeclarations(JavaClassGenerator classGenerator, MemberInfo memberInfo)
     {
-        String memberName = ClassUtil.getArgumentName(module);
-        classGenerator.addMemberDeclaration(module, memberName);
-        return memberName;
+        String memberName = ClassUtil.getArgumentName(memberInfo.getModule());
+        memberInfo.setModuleMember(memberName);
+        classGenerator.addMemberDeclaration(memberInfo.getModule(), memberName);
     }
     
-    protected String[] getSetUpMethodCodeLines(Class module, String memberName, Class factoryClass)
+    protected String[] getSetUpMethodCodeLines(MemberInfo memberInfo)
     {
         String[] codeLines = new String[2];
         codeLines[0] = "super.setUp();";
-        String factoryCall = "get" + ClassUtil.getClassName(factoryClass);
-        codeLines[1] = memberName + " = create" + ClassUtil.getClassName(module) + "(" + factoryCall +"());";
+        String factoryCall = "get" + ClassUtil.getClassName(memberInfo.getFactory());
+        codeLines[1] = memberInfo.getModuleMember() + " = create" + ClassUtil.getClassName(memberInfo.getModule()) + "(" + factoryCall +"());";
         return codeLines;
     }
     
-    protected String[] getTearDownMethodCodeLines(String memberName)
+    protected String[] getTearDownMethodCodeLines(MemberInfo memberInfo)
     {
-        return new String[] {"super.tearDown();", memberName + " = null;"};
+        return new String[] {"super.tearDown();", memberInfo.getModuleMember() + " = null;"};
     }
     
-    protected void addAdditionalControlMethods(Class module, JavaClassGenerator classGenerator, String memberName)
+    protected void addAdditionalControlMethods(JavaClassGenerator classGenerator, MemberInfo memberInfo)
     {
-        addHTMLOutputAndWebTestMethods(classGenerator, module, memberName);
-        addGetAndSetModuleMethods(classGenerator, module, memberName);
+        addHTMLOutputAndWebTestMethods(classGenerator, memberInfo);
+        addGetAndSetModuleMethods(classGenerator, memberInfo);
     }
 
     protected String[] getClassComment(Class module)
@@ -349,5 +355,53 @@ public class StandardAdapterProcessor implements AdapterProcessor
     protected String prepareClassNameFromBaseName(String className)
     {
         return className + "CaseAdapter";
+    }
+    
+    protected class MemberInfo
+    {
+        private Class module;
+        private String moduleMember;
+        private Class factory;
+        private String factoryMember;
+        
+        public Class getFactory()
+        {
+            return factory;
+        }
+        
+        public void setFactory(Class factory)
+        {
+            this.factory = factory;
+        }
+        
+        public String getFactoryMember()
+        {
+            return factoryMember;
+        }
+        
+        public void setFactoryMember(String factoryMember)
+        {
+            this.factoryMember = factoryMember;
+        }
+        
+        public Class getModule()
+        {
+            return module;
+        }
+        
+        public void setModule(Class module)
+        {
+            this.module = module;
+        }
+        
+        public String getModuleMember()
+        {
+            return moduleMember;
+        }
+        
+        public void setModuleMember(String moduleMember)
+        {
+            this.moduleMember = moduleMember;
+        }
     }
 }

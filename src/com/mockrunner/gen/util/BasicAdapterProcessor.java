@@ -2,27 +2,40 @@ package com.mockrunner.gen.util;
 
 import com.mockrunner.base.BasicHTMLOutputTestCase;
 import com.mockrunner.base.HTMLOutputModule;
+import com.mockrunner.util.ClassUtil;
 
 public class BasicAdapterProcessor extends StandardAdapterProcessor
 {
-    protected String addMemberDeclarations(Class module, JavaClassGenerator classGenerator, Class factoryClass)
+    protected void addMemberDeclarations(JavaClassGenerator classGenerator, MemberInfo memberInfo)
     {
-        return super.addMemberDeclarations(module, classGenerator, factoryClass);
+        super.addMemberDeclarations(classGenerator, memberInfo);
+        String factoryName = ClassUtil.getArgumentName(memberInfo.getFactory());
+        memberInfo.setFactoryMember(factoryName);
+        classGenerator.addMemberDeclaration(memberInfo.getFactory(), factoryName);
     }
     
-    protected String[] getSetUpMethodCodeLines(Class module, String memberName, Class factoryMethod)
+    protected String[] getSetUpMethodCodeLines(MemberInfo memberInfo)
     {
-        return super.getSetUpMethodCodeLines(module, memberName, factoryMethod);
+        String[] codeLines = new String[3];
+        codeLines[0] = "super.setUp();";
+        codeLines[1] = memberInfo.getFactoryMember() + " = create" + ClassUtil.getClassName(memberInfo.getFactory()) + "();";
+        String getFactoryCall = "get" + ClassUtil.getClassName(memberInfo.getFactory());
+        codeLines[2] = memberInfo.getModuleMember() + " = create" + ClassUtil.getClassName(memberInfo.getModule()) + "(" + getFactoryCall +"());";
+        return codeLines;
     }
     
-    protected String[] getTearDownMethodCodeLines(String memberName)
+    protected String[] getTearDownMethodCodeLines(MemberInfo memberInfo)
     {
-        return super.getTearDownMethodCodeLines(memberName);
+        String[] codeLines = new String[3];
+        codeLines[0] = "super.tearDown();";
+        codeLines[1] = memberInfo.getModuleMember() + " = null;";
+        codeLines[2] = memberInfo.getFactoryMember() + " = null;";
+        return codeLines;
     }
     
-    protected void addAdditionalControlMethods(Class module, JavaClassGenerator classGenerator, String memberName)
+    protected void addAdditionalControlMethods(JavaClassGenerator classGenerator, MemberInfo memberInfo)
     {
-        super.addAdditionalControlMethods(module, classGenerator, memberName);
+        super.addAdditionalControlMethods(classGenerator, memberInfo);
     }
     
     protected String[] getClassComment(Class module)
