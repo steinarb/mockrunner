@@ -98,7 +98,7 @@ related to the test module you use.
 
 The third-party libraries included in the Mockrunner release are:
 
-Struts 1.2.2:
+Struts 1.2.4:
 http://jakarta.apache.org/struts
 struts.jar
 

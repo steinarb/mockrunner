@@ -54,7 +54,6 @@ public class BillManagerSessionTest extends EJBTestCaseAdapter
             List unpaidObjects = new ArrayList();
             BillEntity entity1 = (BillEntity)createEntityBean("java:comp/env/ejb/BillEntity", new Object[] {new Integer(1)}, new Integer(1));
             BillEntity entity2 = (BillEntity)createEntityBean("java:comp/env/ejb/BillEntity", new Object[] {new Integer(2)}, new Integer(2));
-            System.out.println(entity1);
             entity1.setPaid(false);
             entity2.setPaid(false);
             unpaidObjects.add(entity1);
