@@ -53,6 +53,11 @@ public class MockTopicConnection extends MockConnection implements TopicConnecti
         if(topicSessions.size() <= index || index < 0) return null;
         return (MockTopicSession)topicSessions.get(index);
     }
+    
+    public Session createSession(boolean transacted, int acknowledgeMode) throws JMSException
+    {
+        return createTopicSession(transacted, acknowledgeMode);
+    }
 
     public TopicSession createTopicSession(boolean transacted, int acknowledgeMode) throws JMSException
     {
@@ -64,13 +69,7 @@ public class MockTopicConnection extends MockConnection implements TopicConnecti
 
     public ConnectionConsumer createConnectionConsumer(Topic topic, String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException
     {
-        throwJMSException();
-        return new MockConnectionConsumer(this, sessionPool);
-    }
-
-    public ConnectionConsumer createDurableConnectionConsumer(Topic topic, String subscriptionName, String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException 
-    {
-        return createConnectionConsumer(topic, messageSelector, sessionPool, maxMessages);
+        return super.createConnectionConsumer(topic, messageSelector, sessionPool, maxMessages);
     }
     
     public void close() throws JMSException

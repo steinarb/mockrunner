@@ -1,9 +1,15 @@
 package com.mockrunner.test.jms;
 
 import javax.jms.ConnectionConsumer;
+import javax.jms.Destination;
 import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
+import javax.jms.Queue;
+import javax.jms.QueueConnection;
 import javax.jms.QueueSession;
+import javax.jms.Topic;
+import javax.jms.TopicConnection;
+import javax.jms.TopicSession;
 
 import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.mock.jms.MockQueue;
@@ -90,6 +96,16 @@ public class MockConnectionTest extends TestCase
         topicConnection3.throwJMSException();
     }
     
+    public void testFactoriesCreateConnection() throws Exception
+    {
+        MockQueueConnectionFactory queueFactory = new MockQueueConnectionFactory(new DestinationManager());
+        assertTrue(queueFactory.createConnection() instanceof QueueConnection);
+        assertTrue(queueFactory.createConnection(null, null) instanceof QueueConnection);
+        MockTopicConnectionFactory topicFactory = new MockTopicConnectionFactory(new DestinationManager());
+        assertTrue(topicFactory.createConnection() instanceof TopicConnection);
+        assertTrue(topicFactory.createConnection(null, null) instanceof TopicConnection);
+    }
+    
     public void testClose() throws Exception
     {
         MockQueueSession queueSession1 = (MockQueueSession)queueConnection.createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
@@ -128,6 +144,18 @@ public class MockConnectionTest extends TestCase
         assertTrue(topicSession2.isRolledBack());
         assertFalse(topicSession1.isRecovered());
         assertTrue(topicSession2.isRecovered());
+    }
+    
+    public void testCreateConsumerAndSession() throws Exception
+    {
+        assertTrue(queueConnection.createSession(true, QueueSession.CLIENT_ACKNOWLEDGE) instanceof QueueSession);
+        assertNotNull(queueConnection.createConnectionConsumer((Destination)null, null, null, 0));
+        assertNotNull(queueConnection.createConnectionConsumer((Queue)null, null, null, 0));
+        assertNotNull(queueConnection.createDurableConnectionConsumer(null, null, null, null, 0));
+        assertTrue(topicConnection.createSession(true, QueueSession.CLIENT_ACKNOWLEDGE) instanceof TopicSession);
+        assertNotNull(topicConnection.createConnectionConsumer((Destination)null, null, null, 0));
+        assertNotNull(topicConnection.createConnectionConsumer((Topic)null, null, null, 0));
+        assertNotNull(queueConnection.createDurableConnectionConsumer(null, null, null, null, 0));
     }
 
     public void testException() throws Exception

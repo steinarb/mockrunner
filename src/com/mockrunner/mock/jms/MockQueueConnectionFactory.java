@@ -3,6 +3,7 @@ package com.mockrunner.mock.jms;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
@@ -23,6 +24,16 @@ public class MockQueueConnectionFactory implements QueueConnectionFactory
         queueConnections = new ArrayList();
         this.destinationManager = destinationManager;
         exception = null;
+    }
+    
+    public Connection createConnection() throws JMSException
+    {
+        return createQueueConnection();
+    }
+
+    public Connection createConnection(String name, String password) throws JMSException
+    {
+        return createQueueConnection();
     }
     
     public QueueConnection createQueueConnection() throws JMSException

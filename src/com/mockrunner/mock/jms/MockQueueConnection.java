@@ -54,6 +54,11 @@ public class MockQueueConnection extends MockConnection implements QueueConnecti
         return (MockQueueSession)queueSessions.get(index);
     }
     
+    public Session createSession(boolean transacted, int acknowledgeMode) throws JMSException
+    {
+        return createQueueSession(transacted, acknowledgeMode);
+    }
+    
     public QueueSession createQueueSession(boolean transacted, int acknowledgeMode) throws JMSException
     {
         throwJMSException();
@@ -64,8 +69,7 @@ public class MockQueueConnection extends MockConnection implements QueueConnecti
 
     public ConnectionConsumer createConnectionConsumer(Queue queue, String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException
     {
-        throwJMSException();
-        return new MockConnectionConsumer(this, sessionPool);
+        return super.createConnectionConsumer(queue, messageSelector, sessionPool, maxMessages);
     }
     
     public void close() throws JMSException

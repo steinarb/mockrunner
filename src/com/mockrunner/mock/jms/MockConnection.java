@@ -1,9 +1,13 @@
 package com.mockrunner.mock.jms;
 
 import javax.jms.Connection;
+import javax.jms.ConnectionConsumer;
 import javax.jms.ConnectionMetaData;
+import javax.jms.Destination;
 import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
+import javax.jms.ServerSessionPool;
+import javax.jms.Topic;
 
 import com.mockrunner.jms.DestinationManager;
 
@@ -78,6 +82,17 @@ public abstract class MockConnection implements Connection
     public void setMetaData(ConnectionMetaData metaData)
     {
         this.metaData = metaData;
+    }
+    
+    public ConnectionConsumer createConnectionConsumer(Destination destination, String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException
+    {
+        throwJMSException();
+        return new MockConnectionConsumer(this, sessionPool);
+    }
+
+    public ConnectionConsumer createDurableConnectionConsumer(Topic topic, String subscriptionName, String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException
+    {
+        return createConnectionConsumer(topic, messageSelector, sessionPool, maxMessages);
     }
     
     public ConnectionMetaData getMetaData() throws JMSException
