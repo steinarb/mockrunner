@@ -187,23 +187,30 @@ public class MockQueueSessionTest extends TestCase
         sender.setPriority(9);
         sender.setDeliveryMode(DeliveryMode.PERSISTENT);
         sender.send(message);
+        message = (MockMessage)queue.getMessage();
         assertEquals(0, message.getJMSTimestamp());
         assertEquals("xyz", message.getJMSMessageID());
         assertEquals(0, message.getJMSExpiration());
         assertEquals(9, message.getJMSPriority());
         assertEquals(DeliveryMode.PERSISTENT, message.getJMSDeliveryMode());
+        message = new MockTextMessage("Text1");
         sender.setDisableMessageTimestamp(false);
         sender.setDisableMessageID(false);
         sender.setPriority(7);
         sender.send(message);
+        message = (MockMessage)queue.getMessage();
         assertFalse(0 == message.getJMSTimestamp());
         assertFalse("xyz".equals(message.getJMSMessageID()));
         assertEquals(7, message.getJMSPriority());
+        message = new MockTextMessage("Text1");
         sender.setTimeToLive(10000);
         sender.send(message);
+        message = (MockMessage)queue.getMessage();
         assertEquals(message.getJMSTimestamp() + 10000, message.getJMSExpiration());
+        message = new MockTextMessage("Text1");
         sender.setTimeToLive(0);
         sender.send(message);
+        message = (MockMessage)queue.getMessage();
         assertEquals(0, message.getJMSExpiration());
     }
     
@@ -317,6 +324,8 @@ public class MockQueueSessionTest extends TestCase
         streamMessage.writeLong(2);
         sender.send(bytesMessage);
         sender.send(streamMessage);
+        bytesMessage = (BytesMessage)queue.getMessage();
+        streamMessage = (StreamMessage)queue.getMessage();
         assertEquals(1, bytesMessage.readInt());
         assertEquals(2, streamMessage.readLong());
     }
@@ -372,7 +381,9 @@ public class MockQueueSessionTest extends TestCase
         MockQueue queue = (MockQueue)session1.createQueue("Queue");
         QueueSender sender = session1.createSender(queue);
         MockTextMessage message = new MockTextMessage("Text");
+        queue.reset();
         sender.send(message);
+        message = (MockTextMessage)queue.getReceivedMessageList().get(0);
         MockQueueReceiver receiver = (MockQueueReceiver)session1.createReceiver(queue);
         assertFalse(message.isAcknowledged());
         receiver.receiveNoWait();
@@ -380,12 +391,16 @@ public class MockQueueSessionTest extends TestCase
         TestMessageListener listener = new TestMessageListener();
         receiver.setMessageListener(listener);
         message = new MockTextMessage("Text");
+        queue.reset();
         sender.send(message);
+        message = (MockTextMessage)queue.getReceivedMessageList().get(0);
         assertTrue(message.isAcknowledged());
         receiver.setMessageListener(null);
         session1.setMessageListener(listener);
         message = new MockTextMessage("Text");
+        queue.reset();
         sender.send(message);
+        message = (MockTextMessage)queue.getReceivedMessageList().get(0);
         assertTrue(message.isAcknowledged());
         session1.setMessageListener(null);
         MockQueueSession session2 = (MockQueueSession)connection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
@@ -393,17 +408,23 @@ public class MockQueueSessionTest extends TestCase
         receiver.setMessageListener(listener);
         sender = session2.createSender(queue);
         message = new MockTextMessage("Text");
+        queue.reset();
         sender.send(message);
+        message = (MockTextMessage)queue.getReceivedMessageList().get(0);
         assertFalse(message.isAcknowledged());
         receiver.setMessageListener(null);
         message = new MockTextMessage("Text");
+        queue.reset();
         sender.send(message);
+        message = (MockTextMessage)queue.getReceivedMessageList().get(0);
         assertFalse(message.isAcknowledged());
         receiver.receive();
         assertFalse(message.isAcknowledged());
         session1.setMessageListener(listener);
         message = new MockTextMessage("Text");
+        queue.reset();
         sender.send(message);
+        message = (MockTextMessage)queue.getReceivedMessageList().get(0);
         assertTrue(message.isAcknowledged());
     }
     
