@@ -11,6 +11,7 @@ import javax.servlet.ServletContext;
 public class MockFilterConfig implements FilterConfig
 {
     private ServletContext context;
+    private String name;
     
     public void setupServletContext(ServletContext context)
     {
@@ -29,7 +30,12 @@ public class MockFilterConfig implements FilterConfig
     
     public String getFilterName()
     {
-        return "";
+        return name;
+    }
+    
+    public void setFilterName(String name)
+    {
+        this.name = name;
     }
 
     public ServletContext getServletContext()
