@@ -170,6 +170,14 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
+     * Delegates to {@link ServletTestModule#addRequestParameter(String, String[])}
+     */
+    protected void addRequestParameter(String key, String[] values)
+    {
+        servletTestModule.addRequestParameter(key, values);
+    }
+    
+    /**
      * Delegates to {@link ServletTestModule#doFilter}
      */
     protected void doFilter()

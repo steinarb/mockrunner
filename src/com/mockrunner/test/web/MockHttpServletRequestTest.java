@@ -20,9 +20,30 @@ import com.mockrunner.mock.web.MockRequestDispatcher;
 
 public class MockHttpServletRequestTest extends TestCase
 {
+    private MockHttpServletRequest request;
+    
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        request = new MockHttpServletRequest();
+    }
+    
+    public void testAddRequestParameter() throws Exception
+    {
+        request.setupAddParameter("abc", "abc");
+        assertEquals("abc", request.getParameter("abc"));
+        request.setupAddParameter("abc", "123");
+        assertEquals("123", request.getParameter("abc"));
+        assertEquals(1, request.getParameterValues("abc").length);
+        request.setupAddParameter("abc", new String[] {"123", "456"});
+        assertEquals("123", request.getParameter("abc"));
+        assertEquals(2, request.getParameterValues("abc").length);
+        assertEquals("123", request.getParameterValues("abc")[0]);
+        assertEquals("456", request.getParameterValues("abc")[1]);
+    }
+    
     public void testHeaders()
     {
-        MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("testHeader", "xyz");
         request.addHeader("testHeader", "abc");
         Enumeration enum = request.getHeaders("testHeader");
@@ -72,7 +93,6 @@ public class MockHttpServletRequestTest extends TestCase
     
     public void testCookies()
     {
-        MockHttpServletRequest request = new MockHttpServletRequest();
         request.addCookie(new Cookie("name1", "value1"));
         request.addCookie(new Cookie("name2", "value2"));
         request.addCookie(new Cookie("name3", "value3"));
@@ -88,7 +108,6 @@ public class MockHttpServletRequestTest extends TestCase
     
     public void testBodyContent() throws Exception
     {
-        MockHttpServletRequest request = new MockHttpServletRequest();
         request.setBodyContent("test\nanothertest");
         BufferedReader reader = request.getReader();
         assertEquals("test", reader.readLine());
@@ -110,7 +129,6 @@ public class MockHttpServletRequestTest extends TestCase
         final String rdPath1 = "rdPathOne";
         final String rdPath2 = "rdPathTwo";
         final String rdPath3 = "rdPathThree";
-        MockHttpServletRequest request = new MockHttpServletRequest();
     
         assertEquals(0, request.getRequestDispatcherMap().size());
 

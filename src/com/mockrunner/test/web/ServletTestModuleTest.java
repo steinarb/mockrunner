@@ -21,11 +21,6 @@ public class ServletTestModuleTest extends BaseTestCase
 {
     private ServletTestModule module;
     
-    public ServletTestModuleTest(String arg0)
-    {
-        super(arg0);
-    }
-    
     protected void setUp() throws Exception
     {
         super.setUp();
