@@ -107,7 +107,7 @@ public class MockTopicSessionTest extends TestCase
     {
         DestinationManager manager = connection.getDestinationManager();
         TopicTransmissionManager topicTransManager = session.getTopicTransmissionManager();
-        TransmissionManagerWrapper transManager = session.getTransmissionManager();
+        TransmissionManagerWrapper transManager = session.getTransmissionManagerWrapper();
         topic1 = manager.createTopic("Topic1");
         topic2 = manager.createTopic("Topic2");
         assertEquals(0, topicTransManager.getTopicPublisherList().size());

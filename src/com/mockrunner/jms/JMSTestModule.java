@@ -430,7 +430,7 @@ public class JMSTestModule
     {
         MockSession session = getSession(indexOfSession);
         if(null == session) return null;
-        return session.getTransmissionManager();
+        return session.getTransmissionManagerWrapper();
     }
     
     /**
@@ -444,7 +444,7 @@ public class JMSTestModule
     {
         MockQueueSession session = getQueueSession(indexOfSession);
         if(null == session) return null;
-        return session.getTransmissionManager();
+        return session.getTransmissionManagerWrapper();
     }
     
     /**
@@ -458,7 +458,7 @@ public class JMSTestModule
     {
         MockTopicSession session = getTopicSession(indexOfSession);
         if(null == session) return null;
-        return session.getTransmissionManager();
+        return session.getTransmissionManagerWrapper();
     }
     
     /**

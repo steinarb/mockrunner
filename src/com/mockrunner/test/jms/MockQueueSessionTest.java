@@ -129,7 +129,7 @@ public class MockQueueSessionTest extends TestCase
         session.createSender(queue2);
         session.createSender(queue1);
         QueueTransmissionManager queueTransManager = session.getQueueTransmissionManager();
-        TransmissionManagerWrapper transManager = session.getTransmissionManager();
+        TransmissionManagerWrapper transManager = session.getTransmissionManagerWrapper();
         assertNotNull(queueTransManager.getQueueSender(0));
         assertNotNull(queueTransManager.getQueueSender(1));
         assertNotNull(queueTransManager.getQueueSender(2));
