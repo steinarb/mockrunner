@@ -78,6 +78,16 @@ public class MockResultSet implements ResultSet
         }
     }
     
+    public void setResultSetType(int resultSetType)
+    {
+        this.resultSetType = resultSetType;
+    }
+    
+    public void setResultSetConcurrency(int resultSetConcurrency)
+    {
+        this.resultSetConcurrency = resultSetConcurrency;
+    }
+    
     public void addRow(Object[] values)
     {
         List valueList = new ArrayList();
