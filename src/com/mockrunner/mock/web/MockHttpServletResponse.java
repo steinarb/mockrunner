@@ -133,7 +133,7 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public void sendRedirect(String location) throws IOException
     {
-        setHeader("location", location);
+        setHeader("Location", location);
         wasRedirectSent = true;
     }
 
@@ -221,17 +221,17 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public void setContentLength(int length)
     {
-        setIntHeader("content-length", length);
+        setIntHeader("Content-Length", length);
     }
     
     public String getContentType()
     {
-        return getHeader("content-type");
+        return getHeader("Content-Type");
     }
 
     public void setContentType(String type)
     {
-        setHeader("content-type", type);
+        setHeader("Content-Type", type);
     }
     
     public List getHeaderList(String key)
