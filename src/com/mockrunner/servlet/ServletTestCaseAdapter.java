@@ -59,16 +59,6 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
-     * @deprecated
-     * use {@link #setServletTestModule}
-     * this method was a copy/paste error, it will be removed in the next release
-     */
-    protected void setActionTestModule(ServletTestModule servletTestModule)
-    {
-        setServletTestModule(servletTestModule);
-    }
-    
-    /**
      * Sets the <code>ServletTestModule</code>. 
      * @param servletTestModule the <code>ServletTestModule</code>
      */
