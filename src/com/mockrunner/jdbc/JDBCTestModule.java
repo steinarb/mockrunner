@@ -4,6 +4,8 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -138,6 +140,23 @@ public class JDBCTestModule
         list.addAll(mockFactory.getMockConnection().getCallableStatementResultSetHandler().getExecutedStatements());
         return list;
     }
+    
+	/**
+	 * Returns a <code>Map</code> of all SQL statements that were executed
+	 * by calling an <code>execute</code> method of a
+     * {@link com.mockrunner.mock.jdbc.MockPreparedStatement} or
+     * {@link com.mockrunner.mock.jdbc.MockCallableStatement}.
+	 * Each SQL string maps to the corresponding <code>Map</code>
+	 * of parameters.
+	 * @return the <code>List</code> of SQL statements
+	 */
+	public Map getExecutedSQLStatementParameter()
+	{
+		Map map = new HashMap();
+		map.putAll(mockFactory.getMockConnection().getPreparedStatementResultSetHandler().getExecutedStatementParameters());
+		map.putAll(mockFactory.getMockConnection().getCallableStatementResultSetHandler().getExecutedStatementParameters());
+		return map;
+	}
     
     /**
      * Returns the <code>ResultSet</code> objects with the specified id. 
@@ -493,6 +512,7 @@ public class JDBCTestModule
     
     /**
      * Verifies that an SQL statement was executed.
+     * @param sql the expected SQL string
      * @throws VerifyFailedException if verification fails
      */
     public void verifySQLStatementExecuted(String sql)
@@ -505,6 +525,7 @@ public class JDBCTestModule
     
     /**
      * Verifies that an SQL statement was not executed.
+     * @param sql the SQL string
      * @throws VerifyFailedException if verification fails
      */
     public void verifySQLStatementNotExecuted(String sql)
@@ -514,6 +535,103 @@ public class JDBCTestModule
             throw new VerifyFailedException("Statement " + sql + " was executed.");
         }
     }
+    
+	/**
+	 * Verifies the number of parameters for the specified SQL statement.
+	 * If more than one SQL statement is found, this method uses the
+	 * first one.
+	 * @param sql the SQL string
+	 * @param number the expected number of parameters
+	 * @throws VerifyFailedException if verification fails
+	 */
+	public void verifySQLStatementParameterNumber(String sql, int number)
+	{
+		Map actualParameterMap = verifyAndGetParametersForSQL(sql);
+		if(actualParameterMap.size() != number)
+		{
+			throw new VerifyFailedException("Expected " + number + " parameter, actual " + actualParameterMap.size() + " parameter");
+		}
+	}
+    
+	/**
+	 * Verifies the parameters for the specified SQL statement.
+	 * If more than one SQL statement is found, this method uses the
+	 * first one. The parameter map must match in size and the
+	 * parameters must be equal (by comparing them with
+	 * {de.lv1871.util.ParameterUtil#compareParameter}).
+	 * @param sql the SQL string
+	 * @param parameterMap the map of expected parameters
+	 * @throws VerifyFailedException if verification fails
+	 */
+	public void verifySQLStatementParameter(String sql, Map parameterMap)
+	{
+		verifySQLStatementParameterNumber(sql, parameterMap.size());
+		Map actualParameterMap = verifyAndGetParametersForSQL(sql);
+		Iterator keys = parameterMap.keySet().iterator();
+		while(keys.hasNext())
+		{
+			Object nextKey = keys.next();
+			Object nextExpectedParameter = parameterMap.get(nextKey);
+			Object nextActualParameter = actualParameterMap.get(nextKey);
+			if(null == nextActualParameter)
+			{
+				throw new VerifyFailedException("No parameter " + nextKey + " found.");
+			}
+			if(!ParameterUtil.compareParameter(nextExpectedParameter, nextActualParameter))
+			{
+				throw new VerifyFailedException("Expected " + nextExpectedParameter + " for parameter " + nextKey + ", but was " + nextActualParameter);
+			}
+		}
+	}
+	
+	/**
+	 * Verifies the parameter for the specified SQL statement.
+	 * If more than one SQL statement is found, this method uses the
+	 * first one.
+	 * @param sql the SQL string
+	 * @param indexOfParameter the index of the parameter
+	 * @param expectedParameter the expected parameter
+	 * @throws VerifyFailedException if verification fails
+	 */
+	public void verifySQLStatementParameter(String sql, int indexOfParameter, Object expectedParameter)
+	{
+		Map actualParameterMap = verifyAndGetParametersForSQL(sql);
+		Object actualParameter = actualParameterMap.get(new Integer(indexOfParameter));
+		if(!ParameterUtil.compareParameter(expectedParameter, actualParameter))
+		{
+			throw new VerifyFailedException("Expected " + expectedParameter + " for parameter " + indexOfParameter + ", but was " + actualParameter);
+		}
+	}
+	
+	/**
+	 * Verifies the parameter for the specified SQL statement.
+	 * If more than one SQL statement is found, this method uses the
+	 * first one.
+	 * @param sql the SQL string
+	 * @param nameOfParameter the name of the parameter
+	 * @param expectedParameter the expected parameter
+	 * @throws VerifyFailedException if verification fails
+	 */
+	public void verifySQLStatementParameter(String sql, String nameOfParameter, Object expectedParameter)
+	{
+		Map actualParameterMap = verifyAndGetParametersForSQL(sql);
+		Object actualParameter = actualParameterMap.get(nameOfParameter);
+		if(!ParameterUtil.compareParameter(expectedParameter, actualParameter))
+		{
+			throw new VerifyFailedException("Expected " + expectedParameter + " for parameter " + nameOfParameter + ", but was " + actualParameter);
+		}
+	}
+
+	private Map verifyAndGetParametersForSQL(String sql)
+	{
+		verifySQLStatementExecuted(sql);
+		List matchingParameterList = SearchUtil.getMatchingObjects(getExecutedSQLStatementParameter(), sql, caseSensitive, exactMatch, false);
+		if(null == matchingParameterList || matchingParameterList.size() == 0)
+		{
+			throw new VerifyFailedException("No parameters for SQL " + sql + " found.");
+		}
+		return (Map)matchingParameterList.get(0);
+	}
     
     /**
      * Verifies that the connection is closed.

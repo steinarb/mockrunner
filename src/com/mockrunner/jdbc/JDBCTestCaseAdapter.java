@@ -3,6 +3,7 @@ package com.mockrunner.jdbc;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Map;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
@@ -129,6 +130,14 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     {
         return jdbcTestModule.getExecutedSQLStatements();
     }
+    
+	/**
+	 * Delegates to {@link JDBCTestModule#getExecutedSQLStatementParameter}
+	 */
+	protected Map getExecutedSQLStatementParameter()
+	{
+		return jdbcTestModule.getExecutedSQLStatementParameter();
+	}
     
     /**
      * Delegates to {@link JDBCTestModule#getReturnedResultSet}
@@ -329,6 +338,38 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     {
         jdbcTestModule.verifySQLStatementNotExecuted(sql);
     }
+    
+	/**
+	 * Delegates to {@link JDBCTestModule#verifySQLStatementParameterNumber}
+	 */
+	protected void verifySQLStatementParameterNumber(String sql, int number)
+	{
+		jdbcTestModule.verifySQLStatementParameterNumber(sql, number);
+	}
+
+	/**
+	 * Delegates to {@link JDBCTestModule#verifySQLStatementParameter(String, Map)}
+	 */
+	protected void verifySQLStatementParameter(String sql, Map parameterMap)
+	{
+		jdbcTestModule.verifySQLStatementParameter(sql, parameterMap);
+	}
+	
+	/**
+	 * Delegates to {@link JDBCTestModule#verifySQLStatementParameter(String, int, Object)}
+	 */
+	protected void verifySQLStatementParameter(String sql, int indexOfParameter, Object expectedParameter)
+	{
+		jdbcTestModule.verifySQLStatementParameter(sql, indexOfParameter, expectedParameter);
+	}
+
+	/**
+	 * Delegates to {@link JDBCTestModule#verifySQLStatementParameter(String, String, Object)}
+	 */
+	protected void verifySQLStatementParameter(String sql, String nameOfParameter, Object expectedParameter)
+	{
+		jdbcTestModule.verifySQLStatementParameter(sql, nameOfParameter, expectedParameter);
+	}
     
     /**
      * Delegates to {@link JDBCTestModule#verifyConnectionClosed}

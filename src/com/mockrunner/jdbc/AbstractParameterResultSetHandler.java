@@ -1,6 +1,7 @@
 package com.mockrunner.jdbc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -22,6 +23,41 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
     private Map resultSetsForStatement = new HashMap();
     private Map updateCountForStatement = new HashMap();
     private Map throwsSQLException = new HashMap();
+	private Map executedStatementParameters = new HashMap();
+    
+	/**
+	 * Collects all SQL strings that were executed.
+	 * @param sql the SQL string
+	 * @param parameters a copy of the corresponding parameter map
+	 */
+	public void addParameterMapForExecutedStatement(String sql, Map parameters)
+	{
+		if(null != parameters)
+		{
+			executedStatementParameters.put(sql, parameters);
+		}
+	}
+	
+	/**
+	 * Returns the <code>Map</code> of parameters for a specified
+	 * SQL string.
+	 * @return the <code>Map</code> of parameters
+	 */
+	public Map getParameterMapForExecutedStatement(String sql)
+	{
+		return (Map)executedStatementParameters.get(sql);
+	}
+	
+	/**
+	 * Returns the <code>Map</code> of executed SQL strings.
+	 * Each string maps to the corresponding <code>Map</code>
+	 * of parameters.
+	 * @return the <code>Map</code> of parameters
+	 */
+	public Map getExecutedStatementParameters()
+	{
+		return Collections.unmodifiableMap(executedStatementParameters);
+	}
     
     /**
      * Sets if the specified parameters must match exactly

@@ -22,12 +22,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.mockrunner.jdbc.AbstractParameterResultSetHandler;
+import com.mockrunner.util.ParameterUtil;
 
 /**
  * Mock implementation of <code>PreparedStatement</code>.
@@ -83,6 +85,11 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     {
         return Collections.unmodifiableMap(paramObjects);
     }
+    
+	public Map getParameterMap()
+	{
+		return getIndexedParameterMap();
+	}
     
     public Object getParameter(int index)
     {
@@ -144,6 +151,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             throw new SQLException("Statement " + getSQL() + " was specified to throw an exception");
         }
         MockResultSet result = resultSetHandler.getResultSet(getSQL(), params);
+		resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy());
         if(null != result)
         {
             resultSetHandler.addExecutedStatement(getSQL());
@@ -171,6 +179,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             throw new SQLException("Statement " + getSQL() + " was specified to throw an exception");
         }
         Integer updateCount = resultSetHandler.getUpdateCount(getSQL(), params);
+		resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy());
         if(null != updateCount)
         {
             resultSetHandler.addExecutedStatement(getSQL());
@@ -344,5 +353,20 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     public void setURL(int parameterIndex, URL url) throws SQLException
     {
         setObject(parameterIndex, url);
+    }
+    
+    private Map getParameterMapCopy()
+    {
+    	Map actualParameters = getParameterMap();
+    	Map copyParameters = new HashMap();
+    	Iterator keys = actualParameters.keySet().iterator();
+    	while(keys.hasNext())
+    	{
+    		Object key = keys.next();
+    		Object actualParameter = actualParameters.get(key);
+    		Object copyParameter = ParameterUtil.copyParameter(actualParameter);
+			copyParameters.put(key, copyParameter);
+    	}
+    	return copyParameters;
     }
 }
