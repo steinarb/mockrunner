@@ -14,6 +14,8 @@ import javax.servlet.ServletResponse;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.mockrunner.base.NestedApplicationException;
+
 /**
  * Mock implementation of <code>FilterChain</code>.
  */
@@ -65,7 +67,7 @@ public class MockFilterChain implements FilterChain
 		catch(Exception exc)
 		{
             log.error(exc.getMessage(), exc);
-			throw new RuntimeException(exc.getMessage());
+			throw new NestedApplicationException(exc);
 		}
 	}
 	

@@ -14,6 +14,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.tag.NestedBodyTag;
 import com.mockrunner.tag.NestedStandardTag;
 import com.mockrunner.tag.NestedTag;
@@ -49,7 +50,7 @@ public class TagUtil
         catch(Exception exc)
         {
             log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
         return createNestedTagInstance(tagSupport, pageContext, attributes);
     }
@@ -100,7 +101,7 @@ public class TagUtil
         catch(Exception exc)
         {
             log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -131,7 +132,7 @@ public class TagUtil
                 catch(IOException exc)
                 {
                     log.error(exc.getMessage(), exc);
-                    throw new RuntimeException(exc.getMessage());
+                    throw new NestedApplicationException(exc);
                 }	
             }
         }

@@ -11,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mockrunner.base.HTMLOutputModule;
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockJspWriter;
 import com.mockrunner.mock.web.MockPageContext;
@@ -119,7 +120,7 @@ public class TagTestModule extends HTMLOutputModule
         catch(Exception exc)
         {
             log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     

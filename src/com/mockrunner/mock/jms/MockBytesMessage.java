@@ -15,6 +15,8 @@ import javax.jms.MessageFormatException;
 import javax.jms.MessageNotReadableException;
 import javax.jms.MessageNotWriteableException;
 
+import com.mockrunner.base.NestedApplicationException;
+
 /**
  * Mock implementation of JMS <code>BytesMessage</code>.
  */
@@ -33,7 +35,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
         }
         catch(JMSException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     

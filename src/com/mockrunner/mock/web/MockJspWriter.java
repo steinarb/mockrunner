@@ -6,6 +6,8 @@ import java.io.StringWriter;
 
 import javax.servlet.jsp.JspWriter;
 
+import com.mockrunner.base.NestedApplicationException;
+
 /**
  * Mock implementation of <code>JspWriter</code>.
  * Collects the output data. Use {@link #getOutputAsString}
@@ -34,9 +36,9 @@ public class MockJspWriter extends JspWriter
             flush();
             return getOutputAsString();
         }
-        catch (IOException exc)
+        catch(IOException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
 

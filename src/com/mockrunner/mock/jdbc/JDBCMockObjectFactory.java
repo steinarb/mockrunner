@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.mockrunner.base.NestedApplicationException;
+
 /**
  * Used to create all types of JDBC mock objects. 
  * Maintains the necessary dependencies between the mock objects.
@@ -57,7 +59,7 @@ public class JDBCMockObjectFactory
         }
         catch(SQLException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -77,7 +79,7 @@ public class JDBCMockObjectFactory
         }
         catch(SQLException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -109,7 +111,7 @@ public class JDBCMockObjectFactory
         }
         catch(SQLException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -133,7 +135,7 @@ public class JDBCMockObjectFactory
         }
         catch(SQLException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
         preservedDrivers.clear();
     }

@@ -13,6 +13,8 @@ import javax.jms.Session;
 
 import org.codehaus.activemq.router.filter.mockrunner.Filter;
 
+import com.mockrunner.base.NestedApplicationException;
+
 /**
  * Mock implementation of JMS <code>Destination</code>.
  */
@@ -95,7 +97,7 @@ public abstract class MockDestination implements Destination
             }
             catch(JMSException exc)
             {
-                throw new RuntimeException(exc.getMessage());
+                throw new NestedApplicationException(exc);
             }
         }
         return null;

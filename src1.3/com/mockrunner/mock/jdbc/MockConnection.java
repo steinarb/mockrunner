@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.jdbc.CallableStatementResultSetHandler;
 import com.mockrunner.jdbc.PreparedStatementResultSetHandler;
 import com.mockrunner.jdbc.StatementResultSetHandler;
@@ -55,7 +56,7 @@ public class MockConnection implements Connection
         }
         catch(SQLException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
         typeMap = new HashMap();
         savepoints = new HashMap();

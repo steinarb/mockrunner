@@ -170,6 +170,10 @@ public class SynchronizeVersionUtil
             {
                 return null;
             }
+            else
+            {
+                return fileContent;
+            }
         }
         return null;
     }

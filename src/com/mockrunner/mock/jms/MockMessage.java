@@ -12,6 +12,8 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageFormatException;
 
+import com.mockrunner.base.NestedApplicationException;
+
 /**
  * Mock implementation of JMS <code>Message</code>.
  */
@@ -407,7 +409,7 @@ public class MockMessage implements Message, Cloneable
         }
         catch(CloneNotSupportedException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
 }

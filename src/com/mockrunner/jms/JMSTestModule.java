@@ -10,6 +10,7 @@ import javax.jms.Queue;
 import javax.jms.Session;
 import javax.jms.Topic;
 
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockConnection;
@@ -168,7 +169,7 @@ public class JMSTestModule
         }
         catch(JMSException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -227,7 +228,7 @@ public class JMSTestModule
         }
         catch(JMSException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -256,7 +257,7 @@ public class JMSTestModule
         }
         catch(JMSException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
 
@@ -315,7 +316,7 @@ public class JMSTestModule
         }
         catch(JMSException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     

@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.Globals;
 
+import com.mockrunner.base.NestedApplicationException;
+
 /**
  * Used to create all types of web mock objects. Maintains
  * the necessary dependencies between the mock objects.
@@ -260,7 +262,7 @@ public class WebMockObjectFactory
         }
         catch(Exception exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -295,7 +297,7 @@ public class WebMockObjectFactory
         }
         catch(Exception exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     

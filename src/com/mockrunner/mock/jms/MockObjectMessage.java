@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
 
+import com.mockrunner.base.NestedApplicationException;
+
 /**
  * Mock implementation of JMS <code>ObjectMessage</code>.
  */
@@ -78,7 +80,7 @@ public class MockObjectMessage extends MockMessage implements ObjectMessage
         }
         catch(Exception exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
 }
