@@ -9,7 +9,10 @@ import com.mockrunner.mock.jms.MockTopic;
 /**
  * The <code>DestinationManager</code> can be used
  * to create queues and topics, which is normally an 
- * administrative act.
+ * administrative act. Since queues and topics are ususally
+ * acquired using JNDI in a J2EE environment, you can bind
+ * the created objects to the mock context with the help
+ * of {@link com.mockrunner.ejb.EJBTestModule#bindToContext}.
  */
 public class DestinationManager
 {
@@ -28,7 +31,8 @@ public class DestinationManager
      * calls. Creating queues is an administrative act.
      * Before {@link com.mockrunner.mock.jms.MockQueueSession#createQueue}
      * can be sucessfully called, you have to create a <code>Queue</code>
-     * with this method.
+     * with this method. You can also bind the created queue to the
+     * mock JNDI context using {@link com.mockrunner.ejb.EJBTestModule#bindToContext}.
      * @param name the name of the <code>Queue</code>
      * @return the created <code>Queue</code>
      */
@@ -66,7 +70,8 @@ public class DestinationManager
      * calls. Creating topics is an administrative act.
      * Before {@link com.mockrunner.mock.jms.MockTopicSession#createTopic}
      * can be sucessfully called, you have to create a <code>Topic</code>
-     * with this method.
+     * with this method. You can also bind the created topic to the
+     * mock JNDI context using {@link com.mockrunner.ejb.EJBTestModule#bindToContext}.
      * @param name the name of the <code>Topic</code>
      * @return the created <code>Topic</code>
      */

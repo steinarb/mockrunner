@@ -47,6 +47,8 @@ public class EJBTestModuleTest extends TestCase
         assertTrue(bean instanceof Test);
         bean = module.lookupBean("com/MyLookupTest", new Object[] {new Integer(1), new Boolean(true)});
         assertTrue(bean instanceof Test);
+        bean = module.lookupBean("com/MyLookupTest", "createWithPostfix", new Object[] {new Integer(1), new Boolean(true)});
+        assertTrue(bean instanceof Test);
         try
         {
             module.lookupBean("com/MyLookupTestTest", new Object[] {new Boolean(true), new Integer(1)});
@@ -173,6 +175,11 @@ public class EJBTestModuleTest extends TestCase
 
         }
         
+        public void ejbCreateWithPostfix(int testInt, Boolean testBoolean) throws CreateException
+        {
+
+        }
+        
         public void ejbActivate() throws EJBException, RemoteException
         {
 
@@ -206,5 +213,7 @@ public class EJBTestModuleTest extends TestCase
         public Test create(int testInt) throws CreateException, RemoteException;
         
         public Test create(int testInt, Boolean testBoolean) throws CreateException, RemoteException;
+    
+        public Test createWithPostfix(int testInt, Boolean testBoolean) throws CreateException, RemoteException;
     }
 }
