@@ -1,24 +1,29 @@
 package com.mockrunner.jms;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockQueue;
+import com.mockrunner.mock.jms.MockTopic;
 
+/**
+ * The <code>DestinationManager</code> can be used
+ * to create queues and topics, which is normally an 
+ * administrative act. Before queues or topics can be
+ * used, they have to be created using this class.
+ */
 public class DestinationManager
 {
     private MockConnection connection;
     private Map queues;
-    private List tempQueues;
+    private Map topics;
     
     public DestinationManager(MockConnection connection)
     {
-        queues = new HashMap();
-        tempQueues = new ArrayList();
         this.connection = connection;
+        queues = new HashMap();
+        topics = new HashMap();
     }
     
     /**
@@ -27,9 +32,8 @@ public class DestinationManager
      * calls. Creating queues is an administrative act.
      * Before {@link com.mockrunner.mock.jms.MockQueueSession#createQueue}
      * can be sucessfully called, you have to create a <code>Queue</code>
-     * with this method. The <code>Queue</code> object is cloned when
-     * calling {@link com.mockrunner.mock.jms.MockQueueSession#createQueue}.
-     * @param name the name of the Queue
+     * with this method.
+     * @param name the name of the <code>Queue</code>
      * @return the created <code>Queue</code>
      */
     public MockQueue createQueue(String name)
@@ -41,7 +45,7 @@ public class DestinationManager
     
     /**
      * Removes a formerly created <code>Queue</code>.
-     * @param name the name of the Queue
+     * @param name the name of the <code>Queue</code>
      */
     public void removeQueue(String name)
     {
@@ -52,11 +56,49 @@ public class DestinationManager
      * Returns a <code>Queue</code> that was created with
      * {@link #createQueue} or <code>null</code> if no such
      * <code>Queue</code> is present.
-     * @param name the name of the Queue
+     * @param name the name of the <code>Queue</code>
      * @return the <code>Queue</code>
      */
     public MockQueue getQueue(String name)
     {
         return (MockQueue)queues.get(name);
+    }
+    
+    /**
+     * Creates a new <code>Topic</code> that is available
+     * for {@link com.mockrunner.mock.jms.MockTopicSession#createTopic}
+     * calls. Creating topics is an administrative act.
+     * Before {@link com.mockrunner.mock.jms.MockTopicSession#createTopic}
+     * can be sucessfully called, you have to create a <code>Topic</code>
+     * with this method.
+     * @param name the name of the <code>Topic</code>
+     * @return the created <code>Topic</code>
+     */
+    public MockTopic createTopic(String name)
+    {
+        MockTopic topic = new MockTopic(connection, name);
+        topics.put(name, topic);
+        return topic;
+    }
+    
+    /**
+     * Removes a formerly created <code>Topic</code>.
+     * @param name the name of the <code>Topic</code>
+     */
+    public void removeTopic(String name)
+    {
+        topics.remove(name);
+    }
+    
+    /**
+     * Returns a <code>Topic</code> that was created with
+     * {@link #createTopic} or <code>null</code> if no such
+     * <code>Topic</code> is present.
+     * @param name the name of the <code>Topic</code>
+     * @return the <code>Topic</code>
+     */
+    public MockTopic getTopic(String name)
+    {
+        return (MockTopic)queues.get(name);
     }
 }
