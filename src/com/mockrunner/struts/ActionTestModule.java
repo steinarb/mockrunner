@@ -1164,7 +1164,7 @@ public class ActionTestModule
         }
         else
         {
-            forward = new MockActionForward(currentForward.getName(), currentForward.getPath(), currentForward.getRedirect(), currentForward.getContextRelative());
+            forward = new MockActionForward(currentForward);
         }
     }
 
