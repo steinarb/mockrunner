@@ -55,11 +55,20 @@ It is planned to include support for other frameworks in the J2EE
 environment in future releases.
 
 Mockrunner requires at least Java 1.3 to run. If you are using Java 1.3
-you have to use the mockrunner-jkd1.3.jar. The JDBCTestModule is limited
-to JDBC API 2.1 in this case. If you are running Java 1.4 you can use
-JDBC 3.0. You have to use mockrunner.jar in this case. The other test modules
-are identical in both versions. Struts versions 1.1 and 1.2 are supported.
+you have to use mockrunner-jkd1.3.jar or mockrunner-jdbc-jkd1.3.jar.
+The files mockrunner.jar and mockrunner-jdbc.jar are for Java 1.4 only, 
+all other jar files can be used with both versions. The JDBCTestModule 
+is limited to JDBC API 2.1 if Java 1.3 is used. If you are running Java 1.4 
+you can use JDBC 3.0. 
+Mockrunner supports J2EE 1.3 at the moment. The EJB and JMS related test
+modules are already J2EE 1.4 compatible, the web based test modules are
+not J2EE 1.4 compatible currently. I.e. Mockrunner supports the Servlet API
+2.3. Servlet API 2.4 support is upcoming. Older Servlet and J2EE versions
+are not supported.
+Mockrunner supports Struts versions 1.1 and 1.2.
 It's not possible to use Mockrunner with Struts 1.0.
+Each jar file contains a jarversion.txt which lists the JDK and J2EE version
+this jar supports.
 
 To start with Mockrunner check out the JavaDoc and the examples
 in the com.mockrunner.example packages. Most methods are self-explanatory.
@@ -84,6 +93,13 @@ adapter, you can always create a module like this:
 
 JDBCMockObjectFactory factory = new JDBCMockObjectFactory();
 JDBCTestModule module = new JDBCTestModule(factory);
+
+In addition to the "all-in-one"-files mockrunner.jar and mockrunner-jdk1.3.jar,
+separate jars for the different technologies are provided. These additional
+jar files contain only the classes necessary to test the corresponding technology.
+
+Please check out the file dependencies.txt for a detailed list of required
+third-party libraries for each mockrunner provided jar file.
 
 The third-party libraries included in the Mockrunner release are:
 

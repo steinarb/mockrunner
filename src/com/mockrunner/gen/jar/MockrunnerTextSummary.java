@@ -3,6 +3,8 @@ package com.mockrunner.gen.jar;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -16,9 +18,12 @@ import java.util.Set;
 import com.kirkk.analyzer.framework.Analyzer;
 import com.kirkk.analyzer.framework.JarBundle;
 import com.kirkk.analyzer.textui.Summary;
+import com.mockrunner.util.common.StreamUtil;
 
 public class MockrunnerTextSummary implements Summary
 {
+    private final static String TEMPLATE_FILE = "dependencies.txt";
+    
     private List mockrunnerJars;
 
     public MockrunnerTextSummary()
@@ -26,6 +31,13 @@ public class MockrunnerTextSummary implements Summary
         mockrunnerJars = new ArrayList();
         mockrunnerJars.add("mockrunner.jar");
         mockrunnerJars.add("mockrunner-jdk1.3.jar");
+        mockrunnerJars.add("mockrunner-ejb.jar");
+        mockrunnerJars.add("mockrunner-jdbc.jar");
+        mockrunnerJars.add("mockrunner-jdbc-jdk1.3.jar");
+        mockrunnerJars.add("mockrunner-jms.jar");
+        mockrunnerJars.add("mockrunner-servlet.jar");
+        mockrunnerJars.add("mockrunner-tag.jar");
+        mockrunnerJars.add("mockrunner-struts.jar");
     }
     
     public void createSummary(File srcDir, File destFile) throws Exception 
@@ -34,10 +46,17 @@ public class MockrunnerTextSummary implements Summary
         JarBundle jarBundle[] = analyzer.analyze(srcDir);
         JarFileExtractor extractor = new JarFileExtractor(mockrunnerJars);
         Map dependencyMap = extractor.createDependencies(jarBundle);
-        output(dependencyMap, destFile);
+        try
+        {
+            output(dependencyMap, destFile);
+        } catch (Exception e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
-    private void output(Map dependencyMap, File destFile) 
+    private void output(Map dependencyMap, File destFile) throws Exception 
     {
         try 
         {
@@ -53,8 +72,9 @@ public class MockrunnerTextSummary implements Summary
         }
     }
 
-    private void output(Map dependencyMap, PrintWriter writer) 
+    private void output(Map dependencyMap, PrintWriter writer) throws Exception 
     {
+        dumpTemplate(writer);
         DateFormat timestampFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
         String timestamp = timestampFormat.format(new Date(System.currentTimeMillis()));
         writer.println("Created: " + timestamp);
@@ -93,5 +113,14 @@ public class MockrunnerTextSummary implements Summary
             String jar = (String)jarDependencies.next();
             writer.println(jar);
         }
+    }
+    
+    private void dumpTemplate(PrintWriter writer) throws Exception
+    {
+        InputStream templateStream = MockrunnerTextSummary.class.getClassLoader().getResourceAsStream("/" + TEMPLATE_FILE);
+        String templateText = StreamUtil.getReaderAsString(new InputStreamReader(templateStream, "ISO-8859-1"));
+        writer.println(templateText);
+        writer.println();
+        writer.flush();
     }
 }
