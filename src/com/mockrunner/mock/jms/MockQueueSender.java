@@ -28,6 +28,10 @@ public class MockQueueSender extends MockMessageProducer implements QueueSender
     public void send(Message message) throws JMSException
     {
         getConnection().throwJMSException();
+        if(isClosed())
+        {
+            throw new JMSException("Sender is closed");
+        }
         if(null == queue)
         {
             throw new InvalidDestinationException("Queue must not be null");
@@ -39,6 +43,10 @@ public class MockQueueSender extends MockMessageProducer implements QueueSender
     public void send(Message message, int deliveryMode, int priority, long timeToLive) throws JMSException
     {
         getConnection().throwJMSException();
+        if(isClosed())
+        {
+            throw new JMSException("Sender is closed");
+        }
         if(null == queue)
         {
             throw new InvalidDestinationException("Queue must not be null");
@@ -50,6 +58,10 @@ public class MockQueueSender extends MockMessageProducer implements QueueSender
     public void send(Queue queue, Message message) throws JMSException
     {
         getConnection().throwJMSException();
+        if(isClosed())
+        {
+            throw new JMSException("Sender is closed");
+        }
         if(null == queue)
         {
             throw new InvalidDestinationException("Queue must not be null");
@@ -64,6 +76,10 @@ public class MockQueueSender extends MockMessageProducer implements QueueSender
     public void send(Queue queue, Message message, int deliveryMode, int priority, long timeToLive) throws JMSException
     {
         getConnection().throwJMSException();
+        if(isClosed())
+        {
+            throw new JMSException("Sender is closed");
+        }
         if(null == queue)
         {
             throw new InvalidDestinationException("Queue must not be null");

@@ -29,8 +29,10 @@ import com.mockrunner.mock.jms.MockMapMessage;
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockQueue;
+import com.mockrunner.mock.jms.MockQueueBrowser;
 import com.mockrunner.mock.jms.MockQueueConnection;
 import com.mockrunner.mock.jms.MockQueueReceiver;
+import com.mockrunner.mock.jms.MockQueueSender;
 import com.mockrunner.mock.jms.MockQueueSession;
 import com.mockrunner.mock.jms.MockStreamMessage;
 import com.mockrunner.mock.jms.MockTextMessage;
@@ -281,6 +283,11 @@ public class MockQueueSessionTest extends TestCase
         sender.send(new MockTextMessage("Text4"));
         assertEquals(1, anotherQueue.getReceivedMessageList().size());
         assertEquals("Text4", receiver4.receive().toString());
+        sender = session.createSender(queue);
+        TestMessageListener listener = new TestMessageListener();
+        receiver3.setMessageListener(listener);
+        sender.send(new MockTextMessage("Text5"));
+        assertEquals("Text5", listener.getMessage().toString());
     }
     
     public void testTransmissionResetCalled() throws Exception
@@ -297,6 +304,66 @@ public class MockQueueSessionTest extends TestCase
         sender.send(streamMessage);
         assertEquals(1, bytesMessage.readInt());
         assertEquals(2, streamMessage.readLong());
+    }
+    
+    public void testTransmissionSenderOrReceiverClosed() throws Exception
+    {
+        DestinationManager destManager = connection.getDestinationManager();
+        destManager.createQueue("Queue");
+        MockQueue queue = (MockQueue)session.createQueue("Queue");
+        MockQueueReceiver receiver1 = (MockQueueReceiver)session.createReceiver(queue);
+        TestMessageListener listener1 = new TestMessageListener();
+        receiver1.setMessageListener(listener1);
+        QueueSender sender = session.createSender(queue);
+        sender.send(new MockTextMessage("Text"));
+        assertNull(receiver1.receive());
+        assertEquals("Text", listener1.getMessage().toString());
+        listener1.reset();
+        receiver1.close();
+        sender.send(new MockTextMessage("Text"));
+        assertNull(listener1.getMessage());
+        try
+        {
+            receiver1.receive();
+            fail();
+        }
+        catch(JMSException exc)
+        {
+            //should throw exception
+        }
+        MockQueueReceiver receiver2 = (MockQueueReceiver)session.createReceiver(queue); 
+        assertEquals("Text", receiver2.receive().toString());
+        TestMessageListener listener2 = new TestMessageListener();
+        receiver2.setMessageListener(listener2);
+        sender.send(new MockTextMessage("Text"));
+        assertEquals("Text", listener2.getMessage().toString());
+        sender.close();
+        try
+        {
+            sender.send(new MockTextMessage("Text"));
+            fail();
+        }
+        catch(JMSException exc)
+        {
+            //should throw exception
+        }
+    }
+    
+    public void testTransmissionConnectionStopped() throws Exception
+    {
+        DestinationManager destManager = connection.getDestinationManager();
+        destManager.createQueue("Queue");
+        MockQueue queue = (MockQueue)session.createQueue("Queue");
+        MockQueueReceiver receiver = (MockQueueReceiver)session.createReceiver(queue);
+        TestMessageListener listener = new TestMessageListener();
+        receiver.setMessageListener(listener);
+        QueueSender sender = session.createSender(queue);
+        connection.stop();
+        sender.send(new MockTextMessage("Text"));
+        assertNull(listener.getMessage());
+        connection.start();  
+        sender.send(new MockTextMessage("Text"));
+        assertEquals("Text", listener.getMessage().toString());
     }
     
     public void testTransmissionMultipleSessions() throws Exception
@@ -355,6 +422,55 @@ public class MockQueueSessionTest extends TestCase
         assertTrue(messages.nextElement() instanceof MockStreamMessage);
         assertTrue(messages.nextElement() instanceof MockBytesMessage);
         assertFalse(messages.hasMoreElements());
+        sender.send(new MockTextMessage("Text"));
+        sender.send(new MockObjectMessage("Object"));
+        browser.close();
+        try
+        {
+            browser.getEnumeration();
+            fail();
+        }
+        catch(JMSException exc)
+        {
+            //should throw exception
+        }     
+    }
+    
+    public void testCloseSession() throws Exception
+    {
+        DestinationManager destManager = connection.getDestinationManager();
+        destManager.createQueue("Queue");
+        MockQueueSession session = (MockQueueSession)connection.createQueueSession(false, QueueSession.CLIENT_ACKNOWLEDGE);
+        MockQueue queue = (MockQueue)session.createQueue("Queue");
+        MockQueueReceiver receiver1 = (MockQueueReceiver)session.createReceiver(queue);
+        MockQueueSender sender1 = (MockQueueSender)session.createSender(queue);
+        MockQueueSender sender2 = (MockQueueSender)session.createSender(queue);
+        MockQueueBrowser browser1 = (MockQueueBrowser)session.createBrowser(queue);
+        session.close();
+        assertTrue(session.isClosed());
+        assertFalse(session.isRolledBack());
+        assertTrue(receiver1.isClosed());
+        assertTrue(sender1.isClosed());
+        assertTrue(sender2.isClosed());
+        assertTrue(browser1.isClosed());
+        session = (MockQueueSession)connection.createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        queue = (MockQueue)session.createQueue("Queue");
+        receiver1 = (MockQueueReceiver)session.createReceiver(queue);
+        sender1 = (MockQueueSender)session.createSender(queue);
+        sender2 = (MockQueueSender)session.createSender(queue);
+        browser1 = (MockQueueBrowser)session.createBrowser(queue);
+        session.close();
+        assertTrue(session.isClosed());
+        assertTrue(session.isRolledBack());
+        assertTrue(receiver1.isClosed());
+        assertTrue(sender1.isClosed());
+        assertTrue(sender2.isClosed());
+        assertTrue(browser1.isClosed());
+        session = (MockQueueSession)connection.createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        session.commit();
+        session.close();
+        assertTrue(session.isClosed());
+        assertFalse(session.isRolledBack());
     }
     
     public static class TestListMessageListener implements MessageListener
@@ -379,6 +495,11 @@ public class MockQueueSessionTest extends TestCase
         public Message getMessage()
         {
             return message;
+        }
+        
+        public void reset()
+        {
+            message = null;
         }
         
         public void onMessage(Message message)

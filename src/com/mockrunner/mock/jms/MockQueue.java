@@ -48,25 +48,32 @@ public class MockQueue implements Queue
      */
     public void addMessage(Message message) throws JMSException
     {
-        receivedMessages.add(message);
-        Iterator sessionsIterator = sessions.iterator();
+        receivedMessages.add(message);    
         boolean isConsumed = false;
-        while(sessionsIterator.hasNext() && !isConsumed)
+        if(!connection.isStopped())
         {
-            MockQueueSession session = (MockQueueSession)sessionsIterator.next();
-            MessageListener globalListener = session.getMessageListener();
-            if(null != globalListener)
+            Iterator sessionsIterator = sessions.iterator();
+            while(sessionsIterator.hasNext() && !isConsumed)
             {
-                globalListener.onMessage(message);
-                isConsumed = true;
-            }
-            else
-            {
-                MockQueueReceiver receiver = session.getTransmissionManager().getQueueReceiver(name);
-                if(receiver != null && receiver.canConsume())
+                MockQueueSession session = (MockQueueSession)sessionsIterator.next();
+                MessageListener globalListener = session.getMessageListener();
+                if(null != globalListener)
                 {
-                    receiver.receiveMessage(message);
+                    globalListener.onMessage(message);
                     isConsumed = true;
+                }
+                else
+                {
+                    List receivers = session.getTransmissionManager().getQueueReceiverList(name);
+                    for(int ii = 0; ii < receivers.size() && !isConsumed; ii++)
+                    {
+                        MockQueueReceiver receiver = (MockQueueReceiver)receivers.get(ii);
+                        if(receiver.canConsume())
+                        {
+                            receiver.receiveMessage(message);
+                            isConsumed = true;
+                        }
+                    }
                 }
             }
         }
@@ -84,6 +91,23 @@ public class MockQueue implements Queue
     public boolean isEmpty()
     {
         return currentMessages.size() <= 0;
+    }
+    
+    /**
+     * Clears all current messages.
+     */
+    public void clear()
+    {
+        currentMessages.clear();
+    }
+    
+    /**
+     * Clears all current messages and resets the list of received messages.
+     */
+    public void reset()
+    {
+        currentMessages.clear();
+        receivedMessages.clear();
     }
     
     /**

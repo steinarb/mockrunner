@@ -7,6 +7,7 @@ import java.util.List;
 import javax.jms.ConnectionConsumer;
 import javax.jms.JMSException;
 import javax.jms.ServerSessionPool;
+import javax.jms.Session;
 import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicSession;
@@ -67,5 +68,15 @@ public class MockTopicConnection extends MockConnection implements TopicConnecti
     public ConnectionConsumer createDurableConnectionConsumer(Topic topic, String subscriptionName, String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException 
     {
         return createConnectionConsumer(topic, messageSelector, sessionPool, maxMessages);
+    }
+    
+    public void close() throws JMSException
+    {
+        for(int ii = 0; ii < topicSessions.size(); ii++)
+        {
+            Session session = (Session)topicSessions.get(ii);
+            session.close();
+        }
+        super.close();
     }
 }

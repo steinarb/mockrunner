@@ -49,6 +49,10 @@ public class MockQueueBrowser implements QueueBrowser
     public Enumeration getEnumeration() throws JMSException
     {
         connection.throwJMSException();
+        if(isClosed())
+        {
+            throw new JMSException("Browser is closed");
+        }
         return new Vector(queue.getCurrentMessageList()).elements();
     }
 

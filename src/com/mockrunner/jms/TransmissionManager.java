@@ -20,6 +20,11 @@ import com.mockrunner.mock.jms.MockTopic;
 import com.mockrunner.mock.jms.MockTopicPublisher;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
 
+/**
+ * This class is used to create queue senders and receivers
+ * and topic publishers and subscribers. It can be also used
+ * to access all created classes in tests.
+ */
 public class TransmissionManager
 {
     private MockConnection connection;
@@ -39,6 +44,133 @@ public class TransmissionManager
         topicPublisher = new ArrayList();
         topicSubscriber = new ArrayList();
         topicDurableSubscriber = new ArrayList();
+    }
+    
+    /**
+     * Closes all senders, receivers, browsers, publishers and subscribers.
+     */
+    public void closeAll()
+    {
+        closeAllQueueSender();
+        closeAllQueueReceiver();
+        closeAllQueueBrowser();
+        closeAllTopicPublisher();
+        closeAllTopicSubscriber();
+        closeAllTopicDurableSubscriber();
+    }
+    
+    /**
+     * Closes all queue senders.
+     */
+    public void closeAllQueueSender()
+    {
+        for(int ii = 0; ii < queueSender.size(); ii++)
+        {
+            QueueSender sender = (QueueSender)queueSender.get(ii);
+            try
+            {
+                sender.close();
+            }
+            catch(JMSException exc)
+            {
+                
+            }
+        }
+    }
+    
+    /**
+     * Closes all queue receivers.
+     */
+    public void closeAllQueueReceiver()
+    {
+        for(int ii = 0; ii < queueReceiver.size(); ii++)
+        {
+            QueueReceiver receiver = (QueueReceiver)queueReceiver.get(ii);
+            try
+            {
+                receiver.close();
+            }
+            catch(JMSException exc)
+            {
+        
+            }
+        }
+    }
+    
+    /**
+     * Closes all queue browsers.
+     */
+    public void closeAllQueueBrowser()
+    {
+        for(int ii = 0; ii < queueBrowser.size(); ii++)
+        {
+            QueueBrowser browser = (QueueBrowser)queueBrowser.get(ii);
+            try
+            {
+                browser.close();
+            }
+            catch(JMSException exc)
+            {
+
+            }
+        }
+    }
+    
+    /**
+     * Closes all topic publishers.
+     */
+    public void closeAllTopicPublisher()
+    {
+        for(int ii = 0; ii < topicPublisher.size(); ii++)
+        {
+            TopicPublisher publisher = (TopicPublisher)topicPublisher.get(ii);
+            try
+            {
+                publisher.close();
+            }
+            catch(JMSException exc)
+            {
+
+            }
+        }
+    }
+    
+    /**
+     * Closes all topic subscribers.
+     */
+    public void closeAllTopicSubscriber()
+    {
+        for(int ii = 0; ii < topicSubscriber.size(); ii++)
+        {
+            TopicSubscriber subscriber = (TopicSubscriber)topicSubscriber.get(ii);
+            try
+            {
+                subscriber.close();
+            }
+            catch(JMSException exc)
+            {
+
+            }
+        }
+    }
+    
+    /**
+     * Closes all durable topic subscribers.
+     */
+    public void closeAllTopicDurableSubscriber()
+    {
+        for(int ii = 0; ii < topicDurableSubscriber.size(); ii++)
+        {
+            TopicSubscriber subscriber = (TopicSubscriber)topicDurableSubscriber.get(ii);
+            try
+            {
+                subscriber.close();
+            }
+            catch(JMSException exc)
+            {
+
+            }
+        }
     }
     
     /**
@@ -441,10 +573,11 @@ public class TransmissionManager
      * @param topic the <code>Topic</code>
      * @return the created <code>TopicSubscriber</code>
      */
-    public MockTopicSubscriber createTopicDurableSubscriber(MockTopic topic, String messageSelector, boolean noLocal)
+    public MockTopicSubscriber createTopicDurableSubscriber(MockTopic topic, String name, String messageSelector, boolean noLocal)
     {
         MockTopicSubscriber subscriber = new MockTopicSubscriber(connection, topic, messageSelector, noLocal);
         subscriber.setDurable(true);
+        subscriber.setName(name);
         topicDurableSubscriber.add(subscriber);
         return subscriber;
     }

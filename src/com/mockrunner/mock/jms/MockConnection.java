@@ -24,7 +24,7 @@ public abstract class MockConnection implements Connection
     {
         destinationManager = new DestinationManager(this); 
         metaData = new MockConnectionMetaData();
-        started = false;
+        started = true;
         closed = false;
         exception = null;
     }

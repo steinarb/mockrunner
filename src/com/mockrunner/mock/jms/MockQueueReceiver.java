@@ -27,6 +27,10 @@ public class MockQueueReceiver extends MockMessageConsumer implements QueueRecei
     public Message receive() throws JMSException
     {
         getConnection().throwJMSException();
+        if(isClosed())
+        {
+            throw new JMSException("Receiver is closed");
+        }
         if(queue.isEmpty()) return null;
         return queue.getMessage();
     }

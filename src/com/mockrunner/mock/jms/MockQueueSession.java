@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.jms.InvalidDestinationException;
 import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.jms.QueueBrowser;
@@ -79,7 +80,7 @@ public class MockQueueSession extends MockSession implements QueueSession
         getConnection().throwJMSException();
         if(!(queue instanceof MockQueue))
         {
-            throw new JMSException("queue must be an instance of MockQueue");
+            throw new InvalidDestinationException("queue must be an instance of MockQueue");
         }
         addSessionToQueue(queue);
         return getTransmissionManager().createQueueReceiver((MockQueue)queue, messageSelector);
@@ -90,7 +91,7 @@ public class MockQueueSession extends MockSession implements QueueSession
         getConnection().throwJMSException();
         if(!(queue instanceof MockQueue))
         {
-            throw new JMSException("queue must be an instance of MockQueue");
+            throw new InvalidDestinationException("queue must be an instance of MockQueue");
         }
         addSessionToQueue(queue);
         return getTransmissionManager().createQueueSender((MockQueue)queue);
@@ -107,7 +108,7 @@ public class MockQueueSession extends MockSession implements QueueSession
         getConnection().throwJMSException();
         if(!(queue instanceof MockQueue))
         {
-            throw new JMSException("queue must be an instance of MockQueue");
+            throw new InvalidDestinationException("queue must be an instance of MockQueue");
         }
         addSessionToQueue(queue);
         return getTransmissionManager().createQueueBrowser((MockQueue)queue, messageSelector);
