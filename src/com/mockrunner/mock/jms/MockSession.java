@@ -334,7 +334,7 @@ public class MockSession implements Session
     public Queue createQueue(String name) throws JMSException
     {
         getConnection().throwJMSException();
-        MockQueue queue = ((MockQueueConnection)getConnection()).getDestinationManager().getQueue(name);
+        MockQueue queue = ((MockConnection)getConnection()).getDestinationManager().getQueue(name);
         if(null == queue)
         {
             throw new JMSException("Queue with name " + name + " not found");
@@ -355,7 +355,7 @@ public class MockSession implements Session
     public Topic createTopic(String name) throws JMSException
     {
         getConnection().throwJMSException();
-        MockTopic topic = ((MockTopicConnection)getConnection()).getDestinationManager().getTopic(name);
+        MockTopic topic = ((MockConnection)getConnection()).getDestinationManager().getTopic(name);
         if(null == topic)
         {
             throw new JMSException("Topic with name " + name + " not found");

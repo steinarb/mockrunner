@@ -2047,8 +2047,6 @@ public class JMSTestModule
         }
     }
     
-    //---
-    
     /**
      * Verifies that the specified messages are equal by calling the
      * <code>equals()</code> method. All mock messages provide a

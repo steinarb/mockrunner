@@ -62,6 +62,6 @@ public class JMSMockObjectFactory
      */
     public MockConnectionFactory getMockConnectionFactory()
     {
-        return topicConnectionFactory;
+        return connectionFactory;
     }
 }
