@@ -13,7 +13,7 @@ import com.mockrunner.example.ejb.interfaces.UserEntity;
 import com.mockrunner.example.ejb.interfaces.UserEntityHome;
 
 /*
- * @ejb:bean name="UserLoginSession"
+ * @ejb.bean name="UserLoginSession"
  *           display-name="UserLoginSessionBean"
  *           type="Stateless"
  *           transaction-type="Container"
@@ -29,8 +29,8 @@ public class UserLoginSessionBean implements SessionBean
     private SessionContext sessionContext;
     
     /*
-     * @ejb:interface-method
-     * @ejb:transaction type="Required"
+     * @ejb.interface-method
+     * @ejb.transaction type="Required"
      **/
     public boolean loginUser(String username, String password)
     {
@@ -60,8 +60,8 @@ public class UserLoginSessionBean implements SessionBean
     }
     
     /*
-     * @ejb:interface-method
-     * @ejb:transaction type="Required"
+     * @ejb.interface-method
+     * @ejb.transaction type="Required"
      **/
     public boolean createUser(String username, String password)
     {
@@ -87,7 +87,7 @@ public class UserLoginSessionBean implements SessionBean
     }
     
     /*
-     * @ejb:create-method
+     * @ejb.create-method
      **/
     public void ejbCreate() throws CreateException
     {

@@ -15,18 +15,18 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 /*
- * @ejb:bean name="LogSession"
+ * @ejb.bean name="LogSession"
  *           display-name="LogSessionBean"
  *           type="Stateless"
  *           transaction-type="Container"
  *           jndi-name="com/mockrunner/example/LogSession"
  * 
- * @ejb:resource-ref res-ref-name="jdbc/MySQLDB"
+ * @ejb.resource-ref res-ref-name="jdbc/MySQLDB"
  *                   res-type="javax.sql.DataSource"
  *                   res-auth="Container"
  *                   res-sharing-scope="Shareable"
  * 
- * @jboss:resource-manager res-man-name="jdbc/MySQLDB"
+ * @jboss.resource-manager res-man-name="jdbc/MySQLDB"
  *                         res-man-jndi-name="java:/MySQLDB"
  */
 /**
@@ -38,8 +38,8 @@ public class LogSessionBean implements SessionBean
     private SessionContext sessionContext;
     
     /*
-     * @ejb:interface-method
-     * @ejb:transaction type="Required"
+     * @ejb.interface-method
+     * @ejb.transaction type="Required"
      */
     /**
      * Creates the database <i>logtable</i>
@@ -78,8 +78,8 @@ public class LogSessionBean implements SessionBean
     }
     
     /*
-     * @ejb:interface-method
-     * @ejb:transaction type="Required"
+     * @ejb.interface-method
+     * @ejb.transaction type="Required"
      */
     /**
      * Writes the specified message into the <i>logtable</i>
@@ -120,7 +120,7 @@ public class LogSessionBean implements SessionBean
     }
     
     /*
-     * @ejb:create-method
+     * @ejb.create-method
      */
     public void ejbCreate() throws CreateException
     {

@@ -8,14 +8,14 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 /*
- * @ejb:bean name="test/TestMessage"
+ * @ejb.bean name="test/TestMessage"
  *           transaction-type="Container"
  *           acknowledge-mode="Auto-acknowledge"
  *           destination-type="javax.jms.Queue"
  *           subscription-durability="NonDurable"
  * 
- * @ejb:transaction type="Required"
- * @jboss:destination-jndi-name name="queue/testQueue"
+ * @ejb.transaction type="Required"
+ * @jboss.destination-jndi-name name="queue/testQueue"
  */
 /**
  * Receiver for {@link PrintSessionBean}.
