@@ -38,6 +38,7 @@
 		<property name="doc" value="doc"/>
 		<property name="bin" value="bin"/>
 		<property name="lib" value="lib"/>
+		<property name="config" value="config"/>
 		
 		<property name="releasedir" value="${bin}/mockrunner-${version}"/>
 		<property name="releasefile" value="${bin}/mockrunner-${version}.zip"/>
@@ -97,6 +98,9 @@
 				<exclude name="com/mockrunner/example/**"/>
 				<exclude name="com/mockrunner/test/**"/>
 			</fileset>
+			<fileset dir="${config}">
+				<include name="**"/>
+			</fileset>
 			<fileset dir="${basedir}">
 				<include name="LICENSE*.txt"/>
 			</fileset>
@@ -114,6 +118,9 @@
 			<fileset dir="${build1.3}">
 				<exclude name="com/mockrunner/example/**"/>
 				<exclude name="com/mockrunner/test/**"/>
+			</fileset>
+			<fileset dir="${config}">
+				<include name="**"/>
 			</fileset>
 			<fileset dir="${basedir}">
 				<include name="LICENSE*.txt"/>
