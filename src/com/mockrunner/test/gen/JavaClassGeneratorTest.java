@@ -3,7 +3,9 @@ package com.mockrunner.test.gen;
 import java.util.List;
 import java.util.Map;
 
+import com.mockrunner.test.gen.JavaClassGenerator.ConstructorDeclaration;
 import com.mockrunner.util.ClassUtil;
+import com.mockrunner.util.FileUtil;
 import com.mockrunner.util.XmlUtil;
 
 import junit.framework.TestCase;
@@ -32,6 +34,12 @@ public class JavaClassGeneratorTest extends TestCase
         generator.addImport(XmlUtil.class);
         generator.addMemberDeclaration(XmlUtil.class, "util");
         generator.addMemberDeclaration(String.class, "name");
+        generator.addConstructorDeclaration();
+        ConstructorDeclaration constructor = new ConstructorDeclaration();
+        constructor.setCommentLines(new String[] {"A", "comment"});
+        constructor.setArguments(new Class[] {String.class, FileUtil.class});
+        constructor.setArgumentNames(new String[] {"string1", "util1"});
+        generator.addConstructorDeclaration(constructor);
         System.out.println(generator.generate());
         assertEquals(getExpected(), generator.generate());
     }
@@ -42,7 +50,8 @@ public class JavaClassGeneratorTest extends TestCase
                "import com.mockrunner.util.ClassUtil;" + NL +
                "import java.util.Map;" + NL +
                "import java.util.List;" + NL +
-               "import com.mockrunner.util.XmlUtil;" + NL + NL +
+               "import com.mockrunner.util.XmlUtil;" + NL +
+               "import com.mockrunner.util.FileUtil;" + NL + NL +
                "/**" + NL +
                " * This is" + NL +
                " * a comment" + NL +
@@ -51,6 +60,16 @@ public class JavaClassGeneratorTest extends TestCase
                "{" + NL +
                "    private XmlUtil util;" + NL + 
                "    private String name;" + NL + NL +
+               "    public MyClass()" + NL +
+               "    {" + NL +
+               "    }" + NL + NL +
+               "    /*" + NL +
+               "     * A" + NL +
+               "     * comment" + NL +
+               "     */" + NL +
+               "    public MyClass(String string1, FileUtil util1)" + NL +
+               "    {" + NL +
+               "    }" + NL + NL +
                "}";
     }
 }
