@@ -4,17 +4,15 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.jms.JMSException;
+import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.Queue;
-import javax.jms.QueueReceiver;
-import javax.jms.QueueSession;
 import javax.jms.Session;
 import javax.jms.Topic;
-import javax.jms.TopicSession;
-import javax.jms.TopicSubscriber;
 
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
+import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueBrowser;
@@ -23,6 +21,7 @@ import com.mockrunner.mock.jms.MockQueueConnectionFactory;
 import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
 import com.mockrunner.mock.jms.MockQueueSession;
+import com.mockrunner.mock.jms.MockSession;
 import com.mockrunner.mock.jms.MockTemporaryQueue;
 import com.mockrunner.mock.jms.MockTemporaryTopic;
 import com.mockrunner.mock.jms.MockTopic;
@@ -35,18 +34,27 @@ import com.mockrunner.mock.jms.MockTopicSubscriber;
 /**
  * Module for JMS tests.
  * Note that all indices are zero based.
+ * Note for JMS 1.1:
+ * If you use {@link MockQueueConnectionFactory} for creating your
+ * connections and session, you have to use the <code>Queue</code>
+ * methods. Same with {@link MockTopicConnectionFactory}.
+ * The methods without <code>Queue</code> and <code>Topic</code>
+ * in the method name are for connections and sessions that were
+ * created using the {@link com.mockrunner.mock.jms.MockConnectionFactory}.
  */
 public class JMSTestModule
 {
     private JMSMockObjectFactory mockFactory;
     private int currentQueueConnectionIndex;
     private int currentTopicConnectionIndex;
+    private int currentConnectionIndex;
   
     public JMSTestModule(JMSMockObjectFactory mockFactory)
     {
         this.mockFactory = mockFactory;
         currentQueueConnectionIndex = -1;
         currentTopicConnectionIndex = -1;
+        currentConnectionIndex = -1;
     }
     
     /**
@@ -102,6 +110,32 @@ public class JMSTestModule
     }
     
     /**
+     * Sets the index of the connection that should be used
+     * for the current test. Per default the latest created connection
+     * is used.
+     * @param connectionIndex the index of the connection
+     */
+    public void setCurrentConnectionIndex(int connectionIndex)
+    {
+        this.currentConnectionIndex = connectionIndex;
+    }
+
+    /**
+     * Returns the current connection based on its
+     * index resp. <code>null</code> if no connection
+     * was created.
+     * @return the topic connection
+     */
+    public MockConnection getCurrentConnection()
+    {
+        if(0 > currentConnectionIndex)
+        { 
+            return mockFactory.getMockConnectionFactory().getLatestConnection();
+        }
+        return mockFactory.getMockConnectionFactory().getConnection(currentConnectionIndex);
+    }
+ 
+    /**
      * Creates a new connection and uses it for creating a new session and receiver.
      * Registers the specified listener. Starts the connection for message
      * receiving. This method is useful for creating test listeners when
@@ -109,6 +143,10 @@ public class JMSTestModule
      * Note that the created connection is the latest created
      * connection and automatically becomes the default connection for the
      * test module. The created session is transacted.
+     * This method uses the {@link MockQueueConnectionFactory} for
+     * creating the connection and the session. If you want to use the
+     * {@link com.mockrunner.mock.jms.MockConnectionFactory} you have to create the connection on your own
+     * and call {@link #registerTestMessageListenerForQueue(MockConnection, String, MessageListener)}.
      * @param queueName the name of the queue used for message receiving
      * @param listener the listener that should be registered
      */
@@ -136,7 +174,7 @@ public class JMSTestModule
      * @param queueName the name of the queue used for message receiving
      * @param listener the listener that should be registered
      */
-    public void registerTestMessageListenerForQueue(MockQueueConnection connection, String queueName, MessageListener listener)
+    public void registerTestMessageListenerForQueue(MockConnection connection, String queueName, MessageListener listener)
     {
         registerTestMessageListenerForQueue(connection, queueName, true, Session.AUTO_ACKNOWLEDGE, listener);
     }
@@ -152,14 +190,14 @@ public class JMSTestModule
      * @param acknowledgeMode the acknowledge mode of the created session
      * @param listener the listener that should be registered
      */
-    public void registerTestMessageListenerForQueue(MockQueueConnection connection, String queueName, boolean transacted, int acknowledgeMode, MessageListener listener)
+    public void registerTestMessageListenerForQueue(MockConnection connection, String queueName, boolean transacted, int acknowledgeMode, MessageListener listener)
     {
         try
         {
             Queue queue = getDestinationManager().getQueue(queueName);
-            QueueSession session = connection.createQueueSession(transacted, acknowledgeMode);
-            QueueReceiver receiver = session.createReceiver(queue);
-            receiver.setMessageListener(listener);
+            MockSession session = (MockSession)connection.createSession(transacted, acknowledgeMode);
+            MessageConsumer consumer = session.createConsumer(queue);
+            consumer.setMessageListener(listener);
             connection.start();
         }
         catch(JMSException exc)
@@ -176,6 +214,10 @@ public class JMSTestModule
      * Note that the created connection is the latest created
      * connection and automatically becomes the default connection for the
      * test module. The created session is transacted.
+     * This method uses the {@link MockTopicConnectionFactory} for
+     * creating the connection and the session. If you want to use the
+     * {@link com.mockrunner.mock.jms.MockConnectionFactory} you have to create the connection on your own
+     * and call {@link #registerTestMessageListenerForTopic(MockConnection, String, MessageListener)}.
      * @param topicName the name of the topic used for message receiving
      * @param listener the listener that should be registered
      */
@@ -203,7 +245,7 @@ public class JMSTestModule
      * @param topicName the name of the topic used for message receiving
      * @param listener the listener that should be registered
      */
-    public void registerTestMessageListenerForTopic(MockTopicConnection connection, String topicName, MessageListener listener)
+    public void registerTestMessageListenerForTopic(MockConnection connection, String topicName, MessageListener listener)
     {
         registerTestMessageListenerForTopic(connection, topicName, true, Session.AUTO_ACKNOWLEDGE, listener);
     }
@@ -219,14 +261,14 @@ public class JMSTestModule
      * @param acknowledgeMode the acknowledge mode of the created session
      * @param listener the listener that should be registered
      */
-    public void registerTestMessageListenerForTopic(MockTopicConnection connection, String topicName, boolean transacted, int acknowledgeMode, MessageListener listener)
+    public void registerTestMessageListenerForTopic(MockConnection connection, String topicName, boolean transacted, int acknowledgeMode, MessageListener listener)
     {
         try
         {
             Topic topic = getDestinationManager().getTopic(topicName);
-            TopicSession session = connection.createTopicSession(transacted, acknowledgeMode);
-            TopicSubscriber subscriber = session.createSubscriber(topic);
-            subscriber.setMessageListener(listener);
+            MockSession session = (MockSession)connection.createSession(transacted, acknowledgeMode);
+            MessageConsumer consumer = session.createConsumer(topic);
+            consumer.setMessageListener(listener);
             connection.start();
         }
         catch(JMSException exc)
@@ -246,7 +288,7 @@ public class JMSTestModule
 
     /**
      * Returns the {@link MessageManager} for the specified session
-     * or <code>null<(/code> if the session does not exist. The returned
+     * or <code>null</code> if the session does not exist. The returned
      * {@link MessageManager} is used to keep track of messages sent
      * to queues.
      * @param indexOfSession the index of the session
@@ -261,7 +303,7 @@ public class JMSTestModule
     
     /**
      * Returns the {@link MessageManager} for the specified session
-     * or <code>null<(/code> if the session does not exist. The returned
+     * or <code>null</code> if the session does not exist. The returned
      * {@link MessageManager} is used to keep track of messages sent
      * to topics.
      * @param indexOfSession the index of the session
@@ -275,8 +317,23 @@ public class JMSTestModule
     }
     
     /**
+     * Returns the {@link MessageManager} for the specified session
+     * or <code>null</code> if the session does not exist. The returned
+     * {@link MessageManager} is used to keep track of messages sent
+     * to topics.
+     * @param indexOfSession the index of the session
+     * @return the {@link MessageManager}
+     */
+    public MessageManager getMessageManager(int indexOfSession)
+    {
+        MockSession session = getSession(indexOfSession);
+        if(null == session) return null;
+        return session.getMessageManager();
+    }
+    
+    /**
      * Returns the {@link QueueTransmissionManager} for the specified session
-     * or <code>null<(/code> if the session does not exist.
+     * or <code>null</code> if the session does not exist.
      * @param indexOfSession the index of the session
      * @return the {@link QueueTransmissionManager}
      */
@@ -289,7 +346,7 @@ public class JMSTestModule
     
     /**
      * Returns the {@link TopicTransmissionManager} for the specified session
-     * or <code>null<(/code> if the session does not exist.
+     * or <code>null</code> if the session does not exist.
      * @param indexOfSession the index of the session
      * @return the {@link TopicTransmissionManager}
      */
@@ -298,6 +355,19 @@ public class JMSTestModule
         MockTopicSession session = getTopicSession(indexOfSession);
         if(null == session) return null;
         return session.getTopicTransmissionManager();
+    }
+    
+    /**
+     * Returns the {@link TransmissionManagerWrapper} for the specified session
+     * or <code>null</code> if the session does not exist.
+     * @param indexOfSession the index of the session
+     * @return the {@link TransmissionManagerWrapper}
+     */
+    public TransmissionManagerWrapper getTransmissionManager(int indexOfSession)
+    {
+        MockSession session = getSession(indexOfSession);
+        if(null == session) return null;
+        return session.getTransmissionManager();
     }
     
     /**
@@ -321,8 +391,18 @@ public class JMSTestModule
     }
     
     /**
+     * Returns the list of {@link MockSession} objects.
+     * @return the {@link MockSession} list
+     */
+    public List getSessionList()
+    {
+        if(null == getCurrentConnection()) return null;
+        return getCurrentConnection().getSessionList();
+    }
+    
+    /**
      * Returns the {@link MockQueueSession} for the specified index
-     * or <code>null<(/code> if the session does not exist.
+     * or <code>null</code> if the session does not exist.
      * @param indexOfSession the index of the session
      * @return the {@link MockQueueSession}
      */
@@ -334,7 +414,7 @@ public class JMSTestModule
     
     /**
      * Returns the {@link MockTopicSession} for the specified index
-     * or <code>null<(/code> if the session does not exist.
+     * or <code>null</code> if the session does not exist.
      * @param indexOfSession the index of the session
      * @return the {@link MockTopicSession}
      */
@@ -345,8 +425,20 @@ public class JMSTestModule
     }
     
     /**
+     * Returns the {@link MockSession} for the specified index
+     * or <code>null</code> if the session does not exist.
+     * @param indexOfSession the index of the session
+     * @return the {@link MockSession}
+     */
+    public MockSession getSession(int indexOfSession)
+    {
+        if(null == getCurrentConnection()) return null;
+        return getCurrentConnection().getSession(indexOfSession);
+    }
+    
+    /**
      * Returns the {@link MockQueue} with the specified name
-     * or <code>null<(/code> if no such queue exists.
+     * or <code>null</code> if no such queue exists.
      * @param name the name of the queue
      * @return the {@link MockQueue}
      */
@@ -357,7 +449,7 @@ public class JMSTestModule
     
     /**
      * Returns the {@link MockTopic} with the specified name
-     * or <code>null<(/code> if no such topic exists.
+     * or <code>null</code> if no such topic exists.
      * @param name the name of the topic
      * @return the {@link MockTopic}
      */
@@ -368,7 +460,11 @@ public class JMSTestModule
     
     /**
      * Returns the list of {@link MockTemporaryQueue} objects
-     * for the specified session.
+     * for the specified session. The session has to be created using
+     * the current {@link MockQueueConnection}.
+     * If you want to get the list from the {@link MockTopicConnection} or
+     * {@link com.mockrunner.mock.jms.MockConnection}, you have to call
+     * {@link MockSession#getTemporaryQueueList}.
      * @param indexOfSession the index of the session
      * @return the {@link MockTemporaryQueue} list
      */
@@ -381,7 +477,11 @@ public class JMSTestModule
     
     /**
      * Returns the list of {@link MockTemporaryTopic} objects
-     * for the specified session.
+     * for the specified session. The session has to be created using
+     * the current {@link MockTopicConnection}.
+     * If you want to get the list from the {@link MockQueueConnection} or
+     * {@link com.mockrunner.mock.jms.MockConnection}, you have to call
+     * {@link MockSession#getTemporaryTopicList}.
      * @param indexOfSession the index of the session
      * @return the {@link MockTemporaryTopic} list
      */
@@ -395,7 +495,11 @@ public class JMSTestModule
     /**
      * Returns the {@link MockTemporaryQueue} with the specified index
      * for the specified session. Returns <code>null</code> if no such
-     * temporary queue exists.
+     * temporary queue exists. The session has to be created using
+     * the current {@link MockQueueConnection}.
+     * If you want to get the {@link MockTemporaryQueue} from the 
+     * {@link MockTopicConnection} or {@link com.mockrunner.mock.jms.MockConnection}, 
+     * you have to call {@link MockSession#getTemporaryQueue}.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
      * @return the {@link MockTemporaryQueue}
@@ -410,7 +514,11 @@ public class JMSTestModule
     /**
      * Returns the {@link MockTemporaryTopic} with the specified index
      * for the specified session. Returns <code>null</code> if no such
-     * temporary queue exists.
+     * temporary queue exists. The session has to be created using
+     * the current {@link MockTopicConnection}.
+     * If you want to get the {@link MockTemporaryTopic} from the 
+     * {@link MockQueueConnection} or {@link com.mockrunner.mock.jms.MockConnection}, 
+     * you have to call {@link MockSession#getTemporaryTopic}.
      * @param indexOfSession the index of the session
      * @param indexOfTopic the index of the temporary queue
      * @return the {@link MockTemporaryTopic}
@@ -438,6 +546,9 @@ public class JMSTestModule
     /**
      * Returns the list of messages that are currently present in the 
      * temporary queue resp. <code>null</code> if no such queue exists.
+     * The session has to be created using the current {@link MockQueueConnection}.
+     * You can also call {@link MockTemporaryQueue#getCurrentMessageList} on your
+     * own.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
      * @return the list of messages
@@ -465,6 +576,9 @@ public class JMSTestModule
     /**
      * Returns the list of messages that were received by the 
      * temporary queue resp. <code>null</code> if no such queue exists.
+     * The session has to be created using the current {@link MockQueueConnection}.
+     * You can also call {@link MockTemporaryQueue#getReceivedMessageList} on your
+     * own.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
      * @return the list of messages
@@ -492,6 +606,9 @@ public class JMSTestModule
     /**
      * Returns the list of messages that are currently present in the 
      * temporary topic resp. <code>null</code> if no such topic exists.
+     * The session has to be created using the current {@link MockTopicConnection}.
+     * You can also call {@link MockTemporaryTopic#getCurrentMessageList} on your
+     * own.
      * @param indexOfSession the index of the session
      * @param indexOfTopic the index of the temporary topic
      * @return the list of messages
@@ -519,6 +636,9 @@ public class JMSTestModule
     /**
      * Returns the list of messages that were received by the 
      * temporary topic resp. <code>null</code> if no such topic exists.
+     * The session has to be created using the current {@link MockTopicConnection}.
+     * You can also call {@link MockTemporaryTopic#getReceivedMessageList} on your
+     * own.
      * @param indexOfSession the index of the session
      * @param indexOfTopic the index of the temporary topic
      * @return the list of messages
@@ -623,6 +743,54 @@ public class JMSTestModule
         if(!getCurrentTopicConnection().isStopped())
         {
             throw new VerifyFailedException("TopicConnection is not stopped.");
+        }
+    }
+    
+    /**
+     * Verifies that the current connection is closed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyConnectionClosed()
+    {
+        if(null == getCurrentConnection())
+        {
+            throw new VerifyFailedException("No Connection present.");
+        }
+        if(!getCurrentConnection().isClosed())
+        {
+            throw new VerifyFailedException("Connection is not closed.");
+        }
+    }
+
+    /**
+     * Verifies that the current connection is started.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyConnectionStarted()
+    {
+        if(null == getCurrentConnection())
+        {
+            throw new VerifyFailedException("No Connection present.");
+        }
+        if(!getCurrentConnection().isStarted())
+        {
+            throw new VerifyFailedException("Connection is not started.");
+        }
+    }
+
+    /**
+     * Verifies that the current connection is started.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyConnectionStopped()
+    {
+        if(null == getCurrentConnection())
+        {
+            throw new VerifyFailedException("No Connection present.");
+        }
+        if(!getCurrentConnection().isStopped())
+        {
+            throw new VerifyFailedException("Connection is not stopped.");
         }
     }
     
@@ -837,6 +1005,111 @@ public class JMSTestModule
     }
     
     /**
+     * Verifies that the session with the specified index is
+     * closed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySessionClosed(int indexOfSession)
+    {
+        MockSession session = checkAndGetSessionByIndex(indexOfSession);
+        if(!session.isClosed())
+        {
+            throw new VerifyFailedException("Session with index " + indexOfSession + " is not closed.");
+        }
+    }
+
+    /**
+     * Verifies that the session with the specified index was
+     * committed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySessionCommitted(int indexOfSession)
+    {
+        MockSession session = checkAndGetSessionByIndex(indexOfSession);
+        if(!session.isCommitted())
+        {
+            throw new VerifyFailedException("Session is not committed.");
+        }
+    }
+
+    /**
+     * Verifies that the session with the specified index was
+     * not committed.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySessionNotCommitted(int indexOfSession)
+    {
+        MockSession session = checkAndGetSessionByIndex(indexOfSession);
+        if(session.isCommitted())
+        {
+            throw new VerifyFailedException("Session is committed.");
+        }
+    }
+
+    /**
+     * Verifies that the session with the specified index was
+     * rolled back.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySessionRolledBack(int indexOfSession)
+    {
+        MockSession session = checkAndGetSessionByIndex(indexOfSession);
+        if(!session.isRolledBack())
+        {
+            throw new VerifyFailedException("Session is not rolled back.");
+        }
+    }
+
+    /**
+     * Verifies that the session with the specified index was
+     * not rolled back.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySessionNotRolledBack(int indexOfSession)
+    {
+        MockSession session = checkAndGetSessionByIndex(indexOfSession);
+        if(session.isRolledBack())
+        {
+            throw new VerifyFailedException("Session is rolled back.");
+        }
+    }
+
+    /**
+     * Verifies that the session with the specified index was
+     * recovered.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySessionRecovered(int indexOfSession)
+    {
+        MockSession session = checkAndGetSessionByIndex(indexOfSession);
+        if(!session.isRecovered())
+        {
+            throw new VerifyFailedException("Session is not recovered.");
+        }
+    }
+
+    /**
+     * Verifies that the session with the specified index was
+     * not recovered.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySessionNotRecovered(int indexOfSession)
+    {
+        MockSession session = checkAndGetSessionByIndex(indexOfSession);
+        if(session.isRecovered())
+        {
+            throw new VerifyFailedException("Session is recovered.");
+        }
+    }
+    
+    /**
      * Verifies that all queue sessions are closed.
      * @throws VerifyFailedException if verification fails
      */
@@ -971,6 +1244,76 @@ public class JMSTestModule
             }
         }   
     }
+    
+    /**
+     * Verifies that all sessions are closed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllSessionsClosed()
+    {
+        List sessions = getSessionList();
+        for(int ii = 0; ii < sessions.size(); ii++)
+        {
+            MockSession currentSession = (MockSession)sessions.get(ii);
+            if(!currentSession.isClosed())
+            {
+                throw new VerifyFailedException("Session with index " + ii + " is not closed.");
+            }
+        }
+    }
+
+    /**
+     * Verifies that all sessions are recovered.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllSessionsRecovered()
+    {
+        List sessions = getSessionList();
+        for(int ii = 0; ii < sessions.size(); ii++)
+        {
+            MockSession currentSession = (MockSession)sessions.get(ii);
+            if(!currentSession.isRecovered())
+            {
+                throw new VerifyFailedException("Session with index " + ii + " is not recovered.");
+            }
+        }
+    }
+
+    /**
+     * Verifies that all sessions were commited.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllSessionsCommitted()
+    {
+        List sessions = getSessionList();
+        for(int ii = 0; ii < sessions.size(); ii++)
+        {
+            MockSession currentSession = (MockSession)sessions.get(ii);
+            if(!currentSession.isCommitted())
+            {
+                throw new VerifyFailedException("Session with index " + ii + " is not committed.");
+            }
+        }
+    }
+
+    /**
+     * Verifies that all topic sessions were rolled back.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllSessionsRolledBack()
+    {
+        List sessions = getSessionList();
+        for(int ii = 0; ii < sessions.size(); ii++)
+        {
+            MockSession currentSession = (MockSession)sessions.get(ii);
+            if(!currentSession.isRolledBack())
+            {
+                throw new VerifyFailedException("Session with index " + ii + " is not rolled back.");
+            }
+        }   
+    }
+    
+    //---
     
     /**
      * Verifies the number of senders for the specified session.
@@ -2989,6 +3332,20 @@ public class JMSTestModule
         if(null == session)
         {
             throw new VerifyFailedException("TopicSession with index " + indexOfSession + " does not exist.");
+        }
+        return session;
+    }
+    
+    private MockSession checkAndGetSessionByIndex(int indexOfSession)
+    {
+        if(null == getCurrentConnection())
+        {
+            throw new VerifyFailedException("No Connection present.");
+        }
+        MockSession session = getSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("Session with index " + indexOfSession + " does not exist.");
         }
         return session;
     }
