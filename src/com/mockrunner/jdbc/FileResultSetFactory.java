@@ -73,7 +73,6 @@ public class FileResultSetFactory implements ResultSetFactory
             String[] names = StringUtil.split(firstLine, delimiter, trim);
             for(int ii = 0; ii < names.length; ii++)
             {
-                String nextName = names[ii];
                 resultSet.addColumn(names[ii]);
             }
         }

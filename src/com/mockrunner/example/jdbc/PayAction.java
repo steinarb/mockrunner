@@ -20,8 +20,6 @@ import org.apache.struts.action.ActionMapping;
  * This example simulates the paying of a bill. It checks the id of the customer,
  * the id of the bill and the amount. If an error occurs the transaction is
  * rolled back and an <code>ActionError</code> is created.
- * This action is not the most efficient and best way to implement this, but it's
- * ok to demonstrate the usage of {@link com.mockrunner.jdbc.JDBCTestCaseAdapter}.
  * 
  * This action uses three tables. The table <i>customers</i> has two columns,
  * <i>id</i> and <i>name</i>. The table <i>openbills</i> has three columns,
