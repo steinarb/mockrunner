@@ -5,7 +5,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.util.CollectionUtil;
+import com.mockrunner.util.common.CollectionUtil;
 
 public class CollectionUtilTest extends TestCase
 {

@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.mockrunner.jdbc.AbstractOutParameterResultSetHandler;
-import com.mockrunner.util.StreamUtil;
+import com.mockrunner.util.common.StreamUtil;
 
 /**
  * Mock implementation of <code>CallableStatement</code>.

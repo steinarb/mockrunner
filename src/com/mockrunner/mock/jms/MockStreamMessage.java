@@ -12,7 +12,7 @@ import javax.jms.MessageNotReadableException;
 import javax.jms.MessageNotWriteableException;
 import javax.jms.StreamMessage;
 
-import com.mockrunner.util.ArrayUtil;
+import com.mockrunner.util.common.ArrayUtil;
 
 /**
  * Mock implementation of JMS <code>StreamMessage</code>.

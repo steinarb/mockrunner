@@ -17,7 +17,6 @@ import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.mockrunner.mock.web.MockBodyContent;
-import com.mockrunner.util.TagUtil;
 
 /**
  * Implementation of {@link NestedTag} wrapping tags of

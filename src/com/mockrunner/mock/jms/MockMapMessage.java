@@ -11,7 +11,7 @@ import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.MessageFormatException;
 
-import com.mockrunner.util.ArrayUtil;
+import com.mockrunner.util.common.ArrayUtil;
 
 /**
  * Mock implementation of JMS <code>MapMessage</code>.

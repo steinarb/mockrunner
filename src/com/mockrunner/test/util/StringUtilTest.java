@@ -5,7 +5,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.util.StringUtil;
+import com.mockrunner.util.common.StringUtil;
 
 public class StringUtilTest extends TestCase
 {

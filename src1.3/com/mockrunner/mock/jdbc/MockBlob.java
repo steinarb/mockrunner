@@ -12,8 +12,8 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mockrunner.util.ArrayUtil;
-import com.mockrunner.util.CollectionUtil;
+import com.mockrunner.util.common.ArrayUtil;
+import com.mockrunner.util.common.CollectionUtil;
 
 /**
  * Mock implementation of <code>Blob</code>.

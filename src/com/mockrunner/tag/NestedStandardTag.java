@@ -12,7 +12,6 @@ import javax.servlet.jsp.tagext.IterationTag;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import com.mockrunner.util.TagUtil;
 
 /**
  * Implementation of {@link NestedTag} wrapping tags of

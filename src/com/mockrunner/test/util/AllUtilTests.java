@@ -9,15 +9,12 @@ public class AllUtilTests
     {
         TestSuite suite = new TestSuite("Test for com.mockrunner.test.util");
         //$JUnit-BEGIN$
-		suite.addTest(new TestSuite(XmlUtilTest.class));
 		suite.addTest(new TestSuite(StreamUtilTest.class));
 		suite.addTest(new TestSuite(ArrayUtilTest.class));
 		suite.addTest(new TestSuite(CollectionUtilTest.class));
 		suite.addTest(new TestSuite(StringUtilTest.class));
-		suite.addTest(new TestSuite(ParameterUtilTest.class));
 		suite.addTest(new TestSuite(FileUtilTest.class));
 		suite.addTest(new TestSuite(ClassUtilTest.class));
-		suite.addTest(new TestSuite(TagUtilTest.class));
         suite.addTest(new TestSuite(CaseAwareMapTest.class));
         //$JUnit-END$
         return suite;

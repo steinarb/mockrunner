@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 
 import com.mockrunner.mock.web.WebMockObjectFactory;
-import com.mockrunner.util.XmlUtil;
+import com.mockrunner.util.web.XmlUtil;
 
 /**
  * Base class for modules which produce HTML
@@ -42,7 +42,7 @@ public abstract class HTMLOutputModule extends WebTestModule
      * a <code>RuntimeException</code> if the output is not
      * parsable. NekoHTML is quite good in fixing sloppy
      * HTML code. If you want to use another parser, you can
-     * use the method {@link com.mockrunner.util.XmlUtil#parse} 
+     * use the method {@link com.mockrunner.util.web.XmlUtil#parse} 
      * to parse the string output yourself. Please note that
      * HTML parsing is not very fast and may slow down
      * your test suite.
@@ -60,7 +60,7 @@ public abstract class HTMLOutputModule extends WebTestModule
      * a <code>RuntimeException</code> if the output is not
      * parsable. NekoHTML is quite good in fixing sloppy
      * HTML code. If you want to use another parser, you can
-     * use the method {@link com.mockrunner.util.XmlUtil#parse} 
+     * use the method {@link com.mockrunner.util.web.XmlUtil#parse} 
      * to parse the string output yourself. Please note that
      * HTML parsing is not very fast and may slow down
      * your test suite.

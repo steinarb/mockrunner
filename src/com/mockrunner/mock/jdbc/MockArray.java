@@ -8,7 +8,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.mockrunner.util.ArrayUtil;
+import com.mockrunner.util.common.ArrayUtil;
 
 /**
  * Mock implementation of <code>Array</code>.

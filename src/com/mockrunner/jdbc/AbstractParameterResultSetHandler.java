@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.mock.jdbc.MockResultSet;
-import com.mockrunner.util.ArrayUtil;
-import com.mockrunner.util.ParameterUtil;
+import com.mockrunner.util.common.ArrayUtil;
 
 /**
  * Abstract base class for all statement types

@@ -85,11 +85,12 @@
             <src path="${src}/com/mockrunner/struts" />
             <src path="${src}/com/mockrunner/tag" />
             <src path="${src}/com/mockrunner/mock/web" />
-            <src path="${src}/com/mockrunner/util" />
             <src path="${src}/com/mockrunner/ejb" />
             <src path="${src}/com/mockrunner/mock/ejb" />
             <src path="${src}/com/mockrunner/jms" />
             <src path="${src}/com/mockrunner/mock/jms" />
+            <src path="${src}/com/mockrunner/util/common" />
+            <src path="${src}/com/mockrunner/util/web" />
             <src path="${src}/org/apache" />
             <src path="${src}/org/codehaus" />
             <src path="${src1.3}" />

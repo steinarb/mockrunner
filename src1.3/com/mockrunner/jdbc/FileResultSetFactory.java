@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.List;
 
 import com.mockrunner.mock.jdbc.MockResultSet;
-import com.mockrunner.util.FileUtil;
-import com.mockrunner.util.StringUtil;
+import com.mockrunner.util.common.FileUtil;
+import com.mockrunner.util.common.StringUtil;
 
 /**
  * Can be used to create a <code>ResultSet</code> based on

@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 
 import com.mockrunner.mock.web.MockRequestDispatcher;
 import com.mockrunner.mock.web.MockServletContext;
-import com.mockrunner.util.StreamUtil;
+import com.mockrunner.util.common.StreamUtil;
 
 public class MockServletContextTest extends TestCase
 {
