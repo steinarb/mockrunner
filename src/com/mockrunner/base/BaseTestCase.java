@@ -45,7 +45,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected WebMockObjectFactory createWebMockObjectFactory()
     {
-        MockObjectFactory factory = new MockObjectFactory();
+        WebMockObjectFactory factory = new WebMockObjectFactory();
         return factory;
     }
 
@@ -54,7 +54,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected WebMockObjectFactory createWebMockObjectFactory(WebMockObjectFactory otherFactory)
     {
-        MockObjectFactory factory = new MockObjectFactory(otherFactory);
+        WebMockObjectFactory factory = new WebMockObjectFactory(otherFactory);
         return factory;
     }
     
@@ -74,7 +74,7 @@ public abstract class BaseTestCase extends TestCase
      */
     protected WebMockObjectFactory createWebMockObjectFactory(WebMockObjectFactory otherFactory, boolean createNewSession)
     {
-        MockObjectFactory factory = new MockObjectFactory(otherFactory, createNewSession);
+        WebMockObjectFactory factory = new WebMockObjectFactory(otherFactory, createNewSession);
         return factory;
     }
 
@@ -94,51 +94,6 @@ public abstract class BaseTestCase extends TestCase
     protected void setWebMockObjectFactory(WebMockObjectFactory mockFactory)
     {
         this.webMockFactory = mockFactory;
-    }
-    
-    /**
-     * @deprecated
-     * use {@link #createWebMockObjectFactory}
-     */
-    protected MockObjectFactory createMockObjectFactory()
-    {
-        return (MockObjectFactory)createWebMockObjectFactory();
-    }
-
-    /**
-     * @deprecated
-     * use {@link #createWebMockObjectFactory(WebMockObjectFactory)}
-     */
-    protected MockObjectFactory createMockObjectFactory(MockObjectFactory otherFactory)
-    {
-        return (MockObjectFactory)createWebMockObjectFactory(otherFactory);
-    }
-
-    /**
-     * @deprecated
-     * use {@link #createWebMockObjectFactory(WebMockObjectFactory, boolean)}
-     */
-    protected MockObjectFactory createMockObjectFactory(MockObjectFactory otherFactory, boolean createNewSession)
-    {
-        return (MockObjectFactory)createWebMockObjectFactory(otherFactory, createNewSession);
-    }
-
-    /**
-     * @deprecated
-     * use {@link #getWebMockObjectFactory}
-     */
-    protected MockObjectFactory getMockObjectFactory()
-    {
-        return (MockObjectFactory)getWebMockObjectFactory();
-    }
-
-    /**
-     * @deprecated
-     * use {@link #setWebMockObjectFactory}
-     */
-    protected void setMockObjectFactory(MockObjectFactory mockFactory)
-    {
-        setWebMockObjectFactory(mockFactory);
     }
     
     /**

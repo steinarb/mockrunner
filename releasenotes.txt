@@ -1,4 +1,8 @@
 
+mockrunner-0.2.1:
+
+- removed deprecated methods and classes
+
 mockrunner-0.2:
 
 - reorganized package structure for mockobjects. The
