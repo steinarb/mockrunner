@@ -26,4 +26,22 @@ public class JMSMockObjectFactory
     {
         queueConnectionFactory.setQueueConnection(queueConnection);
     }
+    
+    /**
+     * Returns the {@link com.mockrunner.mock.jms.MockQueueConnection}.
+     * @return the {@link com.mockrunner.mock.jms.MockQueueConnection}
+     */
+    public MockQueueConnection getMockQueueConnection()
+    {
+        return queueConnection;
+    }
+
+    /**
+     * Returns the {@link com.mockrunner.mock.jms.MockQueueConnectionFactory}.
+     * @return the {@link com.mockrunner.mock.jms.MockQueueConnectionFactory}
+     */
+    public MockQueueConnectionFactory getMockQueueConnectionFactory()
+    {
+        return queueConnectionFactory;
+    }
 }
