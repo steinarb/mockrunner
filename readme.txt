@@ -140,7 +140,7 @@ JDOM Beta 10:
 http://www.jdom.org
 jdom.jar
 
-NekoHTML Parser 0.9.2:
+NekoHTML Parser 0.9.3:
 http://www.apache.org/~andyc/neko/doc/html/index.html
 nekohtml.jar
 
