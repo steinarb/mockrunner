@@ -1,6 +1,7 @@
 
 mockrunner-0.2.7:
 
+- applied patch 910699 (MockUserPrincipal)
 - removed most of the methods in MockActionMapping, we can use the
   real Strust implementation
 - improved setResources() to Struts test module to support module config
