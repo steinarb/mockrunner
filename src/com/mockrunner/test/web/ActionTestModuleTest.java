@@ -389,12 +389,14 @@ public class ActionTestModuleTest extends TestCase
         module.addRequestParameter("value(key1)", "value1");
         module.addRequestParameter("value(key2)", "value2");
         module.addRequestParameter("property", "value3");
+        module.addRequestParameter("indexedProperty[1]", "indexedValue");
         module.createActionForm(TestForm.class);
         module.populateRequestToForm();
         TestForm form = (TestForm)module.getActionForm();
         assertEquals("value1", form.getValue("key1"));
         assertEquals("value2", form.getValue("key2"));
         assertEquals("value3", form.getProperty());
+        assertEquals("indexedValue", form.getIndexedProperty(1));
         assertEquals(null, form.getValue("key3"));
     }
     

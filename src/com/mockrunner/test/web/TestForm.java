@@ -1,6 +1,7 @@
 package com.mockrunner.test.web;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,8 +13,9 @@ import org.apache.struts.action.ActionMapping;
 public class TestForm extends ActionForm
 {
     private boolean validationOk = true;
-    private HashMap mappedProperties = new HashMap();
+    private Map mappedProperties = new HashMap();
     private String property;
+    private Map indexedProperties = new HashMap();
     private boolean resetCalled = false;
   
     public void setValidationOk(boolean validationOk)
@@ -29,6 +31,16 @@ public class TestForm extends ActionForm
     public void setProperty(String string)
     {
         property = string;
+    }
+    
+    public String getIndexedProperty(int index)
+    {
+        return (String)indexedProperties.get(new Integer(index));
+    }
+
+    public void setIndexedProperty(int index, String string)
+    {
+        indexedProperties.put(new Integer(index), string);
     }
 
     public Object getValue(String name)
