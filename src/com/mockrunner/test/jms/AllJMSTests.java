@@ -9,7 +9,7 @@ public class AllJMSTests
     {
         TestSuite suite = new TestSuite("Test for com.mockrunner.jms.test");
         //$JUnit-BEGIN$
-        suite.addTest(new TestSuite(MockQueueConnectionTest.class));
+        suite.addTest(new TestSuite(MockConnectionTest.class));
         suite.addTest(new TestSuite(MockMessageTest.class));
         suite.addTest(new TestSuite(MockTextMessageTest.class));
         suite.addTest(new TestSuite(MockObjectMessageTest.class));

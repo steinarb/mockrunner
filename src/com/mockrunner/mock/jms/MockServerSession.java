@@ -9,18 +9,18 @@ import javax.jms.Session;
  * Mock implementation of JMS <code>ServerSession</code>.
  * The <code>ServerSession</code> is not meant for application
  * use. This simple implementation only returns a new
- * {@link MockQueueSession} when calling {@link #getSession}.
+ * {@link MockSession} when calling {@link #getSession}.
  */
 public class MockServerSession implements ServerSession
 {
-    private MockQueueConnection connection;
+    private MockConnection connection;
     private Session session;
     private boolean started;
     
-    public MockServerSession(MockQueueConnection connection)
+    public MockServerSession(MockConnection connection)
     {
         this.connection = connection;
-        session = new MockQueueSession(connection, false, QueueSession.AUTO_ACKNOWLEDGE);
+        session = new MockSession(connection, false, QueueSession.AUTO_ACKNOWLEDGE);
         started = false;
     }
     

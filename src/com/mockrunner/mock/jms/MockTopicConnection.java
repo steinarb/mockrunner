@@ -1,5 +1,9 @@
 package com.mockrunner.mock.jms;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.jms.ConnectionConsumer;
 import javax.jms.JMSException;
 import javax.jms.ServerSessionPool;
@@ -9,24 +13,59 @@ import javax.jms.TopicSession;
 
 /**
  * Mock implementation of JMS <code>TopicConnection</code>.
+ * Please note: The interfaces <code>ConnectionConsumer</code>,
+ * <code>ServerSessionPool</code> and <code>ServerSession</code>
+ * are not meant for application use. Mockrunner provides very
+ * simple mock implementations but usually you won't need them.
  */
 public class MockTopicConnection extends MockConnection implements TopicConnection
 {
+    private List topicSessions;
+    
+    public MockTopicConnection()
+    {
+        topicSessions = new ArrayList();
+    }
+    
+    /**
+     * Returns the list of {@link MockTopicSession} objects that were created 
+     * with {@link #createTopicSession}.
+     * @return the list
+     */
+    public List getTopicSessionList()
+    {
+        return Collections.unmodifiableList(topicSessions);
+    }
+
+    /**
+     * Returns a {@link MockTopicSession} that was created with
+     * {@link #createTopicSession}. If there's no such
+     * {@link MockTopicSession}, <code>null</code> is returned.
+     * @param index the index of the session object
+     * @return the session object
+     */
+    public MockTopicSession getTopicSession(int index)
+    {
+        if(topicSessions.size() <= index || index < 0) return null;
+        return (MockTopicSession)topicSessions.get(index);
+    }
+
     public TopicSession createTopicSession(boolean transacted, int acknowledgeMode) throws JMSException
     {
-        // TODO Auto-generated method stub
-        return null;
+        throwJMSException();
+        MockTopicSession session = new MockTopicSession(this, transacted, acknowledgeMode);
+        topicSessions.add(session);
+        return session;
     }
 
-    public ConnectionConsumer createConnectionConsumer(Topic topic, java.lang.String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException
+    public ConnectionConsumer createConnectionConsumer(Topic topic, String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException
     {
-        // TODO Auto-generated method stub
-        return null;
+        throwJMSException();
+        return new MockConnectionConsumer(this, sessionPool);
     }
 
-    public ConnectionConsumer createDurableConnectionConsumer(Topic topic, java.lang.String subscriptionName, java.lang.String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException 
+    public ConnectionConsumer createDurableConnectionConsumer(Topic topic, String subscriptionName, String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException 
     {
-        // TODO Auto-generated method stub
-        return null;
+        return createConnectionConsumer(topic, messageSelector, sessionPool, maxMessages);
     }
 }

@@ -9,11 +9,11 @@ import javax.jms.ServerSessionPool;
  */
 public class MockConnectionConsumer implements ConnectionConsumer
 {
-    private MockQueueConnection connection;
+    private MockConnection connection;
     private ServerSessionPool sessionPool;
     private boolean closed;
     
-    public MockConnectionConsumer(MockQueueConnection connection, ServerSessionPool serverSessionPool)
+    public MockConnectionConsumer(MockConnection connection, ServerSessionPool serverSessionPool)
     {
         this.connection = connection;
         closed = false;
