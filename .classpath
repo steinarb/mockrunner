@@ -2,18 +2,18 @@
 <classpath>
     <classpathentry kind="src" path="src"/>
     <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/struts.jar"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/junit.jar"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/commons-beanutils.jar"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/commons-collections.jar"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/commons-logging.jar"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/nekohtml.jar"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/jdom.jar"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/xml-apis.jar"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/xercesImpl.jar"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/commons-lang.jar"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/servlet.jar"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/jboss-j2ee.jar"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/mockejb.jar"/>
+    <classpathentry kind="lib" path="lib/commons-beanutils.jar"/>
+    <classpathentry kind="lib" path="lib/commons-collections.jar"/>
+    <classpathentry kind="lib" path="lib/commons-lang.jar"/>
+    <classpathentry kind="lib" path="lib/commons-logging.jar"/>
+    <classpathentry kind="lib" path="lib/jboss-j2ee.jar"/>
+    <classpathentry kind="lib" path="lib/jdom.jar"/>
+    <classpathentry kind="lib" path="lib/junit.jar"/>
+    <classpathentry kind="lib" path="lib/mockejb.jar"/>
+    <classpathentry kind="lib" path="lib/nekohtml.jar"/>
+    <classpathentry kind="lib" path="lib/servlet.jar"/>
+    <classpathentry kind="lib" path="lib/struts.jar"/>
+    <classpathentry kind="lib" path="lib/xercesImpl.jar"/>
+    <classpathentry kind="lib" path="lib/xml-apis.jar"/>
     <classpathentry kind="output" path="classes"/>
 </classpath>
