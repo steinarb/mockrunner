@@ -914,6 +914,7 @@ public class MockResultSet implements ResultSet
     {
         checkColumnName(columnName);
         checkRowBounds();
+        checkResultSetConcurrency();
         List column = (List)columnMapCopy.get(columnName);
         column.set(cursor, value);
     }
@@ -1222,6 +1223,14 @@ public class MockResultSet implements ResultSet
         if(resultSetType == ResultSet.TYPE_FORWARD_ONLY)
         {
             throw new SQLException("ResultSet is TYPE_FORWARD_ONLY");
+        }
+    }
+    
+    private void checkResultSetConcurrency() throws SQLException
+    {
+        if(resultSetConcurrency == ResultSet.CONCUR_READ_ONLY)
+        {
+            throw new SQLException("ResultSet is CONCUR_READ_ONLY");
         }
     }
     
