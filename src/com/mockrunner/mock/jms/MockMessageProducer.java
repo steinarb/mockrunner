@@ -190,8 +190,8 @@ public class MockMessageProducer implements MessageProducer
         }
         if(message instanceof MockMessage)
         {
-            ((MockMessage)message).setReadOnly();
-            ((MockMessage)message).setReadOnlyProperties();
+            ((MockMessage)message).setReadOnly(true);
+            ((MockMessage)message).setReadOnlyProperties(true);
         }
         if(message instanceof BytesMessage)
         {

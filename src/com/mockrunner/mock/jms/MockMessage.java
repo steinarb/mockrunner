@@ -409,14 +409,14 @@ public class MockMessage implements Message, Cloneable
         isInWriteMode = true;
     }
     
-    public void setReadOnly()
+    public void setReadOnly(boolean isReadOnly)
     {
-        isInWriteMode = false;
+        isInWriteMode = !isReadOnly;
     }
     
-    public void setReadOnlyProperties()
+    public void setReadOnlyProperties(boolean isReadOnly)
     {
-        isInWriteModeProperties = false;
+        isInWriteModeProperties = !isReadOnly;
     }
     
     public Object clone()

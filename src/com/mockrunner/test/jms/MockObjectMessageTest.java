@@ -31,7 +31,7 @@ public class MockObjectMessageTest extends TestCase
         MockObjectMessage message = new MockObjectMessage("test");
         message.setObject(new Integer(2));
         assertEquals(new Integer(2), message.getObject());
-        message.setReadOnly();
+        message.setReadOnly(true);
         try
         {
             message.setObject(new Integer(3));

@@ -398,7 +398,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
 
     public void reset() throws JMSException
     {
-        setReadOnly();
+        setReadOnly(true);
         Collections.reverse(data);
     }
 

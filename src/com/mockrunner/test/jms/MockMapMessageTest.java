@@ -92,7 +92,7 @@ public class MockMapMessageTest extends TestCase
         MockMapMessage message = new MockMapMessage();
         message.setString("test", "test");
         message.setBoolean("boolean", true);
-        message.setReadOnly();
+        message.setReadOnly(true);
         try
         {
             message.setString("test", "anothertest");
