@@ -5,14 +5,21 @@ import com.mockrunner.servlet.ServletTestModule;
 
 public class ServletTestModuleTest extends BaseTestCase
 {
+    private ServletTestModule module;
+    
     public ServletTestModuleTest(String arg0)
     {
         super(arg0);
     }
-
-    public void testMethodsCalled()
+    
+    protected void setUp() throws Exception
     {
-        ServletTestModule module = new ServletTestModule(getMockObjectFactory());
+        super.setUp();
+        module = new ServletTestModule(getMockObjectFactory());
+    }
+
+    public void testServletMethodsCalled()
+    {
         TestServlet servlet = (TestServlet)module.createServlet(TestServlet.class);
         module.doDelete();
         assertTrue(servlet.wasDoDeleteCalled());
@@ -26,5 +33,37 @@ public class ServletTestModuleTest extends BaseTestCase
         assertTrue(servlet.wasDoPutCalled());
         module.doTrace();
         assertTrue(servlet.wasDoTraceCalled());
+    }
+    
+    public void testDoFilter()
+    {
+        TestFilter filter = (TestFilter)module.createFilter(TestFilter.class);
+        module.doFilter();
+        assertTrue(filter.wasDoFilterCalled());
+        assertFalse(getMockObjectFactory().getMockFilterChain() == filter.getLastFilterChain());
+    }
+    
+    public void testFilterChain()
+    {
+        TestServlet servlet = (TestServlet)module.createServlet(TestServlet.class);
+        TestFilter filter1 = (TestFilter)module.createAndAddFilter(TestFilter.class);
+        TestFilter filter2 = (TestFilter)module.createAndAddFilter(TestFilter.class);
+        TestFilter filter3 = (TestFilter)module.createAndAddFilter(TestFilter.class);
+        module.doGet();
+        assertTrue(filter1.wasInitCalled());
+        assertTrue(filter2.wasInitCalled());
+        assertTrue(filter3.wasInitCalled());
+        assertFalse(filter1.wasDoFilterCalled());
+        assertFalse(filter2.wasDoFilterCalled());
+        assertFalse(filter3.wasDoFilterCalled());
+        assertTrue(servlet.wasDoGetCalled());
+        module.setDoChain(true);
+        module.doGet();
+        assertTrue(filter1.wasDoFilterCalled());
+        assertTrue(filter2.wasDoFilterCalled());
+        assertTrue(filter3.wasDoFilterCalled());
+        assertTrue(getMockObjectFactory().getMockFilterChain() == filter1.getLastFilterChain());
+        assertTrue(getMockObjectFactory().getMockFilterChain() == filter2.getLastFilterChain());
+        assertTrue(getMockObjectFactory().getMockFilterChain() == filter3.getLastFilterChain());
     }
 }
