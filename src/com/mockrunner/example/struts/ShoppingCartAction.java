@@ -35,9 +35,9 @@ public class ShoppingCartAction extends LookupDispatchAction
     }
           
     public ActionForward order(ActionMapping mapping,
-                                 ActionForm form,
-                                 HttpServletRequest request,
-                                 HttpServletResponse response) throws Exception
+                               ActionForm form,
+                               HttpServletRequest request,
+                               HttpServletResponse response) throws Exception
     {
         return mapping.findForward("order");
     }
