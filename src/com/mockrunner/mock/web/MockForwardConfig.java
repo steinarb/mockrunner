@@ -33,7 +33,6 @@ public class MockForwardConfig extends ActionForward
         setPath(path);
         setRedirect(redirect);
         setContextRelative(contextRelative);
-
     }
 
     public boolean getContextRelative() 
@@ -87,6 +86,5 @@ public class MockForwardConfig extends ActionForward
         sb.append(this.redirect);
         sb.append("]");
         return (sb.toString());
-
     }
 }
