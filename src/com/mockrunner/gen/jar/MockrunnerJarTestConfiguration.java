@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import junit.framework.Test;
+import junit.framework.TestSuite;
+
 import com.mockrunner.example.ejb.UserLoginSessionTest;
 import com.mockrunner.example.jdbc.BookstoreTest;
-import com.mockrunner.example.jdbc.PayActionTest;
 import com.mockrunner.example.jms.StockQuotePublisherTest;
 import com.mockrunner.example.servlet.RedirectServletTest;
 import com.mockrunner.example.struts.AuthenticationActionTest;
@@ -23,7 +25,7 @@ public class MockrunnerJarTestConfiguration
     public final static String J2EE13_DIR = "j2ee1.3";
     public final static String THIRD_PARTY_DIR = "jar";
     
-    public final static String ALL_REFERENCE_TEST = PayActionTest.class.getName();
+    public final static String ALL_REFERENCE_TEST = AllReferenceTests.class.getName();
     public final static String JDBC_REFERENCE_TEST = BookstoreTest.class.getName();
     public final static String EJB_REFERENCE_TEST = UserLoginSessionTest.class.getName();
     public final static String JMS_REFERENCE_TEST = StockQuotePublisherTest.class.getName();
@@ -218,6 +220,21 @@ public class MockrunnerJarTestConfiguration
         public URL[] getUrls()
         {
             return urls;
+        }
+    }
+    
+    public static class AllReferenceTests
+    {
+        public static Test suite()
+        {
+            TestSuite suite = new TestSuite("AllReferenceTests");
+            suite.addTest(new TestSuite(BookstoreTest.class));
+            suite.addTest(new TestSuite(UserLoginSessionTest.class));
+            suite.addTest(new TestSuite(StockQuotePublisherTest.class));
+            suite.addTest(new TestSuite(RedirectServletTest.class));
+            suite.addTest(new TestSuite(AuthenticationActionTest.class));
+            suite.addTest(new TestSuite(TableEnumTagTest.class));
+            return suite;
         }
     }
 }
