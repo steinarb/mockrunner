@@ -1303,6 +1303,11 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != resultSetMetaData) return resultSetMetaData;
         MockResultSetMetaData metaData = new MockResultSetMetaData();
         metaData.setColumnCount(getColumnCount());
+        metaData.setColumnCount(getColumnCount());
+        for(int ii = 0; ii < columnNameList.size(); ii++)
+        {
+            metaData.setColumnName(ii + 1, (String)columnNameList.get(ii));
+        }
         return metaData;
     }
     

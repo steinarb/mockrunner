@@ -31,6 +31,9 @@ public class MockResultSetTest extends TestCase
         resultSet.addColumn("secondColumn");
         resultSet.addColumn("thirdColumn");
         assertEquals(3, resultSet.getMetaData().getColumnCount());
+        assertEquals("firstColumn", resultSet.getMetaData().getColumnName(1));
+        assertEquals("secondColumn", resultSet.getMetaData().getColumnName(2));
+        assertEquals("thirdColumn", resultSet.getMetaData().getColumnName(3));
     }
 
     public void testAddRow() throws Exception
