@@ -2,6 +2,7 @@ package com.mockrunner.test.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.Savepoint;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -205,6 +206,37 @@ public class JDBCTestModuleTest extends TestCase
         {
             //should throw Exception
         }
+    }
+    
+    public void testVerifyCallableStatementoutParameter() throws Exception
+    {
+        prepareCallableStatements();
+        MockCallableStatement statement = module.getCallableStatement("{call getData(?, ?, ?, ?)}");
+        statement.registerOutParameter(1, Types.DECIMAL);
+        statement.registerOutParameter("test", Types.BLOB);
+        statement.registerOutParameter("xyz", Types.BINARY);
+        module.verifyCallableStatementOutParameterRegistered(statement, 1);
+        module.verifyCallableStatementOutParameterRegistered(statement, "test");
+        module.verifyCallableStatementOutParameterRegistered(statement, "xyz");
+        try
+        {
+            module.verifyCallableStatementOutParameterRegistered("{call setData(?, ?, ?, ?)}", "xyz");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw Exception
+        }
+        try
+        {
+            module.verifyCallableStatementOutParameterRegistered(1, "test");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw Exception
+        }
+        module.verifyCallableStatementOutParameterRegistered(0, "test");
     }
     
     public void testGetExecutedSQLStatements() throws Exception
