@@ -9,20 +9,20 @@ import javax.jms.QueueBrowser;
 import javax.jms.QueueReceiver;
 import javax.jms.QueueSender;
 
+import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueBrowser;
-import com.mockrunner.mock.jms.MockQueueConnection;
 import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
 
 public class TransmissionManager
 {
-    private MockQueueConnection connection;
+    private MockConnection connection;
     private List queueSender;
     private List queueReceiver;
     private List queueBrowser;
     
-    public TransmissionManager(MockQueueConnection connection)
+    public TransmissionManager(MockConnection connection)
     {
         queueSender = new ArrayList();
         queueReceiver = new ArrayList();

@@ -12,12 +12,12 @@ import javax.jms.QueueBrowser;
  */
 public class MockQueueBrowser implements QueueBrowser
 {
-    private MockQueueConnection connection;
+    private MockConnection connection;
     private MockQueue queue;
     private boolean closed;
     private String messageSelector;
 
-    public MockQueueBrowser(MockQueueConnection connection, MockQueue queue, String messageSelector)
+    public MockQueueBrowser(MockConnection connection, MockQueue queue, String messageSelector)
     {
         this.connection = connection;
         this.queue = queue;

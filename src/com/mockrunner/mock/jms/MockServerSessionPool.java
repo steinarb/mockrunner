@@ -9,10 +9,10 @@ import javax.jms.ServerSessionPool;
  */
 public class MockServerSessionPool implements ServerSessionPool
 {
-    private MockQueueConnection connection;
+    private MockConnection connection;
     private ServerSession session;
     
-    public MockServerSessionPool(MockQueueConnection connection)
+    public MockServerSessionPool(MockConnection connection)
     {
         this.connection = connection;
         session = new MockServerSession(connection);

@@ -9,7 +9,7 @@ import com.mockrunner.mock.jms.MockQueueConnection;
 
 import junit.framework.TestCase;
 
-public class MockQueueConnectionTest extends TestCase
+public class MockConnectionTest extends TestCase
 {
     private MockQueueConnection connection;
      
