@@ -5,7 +5,7 @@
 		
 		<tstamp/>
 		
-        <property name="version" value="0.1.5"/>
+        <property name="version" value="0.1.6"/>
         <property name="timestamp" value="${DSTAMP}-${TSTAMP}"/>
         
 		<property name="build" value="build"/>
@@ -65,6 +65,7 @@
 			    <fileset dir="${src}" defaultexcludes="yes">
 			    	<include name="com/mockrunner/**" />
 			    	<exclude name="com/mockrunner/test/**" />
+			    	<exclude name="com/mockrunner/example/ejb/interfaces/**" />
 			    </fileset>
 
     			<doctitle><![CDATA[<h1>Mockrunner</h1>]]></doctitle>
