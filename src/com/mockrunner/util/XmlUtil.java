@@ -125,7 +125,7 @@ public class XmlUtil
      * Parses the specified HTML with the NekoHTML parser.
      * If you want to use another HTML parser or configure
      * the NekoHTML parser with special features, you can use
-     * the <code>parse</code> methods.
+     * the <code>parse</code> method.
      * @param source the HTML as String
      * @return the parsed document as org.w3c.dom.Document
      */
