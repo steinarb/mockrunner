@@ -27,6 +27,12 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     {
         super(arg0);
     }
+    
+    protected void tearDown() throws Exception
+    {
+        super.tearDown();
+        tagTestModule = null;
+    }
 
     /**
      * Creates the <code>TagTestModule</code>. If you

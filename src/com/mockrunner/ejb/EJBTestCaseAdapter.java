@@ -25,6 +25,12 @@ public class EJBTestCaseAdapter extends BaseTestCase
     {
         super(arg0);
     }
+    
+    protected void tearDown() throws Exception
+    {
+        super.tearDown();
+        ejbTestModule = null;
+    }
 
     /**
      * Creates the <code>EJBTestModule</code>. If you

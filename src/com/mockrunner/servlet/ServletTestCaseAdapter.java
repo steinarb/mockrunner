@@ -28,6 +28,12 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
         super(arg0);
     }
     
+    protected void tearDown() throws Exception
+    {
+        super.tearDown();
+        servletTestModule = null;
+    }
+    
     /**
      * Creates the <code>ServletTestModule</code>. If you
      * overwrite this method, you must call 

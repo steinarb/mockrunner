@@ -21,6 +21,12 @@ public class JMSTestCaseAdapter extends BaseTestCase
     {
         super(arg0);
     }
+    
+    protected void tearDown() throws Exception
+    {
+        super.tearDown();
+        jmsTestModule = null;
+    }
 
     /**
      * Creates the <code>JMSTestModule</code>. If you

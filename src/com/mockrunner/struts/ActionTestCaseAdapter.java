@@ -31,6 +31,12 @@ public class ActionTestCaseAdapter extends BaseTestCase
     {
         super(arg0);
     }
+    
+    protected void tearDown() throws Exception
+    {
+        super.tearDown();
+        actionTestModule = null;
+    }
 
     /**
      * Creates the <code>ActionTestModule</code>. If you
