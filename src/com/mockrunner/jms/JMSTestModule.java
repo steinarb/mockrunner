@@ -1406,11 +1406,7 @@ public class JMSTestModule
      */
     public void verifyCurrentQueueMessageEquals(String nameOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
     {
-        QueueManager queueManager = getQueueManager();
-        if(null == queueManager.getQueue(nameOfQueue))
-        {
-            throw new VerifyFailedException("Queue with name " + nameOfQueue + " is not present.");
-        }
+        checkQueueByName(nameOfQueue);
         List messageList = getCurrentMessageListFromQueue(nameOfQueue);
         if(null == messageList)
         {
@@ -1434,11 +1430,7 @@ public class JMSTestModule
      */
     public void verifyReceivedQueueMessageEquals(String nameOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
     {
-        QueueManager queueManager = getQueueManager();
-        if(null == queueManager.getQueue(nameOfQueue))
-        {
-            throw new VerifyFailedException("Queue with name " + nameOfQueue + " is not present.");
-        }
+        checkQueueByName(nameOfQueue);
         List messageList = getReceivedMessageListFromQueue(nameOfQueue);
         if(null == messageList)
         {
@@ -1588,7 +1580,7 @@ public class JMSTestModule
      * @param number the expected number of messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfQueueMessages(int indexOfSession, int number)
+    public void verifyNumberOfCreatedQueueMessages(int indexOfSession, int number)
     {
         checkAndGetQueueSessionByIndex(indexOfSession);
         if(number != getQueueMessageManager(indexOfSession).getMessageList().size())
@@ -1605,7 +1597,7 @@ public class JMSTestModule
      * @param number the expected number of bytes messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfQueueBytesMessages(int indexOfSession, int number)
+    public void verifyNumberOfCreatedQueueBytesMessages(int indexOfSession, int number)
     {
         checkAndGetQueueSessionByIndex(indexOfSession);
         if(number != getQueueMessageManager(indexOfSession).getBytesMessageList().size())
@@ -1622,7 +1614,7 @@ public class JMSTestModule
      * @param number the expected number of map messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfQueueMapMessages(int indexOfSession, int number)
+    public void verifyNumberOfCreatedQueueMapMessages(int indexOfSession, int number)
     {
         checkAndGetQueueSessionByIndex(indexOfSession);
         if(number != getQueueMessageManager(indexOfSession).getMapMessageList().size())
@@ -1639,7 +1631,7 @@ public class JMSTestModule
      * @param number the expected number of text messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfQueueTextMessages(int indexOfSession, int number)
+    public void verifyNumberOfCreatedQueueTextMessages(int indexOfSession, int number)
     {
         checkAndGetQueueSessionByIndex(indexOfSession);
         if(number != getQueueMessageManager(indexOfSession).getTextMessageList().size())
@@ -1656,7 +1648,7 @@ public class JMSTestModule
      * @param number the expected number of stream messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfQueueStreamMessages(int indexOfSession, int number)
+    public void verifyNumberOfCreatedQueueStreamMessages(int indexOfSession, int number)
     {
         checkAndGetQueueSessionByIndex(indexOfSession);
         if(number != getQueueMessageManager(indexOfSession).getStreamMessageList().size())
@@ -1673,7 +1665,7 @@ public class JMSTestModule
      * @param number the expected number of object messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfQueueObjectMessages(int indexOfSession, int number)
+    public void verifyNumberOfCreatedQueueObjectMessages(int indexOfSession, int number)
     {
         checkAndGetQueueSessionByIndex(indexOfSession);
         if(number != getQueueMessageManager(indexOfSession).getObjectMessageList().size())
@@ -1866,7 +1858,7 @@ public class JMSTestModule
      * @param number the expected number of messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfTopicMessages(int indexOfSession, int number)
+    public void verifyNumberOfCreatedTopicMessages(int indexOfSession, int number)
     {
         checkAndGetTopicSessionByIndex(indexOfSession);
         if(number != getTopicMessageManager(indexOfSession).getMessageList().size())
@@ -1883,7 +1875,7 @@ public class JMSTestModule
      * @param number the expected number of bytes messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfTopicBytesMessages(int indexOfSession, int number)
+    public void verifyNumberOfCreatedTopicBytesMessages(int indexOfSession, int number)
     {
         checkAndGetTopicSessionByIndex(indexOfSession);
         if(number != getTopicMessageManager(indexOfSession).getBytesMessageList().size())
@@ -1900,7 +1892,7 @@ public class JMSTestModule
      * @param number the expected number of map messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfTopicMapMessages(int indexOfSession, int number)
+    public void verifyNumberOfCreatedTopicMapMessages(int indexOfSession, int number)
     {
         checkAndGetTopicSessionByIndex(indexOfSession);
         if(number != getTopicMessageManager(indexOfSession).getMapMessageList().size())
@@ -1917,7 +1909,7 @@ public class JMSTestModule
      * @param number the expected number of text messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfTopicTextMessages(int indexOfSession, int number)
+    public void verifyNumberOfCreatedTopicTextMessages(int indexOfSession, int number)
     {
         checkAndGetTopicSessionByIndex(indexOfSession);
         if(number != getTopicMessageManager(indexOfSession).getTextMessageList().size())
@@ -1934,7 +1926,7 @@ public class JMSTestModule
      * @param number the expected number of stream messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfTopicStreamMessages(int indexOfSession, int number)
+    public void verifyNumberOfCreatedTopicStreamMessages(int indexOfSession, int number)
     {
         checkAndGetTopicSessionByIndex(indexOfSession);
         if(number != getTopicMessageManager(indexOfSession).getStreamMessageList().size())
@@ -1951,7 +1943,7 @@ public class JMSTestModule
      * @param number the expected number of object messages
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberOfTopicObjectMessages(int indexOfSession, int number)
+    public void verifyNumberOfCreatedTopicObjectMessages(int indexOfSession, int number)
     {
         checkAndGetTopicSessionByIndex(indexOfSession);
         if(number != getTopicMessageManager(indexOfSession).getObjectMessageList().size())

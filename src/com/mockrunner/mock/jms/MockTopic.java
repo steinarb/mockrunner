@@ -71,6 +71,7 @@ public class MockTopic implements Topic
                         {
                             subscriber.receiveMessage(message);
                             isConsumed = true;
+                            acknowledgeMessage(message, session);
                         }
                     }
                     Map durableSubscribers = session.getTopicTransmissionManager().getDurableTopicSubscriberMap(name);
@@ -82,6 +83,7 @@ public class MockTopic implements Topic
                         {
                             subscriber.receiveMessage(message);
                             isConsumed = true;
+                            acknowledgeMessage(message, session);
                         }
                     }
                 }
@@ -90,6 +92,14 @@ public class MockTopic implements Topic
         if(!isConsumed)
         {
             currentMessages.add(message);
+        }
+    }
+    
+    private void acknowledgeMessage(Message message, MockTopicSession session) throws JMSException
+    {
+        if(session.isAutoAcknowledge())
+        {
+            message.acknowledge();
         }
     }
     

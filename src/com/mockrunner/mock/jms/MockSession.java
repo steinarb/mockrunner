@@ -96,6 +96,17 @@ public class MockSession implements Session
         return acknowledgeMode;
     }
     
+    /**
+     * Returns if messages should be automatically acknowledged,
+     * i.e. if the acknowledge mode is <code>AUTO_ACKNOWLEDGE</code>
+     * or <code>DUPS_OK_ACKNOWLEDGE</code>.
+     * @return <code>true</code> if messages are automatically acknowledged
+     */
+    public boolean isAutoAcknowledge()
+    {
+        return (acknowledgeMode == AUTO_ACKNOWLEDGE) || (acknowledgeMode == DUPS_OK_ACKNOWLEDGE);
+    }
+    
     public boolean getTransacted() throws JMSException
     {
         connection.throwJMSException();

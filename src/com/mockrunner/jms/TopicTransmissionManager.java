@@ -11,10 +11,10 @@ import javax.jms.JMSException;
 import javax.jms.TopicPublisher;
 import javax.jms.TopicSubscriber;
 
-import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockTopic;
 import com.mockrunner.mock.jms.MockTopicConnection;
 import com.mockrunner.mock.jms.MockTopicPublisher;
+import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
 
 /**
@@ -23,14 +23,16 @@ import com.mockrunner.mock.jms.MockTopicSubscriber;
  */
 public class TopicTransmissionManager
 {
-    private MockConnection connection; 
+    private MockTopicConnection connection;
+    private MockTopicSession session;
     private List topicPublisherList;
     private List topicSubscriberList;
     private Map topicDurableSubscriberMap;
 
-    public TopicTransmissionManager(MockTopicConnection connection)
+    public TopicTransmissionManager(MockTopicConnection connection, MockTopicSession session)
     {
         this.connection = connection;
+        this.session = session;
         topicPublisherList = new ArrayList();
         topicSubscriberList = new ArrayList();
         topicDurableSubscriberMap = new HashMap();
@@ -191,7 +193,7 @@ public class TopicTransmissionManager
      */
     public MockTopicSubscriber createTopicSubscriber(MockTopic topic, String messageSelector, boolean noLocal)
     {
-        MockTopicSubscriber subscriber = new MockTopicSubscriber(connection, topic, messageSelector, noLocal);
+        MockTopicSubscriber subscriber = new MockTopicSubscriber(connection, session, topic, messageSelector, noLocal);
         subscriber.setDurable(false);
         topicSubscriberList.add(subscriber);
         return subscriber;
@@ -270,7 +272,7 @@ public class TopicTransmissionManager
      */
     public MockTopicSubscriber createDurableTopicSubscriber(MockTopic topic, String name, String messageSelector, boolean noLocal)
     {
-        MockTopicSubscriber subscriber = new MockTopicSubscriber(connection, topic, messageSelector, noLocal);
+        MockTopicSubscriber subscriber = new MockTopicSubscriber(connection, session, topic, messageSelector, noLocal);
         subscriber.setDurable(true);
         subscriber.setName(name);
         topicDurableSubscriberMap.put(name, subscriber);

@@ -31,7 +31,7 @@ public class MockTopicSession extends MockSession implements TopicSession
     public MockTopicSession(MockTopicConnection connection, boolean transacted, int acknowledgeMode)
     {
         super(connection, transacted, acknowledgeMode);
-        topicTransManager = new TopicTransmissionManager(connection);
+        topicTransManager = new TopicTransmissionManager(connection, this);
         tempTopics = new ArrayList();
     }
     

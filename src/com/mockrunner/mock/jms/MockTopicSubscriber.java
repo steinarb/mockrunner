@@ -10,19 +10,21 @@ import javax.jms.TopicSubscriber;
  */
 public class MockTopicSubscriber extends MockMessageConsumer implements TopicSubscriber
 {
+    private MockTopicSession session;
     private MockTopic topic;
     private boolean noLocal;
     private String name;
     private boolean isDurable;
     
-    public MockTopicSubscriber(MockConnection connection, MockTopic topic)
+    public MockTopicSubscriber(MockTopicConnection connection, MockTopicSession session, MockTopic topic)
     {
-        this(connection, topic, null, false);
+        this(connection, session, topic, null, false);
     }
 
-    public MockTopicSubscriber(MockConnection connection, MockTopic topic, String messageSelector, boolean noLocal)
+    public MockTopicSubscriber(MockTopicConnection connection, MockTopicSession session, MockTopic topic, String messageSelector, boolean noLocal)
     {
         super(connection, messageSelector);
+        this.session = session;
         this.topic = topic;
         this.noLocal = noLocal;
         name = null;
@@ -88,6 +90,8 @@ public class MockTopicSubscriber extends MockMessageConsumer implements TopicSub
             throw new JMSException("Subscriber is closed");
         }
         if(topic.isEmpty()) return null;
-        return topic.getMessage();
+        Message message = topic.getMessage();
+        if(session.isAutoAcknowledge()) message.acknowledge();
+        return message;
     }
 }

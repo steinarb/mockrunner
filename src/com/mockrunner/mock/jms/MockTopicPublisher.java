@@ -13,7 +13,7 @@ public class MockTopicPublisher extends MockMessageProducer implements TopicPubl
 {
     private MockTopic topic;
 
-    public MockTopicPublisher(MockConnection connection, MockTopic topic)
+    public MockTopicPublisher(MockTopicConnection connection, MockTopic topic)
     {
         super(connection);
         this.topic = topic;
