@@ -171,6 +171,25 @@ public class JDBCTestModule
 		map.putAll(mockFactory.getMockConnection().getCallableStatementResultSetHandler().getExecutedStatementParameter());
 		return map;
 	}
+	
+	/**
+	 * Returns the {@link ParameterSets} object for the specified SQL statement.
+	 * If more than one {@link ParameterSets} object is found, the first one
+	 * will be returned.
+	 * @param sql the the SQL statement
+	 * @return the {@link ParameterSets} object
+	 */
+	public ParameterSets getExecutedSQLStatementParameterSets(String sql)
+	{
+		Map map = getExecutedSQLStatementParameter();
+		SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch, useRegularExpressions);
+		List list = matcher.getMatchingObjects(map, sql, false, false);
+		if(list != null && list.size() > 0)
+        {
+            return (ParameterSets)list.get(0);
+        }
+        return null;
+	}
     
     /**
      * Returns the <code>ResultSet</code> objects with the specified id. 

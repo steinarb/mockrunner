@@ -12,6 +12,7 @@ mockrunner-0.3:
 - added verifyOutputRegularExpression to ServletTestModule and TagTestModule
 - added setDoReleaseRecursive method to TagTestModule and NestedTag
 - added methods to TagTestModule to set a tag instance directly
+- added getExecutedSQLStatementParameterSets method to JDBCTestModule
 - updated nekohtml.jar from 0.9.2 to 0.9.3
 
 mockrunner-0.2.9:

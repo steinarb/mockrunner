@@ -146,6 +146,14 @@ public class JDBCTestCaseAdapter extends BaseTestCase
 	{
 		return jdbcTestModule.getExecutedSQLStatementParameter();
 	}
+	
+	/**
+	 * Delegates to {@link JDBCTestModule#getExecutedSQLStatementParameterSets}
+	 */
+	protected ParameterSets getExecutedSQLStatementParameterSets(String sql)
+	{
+	    return jdbcTestModule.getExecutedSQLStatementParameterSets(sql);
+	}
     
     /**
      * Delegates to {@link JDBCTestModule#getReturnedResultSet}
