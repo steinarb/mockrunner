@@ -69,6 +69,74 @@
             <exclude name="JarAnalyzer-0.9.2.jar" />
             <exclude name="ant.jar" />
         </patternset>
+        
+        <patternset id="full.jar.classes">
+            <include name="**/*" />
+            <exclude name="com/mockrunner/example/**" />
+            <exclude name="com/mockrunner/test/**" />
+            <exclude name="com/mockrunner/gen/**" />
+        </patternset>
+        
+        <patternset id="basic.jar.base.classes">
+            <include name="com/mockrunner/base/**" />
+            <exclude name="com/mockrunner/base/BaseTestCase.java" />
+            <exclude name="com/mockrunner/base/HTMLOutputTestCase.java" />
+            <exclude name="com/mockrunner/base/WebTestCase.java" />
+        </patternset>  
+        
+        <patternset id="jms.jar.classes">
+            <include name="com/mockrunner/jms/**" />
+            <include name="com/mockrunner/mock/jms/**" />
+            <include name="com/mockrunner/util/common/**" />
+            <exclude name="com/mockrunner/jms/JMSTestCaseAdapter.java" />
+        </patternset>
+        
+        <patternset id="jdbc.jar.classes">
+            <include name="com/mockrunner/jdbc/**" />
+            <include name="com/mockrunner/mock/jdbc/**" />
+            <include name="com/mockrunner/util/common/**" />
+            <exclude name="com/mockrunner/jdbc/JDBCTestCaseAdapter.java" />
+        </patternset>
+        
+        <patternset id="ejb.jar.classes">
+            <include name="com/mockrunner/ejb/**" />
+            <include name="com/mockrunner/mock/ejb/**" />
+            <include name="com/mockrunner/util/common/**" />
+            <exclude name="com/mockrunner/ejb/EJBTestCaseAdapter.java" />
+        </patternset>
+        
+        <patternset id="basic.jar.web.mock.classes">
+            <include name="com/mockrunner/mock/web/**" />
+            <exclude name="com/mockrunner/servlet/ServletTestCaseAdapter.java" />
+            <exclude name="com/mockrunner/mock/web/ActionMockObjectFactory.java" />
+            <exclude name="com/mockrunner/mock/web/MockActionForward.java" />
+            <exclude name="com/mockrunner/mock/web/MockActionMapping.java" />
+            <exclude name="com/mockrunner/mock/web/MockActionServlet.java" />
+            <exclude name="com/mockrunner/mock/web/MockForwardConfig.java" />
+            <exclude name="com/mockrunner/mock/web/MockModuleConfig.java" />
+        </patternset>    
+        
+        <patternset id="servlet.jar.classes">
+            <include name="com/mockrunner/servlet/**" />
+            <include name="com/mockrunner/util/web/**" />
+            <include name="com/mockrunner/util/common/**" />
+            <exclude name="com/mockrunner/servlet/ServletTestCaseAdapter.java" />
+        </patternset>
+        
+        <patternset id="tag.jar.classes">
+            <include name="com/mockrunner/tag/**" />
+            <include name="com/mockrunner/util/web/**" />
+            <include name="com/mockrunner/util/common/**" />
+            <exclude name="com/mockrunner/tag/TagTestCaseAdapter.java" />
+        </patternset>
+        
+        <patternset id="struts.jar.classes">
+            <include name="com/mockrunner/struts/**" />
+            <include name="com/mockrunner/mock/web/**" />
+            <include name="com/mockrunner/util/web/**" />
+            <include name="com/mockrunner/util/common/**" />
+            <exclude name="com/mockrunner/servlet/ActionTestCaseAdapter.java" />
+        </patternset>
 
     </target>
 
@@ -76,7 +144,6 @@
         <mkdir dir="${build}" />
         <javac srcdir="${src}" destdir="${build}" executable="${java1.4.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
-                <pathelement location="${build}" />
                 <path refid="classpath.jar" />
             </classpath>
         </javac>
@@ -86,7 +153,6 @@
         <mkdir dir="${build1.3}" />
         <javac destdir="${build1.3}" target="1.2" executable="${java1.3.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
-                <pathelement location="${build1.3}" />
                 <path refid="classpath.jar" />
             </classpath>
             <src path="${src}/com/mockrunner/base" />
@@ -105,7 +171,12 @@
             <src path="${src1.3}" />
         </javac>
     </target>
-
+    
+    <target name="jars" depends="compile,compile1.3">
+        <antcall target="jar" />
+        <antcall target="jar1.3" />
+    </target>
+    
     <target name="jar" depends="compile">
         <delete file="${build}/mockrunner.jar" />
         <copy todir="${build}" filtering="true">
@@ -115,9 +186,7 @@
         </copy>
         <jar jarfile="${build}/mockrunner.jar">
             <fileset dir="${build}">
-                <exclude name="com/mockrunner/example/**" />
-                <exclude name="com/mockrunner/test/**" />
-                <exclude name="com/mockrunner/gen/**" />
+                <patternset refid="full.jar.classes"/>
             </fileset>
             <fileset dir="${config}">
                 <include name="junit/**" />
@@ -137,9 +206,7 @@
         </copy>
         <jar jarfile="${build1.3}/mockrunner-jdk1.3.jar">
             <fileset dir="${build1.3}">
-                <exclude name="com/mockrunner/example/**" />
-                <exclude name="com/mockrunner/test/**" />
-                <exclude name="com/mockrunner/gen/**" />
+                <patternset refid="full.jar.classes"/>
             </fileset>
             <fileset dir="${config}">
                 <include name="junit/**" />
@@ -150,7 +217,7 @@
         </jar>
     </target>
     
-    <target name="dependencies" depends="jar,jar1.3">
+    <target name="dependencies" depends="jars">
         <mkdir dir="${dependencies}" />
         <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
             <classpath>
@@ -212,7 +279,7 @@
 	    </java2html>
 	</target>
 
-	<target name="release" depends="clean,jar,jar1.3,javadoc,java2html,dependencies">
+	<target name="release" depends="clean,jars,javadoc,java2html,dependencies">
 	    <delete dir="${releasedir}" />
 	    <delete file="${releasefile}" />
 	    <mkdir dir="${releasedir}" />
