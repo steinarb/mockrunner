@@ -400,7 +400,7 @@ public class MockMessage implements Message
             properties.put(name, object);
             return;
         }
-        throw new JMSException(object.getClass() + " not a valid type");
+        throw new MessageFormatException(object.getClass() + " not a valid type");
     }
 
     public void acknowledge() throws JMSException
