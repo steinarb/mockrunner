@@ -1,6 +1,7 @@
 package com.mockrunner.mock.web;
 
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -35,8 +36,8 @@ public class MockPageContext extends PageContext
     private Exception exception;
     private Object page;
     private HashMap attributes;
-    //private ExpressionEvaluator evaluator;
-    //private VariableResolver resolver;
+    /*private ExpressionEvaluator evaluator;
+    private VariableResolver resolver;*/
     
     public MockPageContext()
     {
@@ -376,10 +377,17 @@ public class MockPageContext extends PageContext
     public BodyContent pushBody() 
     {
         outStack.push(jspWriter);
-        jspWriter = new MockBodyContent(jspWriter);;
+        jspWriter = new MockBodyContent(jspWriter);
         return (BodyContent)jspWriter;
     }
-
+    
+    public JspWriter pushBody(Writer writer)
+    {
+        outStack.push(jspWriter);
+        jspWriter = new MockJspWriter(writer);
+        return jspWriter;
+    }
+    
     public void release() 
     {
         jspWriter = new MockJspWriter();

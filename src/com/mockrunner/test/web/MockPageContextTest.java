@@ -49,6 +49,32 @@ public class MockPageContextTest extends BaseTestCase
         assertEquals("TestOut", ((MockJspWriter)writer).getOutputAsString());    
     }
     
+    public void testPushBodyWithWriter() throws Exception
+    {
+        JspWriter writer1 = pageContext.getOut();
+        StringWriter providedWriter = new StringWriter();
+        JspWriter writer2 = pageContext.pushBody(providedWriter);
+        writer1.print("writer1");
+        pageContext.getOut().print("writer");
+        pageContext.getOut().print(2);
+        writer2.print("writer2");
+        MockBodyContent content3 = (MockBodyContent)pageContext.pushBody();
+        content3.print("writer3");
+        pageContext.getOut().print("writer");
+        pageContext.getOut().print(3);
+        pageContext.getOut().print("writer3");
+        pageContext.popBody();
+        pageContext.getOut().print("anotherWriter2Text");
+        pageContext.popBody();
+        pageContext.getOut().print("anotherWriter1Text");
+        writer1.flush();
+        writer2.flush();
+        assertEquals("writer1anotherWriter1Text", ((MockJspWriter)writer1).getOutputAsString());
+        assertEquals("", ((MockJspWriter)writer2).getOutputAsString());
+        assertEquals("writer2writer2anotherWriter2Text", providedWriter.toString());
+        assertEquals("writer3writer3writer3", content3.getString());
+    }
+    
     public void testGetAttribute() throws Exception
     {
         pageContext.setAttribute("pageKey", "pageValue");
