@@ -18,4 +18,18 @@ public class MockTextMessageTest extends TestCase
         assertEquals(new MockTextMessage("test").hashCode(), new MockTextMessage("test").hashCode());
         assertEquals(new MockTextMessage(null).hashCode(), new MockTextMessage(null).hashCode());
     }
+    
+    public void testClone() throws Exception
+    {
+        MockTextMessage message = new MockTextMessage();
+        message.setText("aText");
+        message.setStringProperty("string", "test");
+        message.setJMSPriority(3);
+        MockTextMessage newMessage = (MockTextMessage)message.clone();
+        assertNotSame(message, newMessage);
+        assertEquals(message, newMessage);
+        assertEquals("aText", newMessage.getText());
+        assertEquals("test", newMessage.getStringProperty("string"));
+        assertEquals(3, newMessage.getJMSPriority());
+    }
 }

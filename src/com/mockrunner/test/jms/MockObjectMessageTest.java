@@ -1,5 +1,7 @@
 package com.mockrunner.test.jms;
 
+import java.io.Serializable;
+
 import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockTextMessage;
 
@@ -20,5 +22,29 @@ public class MockObjectMessageTest extends TestCase
         assertTrue(new MockObjectMessage(null).equals(new MockObjectMessage(null)));
         assertEquals(new MockObjectMessage(new Double(1.1)).hashCode(), new MockObjectMessage(new Double(1.1)).hashCode());
         assertEquals(new MockObjectMessage(null).hashCode(), new MockObjectMessage(null).hashCode());
+    }
+    
+    public void testClone() throws Exception
+    {
+        MockObjectMessage message = new MockObjectMessage();
+        message.setObject("aText");
+        message.setStringProperty("string", "test");
+        MockObjectMessage newMessage = (MockObjectMessage)message.clone();
+        assertNotSame(message, newMessage);
+        assertEquals(message, newMessage);
+        assertEquals("aText", newMessage.getObject());
+        assertEquals("test", newMessage.getStringProperty("string"));
+        message.setObject(new Integer(7));
+        newMessage = (MockObjectMessage)message.clone();
+        assertEquals(new Integer(7), newMessage.getObject());
+        TestObject testObject = new TestObject();
+        message.setObject(testObject);
+        newMessage = (MockObjectMessage)message.clone();
+        assertNotSame(testObject, newMessage.getObject());
+    }
+    
+    public static class TestObject implements Serializable
+    {
+    
     }
 }

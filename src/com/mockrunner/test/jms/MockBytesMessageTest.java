@@ -2,13 +2,14 @@ package com.mockrunner.test.jms;
 
 import java.util.Arrays;
 
+import javax.jms.JMSException;
 import javax.jms.MessageEOFException;
 import javax.jms.MessageNotReadableException;
 import javax.jms.MessageNotWriteableException;
 
-import com.mockrunner.mock.jms.MockBytesMessage;
-
 import junit.framework.TestCase;
+
+import com.mockrunner.mock.jms.MockBytesMessage;
 
 public class MockBytesMessageTest extends TestCase
 {   
@@ -163,5 +164,60 @@ public class MockBytesMessageTest extends TestCase
         message2.writeInt(3);
         message2.writeUTF("test");
         assertFalse(message1.equals(message2));
+    }
+    
+    public void testClone() throws Exception
+    {
+        MockBytesMessage message = new MockBytesMessage();
+        MockBytesMessage newMessage = (MockBytesMessage)message.clone();
+        assertNotSame(message, newMessage);
+        assertEquals(message, newMessage);
+        try
+        {
+            newMessage.getBodyLength();
+            fail();
+        }
+        catch(JMSException exc)
+        {
+            //should throw exception
+        }
+        newMessage.writeUTF("test");
+        message.reset();
+        newMessage.reset();
+        try
+        {
+            message.readUTF();
+            fail();
+        }
+        catch(Exception exc)
+        {
+            //should throw exception
+        }
+        assertEquals("test", newMessage.readUTF());
+        message = new MockBytesMessage();
+        message.writeDouble(1.0);
+        newMessage = (MockBytesMessage)message.clone();
+        assertNotSame(message, newMessage);
+        assertEquals(message, newMessage);
+        try
+        {
+            newMessage.getBodyLength();
+            fail();
+        }
+        catch(JMSException exc)
+        {
+            //should throw exception
+        }
+        message.reset();
+        newMessage.reset();
+        assertEquals(1.0, message.readDouble(), 0);
+        assertEquals(1.0, newMessage.readDouble(), 0);
+        message = new MockBytesMessage();
+        message.writeLong(12345);
+        message.reset();
+        newMessage = (MockBytesMessage)message.clone();
+        assertNotSame(message, newMessage);
+        assertEquals(message, newMessage);
+        assertEquals(12345, newMessage.readLong());
     }
 }

@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 
+import javax.jms.DeliveryMode;
 import javax.jms.MessageFormatException;
 
 import com.mockrunner.mock.jms.MockMessage;
+import com.mockrunner.mock.jms.MockQueue;
+import com.mockrunner.mock.jms.MockTopic;
 
 import junit.framework.TestCase;
 
@@ -138,5 +141,30 @@ public class MockMessageTest extends TestCase
         message.setJMSCorrelationID("test");
         assertEquals("test", message.getJMSCorrelationID());
         assertTrue(Arrays.equals("test".getBytes("ISO-8859-1"), message.getJMSCorrelationIDAsBytes()));
+    }
+    
+    public void testClone() throws Exception
+    {
+        MockQueue queue = new MockQueue("MyQueue");
+        MockTopic topic = new MockTopic("MyTopic");
+        MockMessage message = new MockMessage();
+        message.setStringProperty("string", "test");
+        message.setIntProperty("int", 12345);
+        message.setBooleanProperty("boolean", true);
+        message.setJMSCorrelationID("testID");
+        message.setJMSPriority(3);
+        message.setJMSDestination(queue);
+        message.setJMSReplyTo(topic);
+        message.setJMSDeliveryMode(DeliveryMode.NON_PERSISTENT);
+        MockMessage newMessage = (MockMessage)message.clone();
+        assertNotSame(message, newMessage);
+        assertEquals("test", newMessage.getStringProperty("string"));
+        assertEquals(12345, newMessage.getIntProperty("int"));
+        assertEquals(true, newMessage.getBooleanProperty("boolean"));
+        assertEquals("testID", newMessage.getJMSCorrelationID());
+        assertEquals(3, newMessage.getJMSPriority());
+        assertEquals(DeliveryMode.NON_PERSISTENT, newMessage.getJMSDeliveryMode());
+        assertSame(queue, newMessage.getJMSDestination());
+        assertSame(topic, newMessage.getJMSReplyTo());
     }
 }
