@@ -122,7 +122,7 @@ public class MockQueueSessionTest extends TestCase
     public void testCreateSenderAndReceiver() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
-        Queue managerQueue1 = manager.createQueue("Queue1");
+        manager.createQueue("Queue1");
         queue1 = manager.createQueue("Queue1");
         queue2 = manager.createQueue("Queue2");
         QueueSender sender = session.createSender(queue1);
