@@ -113,7 +113,7 @@ MockEJB 0.5:
 http://mockejb.sourceforge.net
 mockejb.jar
 
-JDOM Beta 9:
+JDOM Beta 10:
 http://www.jdom.org
 jdom.jar
 
