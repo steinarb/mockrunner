@@ -68,4 +68,36 @@ public abstract class HTMLOutputTestCase extends WebTestCase
     {
         return getHTMLOutputModule().getOutputAsWellformedXML();
     }
+    
+    /**
+     * Delegates to {@link HTMLOutputModule#setCaseSensitive}
+     */
+    protected void setCaseSensitive(boolean caseSensitive)
+    {
+        getHTMLOutputModule().setCaseSensitive(caseSensitive);
+    }
+    
+    /**
+     * Delegates to {@link HTMLOutputModule#verifyOutput}
+     */
+    protected void verifyOutput(String expectedOutput)
+    {
+        getHTMLOutputModule().verifyOutput(expectedOutput);
+    }
+    
+    /**
+     * Delegates to {@link HTMLOutputModule#verifyOutputContains}
+     */
+    protected void verifyOutputContains(String expectedOutput)
+    {
+        getHTMLOutputModule().verifyOutputContains(expectedOutput);
+    }
+    
+    /**
+     * Delegates to {@link HTMLOutputModule#verifyOutputRegularExpression}
+     */
+    protected void verifyOutputRegularExpression(String expression)
+    {
+        getHTMLOutputModule().verifyOutputRegularExpression(expression);
+    }
 }

@@ -14,11 +14,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.NestedApplicationException;
-import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockJspWriter;
 import com.mockrunner.mock.web.MockPageContext;
 import com.mockrunner.mock.web.WebMockObjectFactory;
-import com.mockrunner.util.common.StringUtil;
 
 /**
  * Module for custom tag tests. Simulates the container by
@@ -29,23 +27,11 @@ public class TagTestModule extends HTMLOutputModule
     private final static Log log = LogFactory.getLog(TagTestModule.class);
     private WebMockObjectFactory mockFactory;
     private NestedTag tag;
-    private boolean caseSensitive;
 
     public TagTestModule(WebMockObjectFactory mockFactory)
     {
         super(mockFactory);
         this.mockFactory = mockFactory;
-        caseSensitive = true;
-    }
-    
-    /**
-     * Set if {@link #verifyOutput} and {@link #verifyOutputContains}
-     * should compare case sensitive. Default is <code>true</code>.
-     * @param caseSensitive enable or disable case sensitivity
-     */
-    public void setCaseSensitive(boolean caseSensitive)
-    {
-        this.caseSensitive = caseSensitive;
     }
     
     /**
@@ -594,49 +580,6 @@ public class TagTestModule extends HTMLOutputModule
         return writer.getOutputAsString();
     }
 
-    /**
-     * Verifies the tag output.
-     * @param expectedOutput the expected output.
-     * @throws VerifyFailedException if verification fails
-     */
-    public void verifyOutput(String expectedOutput)
-    {
-        String actualOutput = getOutput();
-        if(!StringUtil.matchesExact(actualOutput, expectedOutput, caseSensitive))
-        {
-            throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");
-        }
-    }
-    
-    /**
-     * Verifies if the tag output contains the specified data.
-     * @param expectedOutput the data
-     * @throws VerifyFailedException if verification fails
-     */
-    public void verifyOutputContains(String expectedOutput)
-    {
-        String actualOutput = getOutput();
-        if(!StringUtil.matchesContains(actualOutput, expectedOutput, caseSensitive))
-        {
-            throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");
-        }
-    }
-    
-    /**
-     * Verifies if the tag output matches the specified
-     * regular expression.
-     * @param expression the data
-     * @throws VerifyFailedException if verification fails
-     */
-    public void verifyOutputRegularExpression(String expression)
-    {
-        String actualOutput = getOutput();
-        if(!StringUtil.matchesPerl5(actualOutput, expression, caseSensitive))
-        {
-            throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");
-        }
-    }
-    
     private boolean isBodyTag()
     {
         return (tag instanceof NestedBodyTag);

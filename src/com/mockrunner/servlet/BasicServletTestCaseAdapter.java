@@ -254,14 +254,6 @@ public class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#setCaseSensitive(boolean)}
-     */
-    protected void setCaseSensitive(boolean caseSensitive)
-    {
-        servletTestModule.setCaseSensitive(caseSensitive);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.servlet.ServletTestModule#createServlet(Class)}
      */
     protected HttpServlet createServlet(Class servletClass)
@@ -278,19 +270,19 @@ public class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#addFilter(Filter, boolean)}
-     */
-    protected void addFilter(Filter filter, boolean doInit)
-    {
-        servletTestModule.addFilter(filter, doInit);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.servlet.ServletTestModule#addFilter(Filter)}
      */
     protected void addFilter(Filter filter)
     {
         servletTestModule.addFilter(filter);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#addFilter(Filter, boolean)}
+     */
+    protected void addFilter(Filter filter, boolean doInit)
+    {
+        servletTestModule.addFilter(filter, doInit);
     }
 
     /**
@@ -339,29 +331,5 @@ public class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
     protected void clearOutput()
     {
         servletTestModule.clearOutput();
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#verifyOutput(String)}
-     */
-    protected void verifyOutput(String expectedOutput)
-    {
-        servletTestModule.verifyOutput(expectedOutput);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#verifyOutputContains(String)}
-     */
-    protected void verifyOutputContains(String expectedOutput)
-    {
-        servletTestModule.verifyOutputContains(expectedOutput);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#verifyOutputRegularExpression(String)}
-     */
-    protected void verifyOutputRegularExpression(String expression)
-    {
-        servletTestModule.verifyOutputRegularExpression(expression);
     }
 }

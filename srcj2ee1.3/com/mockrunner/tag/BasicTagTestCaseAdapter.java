@@ -175,14 +175,6 @@ public class BasicTagTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.tag.TagTestModule#setCaseSensitive(boolean)}
-     */
-    protected void setCaseSensitive(boolean caseSensitive)
-    {
-        tagTestModule.setCaseSensitive(caseSensitive);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.tag.TagTestModule#clearOutput}
      */
     protected void clearOutput()
@@ -191,27 +183,11 @@ public class BasicTagTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.tag.TagTestModule#verifyOutput(String)}
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#createTag(Class)}
      */
-    protected void verifyOutput(String expectedOutput)
+    protected TagSupport createTag(Class tagClass)
     {
-        tagTestModule.verifyOutput(expectedOutput);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.tag.TagTestModule#verifyOutputContains(String)}
-     */
-    protected void verifyOutputContains(String expectedOutput)
-    {
-        tagTestModule.verifyOutputContains(expectedOutput);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.tag.TagTestModule#verifyOutputRegularExpression(String)}
-     */
-    protected void verifyOutputRegularExpression(String expression)
-    {
-        tagTestModule.verifyOutputRegularExpression(expression);
+        return tagTestModule.createTag(tagClass);
     }
 
     /**
@@ -220,14 +196,6 @@ public class BasicTagTestCaseAdapter extends BasicHTMLOutputTestCase
     protected TagSupport createTag(Class tagClass, Map attributes)
     {
         return tagTestModule.createTag(tagClass, attributes);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.tag.TagTestModule#createTag(Class)}
-     */
-    protected TagSupport createTag(Class tagClass)
-    {
-        return tagTestModule.createTag(tagClass);
     }
 
     /**
@@ -279,14 +247,6 @@ public class BasicTagTestCaseAdapter extends BasicHTMLOutputTestCase
     }*/
 
     /**
-     * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(TagSupport)}
-     */
-    protected NestedTag setTag(TagSupport tag)
-    {
-        return tagTestModule.setTag(tag);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(TagSupport, Map)}
      */
     protected NestedTag setTag(TagSupport tag, Map attributes)
@@ -295,19 +255,27 @@ public class BasicTagTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(JspTag)}
-     */
-    /*protected NestedTag setTag(JspTag tag)
-    {
-        return tagTestModule.setTag(tag);
-    }*/
-
-    /**
      * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(JspTag, Map)}
      */
     /*protected NestedTag setTag(JspTag tag, Map attributes)
     {
         return tagTestModule.setTag(tag, attributes);
+    }*/
+
+    /**
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(TagSupport)}
+     */
+    protected NestedTag setTag(TagSupport tag)
+    {
+        return tagTestModule.setTag(tag);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(JspTag)}
+     */
+    /*protected NestedTag setTag(JspTag tag)
+    {
+        return tagTestModule.setTag(tag);
     }*/
 
     /**
