@@ -164,4 +164,120 @@ public class JavaLineAssemblerTest extends TestCase
         assembler.appendMethodDeclaration("myMethod");
         assertEquals("    protected void myMethod()" + NL, assembler.getResult());
     }
+    
+    public void testAppendMethodDeclarationWithReturnType()
+    {
+        assembler.setIndentLevel(2);
+        assembler.appendMethodDeclaration("MyReturnType", "");
+        assertEquals("", assembler.getResult());
+        assembler.appendMethodDeclaration("MyReturnType", null);
+        assertEquals("", assembler.getResult());
+        assembler.setDefaultMethodModifier("private");
+        assembler.appendMethodDeclaration("", "myMethod");
+        assertEquals("        private void myMethod()" + NL, assembler.getResult());
+        assembler.reset();
+        assembler.setDefaultMethodModifier("");
+        assembler.setIndentLevel(0);
+        assembler.appendMethodDeclaration("MyReturnType", "myMethod");
+        assertEquals("MyReturnType myMethod()" + NL, assembler.getResult());
+    }
+    
+    public void testAppendMethodDeclarationWithReturnTypeAndParameters()
+    {
+        assembler.appendMethodDeclaration("MyReturnType", "", new String[] {"1"}, new String[] {"2"});
+        assertEquals("", assembler.getResult());
+        assembler.appendMethodDeclaration("MyReturnType", null,  new String[] {"1"}, new String[] {"2"});
+        assertEquals("", assembler.getResult());
+        assembler.setDefaultMethodModifier("public");
+        assembler.appendMethodDeclaration("", "myMethod",  new String[] {"String"}, new String[] {"myString"});
+        assertEquals("public void myMethod(String myString)" + NL, assembler.getResult());
+        assembler.reset();
+        assembler.setIndentLevel(1);
+        String[] types = new String[] {"String", "int", "Integer", "double"};
+        assembler.appendMethodDeclaration("MyReturnType", "myMethod",  types, null);
+        assertEquals("    MyReturnType myMethod(String param0, int param1, Integer param2, double param3)" + NL, assembler.getResult());
+        assembler.reset();
+        String[] names = new String[] {"string0", "int1", "int2"};
+        assembler.appendMethodDeclaration("MyReturnType", "myMethod",  types, names);
+        assertEquals("MyReturnType myMethod(String string0, int int1, Integer int2, double param3)" + NL, assembler.getResult());
+        assembler.reset();
+        assembler.setDefaultMethodModifier("protected");
+        names = new String[] {"string0", "int1", "int2", "double3"};
+        assembler.appendMethodDeclaration("MyReturnType", "myMethod",  types, names);
+        assertEquals("protected MyReturnType myMethod(String string0, int int1, Integer int2, double double3)" + NL, assembler.getResult());
+        assembler.reset();
+        assembler.setDefaultMethodModifier("private");
+        names = new String[] {"string0", "int1", "int2", "double3", "xyz"};
+        assembler.appendMethodDeclaration("MyReturnType", "myMethod",  types, names);
+        assertEquals("private MyReturnType myMethod(String string0, int int1, Integer int2, double double3)" + NL, assembler.getResult());
+    }
+    
+    public void testAppendMethodDeclarationWithReturnTypeParametersAndModifiers()
+    {
+        assembler.appendMethodDeclaration(new String[] {"abstract"}, "MyReturnType", "", new String[] {"1"}, new String[] {"2"});
+        assertEquals("", assembler.getResult());
+        assembler.appendMethodDeclaration(new String[] {"abstract"}, "MyReturnType", null,  new String[] {"1"}, new String[] {"2"});
+        assertEquals("", assembler.getResult());
+        assembler.setDefaultMethodModifier("public");
+        assembler.appendMethodDeclaration(new String[] {"abstract"}, "", "myMethod",  new String[] {"String"}, new String[] {"myString"});
+        assertEquals("public abstract void myMethod(String myString)" + NL, assembler.getResult());
+        assembler.reset();
+        String[] types = new String[] {"String", "int", "Integer", "double"};
+        String[] names = new String[] {"string0", "int1", "int2"};
+        String[] modifiers = new String[] {"abstract", "synchronized"};
+        assembler.appendMethodDeclaration(modifiers, "MyReturnType", "myMethod",  types, names);
+        assertEquals("abstract synchronized MyReturnType myMethod(String string0, int int1, Integer int2, double param3)" + NL, assembler.getResult());
+    }
+    
+    public void testAppendComment()
+    {
+        assembler.setIndentLevel(1);
+        assembler.appendComment("");
+        assertEquals("", assembler.getResult());
+        assembler.appendComment(null);
+        assertEquals("", assembler.getResult());
+        assembler.appendComment("this is a comment");
+        assertEquals("    //this is a comment" + NL, assembler.getResult());
+    }
+    
+    public void testAppendBlockComment()
+    {
+        assembler.setIndentLevel(1);
+        assembler.appendBlockComment(new String[0]);
+        assertEquals("", assembler.getResult());
+        assembler.appendBlockComment(null);
+        assertEquals("", assembler.getResult());
+        String[] lines = new String[] {"This is a", "multiline block", "comment"};
+        assembler.appendBlockComment(lines);
+        String expected = "    /*" + NL +
+                          "     * This is a" + NL +
+                          "     * multiline block" + NL +
+                          "     * comment" + NL +
+                          "     */" + NL;
+        assertEquals(expected, assembler.getResult());
+        assembler.reset();
+        lines = new String[] {"Comment"};
+        assembler.appendBlockComment(lines);
+        expected = "/*" + NL +
+                   " * Comment" + NL +
+                   " */" + NL;
+        assertEquals(expected, assembler.getResult());
+    }
+    
+    public void testAppendJavaDocComment()
+    {
+        assembler.setIndentLevel(1);
+        assembler.appendJavaDocComment(new String[0]);
+        assertEquals("", assembler.getResult());
+        assembler.appendJavaDocComment(null);
+        assertEquals("", assembler.getResult());
+        String[] lines = new String[] {"This is a", "multiline block", "comment"};
+        assembler.appendJavaDocComment(lines);
+        String expected = "    /**" + NL +
+                          "     * This is a" + NL +
+                          "     * multiline block" + NL +
+                          "     * comment" + NL +
+                          "     */" + NL;
+        assertEquals(expected, assembler.getResult());
+    }
 }

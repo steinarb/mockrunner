@@ -133,34 +133,17 @@ public class JavaLineAssembler
     
     public void appendClassDefintion(String className)
     {
-        if(null != className && className.length() > 0)
-        {
-            appendLine("public class " + className);
-        }
+        appendClassDefintion(className, "");
     }
     
     public void appendClassDefintion(String className, String superClass)
     {
-        if(null == className || className.length() <= 0) return;
-        if(null == superClass || superClass.length() <= 0)
-        {
-            appendClassDefintion(className);
-        }
-        else
-        {
-            appendLine("public class " + className + " extends " + superClass);
-        }
+        appendClassDefintion(className, superClass, null);
     }
     
     public void appendClassDefintion(String className, String[] interfaceDef)
     {
-        if(null == className || className.length() <= 0) return;
-        if(null == interfaceDef || interfaceDef.length <= 0)
-        {
-            appendClassDefintion(className);
-            return;
-        }
-        appendLine("public class " + className + " implements " + prepareCommaSeparatedList(interfaceDef));
+        appendClassDefintion(className, "", interfaceDef);
     }
     
     public void appendClassDefintion(String className, String superClass, String[] interfaceDef)
@@ -168,15 +151,18 @@ public class JavaLineAssembler
         if(null == className || className.length() <= 0) return;
         if(null == superClass || superClass.length() <= 0)
         {
-            appendClassDefintion(className, interfaceDef);
-            return;
+            superClass = "";
         }
-        if(null == interfaceDef || interfaceDef.length <= 0)
+        else
         {
-            appendClassDefintion(className, superClass);
-            return;
+            superClass = " extends " + superClass;
         }
-        appendLine("public class " + className + " extends " + superClass + " implements " + prepareCommaSeparatedList(interfaceDef));
+        String interfaceDefList = "";
+        if(null != interfaceDef && interfaceDef.length > 0)
+        {
+            interfaceDefList = " implements " + prepareCommaSeparatedList(interfaceDef, null);
+        }
+        appendLine("public class " + className + superClass + interfaceDefList);
     }
     
     public void appendMemberDeclaration(String type, String name)
@@ -188,35 +174,70 @@ public class JavaLineAssembler
     
     public void appendMethodDeclaration(String name)
     {
+        appendMethodDeclaration("void", name);
+    }
+    
+    public void appendMethodDeclaration(String returnType, String name)
+    {
+        appendMethodDeclaration(returnType, name, null, null);
+    }
+    
+    public void appendMethodDeclaration(String returnType, String name, String[] parameterTypes, String[] parameterNames)
+    {
+        appendMethodDeclaration(null, returnType, name, parameterTypes, parameterNames);
+    }
+    
+    public void appendMethodDeclaration(String[] modifiers, String returnType, String name, String[] parameterTypes, String[] parameterNames)
+    {
         if(null == name || name.length() <= 0) return;
+        if(null == returnType || returnType.length() <= 0)
+        {
+            returnType = "void";
+        }
         StringBuffer buffer = new StringBuffer(30);
         if(null != defaultMethodModifier && defaultMethodModifier.length() > 0)
         {
             buffer.append(defaultMethodModifier + " ");
         }
-        buffer.append("void ");
+        buffer.append(prepareModifierList(modifiers));
+        buffer.append(returnType + " ");
         buffer.append(name);
-        buffer.append("()");
+        buffer.append("(");
+        buffer.append(prepareCommaSeparatedList(parameterTypes, getParameterNameList(parameterTypes, parameterNames)));
+        buffer.append(")");
         appendLine(buffer.toString());
     }
     
-    public void appendMethodDeclaration(String returnType, String name)
+    public void appendComment(String oneLineComment)
     {
-        
+        if(null == oneLineComment || oneLineComment.length() <= 0) return;
+        appendLine("//" + oneLineComment);
     }
     
-    public void appendMethodDeclaration(String returnType, String name, String[] parameterTypes, String[] parameterNames)
+    public void appendBlockComment(String[] commentLines)
     {
-        
+        appendBlockComment(commentLines, "/*");
     }
     
-    public void appendMethodDeclaration(String[] modifiers, String returnType, String name, String[] parameterTypes, String[] parameterNames)
+    public void appendJavaDocComment(String[] commentLines)
     {
-        
+        appendBlockComment(commentLines, "/**");
+    }
+    
+    private void appendBlockComment(String[] commentLines, String commentStart)
+    {
+        if(null == commentLines || commentLines.length <= 0) return;
+        appendLine(commentStart);
+        for(int ii = 0; ii < commentLines.length; ii++)
+        {
+            appendLine(" * " + commentLines[ii]);
+        }
+        appendLine(" */");
     }
 
     private String prepareModifierList(String[] modifiers)
     {
+        if(null == modifiers) modifiers = new String[0];
         StringBuffer listBuffer = new StringBuffer(50);
         for(int ii = 0; ii < modifiers.length; ii++)
         {
@@ -225,13 +246,33 @@ public class JavaLineAssembler
         return listBuffer.toString();
     }
     
-    private String prepareCommaSeparatedList(String[] params)
+    private String[] getParameterNameList(String[] types, String[] names)
     {
-        StringBuffer listBuffer = new StringBuffer(50);
-        for(int ii = 0; ii < params.length; ii++)
+        if(null == types) types = new String[0];
+        if(null == names) names = new String[0];
+        if(names.length >= types.length) return names;
+        String[] newNames = new String[types.length];
+        System.arraycopy(names, 0, newNames, 0, names.length);
+        for(int ii = 0; ii < types.length - names.length; ii++)
         {
-            listBuffer.append(params[ii]);
-            if(ii < params.length - 1)
+            newNames[names.length + ii] = "param" + (names.length + ii);
+        }
+        return newNames;
+    }
+    
+    private String prepareCommaSeparatedList(String[] types, String[] names)
+    {
+        if(null == types) types = new String[0];
+        if(null == names) names = new String[0];
+        StringBuffer listBuffer = new StringBuffer(50);
+        for(int ii = 0; ii < types.length; ii++)
+        {
+            listBuffer.append(types[ii]);
+            if(ii < names.length)
+            {
+                listBuffer.append(" " + names[ii]);
+            }
+            if(ii < types.length - 1)
             {
                 listBuffer.append(", ");
             }
