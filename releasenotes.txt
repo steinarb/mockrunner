@@ -4,7 +4,10 @@ mockrunner-0.2:
 - reorganized package structure. ActionTestModule and
   ActionTestCaseAdapter are in com.mockrunner.struts
   package now. The tag stuff is in the com.mockrunner.tag
-  package. Please adapt your imports
+  package. Please adapt your imports.
+- improved the TagTestModule. It supports nested tag and
+  is able to perform the tag lifecycle as in the real
+  container.
 - added some useful methods to ActionTestModule
 
 mockrunner-0.1:
