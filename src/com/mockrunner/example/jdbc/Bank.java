@@ -15,7 +15,6 @@ import java.sql.Statement;
  * The SQL to create the table is
  * 
  * <code>create table account(id int not null primary key,balance int not null)</code>.
- * Check out {@link com.mockrunner.example.servlet.LogoutServletTest} to see how to test this class.
  */
 public class Bank
 {
@@ -38,28 +37,12 @@ public class Bank
     }
     
     public void transfer(int sourceId, int targetId, int amount) throws SQLException
-    {
-        
+    {  
+        PreparedStatement preparedStatement = null;
         try
         {
-            Statement statement = connection.createStatement();
-            ResultSet result = statement.executeQuery("select balance from account where id=" + sourceId);
-            if(!result.next())
-            {
-                result.close();
-                statement.close();
-                connection.rollback();
-                return;
-            }
-            int balance = result.getInt(1);
-            result.close();
-            statement.close();
-            if(balance < amount)
-            {
-                connection.rollback();
-                return;
-            }
-            PreparedStatement preparedStatement = connection.prepareStatement("update account set balance=balance+? where id=?");
+            if(!isValid(sourceId, amount)) return;
+            preparedStatement = connection.prepareStatement("update account set balance=balance+? where id=?");
 			preparedStatement.setInt(1, -amount);
 			preparedStatement.setInt(2, sourceId);
 			preparedStatement.executeUpdate();
@@ -67,11 +50,47 @@ public class Bank
 			preparedStatement.setInt(2, targetId);
 			preparedStatement.executeUpdate();
             connection.commit();
-			preparedStatement.close();
         }
         catch(SQLException exc)
         {
             connection.rollback();
+        }
+        finally
+        {
+            if(null != preparedStatement) preparedStatement.close();
+        }
+    }
+    
+    private boolean isValid(int sourceId, int amount) throws SQLException
+    {
+        Statement statement = null;
+        ResultSet result = null;
+        try
+        {
+            statement = connection.createStatement();
+            result = statement.executeQuery("select balance from account where id=" + sourceId);
+            if(!result.next())
+            {
+                connection.rollback();
+                return false;
+            }
+            int balance = result.getInt(1);
+            if(balance < amount)
+            {
+                connection.rollback();
+                return false;
+            }
+            return true;
+        }
+        catch(SQLException exc)
+        {
+            connection.rollback();
+            return false;
+        }
+        finally
+        {
+            if(null != result) result.close();
+            if(null != statement) statement.close();
         }
     }
 }
