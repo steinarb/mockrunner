@@ -6,6 +6,7 @@ import javax.jms.Session;
 
 import junit.framework.TestCase;
 
+import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueConnection;
@@ -21,8 +22,9 @@ public class MockQueueTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        connection = new MockQueueConnection();
-        queue = new MockQueue(connection, "TestQueue");
+        DestinationManager manager = new DestinationManager();
+        connection = new MockQueueConnection(manager);
+        queue = new MockQueue("TestQueue");
     }
 
     public void testGetMessageList() throws Exception
@@ -109,18 +111,6 @@ public class MockQueueTest extends TestCase
         assertEquals("test", listener2.getMessage().toString());
         assertFalse(((MockMessage)listener2.getMessage()).isAcknowledged());
         assertNull(listener1.getMessage());
-        queue.reset();
-        listener1.reset();
-        listener2.reset();
-        receiver2.close();
-        connection.stop();
-        queue.addMessage(new MockTextMessage("test"));
-        assertEquals(1, queue.getCurrentMessageList().size());
-        assertEquals(1, queue.getReceivedMessageList().size());
-        assertNull(listener1.getMessage());
-        assertNull(listener2.getMessage());
-        assertEquals("test", queue.getMessage().toString());
-        connection.start();
         queue.reset();
         listener1.reset();
         listener2.reset();

@@ -1,5 +1,7 @@
 package com.mockrunner.mock.jms;
 
+import com.mockrunner.jms.DestinationManager;
+
 /**
  * Used to create all types of JMS mock objects. 
  * Maintains the necessary dependencies between the mock objects.
@@ -9,6 +11,7 @@ package com.mockrunner.mock.jms;
  */
 public class JMSMockObjectFactory
 {
+    private DestinationManager destinationManager;
     private MockQueueConnectionFactory queueConnectionFactory;
     private MockQueueConnection queueConnection;
     private MockTopicConnectionFactory topicConnectionFactory;
@@ -19,10 +22,11 @@ public class JMSMockObjectFactory
      */
     public JMSMockObjectFactory()
     {
+        destinationManager = new DestinationManager();
         queueConnectionFactory = new MockQueueConnectionFactory();
-        queueConnection = new MockQueueConnection();
+        queueConnection = new MockQueueConnection(destinationManager);
         topicConnectionFactory = new MockTopicConnectionFactory();
-        topicConnection = new MockTopicConnection();
+        topicConnection = new MockTopicConnection(destinationManager);
         setUpDependencies();
     }
     
@@ -30,6 +34,15 @@ public class JMSMockObjectFactory
     {
         queueConnectionFactory.setQueueConnection(queueConnection);
         topicConnectionFactory.setTopicConnection(topicConnection);
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.jms.DestinationManager}.
+     * @return the {@link com.mockrunner.jms.DestinationManager}
+     */
+    public DestinationManager getDestinationManager()
+    {
+        return destinationManager;
     }
     
     /**

@@ -18,16 +18,14 @@ import javax.jms.QueueSession;
  */
 public class MockQueue implements Queue
 {
-    private MockConnection connection;
     private Set sessions;
     private String name;
     private List currentMessages;
     private List receivedMessages;
     
-    public MockQueue(MockConnection connection, String name)
+    public MockQueue(String name)
     {
         this.name = name;
-        this.connection = connection;
         sessions = new HashSet();
         currentMessages = new ArrayList();
         receivedMessages = new ArrayList();
@@ -35,7 +33,6 @@ public class MockQueue implements Queue
     
     public String getQueueName() throws JMSException
     {
-        connection.throwJMSException();
         return name;
     }
     
@@ -50,31 +47,28 @@ public class MockQueue implements Queue
     {
         receivedMessages.add(message);    
         boolean isConsumed = false;
-        if(!connection.isStopped())
+        Iterator sessionsIterator = sessions.iterator();
+        while(sessionsIterator.hasNext() && !isConsumed)
         {
-            Iterator sessionsIterator = sessions.iterator();
-            while(sessionsIterator.hasNext() && !isConsumed)
+            MockQueueSession session = (MockQueueSession)sessionsIterator.next();
+            MessageListener globalListener = session.getMessageListener();
+            if(null != globalListener)
             {
-                MockQueueSession session = (MockQueueSession)sessionsIterator.next();
-                MessageListener globalListener = session.getMessageListener();
-                if(null != globalListener)
+                globalListener.onMessage(message);
+                isConsumed = true;
+                acknowledgeMessage(message, session);
+            }
+            else
+            {
+                List receivers = session.getQueueTransmissionManager().getQueueReceiverList(name);
+                for(int ii = 0; ii < receivers.size() && !isConsumed; ii++)
                 {
-                    globalListener.onMessage(message);
-                    isConsumed = true;
-                    acknowledgeMessage(message, session);
-                }
-                else
-                {
-                    List receivers = session.getQueueTransmissionManager().getQueueReceiverList(name);
-                    for(int ii = 0; ii < receivers.size() && !isConsumed; ii++)
+                    MockQueueReceiver receiver = (MockQueueReceiver)receivers.get(ii);
+                    if(receiver.canConsume())
                     {
-                        MockQueueReceiver receiver = (MockQueueReceiver)receivers.get(ii);
-                        if(receiver.canConsume())
-                        {
-                            receiver.receiveMessage(message);
-                            isConsumed = true;
-                            acknowledgeMessage(message, session);
-                        }
+                        receiver.receiveMessage(message);
+                        isConsumed = true;
+                        acknowledgeMessage(message, session);
                     }
                 }
             }
@@ -158,10 +152,5 @@ public class MockQueue implements Queue
     public void addQueueSession(QueueSession session)
     {
         sessions.add(session);
-    }
-    
-    protected MockConnection getConnection()
-    {
-        return connection;
     }
 }

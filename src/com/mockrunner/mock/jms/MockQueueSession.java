@@ -70,7 +70,7 @@ public class MockQueueSession extends MockSession implements QueueSession
     public Queue createQueue(String name) throws JMSException
     {
         getConnection().throwJMSException();
-        MockQueue queue = ((MockQueueConnection)getConnection()).getQueueManager().getQueue(name);
+        MockQueue queue = ((MockQueueConnection)getConnection()).getDestinationManager().getQueue(name);
         if(null == queue)
         {
             throw new JMSException("Queue with name " + name + " not found");
@@ -82,7 +82,7 @@ public class MockQueueSession extends MockSession implements QueueSession
     public TemporaryQueue createTemporaryQueue() throws JMSException
     {
         getConnection().throwJMSException();
-        MockTemporaryQueue queue = new MockTemporaryQueue(getConnection());
+        MockTemporaryQueue queue = new MockTemporaryQueue();
         tempQueues.add(queue);
         addSessionToQueue(queue);
         return queue;

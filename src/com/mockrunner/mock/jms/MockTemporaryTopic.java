@@ -7,9 +7,9 @@ public class MockTemporaryTopic extends MockTopic implements TemporaryTopic
 {
     private boolean deleted;
     
-    public MockTemporaryTopic(MockConnection connection)
+    public MockTemporaryTopic()
     {
-        super(connection, "TemporaryTopic");
+        super("TemporaryTopic");
         deleted = false;
     }
     
@@ -24,7 +24,6 @@ public class MockTemporaryTopic extends MockTopic implements TemporaryTopic
 
     public void delete() throws JMSException
     {
-        getConnection().throwJMSException();
         deleted = true;
     }  
 }

@@ -19,15 +19,13 @@ import javax.jms.TopicSession;
  */
 public class MockTopic implements Topic
 {
-    private MockConnection connection;
     private Set sessions;
     private String name;
     private List currentMessages;
     private List receivedMessages;
     
-    public MockTopic(MockConnection connection, String name)
+    public MockTopic(String name)
     {
-        this.connection = connection;
         this.name = name;
         sessions = new HashSet();
         currentMessages = new ArrayList();
@@ -36,7 +34,6 @@ public class MockTopic implements Topic
         
     public String getTopicName() throws JMSException
     {
-        connection.throwJMSException();
         return name;
     }
     
@@ -49,43 +46,40 @@ public class MockTopic implements Topic
     {
         receivedMessages.add(message);    
         boolean isConsumed = false;
-        if(!connection.isStopped())
+        Iterator sessionsIterator = sessions.iterator();
+        while(sessionsIterator.hasNext())
         {
-            Iterator sessionsIterator = sessions.iterator();
-            while(sessionsIterator.hasNext())
+            MockTopicSession session = (MockTopicSession)sessionsIterator.next();
+            MessageListener globalListener = session.getMessageListener();
+            if(null != globalListener)
             {
-                MockTopicSession session = (MockTopicSession)sessionsIterator.next();
-                MessageListener globalListener = session.getMessageListener();
-                if(null != globalListener)
+                globalListener.onMessage(message);
+                isConsumed = true;
+                acknowledgeMessage(message, session);
+            }
+            else
+            {
+                List subscribers = session.getTopicTransmissionManager().getTopicSubscriberList(name);
+                for(int ii = 0; ii < subscribers.size(); ii++)
                 {
-                    globalListener.onMessage(message);
-                    isConsumed = true;
-                    acknowledgeMessage(message, session);
-                }
-                else
-                {
-                    List subscribers = session.getTopicTransmissionManager().getTopicSubscriberList(name);
-                    for(int ii = 0; ii < subscribers.size(); ii++)
+                    MockTopicSubscriber subscriber = (MockTopicSubscriber)subscribers.get(ii);
+                    if(subscriber.canConsume())
                     {
-                        MockTopicSubscriber subscriber = (MockTopicSubscriber)subscribers.get(ii);
-                        if(subscriber.canConsume())
-                        {
-                            subscriber.receiveMessage(message);
-                            isConsumed = true;
-                            acknowledgeMessage(message, session);
-                        }
+                        subscriber.receiveMessage(message);
+                        isConsumed = true;
+                        acknowledgeMessage(message, session);
                     }
-                    Map durableSubscribers = session.getTopicTransmissionManager().getDurableTopicSubscriberMap(name);
-                    Iterator keys = durableSubscribers.keySet().iterator();
-                    while(keys.hasNext())
+                }
+                Map durableSubscribers = session.getTopicTransmissionManager().getDurableTopicSubscriberMap(name);
+                Iterator keys = durableSubscribers.keySet().iterator();
+                while(keys.hasNext())
+                {
+                    MockTopicSubscriber subscriber = (MockTopicSubscriber)durableSubscribers.get(keys.next());
+                    if(subscriber.canConsume())
                     {
-                        MockTopicSubscriber subscriber = (MockTopicSubscriber)durableSubscribers.get(keys.next());
-                        if(subscriber.canConsume())
-                        {
-                            subscriber.receiveMessage(message);
-                            isConsumed = true;
-                            acknowledgeMessage(message, session);
-                        }
+                        subscriber.receiveMessage(message);
+                        isConsumed = true;
+                        acknowledgeMessage(message, session);
                     }
                 }
             }
@@ -169,10 +163,5 @@ public class MockTopic implements Topic
     public void addTopicSession(TopicSession session)
     {
         sessions.add(session);
-    }
-    
-    protected MockConnection getConnection()
-    {
-        return connection;
     }
 }

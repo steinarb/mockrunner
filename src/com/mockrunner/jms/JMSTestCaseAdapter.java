@@ -67,20 +67,12 @@ public class JMSTestCaseAdapter extends BaseTestCase
     }
     
     /**
-     * Delegates to {@link JMSTestModule#getQueueManager}
+     * Delegates to {@link JMSTestModule#getDestinationManager}
      */
-    public QueueManager getQueueManager()
+    public DestinationManager getDestinationManager()
     {
-        return jmsTestModule.getQueueManager();
-    }
-
-    /**
-     * Delegates to {@link JMSTestModule#getTopicManager}
-     */
-    public TopicManager getTopicManager()
-    {
-        return jmsTestModule.getTopicManager();
-    }
+        return jmsTestModule.getDestinationManager();
+    } 
 
     /**
      * Delegates to {@link JMSTestModule#getQueueMessageManager}

@@ -6,6 +6,7 @@ import javax.jms.Session;
 
 import junit.framework.TestCase;
 
+import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockTextMessage;
 import com.mockrunner.mock.jms.MockTopic;
@@ -21,8 +22,9 @@ public class MockTopicTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        connection = new MockTopicConnection();
-        topic = new MockTopic(connection, "TestTopic");
+        DestinationManager manager = new DestinationManager();
+        connection = new MockTopicConnection(manager);
+        topic = new MockTopic("TestTopic");
     }
 
     public void testGetMessageList() throws Exception
@@ -121,23 +123,13 @@ public class MockTopicTest extends TestCase
         assertEquals("test", listener2.getMessage().toString()); 
         assertFalse(((MockMessage)listener1.getMessage()).isAcknowledged());
         assertFalse(((MockMessage)listener2.getMessage()).isAcknowledged());
-        topic.reset();
         listener1.reset();
         listener2.reset();
         subscriber1 = (MockTopicSubscriber)session.createSubscriber(topic);
         subscriber1.setMessageListener(listener1);
-        connection.stop();
-        topic.addMessage(new MockTextMessage("test"));
-        assertEquals(1, topic.getCurrentMessageList().size());
-        assertEquals(1, topic.getReceivedMessageList().size());
-        connection.start();
-        topic.reset();
-        listener1.reset();
         topic.addMessage(new MockTextMessage("test"));
         assertEquals(0, topic.getCurrentMessageList().size());
-        assertEquals(1, topic.getReceivedMessageList().size());
-        assertEquals("test", listener1.getMessage().toString());
-        assertFalse(((MockMessage)listener1.getMessage()).isAcknowledged());
+        assertEquals(2, topic.getReceivedMessageList().size());
     }
     
     public void testAddMessageAutoAcknowledge() throws Exception

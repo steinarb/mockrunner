@@ -5,6 +5,7 @@ import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
 import javax.jms.QueueSession;
 
+import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueConnection;
 import com.mockrunner.mock.jms.MockQueueReceiver;
@@ -26,8 +27,9 @@ public class MockConnectionTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        queueConnection = new MockQueueConnection();
-        topicConnection = new MockTopicConnection();
+        DestinationManager manager = new DestinationManager();
+        queueConnection = new MockQueueConnection(manager);
+        topicConnection = new MockTopicConnection(manager);
     }
     
     public void testClose() throws Exception
@@ -35,9 +37,9 @@ public class MockConnectionTest extends TestCase
         MockQueueSession queueSession1 = (MockQueueSession)queueConnection.createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
         MockQueueSession queueSession2 = (MockQueueSession)queueConnection.createQueueSession(false, QueueSession.CLIENT_ACKNOWLEDGE);
         MockQueueSession queueSession3 = (MockQueueSession)queueConnection.createQueueSession(false, QueueSession.CLIENT_ACKNOWLEDGE);
-        MockQueueSender sender1 = (MockQueueSender)queueSession1.createSender(new MockQueue(queueConnection, ""));
-        MockQueueSender sender2 = (MockQueueSender)queueSession1.createSender(new MockQueue(queueConnection, ""));
-        MockQueueReceiver receiver1 = (MockQueueReceiver)queueSession1.createReceiver(new MockQueue(queueConnection, ""));
+        MockQueueSender sender1 = (MockQueueSender)queueSession1.createSender(new MockQueue(""));
+        MockQueueSender sender2 = (MockQueueSender)queueSession1.createSender(new MockQueue(""));
+        MockQueueReceiver receiver1 = (MockQueueReceiver)queueSession1.createReceiver(new MockQueue(""));
         queueConnection.close();
         assertTrue(queueConnection.isClosed());
         assertTrue(queueSession1.isClosed());
@@ -54,9 +56,9 @@ public class MockConnectionTest extends TestCase
         assertFalse(queueSession3.isRecovered());
         MockTopicSession topicSession1 = (MockTopicSession)topicConnection.createTopicSession(false, QueueSession.CLIENT_ACKNOWLEDGE);
         MockTopicSession topicSession2 = (MockTopicSession)topicConnection.createTopicSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
-        MockTopicPublisher publisher1 = (MockTopicPublisher)topicSession2.createPublisher(new MockTopic(topicConnection, ""));
-        MockTopicSubscriber subscriber1 = (MockTopicSubscriber)topicSession2.createSubscriber(new MockTopic(topicConnection, ""));
-        MockTopicSubscriber subscriber2 = (MockTopicSubscriber)topicSession2.createSubscriber(new MockTopic(topicConnection, ""));
+        MockTopicPublisher publisher1 = (MockTopicPublisher)topicSession2.createPublisher(new MockTopic(""));
+        MockTopicSubscriber subscriber1 = (MockTopicSubscriber)topicSession2.createSubscriber(new MockTopic(""));
+        MockTopicSubscriber subscriber2 = (MockTopicSubscriber)topicSession2.createSubscriber(new MockTopic(""));
         topicConnection.close();
         assertTrue(topicConnection.isClosed());
         assertTrue(topicSession1.isClosed());
