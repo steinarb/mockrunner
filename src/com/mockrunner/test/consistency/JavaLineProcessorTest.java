@@ -92,7 +92,7 @@ public class JavaLineProcessorTest extends TestCase
     
     public void testParseValid() throws Exception
     {
-        JavaLineParser parser = new JavaLineParser(getValidTestCode());
+        JavaLineParser parser = new JavaLineParser();
         List lineList = new ArrayList();
         lineList.add("import java.io.FileReader");
         lineList.add("java.io.FileInputStream");
@@ -102,7 +102,7 @@ public class JavaLineProcessorTest extends TestCase
         blockList.add("public test()");
         parser.addBlocks(blockList);
         parser.addBlock("anotherMethod");
-        List result = parser.parse();
+        List result = parser.parse(getValidTestCode());
         assertEquals(5, result.size());
         Line line1 = (Line)result.get(0);
         assertEquals("import java.io.FileInputStream;", line1.getLine());
@@ -125,10 +125,10 @@ public class JavaLineProcessorTest extends TestCase
     
     public void testParseInvalid() throws Exception
     {
-        JavaLineParser parser = new JavaLineParser(getInvalidTestCode());
+        JavaLineParser parser = new JavaLineParser();
         parser.addLine("import java.io.FileReader");
         parser.addBlock("public test()");
-        List result = parser.parse();
+        List result = parser.parse(getInvalidTestCode());
         assertEquals(1, result.size());
         Line line1 = (Line)result.get(0);
         assertEquals("import java.io.FileReader;", line1.getLine());
@@ -138,9 +138,9 @@ public class JavaLineProcessorTest extends TestCase
     public void testDeeplyNested() throws Exception
     {
         String testJava = getNestedTestCode();
-        JavaLineParser parser = new JavaLineParser(testJava);
+        JavaLineParser parser = new JavaLineParser();
         parser.addBlock("test");
-        List result = parser.parse();
+        List result = parser.parse(testJava);
         assertEquals(1, result.size());
         Block block1 = (Block)result.get(0);
         assertEquals("test", block1.getLine());
@@ -151,7 +151,7 @@ public class JavaLineProcessorTest extends TestCase
     public void testProcessValid() throws Exception
     {
         String testCode = getValidTestCode();
-        JavaLineProcessor processor = new JavaLineProcessor(testCode);
+        JavaLineProcessor processor = new JavaLineProcessor();
         List lineList = new ArrayList();
         lineList.add("import java.io.FileReader");
         lineList.add("java.io.FileInputStream");
@@ -160,7 +160,7 @@ public class JavaLineProcessorTest extends TestCase
         blockList.add("public test()");
         blockList.add("anotherMethod");
         processor.addBlocks(blockList);
-        String result = processor.process();
+        String result = processor.process(testCode);
         assertTrue(-1 != result.indexOf("//import java.io.FileReader"));
         assertTrue(-1 != result.indexOf("//import java.io.FileInputStream"));
         assertTrue(-1 != result.indexOf("    /*public test()" + NL + "{" + NL + " //do it" + NL + " if(true)" + NL + "{" + NL + "  \t}" + NL + "}*/"));
@@ -171,11 +171,11 @@ public class JavaLineProcessorTest extends TestCase
     public void testProcessDeeplyNested() throws Exception
     {
         String testJava = getNestedTestCode();
-        JavaLineProcessor processor = new JavaLineProcessor(testJava);
+        JavaLineProcessor processor = new JavaLineProcessor();
         List blockList = new ArrayList();
         blockList.add("test");
         processor.addBlocks(blockList);
-        String result = processor.process();
+        String result = processor.process(testJava);
         assertTrue(result.trim().startsWith("/*"));
         assertTrue(result.trim().endsWith("*/"));
     }
@@ -183,11 +183,11 @@ public class JavaLineProcessorTest extends TestCase
     public void testProcessCommentAll() throws Exception
     {
         String testCode = getValidTestCode();
-        JavaLineProcessor processor = new JavaLineProcessor(testCode);
+        JavaLineProcessor processor = new JavaLineProcessor();
         List lineList = new ArrayList();
         lineList.add("");
         processor.addLines(lineList);
-        String result = processor.process();
+        String result = processor.process(testCode);
         BufferedReader reader = new BufferedReader(new StringReader(result));
         String currentLine = null;
         while(null != (currentLine = reader.readLine()))

@@ -8,13 +8,11 @@ import java.util.List;
 
 public class JavaLineParser
 {
-    private String source;
     private List linesToParse;
     private List blocksToParse;
     
-    public JavaLineParser(String source)
+    public JavaLineParser()
     {
-        this.source = source;
         linesToParse = new ArrayList();
         blocksToParse = new ArrayList();
     }
@@ -39,7 +37,7 @@ public class JavaLineParser
         blocksToParse.addAll(blocks);
     }
     
-    public List parse()
+    public List parse(String source)
     {
         List resultList = new ArrayList();
         LineNumberReader input = new LineNumberReader(new StringReader(source));

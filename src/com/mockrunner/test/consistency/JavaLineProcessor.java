@@ -13,12 +13,10 @@ import com.mockrunner.test.consistency.JavaLineParser.Line;
 public class JavaLineProcessor
 {
     private JavaLineParser parser;
-    private String source;
     
-    public JavaLineProcessor(String source)
+    public JavaLineProcessor()
     {
-        this.source = source;
-        parser = new JavaLineParser(source);
+        parser = new JavaLineParser();
     }
     
     public void addLines(List lines)
@@ -31,9 +29,9 @@ public class JavaLineProcessor
         parser.addBlocks(blocks);
     }
     
-    public String process()
+    public String process(String source)
     {
-        List result = parser.parse();
+        List result = parser.parse(source);
         LineNumberReader input = new LineNumberReader(new StringReader(source));
         StringWriter resultStringWriter = new StringWriter(source.length() + 100);
         PrintWriter output = new PrintWriter(resultStringWriter);

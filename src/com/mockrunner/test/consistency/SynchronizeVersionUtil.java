@@ -26,10 +26,16 @@ public class SynchronizeVersionUtil
     {
         doSynchronizeJDBCJDK13();
     }
+    
+    private Map prepareJDBCJDK13()
+    {
+        Map jdbcFiles = new HashMap();
+        return jdbcFiles;
+    }
 
     private void doSynchronizeJDBCJDK13() throws Exception
     {
-        Map jdbcFiles = new HashMap();
+        Map jdbcFiles = prepareJDBCJDK13();
         ConsistencyUtil util = new ConsistencyUtil();
         Map jdbcMap = new HashMap();
         File jdbc = new File(src14Dir + "/com/mockrunner/jdbc");
@@ -42,17 +48,29 @@ public class SynchronizeVersionUtil
             String currentFileName = (String)sourceIterator.next();
             File currentSourceFile = (File)jdbcMap.get(currentFileName);
             File currentDestFile = new File(src13Dir + currentFileName);
+            System.out.println(currentFileName);
             String sourceFileContent = StreamUtil.getReaderAsString(new FileReader(currentSourceFile));
             System.out.println("Processing file " + currentSourceFile);
-            String processedFileContent = processFile(sourceFileContent);
+            String processedFileContent = processFile(currentFileName, sourceFileContent, jdbcFiles);
             writeFileContent(processedFileContent, currentDestFile);
         }
         System.out.println("Sucessfully finished");
     }
     
-    private String processFile(String fileContent)
+    private String processFile(String currentFileName, String fileContent, Map jdbcFiles)
     {
-        return fileContent;
+        currentFileName = currentFileName.replace('\\', '.');
+        currentFileName = currentFileName.replace('/', '.');
+        currentFileName = currentFileName.substring(1);
+        JavaLineProcessor currentProcessor = (JavaLineProcessor)jdbcFiles.get(currentFileName);
+        if(null == currentProcessor)
+        {
+            return fileContent;
+        }
+        else
+        {
+            return currentProcessor.process(fileContent);
+        }
     }
 
     private void writeFileContent(String fileContent, File currentDestFile) throws FileNotFoundException, IOException
