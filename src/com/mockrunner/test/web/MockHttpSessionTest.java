@@ -26,6 +26,18 @@ public class MockHttpSessionTest extends TestCase
         assertTrue(listener1.wasValueUnboundCalled());
     }
     
+    public void testOverwriteAttribute()
+    {
+        MockHttpSession session = new MockHttpSession();
+        TestSessionListener listener1 = new TestSessionListener();
+        TestSessionListener listener2 = new TestSessionListener();
+        session.setAttribute("key", listener1);
+        session.setAttribute("key", listener2);
+        assertTrue(listener1.wasValueUnboundCalled());
+        assertTrue(listener2.wasValueBoundCalled());
+        assertFalse(listener2.wasValueUnboundCalled());
+    }
+    
     private static class TestSessionListener implements HttpSessionBindingListener
     {
         private boolean valueBoundCalled = false;

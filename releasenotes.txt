@@ -3,6 +3,8 @@ mockrunner-0.2.9:
 
 - fixed bugs 951972 and 951963
 - added verifyForwardName() to ActionTestModule
+- fixed bug in MockHttpSession.setAttribute(), valueUnbound will now be called
+  if attribute is replaced
 
 mockrunner-0.2.8:
 
