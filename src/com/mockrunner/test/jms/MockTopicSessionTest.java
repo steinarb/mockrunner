@@ -17,8 +17,8 @@ import javax.jms.TopicSubscriber;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.jms.MessageManager;
+import com.mockrunner.jms.TopicManager;
 import com.mockrunner.jms.TransmissionManager;
 import com.mockrunner.mock.jms.MockBytesMessage;
 import com.mockrunner.mock.jms.MockObjectMessage;
@@ -72,7 +72,7 @@ public class MockTopicSessionTest extends TestCase
         {
             //should throw exception
         }
-        DestinationManager manager = connection.getDestinationManager();
+        TopicManager manager = connection.getTopicManager();
         Topic managerTopic1 = manager.createTopic("Topic1");
         Topic topic = session.createTopic("Topic1");
         assertTrue(topic == managerTopic1);
@@ -99,10 +99,10 @@ public class MockTopicSessionTest extends TestCase
     
     public void testCreatePublisherAndSubscriber() throws Exception
     {
-        DestinationManager destManager = connection.getDestinationManager();
+        TopicManager topicManager = connection.getTopicManager();
         TransmissionManager transManager = session.getTransmissionManager();
-        topic1 = destManager.createTopic("Topic1");
-        topic2 = destManager.createTopic("Topic2");
+        topic1 = topicManager.createTopic("Topic1");
+        topic2 = topicManager.createTopic("Topic2");
         assertEquals(0, transManager.getTopicPublisherList().size());
         TopicPublisher publisher1 = session.createPublisher(topic1);
         TopicPublisher publisher2 = session.createPublisher(topic2);  
@@ -132,9 +132,9 @@ public class MockTopicSessionTest extends TestCase
     
     public void testCreateDurableSubscriber() throws Exception
     {
-        DestinationManager destManager = connection.getDestinationManager();
+        TopicManager topicManager = connection.getTopicManager();
         TransmissionManager transManager = session.getTransmissionManager();
-        topic1 = destManager.createTopic("Topic1");
+        topic1 = topicManager.createTopic("Topic1");
         assertEquals(0, transManager.getDurableTopicSubscriberMap().size());
         TopicSubscriber subscriber1 = session.createDurableSubscriber(topic1, "Durable1");
         TopicSubscriber subscriber2 = session.createDurableSubscriber(topic1, "Durable2", null, true);
@@ -163,8 +163,8 @@ public class MockTopicSessionTest extends TestCase
     
     public void testTransmissionGlobalListener() throws Exception
     {
-        DestinationManager destManager = connection.getDestinationManager();
-        destManager.createTopic("Topic1");
+        TopicManager topicManager = connection.getTopicManager();
+        topicManager.createTopic("Topic1");
         topic1 = (MockTopic)session.createTopic("Topic1");
         TopicPublisher publisher = session.createPublisher(topic1);
         TestMessageListener globalListener = new TestMessageListener();
@@ -185,9 +185,9 @@ public class MockTopicSessionTest extends TestCase
     
     public void testTransmission() throws Exception
     {
-        DestinationManager destManager = connection.getDestinationManager();
-        destManager.createTopic("Topic1");
-        destManager.createTopic("Topic2");
+        TopicManager topicManager = connection.getTopicManager();
+        topicManager.createTopic("Topic1");
+        topicManager.createTopic("Topic2");
         topic1 = (MockTopic)session.createTopic("Topic1");
         topic2 = (MockTopic)session.createTopic("Topic2");
         TopicPublisher publisher1 = session.createPublisher(topic1);
@@ -233,7 +233,7 @@ public class MockTopicSessionTest extends TestCase
         assertEquals(0, topic1.getCurrentMessageList().size());
         assertEquals(1, topic2.getReceivedMessageList().size());
         assertEquals(0, topic2.getCurrentMessageList().size());
-        destManager.createTopic("NewTopic");
+        topicManager.createTopic("NewTopic");
         topic2 = (MockTopic)session.createTopic("NewTopic");
         publisher2 = session.createPublisher(topic2);
         publisher2.publish(new MockTextMessage("Text5"));
@@ -264,9 +264,9 @@ public class MockTopicSessionTest extends TestCase
     
     public void testTransmissionDurableSubscriber() throws Exception
     {
-        DestinationManager destManager = connection.getDestinationManager();
-        destManager.createTopic("Topic1");
-        destManager.createTopic("Topic2");
+        TopicManager topicManager = connection.getTopicManager();
+        topicManager.createTopic("Topic1");
+        topicManager.createTopic("Topic2");
         topic1 = (MockTopic)session.createTopic("Topic1");
         topic2 = (MockTopic)session.createTopic("Topic2");
         TopicPublisher publisher1 = session.createPublisher(topic1);
@@ -315,8 +315,8 @@ public class MockTopicSessionTest extends TestCase
                 
     public void testTransmissionResetCalled() throws Exception
     {
-        DestinationManager destManager = connection.getDestinationManager();
-        destManager.createTopic("Topic1");
+        TopicManager topicManager = connection.getTopicManager();
+        topicManager.createTopic("Topic1");
         topic1 = (MockTopic)session.createTopic("Topic1");
         TopicPublisher publisher = session.createPublisher(topic1);
         BytesMessage bytesMessage = new MockBytesMessage();
@@ -349,8 +349,8 @@ public class MockTopicSessionTest extends TestCase
     
     public void testTransmissionSenderOrReceiverClosed() throws Exception
     {
-        DestinationManager destManager = connection.getDestinationManager();
-        destManager.createTopic("Topic1");
+        TopicManager topicManager = connection.getTopicManager();
+        topicManager.createTopic("Topic1");
         topic1 = (MockTopic)session.createTopic("Topic1");
         MockTopicPublisher publisher = (MockTopicPublisher)session.createPublisher(topic1);
         TopicSubscriber subscriber1 = session.createSubscriber(topic1);
@@ -392,8 +392,8 @@ public class MockTopicSessionTest extends TestCase
     
     public void testTransmissionConnectionStopped() throws Exception
     {
-        DestinationManager destManager = connection.getDestinationManager();
-        destManager.createTopic("Topic1");
+        TopicManager topicManager = connection.getTopicManager();
+        topicManager.createTopic("Topic1");
         topic1 = (MockTopic)session.createTopic("Topic1");
         MockTopicSubscriber subscriber = (MockTopicSubscriber)session.createSubscriber(topic1);
         TestMessageListener listener = new TestMessageListener();
@@ -409,8 +409,8 @@ public class MockTopicSessionTest extends TestCase
     
     public void testTransmissionMultipleSessions() throws Exception
     {
-        DestinationManager destManager = connection.getDestinationManager();
-        destManager.createTopic("Topic1");
+        TopicManager topicManager = connection.getTopicManager();
+        topicManager.createTopic("Topic1");
         topic1 = (MockTopic)session.createTopic("Topic1");
         topic2 = (MockTopic)anotherSession.createTopic("Topic1");
         TestListMessageListener listener = new TestListMessageListener();
@@ -443,7 +443,7 @@ public class MockTopicSessionTest extends TestCase
         assertEquals(0, topic1.getCurrentMessageList().size());
         assertEquals(0, topic2.getCurrentMessageList().size());
         assertEquals(7, listener.getMessageList().size());
-        destManager.createTopic("Topic2");
+        topicManager.createTopic("Topic2");
         topic2 = (MockTopic)anotherSession.createTopic("Topic2");
         publisher = anotherSession.createPublisher(topic2);
         publisher.publish(new MockTextMessage("Text2"));

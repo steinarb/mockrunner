@@ -33,12 +33,21 @@ public class JMSTestModule
     }
     
     /**
-     * Returns the {@link DestinationManager}.
-     * @return the {@link DestinationManager}
+     * Returns the {@link QueueManager}.
+     * @return the {@link QueueManager}
      */
-    public DestinationManager getDestinationManager()
+    public QueueManager getQueueManager()
     {
-        return mockFactory.getMockQueueConnection().getDestinationManager();
+        return mockFactory.getMockQueueConnection().getQueueManager();
+    }
+    
+    /**
+     * Returns the {@link TopicManager}.
+     * @return the {@link TopicManager}
+     */
+    public TopicManager getTopicManager()
+    {
+        return mockFactory.getMockTopicConnection().getTopicManager();
     }
 
     /**
@@ -115,7 +124,7 @@ public class JMSTestModule
      */
     public MockQueue getQueue(String name)
     {
-        return getDestinationManager().getQueue(name);
+        return getQueueManager().getQueue(name);
     }
     
     /**
@@ -126,7 +135,7 @@ public class JMSTestModule
      */
     public MockTopic getTopic(String name)
     {
-        return getDestinationManager().getTopic(name);
+        return getTopicManager().getTopic(name);
     }
     
     /**
@@ -1344,15 +1353,28 @@ public class JMSTestModule
     }
 
     /**
-     * Verifies the number of sessions.
-     * @param number the expected number of sessions
+     * Verifies the number of queue sessions.
+     * @param number the expected number of queue sessions
      * @throws VerifyFailedException if verification fails
      */
     public void verifyNumberQueueSessions(int number)
     {
         if(number != getQueueSessionList().size())
         {
-            throw new VerifyFailedException("Expected " + number + " sessions, actually " + getQueueSessionList().size() + " sessions present");
+            throw new VerifyFailedException("Expected " + number + " queue sessions, actually " + getQueueSessionList().size() + " sessions present");
+        }
+    }
+    
+    /**
+     * Verifies the number of topic sessions.
+     * @param number the expected number of topic sessions
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberTopicSessions(int number)
+    {
+        if(number != getTopicSessionList().size())
+        {
+            throw new VerifyFailedException("Expected " + number + " topic sessions, actually " + getTopicSessionList().size() + " sessions present");
         }
     }
     
@@ -1376,8 +1398,27 @@ public class JMSTestModule
     }
     
     /**
+     * Verifies the number of temporary topics.
+     * @param indexOfSession the index of the session
+     * @param numberTopics the expected number of temporary topics
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberTemporaryTopics(int indexOfSession, int numberTopics)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        if(numberTopics != getTemporaryTopicList(indexOfSession).size())
+        {
+            throw new VerifyFailedException("Expected " + numberTopics + " temporary topics, actually " + getTemporaryTopicList(indexOfSession).size() + " temporary topics present");
+        }
+    }
+    
+    /**
      * Verifies that the temporary queue with the specified index
-     * was closed.
+     * was deleted.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the queue
      * @throws VerifyFailedException if verification fails
@@ -1396,7 +1437,7 @@ public class JMSTestModule
         }
         if(!queue.isDeleted())
         {
-            throw new VerifyFailedException("Temporary queue with index " + indexOfQueue + " not closed.");
+            throw new VerifyFailedException("TemporaryQueue with index " + indexOfQueue + " not deleted.");
         }
     }
     
@@ -1418,7 +1459,55 @@ public class JMSTestModule
             MockTemporaryQueue currentQueue = (MockTemporaryQueue)queueList.get(ii);
             if(!currentQueue.isDeleted())
             {
-                throw new VerifyFailedException("Temporary queue with index " + ii + " not closed.");
+                throw new VerifyFailedException("TemporaryQueue with index " + ii + " not deleted.");
+            }
+        }
+    }
+    
+    /**
+     * Verifies that the temporary topic with the specified index
+     * was closed.
+     * @param indexOfSession the index of the session
+     * @param indexOfTopic the index of the topic
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTemporaryTopicDeleted(int indexOfSession, int indexOfTopic)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        MockTemporaryTopic topic = getTemporaryTopic(indexOfSession, indexOfTopic);
+        if(null == topic)
+        {
+            throw new VerifyFailedException("TemporaryTopic with index " + indexOfTopic + " is not present.");
+        }
+        if(!topic.isDeleted())
+        {
+            throw new VerifyFailedException("TemporaryTopic with index " + indexOfTopic + " not deleted.");
+        }
+    }
+
+    /**
+     * Verifies that all temporary topics were deleted.
+     * @param indexOfSession the index of the session
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllTemporaryTopicsDeleted(int indexOfSession)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        List topicList = getTemporaryTopicList(indexOfSession);
+        for(int ii = 0; ii < topicList.size(); ii++)
+        {
+            MockTemporaryTopic currentTopic = (MockTemporaryTopic)topicList.get(ii);
+            if(!currentTopic.isDeleted())
+            {
+                throw new VerifyFailedException("TemporaryTopic with index " + ii + " not deleted.");
             }
         }
     }

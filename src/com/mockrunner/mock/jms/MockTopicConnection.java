@@ -12,6 +12,8 @@ import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicSession;
 
+import com.mockrunner.jms.TopicManager;
+
 /**
  * Mock implementation of JMS <code>TopicConnection</code>.
  * Please note: The interfaces <code>ConnectionConsumer</code>,
@@ -21,11 +23,22 @@ import javax.jms.TopicSession;
  */
 public class MockTopicConnection extends MockConnection implements TopicConnection
 {
+    private TopicManager topicManager;
     private List topicSessions;
     
     public MockTopicConnection()
     {
         topicSessions = new ArrayList();
+        topicManager = new TopicManager(this);
+    }
+    
+    /**
+     * Returns the {com.mockrunner.jms.QueueManager}.
+     * @return the {com.mockrunner.jms.QueueManager}
+     */
+    public TopicManager getTopicManager()
+    {
+        return topicManager;
     }
     
     /**

@@ -5,14 +5,11 @@ import javax.jms.ConnectionMetaData;
 import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
 
-import com.mockrunner.jms.DestinationManager;
-
 /**
  * Mock implementation of JMS <code>Connection</code>.
  */
 public abstract class MockConnection implements Connection
 {
-    private DestinationManager destinationManager;
     private ConnectionMetaData metaData;
     private String clientId;
     private boolean started;
@@ -21,21 +18,11 @@ public abstract class MockConnection implements Connection
     private JMSException exception;
     
     public MockConnection()
-    {
-        destinationManager = new DestinationManager(this); 
+    { 
         metaData = new MockConnectionMetaData();
         started = true;
         closed = false;
         exception = null;
-    }
-    
-    /**
-     * Returns the {@link DestinationManager} for this connection.
-     * @return the {@link DestinationManager}
-     */
-    public DestinationManager getDestinationManager()
-    {
-        return destinationManager;
     }
     
     /**
