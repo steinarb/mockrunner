@@ -10,6 +10,11 @@ import de.mockrunner.mock.MockActionForward;
 import de.mockrunner.mock.MockActionMapping;
 import de.mockrunner.mock.MockPageContext;
 
+/**
+ * Simply delegates to ActionTestModule.
+ * The easiest way to write action tests
+ * is to extend your testcases from this.
+ */
 public class ActionTestCaseAdapter extends BaseTestCase
 {
     private ActionTestModule actionTestModule;
@@ -125,7 +130,7 @@ public class ActionTestCaseAdapter extends BaseTestCase
         actionTestModule.verifyNumberActionErrors(number);
     }
     
-    protected void verifyNumberActionessages(int number)
+    protected void verifyNumberActionMessages(int number)
     {
         actionTestModule.verifyNumberActionMessages(number);
     }

@@ -18,6 +18,11 @@ import de.mockrunner.mock.MockActionForward;
 import de.mockrunner.mock.MockActionMapping;
 import de.mockrunner.mock.MockPageContext;
 
+/**
+ * Can be used to test struts actions.
+ * Have a look at the examples to see 
+ * how to use it.
+ */
 public class ActionTestModule
 {
     private MockObjectFactory mockFactory;
@@ -435,6 +440,7 @@ public class ActionTestModule
 
     private void handleActionForm() throws Exception
     {
+        getActionForm().reset(getMockActionMapping(), mockFactory.getMockRequest());
         populateMockRequest();
         if (validate)
         {

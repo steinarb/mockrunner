@@ -3,6 +3,10 @@ package de.mockrunner.example.test;
 import de.mockrunner.base.TagTestCaseAdapter;
 import de.mockrunner.example.ConstrainedNumericTextTag;
 
+/**
+ * A simple tag test. Tag support will be
+ * extended in future versions
+ */
 public class ConstrainedNumericTextTagTest extends TagTestCaseAdapter
 {
     private ConstrainedNumericTextTag tag;

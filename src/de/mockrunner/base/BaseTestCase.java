@@ -2,6 +2,10 @@ package de.mockrunner.base;
 
 import junit.framework.TestCase;
 
+/**
+ * Base class for all test cases. Does
+ * mock factory handling.
+ */
 public abstract class BaseTestCase extends TestCase
 {
     private MockObjectFactory mockFactory;

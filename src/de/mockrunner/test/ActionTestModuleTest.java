@@ -368,6 +368,7 @@ public class ActionTestModuleTest extends TestCase
         form.setValidationOk(false);
         module.setValidate(true);
         module.actionPerform(TestAction.class, form);
+        assertTrue(form.wasResetCalled());
         assertNull(module.getActionForward());
         assertEquals("value", form.getProperty());
         module.verifyHasActionErrors();
@@ -377,6 +378,7 @@ public class ActionTestModuleTest extends TestCase
         form.setValidationOk(false);
         module.setValidate(false);
         module.actionPerform(TestAction.class, form);
+        assertTrue(form.wasResetCalled());
         assertEquals("success", ((MockActionForward)module.getActionForward()).getPath());
         module.verifyForward("success");
         assertEquals("value", form.getProperty());
@@ -386,15 +388,16 @@ public class ActionTestModuleTest extends TestCase
         form.setValidationOk(true);
         module.setValidate(true);
         module.actionPerform(TestAction.class, form);
+        assertTrue(form.wasResetCalled());
         module.verifyForward("success");
         module.verifyNoActionErrors();
         
         module.actionPerform(TestAction.class, TestForm.class);
         module.verifyForward("success");
         module.verifyNoActionErrors();
-        assertEquals("value", ((TestForm)module.getActionForm()).getProperty());
-              
+        assertEquals("value", ((TestForm)module.getActionForm()).getProperty());        
         module.actionPerform(TestAction.class);
+        assertTrue(form.wasResetCalled());
         module.verifyForward("success");
         module.verifyNoActionErrors();
         assertNull(module.getActionForm());

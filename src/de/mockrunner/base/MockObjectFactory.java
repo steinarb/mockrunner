@@ -9,6 +9,10 @@ import de.mockrunner.mock.MockHttpSession;
 import de.mockrunner.mock.MockPageContext;
 import de.mockrunner.mock.MockServletContext;
 
+/**
+ * Used to create mockobjects and
+ * maintain dependencies.
+ */
 public class MockObjectFactory
 {
     private MockHttpServletRequest request;

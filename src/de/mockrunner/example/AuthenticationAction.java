@@ -10,7 +10,14 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
+import org.apache.struts.action.ActionMessages;
 
+/**
+ * Simple action to do an user authentication.
+ * AuthenticationActionTest demonstrates how
+ * to use the ActionTestModule.
+ */
 public class AuthenticationAction extends Action
 {
     public ActionForward execute(ActionMapping mapping,
@@ -22,7 +29,11 @@ public class AuthenticationAction extends Action
         String username = authForm.getUsername();
         String password = authForm.getPassword();
         boolean loginOk = getAuthenticationStrategy(request).authenticate(username, password);
-        if(loginOk) return mapping.findForward("success");
+        if(loginOk) 
+        {
+            addOkMessage(request);
+            return mapping.findForward("success");
+        }   
         addLoginErrors(request, username);
         return mapping.findForward("failure");
     }
@@ -46,6 +57,13 @@ public class AuthenticationAction extends Action
             errors.add(ActionErrors.GLOBAL_ERROR, error);
         }
         saveErrors(request, errors);
+    }
+    
+    private void addOkMessage(HttpServletRequest request)
+    {
+        ActionMessages messages = new ActionMessages();
+        messages.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("auth.login.successful"));
+        saveMessages(request, messages);
     }
 
     private AuthenticationStrategy getAuthenticationStrategy(HttpServletRequest request)

@@ -14,6 +14,7 @@ public class TestForm extends ActionForm
     private boolean validationOk = true;
     private HashMap mappedProperties = new HashMap();
     private String property;
+    private boolean resetCalled = false;
   
     public void setValidationOk(boolean validationOk)
     {
@@ -40,7 +41,18 @@ public class TestForm extends ActionForm
         mappedProperties.put(name, value);
     }
     
-    public ActionErrors validate(ActionMapping arg0, HttpServletRequest arg1)
+    public boolean wasResetCalled()
+    {
+        return resetCalled;
+    }
+
+    public void reset(ActionMapping mapping, HttpServletRequest request)
+    {
+        super.reset(mapping, request);
+        resetCalled = true;
+    }
+    
+    public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
     {
         ActionErrors errors = new ActionErrors();
         if(!validationOk)
