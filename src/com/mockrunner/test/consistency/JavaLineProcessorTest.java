@@ -8,7 +8,7 @@ import com.mockrunner.test.consistency.JavaLineParser.Line;
 
 import junit.framework.TestCase;
 
-public class JavaLineParserTest extends TestCase
+public class JavaLineProcessorTest extends TestCase
 {
     private String getValidTestCode()
     {
@@ -142,5 +142,20 @@ public class JavaLineParserTest extends TestCase
         assertEquals("test", block1.getLine());
         assertEquals(1, block1.getLineNumber());
         assertEquals(16, block1.getEndLineNumber());
+    }
+    
+    public void testProcessValid() throws Exception
+    {
+        String testCode = getValidTestCode();
+        JavaLineProcessor processor = new JavaLineProcessor(testCode);
+        List lineList = new ArrayList();
+        lineList.add("import java.io.FileReader");
+        lineList.add("java.io.FileInputStream");
+        processor.addLines(lineList);
+        List blockList = new ArrayList();
+        blockList.add("public test()");
+        blockList.add("anotherMethod");
+        processor.addBlocks(blockList);
+        String result = processor.process();
     }
 }

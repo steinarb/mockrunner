@@ -41,42 +41,82 @@ public class JavaLineProcessor
         {
             Line nextLine = (Line)result.get(ii);
             int processUntil = nextLine.getLineNumber();
-            while(input.getLineNumber() < processUntil)
-            {
-                try
-                {
-                    output.println(input.readLine());
-                } 
-                catch(IOException exc)
-                {
-                    throw new RuntimeException(exc);
-                }
-            }
-            
+            dumpToOutputUntil(input, output, processUntil);
+            handleLine(nextLine, input, output);
         }
+        dumpToOutputUntilEnd(input, output);
         output.flush();
         return resultStringWriter.toString();
     }
-    
-    private void handleLine(Line line, LineNumberReader input, PrintWriter output) throws IOException
+
+    private void handleLine(Line line, LineNumberReader input, PrintWriter output)
     {
-        StringBuffer nextLine = new StringBuffer(input.readLine());
-        int firstNonWhitespace = 0;
-        while(firstNonWhitespace < nextLine.length() && Character.isWhitespace(nextLine.charAt(firstNonWhitespace)))
+        try
         {
-            firstNonWhitespace++;
+            StringBuffer nextLine = new StringBuffer(input.readLine());
+            int firstNonWhitespace = 0;
+            while(firstNonWhitespace < nextLine.length() && Character.isWhitespace(nextLine.charAt(firstNonWhitespace)))
+            {
+                firstNonWhitespace++;
+            }
+            if(firstNonWhitespace < nextLine.length())
+            {
+                if(line instanceof Block)
+                {
+                    nextLine.insert(firstNonWhitespace, "/*");
+                    output.println(nextLine);
+                    int processUntil = ((Block)line).getEndLineNumber();
+                    dumpToOutputUntil(input, output, processUntil);
+                    nextLine = new StringBuffer(input.readLine());
+                    int lastNonWhitespace = nextLine.length() - 1;
+                    while(lastNonWhitespace > 0 && Character.isWhitespace(nextLine.charAt(lastNonWhitespace)))
+                    {
+                        firstNonWhitespace--;
+                    }
+                    nextLine.insert(lastNonWhitespace + 1, "*/");
+                    output.println(nextLine);
+                }
+                else
+                {
+                    nextLine.insert(firstNonWhitespace, "//");
+                    output.println(nextLine);
+                }
+            }
+        } 
+        catch(IOException exc)
+        {
+            throw new RuntimeException(exc);
         }
-        if(firstNonWhitespace < nextLine.length())
+    }
+    
+    private void dumpToOutputUntil(LineNumberReader input, PrintWriter output, int processUntil)
+    {
+        while(input.getLineNumber() < processUntil - 1)
         {
-	        if(line instanceof Block)
-	        {
-	            
-	        }
-	        else
-	        {
-	            nextLine.insert(firstNonWhitespace, "//");
-	            output.println(nextLine);
-	        }
+            try
+            {
+                output.println(input.readLine());
+            } 
+            catch(IOException exc)
+            {
+                throw new RuntimeException(exc);
+            }
+        }
+    }
+    
+    private void dumpToOutputUntilEnd(LineNumberReader input, PrintWriter output)
+    {
+        String line = null;
+        try
+        {
+            while(null != (line = input.readLine()))
+            {
+                output.println(line);
+            }
+        } 
+        catch (IOException exc)
+        {
+            throw new RuntimeException(exc);
         }
     }
 }
