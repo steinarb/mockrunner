@@ -1,9 +1,15 @@
 package com.mockrunner.gen;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Modifier;
+
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.HTMLOutputTestCase;
+import com.mockrunner.gen.JavaClassGenerator.ConstructorDeclaration;
+import com.mockrunner.gen.JavaClassGenerator.MethodDeclaration;
 import com.mockrunner.util.ClassUtil;
+import com.mockrunner.util.StringUtil;
 
 public class StandardAdapterProcessor implements AdapterProcessor
 {
@@ -22,6 +28,11 @@ public class StandardAdapterProcessor implements AdapterProcessor
             classGenerator.setSuperClass(getSuperClass(module));
         }
         classGenerator.setClassComment(getClassComment(module));
+        String memberName = StringUtil.lowerCase(ClassUtil.getClassName(module), 0);
+        classGenerator.addMemberDeclaration(module, memberName);
+        addConstructors(classGenerator);
+        addTearDownMethod(classGenerator, memberName);
+        addSetUpMethod(classGenerator, module, memberName);
         output = classGenerator.generate();
     }
     
@@ -33,6 +44,64 @@ public class StandardAdapterProcessor implements AdapterProcessor
     public String getOutput()
     {
         return output;
+    }
+    
+    private Class determineFactoryClass(Class module)
+    {
+        Constructor[] constructors = module.getDeclaredConstructors();
+        for(int ii = 0; ii < constructors.length; ii++)
+        {
+            Constructor constructor = constructors[ii];
+            if(constructor.getParameterTypes().length == 1)
+            {
+                return constructor.getParameterTypes()[0];
+            }
+        }
+        throw new RuntimeException("Module " + module.getName() + " has no constructor with mock object factory argument");
+    }
+    
+    private void addTearDownMethod(JavaClassGenerator classGenerator, String memberName)
+    {
+        MethodDeclaration method = createProtectedMethod();
+        method.setName("tearDown");
+        method.setExceptions(new Class[] {Exception.class});
+        method.setCodeLines(new String[] {"super.tearDown();", memberName + " = null;"});
+        classGenerator.addMethodDeclaration(method);
+    }
+    
+    private void addSetUpMethod(JavaClassGenerator classGenerator, Class module, String memberName)
+    {
+        String name = module.getName();
+        MethodDeclaration method = createProtectedMethod();
+        method.setName("setUp");
+        method.setExceptions(new Class[] {Exception.class});
+        String[] comment = new String[2];
+        comment[0] = "Creates the {@link " + name + "}. If you";
+        comment[1] = "overwrite this method, you must call <code>super.setUp()</code>.";
+        method.setCommentLines(comment);
+        String[] codeLines = new String[2];
+        codeLines[0] = "super.setUp();";
+        String factoryCall = "get" + ClassUtil.getClassName(determineFactoryClass(module));
+        codeLines[1] = memberName + " = create" + ClassUtil.getClassName(module) + "(" + factoryCall +"());";
+        method.setCodeLines(codeLines);
+        classGenerator.addMethodDeclaration(method);
+    }
+    
+    private void addConstructors(JavaClassGenerator classGenerator)
+    {
+        classGenerator.addConstructorDeclaration();
+        ConstructorDeclaration constructor = new ConstructorDeclaration();
+        constructor.setArguments(new Class[] {String.class});
+        constructor.setArgumentNames(new String[] {"name"});
+        constructor.setCodeLines(new String[] {"super(name);"});
+        classGenerator.addConstructorDeclaration(constructor);
+    }
+
+    private MethodDeclaration createProtectedMethod()
+    {
+        MethodDeclaration method = new MethodDeclaration();
+        method.setModifier(Modifier.PROTECTED);
+        return method;
     }
     
     private String prepareName(Class module)

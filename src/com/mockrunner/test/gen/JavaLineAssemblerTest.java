@@ -249,6 +249,22 @@ public class JavaLineAssemblerTest extends TestCase
         assertEquals("abstract synchronized MyReturnType myMethod(String string0, int int1, Integer int2, double param3)" + NL, assembler.getResult());
     }
     
+    public void testAppendMethodDeclarationWithReturnTypeParametersModifiersAndExceptions()
+    {
+        assembler.setDefaultMethodModifier("public");
+        assembler.appendMethodDeclaration(new String[] {"abstract"}, "", "myMethod",  new String[] {"String"}, new String[] {"myString"}, new String[] {"FirstException", "SecondException"});
+        assertEquals("public abstract void myMethod(String myString) throws FirstException, SecondException" + NL, assembler.getResult());
+        assembler.reset();
+        String[] types = new String[] {"String", "int", "Integer", "double"};
+        String[] names = new String[] {"string0", "int1", "int2"};
+        String[] modifiers = new String[] {"abstract", "synchronized"};
+        assembler.appendMethodDeclaration(modifiers, "MyReturnType", "myMethod",  types, names, null);
+        assertEquals("abstract synchronized MyReturnType myMethod(String string0, int int1, Integer int2, double param3)" + NL, assembler.getResult());
+        assembler.reset();
+        assembler.appendMethodDeclaration(modifiers, null, "myMethod",  null, null, new String[] {"Exception"});
+        assertEquals("abstract synchronized void myMethod() throws Exception" + NL, assembler.getResult());   
+    }
+    
     public void testAppendConstructorDeclaration()
     {
         assembler.setIndentLevel(1);
@@ -256,8 +272,8 @@ public class JavaLineAssemblerTest extends TestCase
         assertEquals("", assembler.getResult());
         assembler.appendConstructorDeclaration(null);
         assertEquals("", assembler.getResult());
-        assembler.appendConstructorDeclaration("MyConstrcutor");
-        assertEquals("    public MyConstrcutor()" + NL, assembler.getResult());
+        assembler.appendConstructorDeclaration("MyConstructor");
+        assertEquals("    public MyConstructor()" + NL, assembler.getResult());
     }
     
     public void testAppendConstructorDeclarationWithParameters()
@@ -269,8 +285,20 @@ public class JavaLineAssemblerTest extends TestCase
         assertEquals("", assembler.getResult());
         String[] types = new String[] {"String", "int", "Integer", "double"};
         String[] names = new String[] {"string0", "int1", "int2"};
-        assembler.appendConstructorDeclaration("MyConstrcutor", types, names);
-        assertEquals("    public MyConstrcutor(String string0, int int1, Integer int2, double param3)" + NL, assembler.getResult());
+        assembler.appendConstructorDeclaration("MyConstructor", types, names);
+        assertEquals("    public MyConstructor(String string0, int int1, Integer int2, double param3)" + NL, assembler.getResult());
+    }
+    
+    public void testAppendConstructorDeclarationWithParametersAndExceptions()
+    {
+        assembler.setIndentLevel(1);
+        assembler.appendConstructorDeclaration("", new String[0], new String[0], null);
+        assertEquals("", assembler.getResult());
+        String[] types = new String[] {"String", "int", "Integer", "double"};
+        String[] names = new String[] {"string0", "int1", "int2"};
+        String[] exceptions = new String[] {"Exception1", "Exception2", "Exception3"};
+        assembler.appendConstructorDeclaration("MyConstructor", types, names, exceptions);
+        assertEquals("    public MyConstructor(String string0, int int1, Integer int2, double param3) throws Exception1, Exception2, Exception3" + NL, assembler.getResult());
     }
     
     public void testAppendComment()
