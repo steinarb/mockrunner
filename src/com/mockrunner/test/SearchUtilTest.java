@@ -59,6 +59,20 @@ public class SearchUtilTest extends TestCase
         assertTrue(resultList.contains("TestObject"));
     }
     
+    public void testContains()
+    {
+        ArrayList list = new ArrayList();
+        list.add("TestString1");
+        list.add("TestString2");
+        list.add("TestString3");
+        assertTrue(SearchUtil.contains(list, "TESTSTRING", false, false));
+        assertFalse(SearchUtil.contains(list, "TESTSTRING", true, false));
+        assertFalse(SearchUtil.contains(list, "TESTSTRING", false, true));
+        assertTrue(SearchUtil.contains(list, "TestString3", true, true));
+        assertFalse(SearchUtil.contains(list, "TestString4", true, true));
+        assertFalse(SearchUtil.contains(list, "TestString4", false, false));
+    }
+    
     public void testDoesStringMatch()
     {
         assertFalse(SearchUtil.doesStringMatch("X", "x", true, false));

@@ -2,6 +2,7 @@ package com.mockrunner.jdbc;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
+import java.util.Collection;
 import java.util.List;
 
 import com.mockrunner.base.BaseTestCase;
@@ -110,6 +111,14 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     protected List getStatements()
     {
         return jdbcTestModule.getStatements();
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getExecutedSQLStatements}
+     */
+    protected Collection getExecutedSQLStatements()
+    {
+        return jdbcTestModule.getExecutedSQLStatements();
     }
     
     /**
@@ -270,6 +279,22 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     protected MockSavepoint getSavepoint(String name)
     {
         return jdbcTestModule.getSavepoint(name);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifySQLStatementExecuted}
+     */
+    protected void verifySQLStatementExecuted(String sql)
+    {
+        jdbcTestModule.verifySQLStatementExecuted(sql);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifySQLStatementNotExecuted}
+     */
+    protected void verifySQLStatementNotExecuted(String sql)
+    {
+        jdbcTestModule.verifySQLStatementNotExecuted(sql);
     }
     
     /**

@@ -27,7 +27,7 @@ public class CallableStatementResultSetHandler extends AbstractOutParameterResul
      */
     public void addCallableStatement(MockCallableStatement statement)
     { 
-        statement.setPreparedStatementResultSetHandler(this);
+        statement.setCallableStatementResultSetHandler(this);
         List list = (List)callbaleStatementMap.get(statement.getSQL());
         if(null == list)
         {

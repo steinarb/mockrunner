@@ -1,9 +1,12 @@
 package com.mockrunner.mock.jdbc;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.mockrunner.util.SearchUtil;
 
@@ -24,6 +27,7 @@ public abstract class AbstractResultSetHandler
     private int updateCount = 0;
     private Map updateCountForStatement = new HashMap();
     private Map returnsResultSetMap = new HashMap();
+    private Set executedStatements = new HashSet();
     
     /**
      * Set if specified SQL strings should be handled case sensitive.
@@ -50,6 +54,24 @@ public abstract class AbstractResultSetHandler
     public void setExactMatch(boolean exactMatch)
     {
         this.exactMatch = exactMatch;
+    }
+    
+    /**
+     * Collects all SQL strings that were executed.
+     * @param sql the SQL string
+     */
+    public void addExecutedStatement(String sql)
+    {
+        executedStatements.add(sql);
+    }
+    
+    /**
+     * Returns the <code>Collection</code> of all executed SQL strings.
+     * @param the <code>Collection</code> of executed SQL strings
+     */
+    public Collection getExecutedStatements()
+    {
+        return Collections.unmodifiableCollection(executedStatements);
     }
     
     /**

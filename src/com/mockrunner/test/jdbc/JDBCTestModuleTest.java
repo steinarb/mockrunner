@@ -9,6 +9,7 @@ import junit.framework.TestCase;
 
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.jdbc.JDBCTestModule;
+import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockStatement;
 
@@ -22,6 +23,12 @@ public class JDBCTestModuleTest extends TestCase
         super.setUp();
         mockfactory = new MockObjectFactory();
         module = new JDBCTestModule(mockfactory);
+    }
+    
+    private void prepareCallableStatements() throws Exception
+    {   
+        mockfactory.getMockConnection().prepareCall("{call getData(?, ?, ?, ?)}");
+        mockfactory.getMockConnection().prepareCall("{call setData(?, ?, ?, ?)}");
     }
     
     private void preparePreparedStatements() throws Exception
@@ -125,10 +132,82 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyPreparedStatementParameter(0, 1, "test1");
     }
     
+    public void testGetCallableStatementsByIndex() throws Exception
+    {
+        module.verifyNumberCallableStatements(0);
+        prepareCallableStatements();
+        module.verifyNumberCallableStatements(2);
+        List statements = module.getCallableStatements();
+        assertEquals("{call getData(?, ?, ?, ?)}", ((MockCallableStatement)statements.get(0)).getSQL());
+        assertEquals("{call setData(?, ?, ?, ?)}", ((MockCallableStatement)statements.get(1)).getSQL());
+    }
+    
+    public void testGetCallableStatementsBySQL() throws Exception
+    {
+        prepareCallableStatements();
+        List statements = module.getCallableStatements("call");
+        assertTrue(statements.size() == 2);
+        MockCallableStatement statement = module.getCallableStatement("CALL");
+        assertEquals("{call getData(?, ?, ?, ?)}", statement.getSQL());
+        module.setCaseSensitive(true);
+        statement = module.getCallableStatement("CALL");
+        assertNull(statement);
+        module.setCaseSensitive(false);
+        module.setExactMatch(true);
+        statement = module.getCallableStatement("CALL");
+        assertNull(statement);
+        statements = module.getCallableStatements("{call setData(?, ?, ?, ?)}");
+        assertTrue(statements.size() == 1);
+        module.setExactMatch(false);
+        module.verifyNumberCallableStatements(1, "call getData");
+        module.verifyNumberCallableStatements(2, "call");
+        module.verifyCallableStatementPresent("call setData");
+        module.verifyCallableStatementNotPresent("call setXYZ");
+    }
+    
+    public void testGetCallableStatementObjects() throws Exception
+    {
+        //TODO: implement me
+    }
+    
+    public void testGetExecutedSQlStatements() throws Exception
+    {
+        prepareStatements();
+        preparePreparedStatements();
+        prepareCallableStatements();
+        MockStatement statement = module.getStatement(0);
+        statement.execute("select");
+        statement.execute("UPDATE");
+        MockPreparedStatement preparedStatement = module.getPreparedStatement("insert");
+        preparedStatement.execute();
+        MockCallableStatement callableStatement = module.getCallableStatement("call");
+        callableStatement.executeUpdate();
+        List sqlStatements = module.getExecutedSQLStatements();
+        assertTrue(sqlStatements.size() == 4);
+        assertTrue(sqlStatements.contains("select"));
+        assertTrue(sqlStatements.contains("UPDATE"));
+        assertTrue(sqlStatements.contains("INSERT INTO TEST (COL1, COL2) VALUES(?, ?)"));
+        assertTrue(sqlStatements.contains("{call getData(?, ?, ?, ?)}"));
+        module.verifySQLStatementExecuted("select");
+        module.verifySQLStatementExecuted("update");
+        module.verifySQLStatementExecuted("INSERT");
+        module.verifySQLStatementExecuted("{call");
+        module.verifySQLStatementNotExecuted("{call}");
+        module.setCaseSensitive(true);
+        module.verifySQLStatementExecuted("UPDATE");
+        module.verifySQLStatementNotExecuted("update");
+        module.setExactMatch(true);
+        module.verifySQLStatementExecuted("{call getData(?, ?, ?, ?)}");
+        module.verifySQLStatementNotExecuted("call");
+        module.setCaseSensitive(false);
+        module.verifySQLStatementExecuted("{CALL getData(?, ?, ?, ?)}");
+    }
+    
     public void testStatementsClosed() throws Exception
     {
         prepareStatements();
         preparePreparedStatements();
+        prepareCallableStatements();
         MockStatement statement = module.getStatement(0);
         MockPreparedStatement preparedStatement = module.getPreparedStatement("update");
         statement.close();
@@ -147,6 +226,7 @@ public class JDBCTestModuleTest extends TestCase
         List statements = new ArrayList();
         statements.addAll(module.getStatements());
         statements.addAll(module.getPreparedStatements());
+        statements.addAll(module.getCallableStatements());
         for(int ii = 0; ii < statements.size(); ii++)
         {
             ((MockStatement)statements.get(ii)).close();

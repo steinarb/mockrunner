@@ -140,6 +140,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         MockResultSet result = resultSetHandler.getResultSet(getSQL(), params);
         if(null != result)
         {
+            resultSetHandler.addExecutedStatement(getSQL());
             return cloneResultSet(result);
         }
         return super.executeQuery(getSQL());
@@ -155,6 +156,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         Integer updateCount = resultSetHandler.getUpdateCount(getSQL(), params);
         if(null != updateCount)
         {
+            resultSetHandler.addExecutedStatement(getSQL());
             return updateCount.intValue();
         }
         return super.executeUpdate(getSQL());
