@@ -44,7 +44,7 @@ import com.mockrunner.util.StreamUtil;
  * for the description of the methods in this interface. 
  * The additional methods are described here.
  */
-public class MockResultSet implements ResultSet
+public class MockResultSet implements ResultSet, Cloneable
 {
     private Statement statement;
     private Map columnMap;
@@ -86,6 +86,18 @@ public class MockResultSet implements ResultSet
         resultSetMetaData = null;
     }
     
+    public Object clone()
+    {
+        try
+        {
+            return super.clone();
+        }
+        catch(CloneNotSupportedException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
     /**
      * Sets the <code>ResultSetMetaData</code> for this <code>ResultSet</code>.
      * The specified object will be returned when calling {@link #getMetaData}.
@@ -117,11 +129,22 @@ public class MockResultSet implements ResultSet
             resultSetType = statement.getResultSetType();
             resultSetConcurrency = statement.getResultSetConcurrency();
             fetchSize = statement.getFetchSize();
+            cursorName = ((MockStatement)statement).getCursorName();
         }
         catch(SQLException exc)
         {
 
         }
+    }
+    
+    /**
+     * Sets the cursor name. It's not possible to set
+     * this in a real <code>ResultSet</code>.
+     * @param cursorName the cursor name
+     */
+    public void setCursorName(String cursorName)
+    {
+        this.cursorName = cursorName;
     }
     
     /**

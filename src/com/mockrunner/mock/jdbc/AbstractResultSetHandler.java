@@ -18,6 +18,9 @@ public abstract class AbstractResultSetHandler
     private boolean exactMatch = false;
     private MockResultSet globalResultSet;
     private Map resultSetsForStatement = new HashMap();
+    private int updateCount = 0;
+    private Map updateCountForStatement = new HashMap();
+    private Map returnsResultSetMap = new HashMap();
     
     /**
      * Set if specified SQL strings should be handled case sensitive.
@@ -91,6 +94,40 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
+     * Returns the first update count that matches the
+     * specified SQL string. Please note that you can modify
+     * the search parameters with {@link #setCaseSensitive} and 
+     * {@link #setExactMatch}. Returns <code>null</code> if no
+     * return value is present for the specified SQL string.
+     * @param sql the SQL string
+     * @return the corresponding update count
+     */
+    public Integer getUpdateCount(String sql)
+    {
+        return (Integer)updateCountForStatement.get(sql);
+    }
+    
+    /**
+     * Returns the global update count for execute update calls.
+     * @return the global update count
+     */
+    public int getGlobalUpdateCount()
+    {
+        return updateCount;
+    }
+    
+    /**
+     * Returns if the specified SQL string is a select that returns
+     * a <code>ResultSet</code>.
+     * @param sql the SQL string
+     * @return <code>true</code> if the SQL string returns a <code>ResultSet</code>
+     */
+    public Boolean getReturnsResultSet(String sql)
+    {
+        return (Boolean)returnsResultSetMap.get(sql);
+    }
+    
+    /**
      * Prepare a <code>ResultSet</code> for a specified SQL string.
      * @param sql the SQL string
      * @param resultSet the corresponding {@link MockResultSet}
@@ -101,7 +138,7 @@ public abstract class AbstractResultSetHandler
     }
 
     /**
-     * Prepare a global <code>ResultSet</code>.
+     * Prepare the global <code>ResultSet</code>.
      * @param resultSet the {@link MockResultSet}
      */
     public void prepareGlobalResultSet(MockResultSet resultSet)
@@ -110,9 +147,41 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
+     * Prepare the update count for execute update calls for a specified SQL string.
+     * @param sql the SQL string
+     * @param updateCount the update count
+     */
+    public void prepareUpdateCount(String sql, int updateCount)
+    {
+        updateCountForStatement.put(sql, new Integer(updateCount));
+    }
+    
+    /**
+     * Prepare the global update count for execute update calls.
+     * @param updateCount the update count
+     */
+    public void prepareGlobalUpdateCount(int updateCount)
+    {
+        this.updateCount = updateCount;
+    }
+    
+    /**
+     * Prepare if the specified SQL string is a select that returns
+     * a <code>ResultSet</code>. Usually you do not have to specify this.
+     * It is assumed that an SQL string returns a <code>ResultSet</code> 
+     * if it contains <i>SELECT</i>.
+     * @param sql the SQL string
+     * @param returnsResultSet specify if the SQL string returns a <code>ResultSet</code>
+     */
+    public void prepareReturnsResultSet(String sql, boolean returnsResultSet)
+    {
+        returnsResultSetMap.put(sql, new Boolean(returnsResultSet));
+    }
+    
+    /**
      * Clears the global <code>ResultSet</code>.
      */
-    public void clearGloablResultSet()
+    public void clearGlobalResultSet()
     {
         this.globalResultSet = null;
     }
