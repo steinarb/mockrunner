@@ -11,6 +11,7 @@ import javax.jms.QueueBrowser;
 import javax.jms.QueueReceiver;
 import javax.jms.QueueSender;
 import javax.jms.QueueSession;
+import javax.jms.Session;
 import javax.jms.TemporaryQueue;
 
 /**
@@ -19,6 +20,11 @@ import javax.jms.TemporaryQueue;
 public class MockQueueSession extends MockSession implements QueueSession
 {
     private List tempQueues;
+    
+    public MockQueueSession(MockConnection connection)
+    {
+        this(connection, false, Session.AUTO_ACKNOWLEDGE);
+    }
     
     public MockQueueSession(MockConnection connection, boolean transacted, int acknowledgeMode)
     {

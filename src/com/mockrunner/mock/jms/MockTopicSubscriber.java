@@ -14,6 +14,11 @@ public class MockTopicSubscriber extends MockMessageConsumer implements TopicSub
     private boolean noLocal;
     private String name;
     private boolean isDurable;
+    
+    public MockTopicSubscriber(MockConnection connection, MockTopic topic)
+    {
+        this(connection, topic, null, false);
+    }
 
     public MockTopicSubscriber(MockConnection connection, MockTopic topic, String messageSelector, boolean noLocal)
     {
@@ -77,7 +82,12 @@ public class MockTopicSubscriber extends MockMessageConsumer implements TopicSub
 
     public Message receive() throws JMSException
     {
-        // TODO Auto-generated method stub
-        return null;
+        getConnection().throwJMSException();
+        if(isClosed())
+        {
+            throw new JMSException("Subscriber is closed");
+        }
+        if(topic.isEmpty()) return null;
+        return topic.getMessage();
     }
 }

@@ -11,6 +11,11 @@ import javax.jms.QueueReceiver;
 public class MockQueueReceiver extends MockMessageConsumer implements QueueReceiver
 {
     private MockQueue queue;
+    
+    public MockQueueReceiver(MockConnection connection, MockQueue queue)
+    {
+        this(connection, queue, null);
+    }
 
     public MockQueueReceiver(MockConnection connection, MockQueue queue, String messageSelector)
     {
