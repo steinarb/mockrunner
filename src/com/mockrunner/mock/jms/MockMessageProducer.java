@@ -2,6 +2,8 @@ package com.mockrunner.mock.jms;
 
 import javax.jms.BytesMessage;
 import javax.jms.DeliveryMode;
+import javax.jms.Destination;
+import javax.jms.InvalidDestinationException;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageProducer;
@@ -13,6 +15,7 @@ import javax.jms.StreamMessage;
 public abstract class MockMessageProducer implements MessageProducer
 {
     private MockConnection connection;
+    private MockDestination destination;
     private boolean closed;
     private boolean disableMessageId;
     private boolean disableTimestamp;
@@ -20,9 +23,10 @@ public abstract class MockMessageProducer implements MessageProducer
     private int priority;
     private long timeToLive;
     
-    public MockMessageProducer(MockConnection connection)
+    public MockMessageProducer(MockConnection connection, MockDestination destination)
     {
         this.connection = connection;
+        this.destination = destination;
         closed = false;
         disableMessageId = false;
         disableTimestamp = false;
@@ -38,6 +42,54 @@ public abstract class MockMessageProducer implements MessageProducer
     public boolean isClosed()
     {
         return closed;
+    }
+    
+    public void send(Message message) throws JMSException
+    {
+        send(destination, message, deliveryMode, priority, timeToLive);
+    }
+    
+    public void send(Message message, int deliveryMode, int priority, long timeToLive) throws JMSException
+    {
+        send(destination, message, deliveryMode, priority, timeToLive);
+    }
+    
+    public void send(Destination destination, Message message) throws JMSException
+    {
+        send(destination, message, deliveryMode, priority, timeToLive);
+    }
+    
+    public void send(Destination destination, Message message, int deliveryMode, int priority, long timeToLive) throws JMSException
+    {
+        connection.throwJMSException();
+        if(isClosed())
+        {
+            throw new JMSException("Producer is closed");
+        }
+        if(null == destination)
+        {
+            throw new InvalidDestinationException("destination must not be null");
+        }
+        if(destination instanceof MockQueue)
+        {
+            setJMSProperties(message, deliveryMode, priority, timeToLive);
+            ((MockQueue)destination).addMessage(message);
+        }
+        else if(destination instanceof MockTopic)
+        {
+            setJMSProperties(message, deliveryMode, priority, timeToLive);
+            ((MockTopic)destination).addMessage(message);
+        }
+        else
+        {
+            throw new InvalidDestinationException("destination must be an instance of MockQueue or MockTopic");
+        }
+    }
+    
+    public Destination getDestination() throws JMSException
+    {
+        connection.throwJMSException();
+        return destination;
     }
 
     public void close() throws JMSException
@@ -106,12 +158,7 @@ public abstract class MockMessageProducer implements MessageProducer
         return timeToLive;
     }
 
-    protected void setJMSProperties(Message message) throws JMSException
-    {
-        setJMSProperties(message, deliveryMode, priority, timeToLive);
-    }
-
-    protected void setJMSProperties(Message message, int deliveryMode, int priority, long timeToLive) throws JMSException
+    private void setJMSProperties(Message message, int deliveryMode, int priority, long timeToLive) throws JMSException
     {
         message.setJMSDeliveryMode(deliveryMode);
         message.setJMSPriority(priority);
@@ -140,10 +187,5 @@ public abstract class MockMessageProducer implements MessageProducer
         {
             ((StreamMessage)message).reset();
         }
-    }
-    
-    protected MockConnection getConnection()
-    {
-        return connection;
     }
 }

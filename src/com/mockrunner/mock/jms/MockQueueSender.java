@@ -1,6 +1,5 @@
 package com.mockrunner.mock.jms;
 
-import javax.jms.InvalidDestinationException;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Queue;
@@ -11,83 +10,33 @@ import javax.jms.QueueSender;
  */
 public class MockQueueSender extends MockMessageProducer implements QueueSender
 {
-    private MockQueue queue;
-
     public MockQueueSender(MockConnection connection, MockQueue queue)
     {
-        super(connection);
-        this.queue = queue; 
+        super(connection, queue);
     }
-     
+
     public Queue getQueue() throws JMSException
     {
-        getConnection().throwJMSException();
-        return queue;
+        return (Queue)getDestination();
     }
 
     public void send(Message message) throws JMSException
     {
-        getConnection().throwJMSException();
-        if(isClosed())
-        {
-            throw new JMSException("Sender is closed");
-        }
-        if(null == queue)
-        {
-            throw new InvalidDestinationException("Queue must not be null");
-        }
-        setJMSProperties(message);
-        queue.addMessage(message);
+        super.send(message);
     }
 
     public void send(Message message, int deliveryMode, int priority, long timeToLive) throws JMSException
     {
-        getConnection().throwJMSException();
-        if(isClosed())
-        {
-            throw new JMSException("Sender is closed");
-        }
-        if(null == queue)
-        {
-            throw new InvalidDestinationException("Queue must not be null");
-        }
-        setJMSProperties(message, deliveryMode, priority, timeToLive);
-        queue.addMessage(message);
+        super.send(message, deliveryMode, priority, timeToLive);
     }
 
     public void send(Queue queue, Message message) throws JMSException
     {
-        getConnection().throwJMSException();
-        if(isClosed())
-        {
-            throw new JMSException("Sender is closed");
-        }
-        if(null == queue)
-        {
-            throw new InvalidDestinationException("Queue must not be null");
-        }
-        setJMSProperties(message);
-        if(queue instanceof MockQueue)
-        {
-            ((MockQueue)queue).addMessage(message);
-        }
+        super.send(queue, message);
     }
 
     public void send(Queue queue, Message message, int deliveryMode, int priority, long timeToLive) throws JMSException
     {
-        getConnection().throwJMSException();
-        if(isClosed())
-        {
-            throw new JMSException("Sender is closed");
-        }
-        if(null == queue)
-        {
-            throw new InvalidDestinationException("Queue must not be null");
-        }
-        setJMSProperties(message, deliveryMode, priority, timeToLive);
-        if(queue instanceof MockQueue)
-        {
-            ((MockQueue)queue).addMessage(message);
-        }
-    } 
+        super.send(queue, message, deliveryMode, priority, timeToLive);
+    }
 }
