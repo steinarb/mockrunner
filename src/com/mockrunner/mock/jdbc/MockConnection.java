@@ -20,8 +20,8 @@ import com.mockobjects.sql.MockDatabaseMetaData;
  */
 public class MockConnection implements Connection
 {
-    private StatementHandler statementHandler;
-    private PreparedStatementHandler preparedStatementHandler;
+    private StatementResultSetHandler statementHandler;
+    private PreparedStatementResultSetHandler preparedStatementHandler;
     private Map preparedStatementMap;
     private boolean closed;
     private boolean autoCommit;
@@ -33,8 +33,8 @@ public class MockConnection implements Connection
     
     public MockConnection()
     {
-        statementHandler = new StatementHandler();
-        preparedStatementHandler = new PreparedStatementHandler();
+        statementHandler = new StatementResultSetHandler();
+        preparedStatementHandler = new PreparedStatementResultSetHandler();
         closed = false;
         autoCommit = false;
         readOnly = false;
@@ -44,12 +44,12 @@ public class MockConnection implements Connection
         catalog = null;
     }
     
-    public StatementHandler getStatementHandler()
+    public StatementResultSetHandler getStatementResultSetHandler()
     {
         return statementHandler;
     }
     
-    public PreparedStatementHandler getPreparedStatementHandler()
+    public PreparedStatementResultSetHandler getPreparedStatementResultSetHandler()
     {
         return preparedStatementHandler;
     }
@@ -57,21 +57,21 @@ public class MockConnection implements Connection
     public Statement createStatement() throws SQLException
     {
         MockStatement statement = new MockStatement(this);
-        getStatementHandler().addStatement(statement);
+        getStatementResultSetHandler().addStatement(statement);
         return statement;
     }
     
     public Statement createStatement(int resultSetType, int resultSetConcurrency) throws SQLException
     {
         MockStatement statement = new MockStatement(this, resultSetType, resultSetConcurrency);
-        getStatementHandler().addStatement(statement);
+        getStatementResultSetHandler().addStatement(statement);
         return statement;
     }
 
     public Statement createStatement(int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException
     {
         MockStatement statement = new MockStatement(this, resultSetType, resultSetConcurrency, resultSetHoldability);
-        getStatementHandler().addStatement(statement);
+        getStatementResultSetHandler().addStatement(statement);
         return statement;
     }
   
@@ -93,21 +93,21 @@ public class MockConnection implements Connection
     public PreparedStatement prepareStatement(String sql) throws SQLException
     {
         MockPreparedStatement statement = new MockPreparedStatement(this, sql);
-        getPreparedStatementHandler().addPreparedStatement(statement);
+        getPreparedStatementResultSetHandler().addPreparedStatement(statement);
         return statement;
     }
 
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency) throws SQLException
     {
         MockPreparedStatement statement = new MockPreparedStatement(this, sql, resultSetType, resultSetConcurrency);
-        getPreparedStatementHandler().addPreparedStatement(statement);
+        getPreparedStatementResultSetHandler().addPreparedStatement(statement);
         return statement;
     }
     
     public PreparedStatement prepareStatement(String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability) throws SQLException
     {
         MockPreparedStatement statement = new MockPreparedStatement(this, sql, resultSetType, resultSetConcurrency, resultSetHoldability);
-        getPreparedStatementHandler().addPreparedStatement(statement);
+        getPreparedStatementResultSetHandler().addPreparedStatement(statement);
         return statement;
     }
 

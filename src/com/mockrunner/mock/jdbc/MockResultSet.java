@@ -28,6 +28,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.CollectionUtil;
 import com.mockrunner.util.StreamUtil;
 
@@ -180,11 +181,7 @@ public class MockResultSet implements ResultSet
      */
     public void addRow(Object[] values)
     {
-        List valueList = new ArrayList();
-        for(int ii = 0; ii < values.length; ii++)
-        {   
-            valueList.add(values[ii]);
-        }
+        List valueList = ArrayUtil.getListFromObjectArray(values);
         addRow(valueList);
     }
     
@@ -295,11 +292,7 @@ public class MockResultSet implements ResultSet
      */
     public void addColumn(String columnName, Object[] values)
     {
-        List columnValues = new ArrayList();
-        for(int ii = 0; ii < values.length; ii++)
-        {
-            columnValues.add(values[ii]);
-        }
+        List columnValues = ArrayUtil.getListFromObjectArray(values);
         addColumn(columnName, columnValues);
     }
     

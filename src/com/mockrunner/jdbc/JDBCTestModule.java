@@ -31,7 +31,7 @@ public class JDBCTestModule
      * as <i>insert</i>.
      * @param caseSensitive enable or disable case sensitivity
      */
-    public void setPreparedStatementCaseSensitive(boolean caseSensitive)
+    public void setCaseSensitive(boolean caseSensitive)
     {
         this.caseSensitive = caseSensitive;
     }
@@ -44,9 +44,9 @@ public class JDBCTestModule
      * exactly. If the original statement is <i>insert into mytable values(?, ?, ?)</i>
      * <code>verifyPreparedStatementPresent("insert into mytable")</code>
      * will pass.
-     * @param caseSensitive enable or disable exact matching
+     * @param exactMatch enable or disable exact matching
      */
-    public void setPreparedStatementExactMatch(boolean exactMatch)
+    public void setExactMatch(boolean exactMatch)
     {
         this.exactMatch = exactMatch;
     }
@@ -70,7 +70,7 @@ public class JDBCTestModule
      */
     public List getStatements()
     {
-        return mockFactory.getMockConnection().getStatementHandler().getStatements();
+        return mockFactory.getMockConnection().getStatementResultSetHandler().getStatements();
     }
     
     /**
@@ -93,7 +93,7 @@ public class JDBCTestModule
      * If there are more than one {@link com.mockrunner.mock.jdbc.MockPreparedStatement}
      * objects with the specified SQL, the first one will be returned.
      * Please note that you can modify the search parameters with 
-     * {@link #setPreparedStatementCaseSensitive} and {@link #setPreparedStatementExactMatch}.
+     * {@link #setCaseSensitive} and {@link #setExactMatch}.
      * @param sql the SQL statement used to create the <code>PreparedStatement</code>
      * @return the <code>PreparedStatement</code> or <code>null</code>, if there is no macth
      */
@@ -113,21 +113,20 @@ public class JDBCTestModule
      */
     public List getPreparedStatements()
     {
-        return mockFactory.getMockConnection().getPreparedStatementHandler().getPreparedStatements();
+        return mockFactory.getMockConnection().getPreparedStatementResultSetHandler().getPreparedStatements();
     }
     
     /**
      * Returns all {@link com.mockrunner.mock.jdbc.MockPreparedStatement} with
      * the specified SQL statement as a <code>List</code>. If there are no matches, an empty
      * <code>List</code> will be returned. Please note that you can modify
-     * the search parameters with {@link #setPreparedStatementCaseSensitive} and
-     * {@link #setPreparedStatementExactMatch}.
+     * the search parameters with {@link #setCaseSensitive} and {@link #setExactMatch}.
      * @param sql the SQL statement used to create the <code>PreparedStatement</code>
      * @return the <code>List</code> of <code>PreparedStatement</code> objects
      */
     public List getPreparedStatements(String sql)
     {
-        Map sqlStatements = mockFactory.getMockConnection().getPreparedStatementHandler().getPreparedStatementMap();
+        Map sqlStatements = mockFactory.getMockConnection().getPreparedStatementResultSetHandler().getPreparedStatementMap();
         return SearchUtil.getMatchingObjects(sqlStatements, sql, caseSensitive, exactMatch); 
     }
     
