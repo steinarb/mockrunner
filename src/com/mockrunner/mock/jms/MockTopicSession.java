@@ -9,8 +9,6 @@ import javax.jms.TopicSubscriber;
 
 /**
  * Mock implementation of JMS <code>TopicSession</code>.
- * Please note that message selectors are not supported
- * at the moment.
  */
 public class MockTopicSession extends MockSession implements TopicSession
 {

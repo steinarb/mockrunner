@@ -45,6 +45,8 @@ import com.mockrunner.jms.TransmissionManagerWrapper;
  * transaction is committed or rolled back, so
  * you can test this and rely on the container for
  * the rest.
+ * Also note that message selectors are not supported
+ * at the moment.
  */
 public class MockSession implements Session
 {
