@@ -1,5 +1,6 @@
 package com.mockrunner.test.consistency;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mockrunner.test.consistency.JavaLineParser.Block;
@@ -88,10 +89,14 @@ public class JavaLineParserTest extends TestCase
     public void testParseValid() throws Exception
     {
         JavaLineParser parser = new JavaLineParser(getValidTestCode());
-        parser.addLine("import java.io.FileReader");
-        parser.addLine("java.io.FileInputStream");
+        List lineList = new ArrayList();
+        lineList.add("import java.io.FileReader");
+        lineList.add("java.io.FileInputStream");
+        parser.addLines(lineList);
         parser.addLine("blic clas");
-        parser.addBlock("public test()");
+        List blockList = new ArrayList();
+        blockList.add("public test()");
+        parser.addBlocks(blockList);
         parser.addBlock("anotherMethod");
         List result = parser.parse();
         assertEquals(5, result.size());
