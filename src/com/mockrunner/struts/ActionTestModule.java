@@ -116,7 +116,7 @@ public class ActionTestModule extends HTMLOutputModule
     /**
      * Name of the key under which errors are stored. Default is
      * <code>Globals.ERROR_KEY</code>.
-     * @param messageAttributeKey the message key
+     * @param errorAttributeKey the message key
      */
     public void setErrorAttributeKey(String errorAttributeKey)
     {

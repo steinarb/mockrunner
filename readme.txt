@@ -172,10 +172,11 @@ regexp 1.3
 http://jakarta.apache.org/regexp
 jakarta-regexp-1.3.jar (from JarAnalyzer 0.92 release)
 
-IMPORTANT NOTE: There is a problem when using the JUnit GUI testrunners
-together with Jakarta commons logging. If you are facing strange exceptions
-regarding logger configuration, please put mockrunner.jar before junit.jar
-in your classpath.
+IMPORTANT NOTE: In order to fix problems with JUnits TestCaseClassLoader, all
+Mockrunner jar files contain an excluded.properties file including all org.apache,
+com.mockrunner and org.mockejb classes. If you are facing classloading problems,
+put the mockrunner.jar before junit.jar in your classpath or turn of class
+reloading in JUnit.
 
 For suggestions, remarks or questions you can use the forums on
 Sourceforge (http://sourceforge.net/projects/mockrunner/) or 
