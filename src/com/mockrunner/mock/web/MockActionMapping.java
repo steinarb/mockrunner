@@ -61,7 +61,7 @@ public class MockActionMapping extends ActionMapping
      */
     public ActionForward getInputForward()
     {
-        return new MockActionForward(input, input, false);
+        return new MockActionForward(getInput(), getInput(), false);
     }
 
     public String toString()
