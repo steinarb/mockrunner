@@ -388,6 +388,10 @@ public class MockSession implements Session
     
     public MessageConsumer createConsumer(Destination destination, String messageSelector, boolean noLocal) throws JMSException
     {
+		if(null == destination)
+		{
+			throw new RuntimeException("destination must not be null");
+		}
         if(destination instanceof MockQueue)
         {
             getConnection().throwJMSException();      
@@ -408,6 +412,10 @@ public class MockSession implements Session
     
     public MessageProducer createProducer(Destination destination) throws JMSException
     {
+        if(null == destination)
+        {
+        	throw new RuntimeException("destination must not be null");
+        }
         if(destination instanceof MockQueue)
         {
             getConnection().throwJMSException();

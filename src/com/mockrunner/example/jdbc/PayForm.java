@@ -10,7 +10,6 @@ public class PayForm extends ActionForm
     private String customerId;
     private String billId;
     private double amount;
-    private String name;
       
     public double getAmount()
     {

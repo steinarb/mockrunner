@@ -29,7 +29,6 @@ public class AdapterConsistencyTest extends TestCase
     private Map adapterMap;
     private Map exceptionMap;
     private Map failureMap;
-    private List exceptions;
     
     protected void setUp() throws Exception
     {
