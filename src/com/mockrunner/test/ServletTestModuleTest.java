@@ -35,20 +35,12 @@ public class ServletTestModuleTest extends BaseTestCase
         assertTrue(servlet.wasDoTraceCalled());
     }
     
-    public void testDoFilter()
-    {
-        TestFilter filter = (TestFilter)module.createFilter(TestFilter.class);
-        module.doFilter();
-        assertTrue(filter.wasDoFilterCalled());
-        assertFalse(getMockObjectFactory().getMockFilterChain() == filter.getLastFilterChain());
-    }
-    
     public void testFilterChain()
     {
         TestServlet servlet = (TestServlet)module.createServlet(TestServlet.class);
-        TestFilter filter1 = (TestFilter)module.createAndAddFilter(TestFilter.class);
-        TestFilter filter2 = (TestFilter)module.createAndAddFilter(TestFilter.class);
-        TestFilter filter3 = (TestFilter)module.createAndAddFilter(TestFilter.class);
+        TestFilter filter1 = (TestFilter)module.createFilter(TestFilter.class);
+        TestFilter filter2 = (TestFilter)module.createFilter(TestFilter.class);
+        TestFilter filter3 = (TestFilter)module.createFilter(TestFilter.class);
         module.doGet();
         assertTrue(filter1.wasInitCalled());
         assertTrue(filter2.wasInitCalled());

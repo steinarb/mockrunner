@@ -2,23 +2,23 @@ package com.mockrunner.servlet;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
-import com.mockrunner.mock.MockFilterChain;
 
 /**
  * Module for servlet and filter tests. Can test
- * single servlets and filters or simulate a filter
+ * single servlets and filters and simulate a filter
  * chain.
  */
 public class ServletTestModule extends HTMLOutputModule
 {
     private MockObjectFactory mockFactory;
     private HttpServlet servlet;
-    private Filter filter;
     private boolean doChain;
       
     public ServletTestModule(MockObjectFactory mockFactory)
@@ -68,15 +68,14 @@ public class ServletTestModule extends HTMLOutputModule
     }
     
     /**
-     * Creates a filter and initializes it. <i>filterClass</i> must
-     * be of the type <code>Filter</code>, otherwise a
-     * <code>RuntimeException</code> will be thrown.
-     * Sets the filter as the current filter without adding
-     * it to the filter chain. If you set <i>doChain</i> to
-     * <code>true</code> only filters added with one of the
-     * <code>add</code> methods will be called while going
-     * through the chain. The purpose of this method is to test
-     * one filter without interaction with other filters or servlets.
+     * Creates a filter, initializes it and adds it to the
+     * filter chain. <i>filterClass</i> must be of the type 
+     * <code>Filter</code>, otherwise a <code>RuntimeException</code> 
+     * will be thrown. You can loop through the filter chain with
+     * {@link #doFilter}. If you set <i>doChain</i> to
+     * <code>true</code> every call of one of the servlet methods 
+     * will go through the filter chain before calling the servlet 
+     * method.
      * @param filterClass the class of the filter
      * @return instance of <code>Filter</code>
      * @throws RuntimeException if <code>filterClass</code> is not an
@@ -84,74 +83,44 @@ public class ServletTestModule extends HTMLOutputModule
      */
     public Filter createFilter(Class filterClass)
     {
-        filter = createFilterInstance(filterClass);
-        return filter;
+        if(!Filter.class.isAssignableFrom(filterClass))
+        {
+            throw new RuntimeException("filterClass must be an instance of javax.servlet.Filter");
+        }
+        try
+        {
+            Filter theFilter = (Filter)filterClass.newInstance();
+            theFilter.init(mockFactory.getMockFilterConfig());
+            mockFactory.getMockFilterChain().addFilter(theFilter);
+            return theFilter;
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
     }
     
     /**
-     * Returns the current filter.
-     * @return the filter
-     */
-    public Filter getFilter()
-    {
-        return filter;
-    }
-
-    /**
-     * Creates a filter and initializes it. <i>filterClass</i> must
-     * be of the type <code>Filter</code>, otherwise a
-     * <code>RuntimeException</code> will be thrown.
-     * Sets the filter as the current filter and adds
-     * it to the filter chain. If you set <i>doChain</i> to
-     * <code>true</code> (use {@link #setDoChain}) only filters added 
-     * with this or one of the other <code>add</code> methods will be 
-     * called while going through the chain.
-     * @param filterClass the class of the filter
-     * @return instance of <code>Filter</code>
-     * @throws RuntimeException if <code>filterClass</code> is not an
-     *         instance of <code>Filter</code>
-     */
-    public Filter createAndAddFilter(Class filterClass)
-    {
-        createFilter(filterClass);
-        mockFactory.getMockFilterChain().addFilter(filter);
-        return filter;
-    }
-
-    /**
-     * Creates a filter and initializes it. <i>filterClass</i> must
-     * be of the type <code>Filter</code>, otherwise a
-     * <code>RuntimeException</code> will be thrown.
-     * This method doesn't set the filter as the current filter,
-     * it simply adds it to the filter chain. The current filter
-     * will be kept untouched. If you set <i>doChain</i> to
-     * <code>true</code> (use {@link #setDoChain}) only filters added
-     * with this or one of the other <code>add</code> methods will be 
-     * called while going through the chain.
-     * @param filterClass the class of the filter
-     * @throws RuntimeException if <code>filterClass</code> is not an
-     *         instance of <code>Filter</code>
-     */
-    public void addFilter(Class filterClass)
-    {
-        mockFactory.getMockFilterChain().addFilter(createFilterInstance(filterClass));
-    }
-
-    /**
-     * Adds the specified filter to the filter chain.
-     * This method doesn't set the filter as the current filter.
-     * Furthermore the filter will not be initialized by calling the
-     * <code>init</code> method. You have to do that on your own
-     * using the {@link com.mockrunner.mock.MockFilterConfig} returned
-     * by {@link com.mockrunner.base.MockObjectFactory#getMockFilterConfig}.
-     * If you set <i>doChain</i> to <code>true</code> (use {@link #setDoChain}) 
-     * only filters added with this or one of the other <code>add</code> methods 
-     * will be called while going through the chain.
+     * Adds the specified filter it to the filter chain without
+     * initializing it. 
+     * You have to set the <code>FilterConfig</code> on your own.
+     * Usually you can use 
+     * {@link com.mockrunner.base.MockObjectFactory#getMockFilterConfig}.
      * @param filter the filter
      */
     public void addFilter(Filter filter)
     {
         mockFactory.getMockFilterChain().addFilter(filter);
+    }
+    
+    /**
+     * Deletes all filters in the filter chain.
+     */
+    public void releaseFilters()
+    {
+        mockFactory.getMockFilterChain().release();
+        mockFactory.getMockFilterChain().setServlet(servlet);
     }
 
     /**
@@ -167,40 +136,17 @@ public class ServletTestModule extends HTMLOutputModule
     }
     
     /**
-     * Calls the current filters <code>doFilter</code> method.
-     * Calls only the current filter without going through the 
-     * filter chain, regardless of the <code>doChain</code> setting.
-     */
-    public void doFilter()
-    {
-        try
-        {
-            MockFilterChain newChain = mockFactory.createNewMockFilterChain();
-            newChain.addFilter(filter);
-            filter.doFilter(mockFactory.getMockRequest(), mockFactory.getMockResponse(), newChain);
-        }
-        catch(Exception exc)
-        {
-            exc.printStackTrace();
-            throw new RuntimeException(exc.getMessage());
-        }
-    }
-    
-    /**
      * Loops through the filter chain and calls the current servlets
      * <code>service</code> method at the end (only if a current servlet
-     * is set). Useful if you want to test the interaction of filters
-     * and servlets or if a servlet needs some filters to work properly.
+     * is set). You can use it to test single filters or the interaction 
+     * of filters and servlets.
      * If you set <i>doChain</i> to <code>true</code> (use {@link #setDoChain}),
      * this method is called before any call of a servlet method. If a filter
      * does not call it's chains <code>doFilter</code> method, the chain
      * breaks and the servlet will not be called (just like it in the
      * real container).
-     * Only filters added with one of the <code>add</code> methods will be 
-     * called while going through the chain. The current filter is ignored
-     * if it is not in the chain.
      */
-    public void doChain()
+    public void doFilter()
     {
         try
         {
@@ -307,6 +253,34 @@ public class ServletTestModule extends HTMLOutputModule
     }
     
     /**
+     * Returns the last request from the filter chain. Since
+     * filters can replace the request with a request wrapper,
+     * this method makes only sense after calling at least
+     * one filter, e.g. after calling {@link #doFilter} or
+     * after calling one servlet method with <i>doChain</i> 
+     * set to <code>true</code>.
+     * @return the filtered request
+     */  
+    public ServletRequest getFilteredRequest()
+    {
+        return mockFactory.getMockFilterChain().getLastRequest();
+    }
+    
+    /**
+     * Returns the last resposne from the filter chain. Since
+     * filters can replace the resposne with a resposne wrapper,
+     * this method makes only sense after calling at least
+     * one filter, e.g. after calling {@link #doFilter} or
+     * after calling one servlet method with <i>doChain</i> 
+     * set to <code>true</code>.
+     * @return the filtered resposne
+     */  
+    public ServletResponse getFilteredResponse()
+    {
+        return mockFactory.getMockFilterChain().getLastResponse();
+    }
+    
+    /**
      * Returns the servlet output as a string. Flushes the output
      * before returning it.
      * @return the servlet output
@@ -358,7 +332,7 @@ public class ServletTestModule extends HTMLOutputModule
         {
             if(doChain)
             { 
-                doChain(); 
+                doFilter(); 
             }
             else
             {
@@ -370,24 +344,5 @@ public class ServletTestModule extends HTMLOutputModule
             exc.printStackTrace();
             throw new RuntimeException(exc.getMessage());
         }
-    }
-    
-    private Filter createFilterInstance(Class filterClass)
-    {
-        if(!Filter.class.isAssignableFrom(filterClass))
-        {
-            throw new RuntimeException("filterClass must be an instance of javax.servlet.Filter");
-        }
-        try
-        {
-            Filter theFilter = (Filter)filterClass.newInstance();
-            theFilter.init(mockFactory.getMockFilterConfig());
-            return theFilter;
-        }
-        catch (Exception exc)
-        {
-            exc.printStackTrace();
-            throw new RuntimeException(exc.getMessage());
-        }
-    }   
+    }  
 }
