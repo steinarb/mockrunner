@@ -1,5 +1,6 @@
 package com.mockrunner.mock.jms;
 
+import javax.jms.InvalidDestinationException;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Topic;
@@ -26,24 +27,67 @@ public class MockTopicPublisher extends MockMessageProducer implements TopicPubl
 
     public void publish(Message message) throws JMSException
     {
-        // TODO Auto-generated method stub
-
+        getConnection().throwJMSException();
+        if(isClosed())
+        {
+            throw new JMSException("Publisher is closed");
+        }
+        if(null == topic)
+        {
+            throw new InvalidDestinationException("Topic must not be null");
+        }
+        setJMSProperties(message);
+        topic.addMessage(message);
     }
 
     public void publish(Message message, int deliveryMode, int priority, long timeToLive) throws JMSException
     {
-        // TODO Auto-generated method stub
-
+        getConnection().throwJMSException();
+        if(isClosed())
+        {
+            throw new JMSException("Publisher is closed");
+        }
+        if(null == topic)
+        {
+            throw new InvalidDestinationException("Topic must not be null");
+        }
+        setJMSProperties(message, deliveryMode, priority, timeToLive);
+        topic.addMessage(message);
     }
 
     public void publish(Topic topic, Message message) throws JMSException
     {
-        // TODO Auto-generated method stub
-
+        getConnection().throwJMSException();
+        if(isClosed())
+        {
+            throw new JMSException("Publisher is closed");
+        }
+        if(null == topic)
+        {
+            throw new InvalidDestinationException("Topic must not be null");
+        }
+        setJMSProperties(message);
+        if(topic instanceof MockTopic)
+        {
+            ((MockTopic)topic).addMessage(message);
+        }
     }
 
     public void publish(Topic topic, Message message, int deliveryMode, int priority, long timeToLive) throws JMSException
     {
-        // TODO Auto-generated method stub
+        getConnection().throwJMSException();
+        if(isClosed())
+        {
+            throw new JMSException("Publisher is closed");
+        }
+        if(null == topic)
+        {
+            throw new InvalidDestinationException("Topic must not be null");
+        }
+        setJMSProperties(message, deliveryMode, priority, timeToLive);
+        if(topic instanceof MockTopic)
+        {
+            ((MockTopic)topic).addMessage(message);
+        }
     }
 }

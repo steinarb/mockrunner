@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.jms.InvalidDestinationException;
 import javax.jms.JMSException;
+import javax.jms.Session;
 import javax.jms.TemporaryTopic;
 import javax.jms.Topic;
 import javax.jms.TopicPublisher;
@@ -18,6 +19,11 @@ import javax.jms.TopicSubscriber;
 public class MockTopicSession extends MockSession implements TopicSession
 {
     private List tempTopics;
+    
+    public MockTopicSession(MockConnection connection)
+    {
+        this(connection, false, Session.AUTO_ACKNOWLEDGE);
+    }
     
     public MockTopicSession(MockConnection connection, boolean transacted, int acknowledgeMode)
     {

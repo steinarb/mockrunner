@@ -16,6 +16,11 @@ public class MockQueueBrowser implements QueueBrowser
     private MockQueue queue;
     private boolean closed;
     private String messageSelector;
+    
+    public MockQueueBrowser(MockConnection connection, MockQueue queue)
+    {
+        this(connection, queue, null);
+    }
 
     public MockQueueBrowser(MockConnection connection, MockQueue queue, String messageSelector)
     {
