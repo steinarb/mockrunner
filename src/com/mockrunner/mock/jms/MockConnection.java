@@ -1,5 +1,9 @@
 package com.mockrunner.mock.jms;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.jms.Connection;
 import javax.jms.ConnectionConsumer;
 import javax.jms.ConnectionMetaData;
@@ -7,6 +11,7 @@ import javax.jms.Destination;
 import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
 import javax.jms.ServerSessionPool;
+import javax.jms.Session;
 import javax.jms.Topic;
 
 import com.mockrunner.jms.DestinationManager;
@@ -17,6 +22,7 @@ import com.mockrunner.jms.DestinationManager;
 public abstract class MockConnection implements Connection
 {
     private ConnectionMetaData metaData;
+    private List sessions;
     private String clientId;
     private boolean started;
     private boolean closed;
@@ -31,6 +37,7 @@ public abstract class MockConnection implements Connection
         closed = false;
         exception = null;
         this.destinationManager = destinationManager;
+        sessions = new ArrayList();
     }
     
     /**
@@ -40,6 +47,27 @@ public abstract class MockConnection implements Connection
     public DestinationManager getDestinationManager()
     {
         return destinationManager;
+    }
+    
+    /**
+     * Returns the list of {@link MockSession} objects.
+     * @return the list
+     */
+    public List getSessionList()
+    {
+        return Collections.unmodifiableList(sessions);
+    }
+
+    /**
+     * Returns a {@link MockSession}. If there's no such
+     * {@link MockSession}, <code>null</code> is returned.
+     * @param index the index of the session object
+     * @return the session object
+     */
+    public MockSession getSession(int index)
+    {
+        if(sessions.size() <= index || index < 0) return null;
+        return (MockSession)sessions.get(index);
     }
     
     /**
@@ -140,6 +168,11 @@ public abstract class MockConnection implements Connection
     public void close() throws JMSException
     {
         throwJMSException();
+        for(int ii = 0; ii < sessions.size(); ii++)
+        {
+            Session session = (Session)sessions.get(ii);
+            session.close();
+        }
         closed = true;
     }
     
@@ -156,5 +189,10 @@ public abstract class MockConnection implements Connection
     public boolean isClosed()
     {
         return closed;
+    }
+    
+    protected List sessions()
+    {
+        return sessions;
     }
 }
