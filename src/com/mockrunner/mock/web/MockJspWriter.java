@@ -26,20 +26,20 @@ public class MockJspWriter extends JspWriter
 
     public String getOutputAsString()
     {
-        return stringWriter.toString();
-    }
-
-    public String toString()
-    {
         try
         {
             flush();
-            return getOutputAsString();
+            return stringWriter.toString();
         }
         catch(IOException exc)
         {
             throw new NestedApplicationException(exc);
         }
+    }
+
+    public String toString()
+    {
+        return getOutputAsString();
     }
 
     public void clear() throws IOException

@@ -75,4 +75,16 @@ public class MockHttpServletResponseTest extends TestCase
         response.reset();
         assertNull(response.getHeaderList("testHeader"));
     }
+    
+    public void testSetCharacterEncoding() throws IOException
+    {
+        response.setCharacterEncoding("ISO-8859-1");
+        response.getWriter().write("ה");
+        response.getWriter().flush();
+        response.getOutputStream().println("ה");
+        response.setCharacterEncoding("US-ASCII");
+        assertFalse(response.getOutputStreamContent().startsWith("הה"));
+        response.setCharacterEncoding("ISO-8859-1");
+        assertTrue(response.getOutputStreamContent().startsWith("הה"));
+    }
 }
