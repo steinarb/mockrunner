@@ -1,9 +1,9 @@
 package com.mockrunner.test.consistency;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,22 +42,29 @@ public class SynchronizeVersionUtil
             String currentFileName = (String)sourceIterator.next();
             File currentSourceFile = (File)jdbcMap.get(currentFileName);
             File currentDestFile = new File(src13Dir + currentFileName);
-            copyFiles(currentSourceFile, currentDestFile);
+            String sourceFileContent = StreamUtil.getReaderAsString(new FileReader(currentSourceFile));
+            System.out.println("Processing file " + currentSourceFile);
+            String processedFileContent = processFile(sourceFileContent);
+            writeFileContent(processedFileContent, currentDestFile);
         }
+        System.out.println("Sucessfully finished");
+    }
+    
+    private String processFile(String fileContent)
+    {
+        return fileContent;
     }
 
-    private void copyFiles(File currentSourceFile, File currentDestFile) throws FileNotFoundException, IOException
+    private void writeFileContent(String fileContent, File currentDestFile) throws FileNotFoundException, IOException
     {
         if(!currentDestFile.getParentFile().exists())
         {
             currentDestFile.getParentFile().mkdirs();
         }
-        System.out.println("Copying file " + currentSourceFile + " to " + currentDestFile);
-        FileInputStream currentSourceFileStream = new FileInputStream(currentSourceFile);
-        FileOutputStream currentDestFileStream = new FileOutputStream(currentDestFile);
-        StreamUtil.copyStream(currentSourceFileStream, currentDestFileStream);
-        currentSourceFileStream.close();
-        currentDestFileStream.flush();
-        currentDestFileStream.close();
+        System.out.println("Writing file " + currentDestFile);
+        FileWriter currentDestFileWriter = new FileWriter(currentDestFile); 
+        currentDestFileWriter.write(fileContent);
+        currentDestFileWriter.flush();
+        currentDestFileWriter.close();
     }
 }

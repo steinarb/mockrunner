@@ -24,9 +24,19 @@ public class JavaLineParser
         linesToParse.add(line);
     }
     
+    public void addLines(List lines)
+    {
+        linesToParse.addAll(lines);
+    }
+    
     public void addBlock(String blockLine)
     {
         blocksToParse.add(blockLine);
+    }
+    
+    public void addBlocks(List blocks)
+    {
+        blocksToParse.addAll(blocks);
     }
     
     public List parse()
