@@ -3,8 +3,6 @@ package com.mockrunner.jms;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.jms.JMSException;
-
 import com.mockrunner.mock.jms.MockBytesMessage;
 import com.mockrunner.mock.jms.MockMapMessage;
 import com.mockrunner.mock.jms.MockMessage;
@@ -12,10 +10,6 @@ import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockStreamMessage;
 import com.mockrunner.mock.jms.MockTextMessage;
 
-/**
- * This class is used to keep track of messages that are
- * created using sessions and topics.
- */
 public class MessageManager
 {
     private List messages;
@@ -117,15 +111,7 @@ public class MessageManager
      */
     public MockTextMessage createTextMessage(String text)
     {
-        MockTextMessage message = new MockTextMessage();
-        try
-        {
-            message.setText(text);
-        }
-        catch(JMSException exc)
-        {
-            
-        }
+        MockTextMessage message = new MockTextMessage(text);
         textMessages.add(message);
         return message;
     }
@@ -175,15 +161,7 @@ public class MessageManager
      */
     public MockObjectMessage createObjectMessage(java.io.Serializable object)
     {
-        MockObjectMessage message = new MockObjectMessage();
-        try
-        {
-            message.setObject(object);
-        }
-        catch(JMSException exc)
-        {
-            
-        }
+        MockObjectMessage message = new MockObjectMessage(object);
         objectMessages.add(message);
         return message;
     }

@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Enumeration;
 
-
 /**
  * Used to create all types of JDBC mock objects. 
  * Maintains the necessary dependencies between the mock objects.

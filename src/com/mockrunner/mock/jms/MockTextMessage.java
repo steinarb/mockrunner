@@ -9,6 +9,16 @@ import javax.jms.TextMessage;
 public class MockTextMessage extends MockMessage implements TextMessage
 {
     private String text;
+    
+    public MockTextMessage()
+    {
+
+    }
+
+    public MockTextMessage(String text)
+    {
+        this.text = text;
+    }
 
     public void setText(String text) throws JMSException
     {
@@ -18,6 +28,18 @@ public class MockTextMessage extends MockMessage implements TextMessage
     public String getText() throws JMSException
     {
         return text;
+    }
+    
+    public String toString()
+    {
+        try
+        {
+            return getText();
+        }
+        catch(JMSException exc)
+        {
+            return exc.getMessage();
+        }
     }
 
     public void clearBody() throws JMSException

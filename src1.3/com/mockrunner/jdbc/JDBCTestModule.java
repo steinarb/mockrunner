@@ -444,10 +444,10 @@ public class JDBCTestModule
      * Returns a list of all <code>Savepoint</code> objects.
      * @return the <code>List</code> of {@link com.mockrunner.mock.jdbc.MockSavepoint} objects
      */
-    public List getSavepoints()
+    /*public List getSavepoints()
     {
         return new ArrayList(mockFactory.getMockConnection().getSavepointMap().values());
-    }
+    }*/
     
     /**
      * Returns the <code>Savepoint</code> with the specified index.

@@ -34,11 +34,22 @@ public class MockQueueReceiver implements QueueReceiver
         receivedMessages = new ArrayList();
     }
     
+    /**
+     * Returns if this receiver was closed.
+     * @return <code>true</code> if this receiver is closed
+     */
     public boolean isClosed()
     {
         return closed;
     }
     
+    /**
+     * Adds a message that is immediately propagated to the
+     * message listener. If no message listener is set, the message
+     * is stored an can be received using the <code>receive</code>
+     * methods.
+     * @param message the message
+     */
     public void receiveMessage(Message message)
     {
         receivedMessages.add(message);
@@ -52,6 +63,11 @@ public class MockQueueReceiver implements QueueReceiver
         }
     }
     
+    /**
+     * Returns a <code>List</code> of all messages received
+     * with this receiver.
+     * @return the <code>List</code> of messages
+     */
     public List getReceivedMessageList()
     {
         return Collections.unmodifiableList(receivedMessages);

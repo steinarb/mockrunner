@@ -17,12 +17,17 @@ import javax.jms.StreamMessage;
 import javax.jms.TemporaryQueue;
 import javax.jms.TextMessage;
 
+import com.mockrunner.jms.MessageManager;
+import com.mockrunner.jms.TransmissionManager;
+
 /**
  * Mock implementation of JMS <code>QueueSession</code>.
  */
 public class MockQueueSession implements QueueSession
 {
     private MockQueueConnection connection;
+    private TransmissionManager transmissionManager;
+    private MessageManager messageManager;
     private boolean transacted;
     private int acknowledgeMode;
     private boolean committed;
@@ -36,6 +41,8 @@ public class MockQueueSession implements QueueSession
         this.connection = connection;
         this.transacted = transacted;
         this.acknowledgeMode = acknowledgeMode;
+        transmissionManager = new TransmissionManager(connection);
+        messageManager = new MessageManager();
         committed = false;
         rolledback = false;
         recovered = false;
@@ -43,26 +50,64 @@ public class MockQueueSession implements QueueSession
         messageListener = null;
     }
     
+    /**
+     * Returns the {@link TransmissionManager} for this connection.
+     * @return the {@link TransmissionManager}
+     */
+    public TransmissionManager getTransmissionManager()
+    {
+        return transmissionManager;
+    }
+
+    /**
+     * Returns the {@link MessageManager} for this connection.
+     * @return the {@link MessageManager}
+     */
+    public MessageManager getMessageManager()
+    {
+        return messageManager;
+    }
+    
+    /**
+     * Returns if this session was closed.
+     * @return <code>true</code> if this session is closed
+     */
     public boolean isClosed()
     {
         return closed;
     }
-
-    public boolean isCommitted()
-    {
-        return committed;
-    }
-
+    
+    /**
+     * Returns if this session was recovered.
+     * @return <code>true</code> if this session was recovered
+     */
     public boolean isRecovered()
     {
         return recovered;
     }
-
+    
+    /**
+     * Returns if the current transaction was committed.
+     * @return <code>true</code> if the transaction was committed
+     */
+    public boolean isCommitted()
+    {
+        return committed;
+    }
+    
+    /**
+     * Returns if the current transaction was rolled back.
+     * @return <code>true</code> if the transaction was rolled back
+     */
     public boolean isRolledback()
     {
         return rolledback;
     }
-    
+
+    /**
+     * Returns the acknowledge mode for this session.
+     * @return the acknowledge mode
+     */
     public int getAcknowledgeMode()
     {
         return acknowledgeMode;
@@ -76,15 +121,7 @@ public class MockQueueSession implements QueueSession
         {
             throw new JMSException("Queue with name " + name + " not found");
         }
-        try
-        {
-            queue = (MockQueue)queue.clone();
-        }
-        catch(CloneNotSupportedException exc)
-        {
-            throw new JMSException(exc.getMessage());
-        }
-        queue.setQueueSession(this);
+        addSessionToQueue(queue);
         return queue;
     }
     
@@ -92,7 +129,7 @@ public class MockQueueSession implements QueueSession
     {
         connection.throwJMSException();
         MockTemporaryQueue queue = connection.getDestinationManager().createTemporaryQueue();
-        queue.setQueueSession(this);
+        addSessionToQueue(queue);
         return queue;
     }
 
@@ -109,7 +146,8 @@ public class MockQueueSession implements QueueSession
         {
             throw new JMSException("queue must be an instance of MockQueue");
         }
-        return connection.getTransmissionManager().createQueueReceiver((MockQueue)queue, messageSelector);
+        addSessionToQueue(queue);
+        return getTransmissionManager().createQueueReceiver((MockQueue)queue, messageSelector);
     }
 
     public QueueSender createSender(Queue queue) throws JMSException
@@ -119,7 +157,8 @@ public class MockQueueSession implements QueueSession
         {
             throw new JMSException("queue must be an instance of MockQueue");
         }
-        return connection.getTransmissionManager().createQueueSender((MockQueue)queue);
+        addSessionToQueue(queue);
+        return getTransmissionManager().createQueueSender((MockQueue)queue);
     }
 
     public QueueBrowser createBrowser(Queue queue) throws JMSException
@@ -135,25 +174,26 @@ public class MockQueueSession implements QueueSession
         {
             throw new JMSException("queue must be an instance of MockQueue");
         }
-        return connection.getTransmissionManager().createQueueBrowser((MockQueue)queue, messageSelector);
+        addSessionToQueue(queue);
+        return getTransmissionManager().createQueueBrowser((MockQueue)queue, messageSelector);
     }
 
     public BytesMessage createBytesMessage() throws JMSException
     {
         connection.throwJMSException();
-        return connection.getMessageManager().createBytesMessage();
+        return getMessageManager().createBytesMessage();
     }
 
     public MapMessage createMapMessage() throws JMSException
     {
         connection.throwJMSException();
-        return connection.getMessageManager().createMapMessage();
+        return getMessageManager().createMapMessage();
     }
 
     public Message createMessage() throws JMSException
     {
         connection.throwJMSException();
-        return connection.getMessageManager().createMessage();
+        return getMessageManager().createMessage();
     }
 
     public ObjectMessage createObjectMessage() throws JMSException
@@ -165,13 +205,13 @@ public class MockQueueSession implements QueueSession
     public ObjectMessage createObjectMessage(Serializable object) throws JMSException
     {
         connection.throwJMSException();
-        return connection.getMessageManager().createObjectMessage(object);
+        return getMessageManager().createObjectMessage(object);
     }
 
     public StreamMessage createStreamMessage() throws JMSException
     {
         connection.throwJMSException();
-        return connection.getMessageManager().createStreamMessage();
+        return getMessageManager().createStreamMessage();
     }
 
     public TextMessage createTextMessage() throws JMSException
@@ -183,7 +223,7 @@ public class MockQueueSession implements QueueSession
     public TextMessage createTextMessage(String text) throws JMSException
     {
         connection.throwJMSException();
-        return connection.getMessageManager().createTextMessage(text);
+        return getMessageManager().createTextMessage(text);
     }
 
     public boolean getTransacted() throws JMSException
@@ -231,5 +271,13 @@ public class MockQueueSession implements QueueSession
     public void run()
     {
         
+    }
+    
+    private void addSessionToQueue(Queue queue)
+    {
+        if(queue instanceof MockQueue)
+        {
+            ((MockQueue)queue).addQueueSession(this);
+        }
     }
 }

@@ -5,9 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Enumeration;
 
-
 /**
- * Used to create all types of JDBC and EJB mock objects. 
+ * Used to create all types of JDBC mock objects. 
  * Maintains the necessary dependencies between the mock objects.
  * If you use the mock objects returned by this
  * factory in your tests you can be sure, they are all
@@ -26,7 +25,7 @@ public class JDBCMockObjectFactory
     {
         dataSource = new MockDataSource();
         driver = new MockDriver();
-        connection = new MockConnection();
+        connection = new MockConnection(); 
         setUpDependencies();
     }
     

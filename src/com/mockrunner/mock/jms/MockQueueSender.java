@@ -33,6 +33,15 @@ public class MockQueueSender implements QueueSender
         closed = false;
     }
     
+    /**
+     * Returns if this sender was closed.
+     * @return <code>true</code> if this sender is closed
+     */
+    public boolean isClosed()
+    {
+        return closed;
+    }
+    
     public Queue getQueue() throws JMSException
     {
         connection.throwJMSException();
@@ -154,12 +163,7 @@ public class MockQueueSender implements QueueSender
         connection.throwJMSException();
         closed = true;
     }
-    
-    public boolean isClosed()
-    {
-        return closed;
-    }
-    
+
     private void setJMSProperties(Message message) throws JMSException
     {
         setJMSProperties(message, deliveryMode, priority, timeToLive);

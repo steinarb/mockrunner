@@ -1,6 +1,13 @@
 package com.mockrunner.test.jms;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.QueueBrowser;
 import javax.jms.QueueReceiver;
@@ -14,19 +21,28 @@ import junit.framework.TestCase;
 import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.jms.MessageManager;
 import com.mockrunner.jms.TransmissionManager;
+import com.mockrunner.mock.jms.MockMessage;
+import com.mockrunner.mock.jms.MockObjectMessage;
+import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueConnection;
+import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSession;
+import com.mockrunner.mock.jms.MockTextMessage;
 
 public class MockQueueSessionTest extends TestCase
 {
     private MockQueueConnection connection;
     private MockQueueSession session;
+    private MockQueueSession anotherSession;
+    private MockQueue queue1;
+    private MockQueue queue2;
      
     protected void setUp() throws Exception
     {
         super.setUp();
         connection = new MockQueueConnection();
         session = (MockQueueSession)connection.createQueueSession(false, QueueSession.CLIENT_ACKNOWLEDGE);
+        anotherSession = (MockQueueSession)connection.createQueueSession(false, QueueSession.CLIENT_ACKNOWLEDGE);
     }
     
     public void testCreateMessages() throws Exception
@@ -39,7 +55,7 @@ public class MockQueueSessionTest extends TestCase
         session.createMapMessage();
         session.createMapMessage();
         session.createStreamMessage();
-        MessageManager manager = connection.getMessageManager();
+        MessageManager manager = session.getMessageManager();
         assertEquals("Text1", manager.getTextMessage(0).getText());
         assertEquals("Text2", manager.getTextMessage(1).getText());
         assertNull(manager.getTextMessage(2));
@@ -68,7 +84,7 @@ public class MockQueueSessionTest extends TestCase
         Queue managerQueue2 = manager.getQueue("Queue1");
         Queue queue = session.createQueue("Queue1");
         assertTrue(managerQueue1 == managerQueue2);
-        assertFalse(queue == managerQueue1);
+        assertTrue(queue == managerQueue1);
         assertEquals("Queue1", queue.getQueueName());
         manager.createQueue("Queue2");
         assertNotNull(session.createQueue("Queue2"));
@@ -95,26 +111,30 @@ public class MockQueueSessionTest extends TestCase
     public void testCreateSenderAndReceiver() throws Exception
     {
         DestinationManager destManager = connection.getDestinationManager();
-        Queue queue1 = destManager.createQueue("Queue1");
-        Queue queue2 = destManager.createQueue("Queue2");
+        queue1 = destManager.createQueue("Queue1");
+        queue2 = destManager.createQueue("Queue2");
         QueueSender sender = session.createSender(queue1);
         session.createSender(queue2);
         session.createSender(queue1);
-        TransmissionManager transManager = connection.getTransmissionManager();
+        TransmissionManager transManager = session.getTransmissionManager();
         assertNotNull(transManager.getQueueSender(0));
         assertNotNull(transManager.getQueueSender(1));
         assertNotNull(transManager.getQueueSender(2));
         assertNull(transManager.getQueueSender(3));
         assertEquals(3, transManager.getQueueSenderList().size());
         assertTrue(sender == transManager.getQueueSender(0));
+        assertTrue(sender == transManager.getQueueSender("Queue1"));
         assertTrue(queue1 == transManager.getQueueSender(0).getQueue());
         assertTrue(queue2 == transManager.getQueueSender(1).getQueue());
         assertTrue(queue1 == transManager.getQueueSender(2).getQueue());
+        assertTrue(queue1 == transManager.getQueueSender("Queue1").getQueue());
         assertEquals(0, transManager.getQueueReceiverList().size());
         session.createReceiver(queue1);
         QueueReceiver receiver = session.createReceiver(queue2);
         assertNotNull(transManager.getQueueReceiver(0));
         assertNotNull(transManager.getQueueReceiver(1));
+        assertTrue(receiver == transManager.getQueueReceiver("Queue2"));
+        assertTrue("Queue2" == transManager.getQueueReceiver("Queue2").getQueue().getQueueName());
         assertNull(transManager.getQueueReceiver(2));
         assertTrue(receiver == transManager.getQueueReceiver(1));
         assertTrue(queue1 == transManager.getQueueReceiver(0).getQueue());
@@ -124,7 +144,198 @@ public class MockQueueSessionTest extends TestCase
         assertNotNull(transManager.getQueueBrowser(0));
         assertNull(transManager.getQueueBrowser(1));
         assertTrue(browser == transManager.getQueueBrowser(0));
+        assertTrue(browser == transManager.getQueueBrowser("Queue2"));
         assertTrue(queue2 == transManager.getQueueBrowser(0).getQueue());
         assertEquals(1, transManager.getQueueBrowserList().size());
+    }
+    
+    public void testTransmissionJMSProperties() throws Exception
+    {
+        DestinationManager destManager = connection.getDestinationManager();
+        destManager.createQueue("Queue1");
+        MockQueue queue = (MockQueue)session.createQueue("Queue1");
+        QueueSender sender = session.createSender(queue);
+        MockMessage message = new MockTextMessage("Text1");
+        message.setJMSTimestamp(0);
+        message.setJMSMessageID("xyz");
+        sender.setDisableMessageTimestamp(true);
+        sender.setDisableMessageID(true);
+        sender.setTimeToLive(0);
+        sender.setPriority(9);
+        sender.setDeliveryMode(DeliveryMode.PERSISTENT);
+        sender.send(message);
+        assertEquals(0, message.getJMSTimestamp());
+        assertEquals("xyz", message.getJMSMessageID());
+        assertEquals(0, message.getJMSExpiration());
+        assertEquals(9, message.getJMSPriority());
+        assertEquals(DeliveryMode.PERSISTENT, message.getJMSDeliveryMode());
+        sender.setDisableMessageTimestamp(false);
+        sender.setDisableMessageID(false);
+        sender.setPriority(7);
+        sender.send(message);
+        assertFalse(0 == message.getJMSTimestamp());
+        assertFalse("xyz".equals(message.getJMSMessageID()));
+        assertEquals(7, message.getJMSPriority());
+        sender.setTimeToLive(10000);
+        sender.send(message);
+        assertEquals(message.getJMSTimestamp() + 10000, message.getJMSExpiration());
+        sender.setTimeToLive(0);
+        sender.send(message);
+        assertEquals(0, message.getJMSExpiration());
+    }
+    
+    public void testTransmissionGlobalListener() throws Exception
+    {
+        DestinationManager destManager = connection.getDestinationManager();
+        destManager.createQueue("Queue1");
+        MockQueue queue = (MockQueue)session.createQueue("Queue1");
+        QueueSender sender = session.createSender(queue);
+        TestMessageListener globalListener = new TestMessageListener();
+        session.setMessageListener(globalListener);
+        sender.send(new MockTextMessage("Text1"));
+        assertEquals("Text1", ((TextMessage)globalListener.getMessage()).getText());
+        QueueReceiver receiver = session.createReceiver(queue);
+        TestMessageListener listener = new TestMessageListener();
+        receiver.setMessageListener(listener);
+        sender.send(new MockObjectMessage("Object1"));
+        assertEquals("Object1", ((ObjectMessage)globalListener.getMessage()).getObject());
+        assertNull(listener.getMessage());
+    }
+    
+    public void testTransmissionMultipleReceiversWithListener() throws Exception
+    {
+        DestinationManager destManager = connection.getDestinationManager();
+        destManager.createQueue("Queue1");
+        MockQueue queue = (MockQueue)session.createQueue("Queue1");
+        QueueSender sender = session.createSender(queue);
+        MockQueueReceiver receiver1 = (MockQueueReceiver)session.createReceiver(queue);
+        TestMessageListener listener1 = new TestMessageListener();
+        receiver1.setMessageListener(listener1);
+        MockQueueReceiver receiver2 = (MockQueueReceiver)session.createReceiver(queue);
+        TestMessageListener listener2 = new TestMessageListener();
+        receiver2.setMessageListener(listener2);
+        MockQueueReceiver receiver3 = (MockQueueReceiver)session.createReceiver(queue);
+        TestMessageListener listener3 = new TestMessageListener();
+        receiver3.setMessageListener(listener3);
+        sender.send(new MockTextMessage("Text1"));
+        assertEquals("Text1", ((TextMessage)listener1.getMessage()).getText());
+        assertNull(listener2.getMessage());
+        assertNull(listener3.getMessage());
+        assertEquals(1, receiver1.getReceivedMessageList().size());
+        assertEquals(0, receiver2.getReceivedMessageList().size());
+        assertEquals(0, receiver3.getReceivedMessageList().size());
+        sender.send(new MockTextMessage("Text2"));
+        sender.send(new MockTextMessage("Text3"));
+        assertEquals(3, receiver1.getReceivedMessageList().size());
+        assertEquals(0, receiver2.getReceivedMessageList().size());
+        assertEquals(0, receiver3.getReceivedMessageList().size());
+        destManager.createQueue("Queue2");
+        queue = (MockQueue)session.createQueue("Queue2");
+        sender = session.createSender(queue);
+        MockQueueReceiver receiver4 = (MockQueueReceiver)session.createReceiver(queue);
+        sender.send(new MockTextMessage("Text4"));
+        sender.send(new MockTextMessage("Text5"));
+        assertEquals(3, receiver1.getReceivedMessageList().size());
+        assertEquals(0, receiver2.getReceivedMessageList().size());
+        assertEquals(0, receiver3.getReceivedMessageList().size());
+        assertEquals(2, receiver4.getReceivedMessageList().size());
+        destManager.createQueue("Queue3");
+        queue = (MockQueue)session.createQueue("Queue3");
+        sender.send(queue, new MockTextMessage("Text6"));
+        assertEquals(3, receiver1.getReceivedMessageList().size());
+        assertEquals(0, receiver2.getReceivedMessageList().size());
+        assertEquals(0, receiver3.getReceivedMessageList().size());
+        assertEquals(2, receiver4.getReceivedMessageList().size());
+    }
+    
+    public void testTransmissionMultipleReceiversWithoutListener() throws Exception
+    {
+        DestinationManager destManager = connection.getDestinationManager();
+        destManager.createQueue("Queue1");
+        MockQueue queue = (MockQueue)session.createQueue("Queue1");
+        QueueSender sender = session.createSender(queue);
+        MockQueueReceiver receiver1 = (MockQueueReceiver)session.createReceiver(queue);
+        MockQueueReceiver receiver2 = (MockQueueReceiver)session.createReceiver(queue);
+        MockQueueReceiver receiver3 = (MockQueueReceiver)session.createReceiver(queue);
+        sender.send(queue, new MockTextMessage("Text1"), 1, 2, 3);
+        sender.send(new MockTextMessage("Text2"));
+        assertEquals(2, receiver1.getReceivedMessageList().size());
+        assertEquals(0, receiver2.getReceivedMessageList().size());
+        assertEquals(0, receiver3.getReceivedMessageList().size());
+        assertEquals("Text1", receiver1.receive().toString());
+        assertEquals("Text2", receiver1.receiveNoWait().toString());
+        assertNull(receiver1.receive(3));
+        destManager.createQueue("Queue2");
+        queue = (MockQueue)session.createQueue("Queue2");
+        MockQueueReceiver receiver4 = (MockQueueReceiver)session.createReceiver(queue);
+        sender.send(new MockTextMessage("Text3"));
+        assertEquals(3, receiver1.getReceivedMessageList().size());
+        assertEquals(0, receiver2.getReceivedMessageList().size());
+        assertEquals(0, receiver3.getReceivedMessageList().size());
+        assertEquals(0, receiver4.getReceivedMessageList().size());
+        sender = session.createSender(queue);
+        receiver4.setMessageListener(new TestMessageListener());
+        sender.send(new MockTextMessage("Text4"));
+        assertEquals(1, receiver4.getReceivedMessageList().size());
+        assertNull(receiver4.receive());
+    }
+    
+    public void testTransmissionMultipleSessions() throws Exception
+    {
+        DestinationManager destManager = connection.getDestinationManager();
+        destManager.createQueue("Queue1");
+        MockQueue queue = (MockQueue)session.createQueue("Queue1");
+        MockQueue anotherQueue = (MockQueue)anotherSession.createQueue("Queue1");
+        TestListMessageListener listener = new TestListMessageListener();
+        session.setMessageListener(listener);
+        MockQueueReceiver receiver = (MockQueueReceiver)anotherSession.createReceiver(queue);
+        receiver.setMessageListener(listener);
+        QueueSender sender = anotherSession.createSender(queue);
+        sender.send(new MockTextMessage("Text1"));
+        assertEquals(1, listener.getMessageList().size());
+        assertEquals("Text1", listener.getMessageList().get(0).toString());
+        MockQueueReceiver receiver2 = (MockQueueReceiver)session.createReceiver(queue);
+        receiver2.setMessageListener(listener);
+        session.setMessageListener(null);
+        sender.send(new MockTextMessage("Text2"));
+        assertEquals(2, listener.getMessageList().size());
+        assertEquals("Text2", listener.getMessageList().get(1).toString());
+        MockQueueReceiver receiver3 = (MockQueueReceiver)session.createReceiver(queue);
+        receiver3.setMessageListener(listener);
+        sender = anotherSession.createSender(anotherQueue);
+        sender.send(new MockObjectMessage(new Integer(1)));
+        assertEquals(3, listener.getMessageList().size());
+        Object object = listener.getMessageList().get(2);
+        assertEquals(new Integer(1), ((MockObjectMessage)object).getObject());
+    }
+    
+    public static class TestListMessageListener implements MessageListener
+    {
+        private List messages = new ArrayList();
+    
+        public List getMessageList()
+        {
+            return messages;
+        }
+    
+        public void onMessage(Message message)
+        {
+            messages.add(message);
+        }
+    }
+    
+    public static class TestMessageListener implements MessageListener
+    {
+        private Message message;
+        
+        public Message getMessage()
+        {
+            return message;
+        }
+        
+        public void onMessage(Message message)
+        {
+            this.message = message;
+        }
     }
 }
