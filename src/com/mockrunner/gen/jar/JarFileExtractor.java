@@ -36,10 +36,7 @@ public class JarFileExtractor
     {
         Set resultSet = new TreeSet();
         List dependendJars = jarBundle.getDependentJars();
-        if(null == dependendJars)
-        {
-            return new TreeSet();
-        }
+        if(null == dependendJars) return resultSet;
         for(int ii = 0; ii < dependendJars.size(); ii++)
         {
             JarBundle currentBundle = (JarBundle)dependendJars.get(ii);
