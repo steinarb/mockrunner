@@ -27,6 +27,11 @@ public class MockServletOutputStream extends ServletOutputStream
         return buffer.toString();
     }
     
+    public byte[] getBinaryContent()
+    {
+        return buffer.toByteArray();
+    }
+    
     public void clearContent()
     {
         buffer = new ByteArrayOutputStream();
