@@ -1,5 +1,8 @@
 package de.mockrunner.mock;
 
+/**
+ * Mock implementation of <code>HttpServletResponse</code>.
+ */
 public class MockHttpServletResponse extends com.mockobjects.servlet.MockHttpServletResponse
 {
     public String encodeURL(String url)

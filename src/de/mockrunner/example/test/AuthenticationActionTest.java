@@ -6,10 +6,9 @@ import de.mockrunner.example.AuthenticationForm;
 import de.mockrunner.example.AuthenticationStrategy;
 
 /**
- * This simple TestCase demonstrates how to use the
- * ActionTestModule. Extend your test from  
- * ActionTestCaseAdapter. The methods are 
- * self-explanatory.
+ * Example test for the {@link de.mockrunner.example.AuthenticationAction}.
+ * Demonstrates most of the features of {@link de.mockrunner.base.ActionTestModule} 
+ * resp. {@link de.mockrunner.base.ActionTestCaseAdapter}
  */
 public class AuthenticationActionTest extends ActionTestCaseAdapter
 {

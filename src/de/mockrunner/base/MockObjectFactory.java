@@ -10,8 +10,11 @@ import de.mockrunner.mock.MockPageContext;
 import de.mockrunner.mock.MockServletContext;
 
 /**
- * Used to create mockobjects and
- * maintain dependencies.
+ * Used to create all types of mock objects. Maintains
+ * the necessary dependencies between the mock objects.
+ * If you use the mock objects returned by this
+ * factory in your tests you can be sure, they are all
+ * up to date.
  */
 public class MockObjectFactory
 {
@@ -23,16 +26,25 @@ public class MockObjectFactory
     private MockActionMapping mapping;
     private MockPageContext pageContext;
 
+    /**
+     * Constructor calls {@link #createMockObjects}
+     */
     public MockObjectFactory()
     {
         createMockObjects();
     }
     
+    /**
+     * Constructor calls {@link #createMockObjectsBasedOn(MockObjectFactory)}
+     */
     public MockObjectFactory(MockObjectFactory factory)
     {
         createMockObjectsBasedOn(factory);
     }
 
+    /**
+     * Creates a new set of mock objects.
+     */
     public void createMockObjects()
     {
         createNewMockObjects();
@@ -41,6 +53,14 @@ public class MockObjectFactory
         setUpDependencies();
     }
 
+    /**
+     * Creates a set of mock objects based on another one.
+     * The created mock objects will have their own
+     * request and session objects, but they will share
+     * one <code>ServletContext</code>.
+     * @param factory the other factory
+     * @see BaseTestCase#createMockObjectFactory(MockObjectFactory)
+     */
     public void createMockObjectsBasedOn(MockObjectFactory factory)
     {
         createNewMockObjects();

@@ -14,9 +14,11 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 /**
- * Simple action to do an user authentication.
- * AuthenticationActionTest demonstrates how
- * to use the ActionTestModule.
+ * This example action simulates a simple authentication system
+ * and generates the approriate <code>ActionErrors</code> and
+ * <code>ActionMessages</code>. This action will be tested with
+ * {@link de.mockrunner.example.test.AuthenticationActionTest} in order 
+ * to demonstrate the usage of {@link de.mockrunner.base.ActionTestModule}.
  */
 public class AuthenticationAction extends Action
 {

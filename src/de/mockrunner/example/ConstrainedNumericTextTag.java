@@ -4,6 +4,12 @@ import javax.servlet.jsp.JspException;
 
 import org.apache.struts.taglib.html.TextTag;
 
+/**
+ * This example tag extends the Struts <code>TextTag</code>
+ * and adds a JavaScript handler for checking numeric constraints.
+ * Have a look at {@link de.mockrunner.example.test.ConstrainedNumericTextTagTest} to see
+ * how to test tags.
+ */
 public class ConstrainedNumericTextTag extends TextTag
 {
     private int minValue = 0;

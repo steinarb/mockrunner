@@ -7,6 +7,9 @@ import de.mockrunner.mock.MockHttpSession;
 
 import junit.framework.TestCase;
 
+/**
+ * Test for {@link de.mockrunner.mock.MockHttpSessionTest}
+ */
 public class MockHttpSessionTest extends TestCase
 {
     public MockHttpSessionTest(String arg0)

@@ -1,5 +1,8 @@
 package de.mockrunner.mock;
 
+/**
+ * Mock implementation of <code>ActionForward</code>.
+ */
 public class MockActionForward extends MockForwardConfig
 {
     public MockActionForward()

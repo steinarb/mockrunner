@@ -1,5 +1,9 @@
 package de.mockrunner.base;
 
+/**
+ * Will be thrown by the <code>verify</code> methods
+ * of all test modules.
+ */
 public class VerifyFailedException extends RuntimeException
 {
     public VerifyFailedException()

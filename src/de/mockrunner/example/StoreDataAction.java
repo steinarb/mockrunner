@@ -10,7 +10,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * Used to demonstrate multithread testing.
+ * This example action demonstrates the access to a data repository
+ * stored in the <code>ServletContext</code>. Since the repository
+ * is not thread safe we have to synchronize the access. Used to
+ * demonstrate how to do multithread testing. Check out
+ * {@link de.mockrunner.example.test.StoreDataActionTest}.
  */
 public class StoreDataAction extends Action
 {

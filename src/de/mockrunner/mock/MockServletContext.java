@@ -4,6 +4,9 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Vector;
 
+/**
+ * Mock implementation of <code>ServletContext</code>.
+ */
 public class MockServletContext extends com.mockobjects.servlet.MockServletContext
 {
     private HashMap attributes = new HashMap();
