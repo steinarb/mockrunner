@@ -28,7 +28,9 @@ public class AdapterGenerator
     public AdapterGenerator()
     {
         units = new ArrayList();
-        units.add(new ProcessingUnit(ServletTestModule.class, new StandardAdapterProcessor()));
+        List servletExcluded = new ArrayList();
+        servletExcluded.add("getOutput");
+        units.add(new ProcessingUnit(ServletTestModule.class, new StandardAdapterProcessor(), servletExcluded));
     }
     
     private void generate() throws Exception
@@ -38,7 +40,7 @@ public class AdapterGenerator
         {
             ProcessingUnit nextUnit = (ProcessingUnit)iterator.next();
             AdapterProcessor processor = nextUnit.getProcessor();
-            processor.process(nextUnit.getModule());
+            processor.process(nextUnit.getModule(), nextUnit.getExcludedMethods());
             writeOutputFile(processor);
         }
         System.out.println("Adapters successfully created");
@@ -59,16 +61,28 @@ public class AdapterGenerator
     {
         private Class module;
         private AdapterProcessor processor;
+        private List excludedMethods;
         
         public ProcessingUnit(Class module, AdapterProcessor processor)
         {
+            this(module, processor, new ArrayList());
+        }
+        
+        public ProcessingUnit(Class module, AdapterProcessor processor, List excludedMethods)
+        {
             this.module = module;
             this.processor = processor;
+            this.excludedMethods = excludedMethods;
         }
         
         public Class getModule()
         {
             return module;
+        }
+        
+        public List getExcludedMethods()
+        {
+            return excludedMethods;
         }
         
         public AdapterProcessor getProcessor()

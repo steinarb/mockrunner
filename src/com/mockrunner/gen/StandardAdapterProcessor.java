@@ -1,7 +1,10 @@
 package com.mockrunner.gen;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.base.HTMLOutputModule;
@@ -17,7 +20,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
     private String name;
     private String output;
     
-    public void process(Class module)
+    public void process(Class module, List excludedMethods)
     {
         JavaClassGenerator classGenerator = new JavaClassGenerator();
         classGenerator.setCreateJavaDocComments(true);
@@ -115,6 +118,11 @@ public class StandardAdapterProcessor implements AdapterProcessor
         classGenerator.addMethodDeclaration(htmlOutputMethod);
     }
     
+    private void addDelegatorMethods(JavaClassGenerator classGenerator, Class module, List excludedMethods, String memberName)
+    {
+        
+    }
+    
     private void addConstructors(JavaClassGenerator classGenerator)
     {
         classGenerator.addConstructorDeclaration();
@@ -123,6 +131,29 @@ public class StandardAdapterProcessor implements AdapterProcessor
         constructor.setArgumentNames(new String[] {"name"});
         constructor.setCodeLines(new String[] {"super(name);"});
         classGenerator.addConstructorDeclaration(constructor);
+    }
+    
+    private Method[] getDelegateMethods(Class module, List excludedMethods)
+    {
+        Method[] moduleMethods = module.getDeclaredMethods();
+        List delegateMethods = new ArrayList();
+        for(int ii = 0; ii < moduleMethods.length; ii++)
+        {
+            Method currentMethod = moduleMethods[ii];
+            if(shouldMethodBeAdded(currentMethod, excludedMethods))
+            {
+                delegateMethods.add(currentMethod);
+            }
+        }
+        return (Method[])delegateMethods.toArray(new Method[delegateMethods.size()]);
+    }
+    
+    private boolean shouldMethodBeAdded(Method currentMethod, List excludedMethods)
+    {
+        if(!Modifier.isPublic(currentMethod.getModifiers())) return false;
+        if(null == excludedMethods) return true;
+        if(excludedMethods.contains(currentMethod.getName())) return false;
+        return true;
     }
 
     private MethodDeclaration createProtectedMethod()
