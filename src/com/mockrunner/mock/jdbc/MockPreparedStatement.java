@@ -5,6 +5,7 @@ import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Array;
+import java.sql.BatchUpdateException;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
@@ -37,7 +38,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 {
     private PreparedStatementResultSetHandler resultSetHandler;
     private Map paramObjects = new HashMap();
-    private Map paramObjectsInBatch = new HashMap();
+    private List batchParameters = new ArrayList();
     private String sql;
     private MockParameterMetaData parameterMetaData;
     
@@ -107,12 +108,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     
     public void addBatch() throws SQLException
     {
-        Iterator keys = paramObjects.keySet().iterator();
-        while(keys.hasNext())
-        {
-            Object nextKey = keys.next();
-            paramObjectsInBatch.put(nextKey, paramObjects.get(nextKey));
-        }
+        batchParameters.add(getParameterList(paramObjects));
     }
 
     public void clearParameters() throws SQLException
@@ -122,11 +118,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public boolean execute() throws SQLException
     {
-        return super.execute(getSQL());
-    }
-    
-    protected void callExecute(String sql, boolean callExecuteQuery) throws SQLException
-    {
+        boolean callExecuteQuery = isQuery(getSQL());
         if(callExecuteQuery)
         {
             setNextResultSet(executeQuery());
@@ -135,11 +127,17 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         {
             setNextUpdateCount(executeUpdate());
         }
+        return callExecuteQuery;
     }
-
+    
     public ResultSet executeQuery() throws SQLException
     {
-        MockResultSet result = resultSetHandler.getResultSet(getSQL(), getParameterList(doesExecuteBatch()));
+        return executeQuery(getParameterList(paramObjects));
+    }
+    
+    private ResultSet executeQuery(List params) throws SQLException
+    {
+        MockResultSet result = resultSetHandler.getResultSet(getSQL(), params);
         if(null != result)
         {
             return cloneResultSet(result);
@@ -149,12 +147,32 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public int executeUpdate() throws SQLException
     {
-        Integer updateCount = resultSetHandler.getUpdateCount(getSQL(), getParameterList(doesExecuteBatch()));
+        return executeUpdate(getParameterList(paramObjects));
+    }
+    
+    private int executeUpdate(List params) throws SQLException
+    {
+        Integer updateCount = resultSetHandler.getUpdateCount(getSQL(), params);
         if(null != updateCount)
         {
             return updateCount.intValue();
         }
         return super.executeUpdate(getSQL());
+    }
+    
+    public int[] executeBatch() throws SQLException
+    {
+        int[] results = new int[batchParameters.size()];
+        if(isQuery(getSQL()))
+        {
+            throw new BatchUpdateException("SQL " + getSQL() + " returned a ResultSet.", null);
+        }
+        for(int ii = 0; ii < results.length; ii++)
+        {
+            List currentParameters = (List)batchParameters.get(ii);
+            results[ii] = executeUpdate(currentParameters);
+        }
+        return results;
     }
 
     public ResultSetMetaData getMetaData() throws SQLException
@@ -302,24 +320,15 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         setObject(parameterIndex, url);
     }
     
-    private List getParameterList(boolean useBatchParameters)
+    private List getParameterList(Map parameterMap)
     { 
-        Map params;
-        if(useBatchParameters)
-        {
-            params = paramObjectsInBatch;
-        }
-        else
-        {
-            params = paramObjects;
-        }
         ArrayList resultList = new ArrayList();
-        Iterator iterator = params.keySet().iterator();
+        Iterator iterator = parameterMap.keySet().iterator();
         while(iterator.hasNext())
         {
             Integer nextIndex = (Integer)iterator.next();
             CollectionUtil.fillList(resultList, nextIndex.intValue() + 1);
-            resultList.set(nextIndex.intValue(), params.get(nextIndex));
+            resultList.set(nextIndex.intValue(), parameterMap.get(nextIndex));
         }
         return resultList;
     }

@@ -20,7 +20,6 @@ public class MockStatement implements Statement
     private ResultSet nextResultSet = null;
     private int nextUpdateCount = -1;
     private List batches = new ArrayList();
-    private boolean executesBatch = false;
     private String cursorName = "";
     private int querySeconds = 0;
     private int maxRows = 0;
@@ -69,11 +68,6 @@ public class MockStatement implements Statement
     protected void setNextUpdateCount(int updateCount)
     {
         this.nextUpdateCount = updateCount;
-    }
-    
-    protected boolean doesExecuteBatch()
-    {
-        return executesBatch;
     }
     
     public String getCursorName()
@@ -163,22 +157,7 @@ public class MockStatement implements Statement
 
     public boolean execute(String sql) throws SQLException
     {
-        boolean callExecuteQuery;
-        Boolean returnsResultSet = resultSetHandler.getReturnsResultSet(sql);
-        if(null != returnsResultSet)
-        {
-            callExecuteQuery = returnsResultSet.booleanValue();
-        }
-        else
-        {
-            callExecuteQuery = SQLUtil.isSelect(sql);
-        }
-        callExecute(sql, callExecuteQuery);
-        return callExecuteQuery;
-    }
-    
-    protected void callExecute(String sql, boolean callExecuteQuery) throws SQLException
-    {
+        boolean callExecuteQuery = isQuery(sql);
         if(callExecuteQuery)
         {
             setNextResultSet(executeQuery(sql));
@@ -187,6 +166,22 @@ public class MockStatement implements Statement
         {
             setNextUpdateCount(executeUpdate(sql));
         }
+        return callExecuteQuery;
+    }
+    
+    protected boolean isQuery(String sql)
+    {
+        boolean isQuery;
+        Boolean returnsResultSet = resultSetHandler.getReturnsResultSet(sql);
+        if(null != returnsResultSet)
+        {
+            isQuery = returnsResultSet.booleanValue();
+        }
+        else
+        {
+            isQuery = SQLUtil.isSelect(sql);
+        }
+        return isQuery;
     }
 
     public ResultSet getResultSet() throws SQLException
@@ -243,11 +238,12 @@ public class MockStatement implements Statement
         int[] results = new int[batches.size()];
         for(int ii = 0; ii < results.length; ii++)
         {
-            if(execute((String)batches.get(ii)))
+            String nextSQL = (String)batches.get(ii);
+            if(isQuery(nextSQL))
             {
                 throw new BatchUpdateException("SQL " + batches.get(ii) + " in ths list of batches returned a ResultSet.", null);
             }
-            results[ii] = getUpdateCount();
+            results[ii] = executeUpdate(nextSQL);
         }
         return results;
     }

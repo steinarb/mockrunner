@@ -1,5 +1,6 @@
 package com.mockrunner.test.jdbc;
 
+import java.sql.BatchUpdateException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,6 +104,34 @@ public class MockStatementTest extends BaseTestCase
         assertFalse(statement.execute("DELETE"));
         assertEquals(2, statement.getUpdateCount());
         assertNull(statement.getResultSet());
+    }
+    
+    public void testPrepareUpdateCountBatch() throws Exception
+    {
+        statementHandler.prepareGlobalUpdateCount(2);
+        statementHandler.prepareUpdateCount("insert into", 3);
+        MockStatement statement = (MockStatement)connection.createStatement();
+        statement.addBatch("insert into x(y) values(1)");
+        statement.addBatch("DELETE xyz where");
+        statement.addBatch("update xy");
+        int[] updateCounts = statement.executeBatch();
+        assertTrue(updateCounts.length == 3);
+        assertEquals(3, updateCounts[0]);
+        assertEquals(2, updateCounts[1]);
+        assertEquals(2, updateCounts[2]);
+        statement.addBatch("select xy");
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            //should throw Exception
+        }
+        statement.clearBatch();
+        updateCounts = statement.executeBatch();
+        assertTrue(updateCounts.length == 0);
     }
     
     public void testPrepareResultSetPreparedStatement() throws Exception
@@ -210,5 +239,43 @@ public class MockStatementTest extends BaseTestCase
         assertTrue(statement.execute());
         assertEquals(-1, statement.getUpdateCount());
         assertNull(statement.getResultSet());
+    }
+    
+    public void testPrepareUpdateCountBatchPreparedStatement() throws Exception
+    {
+        preparedStatementHandler.prepareGlobalUpdateCount(2);
+        preparedStatementHandler.prepareUpdateCount("insert into", 3);
+        preparedStatementHandler.prepareUpdateCount("insert into", 4, new Object[] {"1", "2"});
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("insert into x(y) values(?)");
+        statement.setString(1, "1");
+        statement.setString(2, "2");
+        statement.addBatch();
+        statement.clearParameters();
+        statement.addBatch();
+        statement.setString(1, "1");
+        statement.setInt(2, 3);
+        statement.addBatch();
+        int[] updateCounts = statement.executeBatch();
+        assertTrue(updateCounts.length == 3);
+        assertEquals(4, updateCounts[0]);
+        assertEquals(3, updateCounts[1]);
+        assertEquals(3, updateCounts[2]);
+        preparedStatementHandler.prepareReturnsResultSet("insert into", true);
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            //should throw Exception
+        }
+        statement = (MockPreparedStatement)connection.prepareStatement("update xyz");
+        statement.setString(1, "1");
+        statement.setString(2, "2");
+        statement.addBatch();
+        updateCounts = statement.executeBatch();
+        assertTrue(updateCounts.length == 1);
+        assertEquals(2, updateCounts[0]);
     }
 }
