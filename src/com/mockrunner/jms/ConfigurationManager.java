@@ -64,7 +64,7 @@ public class ConfigurationManager
      * selector parser of the open source JMS implementation
      * ActiveMQ. It is a bit experimental at the moment. If there
      * are problems with the parsing or if you don't need message
-     * selectors at all, turn them off. Disable selector parsing also
+     * selectors at all, turn them off. Disabling selector parsing also
      * results in a better test performance.
      * @param useMessageSelectors <code>true</code> use message selectors,
      *                            <code>false</code> ignore message selectors

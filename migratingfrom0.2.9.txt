@@ -1,5 +1,5 @@
 
-Starting with version 0.2.9, Mockrunner supports the MockEJB 0.6 API
+Starting with version 0.3, Mockrunner supports the MockEJB 0.6 API
 and the new features of MockEJB. This breaks the Mockrunner API in a
 few cases.
 
