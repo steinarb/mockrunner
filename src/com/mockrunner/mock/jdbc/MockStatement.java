@@ -15,10 +15,10 @@ public class MockStatement implements Statement
     private int maxRows = 0;
     private int maxFieldSize = 0;
     private int fetchDirection = ResultSet.FETCH_FORWARD;
-    private int fetchRows = 0;
-    private int resultSetType = 0;
-    private int resultSetConcurrency = 0;
-    private int resultSetHoldability = 0;
+    private int fetchSize = 0;
+    private int resultSetType = ResultSet.TYPE_FORWARD_ONLY;
+    private int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
+    private int resultSetHoldability = ResultSet.HOLD_CURSORS_OVER_COMMIT;
     private Connection connection;
     
     public MockStatement(Connection connection)
@@ -139,14 +139,14 @@ public class MockStatement implements Statement
         return fetchDirection;
     }
 
-    public void setFetchSize(int fetchRows) throws SQLException
+    public void setFetchSize(int fetchSize) throws SQLException
     {   
-        this.fetchRows = fetchRows;
+        this.fetchSize = fetchSize;
     }
 
     public int getFetchSize() throws SQLException
     {
-        return fetchRows;
+        return fetchSize;
     }
 
     public void addBatch(String sql) throws SQLException

@@ -3,6 +3,7 @@ package com.mockrunner.mock.jdbc;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Array;
@@ -20,26 +21,51 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import com.mockobjects.sql.MockResultSetMetaData;
 
 /**
  * Mock implementation of <code>ResultSet</code>.
  */
 public class MockResultSet implements ResultSet
 {
+    private Statement statement;
     private Map columnMap;
     private List columnNameList;
     private int cursor;
     private boolean wasNull;
+    private String cursorName;
+    private int fetchSize = 0;
+    private int fetchDirection = ResultSet.FETCH_FORWARD;
+    private int resultSetType = ResultSet.TYPE_FORWARD_ONLY;
+    private int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
     
-    public MockResultSet()
+    public MockResultSet(Statement statement)
     {
+        this(statement, "");
+    }
+    
+    public MockResultSet(Statement statement, String cursorName)
+    {
+        this.statement = statement;
         columnMap = new HashMap();
         columnNameList = new ArrayList();
         cursor = -1;
         wasNull = false;
+        try
+        {
+            fetchDirection = statement.getFetchDirection();
+            resultSetType = statement.getResultSetType();
+            resultSetConcurrency = statement.getResultSetConcurrency();
+            fetchSize = statement.getFetchSize();
+        }
+        catch(SQLException exc)
+        {
+        
+        }
+        this.cursorName = cursorName;
     }
     
     public void addRow(List values)
@@ -69,27 +95,16 @@ public class MockResultSet implements ResultSet
         List column = new ArrayList(values);
         columnMap.put(columnName, column);
         columnNameList.add(columnName);
+        adjustColumns();
     }
     
     public int getRowCount()
     {
-        int count = 0;
-        Iterator columns = columnMap.keySet().iterator();
-        while(columns.hasNext())
-        {
-            List nextColumn = (List)columns.next();
-            count = Math.max(count, nextColumn.size());
-        }
-        return count;
+        if(columnMap.size() == 0) return 0;
+        List column = (List)columnMap.keySet().iterator().next();
+        return column.size();
     }
     
-    public boolean next() throws SQLException
-    {
-        cursor++;
-        if(cursor < getRowCount()) return true;
-        return false;
-    }
-
     public void close() throws SQLException
     {
         
@@ -108,17 +123,18 @@ public class MockResultSet implements ResultSet
         String columnName = (String)columnNameList.get(columnIndex - 1);
         return getObject(columnName);
     }
+    
+    public Object getObject(String colName, Map map) throws SQLException
+    {
+        return getObject(colName);
+    }
 
     public Object getObject(String columnName) throws SQLException
     {
         checkColumnName(columnName);
         checkRowBounds();
-        Object value = null;
         List column = (List)columnMap.get(columnName);
-        if(null != column && cursor < column.size())
-        {
-            value = column.get(cursor);
-        }
+        Object value = column.get(cursor);
         wasNull = (null == value);
         return value;
     }
@@ -146,7 +162,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Boolean) return ((Boolean)value).booleanValue();
             return new Boolean(value.toString()).booleanValue();
         }
-        throw new SQLException("Value is null");
+        return false;
     }
     
     public boolean getBoolean(String columnName) throws SQLException
@@ -157,7 +173,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Boolean) return ((Boolean)value).booleanValue();
             return new Boolean(value.toString()).booleanValue();
         }
-        throw new SQLException("Value is null");
+        return false;
     }
 
     public byte getByte(int columnIndex) throws SQLException
@@ -168,7 +184,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Number) return ((Number)value).byteValue();
             return new Byte(value.toString()).byteValue();
         }
-        throw new SQLException("Value is null");
+        return 0;
     }
     
     public byte getByte(String columnName) throws SQLException
@@ -179,7 +195,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Number) return ((Number)value).byteValue();
             return new Byte(value.toString()).byteValue();
         }
-        throw new SQLException("Value is null");
+        return 0;
     }
 
     public short getShort(int columnIndex) throws SQLException
@@ -190,7 +206,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Number) return ((Number)value).shortValue();
             return new Short(value.toString()).shortValue();
         }
-        throw new SQLException("Value is null");
+        return 0;
     }
     
     public short getShort(String columnName) throws SQLException
@@ -201,7 +217,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Number) return ((Number)value).shortValue();
             return new Short(value.toString()).shortValue();
         }
-        throw new SQLException("Value is null");
+        return 0;
     }
 
     public int getInt(int columnIndex) throws SQLException
@@ -212,7 +228,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Number) return ((Number)value).intValue();
             return new Integer(value.toString()).intValue();
         }
-        throw new SQLException("Value is null");
+        return 0;
     }
     
     public int getInt(String columnName) throws SQLException
@@ -223,7 +239,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Number) return ((Number)value).intValue();
             return new Integer(value.toString()).intValue();
         }
-        throw new SQLException("Value is null");
+        return 0;
     }
 
     public long getLong(int columnIndex) throws SQLException
@@ -234,7 +250,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Number) return ((Number)value).longValue();
             return new Long(value.toString()).longValue();
         }
-        throw new SQLException("Value is null");
+        return 0;
     }
     
     public long getLong(String columnName) throws SQLException
@@ -245,7 +261,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Number) return ((Number)value).longValue();
             return new Long(value.toString()).longValue();
         }
-        throw new SQLException("Value is null");
+        return 0;
     }
 
     public float getFloat(int columnIndex) throws SQLException
@@ -256,7 +272,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Number) return ((Number)value).floatValue();
             return new Float(value.toString()).floatValue();
         }
-        throw new SQLException("Value is null");
+        return 0;
     }
     
     public float getFloat(String columnName) throws SQLException
@@ -267,7 +283,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Number) return ((Number)value).floatValue();
             return new Float(value.toString()).floatValue();
         }
-        throw new SQLException("Value is null");
+        return 0;
     }
     
     public double getDouble(int columnIndex) throws SQLException
@@ -278,7 +294,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Number) return ((Number)value).doubleValue();
             return new Double(value.toString()).doubleValue();
         }
-        throw new SQLException("Value is null");
+        return 0;
     }
     
     public double getDouble(String columnName) throws SQLException
@@ -289,7 +305,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Number) return ((Number)value).doubleValue();
             return new Double(value.toString()).doubleValue();
         }
-        throw new SQLException("Value is null");
+        return 0;
     }
 
     public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException
@@ -320,7 +336,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Number) return new BigDecimal(((Number)value).doubleValue());
             return new BigDecimal(value.toString());
         }
-        throw new SQLException("Value is null");
+        return null;
     }
 
     public BigDecimal getBigDecimal(String columnName) throws SQLException
@@ -331,7 +347,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Number) return new BigDecimal(((Number)value).doubleValue());
             return new BigDecimal(value.toString());
         }
-        throw new SQLException("Value is null");
+        return null;
     }
 
     public byte[] getBytes(int columnIndex) throws SQLException
@@ -342,7 +358,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof byte[]) return (byte[])value;
             return value.toString().getBytes();
         }
-        throw new SQLException("Value is null");
+        return null;
     }
     
     public byte[] getBytes(String columnName) throws SQLException
@@ -353,7 +369,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof byte[]) return (byte[])value;
             return value.toString().getBytes();
         }
-        throw new SQLException("Value is null");
+        return null;
     }
 
     public Date getDate(int columnIndex) throws SQLException
@@ -364,7 +380,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Date) return (Date)value;
             return Date.valueOf(value.toString());
         }
-        throw new SQLException("Value is null");
+        return null;
     }
     
     public Date getDate(String columnName) throws SQLException
@@ -375,7 +391,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Date) return (Date)value;
             return Date.valueOf(value.toString());
         }
-        throw new SQLException("Value is null");
+        return null;
     }
 
     public Time getTime(int columnIndex) throws SQLException
@@ -386,7 +402,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Time) return (Time)value;
             return Time.valueOf(value.toString());
         }
-        throw new SQLException("Value is null");
+        return null;
     }
     
     public Time getTime(String columnName) throws SQLException
@@ -397,7 +413,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Time) return (Time)value;
             return Time.valueOf(value.toString());
         }
-        throw new SQLException("Value is null");
+        return null;
     }
 
     public Timestamp getTimestamp(int columnIndex) throws SQLException
@@ -408,7 +424,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Timestamp) return (Timestamp)value;
             return Timestamp.valueOf(value.toString());
         }
-        throw new SQLException("Value is null");
+        return null;
     }
     
     public Timestamp getTimestamp(String columnName) throws SQLException
@@ -419,7 +435,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof Timestamp) return (Timestamp)value;
             return Timestamp.valueOf(value.toString());
         }
-        throw new SQLException("Value is null");
+        return null;
     }
 
     public InputStream getAsciiStream(int columnIndex) throws SQLException
@@ -450,7 +466,7 @@ public class MockResultSet implements ResultSet
             if(value instanceof InputStream) return (InputStream)value;
             return new ByteArrayInputStream(getBytes(columnIndex));
         }
-        throw new SQLException("Value is null");
+        return null;
     }
 
     public InputStream getBinaryStream(String columnName) throws SQLException
@@ -461,157 +477,173 @@ public class MockResultSet implements ResultSet
             if(value instanceof InputStream) return (InputStream)value;
             return new ByteArrayInputStream(getBytes(columnName));
         }
-        throw new SQLException("Value is null");
-    }
-
-    public SQLWarning getWarnings() throws SQLException
-    {
-        // TODO Auto-generated method stub
         return null;
     }
-
-    public void clearWarnings() throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public String getCursorName() throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public ResultSetMetaData getMetaData() throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public int findColumn(String columnName) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
+    
     public Reader getCharacterStream(int columnIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getObject(columnIndex);
+        if(null != value)
+        {
+            if(value instanceof Reader) return (Reader)value;
+            return new StringReader(getString(columnIndex));
+        }
         return null;
     }
 
     public Reader getCharacterStream(String columnName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getObject(columnName);
+        if(null != value)
+        {
+            if(value instanceof Reader) return (Reader)value;
+            return new StringReader(getString(columnName));
+        }
         return null;
+    }
+
+
+    public SQLWarning getWarnings() throws SQLException
+    {
+        return null;
+    }
+
+    public void clearWarnings() throws SQLException
+    {
+
+    }
+
+    public String getCursorName() throws SQLException
+    {
+        return cursorName;
+    }
+
+    public ResultSetMetaData getMetaData() throws SQLException
+    {
+        return new MockResultSetMetaData();
     }
 
     public boolean isBeforeFirst() throws SQLException
     {
-        // TODO Auto-generated method stub
-        return false;
+        return cursor == -1;
     }
 
     public boolean isAfterLast() throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return false;
+    {    
+        return cursor >= getRowCount();
     }
 
     public boolean isFirst() throws SQLException
     {
-        // TODO Auto-generated method stub
-        return false;
+        return cursor == 0;
     }
 
     public boolean isLast() throws SQLException
     {
-        // TODO Auto-generated method stub
-        return false;
+        return cursor == getRowCount() - 1;
     }
 
     public void beforeFirst() throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        checkResultSetType();
+        cursor = -1;
     }
 
     public void afterLast() throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        checkResultSetType();
+        cursor = getRowCount();
     }
+    
+    public boolean next() throws SQLException
+    {
+        cursor++;
+        adjustCursor();
+        return false;
+    }
+
 
     public boolean first() throws SQLException
     {
-        // TODO Auto-generated method stub
-        return false;
+        checkResultSetType();
+        cursor = 0;
+        return getRowCount() >= 0;
     }
 
     public boolean last() throws SQLException
     {
-        // TODO Auto-generated method stub
-        return false;
+        checkResultSetType();
+        cursor = getRowCount() - 1;
+        return getRowCount() >= 0;
     }
-
-    public int getRow() throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
+    
     public boolean absolute(int row) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return false;
+        checkResultSetType();
+        if(row > 0) cursor = row - 1;
+        if(row < 0) cursor = getRowCount() + row;
+        adjustCursor();
+        return cursor < getRowCount();
     }
 
     public boolean relative(int rows) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return false;
+        checkResultSetType();
+        cursor += rows;
+        adjustCursor();
+        return cursor < getRowCount();
+    }
+
+    public int getRow() throws SQLException
+    {
+        return cursor + 1;
     }
 
     public boolean previous() throws SQLException
     {
-        // TODO Auto-generated method stub
-        return false;
+        checkResultSetType();
+        cursor--;
+        adjustCursor();
+        return cursor < getRowCount();
     }
-
-    public void setFetchDirection(int direction) throws SQLException
+    
+    public void setFetchDirection(int fetchDirection) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        this.fetchDirection = fetchDirection;
     }
 
     public int getFetchDirection() throws SQLException
     {
-        // TODO Auto-generated method stub
-        return 0;
+        return fetchDirection;
     }
 
-    public void setFetchSize(int rows) throws SQLException
+    public void setFetchSize(int fetchSize) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        this.fetchSize = fetchSize;
     }
 
     public int getFetchSize() throws SQLException
     {
-        // TODO Auto-generated method stub
-        return 0;
+        return fetchSize;
     }
 
     public int getType() throws SQLException
     {
-        // TODO Auto-generated method stub
-        return 0;
+        return resultSetType;
     }
 
     public int getConcurrency() throws SQLException
     {
-        // TODO Auto-generated method stub
-        return 0;
+        return resultSetConcurrency;
+    }
+    
+    public int findColumn(String columnName) throws SQLException
+    {
+        for(int ii = 0; ii < columnNameList.size(); ii++)
+        {
+            if(columnName.equals(columnNameList.get(ii))) return ii;
+        }
+        throw new SQLException("No column with name " + columnName + " found");
     }
 
     public boolean rowUpdated() throws SQLException
@@ -630,6 +662,34 @@ public class MockResultSet implements ResultSet
     {
         // TODO Auto-generated method stub
         return false;
+    }
+    
+    public void updateObject(int columnIndex, Object x) throws SQLException
+    {
+        
+    }
+    
+    public void updateObject(int columnIndex, Object x, int scale) throws SQLException
+    {
+        
+
+    }
+    
+    public void updateObject(String columnName, Object value, int scale) throws SQLException
+    {
+        checkColumnName(columnName);
+        checkRowBounds();
+        List column = (List)columnMap.get(columnName);
+        if(null != column && cursor < column.size())
+        {
+            value = column.set(cursor, value);
+        }
+    }
+
+    public void updateObject(String columnName, Object x) throws SQLException
+    {
+        // TODO Auto-generated method stub
+
     }
 
     public void updateNull(int columnIndex) throws SQLException
@@ -729,18 +789,6 @@ public class MockResultSet implements ResultSet
     }
 
     public void updateCharacterStream(int columnIndex, Reader x, int length) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateObject(int columnIndex, Object x, int scale) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateObject(int columnIndex, Object x) throws SQLException
     {
         // TODO Auto-generated method stub
 
@@ -848,18 +896,6 @@ public class MockResultSet implements ResultSet
 
     }
 
-    public void updateObject(String columnName, Object x, int scale) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateObject(String columnName, Object x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
     public void insertRow() throws SQLException
     {
         // TODO Auto-generated method stub
@@ -933,12 +969,6 @@ public class MockResultSet implements ResultSet
     }
 
     public Array getArray(int i) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Object getObject(String colName, Map map) throws SQLException
     {
         // TODO Auto-generated method stub
         return null;
@@ -1086,5 +1116,24 @@ public class MockResultSet implements ResultSet
         {
             throw new SQLException("Current row invalid");
         }
+    }
+    
+    private void checkResultSetType() throws SQLException
+    {
+        if(resultSetType == ResultSet.TYPE_FORWARD_ONLY)
+        {
+            throw new SQLException("ResultSet is TYPE_FORWARD_ONLY");
+        }
+    }
+    
+    private void adjustCursor()
+    {
+        if(cursor < 0) cursor = -1;
+        if(cursor >= getRowCount()) cursor = getRowCount();
+    }
+    
+    private void adjustColumns()
+    {
+        //TODO Implement me
     }
 }
