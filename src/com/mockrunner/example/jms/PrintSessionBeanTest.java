@@ -53,7 +53,7 @@ public class PrintSessionBeanTest extends JMSTestCaseAdapter
 		registerTestMessageListenerForQueue("testQueue", new PrintMessageDrivenBean());
 		ejbModule.setInterfacePackage("com.mockrunner.example.jms.interfaces");
 		ejbModule.deploySessionBean("com/mockrunner/example/PrintSession", PrintSessionBean.class, TransactionPolicy.REQUIRED);
-		bean = (PrintSession)ejbModule.lookupBean("com/mockrunner/example/PrintSession");
+		bean = (PrintSession)ejbModule.createBean("com/mockrunner/example/PrintSession");
 	}*/
     
     public void testSuccessfulDelivery() throws Exception

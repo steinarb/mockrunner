@@ -23,6 +23,11 @@ Otherwise, please consider the following changes:
   renamed to deploySessionBean. If you use this method, you have to change
   the name. However, parameters are the same.
   
+- The methods lookupBean in EJBTestModule were deprecated (but not removed)
+  and renamed to createBean in order to point out that the EJBs are actually created 
+  and not just looked up. There are new createEntityBean methods which do exactly
+  the same but also add the EJB to the MockEJB entity database.
+  
 - Major changes affect message driven beans. If you use the Mockrunner JMS
   test framework without message driven beans, you should not be affected
   by the changes. Message driven beans are now deployed using the method
