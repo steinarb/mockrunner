@@ -216,7 +216,7 @@ public class JavaLineProcessorTest extends TestCase
         assertTrue(result.trim().endsWith("*/"));
     }
     
-    public void testProcessCommentFirst() throws Exception
+    public void testProcessCommentAll() throws Exception
     {
         String testCode = getValidTestCode();
         JavaLineProcessor processor = new JavaLineProcessor();
@@ -225,9 +225,37 @@ public class JavaLineProcessorTest extends TestCase
         processor.addLines(lineList);
         String result = processor.process(testCode);
         BufferedReader reader = new BufferedReader(new StringReader(result));
+        String currentLine = null;
+        while((currentLine = reader.readLine()) != null)
+        {
+            assertTrue(currentLine.trim().startsWith("//"));
+        }
+    }
+    
+    public void testProcessDoubleLine() throws Exception
+    {
+        String testCode = "First line\nSecond line\nFirst line";
+        JavaLineProcessor processor = new JavaLineProcessor();
+        List lineList = new ArrayList();
+        lineList.add("First line");
+        processor.addLines(lineList);
+        String result = processor.process(testCode);
+        BufferedReader reader = new BufferedReader(new StringReader(result));
         assertTrue(reader.readLine().trim().startsWith("//"));
         assertFalse(reader.readLine().trim().startsWith("//"));
-        assertFalse(reader.readLine().trim().startsWith("//"));
+        assertTrue(reader.readLine().trim().startsWith("//"));
+    }
+    
+    public void testProcessDoubleBlock() throws Exception
+    {
+        String testCode = "Block\n{\n}\notherBlock\n{\n}\notherBlock\n{\n}\n";
+        JavaLineProcessor processor = new JavaLineProcessor();
+        List blockList = new ArrayList();
+        blockList.add("otherBlock");
+        processor.addBlocks(blockList);
+        String result = processor.process(testCode);
+        String expected = "Block" + NL + "{" + NL + "}" + NL + "/*otherBlock" + NL + "{" + NL + "}*/" + NL + "/*otherBlock" + NL + "{" + NL + "}*/" + NL;
+        assertEquals(result, expected);
     }
     
     private String stripChars(String theString)

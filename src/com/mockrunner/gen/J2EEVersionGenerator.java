@@ -55,6 +55,49 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
         nestedTagProc.addLine("public NestedTag addTagChild(JspTag tag, Map attributeMap);");
         webFiles.put("com.mockrunner.tag.NestedTag", nestedTagProc);
         
+        JavaLineProcessor nestedStandardTagProc = new JavaLineProcessor();
+        nestedStandardTagProc.addLine("import javax.servlet.jsp.tagext.JspTag;");
+        nestedStandardTagProc.addLine("import javax.servlet.jsp.tagext.SimpleTag;");
+        nestedStandardTagProc.addBlock("public JspTag getWrappedTag()");
+        nestedStandardTagProc.addBlock("public NestedTag addTagChild(JspTag tag)");
+        nestedStandardTagProc.addBlock("public NestedTag addTagChild(JspTag tag, Map attributeMap)");
+        nestedStandardTagProc.addBlock("else if(child instanceof SimpleTag)");
+        nestedStandardTagProc.addBlock("else if(childTag instanceof SimpleTag)");
+        webFiles.put("com.mockrunner.tag.NestedStandardTag", nestedStandardTagProc);
+        
+        JavaLineProcessor nestedBodyTagProc = new JavaLineProcessor();
+        nestedBodyTagProc.addLine("import javax.servlet.jsp.tagext.JspTag;");
+        nestedBodyTagProc.addLine("import javax.servlet.jsp.tagext.SimpleTag;");
+        nestedBodyTagProc.addBlock("public JspTag getWrappedTag()");
+        nestedBodyTagProc.addBlock("public NestedTag addTagChild(JspTag tag)");
+        nestedBodyTagProc.addBlock("public NestedTag addTagChild(JspTag tag, Map attributeMap)");
+        nestedBodyTagProc.addBlock("else if(child instanceof SimpleTag)");
+        nestedBodyTagProc.addBlock("else if(childTag instanceof SimpleTag)");
+        webFiles.put("com.mockrunner.tag.NestedBodyTag", nestedBodyTagProc);
+        
+        JavaLineProcessor tagTestModuleProc = new JavaLineProcessor();
+        tagTestModuleProc.addLine("import javax.servlet.jsp.tagext.JspTag;");
+        tagTestModuleProc.addBlock("public JspTag createWrappedTag(Class tagClass)");
+        tagTestModuleProc.addBlock("public JspTag createWrappedTag(Class tagClass, Map attributes)");
+        tagTestModuleProc.addBlock("public NestedTag setTag(JspTag tag)");
+        tagTestModuleProc.addBlock("public NestedTag setTag(JspTag tag, Map attributes)");
+        tagTestModuleProc.addBlock("public JspTag getWrappedTag()");
+        tagTestModuleProc.addBlock("public void doTag()");
+        tagTestModuleProc.addBlock("if(isSimpleTag())");
+        tagTestModuleProc.addBlock("private boolean isSimpleTag()");
+        webFiles.put("com.mockrunner.tag.TagTestModule", tagTestModuleProc);
+        
+        JavaLineProcessor tagTestAdapterProc = new JavaLineProcessor();
+        tagTestAdapterProc.addLine("import javax.servlet.jsp.tagext.JspTag;");
+        tagTestAdapterProc.addBlock("protected JspTag createWrappedTag(Class tagClass)");
+        tagTestAdapterProc.addBlock("protected JspTag createWrappedTag(Class tagClass, Map attributes)");
+        tagTestAdapterProc.addBlock("protected JspTag getWrappedTag()");
+        tagTestAdapterProc.addBlock("protected NestedTag setTag(JspTag tag)");
+        tagTestAdapterProc.addBlock("protected NestedTag setTag(JspTag tag, Map attributes)");
+        tagTestAdapterProc.addBlock("protected void doTag()");
+        webFiles.put("com.mockrunner.tag.TagTestCaseAdapter", tagTestAdapterProc);
+        webFiles.put("com.mockrunner.tag.BasicTagTestCaseAdapter", tagTestAdapterProc);
+        
         JavaLineProcessor tagUtilProc = new JavaLineProcessor();
         tagUtilProc.addLine("import javax.servlet.jsp.JspContext;");
         tagUtilProc.addLine("import javax.servlet.jsp.tagext.SimpleTag;");
