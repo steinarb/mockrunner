@@ -1,7 +1,5 @@
 package com.mockrunner.mock.jms;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.jms.ConnectionConsumer;
@@ -23,12 +21,9 @@ import com.mockrunner.jms.DestinationManager;
  */
 public class MockTopicConnection extends MockConnection implements TopicConnection
 {
-    private List topicSessions;
-    
     public MockTopicConnection(DestinationManager destinationManager)
     {
         super(destinationManager);
-        topicSessions = new ArrayList();
     }
     
     /**
@@ -38,7 +33,7 @@ public class MockTopicConnection extends MockConnection implements TopicConnecti
      */
     public List getTopicSessionList()
     {
-        return Collections.unmodifiableList(topicSessions);
+        return super.getSessionList();
     }
 
     /**
@@ -50,8 +45,7 @@ public class MockTopicConnection extends MockConnection implements TopicConnecti
      */
     public MockTopicSession getTopicSession(int index)
     {
-        if(topicSessions.size() <= index || index < 0) return null;
-        return (MockTopicSession)topicSessions.get(index);
+        return (MockTopicSession)super.getSession(index);
     }
     
     public Session createSession(boolean transacted, int acknowledgeMode) throws JMSException
@@ -63,22 +57,12 @@ public class MockTopicConnection extends MockConnection implements TopicConnecti
     {
         throwJMSException();
         MockTopicSession session = new MockTopicSession(this, transacted, acknowledgeMode);
-        topicSessions.add(session);
+        sessions().add(session);
         return session;
     }
 
     public ConnectionConsumer createConnectionConsumer(Topic topic, String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException
     {
         return super.createConnectionConsumer(topic, messageSelector, sessionPool, maxMessages);
-    }
-    
-    public void close() throws JMSException
-    {
-        for(int ii = 0; ii < topicSessions.size(); ii++)
-        {
-            Session session = (Session)topicSessions.get(ii);
-            session.close();
-        }
-        super.close();
     }
 }

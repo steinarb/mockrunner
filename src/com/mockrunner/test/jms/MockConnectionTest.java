@@ -7,6 +7,7 @@ import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueSession;
+import javax.jms.Session;
 import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicSession;
@@ -156,6 +157,40 @@ public class MockConnectionTest extends TestCase
         assertNotNull(topicConnection.createConnectionConsumer((Destination)null, null, null, 0));
         assertNotNull(topicConnection.createConnectionConsumer((Topic)null, null, null, 0));
         assertNotNull(queueConnection.createDurableConnectionConsumer(null, null, null, null, 0));
+    }
+    
+    public void testCreateQueueSession() throws Exception
+    {
+        queueConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        assertTrue(queueConnection.getSession(0) instanceof MockQueueSession);
+        assertTrue(queueConnection.getQueueSession(0) instanceof MockQueueSession);
+        assertTrue(queueConnection.getSession(1) instanceof MockQueueSession);
+        assertTrue(queueConnection.getQueueSession(1) instanceof MockQueueSession);
+        assertTrue(queueConnection.getSession(2) instanceof MockQueueSession);
+        assertTrue(queueConnection.getQueueSession(2) instanceof MockQueueSession);
+        assertNull(queueConnection.getSession(3));
+        assertNull(queueConnection.getQueueSession(3));
+        assertEquals(3, queueConnection.getSessionList().size());
+        assertEquals(3, queueConnection.getQueueSessionList().size());
+    }
+    
+    public void testCreateTopicSession() throws Exception
+    {
+        topicConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        topicConnection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        assertTrue(topicConnection.getSession(0) instanceof MockTopicSession);
+        assertTrue(topicConnection.getTopicSession(0) instanceof MockTopicSession);
+        assertTrue(topicConnection.getSession(1) instanceof MockTopicSession);
+        assertTrue(topicConnection.getTopicSession(1) instanceof MockTopicSession);
+        assertTrue(topicConnection.getSession(2) instanceof MockTopicSession);
+        assertTrue(topicConnection.getTopicSession(2) instanceof MockTopicSession);
+        assertNull(topicConnection.getSession(3));
+        assertNull(topicConnection.getTopicSession(3));
+        assertEquals(3, topicConnection.getSessionList().size());
+        assertEquals(3, topicConnection.getTopicSessionList().size());
     }
 
     public void testException() throws Exception

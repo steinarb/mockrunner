@@ -1,7 +1,5 @@
 package com.mockrunner.mock.jms;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.jms.ConnectionConsumer;
@@ -23,12 +21,9 @@ import com.mockrunner.jms.DestinationManager;
  */
 public class MockQueueConnection extends MockConnection implements QueueConnection
 {
-    private List queueSessions;
-    
     public MockQueueConnection(DestinationManager destinationManager)
     {
         super(destinationManager);
-        queueSessions = new ArrayList();
     }
     
     /**
@@ -38,7 +33,7 @@ public class MockQueueConnection extends MockConnection implements QueueConnecti
      */
     public List getQueueSessionList()
     {
-        return Collections.unmodifiableList(queueSessions);
+        return super.getSessionList();
     }
 
     /**
@@ -50,8 +45,7 @@ public class MockQueueConnection extends MockConnection implements QueueConnecti
      */
     public MockQueueSession getQueueSession(int index)
     {
-        if(queueSessions.size() <= index || index < 0) return null;
-        return (MockQueueSession)queueSessions.get(index);
+        return (MockQueueSession)super.getSession(index);
     }
     
     public Session createSession(boolean transacted, int acknowledgeMode) throws JMSException
@@ -63,22 +57,12 @@ public class MockQueueConnection extends MockConnection implements QueueConnecti
     {
         throwJMSException();
         MockQueueSession session = new MockQueueSession(this, transacted, acknowledgeMode);
-        queueSessions.add(session);
+        sessions().add(session);
         return session;
     }
 
     public ConnectionConsumer createConnectionConsumer(Queue queue, String messageSelector, ServerSessionPool sessionPool, int maxMessages) throws JMSException
     {
         return super.createConnectionConsumer(queue, messageSelector, sessionPool, maxMessages);
-    }
-    
-    public void close() throws JMSException
-    {
-        for(int ii = 0; ii < queueSessions.size(); ii++)
-        {
-            Session session = (Session)queueSessions.get(ii);
-            session.close();
-        }
-        super.close();
     }
 }
