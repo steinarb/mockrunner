@@ -211,7 +211,7 @@ public class MockServletContext implements ServletContext
         return new ByteArrayInputStream(data);
     }
     
-    public void setResourceAsStream(String path, InputStream inputStream) 
+    public synchronized void setResourceAsStream(String path, InputStream inputStream) 
     { 
         setResourceAsStream(path, StreamUtil.getStreamAsByteArray(inputStream)); 
     }
@@ -292,7 +292,7 @@ public class MockServletContext implements ServletContext
 
     }
     
-    private void handleAttributeListenerCalls(String key, Object value, Object oldValue)
+    private synchronized void handleAttributeListenerCalls(String key, Object value, Object oldValue)
     {
         if(null != oldValue)
         {
