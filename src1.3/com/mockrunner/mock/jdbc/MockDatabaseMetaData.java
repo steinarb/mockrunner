@@ -2100,12 +2100,11 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     
     private class AttributesDatabaseIdentifierImpl extends DatabaseIdentifierImpl
     {
-        private boolean isGlobal;
         private String attributeNamePattern;
         
         public AttributesDatabaseIdentifierImpl()
         {
-            isGlobal = true;
+            
         }
         
         public AttributesDatabaseIdentifierImpl(String catalog, String schema, String table, String attributeNamePattern)
@@ -2139,12 +2138,11 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     
     private class ColumnDatabaseIdentifierImpl extends DatabaseIdentifierImpl
     {
-        private boolean isGlobal;
         private String columnNamePattern;
         
         public ColumnDatabaseIdentifierImpl()
         {
-            isGlobal = true;
+            
         }
         
         public ColumnDatabaseIdentifierImpl(String catalog, String schema, String table, String columnNamePattern)

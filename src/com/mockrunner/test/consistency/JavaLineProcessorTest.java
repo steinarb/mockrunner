@@ -130,7 +130,7 @@ public class JavaLineProcessorTest extends TestCase
         parser.addBlock("public test()");
         try
         {
-            List result = parser.parse(getInvalidTestCode());
+            parser.parse(getInvalidTestCode());
             fail();
         } 
         catch(RuntimeException exc)
@@ -169,7 +169,7 @@ public class JavaLineProcessorTest extends TestCase
         parser.addBlock("anotherethod");
         try
         {
-            List result = parser.parse(getValidTestCode());
+            parser.parse(getValidTestCode());
             fail();
         } 
         catch(RuntimeException exc)
