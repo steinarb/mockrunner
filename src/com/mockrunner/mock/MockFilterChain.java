@@ -19,10 +19,14 @@ public class MockFilterChain implements FilterChain
 	private ArrayList filters = new ArrayList();
 	private Servlet servlet;
 	private Iterator iterator;
+    private ServletRequest lastRequest;
+    private ServletResponse lastResponse;
 	
 	public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException
 	{
-		if(null == iterator)
+        lastRequest = request;
+        lastResponse = response;
+        if(null == iterator)
 		{
 			iterator = filters.iterator();
 		}
@@ -71,4 +75,14 @@ public class MockFilterChain implements FilterChain
 		filters.clear();
 		setServlet(null);
 	}
+    
+    public ServletRequest getLastRequest()
+    {
+        return lastRequest;
+    }
+
+    public ServletResponse getLastResponse()
+    {
+        return lastResponse;
+    }
 }

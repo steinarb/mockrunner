@@ -1,6 +1,8 @@
 package com.mockrunner.servlet;
 
 import javax.servlet.Filter;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 
 import com.mockrunner.base.HTMLOutputModule;
@@ -90,35 +92,19 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
-     * Delegates to {@link ServletTestModule#getFilter}
-     */
-    public Filter getFilter()
-    {
-        return servletTestModule.getFilter();
-    }
-
-    /**
-     * Delegates to {@link ServletTestModule#createAndAddFilter}
-     */
-    public Filter createAndAddFilter(Class filterClass)
-    {
-        return servletTestModule.createAndAddFilter(filterClass);
-    }
-
-    /**
-     * Delegates to {@link ServletTestModule#addFilter(Class)}
-     */
-    public void addFilter(Class filterClass)
-    {
-        servletTestModule.addFilter(filterClass);
-    }
-
-    /**
      * Delegates to {@link ServletTestModule#addFilter(Filter)}
      */
     public void addFilter(Filter filter)
     {
         servletTestModule.addFilter(filter);
+    }
+    
+    /**
+     * Delegates to {@link ServletTestModule#releaseFilters}
+     */
+    public void releaseFilters()
+    {
+        servletTestModule.releaseFilters();
     }
 
     /**
@@ -135,14 +121,6 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     public void doFilter()
     {
         servletTestModule.doFilter();
-    }
-    
-    /**
-     * Delegates to {@link ServletTestModule#doChain}
-     */
-    public void doChain()
-    {
-        servletTestModule.doChain();
     }
 
     /**
@@ -207,6 +185,22 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     public void service()
     {
         servletTestModule.service();
+    }
+    
+    /**
+     * Delegates to {@link ServletTestModule#getFilteredRequest}
+     */
+    public ServletRequest getFilteredRequest()
+    {
+        return servletTestModule.getFilteredRequest();
+    }
+    
+    /**
+     * Delegates to {@link ServletTestModule#getFilteredResponse}
+     */
+    public ServletResponse getFilteredResponse()
+    {
+        return servletTestModule.getFilteredResponse();
     }
     
     /**

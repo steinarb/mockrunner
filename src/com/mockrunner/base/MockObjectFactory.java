@@ -107,16 +107,6 @@ public class MockObjectFactory
     }
     
     /**
-     * Returns a new {@link com.mockrunner.mock.MockFilterChain}
-     * regardless of the other mockobjects.
-     * @return the {@link com.mockrunner.mock.MockFilterChain}
-     */
-    public MockFilterChain createNewMockFilterChain()
-    {
-        return new MockFilterChain();
-    }
-    
-    /**
      * Returns the <code>MockServletConfig</code>
      * @return the <code>MockServletConfig</code>
      */
