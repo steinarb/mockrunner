@@ -55,6 +55,7 @@ public class MockUserTransaction implements UserTransaction
     
     public void begin() throws NotSupportedException, SystemException
     {
+        reset();
         beginCalled = true;
     }
 
@@ -65,6 +66,7 @@ public class MockUserTransaction implements UserTransaction
                                 IllegalStateException,
                                 SystemException
     {
+
         commitCalled = true;
     }
 

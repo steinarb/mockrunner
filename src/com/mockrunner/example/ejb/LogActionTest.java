@@ -10,9 +10,9 @@ import com.mockrunner.struts.ActionTestCaseAdapter;
 /**
  * Example test for {@link LogAction}. This example demonstrates
  * how to use {@link com.mockrunner.struts.ActionTestModule},
- * {@link com.mockrunner.jdbc.JDBCTestModule} and the MockEJB
- * framework in conjunction. This example works with the simulated JDBC
- * environment of Mockrunner.
+ * {@link com.mockrunner.jdbc.JDBCTestModule} and 
+ * {@link com.mockrunner.ejb.EJBTestModule} in conjunction. 
+ * This example works with the simulated JDBC environment of Mockrunner.
  */
 public class LogActionTest extends ActionTestCaseAdapter
 {
@@ -25,9 +25,8 @@ public class LogActionTest extends ActionTestCaseAdapter
         super.setUp();
         jdbcModule = createJDBCTestModule();
         ejbModule = createEJBTestModule();
-        ejbModule.setInterfacesPackages("com.mockrunner.example.ejb.interfaces");
-        bean = ejbModule.deploy("com/mockrunner/example/LogSession", LogSessionBean.class);
-        bean.setTransactionPolicy(TransactionPolicy.REQUIRED);
+        ejbModule.setInterfacePackage("com.mockrunner.example.ejb.interfaces");
+        bean = ejbModule.deploy("com/mockrunner/example/LogSession", LogSessionBean.class, TransactionPolicy.REQUIRED);
         ejbModule.addToContext("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
     }
     
