@@ -6,7 +6,7 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 
-import org.codehaus.activemq.router.filter.mockrunner.Filter;
+import org.codehaus.activemq.filter.mockrunner.Filter;
 import org.codehaus.activemq.selector.mockrunner.SelectorParser;
 
 /**

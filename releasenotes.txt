@@ -22,6 +22,8 @@ mockrunner-0.3.2:
   reported by Peter Ryan
 - fixed bug in MockHttpServletResponse.getWriter()
 - fixed bug in MockResultSet.setFetchDirection
+- replaced ActiveMQ classes with latest 1.5 version fixing some issues
+  with selector parsing
 
 mockrunner-0.3.1:
 

@@ -18,31 +18,31 @@
 package org.codehaus.activemq.mockrunner.test;
 
 import junit.framework.TestCase;
-
-import org.codehaus.activemq.router.filter.mockrunner.ComparisonExpression;
-import org.codehaus.activemq.router.filter.mockrunner.Expression;
-import org.codehaus.activemq.router.filter.mockrunner.ExpressionFilter;
-import org.codehaus.activemq.router.filter.mockrunner.Filter;
-import org.codehaus.activemq.router.filter.mockrunner.LogicExpression;
-import org.codehaus.activemq.router.filter.mockrunner.PropertyExpression;
+import org.codehaus.activemq.filter.mockrunner.ComparisonExpression;
+import org.codehaus.activemq.filter.mockrunner.Expression;
+import org.codehaus.activemq.filter.mockrunner.ExpressionFilter;
+import org.codehaus.activemq.filter.mockrunner.Filter;
+import org.codehaus.activemq.filter.mockrunner.LogicExpression;
+import org.codehaus.activemq.filter.mockrunner.PropertyExpression;
 import org.codehaus.activemq.selector.mockrunner.SelectorParser;
 
 /**
  * Alwin Ibba: Changed package
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class SelectorParserTest extends TestCase {
 
     public void testParseWithParensAround() throws Exception {
-        String[] values = { "x = 1 and y = 2", "(x = 1) and (y = 2)", "((x = 1) and (y = 2))"};
+        String[] values = {"x = 1 and y = 2", "(x = 1) and (y = 2)", "((x = 1) and (y = 2))"};
 
-        for (int i = 0; i < values.length; i++) {            
-            String value = values[i];   
-            
+        for (int i = 0; i < values.length; i++) {
+            String value = values[i];
+            System.out.println("Parsing: " + value);
+
             Filter filter = parse(value);
             assertTrue("Created ExpressionFilter filter", filter instanceof ExpressionFilter);
-            Expression andExpression = ((ExpressionFilter)filter).getExpression(); 
+            Expression andExpression = ((ExpressionFilter) filter).getExpression();
             assertTrue("Created LogicExpression expression", andExpression instanceof LogicExpression);
             LogicExpression logicExpression = (LogicExpression) andExpression;
             Expression left = logicExpression.getLeft();

@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  * 
- **/ 
+ **/
 
-package org.codehaus.activemq.router.filter.mockrunner;
+package org.codehaus.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -26,7 +26,7 @@ import javax.jms.Message;
  * Represents a subscription filter
  * 
  * Alwin Ibba: Changed package
- * 
+ *
  * @version $Revision: 1.1 $
  */
 public interface Filter {
@@ -35,5 +35,11 @@ public interface Filter {
      * @return true if this filter matches the given JMS message
      */
     public boolean matches(Message message) throws JMSException;
+
+    /**
+     * @return return true if this filter is a wildcard filter
+     *         and so can match multiple destinations
+     */
+    public boolean isWildcard();
 
 }

@@ -14,45 +14,35 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  * 
- **/ 
+ **/
 
-package org.codehaus.activemq.router.filter.mockrunner;
+package org.codehaus.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 
 
 /**
- * Represents a logical AND operation on two filters
+ * Represents a logical not operation on another filter
  * 
  * Alwin Ibba: Changed package
- * 
+ *
  * @version $Revision: 1.1 $
  */
-public class AndFilter implements Filter {
+public class NotFilter implements Filter {
 
-    private Filter left;
-    private Filter right;
+    private Filter filter;
 
-    public AndFilter(Filter left, Filter right) {
-        this.left = left;
-        this.right = right;
+    public NotFilter(Filter filter) {
+        this.filter = filter;
     }
-    
+
     public boolean matches(Message message) throws JMSException {
-        if (left.matches(message)) {
-            return right.matches(message);
-        }
-        else {
-            return false;
-        }
+        return !filter.matches(message);
     }
-    
-    public Filter getLeft() {
-        return left;
+
+    public boolean isWildcard() {
+        return false;
     }
-    
-    public Filter getRight() {
-        return right;
-    }
+
 }

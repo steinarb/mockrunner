@@ -1,6 +1,6 @@
 package com.mockrunner.test.jms;
 
-import org.codehaus.activemq.router.filter.mockrunner.Filter;
+import org.codehaus.activemq.filter.mockrunner.Filter;
 import org.codehaus.activemq.selector.mockrunner.SelectorParser;
 
 import com.mockrunner.mock.jms.MockTextMessage;
@@ -78,5 +78,10 @@ public class MessageSelectorTest extends TestCase
         assertTrue(wildcardFilter.matches(message));
         message.setStringProperty("stringProperty", "1XYZ");
         assertFalse(wildcardFilter.matches(message));
+        wildcardFilter = parser.parse("stringProperty LIKE '__xyz'");
+        message.setStringProperty("stringProperty", "xyz");
+        assertFalse(wildcardFilter.matches(message));
+        message.setStringProperty("stringProperty", "\nbxyz");
+        assertTrue(wildcardFilter.matches(message));
     }
 }

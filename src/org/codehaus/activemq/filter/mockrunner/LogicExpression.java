@@ -15,7 +15,7 @@
  * limitations under the License. 
  * 
  **/
-package org.codehaus.activemq.router.filter.mockrunner;
+package org.codehaus.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -30,10 +30,20 @@ import javax.jms.Message;
 public abstract class LogicExpression extends BinaryExpression implements BooleanExpression {
 
     public static BooleanExpression createOR(BooleanExpression lvalue, BooleanExpression rvalue) {
-        return new LogicExpression(lvalue,rvalue) {
-            protected Object evaluate(Boolean lv, Boolean rv) {
-                return lv.booleanValue() || rv.booleanValue() ? Boolean.TRUE : Boolean.FALSE;
+        return new LogicExpression(lvalue, rvalue) {
+        	
+            public Object evaluate(Message message) throws JMSException {
+                
+            	Boolean lv = (Boolean) left.evaluate(message);
+                // Can we do an OR shortcut??
+            	if (lv !=null && lv.booleanValue()) {
+                    return Boolean.TRUE;
+                }
+            	
+                Boolean rv = (Boolean) right.evaluate(message);
+                return rv==null ? null : rv;
             }
+
             public String getExpressionSymbol() {
                 return "OR";
             }
@@ -41,10 +51,27 @@ public abstract class LogicExpression extends BinaryExpression implements Boolea
     }
 
     public static BooleanExpression createAND(BooleanExpression lvalue, BooleanExpression rvalue) {
-        return new LogicExpression(lvalue,rvalue) {
+        return new LogicExpression(lvalue, rvalue) {
+            
+        	public Object evaluate(Message message) throws JMSException {
+                
+            	Boolean lv = (Boolean) left.evaluate(message);
+            	
+                // Can we do an AND shortcut??
+            	if( lv==null )
+            		return null;
+            	if (!lv.booleanValue()) {
+                    return Boolean.FALSE;
+                }
+            	
+                Boolean rv = (Boolean) right.evaluate(message);
+                return rv==null ? null : rv;
+            }
+
             protected Object evaluate(Boolean lv, Boolean rv) {
                 return lv.booleanValue() && rv.booleanValue() ? Boolean.TRUE : Boolean.FALSE;
             }
+
             public String getExpressionSymbol() {
                 return "AND";
             }
@@ -59,14 +86,7 @@ public abstract class LogicExpression extends BinaryExpression implements Boolea
         super(left, right);
     }
 
-    public Object evaluate(Message message) throws JMSException {
-        Boolean lv = (Boolean) left.evaluate(message);
-        if (lv == null) return null;
-        Boolean rv = (Boolean) right.evaluate(message);
-        if (rv == null) return null;
-        return evaluate(lv, rv);
-    }
+    abstract public Object evaluate(Message message) throws JMSException;
 
-    abstract protected Object evaluate(Boolean lv, Boolean rv);
 
 }
