@@ -40,7 +40,7 @@ import com.mockrunner.util.StringUtil;
  * Can be used to add simulated database entries.
  * You can add Java objects of any type. This
  * mock implementation does not care about SQL
- * data types and tries to perform the necessary
+ * data types. It tries to perform the necessary
  * type conversions for the Java objects (e.g. it will convert a 
  * <code>String</code> "1" to <code>int</code> 1). 
  * Please check out the documentation of <code>ResultSet</code> 
