@@ -19,6 +19,7 @@ import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockStatement;
+import com.mockrunner.mock.jdbc.MockStruct;
 
 public class MockStatementTest extends BaseTestCase
 {
@@ -490,17 +491,19 @@ public class MockStatementTest extends BaseTestCase
     {
         callableStatementHandler.prepareGlobalUpdateCount(5);
         callableStatementHandler.prepareUpdateCount("doTest", 4);
+        MockStruct struct = new MockStruct("test");
+        struct.addAttribute("attribute");
         Map params = new HashMap();
         params.put("1", "Test");
-        params.put(new Integer(5), new Long(2));
+        params.put(new Integer(5), struct);
         params.put(new Integer(6), "xyz");
         callableStatementHandler.prepareUpdateCount("doTest", 3, params);
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doTest(?, ?, ?)}");
-        statement.setLong(5, 2);
+        statement.setObject(5, struct.clone());
         statement.setString(6, "xyz");
         statement.setString("1", "Test");
         statement.addBatch();
-        statement.setLong(5, 3);
+        statement.setObject(5, new MockStruct("test"));
         statement.addBatch();
         int[] updateCounts = statement.executeBatch();
         assertTrue(updateCounts.length == 2);

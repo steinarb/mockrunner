@@ -13,7 +13,7 @@ import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.CollectionUtil;
 
 /**
- * Mock implementation of a JDBC 3.0 <code>Blob</code>.
+ * Mock implementation of <code>Blob</code>.
  */
 public class MockBlob implements Blob, Cloneable
 {

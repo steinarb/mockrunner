@@ -11,6 +11,7 @@ import com.mockrunner.mock.jdbc.MockArray;
 import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockRef;
+import com.mockrunner.mock.jdbc.MockStruct;
 
 /**
  * Util class for <code>PreparedStatement</code> and <code>ResultSet</code>
@@ -21,38 +22,16 @@ public class ParameterUtil
     /**
      * Copies a parameter of a <code>PreparedStatement</code>,
      * <code>CallableStatement</code> or <code>ResultSet</code>.
-     * Since the parameters can be of the type <code>byte[]</code>,
-     * <code>InputStream</code>, <code>Reader</code>, <code>Ref</code>,
-     * <code>Array</code>, <code>Blob</code> or <code>Clob</code>,
-     * this method can handle these types of objects.
-     * <code>InputStream</code>, <code>Reader</code> and arrays
-     * are copied into new allocated streams resp. arrays.
-     * <code>Ref</code>, <code>Array</code>, <code>Blob</code> and 
-     * <code>Clob</code> objects are cloned. All other objects are
-     * cloned by calling the clone method. If the object is not
-     * cloneable, it is returned unchanged.
+     * <code>InputStream</code> objects, <code>Reader</code> objects 
+     * and arrays are copied into new allocated streams resp. arrays.
+     * All other objects are cloned by calling the clone method. 
+     * If the object is not cloneable, it is returned unchanged.
      * @param source the parameter to copy
      * @return a copy of the parameter
      */
     public static Object copyParameter(Object source)
     {
         if(null == source) return null;
-        if(source instanceof MockRef)
-        {
-            return ((MockRef)source).clone();
-        }
-        if(source instanceof MockArray)
-        {
-            return ((MockArray)source).clone();
-        }
-        if(source instanceof MockBlob)
-        {
-            return ((MockBlob)source).clone();
-        }
-        if(source instanceof MockClob)
-        {
-            return ((MockClob)source).clone();
-        }
         if(source.getClass().isArray())
         {
             return ArrayUtil.copyArray(source);
@@ -88,9 +67,9 @@ public class ParameterUtil
      * methods.
      * Since the parameters can be of the type <code>byte[]</code>,
      * <code>InputStream</code>, <code>Reader</code>, <code>Ref</code>,
-     * <code>Array</code>, <code>Blob</code> or <code>Clob</code>,
-     * this method can handle these types of objects. All other objects
-     * are compared using the <code>equals</code> method.
+     * <code>Array</code>, <code>Blob</code>, <code>Clob</code> or
+     * <code>Struct</code> this method can handle these types of objects. 
+     * All other objects are compared using the <code>equals</code> method.
      * @param source the first parameter
      * @param target the second parameter
      * @return <code>true</code> if <i>source</i> is equal to <i>target</i>,
@@ -127,6 +106,10 @@ public class ParameterUtil
         if(source instanceof MockClob && target instanceof MockClob)
         {
             return compareClob(source, target);
+        }
+        if(source instanceof MockStruct && target instanceof MockStruct)
+        {
+            return compareStruct(source, target);
         }
         return source.equals(target);
     }
@@ -183,6 +166,22 @@ public class ParameterUtil
         {
             return false;
         }
-    }  
+    }
+    
+    private static boolean compareStruct(Object source, Object target)
+    {
+        try
+        {
+            String sourceName = ((MockStruct)source).getSQLTypeName();
+            String targetName = ((MockStruct)target).getSQLTypeName();
+            Object[] sourceArray = ((MockStruct)source).getAttributes();
+            Object[] targetArray = ((MockStruct)target).getAttributes();
+            return (sourceName.equals(targetName)) && (Arrays.equals(sourceArray, targetArray));
+        }
+        catch(SQLException exc)
+        {
+            return false;
+        }
+    }
 }
 

@@ -13,6 +13,7 @@ public class AllJDBCTests
         suite.addTest(new TestSuite(MockArrayTest.class));
         suite.addTest(new TestSuite(MockBlobTest.class));
         suite.addTest(new TestSuite(MockClobTest.class));
+        suite.addTest(new TestSuite(MockStructTest.class));
         suite.addTest(new TestSuite(MockResultSetTest.class));
         suite.addTest(new TestSuite(MockStatementTest.class));
         suite.addTest(new TestSuite(FileResultSetFactoryTest.class));
@@ -21,7 +22,7 @@ public class AllJDBCTests
 		suite.addTest(new TestSuite(AbstractParameterResultSetHandlerTest.class));
 		suite.addTest(new TestSuite(AbstractOutParameterResultSetHandlerTest.class));
 		suite.addTest(new TestSuite(ParameterSetsTest.class));
-		suite.addTest(new TestSuite(SQLStatementMatcherTest.class));
+		suite.addTest(new TestSuite(SQLStatementMatcherTest.class));	
         //$JUnit-END$
         return suite;
     }

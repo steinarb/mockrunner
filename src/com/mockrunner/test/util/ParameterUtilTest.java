@@ -13,6 +13,7 @@ import com.mockrunner.mock.jdbc.MockArray;
 import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockRef;
+import com.mockrunner.mock.jdbc.MockStruct;
 import com.mockrunner.util.ParameterUtil;
 import com.mockrunner.util.StreamUtil;
 
@@ -42,6 +43,20 @@ public class ParameterUtilTest extends TestCase
         assertTrue(ParameterUtil.compareParameter(new MockClob("123"), new MockClob("123")));
         assertTrue(ParameterUtil.compareParameter(new MockClob(""), new MockClob("")));
         assertFalse(ParameterUtil.compareParameter(new MockClob("1"), new MockClob("")));
+        assertTrue(ParameterUtil.compareParameter(new MockStruct(""), new MockStruct("")));
+        assertTrue(ParameterUtil.compareParameter(new MockStruct("123"), new MockStruct("123")));
+        assertFalse(ParameterUtil.compareParameter(new MockStruct("123"), new MockStruct("")));
+        MockStruct struct = new MockStruct("123");
+        struct.addAttribute("test");
+        assertTrue(ParameterUtil.compareParameter(struct, struct));
+        assertFalse(ParameterUtil.compareParameter(struct, new MockStruct("123")));
+        MockStruct anotherStruct = new MockStruct("123");
+        anotherStruct.addAttribute("test");
+        assertTrue(ParameterUtil.compareParameter(struct, anotherStruct));
+        anotherStruct.addAttribute(new Integer(2));
+        assertFalse(ParameterUtil.compareParameter(struct, anotherStruct));
+        struct.addAttribute(new Integer(2));
+        assertTrue(ParameterUtil.compareParameter(struct, anotherStruct));
     }
     
     public void testCopyParameter()
