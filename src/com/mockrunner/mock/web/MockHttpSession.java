@@ -131,6 +131,11 @@ public class MockHttpSession implements HttpSession
     public synchronized void setAttribute(String key, Object value)
     {
         if (!isValid) throw new IllegalStateException("session invalid");
+        Object oldValue = getAttribute(key);
+        if(null != oldValue)
+        {
+            callValueUnboundMethod(key, oldValue);
+        }
         callValueBoundMethod(key, value);
         attributes.put(key, value);
     }
