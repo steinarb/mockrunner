@@ -6,18 +6,24 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.jms.BytesMessage;
+import javax.jms.Destination;
+import javax.jms.InvalidDestinationException;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
+import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
+import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
+import javax.jms.QueueBrowser;
 import javax.jms.Session;
 import javax.jms.StreamMessage;
 import javax.jms.TemporaryQueue;
 import javax.jms.TemporaryTopic;
 import javax.jms.TextMessage;
 import javax.jms.Topic;
+import javax.jms.TopicSubscriber;
 
 import com.mockrunner.jms.MessageManager;
 import com.mockrunner.jms.QueueTransmissionManager;
@@ -296,6 +302,8 @@ public class MockSession implements Session
         {
             rollback();
         }
+        getQueueTransmissionManager().closeAll();
+        getTopicTransmissionManager().closeAll();
         closed = true;
     }
 
@@ -303,6 +311,12 @@ public class MockSession implements Session
     {
         connection.throwJMSException();
         recovered = true;
+    }
+    
+    public void unsubscribe(String name) throws JMSException
+    {
+        getConnection().throwJMSException();
+        topicTransManager.removeTopicDurableSubscriber(name);
     }
     
     public Queue createQueue(String name) throws JMSException
@@ -345,6 +359,92 @@ public class MockSession implements Session
         tempTopics.add(topic);
         addSessionToTopic(topic);
         return topic;
+    }
+    
+    public MessageConsumer createConsumer(Destination destination) throws JMSException
+    {
+        getConnection().throwJMSException();
+        return createConsumer(destination, null);
+    }
+    
+    public MessageConsumer createConsumer(Destination destination, String messageSelector) throws JMSException
+    {
+        getConnection().throwJMSException();
+        return createConsumer(destination, null, false);
+    }
+    
+    public MessageConsumer createConsumer(Destination destination, String messageSelector, boolean noLocal) throws JMSException
+    {
+        if(destination instanceof MockQueue)
+        {
+            getConnection().throwJMSException();      
+            addSessionToQueue((Queue)destination);
+            return getQueueTransmissionManager().createQueueReceiver((MockQueue)destination, messageSelector);
+        }
+        else if(destination instanceof MockTopic)
+        {
+            getConnection().throwJMSException();
+            addSessionToTopic((Topic)destination);
+            return getTopicTransmissionManager().createTopicSubscriber((MockTopic)destination, messageSelector, noLocal);
+        }
+        else
+        {
+            throw new InvalidDestinationException("destination must be an instance of MockQueue or MockTopic");
+        }
+    }
+    
+    public MessageProducer createProducer(Destination destination) throws JMSException
+    {
+        if(destination instanceof MockQueue)
+        {
+            getConnection().throwJMSException();
+            addSessionToQueue((Queue)destination);
+            return getQueueTransmissionManager().createQueueSender((MockQueue)destination);
+        }
+        else if(destination instanceof MockTopic)
+        {
+            getConnection().throwJMSException();
+            addSessionToTopic((Topic)destination);
+            return getTopicTransmissionManager().createTopicPublisher((MockTopic)destination);
+        }
+        else
+        {
+            throw new InvalidDestinationException("destination must be an instance of MockQueue or MockTopic");
+        }
+    }
+    
+    public QueueBrowser createBrowser(Queue queue) throws JMSException
+    {
+        getConnection().throwJMSException();
+        return createBrowser(queue, null);
+    }
+
+    public QueueBrowser createBrowser(Queue queue, String messageSelector) throws JMSException
+    {
+        getConnection().throwJMSException();
+        if(!(queue instanceof MockQueue))
+        {
+            throw new InvalidDestinationException("queue must be an instance of MockQueue");
+        }
+        addSessionToQueue(queue);
+        return queueTransManager.createQueueBrowser((MockQueue)queue, messageSelector);
+    }
+    
+    public TopicSubscriber createDurableSubscriber(Topic topic, String name) throws JMSException
+    {
+        getConnection().throwJMSException();
+        return createDurableSubscriber(topic, name, null, false);
+    }
+
+    public TopicSubscriber createDurableSubscriber(Topic topic, String name, String messageSelector, boolean noLocal) throws JMSException
+    {
+        getConnection().throwJMSException();
+        if(!(topic instanceof MockTopic))
+        {
+            throw new InvalidDestinationException("topic must be an instance of MockTopic");
+        }
+        addSessionToTopic(topic);
+        return topicTransManager.createDurableTopicSubscriber((MockTopic)topic, name, messageSelector, noLocal);
     }
     
     protected MockConnection getConnection()
