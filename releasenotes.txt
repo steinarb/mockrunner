@@ -1,8 +1,9 @@
 
 mockrunner-0.2.5:
 
-- all TestCaseAdapter methods are protected now
+- first version of the JMS test framework
 - added methods to EJBTestModule to deploy message driven beans
+- all TestCaseAdapter methods are protected now
 - added clearOutput and setCaseSensitive methods to ServletTestModule
 - added setCaseSensitive method to ServletTestModule and TagTestModule
 - added JDBC Driver preserve mechanism to JDBCMockObjectFactory

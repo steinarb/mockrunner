@@ -9,6 +9,7 @@ import com.mockrunner.example.jdbc.BankTest;
 import com.mockrunner.example.jdbc.BookstoreTest;
 import com.mockrunner.example.jdbc.PayActionTest;
 import com.mockrunner.example.jms.PrintMessageServletTest;
+import com.mockrunner.example.jms.PrintSessionBeanTest;
 import com.mockrunner.example.jms.StockQuotePublisherTest;
 import com.mockrunner.example.servlet.ImageButtonFilterTest;
 import com.mockrunner.example.servlet.LogoutServletTest;
@@ -59,6 +60,7 @@ public class AllTests
         suite.addTest(new TestSuite(PaySessionTest.class));
         suite.addTest(new TestSuite(PrintMessageServletTest.class));
         suite.addTest(new TestSuite(StockQuotePublisherTest.class));
+        suite.addTest(new TestSuite(PrintSessionBeanTest.class));
         //$JUnit-END$
         return suite;
     }

@@ -252,7 +252,7 @@ public class EJBTestModule
     
     /**
      * Creates a message driven bean.
-     * @param the mock ejb object.
+     * @param ejbObject the mock ejb object.
      */
     public MessageListener createMessageBean(MockEjbObject ejbObject)
     {
