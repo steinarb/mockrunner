@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
-
 /**
  * The purpose of this simple tag is to filter images. If its
  * body contains HTML image tags of the form
