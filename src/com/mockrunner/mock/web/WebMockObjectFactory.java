@@ -5,8 +5,6 @@ import java.lang.reflect.Constructor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.mockobjects.servlet.MockServletConfig;
-
 /**
  * Used to create all types of web mock objects. Maintains
  * the necessary dependencies between the mock objects.
