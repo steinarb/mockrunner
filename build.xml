@@ -44,6 +44,12 @@
 
 		<filter token="version" value="${version}"/>
         <filter token="timestamp" value="${timestamp}"/>
+        
+        <path id="classpath.jar">
+            <fileset dir="${lib}">
+                <include name="*.jar"/>
+            </fileset>
+        </path>
        
 	</target>
 		
@@ -52,9 +58,7 @@
 		<javac srcdir="${src}" destdir="${build}" executable="${java1.4.home}/bin/javac" fork="true" nowarn="true">
 		 	<classpath>
                 <pathelement location="${build}"/>
-	            <fileset dir="${lib}">
-	                <include name="*.jar"/>
-	            </fileset>
+	            <path refid="classpath.jar"/>
             </classpath>
 		</javac>
 	</target>
@@ -64,9 +68,7 @@
 		<javac destdir="${build1.3}" target="1.2" executable="${java1.3.home}/bin/javac" fork="true" nowarn="true">
 		 	<classpath>
                 <pathelement location="${build1.3}"/>
-	            <fileset dir="${lib}">
-	                <include name="*.jar"/>
-	            </fileset>
+	            <path refid="classpath.jar"/>
             </classpath>
             <src path="${src}/com/mockrunner/base"/>
             <src path="${src}/com/mockrunner/servlet"/>
@@ -125,14 +127,12 @@
 				
 				<classpath>
 	                <pathelement location="${build}"/>
-		            <fileset dir="${lib}">
-		                <include name="*.jar"/>
-		            </fileset>
+		            <path refid="classpath.jar"/>
             	</classpath>
             	
 			    <fileset dir="${src}" defaultexcludes="yes">
-			    	<exclude name="com/mockrunner/**/*.txt" />
 			    	<include name="com/mockrunner/**" />
+			    	<exclude name="com/mockrunner/**/*.txt" />
 			    	<exclude name="com/mockrunner/test/**" />
 			    	<exclude name="com/mockrunner/example/ejb/interfaces/**" />
 			    </fileset>
