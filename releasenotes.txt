@@ -7,6 +7,10 @@ mockrunner-0.2.7:
 - fixed problem with restoreDrivers() method of JDBCMockObjectFactory 
   (now clears the list of preserved drivers after restoring them)
 - added registerMockDriver() to JDBCMockObjectFactory
+- disabled namespace processing of NekoHTML parser, because of
+  problems with NekoHTML 0.9
+- updated nekohtml.jar from 0.8.3 to 0.9
+- updated servlet.jar from Tomcat 4.1.29 to 4.1.30
 
 mockrunner-0.2.6:
 
