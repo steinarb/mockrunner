@@ -310,14 +310,17 @@ public class MockResultSetTest extends TestCase
         resultSet.addRow(new String[] {"4", "5", "6"});
         resultSet.addRow(new String[] {"7", "8", "9"});
         assertTrue(resultSet.isBeforeFirst());
+        assertFalse(resultSet.isAfterLast());
         assertTrue(resultSet.last());
         assertTrue(resultSet.isLast());
         assertTrue(resultSet.first());
         assertTrue(resultSet.isFirst());
         resultSet.afterLast();
         assertTrue(resultSet.isAfterLast());
+        assertFalse(resultSet.isBeforeFirst());
         resultSet.beforeFirst();
         assertTrue(resultSet.isBeforeFirst());
+        assertFalse(resultSet.isAfterLast());
         assertTrue(resultSet.next());
         assertTrue(resultSet.isFirst());
         assertFalse(resultSet.previous());
