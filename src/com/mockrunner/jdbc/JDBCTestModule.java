@@ -775,7 +775,7 @@ public class JDBCTestModule
      */
     public void verifyCallableStatementNotPresent(String sql)
     {
-        if(null != getCallableStatement(sql) )
+        if(null != getCallableStatement(sql))
         {
             throw new VerifyFailedException("Callable statement with SQL " +  sql + " not present.");
         }
@@ -1228,6 +1228,122 @@ public class JDBCTestModule
         {
             throw new VerifyFailedException("Callable statement parameter with name " + nameOfParameter + " has the value " +
                                              actualObject.toString() + ", expected " + object.toString());
+        }
+    }
+    
+    /**
+     * Verifies that an out parameter was registered on the specified
+     * <code>CallableStatement</code>.
+     * @param statement the <code>CallableStatement</code>
+     * @param indexOfParameter the index of the parameter
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementOutParameterRegistered(CallableStatement statement, int indexOfParameter)
+    {
+        if(!((MockCallableStatement)statement).isOutParameterRegistered(indexOfParameter))
+        {
+            throw new VerifyFailedException("Out parameter with index " + indexOfParameter +
+                                            " not registered in callable statement ");
+        }
+    }
+
+    /**
+     * Verifies that an out parameter was registered on the
+     * <code>CallableStatement</code> with the specified SQL.
+     * @param sql the SQL statement
+     * @param indexOfParameter the index of the parameter
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementOutParameterRegistered(String sql, int indexOfParameter)
+    {
+        MockCallableStatement statement = getCallableStatement(sql);
+        if(null == statement)
+        {
+            throw new VerifyFailedException("No callable statement " + sql + " present");
+        }
+        if(!statement.isOutParameterRegistered(indexOfParameter))
+        {
+            throw new VerifyFailedException("Out parameter with index " + indexOfParameter +
+                                            " not registered in callable statement " + sql);
+        }
+    }
+
+    /**
+     * Verifies that an out parameter was registered on the
+     * <code>CallableStatement</code> with the specified index.
+     * @param indexOfStatement the index of the <code>CallableStatement</code>
+     * @param indexOfParameter the index of the parameter
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementOutParameterRegistered(int indexOfStatement, int indexOfParameter)
+    {
+        MockCallableStatement statement = getCallableStatement(indexOfStatement);
+        if(null == statement)
+        {
+            throw new VerifyFailedException("No callable statement with index " + indexOfStatement + " present");
+        }
+        if(!statement.isOutParameterRegistered(indexOfParameter))
+        {
+            throw new VerifyFailedException("Out parameter with index " + indexOfParameter +
+                                            " not registered in callable statement with index " + indexOfStatement);
+        }
+    }
+    
+    /**
+     * Verifies that an out parameter was registered on the specified
+     * <code>CallableStatement</code>.
+     * @param statement the <code>CallableStatement</code>
+     * @param nameOfParameter the name of the parameter
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementOutParameterRegistered(CallableStatement statement, String nameOfParameter)
+    {
+        if(!((MockCallableStatement)statement).isOutParameterRegistered(nameOfParameter))
+        {
+            throw new VerifyFailedException("Out parameter with name " + nameOfParameter +
+                                            " not registered in callable statement ");
+        }
+    }
+    
+    /**
+     * Verifies that an out parameter was registered on the
+     * <code>CallableStatement</code> with the specified SQL.
+     * @param sql the SQL statement
+     * @param nameOfParameter the name of the parameter
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementOutParameterRegistered(String sql, String nameOfParameter)
+    {
+        MockCallableStatement statement = getCallableStatement(sql);
+        if(null == statement)
+        {
+            throw new VerifyFailedException("No callable statement " + sql + " present");
+        }
+        if(!statement.isOutParameterRegistered(nameOfParameter))
+        {
+            throw new VerifyFailedException("Out parameter with name " + nameOfParameter +
+                                            " not registered in callable statement " + sql);
+        }
+    }
+    
+    /**
+     * Verifies that an out parameter was registered on the
+     * <code>CallableStatement</code> with the specified index.
+     * @param indexOfStatement the index of the <code>CallableStatement</code>
+     * @param nameOfParameter the name of the parameter
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementOutParameterRegistered(int indexOfStatement, String nameOfParameter)
+    {
+        MockCallableStatement statement = getCallableStatement(indexOfStatement);
+        if(null == statement)
+            {
+                throw new VerifyFailedException("No callable statement with index " + indexOfStatement + " present");
+            }
+        if(!statement.isOutParameterRegistered(nameOfParameter))
+        {
+            throw new VerifyFailedException("Out parameter with name " + nameOfParameter +
+                                            " not registered in callable statement with index " + indexOfStatement);
         }
     }
     

@@ -674,6 +674,54 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link JDBCTestModule#verifyCallableStatementOutParameterRegistered(CallableStatement, int)}
+     */
+    protected void verifyCallableStatementOutParameterRegistered(CallableStatement statement, int indexOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementOutParameterRegistered(statement, indexOfParameter);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifyCallableStatementOutParameterRegistered(String, int)}
+     */
+    protected void verifyCallableStatementOutParameterRegistered(String sql, int indexOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementOutParameterRegistered(sql, indexOfParameter);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifyCallableStatementOutParameterRegistered(int, int)}
+     */
+    protected void verifyCallableStatementOutParameterRegistered(int indexOfStatement, int indexOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementOutParameterRegistered(indexOfStatement, indexOfParameter);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifyCallableStatementOutParameterRegistered(CallableStatement, String)}
+     */
+    protected void verifyCallableStatementOutParameterRegistered(CallableStatement statement, String nameOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementOutParameterRegistered(statement, nameOfParameter);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifyCallableStatementOutParameterRegistered(String, String)}
+     */
+    protected void verifyCallableStatementOutParameterRegistered(String sql, String nameOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementOutParameterRegistered(sql, nameOfParameter);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifyCallableStatementOutParameterRegistered(int, String)}
+     */
+    protected void verifyCallableStatementOutParameterRegistered(int indexOfStatement, String nameOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementOutParameterRegistered(indexOfStatement, nameOfParameter);
+    }
+    
+    /**
      * Delegates to {@link JDBCTestModule#verifySavepointPresent(int)}
      */
     protected void verifySavepointPresent(int index)
