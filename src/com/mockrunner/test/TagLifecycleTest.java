@@ -106,6 +106,22 @@ public class TagLifecycleTest extends BaseTestCase
         assertFalse(level3child2Tag.wasDoEndTagCalled());
     }
     
+    public void testPopulated() throws Exception
+    {
+        level1child1Tag.setDoStartTagReturnValue(TagSupport.EVAL_BODY_INCLUDE);
+        level1child2Tag.setDoStartTagReturnValue(TagSupport.SKIP_BODY);
+        level1child3Tag.setDoStartTagReturnValue(BodyTagSupport.EVAL_BODY_BUFFERED);
+        root.doLifecycle();
+        assertEquals("test", rootTag.getTestString());
+        assertEquals("test", level1child1Tag.getTestString());
+        assertEquals("test", level1child2Tag.getTestString());
+        assertEquals("test", level1child2Tag.getTestString());
+        assertNull(level2child1Tag.getTestString());
+        assertNull(level2child2Tag.getTestString());
+        assertNull(level3child1Tag.getTestString());
+        assertNull(level3child2Tag.getTestString());
+    }
+    
     public void testOutput() throws Exception
     {
         level1child1Tag.setDoStartTagReturnValue(TagSupport.SKIP_BODY);
