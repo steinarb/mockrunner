@@ -110,7 +110,6 @@ public class JavaClassGenerator
         appendMembers(assembler);
         appendConstructors(assembler);
         assembler.setIndentLevel(0);
-        assembler.appendNewLine();
         assembler.appendRightBrace();
         return assembler.getResult();
     }
