@@ -14,7 +14,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
 public class StringUtil
 {
     /**
-     * Appends the entried in the specified <code>List</code> as strings
+     * Appends the entries in the specified <code>List</code> as strings
      * with a terminating <i>"\n"</i> after each row.
      * @param buffer the buffer
      * @param data the <code>List</code> with the data
