@@ -70,7 +70,6 @@ public class NestedTagTest extends BaseTestCase
     public void testPopulateAttributesBody()
     {
         prepareBodyTagTest();
-        System.out.println(nestedTagRoot.toString());
         nestedTagRoot.populateAttributes();
         assertEquals("test", ((TestBodyTag)testTag).getTestString());
         assertNull(((TestTag)testTag1).getTestString());

@@ -170,6 +170,14 @@ public class TagTestCaseAdapter extends BaseTestCase
     {
         return tagTestModule.processTagLifecycle();
     }
+    
+    /**
+     * Delegates to {@link TagTestModule#clearOutput}
+     */
+    protected void clearOutput()
+    {
+        tagTestModule.clearOutput();
+    }
 
     /**
      * Delegates to {@link TagTestModule#getOutput}

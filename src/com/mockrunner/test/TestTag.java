@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.TagSupport;
 
 public class TestTag extends TagSupport
@@ -52,7 +53,12 @@ public class TestTag extends TagSupport
     public int doAfterBody() throws JspException
     {
         doAfterBodyCalled = true;
-        return doAfterBodyReturnValue;
+        int returnValue = doAfterBodyReturnValue;
+        if(BodyTagSupport.EVAL_BODY_AGAIN == doAfterBodyReturnValue)
+        {
+            doAfterBodyReturnValue = BodyTagSupport.SKIP_BODY;      
+        }
+        return returnValue;
     }
 
     public int doEndTag() throws JspException

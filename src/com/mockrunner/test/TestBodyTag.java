@@ -3,6 +3,7 @@ package com.mockrunner.test;
 import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -13,6 +14,7 @@ public class TestBodyTag extends BodyTagSupport
     private Integer testInteger;
     private double testDouble;
     private PageContext context;
+    private JspWriter bufferedOut;
     private boolean releaseCalled = false;
     private int doStartTagReturnValue = TagSupport.EVAL_BODY_INCLUDE;
     private int doEndTagReturnValue = TagSupport.EVAL_PAGE;
@@ -54,12 +56,18 @@ public class TestBodyTag extends BodyTagSupport
     public void doInitBody() throws JspException
     {
         doInitBodyCalled = true;
+        bufferedOut = pageContext.getOut();
     }
 
     public int doAfterBody() throws JspException
     {
         doAfterBodyCalled = true;
-        return doAfterBodyReturnValue;
+        int returnValue = doAfterBodyReturnValue;
+        if(BodyTagSupport.EVAL_BODY_AGAIN == doAfterBodyReturnValue)
+        {
+            doAfterBodyReturnValue = BodyTagSupport.SKIP_BODY;      
+        }
+        return returnValue;
     }
 
     public int doEndTag() throws JspException
@@ -107,6 +115,11 @@ public class TestBodyTag extends BodyTagSupport
     public PageContext getPageContext()
     {
         return context;
+    }
+    
+    public JspWriter getBufferedOut()
+    {
+        return bufferedOut;
     }
     
     public void release()

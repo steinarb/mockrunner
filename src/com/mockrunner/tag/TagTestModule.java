@@ -1,5 +1,6 @@
 package com.mockrunner.tag;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -251,6 +252,23 @@ public class TagTestModule
             return ((NestedTag)tag).doLifecycle();
         }
         catch(JspException exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
+    /**
+     * Resets the output buffer.
+     */
+    public void clearOutput()
+    {
+        MockJspWriter writer = (MockJspWriter)mockFactory.getMockPageContext().getOut();
+        try
+        {
+            writer.clearBuffer();
+        }
+        catch(IOException exc)
         {
             exc.printStackTrace();
             throw new RuntimeException(exc.getMessage());
