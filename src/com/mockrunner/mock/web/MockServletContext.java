@@ -30,7 +30,7 @@ import com.mockrunner.util.ArrayUtil;
 public class MockServletContext implements ServletContext
 {
     private Map attributes;
-    private MockRequestDispatcher dispatcher;
+    private Map requestDispatchers;
     private Map subContexts;
     private Map initParameters;
     private Map mimeTypes;
@@ -44,7 +44,7 @@ public class MockServletContext implements ServletContext
     public MockServletContext()
     {
         attributes = new HashMap();
-        dispatcher = new MockRequestDispatcher();
+        requestDispatchers = new HashMap();
         subContexts = new HashMap();
         initParameters = new HashMap();
         mimeTypes = new HashMap();
@@ -93,14 +93,47 @@ public class MockServletContext implements ServletContext
         handleAttributeListenerCalls(key, value, oldValue);
     }
     
-    public synchronized RequestDispatcher getNamedDispatcher(String arg0)
+    public synchronized RequestDispatcher getNamedDispatcher(String name)
     {
-        return dispatcher;
+        return getRequestDispatcher(name);
     }
 
-    public synchronized RequestDispatcher getRequestDispatcher(String arg0)
+    public synchronized RequestDispatcher getRequestDispatcher(String path)
     {
+        MockRequestDispatcher dispatcher = (MockRequestDispatcher)requestDispatchers.get(path);
+        if(null == dispatcher)
+        {
+            dispatcher = new MockRequestDispatcher();
+            setRequestDispatcher(path, dispatcher);
+        }
         return dispatcher;
+    }
+    
+    /**
+     * Returns the map of <code>RequestDispatcher</code> objects. The specified path
+     * maps to the corresponding <code>RequestDispatcher</code> object.
+     * @return the map of <code>RequestDispatcher</code> objects
+     */
+    public synchronized Map getRequestDispatcherMap()
+    {
+        return Collections.unmodifiableMap(requestDispatchers);
+    }
+    
+    /**
+     * Sets a <code>RequestDispatcher</code> that will be returned when calling
+     * {#getRequestDispatcher} with the specified path. If no <code>RequestDispatcher</code>
+     * is set for the specified path, {#getRequestDispatcher} automatically creates a
+     * new one.
+     * @param path the path for the <code>RequestDispatcher</code>
+     * @param dispatcher the <code>RequestDispatcher</code> object
+     */
+    public synchronized void setRequestDispatcher(String path, RequestDispatcher dispatcher)
+    {
+        if(dispatcher instanceof MockRequestDispatcher)
+        {
+            ((MockRequestDispatcher)dispatcher).setPath(path);
+        }
+        requestDispatchers.put(path, dispatcher);
     }
     
     public synchronized ServletContext getContext(String url)
