@@ -1,4 +1,4 @@
-package com.mockrunner.test.web;
+package com.mockrunner.test.util;
 
 import java.io.FileInputStream;
 import java.util.List;
@@ -9,7 +9,6 @@ import org.jdom.Document;
 import org.jdom.Element;
 
 import com.mockrunner.util.web.XmlUtil;
-
 
 public class XmlUtilTest extends TestCase
 {
