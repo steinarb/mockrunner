@@ -70,7 +70,7 @@ public class FileUtil
         } 
         catch(Exception exc)
         {
-            throw new NestedApplicationException(exc);
+            throw new NestedApplicationException("Error while trying to find the file " + filePath, exc);
         } 
     }
 }

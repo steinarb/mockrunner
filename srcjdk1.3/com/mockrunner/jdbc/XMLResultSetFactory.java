@@ -194,7 +194,7 @@ public class XMLResultSetFactory implements ResultSetFactory
        } 
        catch(Exception exc) 
        {
-           throw new NestedApplicationException(exc);
+           throw new NestedApplicationException("Failure while reading from XML file", exc);
        } 
        
        return resultSet;
