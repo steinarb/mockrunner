@@ -4,11 +4,12 @@
     <property file=".ant.properties" />
 
     <target name="checkJDK1.3" unless="java1.3.home">
-        <fail>
+        <echo>
          Property "java1.3.home" not set. Please create a file
          ".ant.properties" in this directory and set "java1.3.home"
-         to your JDK1.3 installation.
-        </fail>
+         to your JDK1.3 installation if you would like to build the
+         JDK1.3 version.    
+        </echo>
     </target>
 
     <target name="checkJDK1.4" unless="java1.4.home">
@@ -20,11 +21,12 @@
     </target>
 
     <target name="checkJava2HTML" unless="java2html.home">
-        <fail>
+        <echo>
 	     Property "java2html.home" not set. Please create a file
 	     ".ant.properties" in this directory and set "java2html.home"
-	     to your Java2HTML installation (location of j2h.jar).
-		</fail>
+	     to your Java2HTML installation (location of j2h.jar) if you
+         would like to generate the documentation.
+		</echo>
     </target>
 
     <target name="checkenvironment">
@@ -129,6 +131,7 @@
             <include name="com/mockrunner/servlet/**" />
             <include name="com/mockrunner/util/web/**" />
             <include name="com/mockrunner/util/common/**" />
+            <exclude name="com/mockrunner/mock/web/MockJspFragment.*" />
             <exclude name="com/mockrunner/servlet/ServletTestCaseAdapter.*" />
         </patternset>
         
@@ -147,6 +150,7 @@
             <include name="com/mockrunner/mock/web/**" />
             <include name="com/mockrunner/util/web/**" />
             <include name="com/mockrunner/util/common/**" />
+            <exclude name="com/mockrunner/mock/web/MockJspFragment.*" />
             <exclude name="com/mockrunner/servlet/ActionTestCaseAdapter.*" />
         </patternset>
 
@@ -161,7 +165,7 @@
         </javac>
     </target>
 
-    <target name="compile1.3" depends="init">
+    <target name="compile1.3" if="java1.3.home" depends="init">
         <mkdir dir="${build1.3}" />
         <javac destdir="${build1.3}" target="1.2" executable="${java1.3.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
@@ -183,19 +187,12 @@
         </javac>
     </target>
     
-    <target name="jars" depends="compile,compile1.3">
+    <target name="jars" depends="compile">
         <antcall target="jar">
             <param name="jarname" value="mockrunner.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${build}" />
-            <param name="jarpattern" value="full.jar.classes" />
-        </antcall>
-        <antcall target="jar">
-            <param name="jarname" value="mockrunner-jdk1.3.jar" />
-            <param name="jdkver" value="1.3" />
-            <param name="j2eever" value="1.3" />
-            <param name="builddir" value="${build1.3}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
         <antcall target="jar">
@@ -220,13 +217,6 @@
             <param name="jarpattern" value="jdbc.jar.classes" />
         </antcall>
         <antcall target="jar">
-            <param name="jarname" value="mockrunner-jdbc-jdk1.3.jar" />
-            <param name="jdkver" value="1.3" />
-            <param name="j2eever" value="1.3 and 1.4" />
-            <param name="builddir" value="${build1.3}" />
-            <param name="jarpattern" value="jdbc.jar.classes" />
-        </antcall>
-        <antcall target="jar">
             <param name="jarname" value="mockrunner-servlet.jar" />
             <param name="jdkver" value="1.3 and 1.4" />
             <param name="j2eever" value="1.3" />
@@ -248,7 +238,24 @@
             <param name="jarpattern" value="struts.jar.classes" />
         </antcall>
     </target>
-    
+        
+    <target name="jars1.3" if="java1.3.home" depends="compile1.3">
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-jdk1.3.jar" />
+            <param name="jdkver" value="1.3" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${build1.3}" />
+            <param name="jarpattern" value="full.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-jdbc-jdk1.3.jar" />
+            <param name="jdkver" value="1.3" />
+            <param name="j2eever" value="1.3 and 1.4" />
+            <param name="builddir" value="${build1.3}" />
+            <param name="jarpattern" value="jdbc.jar.classes" />
+        </antcall>
+    </target>
+
     <target name="jar">
         <filter token="version" value="${version}" />
         <filter token="timestamp" value="${timestamp}" />
@@ -277,7 +284,7 @@
         </jar>
     </target>
     
-    <target name="dependencies" depends="jars">
+    <target name="dependencies" depends="jars,jars1.3">
         <mkdir dir="${dependencies}" />
         <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
             <classpath>
@@ -291,18 +298,31 @@
             <fileset dir="${lib}">
                 <patternset refid="runtime.jars"/>
             </fileset>
-            <fileset dir="${build}">
-                <include name="*.jar" />
-            </fileset>
-            <fileset dir="${build1.3}">
-                <include name="*.jar" />
-            </fileset>
         </copy>
         
+        <antcall target="copybuild"/>
+        <antcall target="copybuild1.3"/>
+
         <jaranalyzer srcdir="${dependencies}" 
                      destfile="${dependencies}/dependencies.txt"
                      summaryclass="com.mockrunner.gen.jar.MockrunnerTextSummary"/>
         
+    </target>
+    
+    <target name="copybuild">
+        <copy todir="${dependencies}">
+             <fileset dir="${build}">
+                 <include name="*.jar" />
+             </fileset>
+        </copy>
+    </target>
+
+    <target name="copybuild1.3" if="java1.3.home">
+        <copy todir="${dependencies}">
+            <fileset dir="${build1.3}" >
+                <include name="*.jar" />
+            </fileset>
+        </copy>
     </target>
 
     <target name="javadoc" depends="init">
@@ -328,7 +348,7 @@
         </javadoc>
     </target>
 
-	<target name="java2html" depends="javadoc">
+	<target name="java2html" if="java2html.home" depends="javadoc">
 	    <mkdir dir="${doc}/examples" />
 	    <taskdef name="java2html" classname="com.java2html.Java2HTMLTask" classpath="${java2html.home}/j2h.jar" />
 	
@@ -339,12 +359,11 @@
 	    </java2html>
 	</target>
 
-	<target name="release" depends="clean,jars,javadoc,java2html,dependencies">
+	<target name="release" depends="clean,jars,jars1.3,javadoc,java2html,dependencies">
 	    <delete dir="${releasedir}" />
 	    <delete file="${releasefile}" />
 	    <mkdir dir="${releasedir}" />
 	    <mkdir dir="${releasedir}/src" />
-	    <mkdir dir="${releasedir}/src1.3" />
 	    <mkdir dir="${releasedir}/doc" />
 	    <mkdir dir="${releasedir}/lib" />
         <mkdir dir="${releasedir}/lib/div" />   
@@ -365,11 +384,6 @@
 	            <include name="**/*" />
 	        </fileset>
 	    </copy>
-	    <copy todir="${releasedir}/src1.3">
-	        <fileset dir="${src1.3}">
-	            <include name="**/*" />
-	        </fileset>
-	    </copy>
 	    <copy todir="${releasedir}/doc">
 	        <fileset dir="${doc}">
 	            <include name="**/*" />
@@ -380,15 +394,31 @@
                 <include name="mockrunner.jar" />
             </fileset>
         </copy>
-        <copy todir="${releasedir}/lib">
-            <fileset dir="${build1.3}">
-                <include name="mockrunner-jdk1.3.jar" />
-            </fileset>
-        </copy>
         <copy todir="${releasedir}/lib/div">
             <fileset dir="${build}">
                 <include name="*.jar" />
                 <exclude name="mockrunner.jar" />
+            </fileset>
+        </copy>
+	    <copy todir="${releasedir}/jar">
+	        <fileset dir="${lib}">
+                <patternset refid="runtime.jars"/>
+	        </fileset>
+	    </copy>
+        <antcall target="release1.3"/>   
+	    <zip destfile="${releasefile}" basedir="${bin}" />
+	</target>
+    
+    <target name="release1.3" if="java1.3.home">
+        <mkdir dir="${releasedir}/src1.3" />
+        <copy todir="${releasedir}/src1.3">
+            <fileset dir="${src1.3}">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+        <copy todir="${releasedir}/lib">
+            <fileset dir="${build1.3}">
+                <include name="mockrunner-jdk1.3.jar" />
             </fileset>
         </copy>
         <copy todir="${releasedir}/lib/div">
@@ -397,14 +427,8 @@
                 <exclude name="mockrunner-jdk1.3.jar" />
             </fileset>
         </copy>
-	    <copy todir="${releasedir}/jar">
-	        <fileset dir="${lib}">
-                <patternset refid="runtime.jars"/>
-	        </fileset>
-	    </copy>
-	    <zip destfile="${releasefile}" basedir="${bin}" />
-	</target>
-	
+    </target>
+
 	<target name="clean" depends="init">
 	    <delete dir="${bin}" />
 	    <delete dir="${doc}" />

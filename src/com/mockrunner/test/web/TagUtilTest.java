@@ -56,8 +56,8 @@ public class TagUtilTest extends BaseTestCase
         assertTrue(((NestedTag)tag).getTag() instanceof TestBodyTag);
         /*SimpleTag simpleTag = (SimpleTag)TagUtil.createNestedTagInstance(TestSimpleTag.class, pageContext, testMap);
         assertTrue(simpleTag instanceof NestedSimpleTag);
-        assertTrue(((NestedTag)simpleTag).getWrappedTag() instanceof TestSimpleTag);
-        */
+        assertTrue(((NestedTag)simpleTag).getWrappedTag() instanceof TestSimpleTag);*/
+        
         TestTag testTag = new TestTag();
         tag = (TagSupport)TagUtil.createNestedTagInstance(testTag, pageContext, testMap);
         assertTrue(tag instanceof NestedStandardTag);

@@ -1,21 +1,18 @@
-package com.mockrunner.tag;
+package com.mockrunner.mock.web;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-/*
-import javax.servlet.jsp.JspContext;
-import javax.servlet.jsp.JspException;
-import javax.servlet.jsp.tagext.JspFragment;
-import javax.servlet.jsp.tagext.JspTag;
-*/
+
+import com.mockrunner.tag.NestedTag;
+
 public class MockJspFragment //extends JspFragment
 {
     //private JspContext jspContext;
     private List childs;
-    //private JspTag parent;
+    /*private JspTag parent;
     
-    /*public MockJspFragment(JspContext jspContext)
+    public MockJspFragment(JspContext jspContext)
     {
         this(jspContext, null);
     }
@@ -24,6 +21,7 @@ public class MockJspFragment //extends JspFragment
     {
         this.jspContext = jspContext;
         this.parent = parent;
+        childs = new ArrayList();
     }
     
     public JspTag getParent()
@@ -44,6 +42,18 @@ public class MockJspFragment //extends JspFragment
     public void setJspContext(JspContext jspContext)
     {
         this.jspContext = jspContext;
+        for(int ii = 0; ii < childs.size(); ii++)
+        {
+            Object child = childs.get(ii);
+            if(child instanceof Tag && jspContext instanceof PageContext)
+            {
+                ((Tag)child).setPageContext((PageContext)jspContext);
+            }
+            else if(child instanceof SimpleTag)
+            {
+                ((SimpleTag)child).setJspContext(jspContext);
+            }
+        }
     }
     
     public void invoke(Writer writer) throws JspException, IOException

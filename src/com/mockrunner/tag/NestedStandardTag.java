@@ -14,7 +14,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 /**
  * Implementation of {@link NestedTag} wrapping tags of
- * type <code>TagSupport</code>. <code>NestedStandardTag</code> instances 
+ * type <code>Tag</code>. <code>NestedStandardTag</code> instances 
  * are created with the help of {@link TagTestModule#createNestedTag}. 
  * You do not need to create them on your own in the tests.
  */
@@ -112,7 +112,7 @@ public class NestedStandardTag extends TagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#doLifecycle} for simple
+     * Implementation of {@link NestedTag#doLifecycle} for standard
      * tags.
      */
     public int doLifecycle() throws JspException
@@ -195,10 +195,8 @@ public class NestedStandardTag extends TagSupport implements NestedTag
      */
     public NestedTag addTagChild(Class tag, Map attributeMap)
     {
-        Tag childTag = (Tag)TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);   
-        childTag.setParent(this.tag);
-        childs.add(childTag);
-        return (NestedTag)childTag;
+        Object childTag = TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);   
+        return addChild(childTag);
     }
     
     /**
@@ -214,12 +212,10 @@ public class NestedStandardTag extends TagSupport implements NestedTag
      */
     public NestedTag addTagChild(TagSupport tag, Map attributeMap)
     {
-        Tag childTag = (Tag)TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);   
-        childTag.setParent(this.tag);
-        childs.add(childTag);
-        return (NestedTag)childTag;
+        Object childTag = TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);   
+        return addChild(childTag);
     }
-    
+
     /**
      * Implementation of {@link NestedTag#addTagChild(JspTag)}.
      */
@@ -233,19 +229,10 @@ public class NestedStandardTag extends TagSupport implements NestedTag
      */
     /*public NestedTag addTagChild(JspTag tag, Map attributeMap)
     {
-        JspTag childTag = (JspTag)TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);   
-        if(childTag instanceof Tag)
-        {
-            ((Tag)childTag).setParent(this.tag);
-        }
-        else if(childTag instanceof SimpleTag)
-        {
-            ((SimpleTag)childTag).setParent(this.tag);
-        }
-        childs.add(childTag);
-        return (NestedTag)childTag;
+        Object childTag = TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);   
+        return addChild(childTag);
     }*/
-    
+
     /**
      * Delegates to wrapped tag.
      * @throws <code>RuntimeException</code>, if the wrapped tag
@@ -297,10 +284,10 @@ public class NestedStandardTag extends TagSupport implements NestedTag
      * @throws <code>RuntimeException</code>, if the wrapped tag
      *         is not an instance of <code>TagSupport</code>
      */
-    public Object getValue(String arg0)
+    public Object getValue(String key)
     {
         checkTagSupport();
-        return ((TagSupport)tag).getValue(arg0);
+        return ((TagSupport)tag).getValue(key);
     }
     
     /**
@@ -327,10 +314,10 @@ public class NestedStandardTag extends TagSupport implements NestedTag
      * @throws <code>RuntimeException</code>, if the wrapped tag
      *         is not an instance of <code>TagSupport</code>
      */
-    public void removeValue(String arg0)
+    public void removeValue(String value)
     {
         checkTagSupport();
-        ((TagSupport)tag).removeValue(arg0);
+        ((TagSupport)tag).removeValue(value);
     }
     
     /**
@@ -338,10 +325,10 @@ public class NestedStandardTag extends TagSupport implements NestedTag
      * @throws <code>RuntimeException</code>, if the wrapped tag
      *         is not an instance of <code>TagSupport</code>
      */
-    public void setId(String arg0)
+    public void setId(String id)
     {
         checkTagSupport();
-        ((TagSupport)tag).setId(arg0);
+        ((TagSupport)tag).setId(id);
     }
     
     /**
@@ -355,28 +342,32 @@ public class NestedStandardTag extends TagSupport implements NestedTag
         for(int ii = 0; ii < childs.size(); ii++)
         {
             Object child = childs.get(ii);
-            if(child instanceof TagSupport)
+            if(child instanceof Tag)
             {
-                ((TagSupport)child).setPageContext(pageContext);
+                ((Tag)child).setPageContext(pageContext);
             }
+            /*else if(child instanceof SimpleTag)
+            {
+                ((SimpleTag)child).setJspContext(pageContext);
+            }*/
         }
     }
     
     /**
      * Delegates to wrapped tag.
      */
-    public void setParent(Tag arg0)
+    public void setParent(Tag parent)
     {
-        tag.setParent(arg0);
+        tag.setParent(parent);
     }
     
     /**
      * Delegates to wrapped tag.
      */
-    public void setValue(String arg0, Object arg1)
+    public void setValue(String key, Object value)
     {
         checkTagSupport();
-        ((TagSupport)tag).setValue(arg0, arg1);
+        ((TagSupport)tag).setValue(key, value);
     }
     
     /**
@@ -385,6 +376,20 @@ public class NestedStandardTag extends TagSupport implements NestedTag
     public String toString()
     {
         return TagUtil.dumpTag(this, new StringBuffer(), 0);
+    }
+    
+    private NestedTag addChild(Object childTag)
+    {
+        if(childTag instanceof Tag)
+        {
+            ((Tag)childTag).setParent(this.tag);
+        }
+        /*else if(childTag instanceof SimpleTag)
+        {
+            ((SimpleTag)childTag).setParent(this.tag);
+        }*/
+        childs.add(childTag);
+        return (NestedTag)childTag;
     }
     
     private void checkTagSupport()
