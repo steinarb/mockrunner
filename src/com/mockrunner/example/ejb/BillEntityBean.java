@@ -45,7 +45,7 @@ public abstract class BillEntityBean implements EntityBean
      * @ejb.interface-method
      * @ejb.persistence
      * @ejb.pk-field
-     * @jboss.column-name name="id"
+     * @jboss:column-name name="id"
      **/
    	public abstract Integer getId();
    	public abstract void setId(Integer id);
