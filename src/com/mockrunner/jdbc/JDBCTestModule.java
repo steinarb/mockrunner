@@ -14,6 +14,7 @@ import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
+import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.ParameterUtil;
 import com.mockrunner.util.SearchUtil;
 
@@ -581,12 +582,186 @@ public class JDBCTestModule
         MockResultSet resultSet = getReturnedResultSet(id);
         if(null == resultSet)
         {
-            throw new VerifyFailedException("ResultSet with id " + resultSet.getId() + " not present.");
+            throw new VerifyFailedException("ResultSet with id " + id + " not present.");
         }
         if(!resultSet.isClosed())
         {
-            throw new VerifyFailedException("ResultSet with id " + resultSet.getId() + " not closed.");
+            throw new VerifyFailedException("ResultSet with id " + id + " not closed.");
         }
+    }
+    
+    /**
+     * Verifies that the specified row of a <code>ResultSet</code> was
+     * inserted.
+     * @param resultSet the <code>ResultSet</code>
+     * @param number the number of the row
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRowInserted(MockResultSet resultSet, int number)
+    {
+    
+    }
+    
+    /**
+     * Verifies that the specified row of a <code>ResultSet</code> was
+     * inserted.
+     * @param id the id of the <code>ResultSet</code>
+     * @param number the number of the row
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRowInserted(String id, int number)
+    {
+        MockResultSet resultSet = getReturnedResultSet(id);
+        if(null == resultSet)
+        {
+            throw new VerifyFailedException("ResultSet with id " + id + " not present.");
+        }
+        verifyResultSetRowInserted(resultSet, number);
+    }
+    
+    /**
+     * Verifies that the specified row of a <code>ResultSet</code> was
+     * not inserted.
+     * @param resultSet the <code>ResultSet</code>
+     * @param number the number of the row
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRowNotInserted(MockResultSet resultSet, int number)
+    {
+
+    }
+    
+    /**
+     * Verifies that the specified row of a <code>ResultSet</code> was
+     * not inserted.
+     * @param id the id of the <code>ResultSet</code>
+     * @param number the number of the row
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRowNotInserted(String id, int number)
+    {
+        MockResultSet resultSet = getReturnedResultSet(id);
+        if(null == resultSet)
+        {
+            throw new VerifyFailedException("ResultSet with id " + id + " not present.");
+        }
+        verifyResultSetRowNotInserted(resultSet, number);
+    }
+    
+    /**
+     * Verifies that the specified row of a <code>ResultSet</code> was
+     * updated.
+     * @param resultSet the <code>ResultSet</code>
+     * @param number the number of the row
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRowUpdated(MockResultSet resultSet, int number)
+    {
+
+    }
+    
+    /**
+     * Verifies that the specified row of a <code>ResultSet</code> was
+     * updated.
+     * @param id the id of the <code>ResultSet</code>
+     * @param number the number of the row
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRowUpdated(String id, int number)
+    {
+        MockResultSet resultSet = getReturnedResultSet(id);
+        if(null == resultSet)
+        {
+            throw new VerifyFailedException("ResultSet with id " + id + " not present.");
+        }
+        verifyResultSetRowUpdated(resultSet, number);
+    }
+    
+    /**
+     * Verifies that the specified row of a <code>ResultSet</code> was
+     * not updated.
+     * @param resultSet the <code>ResultSet</code>
+     * @param number the number of the row
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRowNotUpdated(MockResultSet resultSet, int number)
+    {
+
+    }
+
+    /**
+     * Verifies that the specified row of a <code>ResultSet</code> was
+     * not updated.
+     * @param id the id of the <code>ResultSet</code>
+     * @param number the number of the row
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRowNotUpdated(String id, int number)
+    {
+        MockResultSet resultSet = getReturnedResultSet(id);
+        if(null == resultSet)
+        {
+            throw new VerifyFailedException("ResultSet with id " + id + " not present.");
+        }
+        verifyResultSetRowNotUpdated(resultSet, number);
+    }
+    
+    /**
+     * Verifies that the specified row of a <code>ResultSet</code> was
+     * deleted.
+     * @param resultSet the <code>ResultSet</code>
+     * @param number the number of the row
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRowDeleted(MockResultSet resultSet, int number)
+    {
+        
+    }
+    
+    /**
+     * Verifies that the specified row of a <code>ResultSet</code> was
+     * deleted.
+     * @param id the id of the <code>ResultSet</code>
+     * @param number the number of the row
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRowDeleted(String id, int number)
+    {
+        MockResultSet resultSet = getReturnedResultSet(id);
+        if(null == resultSet)
+        {
+            throw new VerifyFailedException("ResultSet with id " + id + " not present.");
+        }
+        verifyResultSetRowDeleted(resultSet, number);
+    }
+    
+    /**
+     * Verifies that the specified row of a <code>ResultSet</code> was
+     * not deleted.
+     * @param resultSet the <code>ResultSet</code>
+     * @param number the number of the row
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRowNotDeleted(MockResultSet resultSet, int number)
+    {
+
+    }
+
+    /**
+     * Verifies that the specified row of a <code>ResultSet</code> was
+     * not deleted.
+     * @param id the id of the <code>ResultSet</code>
+     * @param number the number of the row
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRowNotDeleted(String id, int number)
+    {
+        MockResultSet resultSet = getReturnedResultSet(id);
+        if(null == resultSet)
+        {
+            throw new VerifyFailedException("ResultSet with id " + id + " not present.");
+        }
+        verifyResultSetRowNotDeleted(resultSet, number);
     }
     
     /**
@@ -859,6 +1034,236 @@ public class JDBCTestModule
         {
             throw new VerifyFailedException("Callable statement with SQL " + sql + " not closed.");
         }
+    }
+    
+    /**
+     * Verifies that a row of a <code>ResultSet</code> is equal to the
+     * entries in the specified <code>List</code>. Uses {@link ParameterUtil#compareParameter}.
+     * You can verify the data of returned <code>ResultSet</code> objects if
+     * the tested JDBC code makes updates.
+     * @param resultSet the <code>ResultSet</code>
+     * @param number the number of the row
+     * @param rowData the row data
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRow(MockResultSet resultSet, int number, List rowData)
+    {
+    
+    }
+    
+    /**
+     * Verifies that a row of a <code>ResultSet</code> is equal to the
+     * entries in the specified array. Uses {@link ParameterUtil#compareParameter}.
+     * You can verify the data of returned <code>ResultSet</code> objects if
+     * the tested JDBC code makes updates.
+     * @param resultSet the <code>ResultSet</code>
+     * @param number the number of the row
+     * @param rowData the row data
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRow(MockResultSet resultSet, int number, Object[] rowData)
+    {
+        List dataList = ArrayUtil.getListFromObjectArray(rowData);
+        verifyResultSetRow(resultSet, number, dataList);
+    }
+    
+    /**
+     * Verifies that a row of a <code>ResultSet</code> is equal to the
+     * entries in the specified <code>List</code>. Uses {@link ParameterUtil#compareParameter}.
+     * You can verify the data of returned <code>ResultSet</code> objects if
+     * the tested JDBC code makes updates.
+     * @param id the id of the <code>ResultSet</code>
+     * @param number the number of the row
+     * @param rowData the row data
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRow(String id, int number, List rowData)
+    {
+        MockResultSet resultSet = getReturnedResultSet(id);
+        if(null == resultSet)
+        {
+            throw new VerifyFailedException("ResultSet with id " + id + " not present.");
+        }
+        verifyResultSetRow(resultSet, number, rowData);
+    }
+
+    /**
+     * Verifies that a row of a <code>ResultSet</code> is equal to the
+     * entries in the specified array. Uses {@link ParameterUtil#compareParameter}.
+     * You can verify the data of returned <code>ResultSet</code> objects if
+     * the tested JDBC code makes updates.
+     * @param id the id of the <code>ResultSet</code>
+     * @param number the number of the row
+     * @param rowData the row data
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetRow(String id, int number, Object[] rowData)
+    {
+        List dataList = ArrayUtil.getListFromObjectArray(rowData);
+        verifyResultSetRow(id, number, dataList);
+    }
+    
+    /**
+     * Verifies that a column of a <code>ResultSet</code> is equal to the
+     * entries in the specified <code>List</code>. Uses {@link ParameterUtil#compareParameter}.
+     * You can verify the data of returned <code>ResultSet</code> objects if
+     * the tested JDBC code makes updates.
+     * @param resultSet the <code>ResultSet</code>
+     * @param number the number of the column
+     * @param columnData the column data
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetColumn(MockResultSet resultSet, int number, List columnData)
+    {
+
+    }
+
+    /**
+     * Verifies that a column of a <code>ResultSet</code> is equal to the
+     * entries in the specified array. Uses {@link ParameterUtil#compareParameter}.
+     * You can verify the data of returned <code>ResultSet</code> objects if
+     * the tested JDBC code makes updates.
+     * @param resultSet the <code>ResultSet</code>
+     * @param number the number of the column
+     * @param columnData the column data
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetColumn(MockResultSet resultSet, int number, Object[] columnData)
+    {
+        List dataList = ArrayUtil.getListFromObjectArray(columnData);
+        verifyResultSetColumn(resultSet, number, dataList);
+    }
+
+    /**
+     * Verifies that a column of a <code>ResultSet</code> is equal to the
+     * entries in the specified <code>List</code>. Uses {@link ParameterUtil#compareParameter}.
+     * You can verify the data of returned <code>ResultSet</code> objects if
+     * the tested JDBC code makes updates.
+     * @param id the id of the <code>ResultSet</code>
+     * @param number the number of the column
+     * @param columnData the column data
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetColumn(String id, int number, List columnData)
+    {
+        MockResultSet resultSet = getReturnedResultSet(id);
+        if(null == resultSet)
+        {
+            throw new VerifyFailedException("ResultSet with id " + id + " not present.");
+        }
+        verifyResultSetColumn(resultSet, number, columnData);
+    }
+
+    /**
+     * Verifies that a column of a <code>ResultSet</code> is equal to the
+     * entries in the specified array. Uses {@link ParameterUtil#compareParameter}.
+     * You can verify the data of returned <code>ResultSet</code> objects if
+     * the tested JDBC code makes updates.
+     * @param id the id of the <code>ResultSet</code>
+     * @param number the number of the column
+     * @param columnData the column data
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetColumn(String id, int number, Object[] columnData)
+    {
+        List dataList = ArrayUtil.getListFromObjectArray(columnData);
+        verifyResultSetColumn(id, number, dataList);
+    }
+    
+    /**
+     * Verifies that a column of a <code>ResultSet</code> is equal to the
+     * entries in the specified <code>List</code>. Uses {@link ParameterUtil#compareParameter}.
+     * You can verify the data of returned <code>ResultSet</code> objects if
+     * the tested JDBC code makes updates.
+     * @param resultSet the <code>ResultSet</code>
+     * @param name the name of the column
+     * @param columnData the column data
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetColumn(MockResultSet resultSet, String name, List columnData)
+    {
+
+    }
+
+    /**
+     * Verifies that a column of a <code>ResultSet</code> is equal to the
+     * entries in the specified array. Uses {@link ParameterUtil#compareParameter}.
+     * You can verify the data of returned <code>ResultSet</code> objects if
+     * the tested JDBC code makes updates.
+     * @param resultSet the <code>ResultSet</code>
+     * @param name the name of the column
+     * @param columnData the column data
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetColumn(MockResultSet resultSet, String name, Object[] columnData)
+    {
+        List dataList = ArrayUtil.getListFromObjectArray(columnData);
+        verifyResultSetColumn(resultSet, name, dataList);
+    }
+
+    /**
+     * Verifies that a column of a <code>ResultSet</code> is equal to the
+     * entries in the specified <code>List</code>. Uses {@link ParameterUtil#compareParameter}.
+     * You can verify the data of returned <code>ResultSet</code> objects if
+     * the tested JDBC code makes updates.
+     * @param id the id of the <code>ResultSet</code>
+     * @param name the name of the column
+     * @param columnData the column data
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetColumn(String id, String name, List columnData)
+    {
+        MockResultSet resultSet = getReturnedResultSet(id);
+        if(null == resultSet)
+        {
+            throw new VerifyFailedException("ResultSet with id " + id + " not present.");
+        }
+        verifyResultSetColumn(resultSet, name, columnData);
+    }
+
+    /**
+     * Verifies that a column of a <code>ResultSet</code> is equal to the
+     * entries in the specified array. Uses {@link ParameterUtil#compareParameter}.
+     * You can verify the data of returned <code>ResultSet</code> objects if
+     * the tested JDBC code makes updates.
+     * @param id the id of the <code>ResultSet</code>
+     * @param name the name of the column
+     * @param columnData the column data
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetColumn(String id, String name, Object[] columnData)
+    {
+        List dataList = ArrayUtil.getListFromObjectArray(columnData);
+        verifyResultSetColumn(id, name, dataList);
+    }
+    
+    /**
+     * Verifies that a <code>ResultSet</code> is equal to another one.
+     * Compares all the rows with {@link ParameterUtil#compareParameter}.
+     * @param source the source <code>ResultSet</code>
+     * @param target the target <code>ResultSet</code>
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetEquals(MockResultSet source, MockResultSet target)
+    {
+        
+    }
+    
+    /**
+     * Verifies that a <code>ResultSet</code> is equal to another one.
+     * Compares all the rows with {@link ParameterUtil#compareParameter}.
+     * @param id the id of the source <code>ResultSet</code>
+     * @param target the target <code>ResultSet</code>
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetEquals(String id, MockResultSet target)
+    {
+        MockResultSet resultSet = getReturnedResultSet(id);
+        if(null == resultSet)
+        {
+            throw new VerifyFailedException("ResultSet with id " + id + " not present.");
+        }
+        verifyResultSetEquals(resultSet, target);
     }
     
     /**
