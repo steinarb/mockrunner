@@ -14,7 +14,6 @@ import com.mockrunner.gen.JavaClassGenerator.ConstructorDeclaration;
 import com.mockrunner.gen.JavaClassGenerator.MethodDeclaration;
 import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.ClassUtil;
-import com.mockrunner.util.StringUtil;
 
 public class StandardAdapterProcessor implements AdapterProcessor
 {
@@ -33,7 +32,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
             classGenerator.setSuperClass(getSuperClass(module));
         }
         classGenerator.setClassComment(getClassComment(module));
-        String memberName = StringUtil.lowerCase(ClassUtil.getClassName(module), 0);
+        String memberName = ClassUtil.getArgumentName(module);
         classGenerator.addMemberDeclaration(module, memberName);
         addConstructors(classGenerator);
         addTearDownMethod(classGenerator, memberName);

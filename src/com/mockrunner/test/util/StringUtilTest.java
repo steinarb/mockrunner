@@ -41,6 +41,25 @@ public class StringUtilTest extends TestCase
         }
     }
     
+    public void testLowerCaseWithEndIndex()
+    {
+        assertEquals("abC", StringUtil.lowerCase("ABC", 0, 2));
+        assertEquals("AbC", StringUtil.lowerCase("ABC", 1, 2));
+        assertEquals("abc", StringUtil.lowerCase("abc", 0, 1));
+        assertEquals("aBC", StringUtil.lowerCase("ABC", 0, 0));
+        assertEquals("aBC", StringUtil.lowerCase("ABC", 0, -1));
+        assertEquals("abc", StringUtil.lowerCase("ABC", 0, 3));
+        try
+        {
+            StringUtil.lowerCase("abc", 0, 4);
+            fail();
+        } 
+        catch(IndexOutOfBoundsException exc)
+        {
+            //should throw exception
+        }
+    }
+    
     public void testSplit()
     {
         String test = "This;;is;a;;  ;test; String;;";

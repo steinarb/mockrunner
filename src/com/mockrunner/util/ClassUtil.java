@@ -67,21 +67,33 @@ public class ClassUtil
     
     /**
      * Returns a suitable argument name for arguments
-     * of type <code>argumentType</code> by converting 
-     * the first character of the specified class name to 
-     * lower case. If the resulting string is a Java 
-     * keyword, <code>"Value"</code> is appended to the 
-     * string.
+     * of type <code>argumentType</code>. Simply takes
+     * the class name and converts the starting characters
+     * to lower case (by preserving one upper case character).
+     * E.g. the result of <code>JMSTestModule</code> is
+     * <code>jmsTestModule</code>.
+     * If the resulting string is a Java keyword, <code>"Value"</code> 
+     * is appended to the string (what is always the case with
+     * primitive types).
      * @param argumentType the argument type
-     * @return a suitable argument name
+     * @return a suitable mixed case argument name
      */
     public static String getArgumentName(Class argumentType)
     {
-       String name = getClassName(argumentType);
-       name = StringUtil.lowerCase(name, 0);
+        String name = getClassName(argumentType);
+        int index = 0;
+        while(index < name.length() - 1 && Character.isUpperCase(name.charAt(index)) && Character.isUpperCase(name.charAt(index + 1)))
+        {
+            index++;
+        }
+        if(index == name.length() - 1)
+        {
+            index++;
+        }
+        name = StringUtil.lowerCase(name, 0, index);
         if(isKeyword(name))
         {
-            name += "Value";
+             name += "Value";
         }
         return name;
     }
