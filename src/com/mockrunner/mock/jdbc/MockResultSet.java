@@ -680,10 +680,7 @@ public class MockResultSet implements ResultSet
         checkColumnName(columnName);
         checkRowBounds();
         List column = (List)columnMap.get(columnName);
-        if(null != column && cursor < column.size())
-        {
-            value = column.set(cursor, value);
-        }
+        column.set(cursor, value);
     }
 
     public void updateObject(String columnName, Object x) throws SQLException
