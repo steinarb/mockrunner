@@ -3,11 +3,10 @@ package com.mockrunner.example.ejb;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
 
-import org.mockejb.MockContainer;
-import org.mockejb.MockContext;
 import org.mockejb.MockEjbObject;
-import org.mockejb.SessionBeanDescriptor;
+import org.mockejb.TransactionPolicy;
 
+import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.example.ejb.interfaces.PaySession;
 import com.mockrunner.example.ejb.interfaces.PaySessionHome;
 import com.mockrunner.jdbc.JDBCTestCaseAdapter;
@@ -24,6 +23,7 @@ import com.mockrunner.mock.jdbc.MockResultSet;
  */
 public class PaySessionTest extends JDBCTestCaseAdapter
 {
+    private EJBTestModule ejbModule;
     private MockEjbObject ejbObject;
     private PaySession bean;
     private StatementResultSetHandler statementHandler;
@@ -31,9 +31,11 @@ public class PaySessionTest extends JDBCTestCaseAdapter
     protected void setUp() throws Exception
     {
         super.setUp();
-        SessionBeanDescriptor beanDescriptor = new SessionBeanDescriptor("com/mockrunner/example/PaySession", PaySessionHome.class, PaySession.class, PaySessionBean.class);
-        ejbObject = MockContainer.deploy(beanDescriptor);
-        MockContext.add("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
+        ejbModule = createEJBTestModule();
+        ejbModule.setInterfacesPackages("com.mockrunner.example.ejb.interfaces");
+        ejbObject = ejbModule.deploy("com/mockrunner/example/PaySession", PaySessionBean.class);
+        ejbObject.setTransactionPolicy(TransactionPolicy.REQUIRED);    
+        ejbModule.addToContext("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
         InitialContext context = new InitialContext();
         Object home = context.lookup("com/mockrunner/example/PaySession");
         PaySessionHome payHome = (PaySessionHome)PortableRemoteObject.narrow(home, PaySessionHome.class );
@@ -71,7 +73,8 @@ public class PaySessionTest extends JDBCTestCaseAdapter
         {
             assertEquals(PaySessionException.UNKNOWN_CUSTOMER, exc.getCode());
         }
-        assertTrue(ejbObject.getEjbContext().getRollbackOnly());
+        ejbModule.verifyMarkedForRollback();
+        ejbModule.verifyRolledBack();
         verifySQLStatementExecuted("select name");
         verifySQLStatementNotExecuted("delete from openbills");
         verifySQLStatementNotExecuted("insert into paidbills");
@@ -97,7 +100,8 @@ public class PaySessionTest extends JDBCTestCaseAdapter
         {
             assertEquals(PaySessionException.UNKNOWN_BILL, exc.getCode());
         }
-        assertTrue(ejbObject.getEjbContext().getRollbackOnly());
+        ejbModule.verifyMarkedForRollback();
+        ejbModule.verifyRolledBack();
         verifySQLStatementExecuted("select * from openbills");
         verifySQLStatementNotExecuted("delete from openbills");
         verifySQLStatementNotExecuted("insert into paidbills");
@@ -119,7 +123,8 @@ public class PaySessionTest extends JDBCTestCaseAdapter
         {
             assertEquals(PaySessionException.WRONG_BILL_FOR_CUSTOMER, exc.getCode());
         }
-        assertTrue(ejbObject.getEjbContext().getRollbackOnly());
+        ejbModule.verifyMarkedForRollback();
+        ejbModule.verifyRolledBack();
         verifySQLStatementExecuted("select * from openbills");
         verifySQLStatementNotExecuted("delete from openbills");
         verifySQLStatementNotExecuted("insert into paidbills");
@@ -141,7 +146,8 @@ public class PaySessionTest extends JDBCTestCaseAdapter
         {
             assertEquals(PaySessionException.WRONG_AMOUNT_FOR_BILL, exc.getCode());
         }
-        assertTrue(ejbObject.getEjbContext().getRollbackOnly());
+        ejbModule.verifyMarkedForRollback();
+        ejbModule.verifyRolledBack();
         verifySQLStatementExecuted("select * from openbills");
         verifySQLStatementNotExecuted("delete from openbills");
         verifySQLStatementNotExecuted("insert into paidbills");
@@ -155,7 +161,8 @@ public class PaySessionTest extends JDBCTestCaseAdapter
         createValidCustomerResult();
         createValidBillResult();
         bean.payBill("1", "1", 100);
-        assertFalse(ejbObject.getEjbContext().getRollbackOnly()); 
+        ejbModule.verifyNotMarkedForRollback();
+        ejbModule.verifyCommitted();
         verifySQLStatementExecuted("delete from openbills where id=1");
         verifySQLStatementExecuted("insert into paidbills values(1,1,100.0)");
         verifyAllResultSetsClosed();

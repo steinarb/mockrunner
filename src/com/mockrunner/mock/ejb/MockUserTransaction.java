@@ -73,7 +73,8 @@ public class MockUserTransaction implements UserTransaction
         if(rollbackCalled) return Status.STATUS_ROLLEDBACK;
         if(commitCalled) return Status.STATUS_COMMITTED;
         if(rollbackOnlyCalled) return Status.STATUS_MARKED_ROLLBACK;
-        return Status.STATUS_ACTIVE;
+        if(beginCalled) return Status.STATUS_ACTIVE;
+        return Status.STATUS_NO_TRANSACTION;
     }
 
     public void rollback() throws IllegalStateException, SecurityException, SystemException

@@ -7,7 +7,7 @@ public class AllJDBCTests
 {
     public static Test suite()
     {
-        TestSuite suite = new TestSuite("Test for com.mockrunner.web.test");
+        TestSuite suite = new TestSuite("Test for com.mockrunner.jdbc.test");
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(JDBCTestModuleTest.class));
         suite.addTest(new TestSuite(MockArrayTest.class));

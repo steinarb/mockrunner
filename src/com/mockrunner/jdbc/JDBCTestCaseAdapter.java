@@ -447,7 +447,16 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link JDBCTestModule#verifyCommitted}
+     */
+    protected void verifyCommitted()
+    {
+        jdbcTestModule.verifyCommitted();
+    }
+    
+    /**
      * Delegates to {@link JDBCTestModule#verifyCommited}
+     * @deprecated use {@link #verifyCommitted}
      */
     protected void verifyCommited()
     {
@@ -455,7 +464,16 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link JDBCTestModule#verifyNotCommitted}
+     */
+    protected void verifyNotCommitted()
+    {
+        jdbcTestModule.verifyNotCommitted();
+    }
+    
+    /**
      * Delegates to {@link JDBCTestModule#verifyNotCommited}
+     * @deprecated use {@link #verifyNotCommitted}
      */
     protected void verifyNotCommited()
     {

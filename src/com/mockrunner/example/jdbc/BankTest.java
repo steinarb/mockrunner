@@ -51,7 +51,7 @@ public class BankTest extends JDBCTestCaseAdapter
         bank.disconnect();
         verifySQLStatementExecuted("select balance");
         verifySQLStatementNotExecuted("update account");
-        verifyNotCommited();
+        verifyNotCommitted();
         verifyRolledBack();
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();
@@ -68,7 +68,7 @@ public class BankTest extends JDBCTestCaseAdapter
         verifySQLStatementExecuted("select balance");
         verifySQLStatementExecuted("update account");
         verifyPreparedStatementParameter("update account", 1, new Integer(5000));
-        verifyCommited();
+        verifyCommitted();
         verifyNotRolledBack();
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();
@@ -84,7 +84,7 @@ public class BankTest extends JDBCTestCaseAdapter
         bank.disconnect();
         verifySQLStatementExecuted("select balance");
         verifySQLStatementNotExecuted("update account");
-        verifyNotCommited();
+        verifyNotCommitted();
         verifyRolledBack();
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();

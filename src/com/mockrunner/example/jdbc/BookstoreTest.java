@@ -42,7 +42,7 @@ public class BookstoreTest extends JDBCTestCaseAdapter
         verifyResultSetRow("bookresult", 3, new String[] {"0987654321", "0"});
         verifyResultSetRow("bookresult", 4, new String[] {"1212121212", "2"});
         verifyResultSetRow("bookresult", 5, new String[] {"3333333333", "0"});
-        verifyCommited();
+        verifyCommitted();
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();
     }

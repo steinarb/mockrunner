@@ -1,12 +1,9 @@
 package com.mockrunner.example.ejb;
 
-import org.mockejb.MockContainer;
-import org.mockejb.MockContext;
 import org.mockejb.MockEjbObject;
-import org.mockejb.SessionBeanDescriptor;
+import org.mockejb.TransactionPolicy;
 
-import com.mockrunner.example.ejb.interfaces.LogSession;
-import com.mockrunner.example.ejb.interfaces.LogSessionHome;
+import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.jdbc.JDBCTestModule;
 import com.mockrunner.struts.ActionTestCaseAdapter;
 
@@ -20,15 +17,18 @@ import com.mockrunner.struts.ActionTestCaseAdapter;
 public class LogActionTest extends ActionTestCaseAdapter
 {
     private JDBCTestModule jdbcModule;
+    private EJBTestModule ejbModule;
     private MockEjbObject bean;
     
     protected void setUp() throws Exception
     {
         super.setUp();
         jdbcModule = createJDBCTestModule();
-        SessionBeanDescriptor beanDescriptor = new SessionBeanDescriptor("com/mockrunner/example/LogSession", LogSessionHome.class, LogSession.class, LogSessionBean.class);
-        bean = MockContainer.deploy(beanDescriptor);
-        MockContext.add("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
+        ejbModule = createEJBTestModule();
+        ejbModule.setInterfacesPackages("com.mockrunner.example.ejb.interfaces");
+        bean = ejbModule.deploy("com/mockrunner/example/LogSession", LogSessionBean.class);
+        bean.setTransactionPolicy(TransactionPolicy.REQUIRED);
+        ejbModule.addToContext("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
     }
     
     public void testLogActionSuccess()
@@ -38,7 +38,8 @@ public class LogActionTest extends ActionTestCaseAdapter
         jdbcModule.verifySQLStatementExecuted("insert into logtable");
         jdbcModule.verifyPreparedStatementParameter("insert into logtable", 2, Thread.currentThread().getName());
         jdbcModule.verifyPreparedStatementParameter("insert into logtable", 3, "testmessage");
-        assertFalse(bean.getEjbContext().getRollbackOnly());
+        ejbModule.verifyNotMarkedForRollback();
+        ejbModule.verifyCommitted();
         jdbcModule.verifyAllStatementsClosed();
         jdbcModule.verifyConnectionClosed();
         verifyNoActionErrors();

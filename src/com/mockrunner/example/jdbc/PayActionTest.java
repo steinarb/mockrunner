@@ -49,7 +49,7 @@ public class PayActionTest extends JDBCTestCaseAdapter
         actionModule.actionPerform(PayAction.class, PayForm.class);
         actionModule.verifyActionErrorPresent("unknown.customer.error");
         verifyRolledBack();
-        verifyNotCommited();
+        verifyNotCommitted();
         verifySQLStatementExecuted("select name");
         verifySQLStatementNotExecuted("delete from openbills");
         verifySQLStatementNotExecuted("insert into paidbills");
@@ -71,7 +71,7 @@ public class PayActionTest extends JDBCTestCaseAdapter
         actionModule.actionPerform(PayAction.class, PayForm.class);
         actionModule.verifyActionErrorPresent("unknown.bill.error");
         verifyRolledBack();
-        verifyNotCommited();
+        verifyNotCommitted();
         verifySQLStatementExecuted("select * from openbills");
         verifySQLStatementNotExecuted("delete from openbills");
         verifySQLStatementNotExecuted("insert into paidbills");
@@ -89,7 +89,7 @@ public class PayActionTest extends JDBCTestCaseAdapter
         actionModule.actionPerform(PayAction.class, PayForm.class);
         actionModule.verifyActionErrorPresent("wrong.bill.for.customer");
         verifyRolledBack();
-        verifyNotCommited();
+        verifyNotCommitted();
         verifySQLStatementExecuted("select * from openbills");
         verifySQLStatementNotExecuted("delete from openbills");
         verifySQLStatementNotExecuted("insert into paidbills");
@@ -108,7 +108,7 @@ public class PayActionTest extends JDBCTestCaseAdapter
         actionModule.actionPerform(PayAction.class, PayForm.class);
         actionModule.verifyActionErrorPresent("wrong.amount.for.bill");
         verifyRolledBack();
-        verifyNotCommited();
+        verifyNotCommitted();
         verifySQLStatementExecuted("select * from openbills");
         verifySQLStatementNotExecuted("delete from openbills");
         verifySQLStatementNotExecuted("insert into paidbills");
@@ -126,7 +126,7 @@ public class PayActionTest extends JDBCTestCaseAdapter
         actionModule.addRequestParameter("amount", "100");
         actionModule.actionPerform(PayAction.class, PayForm.class);
         actionModule.verifyNoActionErrors();
-        verifyCommited();
+        verifyCommitted();
         verifyNotRolledBack();
         verifySQLStatementExecuted("delete from openbills where id=1");
         verifySQLStatementExecuted("insert into paidbills values(1,1,100.0)");
