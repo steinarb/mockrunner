@@ -50,6 +50,7 @@ public class PreparedStatementResultSetHandler extends AbstractResultSetHandler
      */
     public void addPreparedStatement(MockPreparedStatement statement)
     { 
+        statement.setPreparedStatementResultSetHandler(this);
         List list = (List)preparedStatementMap.get(statement.getSQL());
         if(null == list)
         {

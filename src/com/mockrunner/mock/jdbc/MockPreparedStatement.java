@@ -61,8 +61,9 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         prepareParameterMetaData();
     }
     
-    public void setResultSetHandler(PreparedStatementResultSetHandler resultSetHandler)
+    public void setPreparedStatementResultSetHandler(PreparedStatementResultSetHandler resultSetHandler)
     {
+        super.setResultSetHandler(resultSetHandler);
         this.resultSetHandler = resultSetHandler;
     }
     

@@ -14,6 +14,7 @@ public class AllJDBCTests
         suite.addTest(new TestSuite(MockBlobTest.class));
         suite.addTest(new TestSuite(MockClobTest.class));
         suite.addTest(new TestSuite(MockResultSetTest.class));
+        suite.addTest(new TestSuite(MockStatementTest.class));
         //$JUnit-END$
         return suite;
     }

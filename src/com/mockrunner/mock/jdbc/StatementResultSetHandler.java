@@ -23,6 +23,7 @@ public class StatementResultSetHandler extends AbstractResultSetHandler
      */
     public void addStatement(MockStatement statement)
     {
+        statement.setResultSetHandler(this);
         statements.add(statement);
     }
     
