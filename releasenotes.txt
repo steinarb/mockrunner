@@ -8,6 +8,11 @@ mockrunner-0.3.2:
   RuntimeException and nests the original exception
 - renamed ArrayUtil.contains to ArrayUtil.indexOf, contains is misleading
 - added getBinaryContent to MockServletOutputStream
+- refactored the JMS test framework, introduced GenericTransmissionManager
+  for creating producers that are not associated with a destination
+  (check out bug report 1077690)
+- TransmissionManagerWrapper now allows transparent access to senders and
+  receivers
 - fixed bug 1077690 (JMS spec allows MessageProducers with null destination)
   reported by Peter Ryan
 - fixed bug in MockHttpServletResponse.getWriter()

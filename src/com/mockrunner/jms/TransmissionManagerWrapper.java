@@ -5,10 +5,8 @@ import java.util.List;
 
 import com.mockrunner.mock.jms.MockMessageConsumer;
 import com.mockrunner.mock.jms.MockMessageProducer;
-import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
 import com.mockrunner.mock.jms.MockTopicPublisher;
-import com.mockrunner.mock.jms.MockTopicSubscriber;
 
 /**
  * A wrapper around {@link QueueTransmissionManager} and
@@ -84,8 +82,12 @@ public class TransmissionManagerWrapper
 
     /**
      * Returns a list of all queue senders, i.e. all producer objects, 
-     * that are an instance of <code>QueueSender</code> 
-     * @return the list of {@link com.mockrunner.mock.jms.MockQueueSener} objects
+     * that are an instance of <code>QueueSender</code>. In
+     * contrast to {@link QueueTransmissionManager#getQueueSenderList},
+     * this methods also includes the senders that were created without
+     * specifying an explicit queue (these senders are collected using
+     * {@link GenericTransmissionManager}).
+     * @return the list of {@link com.mockrunner.mock.jms.MockQueueSender} objects
      */
     public List getQueueSenderList()
     {
@@ -106,7 +108,11 @@ public class TransmissionManagerWrapper
     /**
      * Returns the {@link com.mockrunner.mock.jms.MockQueueSender} object
      * with the specified index resp. <code>null</code>, if no such 
-     * {@link com.mockrunner.mock.jms.MockQueueSender} exists. 
+     * {@link com.mockrunner.mock.jms.MockQueueSender} exists.
+     * In contrast to {@link QueueTransmissionManager#getQueueSender},
+     * this methods also recognizes the senders that were created without
+     * specifying an explicit queue (these senders are collected using
+     * {@link GenericTransmissionManager}).
      * @param index the index 
      * @return the {@link com.mockrunner.mock.jms.MockQueueSender} object 
      */
@@ -119,7 +125,11 @@ public class TransmissionManagerWrapper
 
     /**
      * Returns a list of all topic publishers, i.e. all producer objects,
-     * that are an instance of <code>TopicPublisher</code> 
+     * that are an instance of <code>TopicPublisher</code>. In
+     * contrast to {@link TopicTransmissionManager#getTopicPublisherList},
+     * this methods also includes the publishers that were created without
+     * specifying an explicit topic (these publishers are collected using
+     * {@link GenericTransmissionManager}).
      * @return the list of {@link com.mockrunner.mock.jms.MockTopicPublisher} objects
      */
     public List getTopicPublisherList()
@@ -142,6 +152,10 @@ public class TransmissionManagerWrapper
      * Returns the {@link com.mockrunner.mock.jms.MockTopicPublisher} object
      * with the specified index resp. <code>null</code>, if no such
      * {@link com.mockrunner.mock.jms.MockTopicPublisher} exists.
+     * In contrast to {@link TopicTransmissionManager#getTopicPublisher},
+     * this methods also recognizes the publishers that were created without
+     * specifying an explicit queue (these publishers are collected using
+     * {@link GenericTransmissionManager}).
      * @param index the index
      * @return the {@link com.mockrunner.mock.jms.MockTopicPublisher} object
      */
@@ -177,58 +191,5 @@ public class TransmissionManagerWrapper
         resultList.addAll(topicManager.getTopicSubscriberList());
         resultList.addAll(topicManager.getDurableTopicSubscriberMap().values());
         return resultList;
-    }
-
-    /**
-     * Returns a list of all queue receivers, i.e. all receiver objects, 
-     * that are an instance of <code>QueueReceiver</code> 
-     * @return the list of {@link com.mockrunner.mock.jms.MockQueueReceiver} objects
-     */
-    public List getQueueReceiverList()
-    {
-        List resultList = new ArrayList();
-        resultList.addAll(queueManager.getQueueReceiverList());
-        return resultList;
-    }
-
-    /**
-     * Returns the {@link com.mockrunner.mock.jms.MockQueueReceiver} object 
-     * with the specified index resp. <code>null</code>, if no such
-     * {@link com.mockrunner.mock.jms.MockQueueReceiver} exists. 
-     * @param index the index 
-     * @return the {@link com.mockrunner.mock.jms.MockQueueReceiver} object 
-     */
-    public MockQueueReceiver getQueueReceiver(int index)
-    {
-        List queueReceiverList = getQueueReceiverList();
-        if(queueReceiverList.size() <= index || index < 0) return null;
-        return (MockQueueReceiver)queueReceiverList.get(index);
-    }
-
-    /**
-     * Returns a list of all topic subscribers, i.e. all subscriber objects,
-     * that are an instance of <code>TopicSubscriber</code>
-     * @return the list of {@link com.mockrunner.mock.jms.MockTopicSubscriber} objects
-     */
-    public List getTopicSubscriberList()
-    {
-        List resultList = new ArrayList();
-        resultList.addAll(topicManager.getTopicSubscriberList());
-        resultList.addAll(topicManager.getDurableTopicSubscriberMap().values());
-        return resultList;
-    }
-
-    /**
-     * Returns the {@link com.mockrunner.mock.jms.MockTopicSubscriber} object
-     * with the specified index resp. <code>null</code>, if no such
-     * {@link com.mockrunner.mock.jms.MockTopicSubscriber} exists.
-     * @param index the index
-     * @return the {@link com.mockrunner.mock.jms.MockTopicSubscriber} object
-     */
-    public MockTopicSubscriber getTopicSubscriber(int index)
-    {
-        List topicSubscriberList = getTopicSubscriberList();
-        if(topicSubscriberList.size() <= index || index < 0) return null;
-        return (MockTopicSubscriber)topicSubscriberList.get(index);
-    }
+    }  
 }

@@ -266,33 +266,4 @@ public class TransmissionManagerTest extends TestCase
         assertTrue(manager.getTopicPublisherList().contains(publisher1));
         assertTrue(manager.getTopicPublisherList().contains(producer2));
     }
-
-    public void testTransmissionManagerWrapperReceiverAndSubscriber() 
-    {
-        QueueTransmissionManager queueManager = session.getQueueTransmissionManager();
-        MockQueueReceiver receiver1 = queueManager.createQueueReceiver(new MockQueue("Queue1"), "");
-        MockQueueReceiver receiver2 = queueManager.createQueueReceiver(new MockQueue("Queue1"), "");
-        TopicTransmissionManager topicManager = session.getTopicTransmissionManager();
-        MockTopicSubscriber subscriber1 = topicManager.createTopicSubscriber(new MockTopic("Topic1"), "", false);
-        MockTopicSubscriber subscriber2 = topicManager.createTopicSubscriber(new MockTopic("Topic1"), "", true);
-        GenericTransmissionManager genericManager = session.getGenericTransmissionManager();
-        TransmissionManagerWrapper manager = new TransmissionManagerWrapper(queueManager, topicManager, genericManager);
-        assertEquals(4, manager.getMessageConsumerList().size());
-        assertEquals(2, manager.getTopicSubscriberList().size());
-        assertEquals(2, manager.getQueueReceiverList().size());
-        assertNotNull(manager.getMessageConsumer(3));
-        assertNull(manager.getMessageConsumer(4));
-        assertNotNull(manager.getQueueReceiver(1));
-        assertNull(manager.getQueueReceiver(2));
-        assertNotNull(manager.getTopicSubscriber(1));
-        assertNull(manager.getTopicSubscriber(2));
-        assertTrue(manager.getMessageConsumerList().contains(receiver1));
-        assertTrue(manager.getMessageConsumerList().contains(receiver2));
-        assertTrue(manager.getMessageConsumerList().contains(subscriber1));
-        assertTrue(manager.getMessageConsumerList().contains(subscriber2)); 
-        assertTrue(manager.getQueueReceiverList().contains(receiver1));
-        assertTrue(manager.getQueueReceiverList().contains(receiver2));
-        assertTrue(manager.getTopicSubscriberList().contains(subscriber1));
-        assertTrue(manager.getTopicSubscriberList().contains(subscriber2));
-    }
 }
