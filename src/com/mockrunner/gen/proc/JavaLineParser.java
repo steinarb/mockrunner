@@ -48,23 +48,23 @@ public class JavaLineParser
         {
             while(null != (currentLine = input.readLine()))
             {
-                int lineIndex = checkLine(currentLine, tempLinesToParse);
-                if(lineIndex >= 0)
+                String line = checkLine(currentLine, linesToParse);
+                if(line != null)
                 {
                     resultList.add(new Line(currentLine, input.getLineNumber()));
-                    tempLinesToParse.remove(lineIndex);
+                    tempLinesToParse.remove(line);
                 }
                 else
                 {
-                    int blockIndex = checkBlock(currentLine, tempBlocksToParse);
-                    if(blockIndex >= 0)
+                    line = checkBlock(currentLine, blocksToParse);
+                    if(line != null)
                     {
 	                    int startLineNumber = input.getLineNumber();
 	                    int endLineNumber = determineEndLineNumber(input);
 	                    if(endLineNumber > startLineNumber)
 	                    {
 	                        resultList.add(new Block(currentLine, startLineNumber, endLineNumber));
-	                        tempBlocksToParse.remove(blockIndex);
+	                        tempBlocksToParse.remove(line);
 	                    }
                     }
                 }
@@ -103,30 +103,30 @@ public class JavaLineParser
         }
     }
     
-    private int checkLine(String currentLine, List tempLinesToParse)
+    private String checkLine(String currentLine, List linesToParse)
     {
-        for(int ii = 0; ii < tempLinesToParse.size(); ii++)
+        for(int ii = 0; ii < linesToParse.size(); ii++)
         {
-            String nextLine = (String)tempLinesToParse.get(ii);
+            String nextLine = (String)linesToParse.get(ii);
             if(currentLine.trim().indexOf(nextLine) != -1)
             {
-                return ii;
+                return nextLine;
             }
         }
-        return -1;
+        return null;
     }
     
-    private int checkBlock(String currentLine, List tempBlocksToParse)
+    private String checkBlock(String currentLine, List blocksToParse)
     {
-        for(int ii = 0; ii < tempBlocksToParse.size(); ii++)
+        for(int ii = 0; ii < blocksToParse.size(); ii++)
         {
-            String nextLine = (String)tempBlocksToParse.get(ii);
+            String nextLine = (String)blocksToParse.get(ii);
             if(currentLine.trim().indexOf(nextLine) != -1)
             {
-                return ii;
+                return nextLine;
             }
         }
-        return -1;
+        return null;
     }
     
     private int determineEndLineNumber(LineNumberReader input)
