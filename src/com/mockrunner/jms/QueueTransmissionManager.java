@@ -9,12 +9,12 @@ import javax.jms.QueueBrowser;
 import javax.jms.QueueReceiver;
 import javax.jms.QueueSender;
 
-import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueBrowser;
 import com.mockrunner.mock.jms.MockQueueConnection;
 import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
+import com.mockrunner.mock.jms.MockQueueSession;
 
 /**
  * This class is used to create queue senders and receivers.
@@ -22,14 +22,16 @@ import com.mockrunner.mock.jms.MockQueueSender;
  */
 public class QueueTransmissionManager
 {
-    private MockConnection connection;
+    private MockQueueConnection connection;
+    private MockQueueSession session;
     private List queueSenderList;
     private List queueReceiverList;
     private List queueBrowserList;
     
-    public QueueTransmissionManager(MockQueueConnection connection)
+    public QueueTransmissionManager(MockQueueConnection connection, MockQueueSession session)
     {
         this.connection = connection;
+        this.session = session;
         queueSenderList = new ArrayList();
         queueReceiverList = new ArrayList();
         queueBrowserList = new ArrayList();
@@ -190,7 +192,7 @@ public class QueueTransmissionManager
      */
     public MockQueueReceiver createQueueReceiver(MockQueue queue, String messageSelector)
     {
-        MockQueueReceiver receiver = new MockQueueReceiver(connection, queue, messageSelector);
+        MockQueueReceiver receiver = new MockQueueReceiver(connection, session, queue, messageSelector);
         queueReceiverList.add(receiver);
         return receiver;
     }

@@ -61,6 +61,7 @@ public class MockQueue implements Queue
                 {
                     globalListener.onMessage(message);
                     isConsumed = true;
+                    acknowledgeMessage(message, session);
                 }
                 else
                 {
@@ -72,6 +73,7 @@ public class MockQueue implements Queue
                         {
                             receiver.receiveMessage(message);
                             isConsumed = true;
+                            acknowledgeMessage(message, session);
                         }
                     }
                 }
@@ -80,6 +82,14 @@ public class MockQueue implements Queue
         if(!isConsumed)
         {
             currentMessages.add(message);
+        }
+    }
+
+    private void acknowledgeMessage(Message message, MockQueueSession session) throws JMSException
+    {
+        if(session.isAutoAcknowledge())
+        {
+            message.acknowledge();
         }
     }
     

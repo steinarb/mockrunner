@@ -600,15 +600,15 @@ public class JMSTestModuleTest extends TestCase
         sender2.send(module.getQueueSession(0).createMapMessage());
         sender3.send(module.getQueueSession(0).createMapMessage());
         sender3.send(module.getQueueSession(0).createStreamMessage());
-        module.verifyNumberOfQueueTextMessages(0, 3);
-        module.verifyNumberOfQueueObjectMessages(0, 1);
-        module.verifyNumberOfQueueMapMessages(0, 2);
-        module.verifyNumberOfQueueStreamMessages(0, 1);
-        module.verifyNumberOfQueueBytesMessages(0, 0);
-        module.verifyNumberOfQueueMessages(0, 0);
+        module.verifyNumberOfCreatedQueueTextMessages(0, 3);
+        module.verifyNumberOfCreatedQueueObjectMessages(0, 1);
+        module.verifyNumberOfCreatedQueueMapMessages(0, 2);
+        module.verifyNumberOfCreatedQueueStreamMessages(0, 1);
+        module.verifyNumberOfCreatedQueueBytesMessages(0, 0);
+        module.verifyNumberOfCreatedQueueMessages(0, 0);
         try
         {
-            module.verifyNumberOfQueueMessages(0, 1);
+            module.verifyNumberOfCreatedQueueMessages(0, 1);
             fail();
         }
         catch(VerifyFailedException exc)
@@ -617,7 +617,7 @@ public class JMSTestModuleTest extends TestCase
         }
         try
         {
-            module.verifyNumberOfQueueMapMessages(1, 2);
+            module.verifyNumberOfCreatedQueueMapMessages(1, 2);
             fail();
         }
         catch(VerifyFailedException exc)
@@ -669,15 +669,15 @@ public class JMSTestModuleTest extends TestCase
         publisher2.publish(module.getTopicSession(0).createMapMessage());
         publisher3.publish(module.getTopicSession(0).createMapMessage());
         publisher3.publish(module.getTopicSession(0).createBytesMessage());
-        module.verifyNumberOfTopicTextMessages(0, 2);
-        module.verifyNumberOfTopicObjectMessages(0, 2);
-        module.verifyNumberOfTopicMapMessages(0, 2);
-        module.verifyNumberOfTopicBytesMessages(0, 1);
-        module.verifyNumberOfTopicStreamMessages(0, 0);
-        module.verifyNumberOfTopicMessages(0, 0);
+        module.verifyNumberOfCreatedTopicTextMessages(0, 2);
+        module.verifyNumberOfCreatedTopicObjectMessages(0, 2);
+        module.verifyNumberOfCreatedTopicMapMessages(0, 2);
+        module.verifyNumberOfCreatedTopicBytesMessages(0, 1);
+        module.verifyNumberOfCreatedTopicStreamMessages(0, 0);
+        module.verifyNumberOfCreatedTopicMessages(0, 0);
         try
         {
-            module.verifyNumberOfTopicMessages(0, 3);
+            module.verifyNumberOfCreatedTopicMessages(0, 3);
             fail();
         }
         catch(VerifyFailedException exc)
@@ -686,7 +686,7 @@ public class JMSTestModuleTest extends TestCase
         }
         try
         {
-            module.verifyNumberOfTopicMapMessages(1, 0);
+            module.verifyNumberOfCreatedTopicMapMessages(1, 0);
             fail();
         }
         catch(VerifyFailedException exc)

@@ -32,7 +32,7 @@ public class MockQueueSession extends MockSession implements QueueSession
     public MockQueueSession(MockQueueConnection connection, boolean transacted, int acknowledgeMode)
     {
         super(connection, transacted, acknowledgeMode);
-        queueTransManager = new QueueTransmissionManager(connection);
+        queueTransManager = new QueueTransmissionManager(connection, this);
         tempQueues = new ArrayList();
     }
     

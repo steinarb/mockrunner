@@ -10,16 +10,18 @@ import javax.jms.QueueReceiver;
  */
 public class MockQueueReceiver extends MockMessageConsumer implements QueueReceiver
 {
+    private MockQueueSession session;
     private MockQueue queue;
     
-    public MockQueueReceiver(MockConnection connection, MockQueue queue)
+    public MockQueueReceiver(MockQueueConnection connection, MockQueueSession session, MockQueue queue)
     {
-        this(connection, queue, null);
+        this(connection, session, queue, null); 
     }
 
-    public MockQueueReceiver(MockConnection connection, MockQueue queue, String messageSelector)
+    public MockQueueReceiver(MockQueueConnection connection, MockQueueSession session, MockQueue queue, String messageSelector)
     {
         super(connection, messageSelector);
+        this.session = session;
         this.queue = queue;
     }
 
@@ -37,6 +39,8 @@ public class MockQueueReceiver extends MockMessageConsumer implements QueueRecei
             throw new JMSException("Receiver is closed");
         }
         if(queue.isEmpty()) return null;
-        return queue.getMessage();
+        Message message = queue.getMessage();
+        if(session.isAutoAcknowledge()) message.acknowledge();
+        return message;
     }
 }
