@@ -7,6 +7,7 @@ import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 
+import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 
 /**
@@ -17,19 +18,21 @@ import com.mockrunner.jms.DestinationManager;
 public class MockConnectionFactory implements ConnectionFactory
 {
     private DestinationManager destinationManager;
+    private ConfigurationManager configurationManager;
     private List connections;
     private JMSException exception;
 
-    public MockConnectionFactory(DestinationManager destinationManager)
+    public MockConnectionFactory(DestinationManager destinationManager, ConfigurationManager configurationManager)
     {
         connections = new ArrayList();
         this.destinationManager = destinationManager;
+        this.configurationManager = configurationManager;
         exception = null;
     }
     
     public Connection createConnection() throws JMSException
     {
-        MockConnection connection = new MockConnection(destinationManager);
+        MockConnection connection = new MockConnection(destinationManager, configurationManager);
         connection.setJMSException(exception);
         connections.add(connection);
         return connection;
@@ -89,6 +92,11 @@ public class MockConnectionFactory implements ConnectionFactory
     protected DestinationManager destinationManager()
     {
         return destinationManager;
+    }
+    
+    protected ConfigurationManager configurationManager()
+    {
+        return configurationManager;
     }
     
     protected List connections()

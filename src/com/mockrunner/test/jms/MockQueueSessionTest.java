@@ -22,6 +22,7 @@ import javax.jms.TextMessage;
 
 import junit.framework.TestCase;
 
+import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.jms.MessageManager;
 import com.mockrunner.jms.QueueTransmissionManager;
@@ -50,8 +51,9 @@ public class MockQueueSessionTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        DestinationManager manager = new DestinationManager();
-        connection = new MockQueueConnection(manager);
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        connection = new MockQueueConnection(destManager, confManager);
         session = (MockQueueSession)connection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
         anotherSession = (MockQueueSession)connection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
     }

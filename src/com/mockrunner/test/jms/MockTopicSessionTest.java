@@ -18,6 +18,7 @@ import javax.jms.TopicSubscriber;
 
 import junit.framework.TestCase;
 
+import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.jms.MessageManager;
 import com.mockrunner.jms.TopicTransmissionManager;
@@ -44,8 +45,9 @@ public class MockTopicSessionTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        DestinationManager manager = new DestinationManager();
-        connection = new MockTopicConnection(manager);
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        connection = new MockTopicConnection(destManager, confManager);
         session = (MockTopicSession)connection.createTopicSession(false, TopicSession.CLIENT_ACKNOWLEDGE);
         anotherSession = (MockTopicSession)connection.createTopicSession(false, TopicSession.CLIENT_ACKNOWLEDGE);
     }

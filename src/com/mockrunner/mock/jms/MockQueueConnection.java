@@ -10,6 +10,7 @@ import javax.jms.QueueSession;
 import javax.jms.ServerSessionPool;
 import javax.jms.Session;
 
+import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 
 /**
@@ -21,9 +22,9 @@ import com.mockrunner.jms.DestinationManager;
  */
 public class MockQueueConnection extends MockConnection implements QueueConnection
 {
-    public MockQueueConnection(DestinationManager destinationManager)
+    public MockQueueConnection(DestinationManager destinationManager, ConfigurationManager configurationManager)
     {
-        super(destinationManager);
+        super(destinationManager, configurationManager);
     }
     
     /**

@@ -70,6 +70,10 @@ public abstract class MockMessageProducer implements MessageProducer
         {
             throw new InvalidDestinationException("destination must not be null");
         }
+        if((message instanceof MockMessage) && connection.getConfigurationManager().getDoCloneOnSend())
+        {
+            message = (MockMessage)((MockMessage)message).clone();
+        }
         if(destination instanceof MockQueue)
         {
             setJMSProperties(message, deliveryMode, priority, timeToLive);

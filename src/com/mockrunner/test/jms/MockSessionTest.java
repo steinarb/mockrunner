@@ -12,6 +12,7 @@ import javax.jms.Session;
 
 import junit.framework.TestCase;
 
+import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockQueue;
@@ -30,8 +31,9 @@ public class MockSessionTest extends TestCase
 {
     public void testGetAcknowledgeMode() throws Exception
     {
-        DestinationManager manager = new DestinationManager();
-        MockQueueConnection connection = new MockQueueConnection(manager);
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        MockQueueConnection connection = new MockQueueConnection(destManager, confManager);
         MockSession session =(MockQueueSession)connection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
         assertEquals(Session.CLIENT_ACKNOWLEDGE, session.getAcknowledgeMode());
         session =(MockQueueSession)connection.createQueueSession(false, Session.DUPS_OK_ACKNOWLEDGE);
@@ -48,50 +50,56 @@ public class MockSessionTest extends TestCase
     
     public void testCreateProducerWithQueueSession() throws Exception
     {
-        DestinationManager manager = new DestinationManager();
-        MockQueueConnection connection = new MockQueueConnection(manager);
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        MockQueueConnection connection = new MockQueueConnection(destManager, confManager);
         MockSession session =(MockSession)connection.createQueueSession(true, Session.AUTO_ACKNOWLEDGE);
-        doTestCreateProducer(session, manager);
+        doTestCreateProducer(session, destManager);
     }
     
     public void testCreateProducerWithTopicSession() throws Exception
     {
-        DestinationManager manager = new DestinationManager();
-        MockTopicConnection connection = new MockTopicConnection(manager);
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        MockTopicConnection connection = new MockTopicConnection(destManager, confManager);
         MockSession session =(MockSession)connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
-        doTestCreateProducer(session, manager);
+        doTestCreateProducer(session, destManager);
     }
     
     public void testCreateProducerWithSession() throws Exception
     {
-        DestinationManager manager = new DestinationManager();
-        MockConnection connection = new MockConnection(manager);
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        MockConnection connection = new MockConnection(destManager, confManager);
         MockSession session =(MockSession)connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        doTestCreateProducer(session, manager);
+        doTestCreateProducer(session, destManager);
     }
     
     public void testCreateConsumerWithQueueSession() throws Exception
     {
-        DestinationManager manager = new DestinationManager();
-        MockQueueConnection connection = new MockQueueConnection(manager);
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        MockQueueConnection connection = new MockQueueConnection(destManager, confManager);
         MockSession session =(MockSession)connection.createQueueSession(true, Session.AUTO_ACKNOWLEDGE);
-        doTestCreateConsumer(session, manager);
+        doTestCreateConsumer(session, destManager);
     }
 
     public void testCreateComsumerWithTopicSession() throws Exception
     {
-        DestinationManager manager = new DestinationManager();
-        MockTopicConnection connection = new MockTopicConnection(manager);
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        MockTopicConnection connection = new MockTopicConnection(destManager, confManager);
         MockSession session =(MockSession)connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
-        doTestCreateConsumer(session, manager);
+        doTestCreateConsumer(session, destManager);
     }
     
     public void testCreateComsumerWithSession() throws Exception
     {
-        DestinationManager manager = new DestinationManager();
-        MockConnection connection = new MockConnection(manager);
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        MockConnection connection = new MockConnection(destManager, confManager);
         MockSession session =(MockSession)connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        doTestCreateConsumer(session, manager);
+        doTestCreateConsumer(session, destManager);
     }
     
     private void doTestCreateProducer(MockSession session, DestinationManager manager) throws Exception
@@ -165,7 +173,7 @@ public class MockSessionTest extends TestCase
             //should throw exception
         }
     }
-    
+
     public static class TestMessageListener implements MessageListener
     {
         private Message message;

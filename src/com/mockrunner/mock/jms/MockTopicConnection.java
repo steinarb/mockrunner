@@ -10,6 +10,7 @@ import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicSession;
 
+import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 
 /**
@@ -21,9 +22,9 @@ import com.mockrunner.jms.DestinationManager;
  */
 public class MockTopicConnection extends MockConnection implements TopicConnection
 {
-    public MockTopicConnection(DestinationManager destinationManager)
+    public MockTopicConnection(DestinationManager destinationManager, ConfigurationManager configurationManager)
     {
-        super(destinationManager);
+        super(destinationManager, configurationManager);
     }
     
     /**

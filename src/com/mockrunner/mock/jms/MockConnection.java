@@ -14,6 +14,7 @@ import javax.jms.ServerSessionPool;
 import javax.jms.Session;
 import javax.jms.Topic;
 
+import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 
 /**
@@ -33,14 +34,16 @@ public class MockConnection implements Connection
     private ExceptionListener listener;
     private JMSException exception;
     private DestinationManager destinationManager;
+    private ConfigurationManager configurationManager;
     
-    public MockConnection(DestinationManager destinationManager)
+    public MockConnection(DestinationManager destinationManager, ConfigurationManager configurationManager)
     { 
         metaData = new MockConnectionMetaData();
         started = false;
         closed = false;
         exception = null;
         this.destinationManager = destinationManager;
+        this.configurationManager = configurationManager;
         sessions = new ArrayList();
     }
     
@@ -51,6 +54,15 @@ public class MockConnection implements Connection
     public DestinationManager getDestinationManager()
     {
         return destinationManager;
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.jms.ConfigurationManager}.
+     * @return the {@link com.mockrunner.jms.ConfigurationManager}
+     */
+    public ConfigurationManager getConfigurationManager()
+    {
+        return configurationManager;
     }
     
     /**
