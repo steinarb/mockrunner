@@ -13,19 +13,20 @@ mockrunner-0.2:
 - added mockejb.jar in order to test EJBs in conjunction with
   the test modules of Mockrunner. Have a look at 
   http://mockejb.sourceforge.net.
-- replaced JDK 1.3 mockobjects with 1.4 version
-- added some jars from Jakarta Commons
-- added jboss-j2ee.jar
 - added methods to WebMockObjectFactory in order to specify
   custom request wrappers. This makes it possible to
   use filters in conjunction with Struts actions
   (among other things)
 - added addRequestParameter() methods to ServletTestModule and
   ServletTestCaseAdapter
+- replaced JDK 1.3 mockobjects with 1.4 version
+- added some jars from Jakarta Commons
+- added jboss-j2ee.jar
 - updated nekohtml.jar from 0.7.7 to 0.8.1
-- added struts.jar to third party jars. You have to include this
-  in the classpath even if you only use the test modules that are
-  not Struts related (e.g ServletTestModule or JDBCTestModule)
+- updated servlet.jar from Tomcat 4.1.18 to 4.1.27
+- added struts.jar from Struts 1.1 to third party jars. You have to 
+  include this in the classpath even if you only use the test modules 
+  that are not Struts related (e.g ServletTestModule or JDBCTestModule)
 
 mockrunner-0.1.5:
 
