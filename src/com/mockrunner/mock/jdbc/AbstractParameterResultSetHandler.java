@@ -1,12 +1,13 @@
 package com.mockrunner.mock.jdbc;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.util.ArrayUtil;
+import com.mockrunner.util.ParameterUtil;
 import com.mockrunner.util.SearchUtil;
 
 /**
@@ -25,8 +26,8 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
      * in order and number.
      * Defaults to <code>false</code>, i.e. the spcified
      * parameters must be present in the actual parameter
-     * list of the prepared statement, but they do not have
-     * to match in order and number.
+     * list of the prepared statement with the correct index
+     * but it's ok if there are more actual parameters.
      * @param exactMatchParameter must parameters match exactly
      */
     public void setExactMatchParameter(boolean exactMatchParameter)
@@ -45,7 +46,7 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
      * @param parameters the parameters
      * @return the corresponding update count
      */
-    public Integer getUpdateCount(String sql, List parameters)
+    public Integer getUpdateCount(String sql, Map parameters)
     {
         List list = SearchUtil.getMatchingObjects(updateCountForStatement, sql, getCaseSensitive(), getExactMatch(), true);
         for(int ii = 0; ii < list.size(); ii++)
@@ -70,7 +71,7 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
      * @param parameters the parameters
      * @return the corresponding {@link MockResultSet}
      */
-    public MockResultSet getResultSet(String sql, List parameters)
+    public MockResultSet getResultSet(String sql, Map parameters)
     {
         List list = SearchUtil.getMatchingObjects(resultSetsForStatement, sql, getCaseSensitive(), getExactMatch(), true);
         for(int ii = 0; ii < list.size(); ii++)
@@ -84,19 +85,36 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
         return null;
     }
 
-    private boolean doParameterMatch(List expectedParameters, List actualParameters)
+    private boolean doParameterMatch(Map expectedParameters, Map actualParameters)
     {
         if(exactMatchParameter)
         {
-            if(actualParameters.size() != expectedParameters.size() + 1) return false;
-            return (-1 != Collections.indexOfSubList(actualParameters, expectedParameters));
+            if(actualParameters.size() != expectedParameters.size()) return false;
+            Iterator iterator = actualParameters.keySet().iterator();
+            while(iterator.hasNext())
+            {
+                Object currentKey = iterator.next();
+                Object expectedObject = expectedParameters.get(currentKey);
+                if(null == expectedObject) return false;
+                if(!ParameterUtil.compareParameter(actualParameters.get(currentKey), expectedObject))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
         else
         {
-            for(int ii= 0; ii < expectedParameters.size(); ii++)
+            Iterator iterator = expectedParameters.keySet().iterator();
+            while(iterator.hasNext())
             {
-                Object nextParameter = expectedParameters.get(ii);
-                if(!actualParameters.contains(nextParameter)) return false;
+                Object currentKey = iterator.next();
+                Object actualObject = actualParameters.get(currentKey);
+                if(null == actualObject) return false;
+                if(!ParameterUtil.compareParameter(actualObject, expectedParameters.get(currentKey)))
+                {
+                    return false;
+                }
             }
             return true;
         }
@@ -107,12 +125,27 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
      */
     public void clearResultSets()
     {
+        super.clearResultSets();
         resultSetsForStatement.clear();
+    }
+    
+    /**
+     * Clears the update counts.
+     */
+    public void clearUpdateCounts()
+    {
+        super.clearUpdateCounts();
+        updateCountForStatement.clear();
     }
 
     /**
      * Prepare a <code>ResultSet</code> for a specified SQL string and
-     * the specified parameters.
+     * the specified parameters. The specified parameters array
+     * must contain the parameters in the correct order starting with 0 as
+     * the first parameter. Please keep in mind that parameters in
+     * <code>PreparedStatement</code> objects start with 1 as the first
+     * parameter. So <code>parameters[0]</code> maps to the
+     * parameter with index 1.
      * @param sql the SQL string
      * @param paramters the parameters
      * @param resultSet the corresponding {@link MockResultSet}
@@ -124,12 +157,38 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
 
     /**
      * Prepare a <code>ResultSet</code> for a specified SQL string and
-     * the specified parameters.
+     * the specified parameters. The specified parameters <code>List</code>
+     * must contain the parameters in the correct order starting with 0 as
+     * the first parameter. Please keep in mind that parameters in
+     * <code>PreparedStatement</code> objects start with 1 as the first
+     * parameter. So <code>parameters.get(0)</code> maps to the
+     * parameter with index 1.
      * @param sql the SQL string
      * @param paramters the parameters
      * @param resultSet the corresponding {@link MockResultSet}
      */
     public void prepareResultSet(String sql, MockResultSet resultSet, List parameters)
+    {
+        Map params = new HashMap();
+        for(int ii = 0; ii < parameters.size(); ii++)
+        {
+            params.put(new Integer(ii + 1), parameters.get(ii));
+        }
+        prepareResultSet(sql, resultSet, params);
+    }
+    
+    /**
+     * Prepare a <code>ResultSet</code> for a specified SQL string and
+     * the specified parameters. The specified parameters <code>Map</code>
+     * must contain the parameters by mapping <code>Integer</code> objects
+     * to the corresponding parameter. The <code>Integer</code> object
+     * is the index of the parameter. In the case of a <code>CallableStatement</code>
+     * there are allowed also <code>String</code> keys for named parameters.
+     * @param sql the SQL string
+     * @param paramters the parameters
+     * @param resultSet the corresponding {@link MockResultSet}
+     */
+    public void prepareResultSet(String sql, MockResultSet resultSet, Map parameters)
     {
         List list = (List)resultSetsForStatement.get(sql);
         if(null == list)
@@ -142,7 +201,12 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
 
     /**
      * Prepare the update count for execute update calls for a specified SQL string
-     * and the specified parameters.
+     * and the specified parameters. The specified parameters array
+     * must contain the parameters in the correct order starting with 0 as
+     * the first parameter. Please keep in mind that parameters in
+     * <code>PreparedStatement</code> objects start with 1 as the first
+     * parameter. So <code>parameters[0]</code> maps to the
+     * parameter with index 1.
      * @param sql the SQL string
      * @param updateCount the update count
      * @param paramters the parameters
@@ -154,12 +218,38 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
 
     /**
      * Prepare the update count for execute update calls for a specified SQL string
-     * and the specified parameters.
+     * and the specified parameters. The specified parameters <code>List</code>
+     * must contain the parameters in the correct order starting with 0 as
+     * the first parameter. Please keep in mind that parameters in
+     * <code>PreparedStatement</code> objects start with 1 as the first
+     * parameter. So <code>parameters.get(0)</code> maps to the
+     * parameter with index 1.
      * @param sql the SQL string
      * @param updateCount the update count
      * @param paramters the parameters
      */
     public void prepareUpdateCount(String sql, int updateCount, List parameters)
+    {
+        Map params = new HashMap();
+        for(int ii = 0; ii < parameters.size(); ii++)
+        {
+            params.put(new Integer(ii + 1), parameters.get(ii));
+        }
+        prepareUpdateCount(sql, updateCount,  params);
+    }
+    
+    /**
+     * Prepare the update count for execute update calls for a specified SQL string
+     * and the specified parameters. The specified parameters <code>Map</code>
+     * must contain the parameters by mapping <code>Integer</code> objects
+     * to the corresponding parameter. The <code>Integer</code> object
+     * is the index of the parameter. In the case of a <code>CallableStatement</code>
+     * there are allowed also <code>String</code> keys for named parameters.
+     * @param sql the SQL string
+     * @param paramters the parameters
+     * @param resultSet the corresponding {@link MockResultSet}
+     */
+    public void prepareUpdateCount(String sql, int updateCount, Map parameters)
     {
         List list = (List)updateCountForStatement.get(sql);
         if(null == list)
@@ -173,15 +263,15 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
     private class MockResultSetWrapper
     {
         private MockResultSet resultSet;
-        private List parameters;
+        private Map parameters;
     
-        public MockResultSetWrapper(MockResultSet resultSet, List parameters)
+        public MockResultSetWrapper(MockResultSet resultSet, Map parameters)
         {
             this.resultSet = resultSet;
             this.parameters = parameters;
         }
     
-        public List getParamters()
+        public Map getParamters()
         {
             return parameters;
         }
@@ -195,15 +285,15 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
     private class MockUpdateCountWrapper
     {
         private Integer updateCount;
-        private List parameters;
+        private Map parameters;
 
-        public MockUpdateCountWrapper(int updateCount, List parameters)
+        public MockUpdateCountWrapper(int updateCount, Map parameters)
         {
             this.updateCount = new Integer(updateCount);
             this.parameters = parameters;
         }
 
-        public List getParamters()
+        public Map getParamters()
         {
             return parameters;
         }

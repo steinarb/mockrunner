@@ -3,13 +3,13 @@ package com.mockrunner.test;
 import java.io.ByteArrayInputStream;
 import java.io.StringReader;
 
+import junit.framework.TestCase;
+
 import com.mockrunner.mock.jdbc.MockArray;
 import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockRef;
 import com.mockrunner.util.ParameterUtil;
-
-import junit.framework.TestCase;
 
 public class ParameterUtilTest extends TestCase
 {

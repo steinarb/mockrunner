@@ -24,7 +24,7 @@ public abstract class AbstractResultSetHandler
     private boolean exactMatch = false;
     private MockResultSet globalResultSet;
     private Map resultSetsForStatement = new HashMap();
-    private int updateCount = 0;
+    private int globalUpdateCount = 0;
     private Map updateCountForStatement = new HashMap();
     private Map returnsResultSetMap = new HashMap();
     private Set executedStatements = new HashSet();
@@ -83,6 +83,23 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
+     * Clears the update counts.
+     */
+    public void clearUpdateCounts()
+    {
+        updateCountForStatement.clear();
+    }
+    
+    /**
+     * Clears the definitions if statements return
+     * <code>ResultSet</code> objects or update counts.
+     */
+    public void clearReturnsResultSet()
+    {
+        returnsResultSetMap.clear();
+    }
+    
+    /**
      * Returns the <code>Map</code> of all <code>ResultSet</code>
      * objects, that were added with {@link #prepareResultSet(String, MockResultSet)}.
      * The SQL strings map to the corresponding <code>ResultSet</code>.
@@ -91,6 +108,18 @@ public abstract class AbstractResultSetHandler
     public Map getResultSetMap()
     {
         return Collections.unmodifiableMap(resultSetsForStatement);
+    }
+    
+    /**
+     * Returns the <code>Map</code> of all update counts, that were added 
+     * with {@link #prepareUpdateCount(String, int)}.
+     * The SQL strings map to the corresponding update count as
+     * <code>Integer</code> object.
+     * @return the <code>Map</code> of <code>ResultSet</code> objects
+     */
+    public Map getUpdateCountMap()
+    {
+        return Collections.unmodifiableMap(updateCountForStatement);
     }
     
     /**
@@ -152,7 +181,7 @@ public abstract class AbstractResultSetHandler
      */
     public int getGlobalUpdateCount()
     {
-        return updateCount;
+        return globalUpdateCount;
     }
     
     /**
@@ -216,7 +245,7 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareGlobalUpdateCount(int updateCount)
     {
-        this.updateCount = updateCount;
+        this.globalUpdateCount = updateCount;
     }
     
     /**

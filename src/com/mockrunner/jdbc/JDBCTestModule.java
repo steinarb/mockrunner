@@ -16,6 +16,7 @@ import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
 import com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler;
 import com.mockrunner.mock.jdbc.StatementResultSetHandler;
+import com.mockrunner.util.ParameterUtil;
 import com.mockrunner.util.SearchUtil;
 
 /**
@@ -1061,7 +1062,7 @@ public class JDBCTestModule
     {
         verifyPreparedStatementParameterPresent(statement, indexOfParameter);
         Object actualObject = getPreparedStatementParameter(statement, indexOfParameter);
-        if(!actualObject.equals(object))
+        if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " has the value " +
                                              actualObject.toString() + ", expected " + object.toString());
@@ -1082,7 +1083,7 @@ public class JDBCTestModule
     {
         verifyPreparedStatementParameterPresent(sql, indexOfParameter);
         Object actualObject = getPreparedStatementParameter(sql, indexOfParameter);
-        if(!actualObject.equals(object))
+        if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " has the value " +
                                              actualObject.toString() + ", expected " + object.toString());
@@ -1102,7 +1103,7 @@ public class JDBCTestModule
     {
         verifyPreparedStatementParameterPresent(indexOfStatement, indexOfParameter);
         Object actualObject = getPreparedStatementParameter(indexOfStatement, indexOfParameter);
-        if(!actualObject.equals(object))
+        if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " has the value " +
                                              actualObject.toString() + ", expected " + object.toString());
@@ -1122,7 +1123,7 @@ public class JDBCTestModule
     {
         verifyCallableStatementParameterPresent(statement, indexOfParameter);
         Object actualObject = getCallableStatementParameter(statement, indexOfParameter);
-        if(!actualObject.equals(object))
+        if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " has the value " +
                                              actualObject.toString() + ", expected " + object.toString());
@@ -1143,7 +1144,7 @@ public class JDBCTestModule
     {
         verifyCallableStatementParameterPresent(sql, indexOfParameter);
         Object actualObject = getCallableStatementParameter(sql, indexOfParameter);
-        if(!actualObject.equals(object))
+        if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " has the value " +
                                              actualObject.toString() + ", expected " + object.toString());
@@ -1163,7 +1164,7 @@ public class JDBCTestModule
     {
         verifyCallableStatementParameterPresent(indexOfStatement, indexOfParameter);
         Object actualObject = getCallableStatementParameter(indexOfStatement, indexOfParameter);
-        if(!actualObject.equals(object))
+        if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " has the value " +
                                              actualObject.toString() + ", expected " + object.toString());
@@ -1183,7 +1184,7 @@ public class JDBCTestModule
     {
         verifyCallableStatementParameterPresent(statement, nameOfParameter);
         Object actualObject = getCallableStatementParameter(statement, nameOfParameter);
-        if(!actualObject.equals(object))
+        if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Callable statement parameter with name " + nameOfParameter + " has the value " +
                                              actualObject.toString() + ", expected " + object.toString());
@@ -1204,7 +1205,7 @@ public class JDBCTestModule
     {
         verifyCallableStatementParameterPresent(sql, nameOfParameter);
         Object actualObject = getCallableStatementParameter(sql, nameOfParameter);
-        if(!actualObject.equals(object))
+        if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Callable statement parameter with name " + nameOfParameter + " has the value " +
                                              actualObject.toString() + ", expected " + object.toString());
@@ -1224,7 +1225,7 @@ public class JDBCTestModule
     {
         verifyCallableStatementParameterPresent(indexOfStatement, nameOfParameter);
         Object actualObject = getCallableStatementParameter(indexOfStatement, nameOfParameter);
-        if(!actualObject.equals(object))
+        if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Callable statement parameter with name " + nameOfParameter + " has the value " +
                                              actualObject.toString() + ", expected " + object.toString());
