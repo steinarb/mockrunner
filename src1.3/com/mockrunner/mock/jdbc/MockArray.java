@@ -8,7 +8,7 @@ import java.util.Map;
 import com.mockrunner.util.ArrayUtil;
 
 /**
- * Mock implementation of a JDBC 3.0 <code>Array</code>.
+ * Mock implementation of <code>Array</code>.
  */
 public class MockArray implements Array, Cloneable
 {

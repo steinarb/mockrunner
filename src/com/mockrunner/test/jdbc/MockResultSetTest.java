@@ -11,6 +11,7 @@ import java.util.List;
 
 import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockResultSet;
+import com.mockrunner.mock.jdbc.MockStruct;
 
 import junit.framework.TestCase;
 
@@ -613,7 +614,7 @@ public class MockResultSetTest extends TestCase
         resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
         resultSet.addRow(new String[] {"test1", "test2"});
         resultSet.addRow(new String[] {"test3", "test4"});
-        resultSet.addRow(new Object[] {new MockClob("test5"), new MockClob("test6")});
+        resultSet.addRow(new Object[] {new MockClob("test5"), new MockStruct("test6")});
         MockResultSet cloneResult = (MockResultSet)resultSet.clone();
         assertTrue(resultSet.isEqual(cloneResult));
         resultSet.next();
@@ -632,12 +633,12 @@ public class MockResultSetTest extends TestCase
         assertEquals("xyzx", clob.getSubString(1, 4));
         List list = new ArrayList();
         list.add(new MockClob("xyzx"));
-        list.add(new MockClob("test6"));
+        list.add(new MockStruct("test6"));
         assertTrue(resultSet.isRowEqual(3, list));
         assertFalse(cloneResult.isRowEqual(3, list));
         list = new ArrayList();
         list.add(new MockClob("test5"));
-        list.add(new MockClob("test6"));
+        list.add(new MockStruct("test6"));
         assertTrue(cloneResult.isRowEqual(3, list));
     }
 }
