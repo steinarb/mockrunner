@@ -38,12 +38,11 @@ public class StandardAdapterProcessor implements AdapterProcessor
         addConstructors(classGenerator);
         addTearDownMethod(classGenerator, memberName);
         addSetUpMethod(classGenerator, module, memberName);
-        addHTMLOutputAndWebTestMethods(classGenerator, module, memberName);
-        addGetAndSetModuleMethods(classGenerator, module, memberName);
+        addAdditionalControlMethods(module, classGenerator, memberName);
         addDelegatorMethods(classGenerator, analyzer, module, excludedMethods, memberName);
         output = classGenerator.generate();
     }
-    
+
     public String getName()
     {
         return name;
@@ -73,7 +72,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         MethodDeclaration method = createProtectedMethod();
         method.setName("tearDown");
         method.setExceptions(new Class[] {Exception.class});
-        method.setCodeLines(new String[] {"super.tearDown();", memberName + " = null;"});
+        method.setCodeLines(getTearDownMethodCodeLines(memberName));
         classGenerator.addMethodDeclaration(method);
     }
     
@@ -86,11 +85,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         comment[0] = "Creates the " + getJavaDocModuleLink(module) + ". If you";
         comment[1] = "overwrite this method, you must call <code>super.setUp()</code>.";
         method.setCommentLines(comment);
-        String[] codeLines = new String[2];
-        codeLines[0] = "super.setUp();";
-        String factoryCall = "get" + ClassUtil.getClassName(determineFactoryClass(module));
-        codeLines[1] = memberName + " = create" + ClassUtil.getClassName(module) + "(" + factoryCall +"());";
-        method.setCodeLines(codeLines);
+        method.setCodeLines(getSetUpMethodCodeLines(module, memberName));
         classGenerator.addMethodDeclaration(method);
     }
     
@@ -301,7 +296,27 @@ public class StandardAdapterProcessor implements AdapterProcessor
         return className;
     }
     
-    private String[] getClassComment(Class module)
+    protected String[] getSetUpMethodCodeLines(Class module, String memberName)
+    {
+        String[] codeLines = new String[2];
+        codeLines[0] = "super.setUp();";
+        String factoryCall = "get" + ClassUtil.getClassName(determineFactoryClass(module));
+        codeLines[1] = memberName + " = create" + ClassUtil.getClassName(module) + "(" + factoryCall +"());";
+        return codeLines;
+    }
+    
+    protected String[] getTearDownMethodCodeLines(String memberName)
+    {
+        return new String[] {"super.tearDown();", memberName + " = null;"};
+    }
+    
+    protected void addAdditionalControlMethods(Class module, JavaClassGenerator classGenerator, String memberName)
+    {
+        addHTMLOutputAndWebTestMethods(classGenerator, module, memberName);
+        addGetAndSetModuleMethods(classGenerator, module, memberName);
+    }
+
+    protected String[] getClassComment(Class module)
     {
         String name = module.getName();
         String[] comment = new String[7];
@@ -315,7 +330,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         return comment;
     }
     
-    private Class getSuperClass(Class module)
+    protected Class getSuperClass(Class module)
     {
         if(HTMLOutputModule.class.isAssignableFrom(module))
         {
@@ -324,7 +339,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         return BaseTestCase.class;
     }
 
-    private String prepareClassNameFromBaseName(String className)
+    protected String prepareClassNameFromBaseName(String className)
     {
         return className + "CaseAdapter";
     }
