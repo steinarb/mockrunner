@@ -349,6 +349,7 @@ public class MockStatementTest extends BaseTestCase
     public void testPrepareThrowsSQLExceptionPreparedStatement() throws Exception
     {
         preparedStatementHandler.prepareThrowsSQLException("insert into");
+        preparedStatementHandler.prepareUpdateCount("insert into", 3, new ArrayList());
         List params = new ArrayList();
         params.add("test");
         preparedStatementHandler.prepareThrowsSQLException("UPDATE", params);
