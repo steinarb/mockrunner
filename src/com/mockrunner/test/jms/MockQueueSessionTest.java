@@ -5,7 +5,6 @@ import java.util.Enumeration;
 import java.util.List;
 
 import javax.jms.BytesMessage;
-import javax.jms.DeliveryMode;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -29,7 +28,6 @@ import com.mockrunner.jms.QueueTransmissionManager;
 import com.mockrunner.jms.TransmissionManagerWrapper;
 import com.mockrunner.mock.jms.MockBytesMessage;
 import com.mockrunner.mock.jms.MockMapMessage;
-import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueBrowser;
@@ -172,48 +170,6 @@ public class MockQueueSessionTest extends TestCase
         assertTrue(browser == queueTransManager.getQueueBrowser("Queue2"));
         assertTrue(queue2 == queueTransManager.getQueueBrowser(0).getQueue());
         assertEquals(1, queueTransManager.getQueueBrowserList().size());
-    }
-    
-    public void testTransmissionJMSProperties() throws Exception
-    {
-        DestinationManager manager = connection.getDestinationManager();
-        manager.createQueue("Queue1");
-        MockQueue queue = (MockQueue)session.createQueue("Queue1");
-        QueueSender sender = session.createSender(queue);
-        MockMessage message = new MockTextMessage("Text1");
-        message.setJMSTimestamp(0);
-        message.setJMSMessageID("xyz");
-        sender.setDisableMessageTimestamp(true);
-        sender.setDisableMessageID(true);
-        sender.setTimeToLive(0);
-        sender.setPriority(9);
-        sender.setDeliveryMode(DeliveryMode.PERSISTENT);
-        sender.send(message);
-        message = (MockMessage)queue.getMessage();
-        assertEquals(0, message.getJMSTimestamp());
-        assertEquals("xyz", message.getJMSMessageID());
-        assertEquals(0, message.getJMSExpiration());
-        assertEquals(9, message.getJMSPriority());
-        assertEquals(DeliveryMode.PERSISTENT, message.getJMSDeliveryMode());
-        message = new MockTextMessage("Text1");
-        sender.setDisableMessageTimestamp(false);
-        sender.setDisableMessageID(false);
-        sender.setPriority(7);
-        sender.send(message);
-        message = (MockMessage)queue.getMessage();
-        assertFalse(0 == message.getJMSTimestamp());
-        assertFalse("xyz".equals(message.getJMSMessageID()));
-        assertEquals(7, message.getJMSPriority());
-        message = new MockTextMessage("Text1");
-        sender.setTimeToLive(10000);
-        sender.send(message);
-        message = (MockMessage)queue.getMessage();
-        assertEquals(message.getJMSTimestamp() + 10000, message.getJMSExpiration());
-        message = new MockTextMessage("Text1");
-        sender.setTimeToLive(0);
-        sender.send(message);
-        message = (MockMessage)queue.getMessage();
-        assertEquals(0, message.getJMSExpiration());
     }
     
     public void testTransmissionGlobalListener() throws Exception

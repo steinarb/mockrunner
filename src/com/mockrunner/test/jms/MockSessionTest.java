@@ -2,12 +2,14 @@ package com.mockrunner.test.jms;
 
 import java.util.List;
 
+import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.InvalidDestinationException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.MessageProducer;
+import javax.jms.QueueSender;
 import javax.jms.Session;
 
 import junit.framework.TestCase;
@@ -15,6 +17,8 @@ import junit.framework.TestCase;
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.mock.jms.MockConnection;
+import com.mockrunner.mock.jms.MockMessage;
+import com.mockrunner.mock.jms.MockMessageProducer;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueConnection;
 import com.mockrunner.mock.jms.MockQueueReceiver;
@@ -29,6 +33,60 @@ import com.mockrunner.mock.jms.MockTopicSubscriber;
 
 public class MockSessionTest extends TestCase
 {
+    public void testTransmissionJMSHeaders() throws Exception
+    {
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        MockQueueConnection connection = new MockQueueConnection(destManager, confManager);
+        MockQueueSession session = (MockQueueSession)connection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
+        destManager.createQueue("Queue1");
+        MockQueue queue = (MockQueue)session.createQueue("Queue1");
+        QueueSender sender = session.createSender(queue);
+        MockMessage message = new MockTextMessage("Text1");
+        message.setJMSTimestamp(0);
+        message.setJMSMessageID("xyz");
+        sender.setDisableMessageTimestamp(true);
+        sender.setDisableMessageID(true);
+        sender.setTimeToLive(0);
+        sender.setPriority(9);
+        sender.setDeliveryMode(DeliveryMode.PERSISTENT);
+        sender.send(message);
+        message = (MockMessage)queue.getMessage();
+        assertEquals(0, message.getJMSTimestamp());
+        assertEquals("xyz", message.getJMSMessageID());
+        assertEquals(0, message.getJMSExpiration());
+        assertEquals(9, message.getJMSPriority());
+        assertEquals(DeliveryMode.PERSISTENT, message.getJMSDeliveryMode());
+        assertEquals(queue, message.getJMSDestination());
+        message = new MockTextMessage("Text1");
+        sender.setDisableMessageTimestamp(false);
+        sender.setDisableMessageID(false);
+        sender.setPriority(7);
+        sender.send(message);
+        message = (MockMessage)queue.getMessage();
+        assertFalse(0 == message.getJMSTimestamp());
+        assertFalse("xyz".equals(message.getJMSMessageID()));
+        assertEquals(7, message.getJMSPriority());
+        assertEquals(queue, message.getJMSDestination());
+        message = new MockTextMessage("Text1");
+        sender.setTimeToLive(10000);
+        sender.send(message);
+        message = (MockMessage)queue.getMessage();
+        assertEquals(message.getJMSTimestamp() + 10000, message.getJMSExpiration());
+        assertEquals(queue, message.getJMSDestination());
+        message = new MockTextMessage("Text1");
+        sender.setTimeToLive(0);
+        sender.send(message);
+        message = (MockMessage)queue.getMessage();
+        assertEquals(0, message.getJMSExpiration());
+        assertEquals(queue, message.getJMSDestination());
+        message = new MockTextMessage("Text1");
+        destManager.createTopic("Topic1");
+        MockTopic topic = (MockTopic)session.createTopic("Topic1");
+        ((MockMessageProducer)sender).send(topic, message);
+        assertEquals(topic, message.getJMSDestination());
+    }
+    
     public void testGetAcknowledgeMode() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
