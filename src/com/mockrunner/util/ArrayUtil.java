@@ -236,35 +236,35 @@ public class ArrayUtil
         {
             return (Object[])sourceArray;
         }
-        if(componentType == Boolean.TYPE)
+        if(componentType.equals(Boolean.TYPE))
         {
             componentType = Boolean.class;
         }
-        else if(componentType == Byte.TYPE)
+        else if(componentType.equals(Byte.TYPE)) 
         {
             componentType = Byte.class;
         }
-        else if(componentType == Character.TYPE)
+        else if(componentType.equals(Character.TYPE))
         {
             componentType = Character.class;
         }
-        else if(componentType == Short.TYPE)
+        else if(componentType.equals(Short.TYPE))
         {
             componentType = Short.class;
         }
-        else if(componentType == Integer.TYPE)
+        else if(componentType.equals(Integer.TYPE))
         {
             componentType = Integer.class;
         }
-        else if(componentType == Long.TYPE)
+        else if(componentType.equals(Long.TYPE))
         {
             componentType = Long.class;
         }
-        else if(componentType == Float.TYPE)
+        else if(componentType.equals(Float.TYPE))
         {
             componentType = Float.class;
         }
-        else if(componentType == Double.TYPE)
+        else if(componentType.equals(Double.TYPE))
         {
             componentType = Double.class;
         }
