@@ -27,14 +27,14 @@ import com.mockrunner.mock.jdbc.MockResultSet;
  */
 public class BankTest extends JDBCTestCaseAdapter
 {
-    private void preparedEmptyResultSet()
+    private void prepareEmptyResultSet()
     {
         StatementResultSetHandler statementHandler = getJDBCMockObjectFactory().getMockConnection().getStatementResultSetHandler();
         MockResultSet result = statementHandler.createResultSet();
         statementHandler.prepareGlobalResultSet(result);
     }
     
-    private void preparedResultSet()
+    private void prepareResultSet()
     {
         StatementResultSetHandler statementHandler = getJDBCMockObjectFactory().getMockConnection().getStatementResultSetHandler();
         MockResultSet result = statementHandler.createResultSet();
@@ -44,7 +44,7 @@ public class BankTest extends JDBCTestCaseAdapter
     
     public void testWrongId() throws SQLException
     {
-        preparedEmptyResultSet();
+        prepareEmptyResultSet();
         Bank bank = new Bank();
         bank.connect();
         bank.transfer(1, 2, 5000);
@@ -60,7 +60,7 @@ public class BankTest extends JDBCTestCaseAdapter
     
     public void testTransferOk() throws SQLException
     {
-        preparedResultSet();
+        prepareResultSet();
         Bank bank = new Bank();
         bank.connect();
         bank.transfer(1, 2, 5000);
@@ -77,7 +77,7 @@ public class BankTest extends JDBCTestCaseAdapter
     
     public void testTransferFailure() throws SQLException
     {
-        preparedResultSet();
+        prepareResultSet();
         Bank bank = new Bank();
         bank.connect();
         bank.transfer(1, 2, 20000);
