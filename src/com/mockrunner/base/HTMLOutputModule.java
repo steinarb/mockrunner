@@ -9,7 +9,8 @@ import com.mockrunner.util.XmlUtil;
  * Base class for modules which produce HTML
  * code as output. These modules have to implement
  * {@link #getOutput}. The HTML code is provided
- * in different formats.
+ * in different formats, e.g. as parsed XML
+ * documents.
  */
 public abstract class HTMLOutputModule
 {

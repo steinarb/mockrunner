@@ -2,10 +2,17 @@ package com.mockrunner.example.servlet;
 
 import java.io.BufferedReader;
 
+import org.jdom.Element;
+
 import com.mockrunner.servlet.ServletTestCaseAdapter;
 
 /**
  * Example test for {@link RedirectServlet}.
+ * Demonstrates the usage of {@link com.mockrunner.servlet.ServletTestModule} 
+ * resp. {@link com.mockrunner.servlet.ServletTestCaseAdapter}.
+ * Demonstrates the testing of output data as string as well as parsed
+ * HTML data (<code>testServletOutputAsXML</code>).
+ * 
  */
 public class RedirectServletTest extends ServletTestCaseAdapter
 {
@@ -29,5 +36,17 @@ public class RedirectServletTest extends ServletTestCaseAdapter
         assertEquals("</body>", reader.readLine().trim());
         assertEquals("</html>", reader.readLine().trim());
         verifyOutputContains("URL=http://www.mockrunner.com");
+    }
+    
+    public void testServletOutputAsXML() throws Exception
+    {
+        getMockObjectFactory().getMockRequest().setupAddParameter("redirecturl", "http://www.mockrunner.com");
+        doPost();
+        Element root = getOutputAsJDOMDocument().getRootElement();
+        assertEquals("html", root.getName());
+        Element head = root.getChild("head");
+        Element meta = head.getChild("meta");
+        assertEquals("refresh", meta.getAttributeValue("http-equiv"));
+        assertEquals("0;URL=http://www.mockrunner.com", meta.getAttributeValue("content"));
     }
 }

@@ -4,6 +4,8 @@ import com.mockrunner.servlet.ServletTestCaseAdapter;
 
 /**
  * Example test for {@link LogoutServlet}.
+ * Demonstrates the usage of {@link com.mockrunner.servlet.ServletTestModule} 
+ * resp. {@link com.mockrunner.servlet.ServletTestCaseAdapter}.
  */
 public class LogoutServletTest extends ServletTestCaseAdapter
 {

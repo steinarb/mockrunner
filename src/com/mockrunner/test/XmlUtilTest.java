@@ -80,5 +80,7 @@ public class XmlUtilTest extends TestCase
         assertEquals("head", headElement.getName());
         Element bodyElement = (Element)children.get(1);
         assertEquals("body", bodyElement.getName());
+        Element table = XmlUtil.getBodyFragmentJDOMDocument(document);
+        assertEquals("table", table.getName());
     }
 }
