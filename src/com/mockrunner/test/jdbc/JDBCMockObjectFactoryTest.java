@@ -45,10 +45,44 @@ public class JDBCMockObjectFactoryTest extends TestCase
         assertFalse(drivers.hasMoreElements());
         factory.restoreDrivers();
         drivers = DriverManager.getDrivers();
+        int numberDrivers = 0;
         while(drivers.hasMoreElements())
         {
+            numberDrivers++;
             assertTrue(oldDrivers.contains(drivers.nextElement()));
         }
+        factory.restoreDrivers();
+        factory.restoreDrivers();
+        factory.restoreDrivers();
+        int newNumberDrivers = 0;
+        drivers = DriverManager.getDrivers();
+        while(drivers.hasMoreElements())
+        {
+            newNumberDrivers++;
+            assertTrue(oldDrivers.contains(drivers.nextElement()));
+        }
+        assertTrue(numberDrivers == newNumberDrivers);
+        factory.registerMockDriver();
+        drivers = DriverManager.getDrivers();
+        numberDrivers = 0;
+        while(drivers.hasMoreElements())
+        {
+            numberDrivers++;
+            assertTrue(drivers.nextElement() instanceof MockDriver);
+        }
+        assertTrue(numberDrivers == 1);
+        factory.registerMockDriver();
+        factory.registerMockDriver();
+        factory.restoreDrivers();
+        factory.restoreDrivers();
+        drivers = DriverManager.getDrivers();
+        numberDrivers = 0;
+        while(drivers.hasMoreElements())
+       {
+           numberDrivers++;
+           assertTrue(oldDrivers.contains(drivers.nextElement()));
+       }
+       assertTrue(numberDrivers == newNumberDrivers);
     }
     
     public static class TestDriver implements Driver
