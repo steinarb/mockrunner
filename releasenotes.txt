@@ -6,6 +6,7 @@ mockrunner-0.3.1:
 - added BillManagerSessionTest and UserLoginSessionTest in order to 
   demonstrate the testing of entity beans
 - adapted example tests to the new MockEJB 0.6 API
+- fixed bug 1063152 (MockHttpServletResponse location header wrong case)
 - replaced all System.out and exc.printStackTrace with commons-logging
   statements in all framework classes
 - improved version of UserTransaction
