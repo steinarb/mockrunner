@@ -83,7 +83,7 @@ JBoss 3.2.2RC2:
 http://www.jboss.org
 jboss-j2ee.jar                
 
-Commons:
+Commons (from Struts 1.1 release):
 http://jakarta.apache.org/commons       
 commons-logging.jar
 commons-collections.jar
