@@ -1308,7 +1308,7 @@ public class JMSTestModule
      * @param numberOfProducers the expected number of producers
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNumberConnectionProducers(int indexOfSession, int numberOfProducers)
+    public void verifyNumberMessageProducers(int indexOfSession, int numberOfProducers)
     {
         checkAndGetSessionByIndex(indexOfSession);
         TransmissionManagerWrapper manager = getTransmissionManager(indexOfSession);
@@ -1324,7 +1324,7 @@ public class JMSTestModule
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyAllConnectionProducersClosed(int indexOfSession)
+    public void verifyAllMessageProducersClosed(int indexOfSession)
     {
         checkAndGetSessionByIndex(indexOfSession);
         TransmissionManagerWrapper manager = getTransmissionManager(indexOfSession);

@@ -230,6 +230,7 @@ public class MockStreamMessageTest extends TestCase
         message1.writeString("test");
         message1.writeObject(new Long(1));
         message1.writeBytes(new byte[] {1, 2, 3});
+        assertTrue(message1.equals(message1));
         MockStreamMessage message2 = null;
         assertFalse(message1.equals(message2));
         message2 = new MockStreamMessage();

@@ -51,7 +51,7 @@ public class MockSessionTest extends TestCase
         DestinationManager manager = new DestinationManager();
         MockQueueConnection connection = new MockQueueConnection(manager);
         MockSession session =(MockSession)connection.createQueueSession(true, Session.AUTO_ACKNOWLEDGE);
-        testCreateProducer(session, manager);
+        doTestCreateProducer(session, manager);
     }
     
     public void testCreateProducerWithTopicSession() throws Exception
@@ -59,7 +59,7 @@ public class MockSessionTest extends TestCase
         DestinationManager manager = new DestinationManager();
         MockTopicConnection connection = new MockTopicConnection(manager);
         MockSession session =(MockSession)connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
-        testCreateProducer(session, manager);
+        doTestCreateProducer(session, manager);
     }
     
     public void testCreateProducerWithSession() throws Exception
@@ -67,7 +67,7 @@ public class MockSessionTest extends TestCase
         DestinationManager manager = new DestinationManager();
         MockConnection connection = new MockConnection(manager);
         MockSession session =(MockSession)connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        testCreateProducer(session, manager);
+        doTestCreateProducer(session, manager);
     }
     
     public void testCreateConsumerWithQueueSession() throws Exception
@@ -75,7 +75,7 @@ public class MockSessionTest extends TestCase
         DestinationManager manager = new DestinationManager();
         MockQueueConnection connection = new MockQueueConnection(manager);
         MockSession session =(MockSession)connection.createQueueSession(true, Session.AUTO_ACKNOWLEDGE);
-        testCreateConsumer(session, manager);
+        doTestCreateConsumer(session, manager);
     }
 
     public void testCreateComsumerWithTopicSession() throws Exception
@@ -83,7 +83,7 @@ public class MockSessionTest extends TestCase
         DestinationManager manager = new DestinationManager();
         MockTopicConnection connection = new MockTopicConnection(manager);
         MockSession session =(MockSession)connection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
-        testCreateConsumer(session, manager);
+        doTestCreateConsumer(session, manager);
     }
     
     public void testCreateComsumerWithSession() throws Exception
@@ -91,10 +91,10 @@ public class MockSessionTest extends TestCase
         DestinationManager manager = new DestinationManager();
         MockConnection connection = new MockConnection(manager);
         MockSession session =(MockSession)connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        testCreateConsumer(session, manager);
+        doTestCreateConsumer(session, manager);
     }
     
-    private void testCreateProducer(MockSession session, DestinationManager manager) throws Exception
+    private void doTestCreateProducer(MockSession session, DestinationManager manager) throws Exception
     {
         MockQueue queue = manager.createQueue("Queue");
         MockTopic topic = manager.createTopic("Topic");
@@ -123,7 +123,7 @@ public class MockSessionTest extends TestCase
         }
     }
     
-    private void testCreateConsumer(MockSession session, DestinationManager manager) throws Exception
+    private void doTestCreateConsumer(MockSession session, DestinationManager manager) throws Exception
     {
         MockQueue queue = manager.createQueue("Queue");
         MockTopic topic = manager.createTopic("Topic");

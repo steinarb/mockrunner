@@ -4,9 +4,11 @@ import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
+import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Queue;
+import javax.jms.QueueBrowser;
 import javax.jms.QueueConnection;
 import javax.jms.QueueReceiver;
 import javax.jms.QueueSender;
@@ -34,6 +36,8 @@ import com.mockrunner.mock.jms.MockBytesMessage;
 import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockMapMessage;
 import com.mockrunner.mock.jms.MockMessage;
+import com.mockrunner.mock.jms.MockMessageConsumer;
+import com.mockrunner.mock.jms.MockMessageProducer;
 import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueBrowser;
@@ -614,10 +618,10 @@ public class JMSTestModuleTest extends TestCase
         module.getSession(0).createProducer(manager.getTopic("topic"));
         module.verifyNumberQueueSenders(0, 0);
         module.verifyNumberTopicPublishers(0, 0);
-        module.verifyNumberConnectionProducers(0, 2);
+        module.verifyNumberMessageProducers(0, 2);
         try
         {
-            module.verifyNumberConnectionProducers(0, 1);
+            module.verifyNumberMessageProducers(0, 1);
             fail();
         }
         catch(VerifyFailedException exc)
@@ -812,7 +816,7 @@ public class JMSTestModuleTest extends TestCase
         module.verifyNumberMessageConsumers(0, 3);
         try
         {
-            module.verifyNumberConnectionProducers(0, 4);
+            module.verifyNumberMessageProducers(0, 4);
             fail();
         }
         catch(VerifyFailedException exc)
@@ -834,8 +838,6 @@ public class JMSTestModuleTest extends TestCase
         assertTrue(manager1.getMessageConsumer(0) instanceof MockQueueReceiver);
         assertTrue(manager1.getMessageConsumer(1) instanceof MockTopicSubscriber);
     }
-    
-    //---
         
     public void testVerifyQueueBrowser() throws Exception
     {
@@ -884,6 +886,37 @@ public class JMSTestModuleTest extends TestCase
         }
         manager.createQueue("otherQueue");
         module.verifyNumberQueueBrowsers(0, "otherQueue", 0);
+    }
+    
+    public void testVerifyQueueBrowserDifferentSessions() throws Exception
+    {
+        queueConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        topicConnection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+        connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        DestinationManager manager = mockFactory.getDestinationManager();
+        manager.createQueue("queue");
+        QueueBrowser browser1 = (QueueBrowser)module.getSession(0).createBrowser(manager.getQueue("queue"));
+        QueueBrowser browser2 = (QueueBrowser)module.getSession(0).createBrowser(manager.getQueue("queue"));
+        module.verifyNumberQueueBrowsers(0, 0);
+        module.verifyNumberQueueBrowsers(0, "queue", 0);
+        try
+        {
+            module.verifyNumberQueueBrowsers(0, 2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        QueueTransmissionManager transManager = module.getTransmissionManager(0).getQueueTransmissionManager();
+        assertEquals(2, transManager.getQueueBrowserList().size());
+        assertSame(browser1, transManager.getQueueBrowser(0));
+        assertSame(browser2, transManager.getQueueBrowser(1));
+        QueueBrowser browser3 = (QueueBrowser)module.getTopicSession(0).createBrowser(manager.getQueue("queue"));
+        module.verifyNumberQueueBrowsers(0, 0);
+        transManager = module.getTopicSession(0).getQueueTransmissionManager();
+        assertEquals(1, transManager.getQueueBrowserList().size());
+        assertSame(browser3, transManager.getQueueBrowser(0));
     }
 
     public void testVerifyQueueSession() throws Exception
@@ -935,7 +968,54 @@ public class JMSTestModuleTest extends TestCase
         }
         topicConnection.createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);
         assertNotNull(module.getTopicSession(1));
-        module.getTopicSession(2);
+        assertNull(module.getTopicSession(2));
+    }
+    
+    public void testVerifySession() throws Exception
+    {
+        module.verifyNumberSessions(0);
+        module.verifyNumberTopicSessions(0);
+        module.verifyNumberQueueSessions(0);
+        assertNull(module.getSession(0));
+        connection.createSession(false, Session.DUPS_OK_ACKNOWLEDGE);
+        assertNotNull(module.getSession(0));
+        assertNull(module.getQueueSession(0));
+        assertNull(module.getTopicSession(0));
+        try
+        {
+            module.verifyNumberSessions(0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyNumberSessions(2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        topicConnection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
+        assertNotNull(module.getSession(0));
+        assertNull(module.getQueueSession(0));
+        assertNotNull(module.getTopicSession(0));
+        try
+        {
+            module.verifyNumberQueueSessions(1);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        connection.createSession(true, Session.DUPS_OK_ACKNOWLEDGE);
+        assertEquals(2, module.getSessionList().size());
+        assertEquals(1, module.getTopicSessionList().size());
+        assertEquals(0, module.getQueueSessionList().size());
     }
     
     public void testVerifyNumberQueueMessages() throws Exception
@@ -1074,6 +1154,103 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
+    }
+    
+    public void testVerifyNumberMessages() throws Exception
+    {
+        connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        DestinationManager manager = mockFactory.getDestinationManager();
+        manager.createQueue("queue");
+        MockMessageProducer producer1 = (MockMessageProducer)module.getSession(0).createProducer(manager.getQueue("queue"));
+        manager.createTopic("topic");
+        MockMessageProducer producer2 = (MockMessageProducer)module.getSession(0).createProducer(manager.getTopic("topic"));
+        MockMessageProducer producer3 = (MockMessageProducer)module.getSession(0).createProducer(module.getSession(0).createTemporaryQueue());
+        MessageConsumer consumer = module.getSession(0).createConsumer(manager.getTopic("topic"));
+        consumer.setMessageListener(new MessageListener() { public void onMessage(Message message){} });
+        producer1.send(module.getSession(0).createTextMessage());
+        producer1.send(module.getSession(0).createTextMessage());
+        producer2.send(module.getSession(0).createTextMessage());
+        producer2.send(module.getSession(0).createObjectMessage());
+        producer2.send(module.getSession(0).createMapMessage());
+        producer3.send(module.getSession(0).createMapMessage());
+        producer3.send(module.getSession(0).createStreamMessage());
+        module.verifyNumberOfCreatedTextMessages(0, 3);
+        module.verifyNumberOfCreatedObjectMessages(0, 1);
+        module.verifyNumberOfCreatedMapMessages(0, 2);
+        module.verifyNumberOfCreatedStreamMessages(0, 1);
+        module.verifyNumberOfCreatedBytesMessages(0, 0);
+        module.verifyNumberOfCreatedMessages(0, 0);
+        try
+        {
+            module.verifyNumberOfCreatedMessages(0, 1);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyNumberOfCreatedMapMessages(1, 2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.verifyNumberOfCurrentQueueMessages("queue", 2);
+        module.verifyNumberOfReceivedQueueMessages("queue", 2);
+        module.verifyNumberOfCurrentTopicMessages("topic", 0);
+        module.verifyNumberOfReceivedTopicMessages("topic", 3);
+        try
+        {
+            module.verifyNumberOfCurrentQueueMessages(0, 0, 2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        assertEquals(2, module.getSession(0).getTemporaryQueue(0).getCurrentMessageList().size());
+    }
+    
+    public void testVerifyNumberMessagesDifferentSessions() throws Exception
+    {
+        queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+        topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        connection.createSession(false, Session.DUPS_OK_ACKNOWLEDGE);
+        DestinationManager manager = mockFactory.getDestinationManager();
+        manager.createQueue("queue");
+        MockMessageProducer queueProducer = (MockMessageProducer)module.getQueueSession(0).createProducer(module.getQueueSession(0).createTemporaryTopic());
+        MockMessageProducer topicProducer = (MockMessageProducer)module.getTopicSession(0).createProducer(module.getTopicSession(0).createTemporaryQueue());
+        MockMessageProducer producer = (MockMessageProducer)module.getSession(0).createProducer(manager.getQueue("queue"));
+        queueProducer.send(new MockTextMessage("testQueue"));
+        topicProducer.send(new MockTextMessage("testTopic"));
+        producer.send(new MockTextMessage("test"));
+        module.verifyNumberOfCurrentQueueMessages("queue", 1);
+        module.verifyNumberOfReceivedQueueMessages("queue", 1);
+        try
+        {
+            module.verifyNumberOfCurrentQueueMessages(0, 0, 1);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyNumberOfCurrentTopicMessages(0, 0, 1);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        assertEquals(1, module.getQueueSession(0).getTemporaryTopic(0).getCurrentMessageList().size());
+        assertEquals(1, module.getTopicSession(0).getTemporaryQueue(0).getCurrentMessageList().size());
+        assertEquals(1, module.getQueueSession(0).getTemporaryTopic(0).getReceivedMessageList().size());
+        assertEquals(1, module.getTopicSession(0).getTemporaryQueue(0).getReceivedMessageList().size());
     }
     
     public void testVerifyQueueMessageEquals() throws Exception
@@ -1332,6 +1509,43 @@ public class JMSTestModuleTest extends TestCase
         module.verifyReceivedTopicMessageEquals(0, 0, 2, testMessage);
     }
     
+    public void testVerifyMessageEqualsDifferentSessions() throws Exception
+    {
+        queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        DestinationManager manager = mockFactory.getDestinationManager();
+        manager.createQueue("queue");
+        manager.createTopic("topic");
+        MockMessageProducer producer1 = (MockMessageProducer)module.getQueueSession(0).createProducer(manager.getQueue("queue"));
+        MockMessageProducer producer2 = (MockMessageProducer)module.getTopicSession(0).createProducer(manager.getQueue("queue"));
+        MockMessageProducer producer3 = (MockMessageProducer)module.getSession(0).createProducer(manager.getQueue("queue"));
+        MockMapMessage mapMessage = new MockMapMessage();
+        mapMessage.setInt("prop", 1);
+        producer1.send(new MockTextMessage("text"));
+        producer2.send(new MockObjectMessage(new Integer(1)));
+        producer3.send(mapMessage);
+        module.verifyCurrentQueueMessageEquals("queue", 0, new MockTextMessage("text"));
+        module.verifyCurrentQueueMessageEquals("queue", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentQueueMessageEquals("queue", 2, mapMessage);
+        producer3 = (MockMessageProducer)module.getSession(0).createProducer(manager.getTopic("topic"));
+        producer3.send(mapMessage);
+        module.verifyCurrentTopicMessageEquals("topic", 0, mapMessage);
+        MockTemporaryQueue queue = (MockTemporaryQueue)module.getSession(0).createTemporaryQueue();
+        producer3 = (MockMessageProducer)module.getSession(0).createProducer(queue);
+        producer3.send(new MockTextMessage("text"));
+        try
+        {
+            module.verifyReceivedQueueMessageEquals(0, 0, 0, new MockTextMessage("text"));
+            fail();
+        }
+        catch(VerifyFailedException e)
+        {
+            //should throw exception
+        }
+        assertEquals(1, queue.getReceivedMessageList().size());
+    }
+    
     public void testVerifyQueueClosed() throws Exception
     {
         MockQueueSession session1 = (MockQueueSession)queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -1497,6 +1711,64 @@ public class JMSTestModuleTest extends TestCase
         module.verifyAllDurableTopicSubscribersClosed(2);
     }
     
+    public void testVerifyMessageProducersAndConsumersClosed() throws Exception
+    {
+        MockSession session1 = (MockSession)connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockSession session2 = (MockSession)connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockSession session3 = (MockSession)connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        DestinationManager manager = mockFactory.getDestinationManager();
+        Topic topic = manager.createTopic("topic");
+        Queue queue = manager.createQueue("queue");
+        MockMessageProducer producer1 = (MockMessageProducer)session1.createProducer(topic);
+        MockMessageProducer producer2 = (MockMessageProducer)session2.createProducer(queue);
+        MockMessageConsumer consumer1 = (MockMessageConsumer)session3.createConsumer(queue);
+        MockMessageConsumer consumer2 = (MockMessageConsumer)session3.createConsumer(topic);
+        MockTopicSubscriber durableSubscriber = (MockTopicSubscriber)session3.createDurableSubscriber(topic, "myDurable");
+        producer1.close();
+        module.verifyAllMessageProducersClosed(0);
+        try
+        {
+            module.verifyAllMessageProducersClosed(1);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.verifyAllMessageConsumersClosed(0);
+        consumer1.close();
+        try
+        {
+            module.verifyAllMessageConsumersClosed(2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        session1.close();
+        session2.close();
+        try
+        {
+            module.verifyAllSessionsClosed();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        queueConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        topicConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        session3.close();
+        module.verifyAllSessionsClosed();
+        module.verifyAllMessageProducersClosed(0);
+        module.verifyAllMessageProducersClosed(1);
+        module.verifyAllMessageProducersClosed(2);
+        module.verifyAllMessageConsumersClosed(0);
+        module.verifyAllMessageConsumersClosed(1);
+        module.verifyAllMessageConsumersClosed(2);
+    }
+    
     public void testVerifyQueueSessionComitted() throws Exception
     {
         MockQueueSession session1 = (MockQueueSession)queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -1649,6 +1921,102 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         } 
+    }
+    
+    public void testVerifySessionComitted() throws Exception
+    {
+        MockSession session1 = (MockSession)connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockSession session2 = (MockSession)connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockSession session3 = (MockSession)connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockSession session4 = (MockSession)queueConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockSession session5 = (MockSession)topicConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        session1.commit();
+        session2.rollback();
+        module.verifySessionCommitted(0);
+        module.verifySessionNotRecovered(0);
+        module.verifySessionNotRolledBack(0);
+        module.verifySessionNotCommitted(1);
+        module.verifySessionRecovered(1);
+        module.verifySessionRolledBack(1);
+        module.verifySessionNotCommitted(2);
+        module.verifySessionNotRecovered(2);
+        module.verifySessionNotRolledBack(2);
+        try
+        {
+            module.verifySessionNotCommitted(0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifySessionRecovered(0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifySessionRolledBack(2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyAllSessionsCommitted();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        session2.commit();
+        session3.commit();
+        module.verifySessionCommitted(1);
+        module.verifyAllSessionsCommitted();
+        try
+        {
+            module.verifySessionNotCommitted(2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyAllSessionsRecovered();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyAllQueueSessionsCommitted();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyAllTopicSessionsCommitted();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
     }
     
     public void testVerifyQueueMessagesAcknowledged() throws Exception
@@ -1932,6 +2300,130 @@ public class JMSTestModuleTest extends TestCase
         publisher3.publish(message1);
         module.verifyReceivedTopicMessageAcknowledged(1, 0, 1);
         module.verifyAllReceivedTopicMessagesAcknowledged(1, 0);
+    }
+    
+    public void testVerifyMessagesAcknowledged() throws Exception
+    {
+        MockSession session1 = (MockSession)connection.createSession(true, Session.AUTO_ACKNOWLEDGE);
+        MockSession session2 = (MockSession)connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockSession session3 = (MockSession)connection.createSession(true, Session.DUPS_OK_ACKNOWLEDGE);
+        MockSession session4 = (MockSession)queueConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockSession session5 = (MockSession)topicConnection.createSession(true, Session.AUTO_ACKNOWLEDGE);
+        DestinationManager manager = mockFactory.getDestinationManager();
+        Queue queue = manager.createQueue("queue");
+        Topic topic = manager.createTopic("topic");
+        MockMessage message1 = (MockMessage)session1.createTextMessage();
+        MockMessage message2 = (MockMessage)session2.createMapMessage();
+        MockMessage message3 = (MockMessage)session2.createObjectMessage();
+        MockMessage message4 = (MockMessage)session3.createBytesMessage();
+        MockMessage message5 = (MockMessage)session3.createStreamMessage();
+        MockMessage message6 = (MockMessage)session3.createMessage();
+        module.verifyCreatedTextMessageNotAcknowledged(0, 0);
+        module.verifyCreatedMapMessageNotAcknowledged(1, 0);
+        module.verifyCreatedObjectMessageNotAcknowledged(1, 0);
+        module.verifyCreatedBytesMessageNotAcknowledged(2, 0);
+        module.verifyCreatedStreamMessageNotAcknowledged(2, 0);
+        module.verifyCreatedMessageNotAcknowledged(2, 0);
+        module.verifyAllReceivedQueueMessagesAcknowledged("queue");
+        module.verifyAllReceivedTopicMessagesAcknowledged("topic");
+        try
+        {
+            module.verifyCreatedTextMessageAcknowledged(1, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        try
+        {
+            module.verifyCreatedMessageAcknowledged(1, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        try
+        {
+            module.verifyCreatedMessageAcknowledged(1, 1);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        try
+        {
+            module.verifyCreatedMessageNotAcknowledged(3, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        MockMessageProducer producer1 = (MockMessageProducer)session1.createProducer(queue);
+        MockMessageProducer producer2 = (MockMessageProducer)session2.createProducer(topic);
+        MockMessageProducer producer3 = (MockMessageProducer)session3.createProducer(topic);
+        MockMessageConsumer consumer1 = (MockMessageConsumer)session1.createConsumer(queue);
+        MockMessageConsumer consumer2 = (MockMessageConsumer)session2.createConsumer(topic);
+        producer1.send(message1);
+        producer1.send(message2);
+        producer2.send(message3);
+        producer2.send(message4);
+        producer3.send(message5);
+        producer3.send(message6);
+        module.verifyCreatedTextMessageNotAcknowledged(0, 0);
+        module.verifyCreatedMapMessageNotAcknowledged(1, 0);
+        module.verifyCreatedObjectMessageNotAcknowledged(1, 0);
+        module.verifyCreatedBytesMessageNotAcknowledged(2, 0);
+        module.verifyCreatedStreamMessageNotAcknowledged(2, 0);
+        module.verifyCreatedMessageNotAcknowledged(2, 0);
+        try
+        {
+            module.verifyAllReceivedQueueMessagesAcknowledged("queue");
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        try
+        {
+            module.verifyAllReceivedTopicMessagesAcknowledged("topic");
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        consumer1.receive();
+        consumer1.receive();
+        module.verifyAllReceivedQueueMessagesAcknowledged("queue");
+        consumer2.receive();
+        consumer2.receive();
+        consumer2.receive();
+        consumer2.receive();
+        try
+        {
+            module.verifyAllReceivedTopicMessagesAcknowledged("topic");
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+           //should throw exception
+        }
+        message3.acknowledge();
+        message4.acknowledge();
+        message5.acknowledge();
+        message6.acknowledge();
+        module.verifyAllReceivedTopicMessagesAcknowledged("topic");
+        module.verifyCreatedTextMessageAcknowledged(0, 0);
+        module.verifyCreatedMapMessageAcknowledged(1, 0);
+        module.verifyCreatedObjectMessageAcknowledged(1, 0);
+        module.verifyCreatedBytesMessageAcknowledged(2, 0);
+        module.verifyCreatedStreamMessageAcknowledged(2, 0);
+        module.verifyCreatedMessageAcknowledged(2, 0);
     }
     
     public static class TestMessageListener implements MessageListener

@@ -8,6 +8,8 @@ public class MockTextMessageTest extends TestCase
 {
     public void testEquals()
     {
+        MockTextMessage message = new MockTextMessage("test");
+        assertTrue(message.equals(message));
         assertTrue(new MockTextMessage("test").equals(new MockTextMessage("test")));
         assertFalse(new MockTextMessage("test").equals(new MockTextMessage("test1")));
         assertFalse(new MockTextMessage("test").equals(null));

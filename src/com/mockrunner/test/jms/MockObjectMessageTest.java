@@ -9,6 +9,8 @@ public class MockObjectMessageTest extends TestCase
 {
     public void testEquals()
     {
+        MockObjectMessage message = new MockObjectMessage("test");
+        assertTrue(message.equals(message));
         assertTrue(new MockObjectMessage("test").equals(new MockObjectMessage("test")));
         assertFalse(new MockObjectMessage("test").equals(new MockTextMessage("test")));
         assertTrue(new MockObjectMessage(new Integer(1)).equals(new MockObjectMessage(new Integer(1))));

@@ -90,6 +90,7 @@ public class MockMapMessageTest extends TestCase
         message1.setInt("name1", 1);
         message1.setString("name2", "text");
         message1.setBytes("name3", new byte[] {1, 2, 3});
+        assertTrue(message1.equals(message1));
         MockMapMessage message2 = null;
         assertFalse(message1.equals(message2));
         message2 = new MockMapMessage();

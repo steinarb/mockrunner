@@ -140,6 +140,7 @@ public class MockBytesMessageTest extends TestCase
         message1.writeUTF("est");
         message1.writeByte((byte)1);
         message1.writeLong(2345);
+        assertTrue(message1.equals(message1));
         MockBytesMessage message2 = new MockBytesMessage();
         message2.writeChar('t');
         message2.writeUTF("est");
