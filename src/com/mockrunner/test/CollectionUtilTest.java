@@ -1,10 +1,11 @@
 package com.mockrunner.test;
 
 import java.util.ArrayList;
-
-import com.mockrunner.util.CollectionUtil;
+import java.util.List;
 
 import junit.framework.TestCase;
+
+import com.mockrunner.util.CollectionUtil;
 
 public class CollectionUtilTest extends TestCase
 {
@@ -23,6 +24,21 @@ public class CollectionUtilTest extends TestCase
         for(int ii = 5; ii < 10; ii++)
         {
             assertNull(testList.get(ii));
+        }
+    }
+    
+    public void testTruncateList()
+    {
+        ArrayList list = new ArrayList();
+        for(int ii = 0; ii < 100; ii++)
+        {
+            list.add("Test" + ii);
+        }
+        List truncatedList = CollectionUtil.truncateList(list, 50);
+        assertTrue(truncatedList.size() == 50);
+        for(int ii = 0; ii < 50; ii++)
+        {
+            assertEquals("Test" + ii, truncatedList.get(ii));
         }
     }
 }

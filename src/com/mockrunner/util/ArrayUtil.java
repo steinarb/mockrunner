@@ -137,24 +137,7 @@ public class ArrayUtil
             list.set(ii, new Byte(data[offset + ii - index]));
         }
     }
-    
-    /**
-     * Returns a truncated version of the specified <code>List</code>.
-     * @param list the <code>List</code>
-     * @param len the truncate length
-     * @return the truncated <code>List</code>
-     */
-    public static List truncateList(List list, int len)
-    {
-        if(len >= list.size()) return list;
-        ArrayList newList = new ArrayList(len);
-        for(int ii = 0; ii < len; ii++)
-        {
-            newList.add(list.get(ii));
-        }
-        return newList;
-    }
-    
+
     /**
      * Returns a truncated copy of <i>sourceArray</i>. <i>len</i>
      * entries are copied.
