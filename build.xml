@@ -261,7 +261,7 @@
                 <include name="jarversion.txt" />
             </fileset>
         </copy>
-        <jar jarfile="${builddir}/${jarname}">
+        <jar destfile="${builddir}/${jarname}">
             <fileset dir="${builddir}">
                 <patternset refid="${jarpattern}"/>
             </fileset>
