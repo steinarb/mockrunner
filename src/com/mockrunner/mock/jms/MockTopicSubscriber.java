@@ -90,7 +90,16 @@ public class MockTopicSubscriber extends MockMessageConsumer implements TopicSub
             throw new JMSException("Subscriber is closed");
         }
         if(topic.isEmpty()) return null;
-        Message message = topic.getMessage();
+        Message message;
+        if((!getConnection().getConfigurationManager().getUseMessageSelectors()) || (null == getMessageFilter()))
+        {
+            message = topic.getMessage();
+        }
+        else
+        {
+            message = topic.getMatchingMessage(getMessageFilter());
+        }
+        if(null == message) return null;
         if(session.isAutoAcknowledge()) message.acknowledge();
         return message;
     }

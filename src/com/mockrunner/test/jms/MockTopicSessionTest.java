@@ -408,6 +408,38 @@ public class MockTopicSessionTest extends TestCase
         }
     }
     
+    public void testTransmissionWithMessageSelector() throws Exception
+    {
+        DestinationManager manager = connection.getDestinationManager();
+        manager.createTopic("Topic");
+        MockTopic topic = (MockTopic)session.createTopic("Topic");
+        MockTopicSubscriber subscriber1 = (MockTopicSubscriber)session.createSubscriber(topic, "number <= 3", false);
+        TestListMessageListener listener1 = new TestListMessageListener();
+        subscriber1.setMessageListener(listener1);
+        TopicPublisher publisher = session.createPublisher(topic);
+        MockStreamMessage message1 = new MockStreamMessage();
+        message1.setIntProperty("number", 3);
+        publisher.publish(message1);
+        MockStreamMessage message2 = new MockStreamMessage();
+        message2.setIntProperty("number", 1);
+        publisher.publish(message2);
+        MockStreamMessage message3 = new MockStreamMessage();
+        message3.setIntProperty("number", 4);
+        publisher.publish(message3);
+        assertEquals(2, listener1.getMessageList().size());
+        assertSame(message1, listener1.getMessageList().get(0));
+        assertSame(message2, listener1.getMessageList().get(1));
+        assertNull(subscriber1.receive());
+        MockTopicSubscriber subscriber2 = (MockTopicSubscriber)session.createSubscriber(topic);
+        assertSame(message3, subscriber2.receiveNoWait());
+        subscriber2.setMessageListener(listener1);
+        listener1.clearMessageList();
+        publisher.publish(message3);
+        publisher.publish(message2);
+        publisher.publish(message1);
+        assertEquals(5, listener1.getMessageList().size());
+    }
+    
     public void testTransmissionMessageAcknowledged() throws Exception
     {
         MockTopicSession session1 = (MockTopicSession)connection.createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);
@@ -516,6 +548,11 @@ public class MockTopicSessionTest extends TestCase
         public List getMessageList()
         {
             return messages;
+        }
+        
+        public void clearMessageList()
+        {
+            messages.clear();
         }
 
         public void onMessage(Message message)

@@ -52,7 +52,7 @@ public class MockTopic extends MockDestination implements Topic
                 for(int ii = 0; ii < subscribers.size(); ii++)
                 {
                     MockTopicSubscriber subscriber = (MockTopicSubscriber)subscribers.get(ii);
-                    if(subscriber.canConsume())
+                    if(subscriber.canConsume(message))
                     {
                         subscriber.receiveMessage(message);
                         isConsumed = true;
@@ -64,7 +64,7 @@ public class MockTopic extends MockDestination implements Topic
                 while(keys.hasNext())
                 {
                     MockTopicSubscriber subscriber = (MockTopicSubscriber)durableSubscribers.get(keys.next());
-                    if(subscriber.canConsume())
+                    if(subscriber.canConsume(message))
                     {
                         subscriber.receiveMessage(message);
                         isConsumed = true;

@@ -45,8 +45,6 @@ import com.mockrunner.jms.TransmissionManagerWrapper;
  * transaction is committed or rolled back, so
  * you can test this and rely on the container for
  * the rest.
- * Also note that message selectors are not supported
- * at the moment.
  */
 public class MockSession implements Session
 {
@@ -216,7 +214,8 @@ public class MockSession implements Session
      * which is specified as <code>0</code>. In order to avoid
      * different versions for JMS 1.0.2 and 1.1 
      * (<code>Session.SESSION_TRANSACTED</code> does not
-     * exist in 1.0.2) this method returns hardcoded <code>0</code>.
+     * exist in 1.0.2) this method returns hardcoded <code>0</code>,
+     * if the session is transacted.
      * @return the acknowledge mode
      */
     public int getAcknowledgeMode() throws JMSException
@@ -384,7 +383,7 @@ public class MockSession implements Session
     public MessageConsumer createConsumer(Destination destination, String messageSelector) throws JMSException
     {
         getConnection().throwJMSException();
-        return createConsumer(destination, null, false);
+        return createConsumer(destination, messageSelector, false);
     }
     
     public MessageConsumer createConsumer(Destination destination, String messageSelector, boolean noLocal) throws JMSException

@@ -67,6 +67,12 @@ Most methods are self-explanatory. Just subclass one of the Adapters
 (e.g. ActionTestCaseAdapter) and start testing. If you have your
 own base class for tests, you can use the Modules (e.g. ActionTestModule).
 
+Mockrunner uses some classes from ActiveMQ project (http://activemq.codehaus.org/)
+for JMS message selector parsing. The classes are modified in order to
+fit the needs of Mockrunner. The corresponding classes are in a different package
+than the original ActiveMQ classes, so you should not face classloading problems
+when using ActiveMQ in your project.
+
 Mockrunner uses the following libraries and software components.
 You have to download them. Please add the specified jars to the classpath.
 

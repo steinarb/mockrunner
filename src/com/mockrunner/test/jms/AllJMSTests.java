@@ -25,6 +25,8 @@ public class AllJMSTests
         suite.addTest(new TestSuite(TransmissionManagerTest.class));
         suite.addTest(new TestSuite(JMSTestModuleTest.class));
         suite.addTest(new TestSuite(MessageSelectorTest.class));
+        suite.addTest(new TestSuite(MockMessageConsumerTest.class));
+        suite.addTest(new TestSuite(MockDestinationTest.class));
         //$JUnit-END$
         return suite;
     }

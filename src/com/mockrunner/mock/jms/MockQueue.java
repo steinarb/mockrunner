@@ -53,7 +53,7 @@ public class MockQueue extends MockDestination implements Queue
                 for(int ii = 0; ii < receivers.size() && !isConsumed; ii++)
                 {
                     MockQueueReceiver receiver = (MockQueueReceiver)receivers.get(ii);
-                    if(receiver.canConsume())
+                    if(receiver.canConsume(message))
                     {
                         receiver.receiveMessage(message);
                         isConsumed = true;
