@@ -19,7 +19,7 @@ public class ParameterUtil
      * Compares two parameters of a <code>PreparedStatement</code> or
      * <code>CallableStatement</code>. You can use it to compare
      * parameters of a <code>ResultSet</code>. It is used by
-     * {@link com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler}
+     * {@link com.mockrunner.jdbc.PreparedStatementResultSetHandler}
      * for comparing parameters specified in the <code>prepare</code>
      * methods.
      * Since the parameters can be of the type <code>byte[]</code>,

@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mockrunner.jdbc.AbstractOutParameterResultSetHandler;
 import com.mockrunner.util.StreamUtil;
 
 /**

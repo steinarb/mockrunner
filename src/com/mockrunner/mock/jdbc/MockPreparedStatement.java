@@ -28,6 +28,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 
 import com.mockobjects.sql.MockResultSetMetaData;
+import com.mockrunner.jdbc.AbstractParameterResultSetHandler;
 
 /**
  * Mock implementation of <code>PreparedStatement</code>.

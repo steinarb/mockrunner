@@ -1,4 +1,4 @@
-package com.mockrunner.mock.jdbc;
+package com.mockrunner.jdbc;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.ParameterUtil;
 import com.mockrunner.util.SearchUtil;

@@ -6,13 +6,10 @@ import java.util.Collection;
 import java.util.List;
 
 import com.mockrunner.base.BaseTestCase;
-import com.mockrunner.mock.jdbc.CallableStatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
-import com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler;
-import com.mockrunner.mock.jdbc.StatementResultSetHandler;
 
 public class JDBCTestCaseAdapater extends BaseTestCase
 {

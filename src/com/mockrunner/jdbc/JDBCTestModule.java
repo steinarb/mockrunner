@@ -9,13 +9,10 @@ import java.util.Map;
 
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
-import com.mockrunner.mock.jdbc.CallableStatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
-import com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler;
-import com.mockrunner.mock.jdbc.StatementResultSetHandler;
 import com.mockrunner.util.ParameterUtil;
 import com.mockrunner.util.SearchUtil;
 
@@ -60,13 +57,13 @@ public class JDBCTestModule
     }
     
     /**
-     * Returns the {@link com.mockrunner.mock.jdbc.StatementResultSetHandler}. 
-     * The {@link com.mockrunner.mock.jdbc.StatementResultSetHandler}
+     * Returns the {@link StatementResultSetHandler}. 
+     * The {@link StatementResultSetHandler}
      * contains methods that can be used to specify the 
      * {@link com.mockrunner.mock.jdbc.MockResultSet} objects
      * and update counts that a {@link com.mockrunner.mock.jdbc.MockStatement} 
      * should return when executing an SQL statement.
-     * @return the {@link com.mockrunner.mock.jdbc.StatementResultSetHandler}
+     * @return the {@link StatementResultSetHandler}
      */
     public StatementResultSetHandler getStatementResultSetHandler()
     {
@@ -74,13 +71,13 @@ public class JDBCTestModule
     }
     
     /**
-     * Returns the {@link com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler}.
-     * The {@link com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler}
+     * Returns the {@link PreparedStatementResultSetHandler}.
+     * The {@link PreparedStatementResultSetHandler}
      * contains methods that can be used to specify the 
      * {@link com.mockrunner.mock.jdbc.MockResultSet} objects
      * and update counts that a {@link com.mockrunner.mock.jdbc.MockPreparedStatement} 
      * should return when executing an SQL statement.
-     * @return the {@link com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler}
+     * @return the {@link PreparedStatementResultSetHandler}
      */
     public PreparedStatementResultSetHandler getPreparedStatementResultSetHandler()
     {
@@ -88,13 +85,13 @@ public class JDBCTestModule
     }
     
     /**
-     * Returns the {@link com.mockrunner.mock.jdbc.CallableStatementResultSetHandler}.
-     * The {@link com.mockrunner.mock.jdbc.CallableStatementResultSetHandler}
+     * Returns the {@link CallableStatementResultSetHandler}.
+     * The {@link CallableStatementResultSetHandler}
      * contains methods that can be used to specify the 
      * {@link com.mockrunner.mock.jdbc.MockResultSet} objects
      * and update counts that a {@link com.mockrunner.mock.jdbc.MockCallableStatement} 
      * should return when executing an SQL statement.
-     * @return the {@link com.mockrunner.mock.jdbc.CallableStatementResultSetHandler}
+     * @return the {@link CallableStatementResultSetHandler}
      */
     public CallableStatementResultSetHandler getCallableStatementResultSetHandler()
     {
