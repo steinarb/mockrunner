@@ -10,6 +10,7 @@ mockrunner-0.3:
   optionally initialize servlets and filters
 - added verifyOutputRegularExpression to ServletTestModule and TagTestModule
 - added setDoReleaseRecursive method to TagTestModule and NestedTag
+- added methods to TagTestModule to set a tag instance directly
 
 mockrunner-0.2.9:
 

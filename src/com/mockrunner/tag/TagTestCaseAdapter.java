@@ -114,6 +114,22 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     }
     
     /**
+     * Delegates to {@link TagTestModule#setTag(TagSupport)}
+     */
+    protected NestedTag setTag(TagSupport tag)
+    {
+        return tagTestModule.setTag(tag);
+    }
+    
+    /**
+     * Delegates to {@link TagTestModule#setTag(TagSupport, Map)}
+     */
+    protected NestedTag setTag(TagSupport tag, Map attributes)
+    {
+        return tagTestModule.setTag(tag, attributes);
+    }
+    
+    /**
      * Delegates to {@link TagTestModule#setDoRelease}
      */
     protected void setDoRelease(boolean doRelease)

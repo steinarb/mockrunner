@@ -16,7 +16,38 @@ public class TagTestModuleTest extends BaseTestCase
     {
         super.setUp();
         module = new TagTestModule(getWebMockObjectFactory());
-    }    
+    }
+    
+    public void testCreateAndSetTag()
+    {
+        module.createTag(TestTag.class);
+        assertTrue(module.getTag() instanceof TestTag);
+        module.createTag(TestBodyTag.class);
+        assertTrue(module.getTag() instanceof TestBodyTag);
+        TestTag testTag = new TestTag();
+        module.setTag(testTag);
+        assertSame(testTag, module.getTag());
+        TestBodyTag testBodyTag = new TestBodyTag();
+        module.setTag(testBodyTag);
+        assertSame(testBodyTag, module.getTag());
+    }
+    
+    public void testSetTagWithAttributes()
+    {
+        HashMap testMap = new HashMap();
+        testMap.put("testString", "test");
+        TestTag testTag = new TestTag();
+        testTag.setTestInteger(new Integer(3));
+        module.setTag(testTag, testMap);
+        module.populateAttributes();
+        assertEquals(new Integer(3), testTag.getTestInteger());
+        assertEquals("test", testTag.getTestString());
+        testMap.put("testInteger", new Integer(5));
+        module.setTag(testTag, testMap);
+        module.populateAttributes();
+        assertEquals(new Integer(5), testTag.getTestInteger());
+        assertEquals("test", testTag.getTestString());
+    }
 
     public void testVerifyOutput()
     {

@@ -26,7 +26,7 @@ public class TagUtil
      * specified tag. Returns an instance of {@link com.mockrunner.tag.NestedStandardTag}
      * resp. {@link com.mockrunner.tag.NestedBodyTag} depending on the
      * type of specified tag.
-     * @param tag the tag
+     * @param tag the tag class
      * @param pageContext the corresponding <code>PageContext</code>
      * @param attributes the attribute map
      * @return the instance of {@link com.mockrunner.tag.NestedTag}
@@ -47,14 +47,32 @@ public class TagUtil
 			exc.printStackTrace();
 			throw new RuntimeException(exc.getMessage());
 		}
+		return createNestedTagInstance(tagSupport, pageContext, attributes);
+	}
+    
+    /**
+     * Creates an {@link com.mockrunner.tag.NestedTag} instance wrapping the
+     * specified tag. Returns an instance of {@link com.mockrunner.tag.NestedStandardTag}
+     * resp. {@link com.mockrunner.tag.NestedBodyTag} depending on the
+     * type of specified tag.
+     * @param tag the tag
+     * @param pageContext the corresponding <code>PageContext</code>
+     * @param attributes the attribute map
+     * @return the instance of {@link com.mockrunner.tag.NestedTag}
+     * @throws RuntimeException if <code>tag</code> is not an
+     *         instance of <code>TagSupport</code>
+     */
+    public static TagSupport createNestedTagInstance(TagSupport tag, PageContext pageContext, Map attributes)
+	{
+		if(null == tag) throw new RuntimeException("tag must not be null");
 		TagSupport nestedTag;
-		if(tagSupport instanceof BodyTagSupport)
+		if(tag instanceof BodyTagSupport)
 		{
-			nestedTag = new NestedBodyTag((BodyTagSupport)tagSupport, pageContext, attributes);
+			nestedTag = new NestedBodyTag((BodyTagSupport)tag, pageContext, attributes);
 		}
 		else
 		{
-			nestedTag = new NestedStandardTag(tagSupport, pageContext, attributes);
+			nestedTag = new NestedStandardTag(tag, pageContext, attributes);
 		}
 		return nestedTag;
 	}

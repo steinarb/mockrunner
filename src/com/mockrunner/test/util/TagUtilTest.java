@@ -1,4 +1,4 @@
-package com.mockrunner.test.web;
+package com.mockrunner.test.util;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +10,8 @@ import com.mockrunner.mock.web.MockPageContext;
 import com.mockrunner.tag.NestedBodyTag;
 import com.mockrunner.tag.NestedStandardTag;
 import com.mockrunner.tag.NestedTag;
+import com.mockrunner.test.web.TestBodyTag;
+import com.mockrunner.test.web.TestTag;
 import com.mockrunner.util.TagUtil;
 
 public class TagUtilTest extends BaseTestCase
@@ -32,6 +34,15 @@ public class TagUtilTest extends BaseTestCase
         tag = TagUtil.createNestedTagInstance(TestBodyTag.class, pageContext, testMap);
         assertTrue(tag instanceof NestedBodyTag);
         assertTrue(((NestedTag)tag).getTag() instanceof TestBodyTag);
+        
+        TestTag testTag = new TestTag();
+        tag = TagUtil.createNestedTagInstance(testTag, pageContext, testMap);
+        assertTrue(tag instanceof NestedStandardTag);
+        assertSame(testTag, ((NestedTag)tag).getTag());
+        TestBodyTag testBodyTag = new TestBodyTag();
+        tag = TagUtil.createNestedTagInstance(testBodyTag, pageContext, testMap);
+        assertTrue(tag instanceof NestedBodyTag);
+        assertSame(testBodyTag, ((NestedTag)tag).getTag());
     }
     
     public void testPopulateTag()
