@@ -393,7 +393,6 @@ public class TagTestModule extends HTMLOutputModule
     
     /**
      * Calls the <code>doStartTag</code> method of the current tag.
-     * @return the result of <code>doStartTag</code>
      * @throws <code>RuntimeException</code>, if the tag
      *         is not a simple tag
      */
