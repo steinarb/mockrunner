@@ -165,7 +165,7 @@ public class MockResultSetMetaData implements ResultSetMetaData
     
     public int getColumnCount() throws SQLException
     {
-        return 0;
+        return columnCount;
     }
 
     public int getColumnDisplaySize(int column) throws SQLException
