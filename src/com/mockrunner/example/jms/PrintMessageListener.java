@@ -11,7 +11,7 @@ import javax.jms.TextMessage;
  * and the message will be acknowledged. The print code is omitted for 
  * simplicity.
  */
-public class PrintMessageReceiver implements MessageListener
+public class PrintMessageListener implements MessageListener
 {
     public void onMessage(Message message)
     {
