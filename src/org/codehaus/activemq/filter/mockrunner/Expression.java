@@ -23,11 +23,11 @@ import javax.jms.Message;
 
 
 /**
- * Represents an expression
- * 
  * Alwin Ibba: Changed package
  * 
- * @version $Revision: 1.3 $
+ * Represents an expression
+ * 
+ * @version $Revision: 1.4 $
  */
 public interface Expression {
 

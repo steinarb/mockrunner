@@ -19,11 +19,11 @@ package org.codehaus.activemq.filter.mockrunner;
 
 
 /**
- * An expression which performs an operation on two expression values.
- * 
  * Alwin Ibba: Changed package
  * 
- * @version $Revision: 1.3 $
+ * An expression which performs an operation on two expression values.
+ * 
+ * @version $Revision: 1.4 $
  */
 abstract public class BinaryExpression implements Expression {
     protected Expression left;

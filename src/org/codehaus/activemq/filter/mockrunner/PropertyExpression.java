@@ -22,11 +22,11 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 
 /**
- * Represents a property  expression
- * 
  * Alwin Ibba: Changed package
  * 
- * @version $Revision: 1.3 $
+ * Represents a property  expression
+ * 
+ * @version $Revision: 1.4 $
  */
 public class PropertyExpression implements Expression {
 

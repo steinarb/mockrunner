@@ -32,12 +32,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
 /**
  * A filter performing a comparison of two objects
  * 
- * Alwin Ibba: Changed package
- * Alwin Ibba: Modified to use Jakarta ORO instead of
- * Java 1.4 regular expressions. This makes the class usable with
- * Java 1.3
- * 
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public abstract class ComparisonExpression extends BinaryExpression implements BooleanExpression {
 
@@ -123,6 +118,7 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
             {
                 throw new RuntimeException(exc.getMessage());
             }
+
         }
 
         /**
@@ -149,7 +145,6 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
             }
 
             return (new Perl5Matcher().matches((String)rv, likePattern)) ? Boolean.TRUE : Boolean.FALSE;
-
         }
 
     }

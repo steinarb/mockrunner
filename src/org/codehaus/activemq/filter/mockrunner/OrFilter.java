@@ -23,11 +23,11 @@ import javax.jms.Message;
 
 
 /**
- * Represents a logical OR operation on two filters
- * 
  * Alwin Ibba: Changed package
+ * 
+ * Represents a logical OR operation on two filters
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class OrFilter implements Filter {
 

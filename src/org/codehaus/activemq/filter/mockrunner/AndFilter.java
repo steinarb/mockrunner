@@ -23,11 +23,11 @@ import javax.jms.Message;
 
 
 /**
- * Represents a logical AND operation on two filters
- * 
  * Alwin Ibba: Changed package
  * 
- * @version $Revision: 1.3 $
+ * Represents a logical AND operation on two filters
+ *
+ * @version $Revision: 1.4 $
  */
 public class AndFilter implements Filter {
 

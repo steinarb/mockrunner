@@ -23,11 +23,11 @@ import javax.jms.Message;
 
 
 /**
- * Represents a subscription filter
- * 
  * Alwin Ibba: Changed package
+ * 
+ * Represents a subscription filter
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public interface Filter {
 

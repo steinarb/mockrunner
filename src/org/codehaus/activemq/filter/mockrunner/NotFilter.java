@@ -23,11 +23,11 @@ import javax.jms.Message;
 
 
 /**
- * Represents a logical not operation on another filter
- * 
  * Alwin Ibba: Changed package
+ * 
+ * Represents a logical not operation on another filter
  *
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public class NotFilter implements Filter {
 
