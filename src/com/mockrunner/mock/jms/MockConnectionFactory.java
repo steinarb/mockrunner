@@ -4,18 +4,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.TopicConnection;
+import javax.jms.TopicConnectionFactory;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 
 /**
  * Mock implementation of JMS <code>ConnectionFactory</code>.
- * Can be used if the domain type (queue or topic) does
- * not matter (only with JMS 1.1)
+ * Can be used as generic factory for JMS 1.1.
+ * Also implements <code>QueueConnectionFactory</code> and
+ * <code>TopicConnectionFactory</code> and can be used to 
+ * create queue and topic connections as well as generic 
+ * JMS 1.1 connections. It is recommended to use
+ * {@link com.mockrunner.mock.jms.MockQueueConnectionFactory}
+ * if you only use queues and 
+ * {@link com.mockrunner.mock.jms.MockTopicConnectionFactory}
+ * if you only use topics.
+ * This implementation is primary for generic JMS 1.1 connections
+ * but can also be used, if a server provides one implementation
+ * for both domains (which is not portable).
  */
-public class MockConnectionFactory implements ConnectionFactory
+public class MockConnectionFactory implements QueueConnectionFactory, TopicConnectionFactory
 {
     private DestinationManager destinationManager;
     private ConfigurationManager configurationManager;
@@ -41,6 +54,32 @@ public class MockConnectionFactory implements ConnectionFactory
     public Connection createConnection(String name, String password) throws JMSException
     {
         return createConnection();
+    }
+    
+    public QueueConnection createQueueConnection() throws JMSException
+    {
+        MockQueueConnection connection = new MockQueueConnection(destinationManager(), configurationManager());
+        connection.setJMSException(exception());
+        connections().add(connection);
+        return connection;
+    }
+
+    public QueueConnection createQueueConnection(String name, String password) throws JMSException
+    {
+        return createQueueConnection();
+    }
+    
+    public TopicConnection createTopicConnection() throws JMSException
+    {
+        MockTopicConnection connection = new MockTopicConnection(destinationManager(), configurationManager());
+        connection.setJMSException(exception());
+        connections().add(connection);
+        return connection;
+    }
+
+    public TopicConnection createTopicConnection(String name, String password) throws JMSException
+    {
+        return createTopicConnection();
     }
     
     /**

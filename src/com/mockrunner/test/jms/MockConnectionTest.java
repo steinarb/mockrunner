@@ -119,9 +119,9 @@ public class MockConnectionTest extends TestCase
         JMSException exception = new JMSException("");
         factory.setJMSException(exception);
         MockConnection connection1 = (MockConnection)factory.createConnection(null, null);
-        MockConnection connection2 = (MockConnection)factory.createConnection();
+        MockConnection connection2 = (MockConnection)factory.createQueueConnection();
         factory.setJMSException(null);
-        MockConnection connection3 = (MockConnection)factory.createConnection();
+        MockConnection connection3 = (MockConnection)factory.createTopicConnection();
         assertEquals(connection1, factory.getConnection(0));
         assertEquals(connection2, factory.getConnection(1));
         assertEquals(connection3, factory.getConnection(2));
@@ -159,8 +159,23 @@ public class MockConnectionTest extends TestCase
         MockConnectionFactory factory = new MockConnectionFactory(new DestinationManager(), new ConfigurationManager());
         assertTrue(factory.createConnection() instanceof Connection);
         assertTrue(factory.createConnection(null, null) instanceof Connection);
+        assertTrue(factory.createQueueConnection() instanceof QueueConnection);
+        assertTrue(factory.createQueueConnection(null, null) instanceof QueueConnection);
+        assertTrue(factory.createTopicConnection() instanceof TopicConnection);
+        assertTrue(factory.createTopicConnection(null, null) instanceof TopicConnection);
         assertFalse(factory.createConnection() instanceof QueueConnection);
-        assertFalse(factory.createConnection(null, null) instanceof TopicConnection);
+        assertFalse(factory.createConnection(null, null) instanceof TopicConnection);    
+    }
+    
+    public void testGenericFactoryConnectionType() throws Exception
+    {
+        MockConnectionFactory factory = new MockConnectionFactory(new DestinationManager(), new ConfigurationManager());
+        QueueConnection queueConnection = factory.createQueueConnection();
+        TopicConnection topicConnection = factory.createTopicConnection();
+        MockConnection connection = (MockConnection)factory.createConnection();
+        assertSame(queueConnection, factory.getConnection(0));
+        assertSame(topicConnection, factory.getConnection(1));
+        assertSame(connection, factory.getConnection(2));
     }
     
     public void testDistinctFactoriesButSameDestinationManager() throws Exception
