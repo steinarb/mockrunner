@@ -26,7 +26,6 @@ public class MockConnection implements Connection
     private PreparedStatementResultSetHandler preparedStatementHandler;
     private CallableStatementResultSetHandler callableStatementHandler;
     private DatabaseMetaData metaData;
-    private Map preparedStatementMap;
     private Map savepoints;
     private int savepointCount;
     private boolean closed;

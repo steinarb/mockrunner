@@ -22,7 +22,6 @@ public class TagTestModule extends HTMLOutputModule
 {
     private WebMockObjectFactory mockFactory;
     private TagSupport tag;
-    private String body;
     private boolean caseSensitive;
 
     public TagTestModule(WebMockObjectFactory mockFactory)
