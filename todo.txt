@@ -1,4 +1,4 @@
-- add message selector support to JMS test framework
+- complete JMS test framework
 - add support for mulitple ResultSet returns
 - add better support of HTML fragments
 - get MultiThreadTestSuite working
