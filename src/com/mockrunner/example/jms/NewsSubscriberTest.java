@@ -16,13 +16,10 @@ import com.mockrunner.mock.jms.MockTextMessage;
  * message selector usage. Only messages with the <code>subject</code>
  * property <code>Java</code> will be received by {@link NewsSubscriber}.
  * There's one problem with {@link NewsSubscriber}. It blocks the current
- * thread while waiting for incoming messages. While this is necessary when
- * working with a real message server, it blocks the whole test suite in
- * the single threaded synchronous test environment. To get around of this,
- * we can use a simple trick. We call the main method of {@link NewsSubscriber}
- * from a different thread and interrupt it immediately. Then we can send
- * messages from the main thread, that are received synchronously by
- * {@link NewsSubscriber}.
+ * thread. To get around of this, we can use a simple trick. We call the 
+ * main method of {@link NewsSubscriber} from a different thread and interrupt 
+ * it immediately. Then we can send messages from the main thread, that are 
+ * received synchronously by {@link NewsSubscriber}.
  * Please note, that the JMS test framework is not thread safe at the moment
  * and should not be accessed by multiple threads concurrently. In this test
  * the <code>TestNewsSubscriberThread</code> and the main thread do not run
