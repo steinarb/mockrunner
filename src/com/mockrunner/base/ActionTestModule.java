@@ -380,6 +380,42 @@ public class ActionTestModule
     }
     
     /**
+     * Verifies that the specified error is stored for the specified
+     * property.
+     * @param errorKey the error key
+     * @param property the exepcted value
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyActionErrorProperty(String errorKey, String property)
+    {
+        verifyActionMessageProperty(errorKey, property, getActionErrors());
+    }
+    
+    /**
+     * Verifies that the specified message is stored for the specified
+     * property.
+     * @param messageKey the message key
+     * @param property the exepcted value
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyActionMessageProperty(String messageKey, String property)
+    {
+        verifyActionMessageProperty(messageKey, property, getActionMessages());
+    }
+    
+    private void verifyActionMessageProperty(String messageKey, String property, ActionMessages messages)
+    {
+        verifyActionMessagePresent(messageKey, messages);
+        Iterator iterator = messages.get(property);
+        while(iterator.hasNext())
+        {
+              ActionMessage message = (ActionMessage)iterator.next();
+              if(message.getKey().equals(messageKey)) return;
+        }
+        throw new VerifyFailedException("action message/error " + messageKey + " not present for property " + property);
+    }
+    
+    /**
      * Verifies the number of action errors.
      * @param number the expected number of errors
      * @throws VerifyFailedException if verification fails

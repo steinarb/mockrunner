@@ -1,4 +1,8 @@
 
+mockrunner-0.2:
+
+- added some useful methods to ActionTestModule
+
 mockrunner-0.1:
 
 - Inital release (includes examples and JavaDoc)

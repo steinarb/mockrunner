@@ -232,6 +232,22 @@ public class ActionTestCaseAdapter extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link ActionTestModule#verifyActionErrorProperty}
+     */
+    protected void verifyActionErrorProperty(String errorKey, String property)
+    {
+        actionTestModule.verifyActionErrorProperty(errorKey, property);
+    }
+    
+    /**
+     * Delegates to {@link ActionTestModule#verifyActionMessageProperty}
+     */
+    protected void verifyActionMessageProperty(String messageKey, String property)
+    {
+        actionTestModule.verifyActionMessageProperty(messageKey, property);
+    }
+    
+    /**
      * Delegates to {@link ActionTestModule#verifyNumberActionErrors}
      */
     protected void verifyNumberActionErrors(int number)

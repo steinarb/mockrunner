@@ -340,6 +340,48 @@ public class ActionTestModuleTest extends TestCase
         }
     }
     
+    public void testVerifyActionErrorProperty()
+    {
+        ActionErrors errors = new ActionErrors();
+        ActionError error1 = new ActionError("error1");
+        ActionError error2 = new ActionError("error2"); 
+        errors.add("property", error1);
+        errors.add(ActionErrors.GLOBAL_ERROR, error2);
+        module.setActionErrors(errors);
+        module.verifyActionErrorProperty("error1", "property");
+        try
+        {
+            module.verifyActionMessageProperty("error2", "property");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.verifyActionErrorProperty("error2", ActionErrors.GLOBAL_ERROR);
+    }
+    
+    public void testVerifyActionMessageProperty()
+    {
+        ActionMessages messages = new ActionMessages();
+        ActionMessage message1 = new ActionMessage("message1");
+        ActionMessage message2 = new ActionMessage("message2"); 
+        messages.add("property", message1);
+        messages.add("property", message2);
+        module.setActionMessages(messages);
+        module.verifyActionMessageProperty("message1", "property");
+        module.verifyActionMessageProperty("message2", "property");
+        try
+        {
+            module.verifyActionMessageProperty("message2", "property1");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    
     public void testCreateActionForm()
     {
         module.createActionForm(null);
