@@ -16,8 +16,10 @@ import com.mockrunner.mock.jdbc.MockStatement;
  * Delegator for {@link com.mockrunner.jdbc.JDBCTestModule}. You can
  * subclass this adapter or use {@link com.mockrunner.jdbc.JDBCTestModule}
  * directly (so your test case can use another base class).
- * <b>This class is generated from the JDBCTestModule and should not be
- * edited directly</b>.
+ * This adapter extends {@link com.mockrunner.base.BaseTestCase}.
+ * It can be used if you want to use several modules in conjunction.
+ * <b>This class is generated from the {@link com.mockrunner.jdbc.JDBCTestModule}
+ * and should not be edited directly</b>.
  */
 public class JDBCTestCaseAdapter extends BaseTestCase
 {

@@ -304,12 +304,14 @@ public class StandardAdapterProcessor implements AdapterProcessor
     private String[] getClassComment(Class module)
     {
         String name = module.getName();
-        String[] comment = new String[5];
+        String[] comment = new String[7];
         comment[0] = "Delegator for {@link " + name + "}. You can";
         comment[1] = "subclass this adapter or use {@link " + name + "}";
         comment[2] = "directly (so your test case can use another base class).";
-        comment[3] = "<b>This class is generated from the " + ClassUtil.getClassName(module) + " and should not be";
-        comment[4] = "edited directly</b>.";
+        comment[3] = "This adapter extends {@link com.mockrunner.base.BaseTestCase}.";
+        comment[4] = "It can be used if you want to use several modules in conjunction.";
+        comment[5] = "<b>This class is generated from the {@link " + name + "}";
+        comment[6] = "and should not be edited directly</b>.";
         return comment;
     }
     

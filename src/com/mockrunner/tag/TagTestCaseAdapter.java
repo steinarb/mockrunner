@@ -13,8 +13,10 @@ import com.mockrunner.mock.web.MockPageContext;
  * Delegator for {@link com.mockrunner.tag.TagTestModule}. You can
  * subclass this adapter or use {@link com.mockrunner.tag.TagTestModule}
  * directly (so your test case can use another base class).
- * <b>This class is generated from the TagTestModule and should not be
- * edited directly</b>.
+ * This adapter extends {@link com.mockrunner.base.BaseTestCase}.
+ * It can be used if you want to use several modules in conjunction.
+ * <b>This class is generated from the {@link com.mockrunner.tag.TagTestModule}
+ * and should not be edited directly</b>.
  */
 public class TagTestCaseAdapter extends HTMLOutputTestCase
 {
