@@ -142,11 +142,11 @@ public class EJBTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link EJBTestModule#addToContext}
+     * Delegates to {@link EJBTestModule#bindToContext}
      */
-    public void addToContext(String name, Object object)
+    public void bindToContext(String name, Object object)
     {
-        ejbTestModule.addToContext(name, object);
+        ejbTestModule.bindToContext(name, object);
     }
 
     /**

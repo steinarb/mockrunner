@@ -2,6 +2,7 @@ package com.mockrunner.example.ejb;
 
 import org.mockejb.MockEjbObject;
 import org.mockejb.TransactionPolicy;
+import org.mockejb.jndi.MockContextFactory;
 
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.jdbc.JDBCTestModule;
@@ -11,7 +12,7 @@ import com.mockrunner.struts.ActionTestCaseAdapter;
  * Example test for {@link LogAction}. This example demonstrates
  * how to use {@link com.mockrunner.struts.ActionTestModule},
  * {@link com.mockrunner.jdbc.JDBCTestModule} and 
- * {@link com.mockrunner.ejb.EJBTestModule} in conjunction. 
+ * {@link com.mockrunner.ejb.EJBTestModule} in conjunction.
  * This example works with the simulated JDBC environment of Mockrunner.
  */
 public class LogActionTest extends ActionTestCaseAdapter
@@ -27,9 +28,15 @@ public class LogActionTest extends ActionTestCaseAdapter
         ejbModule = createEJBTestModule();
         ejbModule.setInterfacePackage("com.mockrunner.example.ejb.interfaces");
         bean = ejbModule.deploy("com/mockrunner/example/LogSession", LogSessionBean.class, TransactionPolicy.REQUIRED);
-        ejbModule.addToContext("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
+        ejbModule.bindToContext("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
     }
     
+    protected void tearDown() throws Exception
+    {
+        super.tearDown();
+        MockContextFactory.revertSetAsInitial();
+    }
+
     public void testLogActionSuccess()
     {
         addRequestParameter("message", "testmessage");

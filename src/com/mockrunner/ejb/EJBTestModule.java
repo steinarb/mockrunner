@@ -6,8 +6,6 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import org.apache.commons.beanutils.MethodUtils;
-import org.mockejb.MockContainer;
-import org.mockejb.MockContext;
 import org.mockejb.MockEjbObject;
 import org.mockejb.SessionBeanDescriptor;
 import org.mockejb.TransactionPolicy;
@@ -124,9 +122,18 @@ public class EJBTestModule
      */
     public MockEjbObject deploy(SessionBeanDescriptor descriptor, TransactionPolicy policy)
     {
-        MockEjbObject bean = MockContainer.deploy(descriptor);
-        bean.setTransactionPolicy(policy);
-        return bean;
+        MockEjbObject bean;
+        try
+        {
+            bean = mockFactory.getMockContainer().deploy(descriptor);
+            bean.setTransactionPolicy(policy);
+            return bean;
+        }
+        catch(NamingException exc)
+        {
+            exc.printStackTrace();
+            return null;
+        } 
     }
     
     /**
@@ -166,13 +173,21 @@ public class EJBTestModule
     }
     
     /**
-     * Adds an object to the mock context.
+     * Adds an object to the mock context by calling <code>rebind</code>
      * @param name the name of the object
      * @param object the object to add
      */
-    public void addToContext(String name, Object object)
+    public void bindToContext(String name, Object object)
     {
-        MockContext.add(name, object);
+        try
+        {
+            InitialContext context = new InitialContext();
+            context.rebind(name, object);
+        }
+        catch(NamingException exc)
+        {
+            throw new RuntimeException("Object with name " + name + " not found.");
+        }
     }
     
     /**
@@ -260,13 +275,16 @@ public class EJBTestModule
      * transaction policy, e.g. <i>REQUIRED</i>. Otherwise the container
      * will not commit the mock transaction.
      * Note: If you do not use the {@link com.mockrunner.mock.ejb.MockUserTransaction}
-     * implementation, this method does nothing.
+     * implementation, this method throws a <code>VerifyFailedException</code>.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyCommitted()
     {
         MockUserTransaction transaction = mockFactory.getMockUserTransaction();
-        if(null == transaction) return;
+        if(null == transaction)
+        {
+            throw new VerifyFailedException("MockTransaction is null.");
+        }
         if(!transaction.wasCommitCalled())
         {
             throw new VerifyFailedException("Transaction was not committed.");
@@ -278,13 +296,16 @@ public class EJBTestModule
      * container managed transactions, you have to set an appropriate 
      * transaction policy, e.g. <i>REQUIRED</i>.
      * Note: If you do not use the {@link com.mockrunner.mock.ejb.MockUserTransaction}
-     * implementation, this method does nothing.
+     * implementation, this method throws a <code>VerifyFailedException</code>.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyNotCommitted()
     {
         MockUserTransaction transaction = mockFactory.getMockUserTransaction();
-        if(null == transaction) return;
+        if(null == transaction)
+        {
+            throw new VerifyFailedException("MockTransaction is null.");
+        }
         if(transaction.wasCommitCalled())
         {
             throw new VerifyFailedException("Transaction was committed.");
@@ -297,13 +318,16 @@ public class EJBTestModule
      * transaction policy, e.g. <i>REQUIRED</i>. Otherwise the container
      * will not rollback the mock transaction.
      * Note: If you do not use the {@link com.mockrunner.mock.ejb.MockUserTransaction}
-     * implementation, this method does nothing.
+     * implementation, this method throws a <code>VerifyFailedException</code>.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyRolledBack()
     {
         MockUserTransaction transaction = mockFactory.getMockUserTransaction();
-        if(null == transaction) return;
+        if(null == transaction)
+        {
+            throw new VerifyFailedException("MockTransaction is null.");
+        }
         if(!transaction.wasRollbackCalled())
         {
             throw new VerifyFailedException("Transaction was not rolled back");
@@ -315,13 +339,16 @@ public class EJBTestModule
      * container managed transactions, you have to set an appropriate 
      * transaction policy, e.g. <i>REQUIRED</i>.
      * Note: If you do not use the {@link com.mockrunner.mock.ejb.MockUserTransaction}
-     * implementation, this method does nothing.
+     * implementation, this method throws a <code>VerifyFailedException</code>.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyNotRolledBack()
     {
         MockUserTransaction transaction = mockFactory.getMockUserTransaction();
-        if(null == transaction) return;
+        if(null == transaction)
+        {
+            throw new VerifyFailedException("MockTransaction is null.");
+        }
         if(transaction.wasRollbackCalled())
         {
             throw new VerifyFailedException("Transaction was rolled back");
@@ -332,13 +359,16 @@ public class EJBTestModule
      * Verifies that the transaction was marked for rollback using
      * the method <code>setRollbackOnly()</code>.
      * Note: If you do not use the {@link com.mockrunner.mock.ejb.MockUserTransaction}
-     * implementation, this method does nothing.
+     * implementation, this method throws a <code>VerifyFailedException</code>.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyMarkedForRollback()
     {
         MockUserTransaction transaction = mockFactory.getMockUserTransaction();
-        if(null == transaction) return;
+        if(null == transaction)
+        {
+            throw new VerifyFailedException("MockTransaction is null.");
+        }
         if(!transaction.wasRollbackOnlyCalled())
         {
             throw new VerifyFailedException("Transaction was not marked for rollback");
@@ -348,13 +378,16 @@ public class EJBTestModule
     /**
      * Verifies that the transaction was not marked for rollback.
      * Note: If you do not use the {@link com.mockrunner.mock.ejb.MockUserTransaction}
-     * implementation, this method does nothing.
+     * implementation, this method throws a <code>VerifyFailedException</code>.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyNotMarkedForRollback()
     {
         MockUserTransaction transaction = mockFactory.getMockUserTransaction();
-        if(null == transaction) return;
+        if(null == transaction)
+        {
+            throw new VerifyFailedException("MockTransaction is null.");
+        }
         if(transaction.wasRollbackOnlyCalled())
         {
             throw new VerifyFailedException("Transaction was marked for rollback");
