@@ -9,6 +9,7 @@ mockrunner-0.2:
   is able to perform the tag lifecycle as in the real
   container.
 - added some useful methods to ActionTestModule
+- added third party jars to release
 
 mockrunner-0.1:
 
