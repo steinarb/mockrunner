@@ -49,18 +49,18 @@ or as parsed XML.
 It is planned to include support for other frameworks in the J2EE
 environment in future releases.
 
-To start with Mockrunner check out the JavaDoc and the examples
-in the com.mockrunner.example packages.
-Most methods are self-explanatory. Just subclass one of the Adapters
-(e.g. ActionTestCaseAdapter) and start testing. If you have your
-own base class for tests, you can use the Modules (e.g. ActionTestModule).
-
 Mockrunner requires at least Java 1.3 to run. If you are using Java 1.3
 you have to use the mockrunner-jkd1.3.jar. The JDBCTestModule is limited
 to JDBC API 2.1 in this case. If you are running Java 1.4 you can use
 JDBC 3.0. You have to use mockrunner.jar in this case. The other test modules
 are identical in both versions. Mockrunner supports Servlet API 2.3 and
 Struts 1.1. Older versions are not supported.
+
+To start with Mockrunner check out the JavaDoc and the examples
+in the com.mockrunner.example packages.
+Most methods are self-explanatory. Just subclass one of the Adapters
+(e.g. ActionTestCaseAdapter) and start testing. If you have your
+own base class for tests, you can use the Modules (e.g. ActionTestModule).
 
 Mockrunner uses the following libraries and software components.
 You have to download them. Please add the specified jars to the classpath.
