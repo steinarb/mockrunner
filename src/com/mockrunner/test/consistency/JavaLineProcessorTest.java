@@ -1,15 +1,19 @@
 package com.mockrunner.test.consistency;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+
+import junit.framework.TestCase;
 
 import com.mockrunner.test.consistency.JavaLineParser.Block;
 import com.mockrunner.test.consistency.JavaLineParser.Line;
 
-import junit.framework.TestCase;
-
 public class JavaLineProcessorTest extends TestCase
 {
+    private final static String NL = System.getProperty("line.separator");
+    
     private String getValidTestCode()
     {
         StringBuffer testJava = new StringBuffer();
@@ -157,5 +161,57 @@ public class JavaLineProcessorTest extends TestCase
         blockList.add("anotherMethod");
         processor.addBlocks(blockList);
         String result = processor.process();
+        assertTrue(-1 != result.indexOf("//import java.io.FileReader"));
+        assertTrue(-1 != result.indexOf("//import java.io.FileInputStream"));
+        assertTrue(-1 != result.indexOf("    /*public test()" + NL + "{" + NL + " //do it" + NL + " if(true)" + NL + "{" + NL + "  \t}" + NL + "}*/"));
+        assertTrue(-1 != result.indexOf("/*public anotherMethod()" + NL + "{" + NL + "}*/"));
+        assertEquals(stripChars(testCode), stripChars(result));
+    }
+    
+    public void testProcessDeeplyNested() throws Exception
+    {
+        String testJava = getNestedTestCode();
+        JavaLineProcessor processor = new JavaLineProcessor(testJava);
+        List blockList = new ArrayList();
+        blockList.add("test");
+        processor.addBlocks(blockList);
+        String result = processor.process();
+        assertTrue(result.trim().startsWith("/*"));
+        assertTrue(result.trim().endsWith("*/"));
+    }
+    
+    public void testProcessCommentAll() throws Exception
+    {
+        String testCode = getValidTestCode();
+        JavaLineProcessor processor = new JavaLineProcessor(testCode);
+        List lineList = new ArrayList();
+        lineList.add("");
+        processor.addLines(lineList);
+        String result = processor.process();
+        BufferedReader reader = new BufferedReader(new StringReader(result));
+        String currentLine = null;
+        while(null != (currentLine = reader.readLine()))
+        {
+            assertTrue(currentLine.trim().startsWith("//"));
+        }
+    }
+    
+    private String stripChars(String theString)
+    {
+        StringBuffer buffer = new StringBuffer(theString);
+        int ii = 0;
+        while(ii < buffer.length())
+        {
+            char currentChar = buffer.charAt(ii);
+            if(Character.isWhitespace(currentChar) || currentChar == '/' || currentChar == '*')
+            {
+                buffer.deleteCharAt(ii);
+            }
+            else
+            {
+                ii++;
+            }
+        }
+        return buffer.toString();
     }
 }
