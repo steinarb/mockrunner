@@ -24,6 +24,6 @@ public class EJBTestCaseAdapter extends BaseTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        ejbTestModule = createEJBTestModule(getJDBCMockObjectFactory());
+        ejbTestModule = createEJBTestModule(getEJBMockObjectFactory());
     }
 }

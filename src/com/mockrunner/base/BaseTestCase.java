@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.jdbc.JDBCTestModule;
+import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.servlet.ServletTestModule;
@@ -17,6 +18,7 @@ public abstract class BaseTestCase extends TestCase
 {
     private WebMockObjectFactory webMockFactory;
     private JDBCMockObjectFactory jdbcMockFactory;
+    private EJBMockObjectFactory ejbMockFactory;
     
     public BaseTestCase()
     {
@@ -38,6 +40,7 @@ public abstract class BaseTestCase extends TestCase
         super.setUp();
         webMockFactory = createWebMockObjectFactory();
         jdbcMockFactory = createJDBCMockObjectFactory();
+        ejbMockFactory = createEJBMockObjectFactory();
     }
 
     /**
@@ -123,6 +126,34 @@ public abstract class BaseTestCase extends TestCase
     protected void setJDBCMockObjectFactory(JDBCMockObjectFactory mockFactory)
     {
         this.jdbcMockFactory = mockFactory;
+    }
+    
+    /**
+     * Creates a {@link EJBMockObjectFactory}. 
+     * @return the created {@link EJBMockObjectFactory}
+     */
+    protected EJBMockObjectFactory createEJBMockObjectFactory()
+    {
+        EJBMockObjectFactory factory = new EJBMockObjectFactory();
+        return factory;
+    }
+
+    /**
+     * Gets the current {@link EJBMockObjectFactory}.
+     * @return the {@link EJBMockObjectFactory}
+     */
+    protected EJBMockObjectFactory getEJBMockObjectFactory()
+    {
+        return ejbMockFactory;
+    }
+
+    /**
+     * Sets the current {@link JDBCMockObjectFactory}.
+     * @param mockFactory the {@link JDBCMockObjectFactory}
+     */
+    protected void setEJBMockObjectFactory(EJBMockObjectFactory mockFactory)
+    {
+        this.ejbMockFactory = mockFactory;
     }
     
     /**
@@ -212,10 +243,10 @@ public abstract class BaseTestCase extends TestCase
     
     /**
      * Creates an <code>EJBTestModule</code> with the specified
-     * {@link JDBCMockObjectFactory}.
+     * {@link EJBMockObjectFactory}.
      * @return the created <code>TagTestModule</code>
      */
-    protected EJBTestModule createEJBTestModule(JDBCMockObjectFactory mockFactory)
+    protected EJBTestModule createEJBTestModule(EJBMockObjectFactory mockFactory)
     {
         return new EJBTestModule(mockFactory);
     }
@@ -228,6 +259,6 @@ public abstract class BaseTestCase extends TestCase
      */
     protected EJBTestModule createEJBTestModule()
     {
-        return new EJBTestModule(getJDBCMockObjectFactory());
+        return new EJBTestModule(getEJBMockObjectFactory());
     }
 }

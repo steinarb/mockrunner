@@ -1,4 +1,4 @@
-package com.mockrunner.mock.jdbc;
+package com.mockrunner.mock.ejb;
 
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
