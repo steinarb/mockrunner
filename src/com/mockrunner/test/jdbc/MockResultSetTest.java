@@ -193,7 +193,7 @@ public class MockResultSetTest extends TestCase
         assertEquals(-1, inputStream.read());
     }
     
-    public void testError()
+    public void testError() throws Exception
     {
         resultSet.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
         List column = new ArrayList();
@@ -265,6 +265,23 @@ public class MockResultSetTest extends TestCase
         }
     }
     
+    public void testEmptyResultSet() throws Exception
+    {
+        resultSet.addColumn("test");
+        assertFalse(resultSet.next());
+        assertFalse(resultSet.first());
+        assertFalse(resultSet.last());
+        assertFalse(resultSet.previous());
+        assertFalse(resultSet.absolute(1));
+        assertFalse(resultSet.relative(1));
+        assertFalse(resultSet.isFirst());
+        assertFalse(resultSet.isAfterLast());
+        assertTrue(resultSet.isBeforeFirst());
+        assertTrue(resultSet.isLast());
+        assertNull(resultSet.getString("test"));
+        assertNull(resultSet.getString(1));
+    }
+    
     public void testCursorPosition() throws Exception
     {
         resultSet.setResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
@@ -272,30 +289,32 @@ public class MockResultSetTest extends TestCase
         resultSet.addRow(new String[] {"4", "5", "6"});
         resultSet.addRow(new String[] {"7", "8", "9"});
         assertTrue(resultSet.isBeforeFirst());
-        resultSet.last();
+        assertTrue(resultSet.last());
         assertTrue(resultSet.isLast());
-        resultSet.first();
+        assertTrue(resultSet.first());
         assertTrue(resultSet.isFirst());
         resultSet.afterLast();
         assertTrue(resultSet.isAfterLast());
         resultSet.beforeFirst();
         assertTrue(resultSet.isBeforeFirst());
-        resultSet.next();
+        assertTrue(resultSet.next());
         assertTrue(resultSet.isFirst());
-        resultSet.previous();
+        assertFalse(resultSet.previous());
         assertTrue(resultSet.isBeforeFirst());
-        resultSet.absolute(3);
+        assertTrue(resultSet.absolute(3));
         assertTrue(resultSet.isLast());
-        resultSet.absolute(1);
+        assertTrue(resultSet.absolute(1));
         assertTrue(resultSet.isFirst());
         assertEquals(1, resultSet.getInt(1));
-        resultSet.relative(1);
+        assertTrue(resultSet.relative(1));
         assertEquals(4, resultSet.getInt(1));
-        resultSet.relative(1);
+        assertTrue(resultSet.relative(1));
         assertTrue(resultSet.isLast());
         assertEquals(7, resultSet.getInt(1));
-        resultSet.relative(-2);
+        assertTrue(resultSet.relative(-2));
         assertTrue(resultSet.isFirst());
+        assertTrue(resultSet.last());
+        assertFalse(resultSet.next());
     }
     
     public void testSetFetchDirection() throws Exception

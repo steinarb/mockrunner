@@ -540,7 +540,7 @@ public class JDBCTestModule
      * autocommit mode.
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyRolledback()
+    public void verifyRolledBack()
     {
         int number = mockFactory.getMockConnection().getNumberRollbacks();
         if(number <= 0)
@@ -555,7 +555,7 @@ public class JDBCTestModule
      * autocommit mode.
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyNotRolledback()
+    public void verifyNotRolledBack()
     {
         int number = mockFactory.getMockConnection().getNumberRollbacks();
         if(number > 0)

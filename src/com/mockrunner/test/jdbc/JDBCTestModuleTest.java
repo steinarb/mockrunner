@@ -396,7 +396,7 @@ public class JDBCTestModuleTest extends TestCase
         }
         try
         {
-            module.verifyRolledback();
+            module.verifyRolledBack();
             fail();
         }
         catch(Exception exc)
@@ -408,7 +408,7 @@ public class JDBCTestModuleTest extends TestCase
         mockfactory.getMockConnection().rollback();
         mockfactory.getMockConnection().rollback(savepoint);
         module.verifyCommited();
-        module.verifyRolledback();
+        module.verifyRolledBack();
         module.verifyNumberCommits(1);
         module.verifyNumberRollbacks(2);
     }

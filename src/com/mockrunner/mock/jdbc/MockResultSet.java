@@ -84,6 +84,7 @@ public class MockResultSet implements ResultSet, Cloneable
         isDatabaseView = false;
         this.cursorName = cursorName;
         resultSetMetaData = null;
+        copyColumnMap();
     }
     
     public Object clone()
@@ -376,7 +377,11 @@ public class MockResultSet implements ResultSet, Cloneable
     public Object getObject(int columnIndex) throws SQLException
     {
         checkColumnBounds(columnIndex);
-        checkRowBounds();
+        if(!isCurrentRowValid())
+        {
+            wasNull = true;
+            return null;
+        }
         String columnName = (String)columnNameList.get(columnIndex - 1);
         return getObject(columnName);
     }
@@ -384,7 +389,11 @@ public class MockResultSet implements ResultSet, Cloneable
     public Object getObject(String columnName) throws SQLException
     {
         checkColumnName(columnName);
-        checkRowBounds();
+        if(!isCurrentRowValid())
+        {
+            wasNull = true;
+            return null;
+        }
         if(rowDeleted()) throw new SQLException("row was deleted");
         List column;
         if(isDatabaseView)
@@ -1013,15 +1022,17 @@ public class MockResultSet implements ResultSet, Cloneable
     {
         if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         checkResultSetType();
+        if(getRowCount() == 0) return;
         cursor = getRowCount();
     }
     
     public boolean next() throws SQLException
     {
         if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
+        if(getRowCount() == 0) return false;
         cursor++;
         adjustCursor();
-        return false;
+        return isCurrentRowValid();
     }
 
 
@@ -1029,35 +1040,39 @@ public class MockResultSet implements ResultSet, Cloneable
     {
         if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         checkResultSetType();
+        if(getRowCount() == 0) return false;
         cursor = 0;
-        return getRowCount() >= 0;
+        return true;
     }
 
     public boolean last() throws SQLException
     {
         if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         checkResultSetType();
+        if(getRowCount() == 0) return false;
         cursor = getRowCount() - 1;
-        return getRowCount() >= 0;
+        return true;
     }
     
     public boolean absolute(int row) throws SQLException
     {
         if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         checkResultSetType();
+        if(getRowCount() == 0) return false;
         if(row > 0) cursor = row - 1;
         if(row < 0) cursor = getRowCount() + row;
         adjustCursor();
-        return cursor < getRowCount();
+        return isCurrentRowValid();
     }
 
     public boolean relative(int rows) throws SQLException
     {
         if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         checkResultSetType();
+        if(getRowCount() == 0) return false;
         cursor += rows;
         adjustCursor();
-        return cursor < getRowCount();
+        return isCurrentRowValid();
     }
 
     public int getRow() throws SQLException
@@ -1069,9 +1084,10 @@ public class MockResultSet implements ResultSet, Cloneable
     {
         if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         checkResultSetType();
+        if(getRowCount() == 0) return false;
         cursor--;
         adjustCursor();
-        return cursor < getRowCount();
+        return isCurrentRowValid();
     }
     
     public void setFetchDirection(int fetchDirection) throws SQLException
@@ -1455,10 +1471,15 @@ public class MockResultSet implements ResultSet, Cloneable
     
     private void checkRowBounds() throws SQLException
     {
-        if((!(cursor < getRowCount())) || (-1 == cursor))
+        if(!isCurrentRowValid())
         {
             throw new SQLException("Current row invalid");
         }
+    }
+    
+    private boolean isCurrentRowValid()
+    {
+        return (cursor < getRowCount()) && (-1 != cursor);
     }
     
     private void checkResultSetType() throws SQLException

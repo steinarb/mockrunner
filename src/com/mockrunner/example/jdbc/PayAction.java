@@ -45,10 +45,10 @@ public class PayAction extends Action
             String name = getName(connection, payForm);
             if(null == name)
             {
-                createErrorAndRollback(connection, errors, "unknown.customer.error");
+                createErrorAndRollback(request, connection, errors, "unknown.customer.error");
                 return mapping.findForward("failure");
             }
-            if(!checkBillIntegrity(connection, errors, payForm))
+            if(!checkBillIntegrity(request, connection, errors, payForm))
             {
                 return mapping.findForward("failure");
             }
@@ -59,7 +59,8 @@ public class PayAction extends Action
         catch(Exception exc)
         {
             exc.printStackTrace();
-            createErrorAndRollback(connection, errors, "general.database.error");
+            createErrorAndRollback(request, connection, errors, "general.database.error");
+            return mapping.findForward("failure");
         }
         finally
         {
@@ -75,10 +76,11 @@ public class PayAction extends Action
         return connection;
     }
 
-    private void createErrorAndRollback(Connection connection ,ActionErrors errors, String errorKey) throws SQLException
+    private void createErrorAndRollback(HttpServletRequest request, Connection connection ,ActionErrors errors, String errorKey) throws SQLException
     {
         ActionError error = new ActionError(errorKey);
         errors.add(ActionErrors.GLOBAL_ERROR, error);
+        saveErrors(request, errors);
         connection.rollback();
     }
     
@@ -101,23 +103,23 @@ public class PayAction extends Action
        statement.close();
     }
     
-    private boolean checkBillIntegrity(Connection connection, ActionErrors errors, PayForm payForm) throws SQLException
+    private boolean checkBillIntegrity(HttpServletRequest request, Connection connection, ActionErrors errors, PayForm payForm) throws SQLException
     {
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("select * from openbills where id=" + payForm.getBillId());
         if(false == result.next())
         {
-            createErrorAndRollback(connection, errors, "unknown.bill.error");
+            createErrorAndRollback(request, connection, errors, "unknown.bill.error");
             return false;
         }
         if(!result.getString("customerid").equals(payForm.getCustomerId()))
         {
-            createErrorAndRollback(connection, errors, "wrong.bill.for.customer");
+            createErrorAndRollback(request, connection, errors, "wrong.bill.for.customer");
             return false;
         }
         if(result.getDouble("amount") != payForm.getAmount())
         {
-            createErrorAndRollback(connection, errors, "wrong.amount.for.bill");
+            createErrorAndRollback(request, connection, errors, "wrong.amount.for.bill");
             return false;
         }
         result.close();
