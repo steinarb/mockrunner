@@ -226,6 +226,16 @@ public class ServletTestModule extends HTMLOutputModule
     }
     
     /**
+     * Adds several request parameters.
+     * @param key the request key
+     * @param values the request values
+     */
+    public void addRequestParameter(String key, String[] values)
+    {
+        mockFactory.getMockRequest().setupAddParameter(key, values);
+    }
+    
+    /**
      * Loops through the filter chain and calls the current servlets
      * <code>service</code> method at the end (only if a current servlet
      * is set). You can use it to test single filters or the interaction 

@@ -871,6 +871,18 @@ public class ActionTestModule
     {
         mockFactory.getMockRequest().setupAddParameter(key, value);
     }
+    
+    /**
+     * Adds several request parameters. Request parameters are populated
+     * to the <code>ActionForm</code>. To add parameters for map 
+     * backed properties use the <i>value(property)</i> style.
+     * @param key the request key
+     * @param values the request values
+     */
+    public void addRequestParameter(String key, String[] values)
+    {
+        mockFactory.getMockRequest().setupAddParameter(key, values);
+    }
 
     /**
      * Generates a token and sets it to the session and the request.

@@ -529,6 +529,14 @@ public class ActionTestCaseAdapter extends BaseTestCase
     {
         actionTestModule.addRequestParameter(key, value);
     }
+    
+    /**
+     * Delegates to {@link ActionTestModule#addRequestParameter(String, String[])}
+     */
+    protected void addRequestParameter(String key, String[] values)
+    {
+        actionTestModule.addRequestParameter(key, values);
+    }
 
     /**
      * Delegates to {@link ActionTestModule#generateValidToken}
