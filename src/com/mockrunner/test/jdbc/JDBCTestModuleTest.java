@@ -473,20 +473,20 @@ public class JDBCTestModuleTest extends TestCase
         module.verifySavepointNotReleased(1);
         module.verifySavepointNotReleased(2);
         module.verifySavepointNotReleased(3);
-        module.verifySavepointNotRollbacked(0);
-        module.verifySavepointNotRollbacked("test");
-        module.verifySavepointNotRollbacked(2);
-        module.verifySavepointNotRollbacked(3);
+        module.verifySavepointNotRolledBack(0);
+        module.verifySavepointNotRolledBack("test");
+        module.verifySavepointNotRolledBack(2);
+        module.verifySavepointNotRolledBack(3);
         mockfactory.getMockConnection().releaseSavepoint(savepoint2);
         mockfactory.getMockConnection().rollback(savepoint3);
         module.verifySavepointNotReleased(0);
         module.verifySavepointNotReleased(1);
         module.verifySavepointReleased("xyz");
         module.verifySavepointNotReleased(3);
-        module.verifySavepointNotRollbacked(0);
-        module.verifySavepointNotRollbacked(1);
-        module.verifySavepointNotRollbacked("xyz");
-        module.verifySavepointRollbacked(3);
+        module.verifySavepointNotRolledBack(0);
+        module.verifySavepointNotRolledBack(1);
+        module.verifySavepointNotRolledBack("xyz");
+        module.verifySavepointRolledBack(3);
         try
         {
             module.verifySavepointReleased("test");
@@ -498,7 +498,7 @@ public class JDBCTestModuleTest extends TestCase
         }
         try
         {
-            module.verifySavepointNotRollbacked(3);
+            module.verifySavepointNotRolledBack(3);
             fail();
         }
         catch(Exception exc)
