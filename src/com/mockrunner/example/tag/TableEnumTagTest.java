@@ -6,9 +6,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.struts.taglib.bean.WriteTag;
+import org.jdom.Element;
 
 import com.mockrunner.tag.NestedTag;
 import com.mockrunner.tag.TagTestCaseAdapter;
+import com.mockrunner.util.XmlUtil;
 
 /**
  * Example test for the {@link TableEnumTag}.
@@ -16,7 +18,9 @@ import com.mockrunner.tag.TagTestCaseAdapter;
  * resp. {@link com.mockrunner.tag.TagTestCaseAdapter} and
  * {@link com.mockrunner.tag.NestedTag}.
  * Tests the html output of {@link TableEnumTag} with static
- * and dynamic body content (simulated by nesting the <code>WriteTag</code>):
+ * and dynamic body content (simulated by nesting the <code>WriteTag</code>).
+ * Demonstrates the testing of output data as string as well as parsed
+ * HTML data (<code>testStaticBodyAsXML</code>).
  */
 public class TableEnumTagTest extends TagTestCaseAdapter
 {
@@ -66,6 +70,17 @@ public class TableEnumTagTest extends TagTestCaseAdapter
             assertEquals("</tr>", reader.readLine().trim());
         }
         assertEquals("</table>", reader.readLine().trim());
+    }
+    
+    public void testStaticBodyAsXML() throws Exception
+    {
+        nestedTag.addTextChild("myStaticValue");
+        processTagLifecycle();
+        Element table = XmlUtil.getBodyFragmentJDOMDocument(getOutputAsJDOMDocument());
+        Element tr = table.getChild("tr");
+        assertEquals("myLabel", tr.getChildTextTrim("td"));
+        Element secondTd = (Element)tr.getChildren().get(1);
+        assertEquals("myStaticValue", secondTd.getTextTrim());
     }
     
     public void testDynamicBody() throws Exception

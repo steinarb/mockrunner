@@ -2,9 +2,11 @@ package com.mockrunner.util;
 
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.List;
 
 import org.apache.xerces.parsers.DOMParser;
 import org.cyberneko.html.HTMLConfiguration;
+import org.jdom.Element;
 import org.jdom.input.DOMBuilder;
 import org.jdom.output.XMLOutputter;
 import org.xml.sax.InputSource;
@@ -14,6 +16,41 @@ import org.xml.sax.InputSource;
  */
 public class XmlUtil
 {
+    /**
+     * Convinience method for HTML fragments. Returns the body
+     * as JDOM <code>Element</code>.
+     * 
+     * If an HTML documents looks like this:
+     * <pre>
+     * &lt;html&gt;
+     * &lt;head&gt;
+     * &lt;/head&gt;
+     * &lt;body&gt;
+     * &lt;h1&gt;
+     * &lt;/h1&gt;
+     * &lt;/body&gt;
+     * &lt;/html&gt;
+     * </pre>
+     * 
+     * the method returns the h1 tag as <code>Element</code>.
+     * @param document the <code>org.jdom.Document</code>
+     * @return the body <code>Element</code>
+     */
+    public static Element getBodyFragmentJDOMDocument(org.jdom.Document document)
+    {
+        Element element = document.getRootElement().getChild("BODY");
+        if(null == element)
+        {
+            element = document.getRootElement().getChild("body");
+        }
+        if(null != element)
+        {
+            List childs = element.getChildren();
+            if(null != childs && childs.size() > 0) return (Element)childs.get(0);
+        }
+        return null;
+    }
+    
     /**
      * Returns the documents XML content as a string.
      * @param document the <code>org.jdom.Document</code>
@@ -99,7 +136,7 @@ public class XmlUtil
      * and its default features, you can use {@link #parseHTML}.
      * @param parser the <code>DOMParser</code>, e.g. the one
      *        returned by {@link #getHTMLParser}
-     * @param source the HTML as String
+     * @param source the XML as String
      * @return the parsed document as org.w3c.dom.Document
      */
     public static org.w3c.dom.Document parse(DOMParser parser, String source)
