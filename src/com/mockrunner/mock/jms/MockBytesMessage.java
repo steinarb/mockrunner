@@ -295,7 +295,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     {
         if(!isInWriteMode)
         {
-            throw new MessageNotWriteableException("Message is in write mode");
+            throw new MessageNotWriteableException("Message is in read mode");
         }
         try
         {
@@ -311,7 +311,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     {
         if(!isInWriteMode)
         {
-            throw new MessageNotWriteableException("Message is in write mode");
+            throw new MessageNotWriteableException("Message is in read mode");
         }
         try
         {
@@ -327,7 +327,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     {
         if(!isInWriteMode)
         {
-            throw new MessageNotWriteableException("Message is in write mode");
+            throw new MessageNotWriteableException("Message is in read mode");
         }
         try
         {
@@ -343,7 +343,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     {
         if(!isInWriteMode)
         {
-            throw new MessageNotWriteableException("Message is in write mode");
+            throw new MessageNotWriteableException("Message is in read mode");
         }
         try
         {
@@ -359,7 +359,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     {
         if(!isInWriteMode)
         {
-            throw new MessageNotWriteableException("Message is in write mode");
+            throw new MessageNotWriteableException("Message is in read mode");
         }
         try
         {
@@ -375,7 +375,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     {
         if(!isInWriteMode)
         {
-            throw new MessageNotWriteableException("Message is in write mode");
+            throw new MessageNotWriteableException("Message is in read mode");
         }
         try
         {
@@ -391,7 +391,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     {
         if(!isInWriteMode)
         {
-            throw new MessageNotWriteableException("Message is in write mode");
+            throw new MessageNotWriteableException("Message is in read mode");
         }
         try
         {
@@ -407,7 +407,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     {
         if(!isInWriteMode)
         {
-            throw new MessageNotWriteableException("Message is in write mode");
+            throw new MessageNotWriteableException("Message is in read mode");
         }
         try
         {
@@ -423,7 +423,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     {
         if(!isInWriteMode)
         {
-            throw new MessageNotWriteableException("Message is in write mode");
+            throw new MessageNotWriteableException("Message is in read mode");
         }
         try
         {
@@ -439,7 +439,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     {
         if(!isInWriteMode)
         {
-            throw new MessageNotWriteableException("Message is in write mode");
+            throw new MessageNotWriteableException("Message is in read mode");
         }
         try
         {
@@ -455,7 +455,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     {
         if(!isInWriteMode)
         {
-            throw new MessageNotWriteableException("Message is in write mode");
+            throw new MessageNotWriteableException("Message is in read mode");
         }
         try
         {
@@ -471,7 +471,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     {
         if(!isInWriteMode)
         {
-            throw new MessageNotWriteableException("Message is in write mode");
+            throw new MessageNotWriteableException("Message is in read mode");
         }
         if(object instanceof Byte) 
         {
