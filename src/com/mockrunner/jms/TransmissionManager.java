@@ -2,7 +2,10 @@ package com.mockrunner.jms;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import javax.jms.JMSException;
 import javax.jms.QueueBrowser;
@@ -28,22 +31,22 @@ import com.mockrunner.mock.jms.MockTopicSubscriber;
 public class TransmissionManager
 {
     private MockConnection connection;
-    private List queueSender;
-    private List queueReceiver;
-    private List queueBrowser;
-    private List topicPublisher;
-    private List topicSubscriber;
-    private List topicDurableSubscriber;
+    private List queueSenderList;
+    private List queueReceiverList;
+    private List queueBrowserList;
+    private List topicPublisherList;
+    private List topicSubscriberList;
+    private Map topicDurableSubscriberMap;
     
     public TransmissionManager(MockConnection connection)
     {
         this.connection = connection;
-        queueSender = new ArrayList();
-        queueReceiver = new ArrayList();
-        queueBrowser = new ArrayList();
-        topicPublisher = new ArrayList();
-        topicSubscriber = new ArrayList();
-        topicDurableSubscriber = new ArrayList();
+        queueSenderList = new ArrayList();
+        queueReceiverList = new ArrayList();
+        queueBrowserList = new ArrayList();
+        topicPublisherList = new ArrayList();
+        topicSubscriberList = new ArrayList();
+        topicDurableSubscriberMap = new HashMap();
     }
     
     /**
@@ -64,9 +67,9 @@ public class TransmissionManager
      */
     public void closeAllQueueSender()
     {
-        for(int ii = 0; ii < queueSender.size(); ii++)
+        for(int ii = 0; ii < queueSenderList.size(); ii++)
         {
-            QueueSender sender = (QueueSender)queueSender.get(ii);
+            QueueSender sender = (QueueSender)queueSenderList.get(ii);
             try
             {
                 sender.close();
@@ -83,9 +86,9 @@ public class TransmissionManager
      */
     public void closeAllQueueReceiver()
     {
-        for(int ii = 0; ii < queueReceiver.size(); ii++)
+        for(int ii = 0; ii < queueReceiverList.size(); ii++)
         {
-            QueueReceiver receiver = (QueueReceiver)queueReceiver.get(ii);
+            QueueReceiver receiver = (QueueReceiver)queueReceiverList.get(ii);
             try
             {
                 receiver.close();
@@ -102,9 +105,9 @@ public class TransmissionManager
      */
     public void closeAllQueueBrowser()
     {
-        for(int ii = 0; ii < queueBrowser.size(); ii++)
+        for(int ii = 0; ii < queueBrowserList.size(); ii++)
         {
-            QueueBrowser browser = (QueueBrowser)queueBrowser.get(ii);
+            QueueBrowser browser = (QueueBrowser)queueBrowserList.get(ii);
             try
             {
                 browser.close();
@@ -121,9 +124,9 @@ public class TransmissionManager
      */
     public void closeAllTopicPublisher()
     {
-        for(int ii = 0; ii < topicPublisher.size(); ii++)
+        for(int ii = 0; ii < topicPublisherList.size(); ii++)
         {
-            TopicPublisher publisher = (TopicPublisher)topicPublisher.get(ii);
+            TopicPublisher publisher = (TopicPublisher)topicPublisherList.get(ii);
             try
             {
                 publisher.close();
@@ -140,9 +143,9 @@ public class TransmissionManager
      */
     public void closeAllTopicSubscriber()
     {
-        for(int ii = 0; ii < topicSubscriber.size(); ii++)
+        for(int ii = 0; ii < topicSubscriberList.size(); ii++)
         {
-            TopicSubscriber subscriber = (TopicSubscriber)topicSubscriber.get(ii);
+            TopicSubscriber subscriber = (TopicSubscriber)topicSubscriberList.get(ii);
             try
             {
                 subscriber.close();
@@ -159,9 +162,10 @@ public class TransmissionManager
      */
     public void closeAllTopicDurableSubscriber()
     {
-        for(int ii = 0; ii < topicDurableSubscriber.size(); ii++)
+        Iterator keys = topicDurableSubscriberMap.keySet().iterator();
+        while(keys.hasNext())
         {
-            TopicSubscriber subscriber = (TopicSubscriber)topicDurableSubscriber.get(ii);
+            TopicSubscriber subscriber = (TopicSubscriber)topicDurableSubscriberMap.get(keys.next());
             try
             {
                 subscriber.close();
@@ -183,7 +187,7 @@ public class TransmissionManager
     public MockQueueSender createQueueSender(MockQueue queue)
     {
         MockQueueSender sender = new MockQueueSender(connection, queue);
-        queueSender.add(sender);
+        queueSenderList.add(sender);
         return sender;
     }
 
@@ -196,8 +200,8 @@ public class TransmissionManager
      */
     public MockQueueSender getQueueSender(int index)
     {
-        if(queueSender.size() <= index || index < 0) return null;
-        return (MockQueueSender)queueSender.get(index);
+        if(queueSenderList.size() <= index || index < 0) return null;
+        return (MockQueueSender)queueSenderList.get(index);
     }
     
     /**
@@ -224,9 +228,9 @@ public class TransmissionManager
     public List getQueueSenderList(String queueName)
     {
         List resultList = new ArrayList();
-        for(int ii = 0; ii < queueSender.size(); ii++)
+        for(int ii = 0; ii < queueSenderList.size(); ii++)
         {
-            QueueSender sender = (QueueSender)queueSender.get(ii);
+            QueueSender sender = (QueueSender)queueSenderList.get(ii);
             try
             {
                 if(sender.getQueue().getQueueName().equals(queueName))
@@ -248,7 +252,7 @@ public class TransmissionManager
      */
     public List getQueueSenderList()
     {
-        return Collections.unmodifiableList(queueSender);
+        return Collections.unmodifiableList(queueSenderList);
     }
 
     /**
@@ -262,7 +266,7 @@ public class TransmissionManager
     public MockQueueReceiver createQueueReceiver(MockQueue queue, String messageSelector)
     {
         MockQueueReceiver receiver = new MockQueueReceiver(connection, queue, messageSelector);
-        queueReceiver.add(receiver);
+        queueReceiverList.add(receiver);
         return receiver;
     }
 
@@ -275,8 +279,8 @@ public class TransmissionManager
      */
     public MockQueueReceiver getQueueReceiver(int index)
     {
-        if(queueReceiver.size() <= index || index < 0) return null;
-        return (MockQueueReceiver)queueReceiver.get(index);
+        if(queueReceiverList.size() <= index || index < 0) return null;
+        return (MockQueueReceiver)queueReceiverList.get(index);
     }
     
     /**
@@ -303,9 +307,9 @@ public class TransmissionManager
     public List getQueueReceiverList(String queueName)
     {
         List resultList = new ArrayList();
-        for(int ii = 0; ii < queueReceiver.size(); ii++)
+        for(int ii = 0; ii < queueReceiverList.size(); ii++)
         {
-            QueueReceiver receiver = (QueueReceiver)queueReceiver.get(ii);
+            QueueReceiver receiver = (QueueReceiver)queueReceiverList.get(ii);
             try
             {
                 if(receiver.getQueue().getQueueName().equals(queueName))
@@ -327,7 +331,7 @@ public class TransmissionManager
      */
     public List getQueueReceiverList()
     {
-        return Collections.unmodifiableList(queueReceiver);
+        return Collections.unmodifiableList(queueReceiverList);
     }
 
     /**
@@ -341,7 +345,7 @@ public class TransmissionManager
     public MockQueueBrowser createQueueBrowser(MockQueue queue, String messageSelector)
     {
         MockQueueBrowser browser = new MockQueueBrowser(connection, queue, messageSelector);
-        queueBrowser.add(browser);
+        queueBrowserList.add(browser);
         return browser;
     }
 
@@ -354,8 +358,8 @@ public class TransmissionManager
      */
     public MockQueueBrowser getQueueBrowser(int index)
     {
-        if(queueBrowser.size() <= index || index < 0) return null;
-        return (MockQueueBrowser)queueBrowser.get(index);
+        if(queueBrowserList.size() <= index || index < 0) return null;
+        return (MockQueueBrowser)queueBrowserList.get(index);
     }
     
     /**
@@ -382,9 +386,9 @@ public class TransmissionManager
     public List getQueueBrowserList(String queueName)
     {
         List resultList = new ArrayList();
-        for(int ii = 0; ii < queueBrowser.size(); ii++)
+        for(int ii = 0; ii < queueBrowserList.size(); ii++)
         {
-            QueueBrowser browser = (QueueBrowser)queueBrowser.get(ii);
+            QueueBrowser browser = (QueueBrowser)queueBrowserList.get(ii);
             try
             {
                 if(browser.getQueue().getQueueName().equals(queueName))
@@ -406,7 +410,7 @@ public class TransmissionManager
      */
     public List getQueueBrowserList()
     {
-        return Collections.unmodifiableList(queueBrowser);
+        return Collections.unmodifiableList(queueBrowserList);
     }
     
     /**
@@ -419,7 +423,7 @@ public class TransmissionManager
     public MockTopicPublisher createTopicPublisher(MockTopic topic)
     {
         MockTopicPublisher publisher = new MockTopicPublisher(connection, topic);
-        topicPublisher.add(publisher);
+        topicPublisherList.add(publisher);
         return publisher;
     }
 
@@ -432,8 +436,8 @@ public class TransmissionManager
      */
     public MockTopicPublisher getTopicPublisher(int index)
     {
-        if(topicPublisher.size() <= index || index < 0) return null;
-        return (MockTopicPublisher)topicPublisher.get(index);
+        if(topicPublisherList.size() <= index || index < 0) return null;
+        return (MockTopicPublisher)topicPublisherList.get(index);
     }
 
     /**
@@ -460,9 +464,9 @@ public class TransmissionManager
     public List getTopicPublisherList(String topicName)
     {
         List resultList = new ArrayList();
-        for(int ii = 0; ii < topicPublisher.size(); ii++)
+        for(int ii = 0; ii < topicPublisherList.size(); ii++)
         {
-            TopicPublisher publisher = (TopicPublisher)topicPublisher.get(ii);
+            TopicPublisher publisher = (TopicPublisher)topicPublisherList.get(ii);
             try
             {
                 if(publisher.getTopic().getTopicName().equals(topicName))
@@ -484,7 +488,7 @@ public class TransmissionManager
      */
     public List getTopicPublisherList()
     {
-        return Collections.unmodifiableList(topicPublisher);
+        return Collections.unmodifiableList(topicPublisherList);
     }
     
     /**
@@ -498,7 +502,7 @@ public class TransmissionManager
     {
         MockTopicSubscriber subscriber = new MockTopicSubscriber(connection, topic, messageSelector, noLocal);
         subscriber.setDurable(false);
-        topicSubscriber.add(subscriber);
+        topicSubscriberList.add(subscriber);
         return subscriber;
     }
 
@@ -511,8 +515,8 @@ public class TransmissionManager
      */
     public MockTopicSubscriber getTopicSubscriber(int index)
     {
-        if(topicSubscriber.size() <= index || index < 0) return null;
-        return (MockTopicSubscriber)topicSubscriber.get(index);
+        if(topicSubscriberList.size() <= index || index < 0) return null;
+        return (MockTopicSubscriber)topicSubscriberList.get(index);
     }
 
     /**
@@ -539,9 +543,9 @@ public class TransmissionManager
     public List getTopicSubscriberList(String topicName)
     {
         List resultList = new ArrayList();
-        for(int ii = 0; ii < topicSubscriber.size(); ii++)
+        for(int ii = 0; ii < topicSubscriberList.size(); ii++)
         {
-            TopicSubscriber subscriber = (TopicSubscriber)topicSubscriber.get(ii);
+            TopicSubscriber subscriber = (TopicSubscriber)topicSubscriberList.get(ii);
             try
             {
                 if(subscriber.getTopic().getTopicName().equals(topicName))
@@ -563,7 +567,7 @@ public class TransmissionManager
      */
     public List getTopicSubscriberList()
     {
-        return Collections.unmodifiableList(topicSubscriber);
+        return Collections.unmodifiableList(topicSubscriberList);
     }
     
     /**
@@ -578,71 +582,37 @@ public class TransmissionManager
         MockTopicSubscriber subscriber = new MockTopicSubscriber(connection, topic, messageSelector, noLocal);
         subscriber.setDurable(true);
         subscriber.setName(name);
-        topicDurableSubscriber.add(subscriber);
+        topicDurableSubscriberMap.put(name, subscriber);
         return subscriber;
     }
 
     /**
-     * Returns a durable <code>TopicSubscriber</code> by its index resp.
+     * Returns a durable <code>TopicSubscriber</code> by its name resp.
      * <code>null</code>, if no such durable <code>TopicSubscriber</code> is
      * present.
-     * @param index the index of the <code>TopicSubscriber</code>
+     * @param name the name of the <code>TopicSubscriber</code>
      * @return the <code>TopicSubscriber</code>
      */
-    public MockTopicSubscriber getTopicDurableSubscriber(int index)
+    public MockTopicSubscriber getTopicDurableSubscriber(String name)
     {
-        if(topicDurableSubscriber.size() <= index || index < 0) return null;
-        return (MockTopicSubscriber)topicDurableSubscriber.get(index);
+        return (MockTopicSubscriber)topicDurableSubscriberMap.get(name);
+    }
+    
+    /**
+     * Deletes a durable <code>TopicSubscriber</code>.
+     * @param name the name of the <code>TopicSubscriber</code>
+     */
+    public void removeTopicDurableSubscriber(String name)
+    {
+        topicDurableSubscriberMap.remove(name);
     }
 
     /**
-     * Returns a durable <code>TopicSubscriber</code> by the name of its
-     * corresponding <code>Topic</code>. If there's more than one 
-     * durable <code>TopicSubscriber</code> object for the specified name,
-     * the first one will be returned.
-     * @param topicName the name of the <code>Topic</code>
-     * @return the <code>TopicSubscriber</code>
+     * Returns the map of all durable <code>TopicSubscriber</code> objects.
+     * @return the map of <code>TopicSubscriber</code> objects
      */
-    public MockTopicSubscriber getTopicDurableSubscriber(String topicName)
+    public Map getTopicDurableSubscriberMap()
     {
-        List subscribers = getTopicDurableSubscriberList(topicName);
-        if(subscribers.size() <= 0) return null;
-        return (MockTopicSubscriber)subscribers.get(0);
-    }
-
-    /**
-     * Returns the list of the durable <code>TopicSubscriber</code> objects
-     * for a specific <code>Topic</code>.
-     * @param topicName the name of the <code>Topic</code>
-     * @return the list of <code>TopicSubscriber</code> objects
-     */
-    public List getTopicDurableSubscriberList(String topicName)
-    {
-        List resultList = new ArrayList();
-        for(int ii = 0; ii < topicDurableSubscriber.size(); ii++)
-        {
-            TopicSubscriber subscriber = (TopicSubscriber)topicDurableSubscriber.get(ii);
-            try
-            {
-                if(subscriber.getTopic().getTopicName().equals(topicName))
-                {
-                    resultList.add(subscriber);
-                }
-            }
-            catch(JMSException exc)
-            {
-
-            }
-        }
-        return Collections.unmodifiableList(resultList);
-    }
-
-    /**
-     * Returns the list of all durable <code>TopicSubscriber</code> objects.
-     * @return the list of <code>TopicSubscriber</code> objects
-     */
-    public List getTopicDurableSubscriberList()
-    {
-        return Collections.unmodifiableList(topicDurableSubscriber);
+        return Collections.unmodifiableMap(topicDurableSubscriberMap);
     }
 }
