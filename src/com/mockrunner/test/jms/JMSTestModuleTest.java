@@ -1,11 +1,15 @@
 package com.mockrunner.test.jms;
 
+import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
 import javax.jms.Queue;
 import javax.jms.QueueReceiver;
 import javax.jms.QueueSender;
 import javax.jms.QueueSession;
+import javax.jms.TemporaryQueue;
+import javax.jms.TextMessage;
 
 import junit.framework.TestCase;
 
@@ -13,11 +17,14 @@ import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
+import com.mockrunner.mock.jms.MockMapMessage;
+import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockQueueBrowser;
 import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
 import com.mockrunner.mock.jms.MockQueueSession;
 import com.mockrunner.mock.jms.MockTemporaryQueue;
+import com.mockrunner.mock.jms.MockTextMessage;
 
 public class JMSTestModuleTest extends TestCase
 {
@@ -242,15 +249,15 @@ public class JMSTestModuleTest extends TestCase
         sender2.send(module.getQueueSession(0).createMapMessage());
         sender3.send(module.getQueueSession(0).createMapMessage());
         sender3.send(module.getQueueSession(0).createStreamMessage());
-        module.verifyNumberOfTextMessages(0, 3);
-        module.verifyNumberOfObjectMessages(0, 1);
-        module.verifyNumberOfMapMessages(0, 2);
-        module.verifyNumberOfStreamMessages(0, 1);
-        module.verifyNumberOfBytesMessages(0, 0);
-        module.verifyNumberOfMessages(0, 0);
+        module.verifyNumberOfQueueTextMessages(0, 3);
+        module.verifyNumberOfQueueObjectMessages(0, 1);
+        module.verifyNumberOfQueueMapMessages(0, 2);
+        module.verifyNumberOfQueueStreamMessages(0, 1);
+        module.verifyNumberOfQueueBytesMessages(0, 0);
+        module.verifyNumberOfQueueMessages(0, 0);
         try
         {
-            module.verifyNumberOfMessages(0, 1);
+            module.verifyNumberOfQueueMessages(0, 1);
             fail();
         }
         catch(VerifyFailedException exc)
@@ -259,23 +266,23 @@ public class JMSTestModuleTest extends TestCase
         }
         try
         {
-            module.verifyNumberOfMapMessages(1, 2);
+            module.verifyNumberOfQueueMapMessages(1, 2);
             fail();
         }
         catch(VerifyFailedException exc)
         {
             //should throw exception
         }
-        module.verifyNumberOfCurrentMessages("queue", 2);
-        module.verifyNumberOfReceivedMessages("queue", 2);
-        module.verifyNumberOfCurrentMessages("otherQueue", 0);
-        module.verifyNumberOfReceivedMessages("otherQueue", 3);
-        module.verifyNumberOfCurrentMessages(0, 0, 2);
-        module.verifyNumberOfReceivedMessages(0, 0, 2);
+        module.verifyNumberOfCurrentQueueMessages("queue", 2);
+        module.verifyNumberOfReceivedQueueMessages("queue", 2);
+        module.verifyNumberOfCurrentQueueMessages("otherQueue", 0);
+        module.verifyNumberOfReceivedQueueMessages("otherQueue", 3);
+        module.verifyNumberOfCurrentQueueMessages(0, 0, 2);
+        module.verifyNumberOfReceivedQueueMessages(0, 0, 2);
         module.verifyNumberTemporaryQueues(0, 1);
         try
         {
-            module.verifyNumberOfReceivedMessages("queue", 1);
+            module.verifyNumberOfReceivedQueueMessages("queue", 1);
             fail();
         }
         catch(VerifyFailedException exc)
@@ -284,13 +291,137 @@ public class JMSTestModuleTest extends TestCase
         }
         try
         {
-            module.verifyNumberOfCurrentMessages(0, 0, 0);
+            module.verifyNumberOfCurrentQueueMessages(0, 0, 0);
             fail();
         }
         catch(VerifyFailedException exc)
         {
             //should throw exception
         }
+    }
+    
+    public void testVerifyMessageEquals() throws Exception
+    {
+        mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        DestinationManager manager = mockFactory.getMockQueueConnection().getDestinationManager();
+        manager.createQueue("queue");
+        QueueSender sender = module.getQueueSession(0).createSender(manager.getQueue("queue"));
+        TextMessage message1 = module.getQueueSession(0).createTextMessage();
+        message1.setText("text1");
+        ObjectMessage message2 = module.getQueueSession(0).createObjectMessage();
+        message2.setObject(new Integer(1));
+        MapMessage message3 = module.getQueueSession(0).createMapMessage();
+        message3.setFloat("float1", 1.2f);
+        message3.setString("string1", "teststring");
+        sender.send(message1);
+        sender.send(message2);
+        sender.send(message3);
+        module.verifyCurrentQueueMessageEquals("queue", 0, new MockTextMessage("text1"));
+        module.verifyCurrentQueueMessageEquals("queue", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedQueueMessageEquals("queue", 0, new MockTextMessage("text1"));
+        module.verifyReceivedQueueMessageEquals("queue", 1, new MockObjectMessage(new Integer(1)));
+        MockMapMessage testMessage = new MockMapMessage();
+        testMessage.setFloat("float1", 1.2f);
+        testMessage.setString("string1", "teststring");
+        module.verifyCurrentQueueMessageEquals("queue", 2, testMessage);
+        module.verifyReceivedQueueMessageEquals("queue", 2, testMessage);
+        try
+        {
+            module.verifyReceivedQueueMessageEquals("queue", 1, new MockTextMessage("text1"));
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyCurrentQueueMessageEquals("queue", 3, testMessage);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        testMessage.setString("string2", "teststring");
+        try
+        {
+            module.verifyCurrentQueueMessageEquals("queue", 2, testMessage);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        QueueReceiver receiver = module.getQueueSession(0).createReceiver(manager.getQueue("queue"));
+        receiver.receive();
+        testMessage = new MockMapMessage();
+        testMessage.setFloat("float1", 1.2f);
+        testMessage.setString("string1", "teststring");
+        try
+        {
+            module.verifyCurrentQueueMessageEquals("queue", 0, new MockTextMessage("text1"));
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.verifyCurrentQueueMessageEquals("queue", 0, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentQueueMessageEquals("queue", 1, testMessage);      
+        module.verifyReceivedQueueMessageEquals("queue", 0, new MockTextMessage("text1"));
+        module.verifyReceivedQueueMessageEquals("queue", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedQueueMessageEquals("queue", 2, testMessage);
+        receiver.receive();
+        try
+        {
+            module.verifyCurrentQueueMessageEquals("queue", 0, new MockObjectMessage(new Integer(1)));
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.verifyCurrentQueueMessageEquals("queue", 0, testMessage);      
+        module.verifyReceivedQueueMessageEquals("queue", 0, new MockTextMessage("text1"));
+        module.verifyReceivedQueueMessageEquals("queue", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedQueueMessageEquals("queue", 2, testMessage);
+        TemporaryQueue tempQueue = module.getQueueSession(0).createTemporaryQueue();
+        sender = module.getQueueSession(0).createSender(tempQueue);
+        sender.send(message1);
+        sender.send(message2);
+        sender.send(message3);
+        module.verifyCurrentQueueMessageEquals(0, 0, 0, new MockTextMessage("text1"));
+        module.verifyCurrentQueueMessageEquals(0, 0, 1, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentQueueMessageEquals(0, 0, 2, testMessage);
+        module.verifyReceivedQueueMessageEquals(0, 0, 0, new MockTextMessage("text1"));
+        module.verifyReceivedQueueMessageEquals(0, 0, 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedQueueMessageEquals(0, 0, 2, testMessage);
+        try
+        {
+            module.verifyCurrentQueueMessageEquals(0, 0, 0, new MockTextMessage("text2"));
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        receiver = module.getQueueSession(0).createReceiver(tempQueue);
+        receiver.receive();
+        try
+        {
+            module.verifyCurrentQueueMessageEquals(0, 0, 0, new MockTextMessage("text1"));
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.verifyCurrentQueueMessageEquals(0, 0, 0, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentQueueMessageEquals(0, 0, 1, testMessage);
+        module.verifyReceivedQueueMessageEquals(0, 0, 0, new MockTextMessage("text1"));
+        module.verifyReceivedQueueMessageEquals(0, 0, 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedQueueMessageEquals(0, 0, 2, testMessage);
     }
     
     public void testVerifyClosed() throws Exception
