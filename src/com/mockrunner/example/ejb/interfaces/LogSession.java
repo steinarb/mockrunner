@@ -4,7 +4,7 @@
 package com.mockrunner.example.ejb.interfaces;
 
 /**
- * Remote interface for LogSession.
+ * Remote interface for PrintSession.
  */
 public interface LogSession
    extends javax.ejb.EJBObject

@@ -2,6 +2,7 @@ package com.mockrunner.ejb;
 
 import javax.ejb.EJBHome;
 import javax.ejb.EJBLocalHome;
+import javax.jms.MessageListener;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
@@ -203,7 +204,30 @@ public class EJBTestModule
     {
         SessionBeanDescriptor descriptor = new SessionBeanDescriptor(jndiName, getHomeClass(beanClass), getRemoteClass(beanClass), beanClass);
         descriptor.setStateful(stateful);
-        MockEjbObject bean = deploy(descriptor);
+        MockEjbObject bean = deploy(descriptor, policy);
+        return bean;
+    }
+    
+    /**
+     * Deploys a message driven bean to the mock container.
+     * The specified transaction policy will be automatically set.
+     * @param messageBeanClass the bean implementation class
+     * @return the <code>MockEjbObject</code> of the deployed bean
+     */
+    public MockEjbObject deployMessageBean(Class messageBeanClass)
+    {
+        return deployMessageBean(messageBeanClass, TransactionPolicy.NOT_SUPPORTED);
+    }
+    
+    /**
+     * Deploys a message driven bean to the mock container.
+     * Sets the transaction policy <i>NOT_SUPPORTED</i>.
+     * @param messageBeanClass the bean implementation class
+     * @return the <code>MockEjbObject</code> of the deployed bean
+     */
+    public MockEjbObject deployMessageBean(Class messageBeanClass, TransactionPolicy policy)
+    {
+        MockEjbObject bean = mockFactory.getMockContainer().deployMessageBean(messageBeanClass);
         bean.setTransactionPolicy(policy);
         return bean;
     }
@@ -224,6 +248,15 @@ public class EJBTestModule
         {
             throw new RuntimeException("Object with name " + name + " not found.");
         }
+    }
+    
+    /**
+     * Creates a message driven bean.
+     * @param the mock ejb object.
+     */
+    public MessageListener createMessageBean(MockEjbObject ejbObject)
+    {
+        return mockFactory.getMockContainer().createMessageBean(ejbObject);
     }
     
     /**

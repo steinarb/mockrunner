@@ -105,7 +105,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#registerTestMessageListenerForQueue(String, MessageListener)}
      */
-    public void registerTestMessageListenerForQueue(String queueName, MessageListener listener)
+    protected void registerTestMessageListenerForQueue(String queueName, MessageListener listener)
     {
         jmsTestModule.registerTestMessageListenerForQueue(queueName, listener);
     }
@@ -113,7 +113,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#registerTestMessageListenerForQueue(MockQueueConnection, String, MessageListener)}
      */
-    public void registerTestMessageListenerForQueue(MockQueueConnection connection, String queueName, MessageListener listener)
+    protected void registerTestMessageListenerForQueue(MockQueueConnection connection, String queueName, MessageListener listener)
     {
         jmsTestModule.registerTestMessageListenerForQueue(connection, queueName,listener);
     }
@@ -121,7 +121,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#registerTestMessageListenerForTopic(String, MessageListener)}
      */
-    public void registerTestMessageListenerForTopic(String topicName, MessageListener listener)
+    protected void registerTestMessageListenerForTopic(String topicName, MessageListener listener)
     {
         jmsTestModule.registerTestMessageListenerForTopic(topicName, listener);
     }
@@ -129,7 +129,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#registerTestMessageListenerForTopic(MockTopicConnection, String, MessageListener)}
      */
-    public void registerTestMessageListenerForTopic(MockTopicConnection connection, String topicName, MessageListener listener)
+    protected void registerTestMessageListenerForTopic(MockTopicConnection connection, String topicName, MessageListener listener)
     {
         jmsTestModule.registerTestMessageListenerForTopic(connection, topicName, listener);
     }

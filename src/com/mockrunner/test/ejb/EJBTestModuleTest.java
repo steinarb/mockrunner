@@ -4,18 +4,22 @@ import java.rmi.RemoteException;
 
 import javax.ejb.CreateException;
 import javax.ejb.EJBException;
+import javax.ejb.MessageDrivenBean;
+import javax.ejb.MessageDrivenContext;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
+import javax.jms.Message;
+import javax.jms.MessageListener;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
+
+import junit.framework.TestCase;
 
 import org.mockejb.MockEjbObject;
 import org.mockejb.TransactionPolicy;
 
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
-
-import junit.framework.TestCase;
 
 public class EJBTestModuleTest extends TestCase
 {
@@ -133,6 +137,13 @@ public class EJBTestModuleTest extends TestCase
         assertTrue(home instanceof TestHome);
     }
     
+    public void testDeployMessageBean()
+    {
+        MockEjbObject ejbObject = module.deployMessageBean(TestMessageBean.class);
+        MessageListener listener = module.createMessageBean(ejbObject);
+        assertNotNull(listener);
+    }
+    
     public void testTransactions() throws Exception
     {
         MockEjbObject ejbObject = module.deploy("mybean", TestBean.class, TransactionPolicy.REQUIRED);
@@ -149,6 +160,29 @@ public class EJBTestModuleTest extends TestCase
         module.verifyNotCommitted();
         module.verifyMarkedForRollback();
         module.verifyRolledBack();
+    }
+    
+    public static class TestMessageBean implements MessageDrivenBean, MessageListener
+    {
+        public void onMessage(Message message)
+        {
+
+        }  
+   
+        public void setMessageDrivenContext(MessageDrivenContext context) throws EJBException
+        {
+
+        }
+    
+        public void ejbCreate()
+        {
+
+        }
+   
+        public void ejbRemove()
+        {
+
+        }
     }
     
     public static class TestBean implements SessionBean

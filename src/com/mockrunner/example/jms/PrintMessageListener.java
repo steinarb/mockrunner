@@ -26,6 +26,6 @@ public class PrintMessageListener implements MessageListener
             {
                 exc.printStackTrace();
             }
-        }   
+        }
     }
 }

@@ -11,6 +11,10 @@ import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.jms.JMSTestCaseAdapter;
 import com.mockrunner.mock.jms.MockTopic;
 
+/**
+ * Example test for {@link StockQuotePublisher}. Demonstrates
+ * the usage of {@link com.mockrunner.jms.JMSTestModule}.
+ */
 public class StockQuotePublisherTest extends JMSTestCaseAdapter
 {
     private EJBTestModule ejbModule;

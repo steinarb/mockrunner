@@ -15,6 +15,16 @@ import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 import javax.naming.InitialContext;
 
+/**
+ * This example class sends multiple messages
+ * to a topic within a transaction. The first message
+ * is a <code>TextMessage</code> with the current
+ * timestamp. The following two messages refer to
+ * the first message with this timestamp as
+ * correlation id. They contain the market rates for
+ * some stocks in the form of maps (the company name
+ * maps to the market rate).
+ */
 public class StockQuotePublisher
 {
     private Map nasdaqRates = new HashMap();

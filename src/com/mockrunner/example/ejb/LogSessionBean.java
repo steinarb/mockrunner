@@ -14,8 +14,8 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 /*
- * @ejb:bean name="TestSession"
- *           display-name="TestSessionBean"
+ * @ejb:bean name="LogSession"
+ *           display-name="LogSessionBean"
  *           type="Stateless"
  *           transaction-type="Container"
  *           jndi-name="com/mockrunner/example/LogSession"
