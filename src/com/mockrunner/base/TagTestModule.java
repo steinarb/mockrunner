@@ -3,6 +3,7 @@ package com.mockrunner.base;
 import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.mockrunner.mock.MockJspWriter;
@@ -94,6 +95,75 @@ public class TagTestModule
     }
     
     /**
+     * Calls the <code>doInitBody</code> method of the current tag.
+     * @throws RuntimeException if the current tag is no body tag
+     */
+    public void doInitBody()
+    {
+        if(!isBodyTag()) throw new RuntimeException("current tag is no body tag");
+        try
+        {
+            BodyTagSupport bodyTag = (BodyTagSupport)tag;
+            bodyTag.doInitBody();
+        }
+        catch(JspException exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+
+    /**
+     * Calls the <code>doAfterBody</code> method of the current tag.
+     * @throws RuntimeException if the current tag is no body tag
+     */
+    public void doAfterBody()
+    {
+        if(!isBodyTag()) throw new RuntimeException("current tag is no body tag");
+        try
+        {
+            BodyTagSupport bodyTag = (BodyTagSupport)tag;
+            bodyTag.doAfterBody();
+        }
+        catch(JspException exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+
+    /**
+     * Calls the <code>release</code> method of the current tag.
+     */
+    public void release()
+    {
+        tag.release();
+    }
+
+    public void processTagLifecycle()
+    {
+        if(isBodyTag())
+        {
+            processBodyTagLifecycle();
+        }
+        else
+        {
+            processSimpleTagLifecycle();
+        }
+    }
+
+    public void processSimpleTagLifecycle()
+    {
+        //TODO: implement me
+    }
+
+    public void processBodyTagLifecycle()
+    {
+        //TODO: implement me
+    }
+
+    
+    /**
      * Gets the output data the current tag has rendered. Makes only sense
      * after calling at least [@link #doStartTag}.
      * @return the output data
@@ -139,4 +209,10 @@ public class TagTestModule
             throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");
         }
     }
+    
+    private boolean isBodyTag()
+    {
+        return (tag instanceof BodyTagSupport);
+    }
+
 }

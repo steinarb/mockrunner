@@ -3,7 +3,7 @@ and forms, servlets and tag classes. It extends JUnit and simulates
 the necessary behaviour without calling the real infrastructure, i.e. 
 it does not call the struts ActionServlet or any other struts class 
 except for the tested action. This makes it very fast and enables the 
-user to manipulate all invloved classes and mockobjects in all steps 
+user to manipulate all involved classes and mockobjects in all steps 
 of the test making it possible to write very sophisticated unit-tests 
 for struts and servlets without any overhead. The framework was inspired 
 by StrutsTestCase (http://strutstestcase.sourceforge.net/)
