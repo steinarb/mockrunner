@@ -27,32 +27,13 @@ public class MockObjectFactory
     private MockPageContext pageContext;
 
     /**
-     * Constructor calls {@link #createMockObjects}
+     * Creates a new set of mock objects.
      */
     public MockObjectFactory()
     {
         createMockObjects();
     }
     
-    /**
-     * Constructor calls {@link #createMockObjectsBasedOn(MockObjectFactory)}
-     */
-    public MockObjectFactory(MockObjectFactory factory)
-    {
-        createMockObjectsBasedOn(factory);
-    }
-
-    /**
-     * Creates a new set of mock objects.
-     */
-    public void createMockObjects()
-    {
-        createNewMockObjects();
-        config = new MockServletConfig();
-        context = new MockServletContext();
-        setUpDependencies();
-    }
-
     /**
      * Creates a set of mock objects based on another one.
      * The created mock objects will have their own
@@ -61,7 +42,20 @@ public class MockObjectFactory
      * @param factory the other factory
      * @see BaseTestCase#createMockObjectFactory(MockObjectFactory)
      */
-    public void createMockObjectsBasedOn(MockObjectFactory factory)
+    public MockObjectFactory(MockObjectFactory factory)
+    {
+        createMockObjectsBasedOn(factory);
+    }
+ 
+    private void createMockObjects()
+    {
+        createNewMockObjects();
+        config = new MockServletConfig();
+        context = new MockServletContext();
+        setUpDependencies();
+    }
+
+    private void createMockObjectsBasedOn(MockObjectFactory factory)
     {
         createNewMockObjects();
         config = factory.getMockServletConfig();
