@@ -1016,7 +1016,8 @@ public class JDBCTestModule
         Object actualObject = getPreparedStatementParameter(statement, indexOfParameter);
         if(!actualObject.equals(object))
         {
-            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " not equal with specified object.");
+            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " has the value " +
+                                             actualObject.toString() + ", expected " + object.toString());
         }
     }
     
@@ -1035,7 +1036,8 @@ public class JDBCTestModule
         Object actualObject = getPreparedStatementParameter(sql, indexOfParameter);
         if(!actualObject.equals(object))
         {
-            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " not equal with specified object.");
+            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " has the value " +
+                                             actualObject.toString() + ", expected " + object.toString());
         }
     }
     
@@ -1053,7 +1055,124 @@ public class JDBCTestModule
         Object actualObject = getPreparedStatementParameter(indexOfStatement, indexOfParameter);
         if(!actualObject.equals(object))
         {
-            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " not equal with specified object.");
+            throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " has the value " +
+                                             actualObject.toString() + ", expected " + object.toString());
+        }
+    }
+    
+    /**
+     * Verifies that a parameter from the specified <code>CallableStatement</code> is equal
+     * to the specified object.
+     * @param statement the <code>CallableStatement</code>
+     * @param indexOfParameter the index used to set the object
+     * @param object the expected object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameter(CallableStatement statement, int indexOfParameter, Object object)
+    {
+        verifyCallableStatementParameterPresent(statement, indexOfParameter);
+        Object actualObject = getCallableStatementParameter(statement, indexOfParameter);
+        if(!actualObject.equals(object))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " has the value " +
+                                             actualObject.toString() + ", expected " + object.toString());
+        }
+    }
+    
+    /**
+     * Verifies that a parameter from the <code>CallableStatement</code> with the
+     * specified SQL statement is equal to the specified object.
+     * Uses the first <code>CallableStatement</code> with the specified SQL.
+     * @param sql the SQL statement of the <code>CallableStatement</code>
+     * @param indexOfParameter the index used to set the object
+     * @param object the expected object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameter(String sql, int indexOfParameter, Object object)
+    {
+        verifyCallableStatementParameterPresent(sql, indexOfParameter);
+        Object actualObject = getCallableStatementParameter(sql, indexOfParameter);
+        if(!actualObject.equals(object))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " has the value " +
+                                             actualObject.toString() + ", expected " + object.toString());
+        }
+    }
+    
+    /**
+     * Verifies that a parameter from the <code>CallableStatement</code> with the
+     * specified SQL statement is equal to the specified object.
+     * @param sql the SQL statement of the <code>CallableStatement</code>
+     * @param indexOfParameter the index used to set the object
+     * @param object the expected object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameter(int indexOfStatement, int indexOfParameter, Object object)
+    {
+        verifyCallableStatementParameterPresent(indexOfStatement, indexOfParameter);
+        Object actualObject = getCallableStatementParameter(indexOfStatement, indexOfParameter);
+        if(!actualObject.equals(object))
+        {
+            throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " has the value " +
+                                             actualObject.toString() + ", expected " + object.toString());
+        }
+    }
+    
+    /**
+     * Verifies that a parameter from the specified <code>CallableStatement</code> is equal
+     * to the specified object.
+     * @param statement the <code>CallableStatement</code>
+     * @param indexOfParameter the index used to set the object
+     * @param object the expected object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameter(CallableStatement statement, String nameOfParameter, Object object)
+    {
+        verifyCallableStatementParameterPresent(statement, nameOfParameter);
+        Object actualObject = getCallableStatementParameter(statement, nameOfParameter);
+        if(!actualObject.equals(object))
+        {
+            throw new VerifyFailedException("Callable statement parameter with name " + nameOfParameter + " has the value " +
+                                             actualObject.toString() + ", expected " + object.toString());
+        }
+    }
+    
+    /**
+     * Verifies that a parameter from the <code>CallableStatement</code> with the
+     * specified SQL statement is equal to the specified object.
+     * Uses the first <code>CallableStatement</code> with the specified SQL.
+     * @param sql the SQL statement of the <code>CallableStatement</code>
+     * @param indexOfParameter the index used to set the object
+     * @param object the expected object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameter(String sql, String nameOfParameter, Object object)
+    {
+        verifyCallableStatementParameterPresent(sql, nameOfParameter);
+        Object actualObject = getCallableStatementParameter(sql, nameOfParameter);
+        if(!actualObject.equals(object))
+        {
+            throw new VerifyFailedException("Callable statement parameter with name " + nameOfParameter + " has the value " +
+                                             actualObject.toString() + ", expected " + object.toString());
+        }
+    }
+    
+    /**
+     * Verifies that a parameter from the <code>CallableStatement</code> with the
+     * specified SQL statement is equal to the specified object.
+     * @param sql the SQL statement of the <code>CallableStatement</code>
+     * @param indexOfParameter the index used to set the object
+     * @param object the expected object
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCallableStatementParameter(int indexOfStatement, String nameOfParameter, Object object)
+    {
+        verifyCallableStatementParameterPresent(indexOfStatement, nameOfParameter);
+        Object actualObject = getCallableStatementParameter(indexOfStatement, nameOfParameter);
+        if(!actualObject.equals(object))
+        {
+            throw new VerifyFailedException("Callable statement parameter with name " + nameOfParameter + " has the value " +
+                                             actualObject.toString() + ", expected " + object.toString());
         }
     }
     
