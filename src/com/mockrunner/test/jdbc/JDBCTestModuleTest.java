@@ -1,15 +1,16 @@
 package com.mockrunner.test.jdbc;
 
 import java.sql.ResultSet;
+import java.sql.Savepoint;
 import java.util.ArrayList;
 import java.util.List;
+
+import junit.framework.TestCase;
 
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.jdbc.JDBCTestModule;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockStatement;
-
-import junit.framework.TestCase;
 
 public class JDBCTestModuleTest extends TestCase
 {
@@ -153,5 +154,91 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyAllStatementsClosed();
         mockfactory.getMockConnection().close();
         module.verifyConnectionClosed();
+    }
+    
+    public void testSavepoints() throws Exception
+    {
+        Savepoint savepoint0 = mockfactory.getMockConnection().setSavepoint();
+        Savepoint savepoint1 = mockfactory.getMockConnection().setSavepoint("test");
+        Savepoint savepoint2 = mockfactory.getMockConnection().setSavepoint("xyz");
+        Savepoint savepoint3 = mockfactory.getMockConnection().setSavepoint();
+        module.verifySavepointNotReleased(0);
+        module.verifySavepointNotReleased(1);
+        module.verifySavepointNotReleased(2);
+        module.verifySavepointNotReleased(3);
+        module.verifySavepointNotRollbacked(0);
+        module.verifySavepointNotRollbacked("test");
+        module.verifySavepointNotRollbacked(2);
+        module.verifySavepointNotRollbacked(3);
+        mockfactory.getMockConnection().releaseSavepoint(savepoint2);
+        mockfactory.getMockConnection().rollback(savepoint3);
+        module.verifySavepointNotReleased(0);
+        module.verifySavepointNotReleased(1);
+        module.verifySavepointReleased("xyz");
+        module.verifySavepointNotReleased(3);
+        module.verifySavepointNotRollbacked(0);
+        module.verifySavepointNotRollbacked(1);
+        module.verifySavepointNotRollbacked("xyz");
+        module.verifySavepointRollbacked(3);
+        try
+        {
+            module.verifySavepointReleased("test");
+            fail();
+        }
+        catch(Exception exc)
+        {
+            //should throw Exception
+        }
+        try
+        {
+            module.verifySavepointNotRollbacked(3);
+            fail();
+        }
+        catch(Exception exc)
+        {
+            //should throw Exception
+        }
+        List savepoints = module.getSavepoints();
+        int[] ids = new int[4];
+        for(int ii = 0; ii < savepoints.size(); ii++)
+        {
+            ids[ii] += 1;
+        }
+        assertTrue(ids[0] == 1);
+        assertTrue(ids[1] == 1);
+        assertTrue(ids[2] == 1);
+        assertTrue(ids[3] == 1);
+        Savepoint savepoint = module.getSavepoint("xyz");
+        assertTrue(savepoint == savepoint2);
+    }
+    
+    public void testVerifyNumberCommitsAndRollbacks() throws Exception
+    {
+        try
+        {
+            module.verifyCommited();
+            fail();
+        }
+        catch(Exception exc)
+        {
+            //should throw Exception
+        }
+        try
+        {
+            module.verifyRollbacked();
+            fail();
+        }
+        catch(Exception exc)
+        {
+            //should throw Exception
+        }
+        Savepoint savepoint = mockfactory.getMockConnection().setSavepoint();
+        mockfactory.getMockConnection().commit();
+        mockfactory.getMockConnection().rollback();
+        mockfactory.getMockConnection().rollback(savepoint);
+        module.verifyCommited();
+        module.verifyRollbacked();
+        module.verifyNumberCommits(1);
+        module.verifyNumberRollbacks(2);
     }
 }
