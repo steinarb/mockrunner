@@ -7,6 +7,7 @@ mockrunner-0.2.9:
   if attribute is replaced
 - added Servlet 2.4 methods to MockHttpServletRequest and MockHttpServletResponse
 - fixed some problems with MockPageContext
+- mockrunner jars are now compiled with debug information (line numbers)
 - updated jdom.jar from Beta 9 to Beta 10
 
 mockrunner-0.2.8:
