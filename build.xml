@@ -172,7 +172,9 @@
             </fileset>
         </copy>
         
-        <jaranalyzer srcdir="${dependencies}" destfile="${dependencies}/dependencies.txt"/>
+        <jaranalyzer srcdir="${dependencies}" 
+                     destfile="${dependencies}/dependencies.txt"
+                     summaryclass="com.mockrunner.gen.jar.MockrunnerTextSummary"/>
         
     </target>
 
