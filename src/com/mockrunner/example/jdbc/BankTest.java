@@ -1,5 +1,7 @@
 package com.mockrunner.example.jdbc;
 
+import java.sql.SQLException;
+
 import com.mockrunner.jdbc.JDBCTestCaseAdapter;
 import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockResultSet;
@@ -22,20 +24,41 @@ import com.mockrunner.mock.jdbc.MockResultSet;
  * {@link com.mockrunner.jdbc.JDBCTestModule#setExactMatch} and
  * {@link com.mockrunner.jdbc.JDBCTestModule#setCaseSensitive}.
  * The default is <code>false</code> for both.
- **/
+ */
 public class BankTest extends JDBCTestCaseAdapter
 {
-    protected void setUp() throws Exception
+    private void preparedEmptyResultSet()
     {
-        super.setUp();
+        StatementResultSetHandler statementHandler = getJDBCMockObjectFactory().getMockConnection().getStatementResultSetHandler();
+        MockResultSet result = statementHandler.createResultSet();
+        statementHandler.prepareGlobalResultSet(result);
+    }
+    
+    private void preparedResultSet()
+    {
         StatementResultSetHandler statementHandler = getJDBCMockObjectFactory().getMockConnection().getStatementResultSetHandler();
         MockResultSet result = statementHandler.createResultSet();
         result.addRow(new Integer[] {new Integer(10000)});
         statementHandler.prepareGlobalResultSet(result);
     }
     
-    public void testTransferOk() throws Exception
+    public void testWrongId() throws SQLException
     {
+        preparedEmptyResultSet();
+        Bank bank = new Bank();
+        bank.connect();
+        bank.transfer(1, 2, 5000);
+        verifySQLStatementExecuted("select balance");
+        verifySQLStatementNotExecuted("update account");
+        verifyNotCommited();
+        verifyRolledBack();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+    }
+    
+    public void testTransferOk() throws SQLException
+    {
+        preparedResultSet();
         Bank bank = new Bank();
         bank.connect();
         bank.transfer(1, 2, 5000);
@@ -44,11 +67,13 @@ public class BankTest extends JDBCTestCaseAdapter
         verifyPreparedStatementParameter("update account", 1, new Integer(5000));
         verifyCommited();
         verifyNotRolledBack();
-        verifyAllStatementsClosed();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();    
     }
     
-    public void testTransferFailure() throws Exception
+    public void testTransferFailure() throws SQLException
     {
+        preparedResultSet();
         Bank bank = new Bank();
         bank.connect();
         bank.transfer(1, 2, 20000);
@@ -56,6 +81,7 @@ public class BankTest extends JDBCTestCaseAdapter
         verifySQLStatementNotExecuted("update account");
         verifyNotCommited();
         verifyRolledBack();
+        verifyAllResultSetsClosed();
         verifyAllStatementsClosed();
     }
 }

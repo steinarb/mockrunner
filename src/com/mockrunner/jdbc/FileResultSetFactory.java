@@ -61,9 +61,9 @@ public class FileResultSetFactory implements ResultSetFactory
         this.trim = trim;
     }
 
-    public MockResultSet create()
+    public MockResultSet create(String id)
     {
-        MockResultSet resultSet = new MockResultSet();
+        MockResultSet resultSet = new MockResultSet(id);
         List lines = FileUtil.getLinesFromFile(file);
         int firstLineNumber = 0;
         if(firstLineContainsColumnNames)

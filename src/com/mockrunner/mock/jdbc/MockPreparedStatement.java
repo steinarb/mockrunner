@@ -144,7 +144,9 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         if(null != result)
         {
             resultSetHandler.addExecutedStatement(getSQL());
-            return cloneResultSet(result);
+            result = cloneResultSet(result);
+            resultSetHandler.addReturnedResultSet(result);
+            return result;
         }
         return super.executeQuery(getSQL());
     }

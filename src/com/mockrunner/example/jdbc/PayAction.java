@@ -21,7 +21,7 @@ import org.apache.struts.action.ActionMapping;
  * the id of the bill and the amount. If an error occurs the transaction is
  * rolled back and an <code>ActionError</code> is created.
  * This action is not the most efficient and best way to implement this, but it's
- * good to demonstrate the usage of {@link com.mockrunner.jdbc.JDBCTestCaseAdapter}.
+ * ok to demonstrate the usage of {@link com.mockrunner.jdbc.JDBCTestCaseAdapter}.
  * 
  * This action uses three tables. The table <i>customers</i> has two columns,
  * <i>id</i> and <i>name</i>. The table <i>openbills</i> has three columns,
@@ -29,7 +29,7 @@ import org.apache.struts.action.ActionMapping;
  * is equivalent to <i>openbills</i>. If a bill is successfully paid, the
  * action deletes the corresponding row from <i>openbills</i> and inserts
  * it into <i>paidbills</i>.
- **/
+ */
 public class PayAction extends Action
 {
     public ActionForward execute(ActionMapping mapping,
@@ -88,8 +88,11 @@ public class PayAction extends Action
     {
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("select name from customers where id=" + payForm.getCustomerId());  
-        result.next();
-        String name = result.getString("name");
+        String name = null;
+        if(result.next())
+        {
+            name = result.getString("name");
+        }
         result.close();
         statement.close();
         return name;

@@ -11,6 +11,7 @@ import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
+import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
 import com.mockrunner.util.ParameterUtil;
@@ -125,7 +126,7 @@ public class JDBCTestModule
      * by calling an <code>execute</code> method of a {@link com.mockrunner.mock.jdbc.MockStatement},
      * {@link com.mockrunner.mock.jdbc.MockPreparedStatement} or
      * {@link com.mockrunner.mock.jdbc.MockCallableStatement}.
-     * @return the <code>List</code> of <code>Statement</code> objects
+     * @return the <code>List</code> of SQL statements
      */
     public List getExecutedSQLStatements()
     {
@@ -133,6 +134,71 @@ public class JDBCTestModule
         list.addAll(mockFactory.getMockConnection().getStatementResultSetHandler().getExecutedStatements());
         list.addAll(mockFactory.getMockConnection().getPreparedStatementResultSetHandler().getExecutedStatements());
         list.addAll(mockFactory.getMockConnection().getCallableStatementResultSetHandler().getExecutedStatements());
+        return list;
+    }
+    
+    /**
+     * Returns the <code>ResultSet</code> objects with the specified id. 
+     * If there are more than one <code>ResultSet</code> objects with the
+     * specified id, the first one is returned. If there is no
+     * <code>ResultSet</code> with the specified id, this method
+     * returns <code>null</code>.
+     * Please also see {@link #getReturnedResultSets(String)}.
+     * @return the <code>ResultSet</code> with the specified id
+     */
+    public MockResultSet getReturnedResultSet(String id)
+    {
+        List list = getReturnedResultSets(id);
+        if(list != null && list.size() > 0)
+        {
+            return (MockResultSet)list.get(0);
+        }
+        return null;
+    }
+    
+    /**
+     * Returns a <code>List</code> of the <code>ResultSet</code> objects with
+     * the specified id. Equivalent to {@link #getReturnedResultSets}, except
+     * that only <code>ResultSet</code> objects are added that have the
+     * corresponding id.
+     * Please note that <code>ResultSet</code> objects are cloned when executing 
+     * statements. The <code>ResultSet</code> objects in the <code>List</code>
+     * returned by this method are really the instances the statement returned
+     * and not the instances you have used when preparing them.
+     * @return the <code>List</code> of <code>ResultSet</code> objects
+     */
+    public List getReturnedResultSets(String id)
+    {
+        List list = getReturnedResultSets();
+        ArrayList resultList = new ArrayList();
+        for(int ii = 0; ii < list.size(); ii++)
+        {
+            MockResultSet resultSet = (MockResultSet)list.get(ii);
+            if(id.equals(resultSet.getId()))
+            {
+                resultList.add(resultSet);
+            }
+        }
+        return resultList;
+    }
+    
+    /**
+     * Returns a <code>List</code> of all <code>ResultSet</code> objects that were returned
+     * by calling an <code>executeQuery</code> method of a {@link com.mockrunner.mock.jdbc.MockStatement},
+     * {@link com.mockrunner.mock.jdbc.MockPreparedStatement} or
+     * {@link com.mockrunner.mock.jdbc.MockCallableStatement}.
+     * Please note that <code>ResultSet</code> objects are cloned when executing 
+     * statements. The <code>ResultSet</code> objects in the <code>List</code>
+     * returned by this method are really the instances the statement returned
+     * and not the instances you have used when preparing them.
+     * @return the <code>List</code> of <code>ResultSet</code> objects
+     */
+    public List getReturnedResultSets()
+    {
+        ArrayList list = new ArrayList();
+        list.addAll(mockFactory.getMockConnection().getStatementResultSetHandler().getReturnedResultSets());
+        list.addAll(mockFactory.getMockConnection().getPreparedStatementResultSetHandler().getReturnedResultSets());
+        list.addAll(mockFactory.getMockConnection().getCallableStatementResultSetHandler().getReturnedResultSets());
         return list;
     }
     
@@ -498,6 +564,48 @@ public class JDBCTestModule
             if(!statement.isClosed())
             {
                 throw new VerifyFailedException("Callable statement with index " + ii + " (SQL " + statement.getSQL() + ") not closed.");
+            }
+        }
+    }
+    
+    /**
+     * Verifies that the <code>ResultSet</code> with the
+     * specified id is closed. Only recognizes <code>ResultSet</code>
+     * objects that were actually returned when executing a statement
+     * and that were explicitly closed. Implicit closed <code>ResultSet</code>
+     * objects (when closing a statement) are not recognized.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyResultSetClosed(String id)
+    {
+        MockResultSet resultSet = getReturnedResultSet(id);
+        if(null == resultSet)
+        {
+            throw new VerifyFailedException("ResultSet with id " + resultSet.getId() + " not present.");
+        }
+        if(!resultSet.isClosed())
+        {
+            throw new VerifyFailedException("ResultSet with id " + resultSet.getId() + " not closed.");
+        }
+    }
+    
+    /**
+     * Verifies that all <code>ResultSet</code> objects are closed.
+     * Only recognizes <code>ResultSet</code> * objects that were actually 
+     * returned when executing a statement and that were explicitly closed. 
+     * Implicit closed <code>ResultSet</code> objects (when closing a statement) 
+     * are not recognized.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllResultSetsClosed()
+    {
+        List allResultSets = getReturnedResultSets();
+        for(int ii = 0; ii < allResultSets.size(); ii++)
+        {
+            MockResultSet resultSet = (MockResultSet)allResultSets.get(ii);
+            if(!resultSet.isClosed())
+            {
+                throw new VerifyFailedException("ResultSet with id " + resultSet.getId() + " not closed.");
             }
         }
     }
