@@ -82,7 +82,7 @@ public class TagUtil
     
     /**
      * Populates the specified attributes to the specified tag. Calls the
-     * <code>release</code> method, if <i>doRelease</i> is set to
+     * <code>release</code> method before populating, if <i>doRelease</i> is set to
      * <code>true</code>.
      * @param tag the tag
      * @param attributes the attribute map
