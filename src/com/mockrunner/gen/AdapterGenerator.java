@@ -13,7 +13,6 @@ import java.util.List;
 
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.gen.util.AdapterProcessor;
-import com.mockrunner.gen.util.BasicAdapterProcessor;
 import com.mockrunner.gen.util.StandardAdapterProcessor;
 import com.mockrunner.jdbc.JDBCTestModule;
 import com.mockrunner.jms.JMSTestModule;
@@ -42,7 +41,7 @@ public class AdapterGenerator
         List servletExcluded = new ArrayList();
         servletExcluded.add("getOutput");
         units.add(new ProcessingUnit(ServletTestModule.class, new StandardAdapterProcessor(), servletExcluded));
-        units.add(new ProcessingUnit(ServletTestModule.class, new BasicAdapterProcessor(), servletExcluded));
+        //units.add(new ProcessingUnit(ServletTestModule.class, new BasicAdapterProcessor(), servletExcluded));
         List tagExcluded = new ArrayList();
         tagExcluded.add("getOutput");
         units.add(new ProcessingUnit(TagTestModule.class, new StandardAdapterProcessor(), tagExcluded));
