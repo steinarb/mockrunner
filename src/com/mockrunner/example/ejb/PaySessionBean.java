@@ -11,6 +11,7 @@ import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /*
@@ -29,9 +30,9 @@ import javax.sql.DataSource;
  *                         res-man-jndi-name="java:/MySQLDB"
  */
 /**
- * This is the EJB-vesrion of 
+ * This is the EJB-version of 
  * {@link com.mockrunner.example.jdbc.PayAction}.
- * It throws an <code>Exception</code> in case of error.
+ * It throws a <code>PaySessionException</code> in case of error.
  */
 public class PaySessionBean implements SessionBean
 {
@@ -41,22 +42,28 @@ public class PaySessionBean implements SessionBean
      * @ejb:interface-method
      * @ejb:transaction type="Required"
      */
-    public void payBill(String customerId, String billId, double amount) throws Exception
+    public void payBill(String customerId, String billId, double amount) throws PaySessionException
     {
-        InitialContext context = new InitialContext();
-        DataSource dataSource = (DataSource)context.lookup("java:comp/env/jdbc/MySQLDB");
-        Connection connection = dataSource.getConnection();
+        Connection connection = null;
         try
         {
+            InitialContext context = new InitialContext();
+            DataSource dataSource = (DataSource)context.lookup("java:comp/env/jdbc/MySQLDB");
+            connection = dataSource.getConnection();
             String name = getName(connection, customerId);
             if(null == name)
             {
                 sessionContext.setRollbackOnly();
-                throw new EJBException("Unknown customer error");
+                throw new PaySessionException(PaySessionException.UNKNOWN_CUSTOMER);
             }
             checkBillIntegrity(connection, customerId, billId, amount);
             markBillAsPaid(connection, customerId, billId, amount);
             System.out.println(amount + " paid from customer " + name);
+        }
+        catch(NamingException exc)
+        {
+            sessionContext.setRollbackOnly();
+            throw new EJBException("JNDI error " + exc.getMessage());
         }
         catch(SQLException exc)
         {
@@ -65,7 +72,14 @@ public class PaySessionBean implements SessionBean
         }
         finally
         {
-            connection.close();
+            try
+            {
+                if(null != connection) connection.close();
+            }
+            catch(SQLException sqlExc)
+            {
+        
+            }
         }
     }
     
@@ -83,7 +97,7 @@ public class PaySessionBean implements SessionBean
         return name;
     }
     
-    private void checkBillIntegrity(Connection connection, String customerId, String billId, double amount) throws Exception
+    private void checkBillIntegrity(Connection connection, String customerId, String billId, double amount) throws SQLException, PaySessionException
     {
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("select * from openbills where id=" + billId);
@@ -92,17 +106,17 @@ public class PaySessionBean implements SessionBean
             if(false == result.next())
             {
                 sessionContext.setRollbackOnly();
-                throw new Exception("Unknown bill error");
+                throw new PaySessionException(PaySessionException.UNKNOWN_BILL);
             }
             if(!result.getString("customerid").equals(customerId))
             {
                 sessionContext.setRollbackOnly();
-                throw new Exception("Wrong bill for customer");
+                throw new PaySessionException(PaySessionException.WRONG_BILL_FOR_CUSTOMER);
             }
             if(result.getDouble("amount") != amount)
             {
                 sessionContext.setRollbackOnly();
-                throw new Exception("Wrong amount for bill");
+                throw new PaySessionException(PaySessionException.WRONG_AMOUNT_FOR_BILL);
             }
         }
         finally

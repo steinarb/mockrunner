@@ -16,6 +16,15 @@ public class MockUserTransaction implements UserTransaction
     private boolean rollbackOnlyCalled = false;
     private int transactionTimeout = 0;
     
+    public void reset()
+    {
+        beginCalled = false;
+        commitCalled = false;
+        rollbackCalled = false;
+        rollbackOnlyCalled = false;
+        transactionTimeout = 0;
+    }
+    
     public boolean wasBeginCalled()
     {
         return beginCalled;

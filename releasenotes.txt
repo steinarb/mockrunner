@@ -9,6 +9,10 @@ mockrunner-0.1.6:
   createMockObjectFactory methods to createWebMockObjectFactory.
   There's also a JDBCMockObjectFactory now in com.mockrunner.mock.jdbc
   package and corresponding createJDBCMockObjectFactory methods.
+- first version of the JDBC test framework.
+- added mockejb.jar in order to test EJBs in conjunction with
+  the test modules of Mockrunner. Have a look at 
+  http://mockejb.sourceforge.net.
 - replaced JDK 1.3 mockobjects with 1.4 version
 - added some jars from Jakarta Commons
 - added methods to WebMockObjectFactory in order to specify
