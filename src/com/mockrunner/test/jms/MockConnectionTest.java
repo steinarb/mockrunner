@@ -235,11 +235,7 @@ public class MockConnectionTest extends TestCase
         assertTrue(topicConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE) instanceof TopicSession);
         assertNotNull(topicConnection.createConnectionConsumer((Destination)null, null, null, 0));
         assertNotNull(topicConnection.createConnectionConsumer((Topic)null, null, null, 0));
-        assertNotNull(topicConnection.createDurableConnectionConsumer(null, null, null, null, 0));
-        assertTrue(connection.createSession(true, Session.CLIENT_ACKNOWLEDGE) instanceof Session);
-        assertNotNull(connection.createConnectionConsumer((Destination)null, null, null, 0));
-        assertNotNull(connection.createConnectionConsumer((Topic)null, null, null, 0));
-        assertNotNull(connection.createDurableConnectionConsumer(null, null, null, null, 0));
+        assertNotNull(queueConnection.createDurableConnectionConsumer(null, null, null, null, 0));
     }
     
     public void testCreateQueueSession() throws Exception
@@ -274,16 +270,6 @@ public class MockConnectionTest extends TestCase
         assertNull(topicConnection.getTopicSession(3));
         assertEquals(3, topicConnection.getSessionList().size());
         assertEquals(3, topicConnection.getTopicSessionList().size());
-    }
-    
-    public void testCreateSession() throws Exception
-    {
-        connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
-        connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
-        assertTrue(connection.getSession(0) instanceof MockSession);
-        assertTrue(connection.getSession(1) instanceof MockSession);
-        assertNull(connection.getSession(3));
-        assertEquals(2, connection.getSessionList().size());
     }
 
     public void testException() throws Exception
