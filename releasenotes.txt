@@ -1,0 +1,7 @@
+
+mockrunner-0.1:
+
+- Inital release (includes examples and JavaDoc)
+- the Struts stuff is ok and usable, for the
+  other test modlues (servlets and tags) there's 
+  still a lot to do.
