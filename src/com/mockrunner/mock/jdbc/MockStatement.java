@@ -13,7 +13,7 @@ import com.mockrunner.util.SQLUtil;
  */
 public class MockStatement implements Statement
 {
-    private StatementResultSetHandler resultSetHandler;
+    private AbstractResultSetHandler resultSetHandler;
     private ResultSet nextResultSet = null;
     private int nextUpdateCount = -1;
     private String cursorName = "";
@@ -45,7 +45,7 @@ public class MockStatement implements Statement
         this.resultSetHoldability = resultSetHoldability;
     }
     
-    public void setResultSetHandler(StatementResultSetHandler resultSetHandler)
+    public void setResultSetHandler(AbstractResultSetHandler resultSetHandler)
     {
         this.resultSetHandler = resultSetHandler;
     }
@@ -287,7 +287,7 @@ public class MockStatement implements Statement
         return resultSetHoldability;
     }
     
-    protected MockResultSet cloneResultSet(MockResultSet resultSet)
+    protected MockResultSet cloneResultSet(MockResultSet resultSet) throws SQLException
     {
         MockResultSet clone = (MockResultSet)resultSet.clone();
         clone.setStatement(this);
