@@ -40,6 +40,21 @@ public class JarFileExtractorTest extends TestCase
         return bundle;
     }
     
+    public void testFilter()
+    {
+        JarBundle[] bundles = new JarBundle[5];
+        bundles[0] = createEmptyJarBundle("test1.jar");
+        bundles[1] = createEmptyJarBundle("test2.jar");
+        bundles[2] = createEmptyJarBundle("test3.jar");
+        bundles[3] = createEmptyJarBundle("test4.jar");
+        bundles[4] = createEmptyJarBundle("test5.jar");
+        bundles = extractor.filterBundles(bundles);
+        assertEquals(3, bundles.length);
+        assertTrue(bundles[0].getJarFileName().equals("test1.jar"));
+        assertTrue(bundles[1].getJarFileName().equals("test2.jar"));
+        assertTrue(bundles[2].getJarFileName().equals("test3.jar"));
+    }
+    
     public void testEmpty()
     {
         Map dependencies = extractor.createDependencies(new JarBundle[0]);

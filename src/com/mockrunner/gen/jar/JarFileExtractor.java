@@ -18,6 +18,19 @@ public class JarFileExtractor
         this.jars = new ArrayList(jars);
     }
     
+    public JarBundle[] filterBundles(JarBundle jarBundles[])
+    {
+        List finalList = new ArrayList();
+        for(int ii = 0; ii < jarBundles.length; ii++) 
+        {
+            if(jars.contains(jarBundles[ii].getJarFileName()))
+            {
+                finalList.add(jarBundles[ii]);
+            }
+        }
+        return (JarBundle[])finalList.toArray(new JarBundle[finalList.size()]);
+    }
+    
     public Map createDependencies(JarBundle jarBundles[])
     {
         Map finalMap = new HashMap();
