@@ -28,7 +28,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import com.mockobjects.sql.MockResultSetMetaData;
 import com.mockrunner.util.StreamUtil;
 
 /**
@@ -62,6 +61,7 @@ public class MockResultSet implements ResultSet
     private int resultSetType = ResultSet.TYPE_FORWARD_ONLY;
     private int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
     private boolean isDatabaseView;
+    private ResultSetMetaData resultSetMetaData;
     
     public MockResultSet()
     {
@@ -81,6 +81,22 @@ public class MockResultSet implements ResultSet
         isCursorInInsertRow = false;
         isDatabaseView = false;
         this.cursorName = cursorName;
+        resultSetMetaData = null;
+    }
+    
+    /**
+     * Sets the <code>ResultSetMetaData</code> for this <code>ResultSet</code>.
+     * The specified object will be returned when calling {@link #getMetaData}.
+     * If no <code>ResultSetMetaData</code> is set, the method {@link #getMetaData}
+     * will return an object of {@link MockResultSetMetaData}. The
+     * <code>MockResultSetMetaData</code> returns default values for most
+     * of its attributes (however the correct number of columns will be
+     * returned). Usually you do not have to set the <code>ResultSetMetaData</code>.
+     * @param resultSetMetaData the <code>ResultSetMetaData</code>
+     */
+    public void setResultSetMetaData(ResultSetMetaData resultSetMetaData)
+    {
+        this.resultSetMetaData = resultSetMetaData;
     }
     
     /**
@@ -319,6 +335,15 @@ public class MockResultSet implements ResultSet
         if(columnMapCopy.size() == 0) return 0;
         List column = (List)columnMapCopy.values().iterator().next();
         return column.size();
+    }
+    
+    /**
+     * Returns the current number of columns.
+     * @return the number of columns
+     */
+    public int getColumnCount()
+    {
+        return columnMapCopy.size();
     }
     
     public void close() throws SQLException
@@ -929,7 +954,10 @@ public class MockResultSet implements ResultSet
 
     public ResultSetMetaData getMetaData() throws SQLException
     {
-        return new MockResultSetMetaData();
+        if(null != resultSetMetaData) return resultSetMetaData;
+        MockResultSetMetaData metaData = new MockResultSetMetaData();
+        metaData.setColumnCount(getColumnCount());
+        return metaData;
     }
     
     public Statement getStatement() throws SQLException
