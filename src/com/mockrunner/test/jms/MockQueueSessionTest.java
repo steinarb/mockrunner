@@ -105,11 +105,11 @@ public class MockQueueSessionTest extends TestCase
         session.createTemporaryQueue();
         TemporaryQueue tempQueue = session.createTemporaryQueue();
         session.createTemporaryQueue();
-        assertNotNull(manager.getTemporaryQueue(0));
-        assertNotNull(manager.getTemporaryQueue(1));
-        assertNotNull(manager.getTemporaryQueue(2));
-        assertNull(manager.getTemporaryQueue(3));
-        assertTrue(tempQueue == manager.getTemporaryQueue(1));
+        assertNotNull(session.getTemporaryQueue(0));
+        assertNotNull(session.getTemporaryQueue(1));
+        assertNotNull(session.getTemporaryQueue(2));
+        assertNull(session.getTemporaryQueue(3));
+        assertTrue(tempQueue == session.getTemporaryQueue(1));
     }
     
     public void testCreateSenderAndReceiver() throws Exception
