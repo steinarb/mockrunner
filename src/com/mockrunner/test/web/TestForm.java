@@ -16,6 +16,7 @@ public class TestForm extends ActionForm
     private Map mappedProperties = new HashMap();
     private String property;
     private Map indexedProperties = new HashMap();
+    private TestNested nested = new TestNested();
     private boolean resetCalled = false;
   
     public void setValidationOk(boolean validationOk)
@@ -53,6 +54,16 @@ public class TestForm extends ActionForm
         mappedProperties.put(name, value);
     }
     
+    public TestNested getNested()
+    {
+        return nested;
+    }
+    
+    public void setNested(TestNested nested)
+    {
+        this.nested = nested;
+    }
+    
     public boolean wasResetCalled()
     {
         return resetCalled;
@@ -72,5 +83,20 @@ public class TestForm extends ActionForm
             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("testkey"));
         }
         return errors;
-    } 
+    }
+    
+    public static class TestNested
+    {
+        private String property;
+         
+        public String getProperty()
+        {
+            return property;
+        }
+
+        public void setProperty(String string)
+        {
+            property = string;
+        }
+    }
 }
