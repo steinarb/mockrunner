@@ -36,11 +36,11 @@ public class PrintMessageServletTest extends JMSTestCaseAdapter
     protected void setUp() throws Exception
     {
         super.setUp();
-        ejbModule = new EJBTestModule(createEJBMockObjectFactory());
+        ejbModule = createEJBTestModule();
         ejbModule.bindToContext("java:/ConnectionFactory", getJMSMockObjectFactory().getMockQueueConnectionFactory());
         queue = getDestinationManager().createQueue("testQueue");
         ejbModule.bindToContext("queue/testQueue", queue);
-        servletModule = new ServletTestModule(createWebMockObjectFactory());
+        servletModule = createServletTestModule();
         servletModule.createServlet(PrintMessageServlet.class);
     }
 

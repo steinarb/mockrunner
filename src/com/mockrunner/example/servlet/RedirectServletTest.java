@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 
 import org.jdom.Element;
 
-import com.mockrunner.servlet.ServletTestCaseAdapter;
+import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 
 /**
  * Example test for {@link RedirectServlet}.
@@ -14,7 +14,7 @@ import com.mockrunner.servlet.ServletTestCaseAdapter;
  * HTML data (<code>testServletOutputAsXML</code>).
  * 
  */
-public class RedirectServletTest extends ServletTestCaseAdapter
+public class RedirectServletTest extends BasicServletTestCaseAdapter
 {
     protected void setUp() throws Exception
     {

@@ -1,13 +1,13 @@
 package com.mockrunner.example.struts;
 
-import com.mockrunner.struts.ActionTestCaseAdapter;
+import com.mockrunner.struts.BasicActionTestCaseAdapter;
 
 /**
  * Example test for the {@link AuthenticationAction}.
  * Demonstrates most of the features of {@link com.mockrunner.struts.ActionTestModule} 
  * resp. {@link com.mockrunner.struts.ActionTestCaseAdapter}.
  */
-public class AuthenticationActionTest extends ActionTestCaseAdapter
+public class AuthenticationActionTest extends BasicActionTestCaseAdapter
 {
     private MockAuthenticationStrategy strategy;
     private AuthenticationForm form;

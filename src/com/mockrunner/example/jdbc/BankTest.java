@@ -2,7 +2,7 @@ package com.mockrunner.example.jdbc;
 
 import java.sql.SQLException;
 
-import com.mockrunner.jdbc.JDBCTestCaseAdapter;
+import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockResultSet;
 
@@ -25,7 +25,7 @@ import com.mockrunner.mock.jdbc.MockResultSet;
  * {@link com.mockrunner.jdbc.JDBCTestModule#setCaseSensitive}.
  * The default is <code>false</code> for both.
  */
-public class BankTest extends JDBCTestCaseAdapter
+public class BankTest extends BasicJDBCTestCaseAdapter
 {
     private void prepareEmptyResultSet()
     {

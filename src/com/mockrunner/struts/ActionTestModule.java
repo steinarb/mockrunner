@@ -819,7 +819,7 @@ public class ActionTestModule extends HTMLOutputModule
      * Returns the <code>MockActionMapping</code> passed to 
      * the action. Can be manipulated before and after 
      * {@link #actionPerform}.
-     * Delegates to {@link com.mockrunner.mock.web.WebMockObjectFactory#getMockActionMapping}.
+     * Delegates to {@link com.mockrunner.mock.web.ActionMockObjectFactory#getMockActionMapping}.
      * @return the MockActionMapping
      */
     public MockActionMapping getMockActionMapping()
@@ -829,7 +829,7 @@ public class ActionTestModule extends HTMLOutputModule
 
     /**
      * Returns the <code>MockPageContext</code> object.
-     * Delegates to {@link com.mockrunner.mock.web.WebMockObjectFactory#getMockPageContext}.
+     * Delegates to {@link com.mockrunner.mock.web.ActionMockObjectFactory#getMockPageContext}.
      * @return the MockPageContext
      */
     public MockPageContext getMockPageContext()

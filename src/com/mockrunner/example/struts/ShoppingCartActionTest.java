@@ -1,12 +1,12 @@
 package com.mockrunner.example.struts;
 
-import com.mockrunner.struts.ActionTestCaseAdapter;
+import com.mockrunner.struts.BasicActionTestCaseAdapter;
 import com.mockrunner.struts.MapMessageResources;
 
 /**
  * Example test for the {@link ShoppingCartAction}.
  */
-public class ShoppingCartActionTest extends ActionTestCaseAdapter
+public class ShoppingCartActionTest extends BasicActionTestCaseAdapter
 {
     protected void setUp() throws Exception
     {

@@ -2,7 +2,7 @@ package com.mockrunner.example.struts;
 
 import org.apache.commons.validator.ValidatorResources;
 
-import com.mockrunner.struts.ActionTestCaseAdapter;
+import com.mockrunner.struts.BasicActionTestCaseAdapter;
 import com.mockrunner.struts.MapMessageResources;
 
 /**
@@ -11,7 +11,7 @@ import com.mockrunner.struts.MapMessageResources;
  * in a static field. You don't need to do this, but the parsing
  * of the files before every test method will slow down your tests.
  */
-public class GreetingsActionTest extends ActionTestCaseAdapter
+public class GreetingsActionTest extends BasicActionTestCaseAdapter
 {
     private static ValidatorResources validatorRes = null;
     

@@ -35,7 +35,7 @@ public class NewsSubscriberTest extends JMSTestCaseAdapter
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-		ejbModule = new EJBTestModule(createEJBMockObjectFactory());
+		ejbModule = createEJBTestModule();
 		ejbModule.bindToContext("ConnectionFactory", getJMSMockObjectFactory().getMockTopicConnectionFactory());
 		Topic topic = getDestinationManager().createTopic("topic");
 		ejbModule.bindToContext("topic/newsTopic", topic);

@@ -8,8 +8,8 @@ import java.util.Map;
 import org.apache.struts.taglib.bean.WriteTag;
 import org.jdom.Element;
 
+import com.mockrunner.tag.BasicTagTestCaseAdapter;
 import com.mockrunner.tag.NestedTag;
-import com.mockrunner.tag.TagTestCaseAdapter;
 import com.mockrunner.util.web.XmlUtil;
 
 /**
@@ -22,7 +22,7 @@ import com.mockrunner.util.web.XmlUtil;
  * Demonstrates the testing of output data as string as well as parsed
  * HTML data (<code>testStaticBodyAsXML</code>).
  */
-public class TableEnumTagTest extends TagTestCaseAdapter
+public class TableEnumTagTest extends BasicTagTestCaseAdapter
 {
     private NestedTag nestedTag;
     
