@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Simple util class with some methods for searching into collections
+ */
 public class SearchUtil
 {
     /**

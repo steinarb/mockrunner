@@ -117,9 +117,9 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
      * @param paramters the parameters
      * @param resultSet the corresponding {@link MockResultSet}
      */
-    public void prepareResultSet(String sql, MockResultSet resultSet, Object[] paramters)
+    public void prepareResultSet(String sql, MockResultSet resultSet, Object[] parameters)
     {
-        prepareResultSet(sql, resultSet, ArrayUtil.getListFromObjectArray(paramters));
+        prepareResultSet(sql, resultSet, ArrayUtil.getListFromObjectArray(parameters));
     }
 
     /**
@@ -129,7 +129,7 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
      * @param paramters the parameters
      * @param resultSet the corresponding {@link MockResultSet}
      */
-    public void prepareResultSet(String sql, MockResultSet resultSet, List paramters)
+    public void prepareResultSet(String sql, MockResultSet resultSet, List parameters)
     {
         List list = (List)resultSetsForStatement.get(sql);
         if(null == list)
@@ -137,7 +137,7 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
             list = new ArrayList();
             resultSetsForStatement.put(sql, list);
         }
-        list.add(new MockResultSetWrapper(resultSet, paramters));
+        list.add(new MockResultSetWrapper(resultSet, parameters));
     }
 
     /**
@@ -147,9 +147,9 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
      * @param updateCount the update count
      * @param paramters the parameters
      */
-    public void prepareUpdateCount(String sql, int updateCount, Object[] paramters)
+    public void prepareUpdateCount(String sql, int updateCount, Object[] parameters)
     {
-        prepareUpdateCount(sql, updateCount, ArrayUtil.getListFromObjectArray(paramters));
+        prepareUpdateCount(sql, updateCount, ArrayUtil.getListFromObjectArray(parameters));
     }
 
     /**
@@ -159,7 +159,7 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
      * @param updateCount the update count
      * @param paramters the parameters
      */
-    public void prepareUpdateCount(String sql, int updateCount, List paramters)
+    public void prepareUpdateCount(String sql, int updateCount, List parameters)
     {
         List list = (List)updateCountForStatement.get(sql);
         if(null == list)
@@ -167,23 +167,23 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
             list = new ArrayList();
             updateCountForStatement.put(sql, list);
         }
-        list.add(new MockUpdateCountWrapper(updateCount, paramters));
+        list.add(new MockUpdateCountWrapper(updateCount, parameters));
     }
     
     private class MockResultSetWrapper
     {
         private MockResultSet resultSet;
-        private List paramters;
+        private List parameters;
     
-        public MockResultSetWrapper(MockResultSet resultSet, List paramters)
+        public MockResultSetWrapper(MockResultSet resultSet, List parameters)
         {
             this.resultSet = resultSet;
-            this.paramters = paramters;
+            this.parameters = parameters;
         }
     
         public List getParamters()
         {
-            return paramters;
+            return parameters;
         }
 
         public MockResultSet getResultSet()
@@ -195,17 +195,17 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
     private class MockUpdateCountWrapper
     {
         private Integer updateCount;
-        private List paramters;
+        private List parameters;
 
-        public MockUpdateCountWrapper(int updateCount, List paramters)
+        public MockUpdateCountWrapper(int updateCount, List parameters)
         {
             this.updateCount = new Integer(updateCount);
-            this.paramters = paramters;
+            this.parameters = parameters;
         }
 
         public List getParamters()
         {
-            return paramters;
+            return parameters;
         }
 
         public Integer getUpdateCount()
