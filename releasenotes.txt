@@ -1,6 +1,10 @@
 
 mockrunner-0.3.2:
 
+- reorganized package structure of util classes
+- introduced basic adapter versions (e.g. BasicJMSTestCaseAdapter)
+  which do not extend BaseTestCase
+- adapters (both standard and basic) are generated now
 - added getMockConnection method to MockDataSource (patch by Gabor Liptak)
 - JMS MockConnectionFactory now implements MockQueueConnectionFactory and
   MockTopicConnectionFactory to provide one factory with one JNDI name
