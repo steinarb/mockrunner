@@ -141,6 +141,8 @@ public class JMSTestModuleTest extends TestCase
         module.verifyQueueConnectionStarted();
         listener = new TestMessageListener(true);
         module.registerTestMessageListenerForQueue(queueConnection, "queue", listener);
+        assertTrue(module.getQueueSession(0).getTransacted());
+        assertTrue(module.getQueueSession(0).isAutoAcknowledge());
         module.verifyNumberQueueSessions(1);
         module.setCurrentQueueConnectionIndex(0);
         module.verifyNumberQueueSessions(1);
@@ -149,6 +151,9 @@ public class JMSTestModuleTest extends TestCase
         assertTrue(listener == receiver.getMessageListener());
         module.verifyQueueConnectionStarted();
         assertTrue(queueConnection.isStarted());
+        module.registerTestMessageListenerForQueue(queueConnection, "queue", false, Session.CLIENT_ACKNOWLEDGE, listener);
+        assertFalse(module.getQueueSession(1).getTransacted());
+        assertFalse(module.getQueueSession(1).isAutoAcknowledge());
     }
     
     public void testRegisterTopicMessageListener() throws Exception
@@ -164,6 +169,8 @@ public class JMSTestModuleTest extends TestCase
         assertTrue(listener == subscriber.getMessageListener());
         module.verifyTopicConnectionStarted();
         module.registerTestMessageListenerForTopic((MockTopicConnection)currentTopicConnection, "topic", listener);
+        assertTrue(module.getTopicSession(0).getTransacted());
+        assertTrue(module.getTopicSession(0).isAutoAcknowledge());
         module.verifyNumberTopicSessions(2);
         transManager = module.getTopicTransmissionManager(1);
         subscriber = transManager.getTopicSubscriber(0);
@@ -177,6 +184,9 @@ public class JMSTestModuleTest extends TestCase
         transManager = module.getTopicTransmissionManager(0);
         subscriber = transManager.getTopicSubscriber(0);
         assertTrue(listener == subscriber.getMessageListener());
+        module.registerTestMessageListenerForTopic(topicConnection, "topic", false, Session.DUPS_OK_ACKNOWLEDGE, listener);
+        assertFalse(module.getTopicSession(1).getTransacted());
+        assertTrue(module.getTopicSession(1).isAutoAcknowledge());
     }
     
     public void testGetQueue() throws Exception

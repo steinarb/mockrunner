@@ -66,6 +66,7 @@ public class PrintMessageServletTest extends JMSTestCaseAdapter
         verifyNumberOfReceivedQueueMessages("testQueue", 1);
         verifyReceivedQueueMessageEquals("testQueue", 0, new MockTextMessage("1"));
         verifyReceivedQueueMessageAcknowledged("testQueue", 0);
+        verifyNumberOfCurrentQueueMessages("testQueue", 0);
     }
     
     public void testDeliveryMoreMessages() throws Exception
@@ -78,10 +79,14 @@ public class PrintMessageServletTest extends JMSTestCaseAdapter
         servletModule.doGet();
         verifyNumberOfReceivedQueueMessages("testQueue", 3);
         verifyAllReceivedQueueMessagesAcknowledged("testQueue");
+        verifyReceivedQueueMessageEquals("testQueue", 0, new MockTextMessage("1"));
+        verifyReceivedQueueMessageEquals("testQueue", 1, new MockTextMessage("2"));
+        verifyReceivedQueueMessageEquals("testQueue", 2, new MockTextMessage("3"));
         QueueSender sender = getQueueTransmissionManager(0).createQueueSender(queue);
         sender.send(new MockObjectMessage(new Integer(3)));
         verifyNumberOfReceivedQueueMessages("testQueue", 4);
         verifyReceivedQueueMessageNotAcknowledged("testQueue", 3);
+        verifyNumberOfCurrentQueueMessages("testQueue", 0);
     }
     
     public void testServletResponse() throws Exception

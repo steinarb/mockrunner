@@ -117,6 +117,14 @@ public class JMSTestCaseAdapter extends BaseTestCase
     {
         jmsTestModule.registerTestMessageListenerForQueue(connection, queueName,listener);
     }
+    
+    /**
+     * Delegates to {@link JMSTestModule#registerTestMessageListenerForQueue(MockQueueConnection, String, boolean, int, MessageListener)}
+     */
+    protected void registerTestMessageListenerForQueue(MockQueueConnection connection, String queueName, boolean transacted, int acknowledgeMode, MessageListener listener)
+    {
+        jmsTestModule.registerTestMessageListenerForQueue(connection, queueName, transacted, acknowledgeMode, listener);
+    }
 
     /**
      * Delegates to {@link JMSTestModule#registerTestMessageListenerForTopic(String, MessageListener)}
@@ -133,7 +141,15 @@ public class JMSTestCaseAdapter extends BaseTestCase
     {
         jmsTestModule.registerTestMessageListenerForTopic(connection, topicName, listener);
     }
-       
+    
+    /**
+     * Delegates to {@link JMSTestModule#registerTestMessageListenerForTopic(MockTopicConnection, String, boolean, int, MessageListener)}
+     */
+    protected void registerTestMessageListenerForTopic(MockTopicConnection connection, String topicName, boolean transacted, int acknowledgeMode, MessageListener listener)
+    {
+        jmsTestModule.registerTestMessageListenerForTopic(connection, topicName, transacted, acknowledgeMode, listener);
+    }
+    
     /**
      * Delegates to {@link JMSTestModule#getDestinationManager}
      */

@@ -54,7 +54,6 @@ public class PrintSessionBean implements SessionBean
         catch(Exception exc)
         {
             sessionContext.setRollbackOnly();
-            throw new EJBException(exc.getMessage());
         }
         finally
         {
