@@ -205,6 +205,7 @@ public class MockResultSet implements ResultSet
     {
         checkColumnName(columnName);
         checkRowBounds();
+        if(rowDeleted()) throw new SQLException("row was deleted");
         List column;
         if(isDatabaseView)
         {
@@ -899,7 +900,7 @@ public class MockResultSet implements ResultSet
             List column = (List)columns.next();
             Collections.reverse(column);
         }
-        if(-1 != cursor) cursor = getRowCount() - cursor;
+        if(-1 != cursor) cursor = getRowCount() - cursor - 1;
     }
 
     public int getFetchDirection() throws SQLException
@@ -931,7 +932,7 @@ public class MockResultSet implements ResultSet
     {
         for(int ii = 0; ii < columnNameList.size(); ii++)
         {
-            if(columnName.equals(columnNameList.get(ii))) return ii;
+            if(columnName.equals(columnNameList.get(ii))) return ii + 1;
         }
         throw new SQLException("No column with name " + columnName + " found");
     }
@@ -1208,7 +1209,7 @@ public class MockResultSet implements ResultSet
     
     public void insertRow() throws SQLException
     {
-        if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
+        if(!isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         insertRow(cursor);
     }
 
@@ -1239,7 +1240,7 @@ public class MockResultSet implements ResultSet
         if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         if(rowDeleted()) throw new SQLException("row was deleted");
         checkRowBounds();
-        updateRow(cursor, true);
+        updateRow(cursor, false);
         updatedRows.set(cursor, new Boolean(false));
     }
 
@@ -1271,7 +1272,7 @@ public class MockResultSet implements ResultSet
     
     private void checkRowBounds() throws SQLException
     {
-        if(!(cursor < getRowCount()))
+        if((!(cursor < getRowCount())) || (-1 == cursor))
         {
             throw new SQLException("Current row invalid");
         }
