@@ -128,58 +128,50 @@ public class MockQueueSession implements QueueSession
 
     public BytesMessage createBytesMessage() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return connection.getMessageManager().createBytesMessage();
     }
 
     public MapMessage createMapMessage() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return connection.getMessageManager().createMapMessage();
     }
 
     public Message createMessage() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return connection.getMessageManager().createMessage();
     }
 
     public ObjectMessage createObjectMessage() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return createObjectMessage(null);
     }
 
-    public ObjectMessage createObjectMessage(Serializable arg0) throws JMSException
+    public ObjectMessage createObjectMessage(Serializable object) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return connection.getMessageManager().createObjectMessage(object);
     }
 
     public StreamMessage createStreamMessage() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return connection.getMessageManager().createStreamMessage();
     }
 
     public TextMessage createTextMessage() throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return createTextMessage(null);
     }
 
-    public TextMessage createTextMessage(String arg0) throws JMSException
+    public TextMessage createTextMessage(String text) throws JMSException
     {
-        // TODO Auto-generated method stub
         connection.throwJMSException();
-        return null;
+        return connection.getMessageManager().createTextMessage(text);
     }
 
     public boolean getTransacted() throws JMSException
