@@ -63,25 +63,25 @@ public class SearchUtil
     }
     
     /**
-     * Compares all elements in the specified <code>Collections</code> with the
+     * Compares all elements in the specified <code>Collection</code> with the
      * specified query string using the method {@link #doesStringMatch}.
      * @param col the <code>Collections</code>
      * @param query the query string that must match the keys in <i>col</i>
      * @param caseSensitive is comparison case sensitive
      * @param exactMatch compare exactly
-     * @param queryContainsSetData only matters if <i>exactMatch</i> is <code>false</code>,
-     *        specifies if query must be contained in the <code>Set</code> (<code>false</code>)
-     *        or if query must contain the <code>Set</code> (<code>true</code>)
+     * @param queryContainsData only matters if <i>exactMatch</i> is <code>false</code>,
+     *        specifies if query must be contained in the <code>Collection</code> data (<code>false</code>)
+     *        or if query must contain the <code>Collection</code> data (<code>true</code>)
      * @return <code>true</code> if <i>col</i> contains <i>query</i>, false otherwise
      */
-    public static boolean contains(Collection col, String query, boolean caseSensitive, boolean exactMatch, boolean queryContainsSetData)
+    public static boolean contains(Collection col, String query, boolean caseSensitive, boolean exactMatch, boolean queryContainsData)
     {
         Iterator iterator = col.iterator();
         while(iterator.hasNext())
         {
             String nextKey = (String)iterator.next();
             String source, currentQuery;
-            if(queryContainsSetData)
+            if(queryContainsData)
             {
                 source = query;
                 currentQuery = nextKey;

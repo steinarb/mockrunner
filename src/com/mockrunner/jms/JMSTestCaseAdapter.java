@@ -721,7 +721,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     }
     
     /**
-     * Delegates to {@link JMSTestModule#verifyNumberConnectionProducers}
+     * Delegates to {@link JMSTestModule#verifyNumberMessageProducers}
      */
     protected void verifyNumberMessageProducers(int indexOfSession, int numberOfProducers)
     {
@@ -729,7 +729,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link JMSTestModule#verifyAllConnectionProducersClosed}
+     * Delegates to {@link JMSTestModule#verifyAllMessageProducersClosed}
      */
     protected void verifyAllMessageProducersClosed(int indexOfSession)
     {
