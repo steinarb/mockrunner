@@ -22,7 +22,7 @@ import com.mockrunner.util.common.StreamUtil;
 
 public class MockrunnerTextSummary implements Summary
 {
-    private final static String TEMPLATE_FILE = "dependencies.txt";
+    private final static String TEMPLATE_FILE = "dependtemplate.txt";
     
     private List mockrunnerJars;
 
