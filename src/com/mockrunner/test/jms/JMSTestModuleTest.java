@@ -1,5 +1,7 @@
 package com.mockrunner.test.jms;
 
+import javax.jms.BytesMessage;
+import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -8,15 +10,23 @@ import javax.jms.Queue;
 import javax.jms.QueueReceiver;
 import javax.jms.QueueSender;
 import javax.jms.QueueSession;
+import javax.jms.Session;
 import javax.jms.TemporaryQueue;
+import javax.jms.TemporaryTopic;
 import javax.jms.TextMessage;
+import javax.jms.Topic;
+import javax.jms.TopicPublisher;
+import javax.jms.TopicSession;
+import javax.jms.TopicSubscriber;
 
 import junit.framework.TestCase;
 
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.jms.QueueManager;
+import com.mockrunner.jms.TopicManager;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
+import com.mockrunner.mock.jms.MockBytesMessage;
 import com.mockrunner.mock.jms.MockMapMessage;
 import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockQueueBrowser;
@@ -24,7 +34,11 @@ import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
 import com.mockrunner.mock.jms.MockQueueSession;
 import com.mockrunner.mock.jms.MockTemporaryQueue;
+import com.mockrunner.mock.jms.MockTemporaryTopic;
 import com.mockrunner.mock.jms.MockTextMessage;
+import com.mockrunner.mock.jms.MockTopicPublisher;
+import com.mockrunner.mock.jms.MockTopicSession;
+import com.mockrunner.mock.jms.MockTopicSubscriber;
 
 public class JMSTestModuleTest extends TestCase
 {
@@ -46,13 +60,47 @@ public class JMSTestModuleTest extends TestCase
         assertNotNull(module.getQueue("test1"));
         assertNotNull(module.getQueue("test2"));
         assertNull(module.getQueue("xyz"));
+        QueueSession session = mockFactory.getMockQueueConnection().createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+        session.createQueue("test2");
         manager.removeQueue("test2");
         assertNull(module.getQueue("test2"));
+        try
+        {
+            session.createQueue("test2");
+            fail();
+        }
+        catch (JMSException e)
+        {
+            //should throw exception
+        }
+    }
+    
+    public void testGetTopic() throws Exception
+    {
+        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        manager.createTopic("myTopic1");
+        manager.createTopic("myTopic2");
+        assertNotNull(module.getTopic("myTopic1"));
+        assertNotNull(module.getTopic("myTopic2"));
+        assertNull(module.getTopic("xyz"));
+        TopicSession session = mockFactory.getMockTopicConnection().createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
+        session.createTopic("myTopic1");
+        manager.removeTopic("myTopic1");
+        assertNull(module.getTopic("myTopic1"));
+        try
+        {
+            session.createTopic("myTopic1");
+            fail();
+        }
+        catch (JMSException e)
+        {
+            //should throw exception
+        }
     }
     
     public void testVerifyTemporaryQueue() throws Exception
     {
-        mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         MockTemporaryQueue queue1 = (MockTemporaryQueue)module.getQueueSession(0).createTemporaryQueue();
         MockTemporaryQueue queue2 = (MockTemporaryQueue)module.getQueueSession(0).createTemporaryQueue();
         assertNotNull(module.getTemporaryQueue(0, 0));
@@ -111,9 +159,70 @@ public class JMSTestModuleTest extends TestCase
         module.verifyAllTemporaryQueuesDeleted(0);
     }
     
+    public void testVerifyTemporaryTopic() throws Exception
+    {
+        mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockTemporaryTopic topic1 = (MockTemporaryTopic)module.getTopicSession(0).createTemporaryTopic();
+        MockTemporaryTopic topic2 = (MockTemporaryTopic)module.getTopicSession(0).createTemporaryTopic();
+        assertNotNull(module.getTemporaryTopic(0, 0));
+        assertNotNull(module.getTemporaryTopic(0, 1));
+        assertNull(module.getTemporaryTopic(0, 2));
+        module.verifyNumberTemporaryTopics(0, 2);
+        try
+        {
+            module.verifyNumberTemporaryTopics(0, 3);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyNumberTemporaryTopics(1, 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyTemporaryTopicDeleted(0, 1);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyAllTemporaryTopicsDeleted(0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        topic2.delete();
+        module.verifyTemporaryTopicDeleted(0, 1);
+        try
+        {
+            module.verifyAllTemporaryQueuesDeleted(0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        topic1.delete();
+        module.verifyTemporaryTopicDeleted(0, 0);
+        module.verifyAllTemporaryTopicsDeleted(0);
+    }
+    
     public void testVerifyQueueSender() throws Exception
     {
-        mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
         manager.createQueue("queue");
         module.getQueueSession(0).createSender(manager.getQueue("queue"));
@@ -148,11 +257,90 @@ public class JMSTestModuleTest extends TestCase
         module.getQueueSession(0).createSender(manager.getQueue("queue"));
         module.verifyNumberQueueSenders(0, "queue", 2);
         module.verifyNumberQueueSenders(0, 2);
+        try
+        {
+            module.verifyNumberQueueSenders(0, "otherQueue", 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        manager.createQueue("otherQueue");
+        module.verifyNumberQueueSenders(0, "otherQueue", 0);
+    }
+    
+    public void testVerifyTopicPublishers() throws Exception
+    {
+        mockFactory.getMockTopicConnection().createTopicSession(true, Session.AUTO_ACKNOWLEDGE);
+        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        manager.createTopic("topic");
+        module.getTopicSession(0).createPublisher(manager.getTopic("topic"));
+        module.verifyNumberTopicPublishers(0, 1);
+        try
+        {
+            module.verifyNumberTopicPublishers(0, 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyNumberTopicPublishers(0, 2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyNumberTopicPublishers(0, "topic", 2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyNumberTopicPublishers(1, "topic", 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.getTopicSession(0).createPublisher(manager.getTopic("topic"));
+        module.verifyNumberTopicPublishers(0, "topic", 2);
+        module.verifyNumberTopicPublishers(0, 2);
+        try
+        {
+            module.verifyNumberTopicPublishers(0, "topic", 1);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyNumberTopicPublishers(0, "myTopic", 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        manager.createTopic("myTopic");
+        module.verifyNumberTopicPublishers(0, "myTopic", 0);
     }
     
     public void testVerifyQueueReceiver() throws Exception
     {
-        mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
         Queue queue1 = manager.createQueue("queue");
         Queue queue2 = manager.createQueue("otherQueue");
@@ -177,14 +365,125 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
+        module.verifyNumberQueueReceivers(0, "otherQueue", 0);
         module.getQueueSession(0).createReceiver(queue2);
         module.verifyNumberQueueReceivers(0, 2);
         module.verifyNumberQueueReceivers(0, "otherQueue", 1);
+        try
+        {
+            module.verifyNumberQueueReceivers(0, "noQueue", 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    
+    public void testVerifyTopicSubscriber() throws Exception
+    {
+        mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        Topic topic1 = manager.createTopic("topic1");
+        Topic topic2 = manager.createTopic("topic2");
+        module.getTopicSession(0).createSubscriber(topic1);
+        module.verifyNumberTopicSubscribers(0, 1);
+        module.verifyNumberTopicSubscribers(0, "topic1", 1);
+        try
+        {
+            module.verifyNumberTopicSubscribers(0, 2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyNumberTopicSubscribers(0, 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyNumberTopicSubscribers(0, "topic1", 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.verifyNumberTopicSubscribers(0, "topic2", 0);
+        module.getTopicSession(0).createSubscriber(topic2);
+        module.verifyNumberTopicSubscribers(0, 2);
+        module.verifyNumberTopicSubscribers(0, "topic2", 1);
+        try
+        {
+            module.verifyNumberTopicSubscribers(0, "noTopic", 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    
+    public void testVerifyDurableTopicSubscriber() throws Exception
+    {
+        mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        module.verifyNumberDurableTopicSubscribers(0, 0);
+        try
+        {
+            module.verifyDurableTopicSubscriberPresent(0, "durableSubscriber");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        Topic topic1 = manager.createTopic("topic1");
+        Topic topic2 = manager.createTopic("topic2");
+        module.verifyNumberDurableTopicSubscribers(0, "topic1", 0);
+        module.getTopicSession(0).createDurableSubscriber(topic1, "durableSubscriber");
+        module.verifyDurableTopicSubscriberPresent(0, "durableSubscriber");
+        module.verifyNumberDurableTopicSubscribers(0, 1);
+        module.verifyNumberDurableTopicSubscribers(0, "topic1", 1);
+        try
+        {
+            module.verifyNumberDurableTopicSubscribers(0, "anotherDurableSubscriber", 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.getTopicSession(0).createDurableSubscriber(topic1, "durableSubscriber");
+        module.verifyDurableTopicSubscriberPresent(0, "durableSubscriber");
+        module.verifyNumberDurableTopicSubscribers(0, 1);
+        module.verifyNumberDurableTopicSubscribers(0, "topic1", 1);
+        module.getTopicSession(0).createDurableSubscriber(topic2, "anotherDurableSubscriber");
+        module.verifyDurableTopicSubscriberPresent(0, "anotherDurableSubscriber");
+        module.verifyNumberDurableTopicSubscribers(0, 2);
+        module.verifyNumberDurableTopicSubscribers(0, "topic1", 1);
+        module.verifyNumberDurableTopicSubscribers(0, "topic2", 1);
+        try
+        {
+            module.verifyNumberDurableTopicSubscribers(0, "topic1", 2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
     }
     
     public void testVerifyQueueBrowser() throws Exception
     {
-        mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
         manager.createQueue("queue");
         module.getQueueSession(0).createBrowser(manager.getQueue("queue"));
@@ -209,11 +508,32 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
+        try
+        {
+            module.verifyNumberQueueBrowsers(0, "queue", 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyNumberQueueBrowsers(0, "otherQueue", 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        manager.createQueue("otherQueue");
+        module.verifyNumberQueueBrowsers(0, "otherQueue", 0);
     }
 
-    public void testVerifySession() throws Exception
+    public void testVerifyQueueSession() throws Exception
     {
-        mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        assertNull(module.getQueueSession(0));
+        mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         assertNotNull(module.getQueueSession(0));
         assertNull(module.getQueueSession(1));
         module.verifyNumberQueueSessions(1);
@@ -226,14 +546,45 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
-        mockFactory.getMockQueueConnection().createQueueSession(false, QueueSession.CLIENT_ACKNOWLEDGE);
+        mockFactory.getMockQueueConnection().createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
         assertNotNull(module.getQueueSession(1));
         module.verifyNumberQueueSessions(2);
     }
     
-    public void testVerifyNumberMessages() throws Exception
+    public void testVerifyTopicSession() throws Exception
     {
-        mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        module.verifyNumberTopicSessions(0);
+        assertNull(module.getTopicSession(0));
+        mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        assertNotNull(module.getTopicSession(0));
+        assertNull(module.getTopicSession(1));
+        module.verifyNumberTopicSessions(1);
+        try
+        {
+            module.verifyNumberTopicSessions(0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyNumberTopicSessions(2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        mockFactory.getMockTopicConnection().createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);
+        assertNotNull(module.getTopicSession(1));
+        module.getTopicSession(2);
+    }
+    
+    public void testVerifyNumberQueueMessages() throws Exception
+    {
+        mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
         manager.createQueue("queue");
         QueueSender sender1 = module.getQueueSession(0).createSender(manager.getQueue("queue"));
@@ -300,9 +651,78 @@ public class JMSTestModuleTest extends TestCase
         }
     }
     
-    public void testVerifyMessageEquals() throws Exception
+    public void testVerifyNumberTopicMessages() throws Exception
     {
-        mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        manager.createTopic("topic");
+        TopicPublisher publisher1 = module.getTopicSession(0).createPublisher(manager.getTopic("topic"));
+        manager.createTopic("otherTopic");
+        TopicPublisher publisher2 = module.getTopicSession(0).createPublisher(manager.getTopic("otherTopic"));
+        TopicPublisher publisher3 = module.getTopicSession(0).createPublisher(module.getTopicSession(0).createTemporaryTopic());
+        TopicSubscriber subscriber = module.getTopicSession(0).createSubscriber(manager.getTopic("otherTopic"));
+        subscriber.setMessageListener(new MessageListener() { public void onMessage(Message message){} });
+        publisher1.publish(module.getTopicSession(0).createTextMessage());
+        publisher2.publish(module.getTopicSession(0).createTextMessage());
+        publisher2.publish(module.getTopicSession(0).createObjectMessage());
+        publisher2.publish(module.getTopicSession(0).createObjectMessage());
+        publisher2.publish(module.getTopicSession(0).createMapMessage());
+        publisher3.publish(module.getTopicSession(0).createMapMessage());
+        publisher3.publish(module.getTopicSession(0).createBytesMessage());
+        module.verifyNumberOfTopicTextMessages(0, 2);
+        module.verifyNumberOfTopicObjectMessages(0, 2);
+        module.verifyNumberOfTopicMapMessages(0, 2);
+        module.verifyNumberOfTopicBytesMessages(0, 1);
+        module.verifyNumberOfTopicStreamMessages(0, 0);
+        module.verifyNumberOfTopicMessages(0, 0);
+        try
+        {
+            module.verifyNumberOfTopicMessages(0, 3);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyNumberOfTopicMapMessages(1, 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.verifyNumberOfCurrentTopicMessages("topic", 1);
+        module.verifyNumberOfReceivedTopicMessages("topic", 1);
+        module.verifyNumberOfCurrentTopicMessages("otherTopic", 0);
+        module.verifyNumberOfReceivedTopicMessages("otherTopic", 4);
+        module.verifyNumberOfCurrentTopicMessages(0, 0, 2);
+        module.verifyNumberOfReceivedTopicMessages(0, 0, 2);
+        module.verifyNumberTemporaryTopics(0, 1);
+        try
+        {
+            module.verifyNumberOfReceivedTopicMessages("topic", 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyNumberOfCurrentQueueMessages(0, 0, 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    
+    public void testVerifyQueueMessageEquals() throws Exception
+    {
+        mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
         manager.createQueue("queue");
         QueueSender sender = module.getQueueSession(0).createSender(manager.getQueue("queue"));
@@ -424,11 +844,143 @@ public class JMSTestModuleTest extends TestCase
         module.verifyReceivedQueueMessageEquals(0, 0, 2, testMessage);
     }
     
-    public void testVerifyClosed() throws Exception
+    public void testVerifyTopicMessageEquals() throws Exception
     {
-        MockQueueSession session1 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
-        MockQueueSession session2 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
-        MockQueueSession session3 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        manager.createTopic("topic");
+        TopicPublisher publisher = module.getTopicSession(0).createPublisher(manager.getTopic("topic"));
+        ObjectMessage message1 = module.getTopicSession(0).createObjectMessage();
+        message1.setObject("testObject");
+        ObjectMessage message2 = module.getTopicSession(0).createObjectMessage();
+        message2.setObject(new Integer(1));
+        BytesMessage message3 = module.getTopicSession(0).createBytesMessage();
+        message3.writeInt(1);
+        message3.writeInt(2);
+        message3.writeInt(3);
+        publisher.publish(message1);
+        publisher.publish(message2);
+        publisher.publish(message3);
+        module.verifyCurrentTopicMessageEquals("topic", 0, new MockObjectMessage("testObject"));
+        module.verifyCurrentTopicMessageEquals("topic", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedTopicMessageEquals("topic", 0, new MockObjectMessage("testObject"));
+        module.verifyReceivedTopicMessageEquals("topic", 1, new MockObjectMessage(new Integer(1)));
+        MockBytesMessage testMessage = new MockBytesMessage();
+        testMessage.writeInt(1);
+        testMessage.writeInt(2);
+        testMessage.writeInt(3);
+        module.verifyCurrentTopicMessageEquals("topic", 2, testMessage);
+        module.verifyReceivedTopicMessageEquals("topic", 2, testMessage);
+        try
+        {
+            module.verifyReceivedTopicMessageEquals("topic", 1, new MockObjectMessage("testObject"));
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyCurrentTopicMessageEquals("topic", 5, testMessage);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        testMessage.writeInt(4);
+        try
+        {
+            module.verifyReceivedTopicMessageEquals("topic", 2, testMessage);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        TopicSubscriber subscriber = module.getTopicSession(0).createSubscriber(manager.getTopic("topic"));
+        subscriber.receive();
+        testMessage = new MockBytesMessage();
+        testMessage.writeInt(1);
+        testMessage.writeInt(2);
+        testMessage.writeInt(3);
+        try
+        {
+            module.verifyCurrentTopicMessageEquals("topic", 0, new MockObjectMessage("testObject"));
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.verifyCurrentTopicMessageEquals("topic", 0, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentTopicMessageEquals("topic", 1, testMessage);      
+        module.verifyReceivedTopicMessageEquals("topic", 0, new MockObjectMessage("testObject"));
+        module.verifyReceivedTopicMessageEquals("topic", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedTopicMessageEquals("topic", 2, testMessage);
+        subscriber.receive();
+        try
+        {
+            module.verifyCurrentTopicMessageEquals("topic", 0, new MockObjectMessage(new Integer(1)));
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.verifyCurrentTopicMessageEquals("topic", 0, testMessage);      
+        module.verifyReceivedTopicMessageEquals("topic", 0, new MockObjectMessage("testObject"));
+        module.verifyReceivedTopicMessageEquals("topic", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedTopicMessageEquals("topic", 2, testMessage);
+        TemporaryTopic tempTopic = module.getTopicSession(0).createTemporaryTopic();
+        publisher = module.getTopicSession(0).createPublisher(tempTopic);
+        publisher.publish(message1);
+        publisher.publish(message2);
+        publisher.publish(message3);
+        module.verifyCurrentTopicMessageEquals(0, 0, 0, new MockObjectMessage("testObject"));
+        module.verifyCurrentTopicMessageEquals(0, 0, 1, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentTopicMessageEquals(0, 0, 2, testMessage);
+        module.verifyReceivedTopicMessageEquals(0, 0, 0, new MockObjectMessage("testObject"));
+        module.verifyReceivedTopicMessageEquals(0, 0, 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedTopicMessageEquals(0, 0, 2, testMessage);
+        try
+        {
+            module.verifyCurrentTopicMessageEquals(0, 0, 0, new MockObjectMessage("TestObject"));
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        subscriber = module.getTopicSession(0).createSubscriber(tempTopic);
+        subscriber.receive();
+        try
+        {
+            module.verifyCurrentTopicMessageEquals(0, 0, 0, new MockObjectMessage("testObject"));
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        module.verifyCurrentTopicMessageEquals(0, 0, 0, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentTopicMessageEquals(0, 0, 1, testMessage);
+        module.verifyReceivedTopicMessageEquals(0, 0, 0, new MockObjectMessage("testObject"));
+        module.verifyReceivedTopicMessageEquals(0, 0, 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedTopicMessageEquals(0, 0, 2, testMessage);
+        subscriber.receive();
+        module.verifyCurrentTopicMessageEquals(0, 0, 0, testMessage);
+        module.verifyReceivedTopicMessageEquals(0, 0, 0, new MockObjectMessage("testObject"));
+        module.verifyReceivedTopicMessageEquals(0, 0, 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedTopicMessageEquals(0, 0, 2, testMessage);
+    }
+    
+    public void testVerifyQueueClosed() throws Exception
+    {
+        MockQueueSession session1 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session2 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session3 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
         Queue queue = manager.createQueue("queue");
         MockQueueSender sender1 = (MockQueueSender)session1.createSender(queue);
@@ -502,11 +1054,98 @@ public class JMSTestModuleTest extends TestCase
         module.verifyAllQueueSendersClosed(1);
     }
     
-    public void testVerifySessionComitted() throws Exception
+    public void testVerifyTopicClosed() throws Exception
     {
-        MockQueueSession session1 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
-        MockQueueSession session2 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
-        MockQueueSession session3 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        MockTopicSession session1 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockTopicSession session2 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockTopicSession session3 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        Topic topic = manager.createTopic("topic");
+        MockTopicPublisher publisher1 = (MockTopicPublisher)session1.createPublisher(topic);
+        MockTopicPublisher publisher2 = (MockTopicPublisher)session2.createPublisher(topic);
+        MockTopicSubscriber subscriber1 = (MockTopicSubscriber)session3.createSubscriber(topic);
+        MockTopicSubscriber subscriber2 = (MockTopicSubscriber)session3.createSubscriber(topic);
+        MockTopicSubscriber durableSubscriber = (MockTopicSubscriber)session3.createDurableSubscriber(topic, "myDurable");
+        publisher1.close();
+        subscriber1.close();
+        module.verifyTopicPublisherClosed(0, "topic", 0);
+        module.verifyTopicSubscriberClosed(2, "topic", 0);
+        module.verifyAllTopicPublishersClosed(2);
+        module.verifyAllDurableTopicSubscribersClosed(0);
+        try
+        {
+            module.verifyAllDurableTopicSubscribersClosed(2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyTopicConnectionClosed();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyTopicSessionClosed(0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyAllTopicSessionsClosed();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyTopicPublisherClosed(1, "topic", 0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyAllTopicPublishersClosed(1);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        mockFactory.getMockTopicConnection().close();
+        module.verifyTopicConnectionClosed();
+        module.verifyAllTopicSessionsClosed();
+        module.verifyDurableTopicSubscriberClosed(2, "myDurable");
+        module.verifyAllTopicSubscribersClosed(0);
+        module.verifyAllTopicSubscribersClosed(1);
+        module.verifyAllTopicSubscribersClosed(2);
+        module.verifyAllTopicPublishersClosed(0);
+        module.verifyAllTopicPublishersClosed(1);
+        module.verifyAllTopicPublishersClosed(2);
+        module.verifyAllDurableTopicSubscribersClosed(0);
+        module.verifyAllDurableTopicSubscribersClosed(1);
+        module.verifyAllDurableTopicSubscribersClosed(2);
+    }
+    
+    public void testVerifyQueueSessionComitted() throws Exception
+    {
+        MockQueueSession session1 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session2 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockQueueSession session3 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         session1.commit();
         session2.rollback();
         module.verifyQueueSessionCommitted(0);
@@ -570,6 +1209,84 @@ public class JMSTestModuleTest extends TestCase
         try
         {
             module.verifyAllQueueSessionsRecovered();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        } 
+    }
+    
+    public void testVerifyTopicSessionComitted() throws Exception
+    {
+        MockTopicSession session1 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockTopicSession session2 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockTopicSession session3 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
+        session1.commit();
+        session2.rollback();
+        module.verifyTopicSessionCommitted(0);
+        module.verifyTopicSessionNotRecovered(0);
+        module.verifyTopicSessionNotRolledBack(0);
+        module.verifyTopicSessionNotCommitted(1);
+        module.verifyTopicSessionRecovered(1);
+        module.verifyTopicSessionRolledBack(1);
+        module.verifyTopicSessionNotCommitted(2);
+        module.verifyTopicSessionNotRecovered(2);
+        module.verifyTopicSessionNotRolledBack(2);
+        try
+        {
+            module.verifyTopicSessionRecovered(0);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyTopicSessionNotRolledBack(1);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyTopicSessionRolledBack(2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyAllTopicSessionsRolledBack();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        session2.commit();
+        session3.commit();
+        module.verifyTopicSessionCommitted(1);
+        module.verifyTopicSessionCommitted(2);
+        module.verifyAllTopicSessionsCommitted();
+        module.verifyAllQueueSessionsCommitted();
+        try
+        {
+            module.verifyTopicSessionNotCommitted(2);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyAllTopicSessionsRecovered();
             fail();
         }
         catch(VerifyFailedException exc)

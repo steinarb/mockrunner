@@ -797,7 +797,7 @@ public class JMSTestModule
         List topicSessions = getTopicSessionList();
         for(int ii = 0; ii < topicSessions.size(); ii++)
         {
-            MockQueueSession currentSession = (MockQueueSession)topicSessions.get(ii);
+            MockTopicSession currentSession = (MockTopicSession)topicSessions.get(ii);
             if(!currentSession.isRolledBack())
             {
                 throw new VerifyFailedException("TopicSession with index " + ii + " is not rolled back.");
@@ -840,6 +840,11 @@ public class JMSTestModule
         {
             throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
         }
+        QueueManager queueManager = getQueueManager();
+        if(null == queueManager.getQueue(queueName))
+        {
+            throw new VerifyFailedException("Queue with name " + queueName + " is not present.");
+        }
         QueueTransmissionManager manager = getQueueTransmissionManager(indexOfSession);
         if(numberOfSenders != manager.getQueueSenderList(queueName).size())
         {
@@ -860,6 +865,11 @@ public class JMSTestModule
         if(null == session)
         {
             throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        QueueManager queueManager = getQueueManager();
+        if(null == queueManager.getQueue(queueName))
+        {
+            throw new VerifyFailedException("Queue with name " + queueName + " is not present.");
         }
         QueueTransmissionManager manager = getQueueTransmissionManager(indexOfSession);
         List senders = manager.getQueueSenderList(queueName);
@@ -933,6 +943,11 @@ public class JMSTestModule
         {
             throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
         }
+        TopicManager topicManager = getTopicManager();
+        if(null == topicManager.getTopic(topicName))
+        {
+            throw new VerifyFailedException("Topic with name " + topicName + " is not present.");
+        }
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
         if(numberOfPublishers != manager.getTopicPublisherList(topicName).size())
         {
@@ -953,6 +968,11 @@ public class JMSTestModule
         if(null == session)
         {
             throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TopicManager topicManager = getTopicManager();
+        if(null == topicManager.getTopic(topicName))
+        {
+            throw new VerifyFailedException("Topic with name " + topicName + " is not present.");
         }
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
         List publishers = manager.getTopicPublisherList(topicName);
@@ -1026,6 +1046,11 @@ public class JMSTestModule
         {
             throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
         }
+        QueueManager queueManager = getQueueManager();
+        if(null == queueManager.getQueue(queueName))
+        {
+            throw new VerifyFailedException("Queue with name " + queueName + " is not present.");
+        }
         QueueTransmissionManager manager = getQueueTransmissionManager(indexOfSession);
         if(numberOfReceivers != manager.getQueueReceiverList(queueName).size())
         {
@@ -1046,6 +1071,11 @@ public class JMSTestModule
         if(null == session)
         {
             throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        QueueManager queueManager = getQueueManager();
+        if(null == queueManager.getQueue(queueName))
+        {
+            throw new VerifyFailedException("Queue with name " + queueName + " is not present.");
         }
         QueueTransmissionManager manager = getQueueTransmissionManager(indexOfSession);
         List receivers = manager.getQueueReceiverList(queueName);
@@ -1119,6 +1149,11 @@ public class JMSTestModule
         {
             throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
         }
+        TopicManager topicManager = getTopicManager();
+        if(null == topicManager.getTopic(topicName))
+        {
+            throw new VerifyFailedException("Topic with name " + topicName + " is not present.");
+        }
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
         if(numberOfSubscribers != manager.getTopicSubscriberList(topicName).size())
         {
@@ -1139,6 +1174,11 @@ public class JMSTestModule
         if(null == session)
         {
             throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TopicManager topicManager = getTopicManager();
+        if(null == topicManager.getTopic(topicName))
+        {
+            throw new VerifyFailedException("Topic with name " + topicName + " is not present.");
         }
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
         List subscribers = manager.getTopicSubscriberList(topicName);
@@ -1212,6 +1252,11 @@ public class JMSTestModule
         {
             throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
         }
+        QueueManager queueManager = getQueueManager();
+        if(null == queueManager.getQueue(queueName))
+        {
+            throw new VerifyFailedException("Queue with name " + queueName + " is not present.");
+        }
         QueueTransmissionManager manager = getQueueTransmissionManager(indexOfSession);
         if(numberOfBrowsers != manager.getQueueBrowserList(queueName).size())
         {
@@ -1232,6 +1277,11 @@ public class JMSTestModule
         if(null == session)
         {
             throw new VerifyFailedException("QueueSession with index " + indexOfSession + " is not present.");
+        }
+        QueueManager queueManager = getQueueManager();
+        if(null == queueManager.getQueue(queueName))
+        {
+            throw new VerifyFailedException("Queue with name " + queueName + " is not present.");
         }
         QueueTransmissionManager manager = getQueueTransmissionManager(indexOfSession);
         List browsers = manager.getQueueBrowserList(queueName);
@@ -1324,6 +1374,11 @@ public class JMSTestModule
         if(null == session)
         {
             throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        TopicManager topicManager = getTopicManager();
+        if(null == topicManager.getTopic(topicName))
+        {
+            throw new VerifyFailedException("Topic with name " + topicName + " is not present.");
         }
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
         if(numberOfSubscribers != manager.getDurableTopicSubscriberMap(topicName).size())
@@ -1575,6 +1630,11 @@ public class JMSTestModule
      */
     public void verifyCurrentQueueMessageEquals(String nameOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
     {
+        QueueManager queueManager = getQueueManager();
+        if(null == queueManager.getQueue(nameOfQueue))
+        {
+            throw new VerifyFailedException("Queue with name " + nameOfQueue + " is not present.");
+        }
         List messageList = getCurrentMessageListFromQueue(nameOfQueue);
         if(null == messageList)
         {
@@ -1598,6 +1658,11 @@ public class JMSTestModule
      */
     public void verifyReceivedQueueMessageEquals(String nameOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
     {
+        QueueManager queueManager = getQueueManager();
+        if(null == queueManager.getQueue(nameOfQueue))
+        {
+            throw new VerifyFailedException("Queue with name " + nameOfQueue + " is not present.");
+        }
         List messageList = getReceivedMessageListFromQueue(nameOfQueue);
         if(null == messageList)
         {
@@ -1667,6 +1732,11 @@ public class JMSTestModule
      */
     public void verifyNumberOfCurrentQueueMessages(String nameOfQueue, int numberOfMessages)
     {
+        QueueManager queueManager = getQueueManager();
+        if(null == queueManager.getQueue(nameOfQueue))
+        {
+            throw new VerifyFailedException("Queue with name " + nameOfQueue + " is not present.");
+        }
         List list = getCurrentMessageListFromQueue(nameOfQueue);
         if(null == list)
         {
@@ -1686,6 +1756,11 @@ public class JMSTestModule
      */
     public void verifyNumberOfReceivedQueueMessages(String nameOfQueue, int numberOfMessages)
     {
+        QueueManager queueManager = getQueueManager();
+        if(null == queueManager.getQueue(nameOfQueue))
+        {
+            throw new VerifyFailedException("Queue with name " + nameOfQueue + " is not present.");
+        }
         List list = getReceivedMessageListFromQueue(nameOfQueue);
         if(null == list)
         {
@@ -1873,6 +1948,11 @@ public class JMSTestModule
      */
     public void verifyCurrentTopicMessageEquals(String nameOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
     {
+        TopicManager topicManager = getTopicManager();
+        if(null == topicManager.getTopic(nameOfTopic))
+        {
+            throw new VerifyFailedException("Topic with name " + nameOfTopic + " is not present.");
+        }
         List messageList = getCurrentMessageListFromTopic(nameOfTopic);
         if(null == messageList)
         {
@@ -1896,6 +1976,11 @@ public class JMSTestModule
      */
     public void verifyReceivedTopicMessageEquals(String nameOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
     {
+        TopicManager topicManager = getTopicManager();
+        if(null == topicManager.getTopic(nameOfTopic))
+        {
+            throw new VerifyFailedException("Topic with name " + nameOfTopic + " is not present.");
+        }
         List messageList = getReceivedMessageListFromTopic(nameOfTopic);
         if(null == messageList)
         {
@@ -1965,6 +2050,11 @@ public class JMSTestModule
      */
     public void verifyNumberOfCurrentTopicMessages(String nameOfTopic, int numberOfMessages)
     {
+        TopicManager topicManager = getTopicManager();
+        if(null == topicManager.getTopic(nameOfTopic))
+        {
+            throw new VerifyFailedException("Topic with name " + nameOfTopic + " is not present.");
+        }
         List list = getCurrentMessageListFromTopic(nameOfTopic);
         if(null == list)
         {
@@ -1984,6 +2074,11 @@ public class JMSTestModule
      */
     public void verifyNumberOfReceivedTopicMessages(String nameOfTopic, int numberOfMessages)
     {
+        TopicManager topicManager = getTopicManager();
+        if(null == topicManager.getTopic(nameOfTopic))
+        {
+            throw new VerifyFailedException("Topic with name " + nameOfTopic + " is not present.");
+        }
         List list = getReceivedMessageListFromTopic(nameOfTopic);
         if(null == list)
         {
@@ -2024,7 +2119,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfReceivedTopicMessages(int indexOfSession, int indexOfTopic, int numberOfMessages)
     {
-        List list = getReceivedMessageListFromTemporaryQueue(indexOfSession, indexOfTopic);
+        List list = getReceivedMessageListFromTemporaryTopic(indexOfSession, indexOfTopic);
         if(null == list)
         {
             throw new VerifyFailedException("Temporary topic with index " + indexOfTopic + " of session with index " + indexOfSession +  " does not exist");
