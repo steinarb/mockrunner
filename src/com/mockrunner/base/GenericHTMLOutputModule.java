@@ -13,6 +13,7 @@ public class GenericHTMLOutputModule extends HTMLOutputModule
     
     public GenericHTMLOutputModule(WebMockObjectFactory factory)
     {
+        super(factory);
         this.factory = factory;
     }
     

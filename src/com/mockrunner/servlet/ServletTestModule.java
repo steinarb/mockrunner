@@ -29,6 +29,7 @@ public class ServletTestModule extends HTMLOutputModule
       
     public ServletTestModule(WebMockObjectFactory mockFactory)
     {
+        super(mockFactory);
         this.mockFactory = mockFactory;
         doChain = false;
         caseSensitive = true;
@@ -207,36 +208,6 @@ public class ServletTestModule extends HTMLOutputModule
     public void setDoChain(boolean doChain)
     {
         this.doChain = doChain;
-    }
-    
-    /**
-     * Adds an empty request parameter. Same as
-     * <code>addRequestParameter(key, "")</code>.
-     * @param key the request key
-     */
-    public void addRequestParameter(String key)
-    {
-        addRequestParameter(key, "");
-    }
-
-    /**
-     * Adds a request parameter.
-     * @param key the request key
-     * @param value the request value
-     */
-    public void addRequestParameter(String key, String value)
-    {
-        mockFactory.getMockRequest().setupAddParameter(key, value);
-    }
-    
-    /**
-     * Adds several request parameters.
-     * @param key the request key
-     * @param values the request values
-     */
-    public void addRequestParameter(String key, String[] values)
-    {
-        mockFactory.getMockRequest().setupAddParameter(key, values);
     }
     
     /**

@@ -31,6 +31,7 @@ public class TagTestModule extends HTMLOutputModule
 
     public TagTestModule(WebMockObjectFactory mockFactory)
     {
+        super(mockFactory);
         this.mockFactory = mockFactory;
         caseSensitive = true;
     }

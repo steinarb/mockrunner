@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionMapping;
 import org.jdom.Element;
 
 import com.mockrunner.base.HTMLOutputModule;
+import com.mockrunner.base.WebTestModule;
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.servlet.ServletTestModule;
@@ -37,46 +38,64 @@ public class HTMLOutputModuleTest extends TestCase
         webfactory = new WebMockObjectFactory();
     }
     
-    public void testActionTestModule()
+    public void testActionTestModuleOutput()
     {
         ActionTestModule module = new ActionTestModule(webfactory);
         module.actionPerform(TestOutputAction.class);
-        doTestAsString(module);
-        doTestAsBufferedReader(module);
-        doTestAsJDOMDocument(module);      
+        doTestOutputAsString(module);
+        doTestOutputAsBufferedReader(module);
+        doTestOutputAsJDOMDocument(module);      
     }
     
-    public void testServletTestModule()
+    public void testActionTestModuleAttributes()
+    {
+        ActionTestModule module = new ActionTestModule(webfactory);
+        doTestAttributes(module);
+    }
+
+    public void testServletTestModuleOutput()
     {
         ServletTestModule module = new ServletTestModule(webfactory);
         module.createServlet(TestOutputServlet.class);
         module.doGet();
-        doTestAsString(module);
-        doTestAsBufferedReader(module);
-        doTestAsJDOMDocument(module);      
+        doTestOutputAsString(module);
+        doTestOutputAsBufferedReader(module);
+        doTestOutputAsJDOMDocument(module);      
     }
     
-    public void testTagTestModule()
+    public void testServletTestModuleAttributes()
+    {
+        ServletTestModule module = new ServletTestModule(webfactory);
+        doTestAttributes(module);
+    }
+    
+    public void testTagTestModuleOutput()
     {
         TagTestModule module = new TagTestModule(webfactory);
         module.createTag(TestOutputTag.class);
         module.doStartTag();
-        doTestAsString(module);
-        doTestAsBufferedReader(module);
-        doTestAsJDOMDocument(module);      
+        doTestOutputAsString(module);
+        doTestOutputAsBufferedReader(module);
+        doTestOutputAsJDOMDocument(module);      
     }
     
-    private void doTestAsString(HTMLOutputModule module)
+    public void testTagTestModuleAttributes()
+    {
+        TagTestModule module = new TagTestModule(webfactory);
+        doTestAttributes(module);
+    }
+    
+    private void doTestOutputAsString(HTMLOutputModule module)
     {
         assertEquals(testHTML, module.getOutput());
     }
     
-    private void doTestAsBufferedReader(HTMLOutputModule module)
+    private void doTestOutputAsBufferedReader(HTMLOutputModule module)
     {
         assertEquals(testHTML, StreamUtil.getReaderAsString(module.getOutputAsBufferedReader()));
     }
     
-    private void doTestAsJDOMDocument(HTMLOutputModule module)
+    private void doTestOutputAsJDOMDocument(HTMLOutputModule module)
     {
         Element root = module.getOutputAsJDOMDocument().getRootElement();
         assertEquals("html", root.getName());
@@ -84,6 +103,16 @@ public class HTMLOutputModuleTest extends TestCase
         assertNotNull(body);
         Element tag = body.getChild("tag");
         assertNotNull(tag);
+    }
+    
+    private void doTestAttributes(WebTestModule module)
+    {
+        module.setSessionAttribute("sessionatt", new Integer(3));
+        module.addRequestParameter("requestparam");
+        module.setRequestAttribute("requestatt", "xyz");
+        assertEquals(new Integer(3), webfactory.getMockSession().getAttribute("sessionatt"));
+        assertEquals("", webfactory.getMockRequest().getParameter("requestparam"));
+        assertEquals("xyz", webfactory.getMockRequest().getAttribute("requestatt"));
     }
     
     public static class TestOutputAction extends Action

@@ -16,6 +16,7 @@ import org.apache.struts.util.MessageResources;
 
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.HTMLOutputTestCase;
+import com.mockrunner.base.WebTestModule;
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.mock.web.MockActionMapping;
 import com.mockrunner.mock.web.MockPageContext;
@@ -59,8 +60,18 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     
     /**
      * Returns the {@link com.mockrunner.struts.ActionTestModule} as 
-     * <code>HTMLOutputModule</code>.
-     * @return the <code>HTMLOutputModule</code>
+     * {@link com.mockrunner.base.WebTestModule}.
+     * @return the {@link com.mockrunner.base.WebTestModule}
+     */
+    protected WebTestModule getWebTestModule()
+    {
+        return actionTestModule;
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.struts.ActionTestModule} as 
+     * {@link com.mockrunner.base.HTMLOutputModule}.
+     * @return the {@link com.mockrunner.base.HTMLOutputModule}
      */
     protected HTMLOutputModule getHTMLOutputModule()
     {
@@ -523,30 +534,6 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     protected Action getLastAction()
     {
         return actionTestModule.getLastAction();
-    }
-
-    /**
-     * Delegates to {@link ActionTestModule#addRequestParameter(String)}
-     */
-    protected void addRequestParameter(String key)
-    {
-        actionTestModule.addRequestParameter(key);
-    }
-
-    /**
-     * Delegates to {@link ActionTestModule#addRequestParameter(String, String)}
-     */
-    protected void addRequestParameter(String key, String value)
-    {
-        actionTestModule.addRequestParameter(key, value);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#addRequestParameter(String, String[])}
-     */
-    protected void addRequestParameter(String key, String[] values)
-    {
-        actionTestModule.addRequestParameter(key, values);
     }
 
     /**

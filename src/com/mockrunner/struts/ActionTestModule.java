@@ -54,6 +54,7 @@ public class ActionTestModule extends HTMLOutputModule
     
     public ActionTestModule(WebMockObjectFactory mockFactory)
     {
+        super(mockFactory);
         this.mockFactory = mockFactory;
         reset = true;
         doPopulate = true;
@@ -852,40 +853,6 @@ public class ActionTestModule extends HTMLOutputModule
     public Action getLastAction()
     {
         return actionObj;
-    }
-
-    /**
-     * Adds an empty request parameter. Same as
-     * <code>addRequestParameter(key, "")</code>.
-     * @param key the request key
-     */
-    public void addRequestParameter(String key)
-    {
-        addRequestParameter(key, "");
-    }
-
-    /**
-     * Adds a request parameter. Request parameters are populated
-     * to the <code>ActionForm</code>. To add parameters for map 
-     * backed properties use the <i>value(property)</i> style.
-     * @param key the request key
-     * @param value the request value
-     */
-    public void addRequestParameter(String key, String value)
-    {
-        mockFactory.getMockRequest().setupAddParameter(key, value);
-    }
-    
-    /**
-     * Adds several request parameters. Request parameters are populated
-     * to the <code>ActionForm</code>. To add parameters for map 
-     * backed properties use the <i>value(property)</i> style.
-     * @param key the request key
-     * @param values the request values
-     */
-    public void addRequestParameter(String key, String[] values)
-    {
-        mockFactory.getMockRequest().setupAddParameter(key, values);
     }
 
     /**

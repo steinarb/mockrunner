@@ -6,7 +6,7 @@ import java.io.BufferedReader;
  * Delegator for {@link HTMLOutputModule}. The corresponding
  * adapters extend this class.
  */
-public abstract class HTMLOutputTestCase extends BaseTestCase
+public abstract class HTMLOutputTestCase extends WebTestCase
 {
     public HTMLOutputTestCase()
     {

@@ -6,6 +6,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.HTMLOutputTestCase;
+import com.mockrunner.base.WebTestModule;
 import com.mockrunner.mock.web.MockPageContext;
 
 /**
@@ -47,8 +48,18 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     
     /**
      * Returns the {@link com.mockrunner.tag.TagTestModule} as 
-     * <code>HTMLOutputModule</code>.
-     * @return the <code>HTMLOutputModule</code>
+     * {@link com.mockrunner.base.WebTestModule}.
+     * @return the {@link com.mockrunner.base.WebTestModule}
+     */
+    protected WebTestModule getWebTestModule()
+    {
+        return tagTestModule;
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.tag.TagTestModule} as 
+     * {@link com.mockrunner.base.HTMLOutputModule}.
+     * @return the {@link com.mockrunner.base.HTMLOutputModule}
      */
     protected HTMLOutputModule getHTMLOutputModule()
     {

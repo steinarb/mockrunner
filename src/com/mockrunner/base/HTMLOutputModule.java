@@ -3,6 +3,7 @@ package com.mockrunner.base;
 import java.io.BufferedReader;
 import java.io.StringReader;
 
+import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.util.XmlUtil;
 
 /**
@@ -12,8 +13,13 @@ import com.mockrunner.util.XmlUtil;
  * in different formats, e.g. as parsed XML
  * documents.
  */
-public abstract class HTMLOutputModule
+public abstract class HTMLOutputModule extends WebTestModule
 {
+    public HTMLOutputModule(WebMockObjectFactory mockFactory)
+    {
+        super(mockFactory);
+    }
+    
     /**
      * Returns the output as a string. Concrete modules implement
      * this method.

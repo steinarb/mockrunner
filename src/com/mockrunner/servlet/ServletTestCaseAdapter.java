@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServlet;
 
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.HTMLOutputTestCase;
+import com.mockrunner.base.WebTestModule;
 
 /**
  * Delegator for {@link ServletTestModule}. You can
@@ -47,8 +48,18 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     
     /**
      * Returns the {@link com.mockrunner.servlet.ServletTestModule} as 
-     * <code>HTMLOutputModule</code>.
-     * @return the <code>HTMLOutputModule</code>
+     * {@link com.mockrunner.base.WebTestModule}.
+     * @return the {@link com.mockrunner.base.WebTestModule}
+     */
+    protected WebTestModule getWebTestModule()
+    {
+        return servletTestModule;
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.servlet.ServletTestModule} as 
+     * {@link com.mockrunner.base.HTMLOutputModule}.
+     * @return the {@link com.mockrunner.base.HTMLOutputModule}
      */
     protected HTMLOutputModule getHTMLOutputModule()
     {
@@ -151,30 +162,6 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     protected void setDoChain(boolean doChain)
     {
         servletTestModule.setDoChain(doChain);
-    }
-    
-    /**
-     * Delegates to {@link ServletTestModule#addRequestParameter(String)}
-     */
-    protected void addRequestParameter(String key)
-    {
-        servletTestModule.addRequestParameter(key);
-    }
-
-    /**
-     * Delegates to {@link ServletTestModule#addRequestParameter(String, String)}
-     */
-    protected void addRequestParameter(String key, String value)
-    {
-        servletTestModule.addRequestParameter(key, value);
-    }
-    
-    /**
-     * Delegates to {@link ServletTestModule#addRequestParameter(String, String[])}
-     */
-    protected void addRequestParameter(String key, String[] values)
-    {
-        servletTestModule.addRequestParameter(key, values);
     }
     
     /**
