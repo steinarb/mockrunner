@@ -16,10 +16,22 @@ import com.mockrunner.tag.NestedBodyTag;
 import com.mockrunner.tag.NestedStandardTag;
 import com.mockrunner.tag.NestedTag;
 
-
+/**
+ * Util class for tag test framework.
+ */
 public class TagUtil
 {
-	public static TagSupport createNestedTagInstance(Class tag, PageContext pageContext, Map attributes)
+    /**
+     * Creates an {@link com.mockrunner.tag.NestedTag} instance wrapping the
+     * specified tag. Returns an instance of {@link com.mockrunner.tag.NestedStandardTag}
+     * resp. {@link com.mockrunner.tag.NestedBodyTag} depending on the
+     * type of specified tag.
+     * @param tag the tag
+     * @param pageContext the corresponding <code>PageContext</code>
+     * @param attributes the attribute map
+     * @return the instance of {@link com.mockrunner.tag.NestedTag}
+     */
+    public static TagSupport createNestedTagInstance(Class tag, PageContext pageContext, Map attributes)
 	{
 		if(null == tag) throw new RuntimeException("tag must not be null");
 		TagSupport tagSupport;
@@ -44,6 +56,14 @@ public class TagUtil
 		return nestedTag;
 	}
 	
+    /**
+     * Populates the specified attributes to the specified tag. Calls the
+     * <code>release</code> method, if <i>doRelease</i> is set to
+     * <code>true</code>.
+     * @param tag the tag
+     * @param attributes the attribute map
+     * @param doRelease should release be called
+     */
 	public static void populateTag(TagSupport tag, Map attributes, boolean doRelease)
 	{
 		if(doRelease) tag.release();
@@ -58,6 +78,9 @@ public class TagUtil
 		}
 	}
 	
+    /**
+     * Handles body evaluation of a tag.
+     */
 	public static void evalBody(List bodyList, PageContext pageContext) throws JspException
 	{
 		for(int ii = 0; ii < bodyList.size(); ii++)
@@ -88,6 +111,9 @@ public class TagUtil
 		}
 	}
     
+    /**
+     * Helper method to dump tags incl. child tags.
+     */
     public static String dumpTag(NestedTag tag, StringBuffer buffer, int level)
     {
         StringUtil.appendTabs(buffer, level);
@@ -98,6 +124,9 @@ public class TagUtil
         return buffer.toString();
     }
     
+    /**
+     * Helper method to dump tags incl. child tags.
+     */
     public static void dumpTagTree(List bodyList, StringBuffer buffer, int level)
     {
         for(int ii = 0; ii < bodyList.size(); ii++)
