@@ -40,7 +40,7 @@ public class ServletTestModule extends HTMLOutputModule
     }
     
     /**
-     * Creates a servlet and initializes it. <i>servletClass</i> must
+     * Creates a servlet and initializes it. <code>servletClass</code> must
      * be of the type <code>HttpServlet</code>, otherwise a
      * <code>RuntimeException</code> will be thrown.
      * Sets the specified servlet as the current servlet and
@@ -58,10 +58,45 @@ public class ServletTestModule extends HTMLOutputModule
         }
         try
         {
-            servlet = (HttpServlet)servletClass.newInstance();
-            servlet.init(mockFactory.getMockServletConfig());
-            mockFactory.getMockFilterChain().setServlet(servlet);
-            return servlet;
+            HttpServlet theServlet = (HttpServlet)servletClass.newInstance();
+            setServlet(theServlet, true);
+            return theServlet;
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
+    /**
+     * Sets the specified servlet as the current servlet without initializing it. 
+     * You have to set the <code>ServletConfig</code> on your own.
+     * Usually you can use 
+     * {@link com.mockrunner.mock.web.WebMockObjectFactory#getMockServletConfig}.
+     * @param servlet the servlet
+     */
+    public void setServlet(HttpServlet servlet)
+    {
+        setServlet(servlet, false);
+    }
+    
+    /**
+     * Sets the specified servlet as the current servlet.
+     * Initializes it, if <code>doInit</code> is <code>true</code>.
+     * @param servlet the servlet
+     * @param doInit should <code>init</code> be called
+     */
+    public void setServlet(HttpServlet servlet, boolean doInit)
+    {
+        try
+        {
+	        this.servlet = servlet;
+	        if(doInit)
+	        {
+	            servlet.init(mockFactory.getMockServletConfig());
+	        }
+	        mockFactory.getMockFilterChain().setServlet(servlet);
         }
         catch (Exception exc)
         {
@@ -81,10 +116,10 @@ public class ServletTestModule extends HTMLOutputModule
     
     /**
      * Creates a filter, initializes it and adds it to the
-     * filter chain. <i>filterClass</i> must be of the type 
+     * filter chain. <code>filterClass</code> must be of the type 
      * <code>Filter</code>, otherwise a <code>RuntimeException</code> 
      * will be thrown. You can loop through the filter chain with
-     * {@link #doFilter}. If you set <i>doChain</i> to
+     * {@link #doFilter}. If you set <code>doChain</code> to
      * <code>true</code> every call of one of the servlet methods 
      * will go through the filter chain before calling the servlet 
      * method.
@@ -102,8 +137,7 @@ public class ServletTestModule extends HTMLOutputModule
         try
         {
             Filter theFilter = (Filter)filterClass.newInstance();
-            theFilter.init(mockFactory.getMockFilterConfig());
-            mockFactory.getMockFilterChain().addFilter(theFilter);
+            addFilter(theFilter, true);
             return theFilter;
         }
         catch (Exception exc)
@@ -114,7 +148,7 @@ public class ServletTestModule extends HTMLOutputModule
     }
     
     /**
-     * Adds the specified filter it to the filter chain without
+     * Adds the specified filter to the filter chain without
      * initializing it. 
      * You have to set the <code>FilterConfig</code> on your own.
      * Usually you can use 
@@ -123,6 +157,29 @@ public class ServletTestModule extends HTMLOutputModule
      */
     public void addFilter(Filter filter)
     {
+        addFilter(filter, false);
+    }
+    
+    /**
+     * Adds the specified filter it to the filter chain. Initializes it,
+     * if <code>doInit</code> is <code>true</code>.
+     * @param filter the filter
+     * @param doInit should <code>init</code> be called
+     */
+    public void addFilter(Filter filter, boolean doInit)
+    {
+        if(doInit)
+        {
+            try
+            {
+                filter.init(mockFactory.getMockFilterConfig());
+            }
+            catch (Exception exc)
+            {
+                exc.printStackTrace();
+                throw new RuntimeException(exc.getMessage());
+            }
+        }
         mockFactory.getMockFilterChain().addFilter(filter);
     }
     

@@ -5,6 +5,7 @@ import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -29,6 +30,36 @@ public class ServletTestModuleTest extends BaseTestCase
     {
         super.setUp();
         module = new ServletTestModule(getWebMockObjectFactory());
+    }
+    
+    public void testServletInitCalls() throws Exception
+    {
+        TestServlet servlet = (TestServlet)module.createServlet(TestServlet.class);
+        assertTrue(servlet.wasInitCalled());
+        servlet = new TestServlet();
+        module.setServlet(servlet);
+        assertFalse(servlet.wasInitCalled());
+        servlet = new TestServlet();
+        module.setServlet(servlet, false);
+        assertFalse(servlet.wasInitCalled());
+        servlet = new TestServlet();
+        module.setServlet(servlet, true);
+        assertTrue(servlet.wasInitCalled());
+    }
+    
+    public void testFilterInitCalls() throws Exception
+    {
+        TestFilter filter1 = (TestFilter)module.createFilter(TestFilter.class);
+        assertTrue(filter1.wasInitCalled());
+        TestFilter filter2 = new TestFilter();
+        module.addFilter(filter2);
+        assertFalse(filter2.wasInitCalled());
+        TestFilter filter3 = new TestFilter();
+        module.addFilter(filter3, false);
+        assertFalse(filter3.wasInitCalled());
+        TestFilter filter4 = new TestFilter();
+        module.addFilter(filter4, true);
+        assertTrue(filter4.wasInitCalled());
     }
     
     public void testCaseSensitive() throws Exception
@@ -79,7 +110,8 @@ public class ServletTestModuleTest extends BaseTestCase
     
     public void testFilterChain()
     {
-        TestServlet servlet = (TestServlet)module.createServlet(TestServlet.class);
+        module.setServlet(new TestServlet(), true);
+        TestServlet servlet = (TestServlet)module.getServlet();
         TestFilter filter1 = (TestFilter)module.createFilter(TestFilter.class);
         TestFilter filter2 = (TestFilter)module.createFilter(TestFilter.class);
         TestFilter filter3 = (TestFilter)module.createFilter(TestFilter.class);
@@ -99,6 +131,26 @@ public class ServletTestModuleTest extends BaseTestCase
         assertTrue(getWebMockObjectFactory().getMockFilterChain() == filter1.getLastFilterChain());
         assertTrue(getWebMockObjectFactory().getMockFilterChain() == filter2.getLastFilterChain());
         assertTrue(getWebMockObjectFactory().getMockFilterChain() == filter3.getLastFilterChain());
+    }
+    
+    public void testFilterChainWithRelease()
+    {
+        TestServlet servlet = (TestServlet)module.createServlet(TestServlet.class);
+        TestFilter filter = new TestFilter();
+        module.setDoChain(true);
+        module.addFilter(filter, true);
+        module.doPost();
+        assertTrue(servlet.wasInitCalled());
+        assertTrue(servlet.wasDoPostCalled());
+        assertTrue(filter.wasInitCalled());
+        assertTrue(filter.wasDoFilterCalled());
+        servlet.reset();
+        filter.reset();
+        module.releaseFilters();
+        module.doPost();
+        assertTrue(servlet.wasDoPostCalled());
+        assertFalse(filter.wasInitCalled());
+        assertFalse(filter.wasDoFilterCalled());
     }
     
     public static class TestFilter implements Filter
@@ -138,10 +190,18 @@ public class ServletTestModuleTest extends BaseTestCase
         {
             return lastChain;
         }
+        
+        public void reset()
+        {
+            initCalled  = false;
+            doFilterCalled  = false;
+            lastChain = null;
+        }
     }
     
     public static class TestServlet extends HttpServlet
     {
+        private boolean initCalled = false;
         private boolean doGetCalled = false;
         private boolean doPostCalled = false;
         private boolean doDeleteCalled = false;
@@ -149,6 +209,11 @@ public class ServletTestModuleTest extends BaseTestCase
         private boolean doPutCalled = false;
         private boolean doTraceCalled = false;
         private boolean doHeadCalled = false;
+        
+        public void init(ServletConfig config) throws ServletException
+        {
+            initCalled = true;
+        }
     
         protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
         {
@@ -184,6 +249,11 @@ public class ServletTestModuleTest extends BaseTestCase
         {
             doHeadCalled = true;
         }
+        
+        public boolean wasInitCalled()
+        {
+            return initCalled;
+        }
     
         public boolean wasDoDeleteCalled()
         {
@@ -218,6 +288,18 @@ public class ServletTestModuleTest extends BaseTestCase
         public boolean wasDoHeadCalled()
         {
             return doHeadCalled;
+        }
+        
+        public void reset()
+        {
+            initCalled = false;
+            doGetCalled = false;
+            doPostCalled = false;
+            doDeleteCalled = false;
+            doOptionsCalled = false;
+            doPutCalled = false;
+            doTraceCalled = false;
+            doHeadCalled = false;
         }
     }
 }
