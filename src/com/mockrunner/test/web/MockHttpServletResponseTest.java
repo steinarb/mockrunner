@@ -8,9 +8,16 @@ import junit.framework.TestCase;
 
 public class MockHttpServletResponseTest extends TestCase
 {
+    private MockHttpServletResponse response;
+    
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        response = new MockHttpServletResponse();
+    }
+    
     public void testHeaders()
     {
-        MockHttpServletResponse response = new MockHttpServletResponse();
         response.addHeader("testHeader", "xyz");
         response.addHeader("testHeader", "abc");
         assertTrue(response.getHeaderList("testHeader").size() == 2);
@@ -28,11 +35,17 @@ public class MockHttpServletResponseTest extends TestCase
     
     public void testOutputStreams() throws IOException
     {
-        MockHttpServletResponse response = new MockHttpServletResponse();
         response.getOutputStream().print("test");
         response.getWriter().print(true);
         response.getWriter().print("test");
         response.flushBuffer();
         assertEquals("testtruetest", response.getOutputStreamContent());
+    }
+    
+    public void testGetSetContentType() throws IOException
+    {
+        assertNull(response.getContentType());
+        response.setContentType("myType");
+        assertEquals("myType", response.getContentType());
     }
 }
