@@ -1685,7 +1685,6 @@ public class MockResultSet implements ResultSet, Cloneable
     public void updateBlob(String columnName, Blob blob) throws SQLException
     {
         updateObject(columnName, blob);
-
     }
 
     public void updateClob(int columnIndex, Clob clob) throws SQLException
