@@ -208,4 +208,17 @@ public class ArrayUtilTest extends TestCase
         assertFalse(myArray == myCopy);
         assertTrue(myArray[0] == myCopy[0]);
     }
+    
+    public void testEnsureUnique()
+    {
+        String[] testArray = new String[] {"test1", "test2"};
+        ArrayUtil.ensureUnique(testArray);
+        assertTrue(Arrays.equals(new String[] {"test1", "test2"}, testArray));
+        testArray = new String[] {"test", "test", "xyz"};
+        ArrayUtil.ensureUnique(testArray);
+        assertTrue(Arrays.equals(new String[] {"test1", "test2", "xyz"}, testArray));
+        testArray = new String[] {"x", "y", "z", "z", "x"};
+        ArrayUtil.ensureUnique(testArray);
+        assertTrue(Arrays.equals(new String[] {"x1", "y", "z1", "z2", "x2"}, testArray));
+    }
 }

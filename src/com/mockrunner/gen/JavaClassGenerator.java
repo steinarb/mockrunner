@@ -171,9 +171,10 @@ public class JavaClassGenerator
         {
             newNames[ii] = ClassUtil.getArgumentName(arguments[ii]);
         }
+        ArrayUtil.ensureUnique(newNames);
         return newNames;
     }
-    
+
     private void appendImportBlocks(JavaLineAssembler assembler)
     {
         List importBlocks = processImports();

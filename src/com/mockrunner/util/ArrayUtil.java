@@ -2,7 +2,10 @@ package com.mockrunner.util;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Util class for arrays
@@ -308,5 +311,59 @@ public class ArrayUtil
             if(yy == bytes.length) return ii;
         }
         return -1;
+    }
+    
+    /**
+     * Ensures that each entry in the specified string array
+     * is unique by adding a number to duplicate entries.
+     * I.e. if the string <code>"entry"</code> occurs three
+     * times, the three entries will be renamed to <code>"entry1"</code>,
+     * <code>"entry2"</code> and <code>"entry3"</code>.
+     * @param values the array of strings
+     */
+    public static void ensureUnique(String[] values)
+    {
+        Map nameMap = collectOccurences(values);
+        renameDuplicates(values, nameMap);
+    }
+    
+    private static void renameDuplicates(String[] names, Map nameMap)
+    {
+        Iterator iterator = nameMap.keySet().iterator();
+        while(iterator.hasNext())
+        {
+            String nextName = (String)iterator.next();
+            Integer nextValue = (Integer)nameMap.get(nextName);
+            if(nextValue.intValue() > 1)
+            {
+                int number = 1;
+                for(int ii = 0; ii < names.length; ii++)
+                {
+                    if(names[ii].equals(nextName))
+                    {
+                        names[ii] = nextName + number;
+                        number++;
+                    }
+                }
+            }
+        }
+    }
+
+    private static Map collectOccurences(String[] names)
+    {
+        Map nameMap = new HashMap();
+        for(int ii = 0; ii < names.length; ii++)
+        {
+            Integer currentValue = (Integer)nameMap.get(names[ii]);            
+            if(null == currentValue)
+            {
+                nameMap.put(names[ii], new Integer(1));
+            }
+            else
+            {
+                nameMap.put(names[ii], new Integer(currentValue.intValue() + 1));
+            }
+        }
+        return nameMap;
     }
 }
