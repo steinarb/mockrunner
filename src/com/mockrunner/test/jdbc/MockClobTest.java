@@ -17,7 +17,7 @@ public class MockClobTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        clob = new MockClob("This is a Test Clob");
+        clob = new MockClob("This is a Test Clob");   
     }
 
     public void testGetData() throws Exception

@@ -16,7 +16,7 @@ public class MockArrayTest extends TestCase
     {
         super.setUp();
         stringArray = new MockArray(new String[] {"This", "is", "a", "test", "array"});
-        byteArray = new MockArray(new byte[]{1, 2, 3, 4, 5, 6, 7});
+        byteArray = new MockArray(new byte[]{1, 2, 3, 4, 5, 6, 7}); 
     }
 
     public void testGetArray() throws Exception

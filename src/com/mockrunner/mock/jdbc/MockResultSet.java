@@ -433,7 +433,11 @@ public class MockResultSet implements ResultSet, Cloneable
     /**
      * Returns if the row with the specified number is
      * equal to the specified data. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
-     * The first row has the number 1.
+     * The first row has the number 1. If the compared parameters are not of
+     * the same type (and cannot be equal according to the 
+     * {@link com.mockrunner.util.ParameterUtil#compareParameter} method) they
+     * will be converted to a string with the <code>toString()</code> method before
+     * comparison.
      * @param number the number of the row
      * @param rowData the row data
      * @return <code>true</code> if the row is equal to the specified data,
@@ -446,7 +450,14 @@ public class MockResultSet implements ResultSet, Cloneable
         if(currentRow.size() != rowData.size()) return false;
         for(int ii = 0; ii < currentRow.size(); ii++)
         {
-            if(!ParameterUtil.compareParameter(currentRow.get(ii), rowData.get(ii)))
+            Object source = currentRow.get(ii);
+            Object target = rowData.get(ii);
+            if(!source.getClass().isAssignableFrom(target.getClass()) && !target.getClass().isAssignableFrom(source.getClass()))
+            {
+                source = source.toString();
+                target = target.toString();
+            }
+            if(!ParameterUtil.compareParameter(source, target))
             {
                 return false;
             }
@@ -457,7 +468,11 @@ public class MockResultSet implements ResultSet, Cloneable
     /**
      * Returns if the column with the specified number is
      * equal to the specified data. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
-     * The first column has the number 1.
+     * The first column has the number 1. If the compared parameters are not of
+     * the same type (and cannot be equal according to the 
+     * {@link com.mockrunner.util.ParameterUtil#compareParameter} method) they
+     * will be converted to a string with the <code>toString()</code> method before
+     * comparison.
      * @param number the number of the column
      * @param columnData the column data
      * @return <code>true</code> if the column is equal to the specified data,
@@ -470,7 +485,14 @@ public class MockResultSet implements ResultSet, Cloneable
         if(currentColumn.size() != columnData.size()) return false;
         for(int ii = 0; ii < currentColumn.size(); ii++)
         {
-            if(!ParameterUtil.compareParameter(currentColumn.get(ii), columnData.get(ii)))
+            Object source = currentColumn.get(ii);
+            Object target = columnData.get(ii);
+            if(!source.getClass().isAssignableFrom(target.getClass()) && !target.getClass().isAssignableFrom(source.getClass()))
+            {
+                source = source.toString();
+                target = target.toString();
+            }
+            if(!ParameterUtil.compareParameter(source, target))
             {
                 return false;
             }
@@ -481,7 +503,11 @@ public class MockResultSet implements ResultSet, Cloneable
     /**
      * Returns if the column with the specified name is
      * equal to the specified data. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
-     * The first column has the number 1.
+     * The first column has the number 1. If the compared parameters are not of
+     * the same type (and cannot be equal according to the 
+     * {@link com.mockrunner.util.ParameterUtil#compareParameter} method) they
+     * will be converted to a string with the <code>toString()</code> method before
+     * comparison.
      * @param number the number of the column
      * @param columnData the column data
      * @return <code>true</code> if the column is equal to the specified data,
@@ -494,7 +520,14 @@ public class MockResultSet implements ResultSet, Cloneable
         if(currentColumn.size() != columnData.size()) return false;
         for(int ii = 0; ii < currentColumn.size(); ii++)
         {
-            if(!ParameterUtil.compareParameter(currentColumn.get(ii), columnData.get(ii)))
+            Object source = currentColumn.get(ii);
+            Object target = columnData.get(ii);
+            if(!source.getClass().isAssignableFrom(target.getClass()) && !target.getClass().isAssignableFrom(source.getClass()))
+            {
+                source = source.toString();
+                target = target.toString();
+            }
+            if(!ParameterUtil.compareParameter(source, target))
             {
                 return false;
             }
@@ -504,7 +537,11 @@ public class MockResultSet implements ResultSet, Cloneable
     
     /**
      * Returns if the specified <code>ResultSet</code> is equal to
-     * this <code>ResultSet</code>.
+     * this <code>ResultSet</code>. If the compared parameters are not of
+     * the same type (and cannot be equal according to the 
+     * {@link com.mockrunner.util.ParameterUtil#compareParameter} method) they
+     * will be converted to a string with the <code>toString()</code> method before
+     * comparison.
      * @return <code>true</code> if the two <code>ResultSet</code> objects are equal,
      *         <code>false</code> otherwise
      */
@@ -539,7 +576,14 @@ public class MockResultSet implements ResultSet, Cloneable
             if(thisList.size() != otherList.size()) return false;
             for(int ii = 0; ii < thisList.size(); ii++)
             {
-                if(!ParameterUtil.compareParameter(thisList.get(ii), otherList.get(ii)))
+                Object source = thisList.get(ii);
+                Object target = otherList.get(ii);
+                if(!source.getClass().isAssignableFrom(target.getClass()) && !target.getClass().isAssignableFrom(source.getClass()))
+                {
+                    source = source.toString();
+                    target = target.toString();
+                }
+                if(!ParameterUtil.compareParameter(source, target))
                 {
                     return false;
                 }    

@@ -80,4 +80,15 @@ public class MockArray implements Array
     {
         return getResultSet();
     }
+    
+    public String toString()
+    {
+        StringBuffer buffer = new StringBuffer("Array data: ");
+        Object[] arrayData = ArrayUtil.convertToObjectArray(array);
+        for(int ii = 0; ii < arrayData.length; ii++)
+        {
+            buffer.append("[" + arrayData[ii].toString() + "] ");
+        }
+        return buffer.toString();
+    }
 }

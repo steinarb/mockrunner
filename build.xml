@@ -63,6 +63,7 @@
            		 windowtitle="Mockrunner">
 
 			    <fileset dir="${src}" defaultexcludes="yes">
+			    	<exclude name="com/mockrunner/**/*.txt" />
 			    	<include name="com/mockrunner/**" />
 			    	<exclude name="com/mockrunner/test/**" />
 			    	<exclude name="com/mockrunner/example/ejb/interfaces/**" />

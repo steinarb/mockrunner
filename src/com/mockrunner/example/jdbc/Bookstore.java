@@ -35,21 +35,23 @@ public class Bookstore
                     query.append(" or ");
                 }
             }
-            query.append(") and quantity >= 1");
+            query.append(")");
             statement = connection.createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
             result = statement.executeQuery(query.toString());
             while(result.next())
             {
                 int quantity = result.getInt("quantity");
-                result.updateInt("quantity", quantity - 1);
-                result.updateRow();
-                resultList.add(result.getString("isbn"));
+                if(quantity > 0)
+                {
+                    result.updateInt("quantity", quantity - 1);
+                    result.updateRow();
+                    resultList.add(result.getString("isbn"));
+                }
             }
             connection.commit();
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
             connection.rollback();
         }
         if(null != result) result.close();

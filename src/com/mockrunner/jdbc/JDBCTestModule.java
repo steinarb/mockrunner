@@ -1057,7 +1057,7 @@ public class JDBCTestModule
     
     /**
      * Verifies that a row of a <code>ResultSet</code> is equal to the
-     * entries in the specified <code>List</code>. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * entries in the specified <code>List</code>. Uses {@link com.mockrunner.mock.jdbc.MockResultSet#isRowEqual}.
      * You can verify the data of returned <code>ResultSet</code> objects if
      * the tested JDBC code makes updates.
      * @param resultSet the <code>ResultSet</code>
@@ -1084,7 +1084,7 @@ public class JDBCTestModule
     
     /**
      * Verifies that a row of a <code>ResultSet</code> is equal to the
-     * entries in the specified array. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * entries in the specified array. Uses {@link com.mockrunner.mock.jdbc.MockResultSet#isRowEqual}.
      * You can verify the data of returned <code>ResultSet</code> objects if
      * the tested JDBC code makes updates.
      * @param resultSet the <code>ResultSet</code>
@@ -1100,7 +1100,7 @@ public class JDBCTestModule
     
     /**
      * Verifies that a row of a <code>ResultSet</code> is equal to the
-     * entries in the specified <code>List</code>. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * entries in the specified <code>List</code>. Uses {@link com.mockrunner.mock.jdbc.MockResultSet#isRowEqual}.
      * You can verify the data of returned <code>ResultSet</code> objects if
      * the tested JDBC code makes updates.
      * @param id the id of the <code>ResultSet</code>
@@ -1120,7 +1120,7 @@ public class JDBCTestModule
 
     /**
      * Verifies that a row of a <code>ResultSet</code> is equal to the
-     * entries in the specified array. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * entries in the specified array. Uses {@link com.mockrunner.mock.jdbc.MockResultSet#isRowEqual}.
      * You can verify the data of returned <code>ResultSet</code> objects if
      * the tested JDBC code makes updates.
      * @param id the id of the <code>ResultSet</code>
@@ -1136,7 +1136,7 @@ public class JDBCTestModule
     
     /**
      * Verifies that a column of a <code>ResultSet</code> is equal to the
-     * entries in the specified <code>List</code>. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * entries in the specified <code>List</code>. Uses {@link com.mockrunner.mock.jdbc.MockResultSet#isColumnEqual(int, List)}.
      * You can verify the data of returned <code>ResultSet</code> objects if
      * the tested JDBC code makes updates.
      * @param resultSet the <code>ResultSet</code>
@@ -1163,7 +1163,7 @@ public class JDBCTestModule
 
     /**
      * Verifies that a column of a <code>ResultSet</code> is equal to the
-     * entries in the specified array. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * entries in the specified array. Uses {@link com.mockrunner.mock.jdbc.MockResultSet#isColumnEqual(int, List)}.
      * You can verify the data of returned <code>ResultSet</code> objects if
      * the tested JDBC code makes updates.
      * @param resultSet the <code>ResultSet</code>
@@ -1179,7 +1179,7 @@ public class JDBCTestModule
 
     /**
      * Verifies that a column of a <code>ResultSet</code> is equal to the
-     * entries in the specified <code>List</code>. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * entries in the specified <code>List</code>. Uses {@link com.mockrunner.mock.jdbc.MockResultSet#isColumnEqual(int, List)}.
      * You can verify the data of returned <code>ResultSet</code> objects if
      * the tested JDBC code makes updates.
      * @param id the id of the <code>ResultSet</code>
@@ -1199,7 +1199,7 @@ public class JDBCTestModule
 
     /**
      * Verifies that a column of a <code>ResultSet</code> is equal to the
-     * entries in the specified array. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * entries in the specified array. Uses {@link com.mockrunner.mock.jdbc.MockResultSet#isColumnEqual(int, List)}.
      * You can verify the data of returned <code>ResultSet</code> objects if
      * the tested JDBC code makes updates.
      * @param id the id of the <code>ResultSet</code>
@@ -1215,7 +1215,7 @@ public class JDBCTestModule
     
     /**
      * Verifies that a column of a <code>ResultSet</code> is equal to the
-     * entries in the specified <code>List</code>. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * entries in the specified <code>List</code>. Uses {@link com.mockrunner.mock.jdbc.MockResultSet#isColumnEqual(String, List)}.
      * You can verify the data of returned <code>ResultSet</code> objects if
      * the tested JDBC code makes updates.
      * @param resultSet the <code>ResultSet</code>
@@ -1242,7 +1242,7 @@ public class JDBCTestModule
 
     /**
      * Verifies that a column of a <code>ResultSet</code> is equal to the
-     * entries in the specified array. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * entries in the specified array. Uses {@link com.mockrunner.mock.jdbc.MockResultSet#isColumnEqual(String, List)}.
      * You can verify the data of returned <code>ResultSet</code> objects if
      * the tested JDBC code makes updates.
      * @param resultSet the <code>ResultSet</code>
@@ -1258,7 +1258,7 @@ public class JDBCTestModule
 
     /**
      * Verifies that a column of a <code>ResultSet</code> is equal to the
-     * entries in the specified <code>List</code>. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * entries in the specified <code>List</code>. Uses {@link com.mockrunner.mock.jdbc.MockResultSet#isColumnEqual(String, List)}.
      * You can verify the data of returned <code>ResultSet</code> objects if
      * the tested JDBC code makes updates.
      * @param id the id of the <code>ResultSet</code>
@@ -1278,7 +1278,7 @@ public class JDBCTestModule
 
     /**
      * Verifies that a column of a <code>ResultSet</code> is equal to the
-     * entries in the specified array. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * entries in the specified array. Uses {@link com.mockrunner.mock.jdbc.MockResultSet#isColumnEqual(String, List)}.
      * You can verify the data of returned <code>ResultSet</code> objects if
      * the tested JDBC code makes updates.
      * @param id the id of the <code>ResultSet</code>
@@ -1294,7 +1294,7 @@ public class JDBCTestModule
     
     /**
      * Verifies that a <code>ResultSet</code> is equal to another one.
-     * Compares all the rows with {@link com.mockrunner.util.ParameterUtil#compareParameter}.
+     * Compares all the rows with {@link com.mockrunner.mock.jdbc.MockResultSet#isEqual}.
      * @param source the source <code>ResultSet</code>
      * @param target the target <code>ResultSet</code>
      * @throws VerifyFailedException if verification fails
