@@ -30,6 +30,7 @@ public class PayActionTest extends JDBCTestCaseAdapter
         verifySQLStatementExecuted("select name");
         verifySQLStatementNotExecuted("delete from openbills");
         verifySQLStatementNotExecuted("insert into paidbills");
+        verifyAllResultSetsClosed();
         verifyAllStatementsClosed();
         verifyConnectionClosed();
     }

@@ -20,7 +20,7 @@ public class MockResultSetTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        resultSet = new MockResultSet();
+        resultSet = new MockResultSet("");
     }
 
     public void testAddRow() throws Exception

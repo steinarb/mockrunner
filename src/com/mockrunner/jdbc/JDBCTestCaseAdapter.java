@@ -2,12 +2,12 @@ package com.mockrunner.jdbc;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
-import java.util.Collection;
 import java.util.List;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
+import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
 
@@ -113,9 +113,33 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JDBCTestModule#getExecutedSQLStatements}
      */
-    protected Collection getExecutedSQLStatements()
+    protected List getExecutedSQLStatements()
     {
         return jdbcTestModule.getExecutedSQLStatements();
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getReturnedResultSet}
+     */
+    protected MockResultSet getReturnedResultSet(String id)
+    {
+        return jdbcTestModule.getReturnedResultSet(id);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getReturnedResultSets(String)}
+     */    
+    protected List getReturnedResultSets(String id)
+    {
+        return jdbcTestModule.getReturnedResultSets(id);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getReturnedResultSets}
+     */
+    protected List getReturnedResultSets()
+    {
+        return jdbcTestModule.getReturnedResultSets();
     }
     
     /**
@@ -308,6 +332,22 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     protected void verifyAllStatementsClosed()
     {
         jdbcTestModule.verifyAllStatementsClosed();
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetClosed}
+     */
+    protected void verifyResultSetClosed(String id)
+    {
+        jdbcTestModule.verifyResultSetClosed(id);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyAllResultSetsClosed}
+     */
+    protected void verifyAllResultSetsClosed()
+    {
+        jdbcTestModule.verifyAllResultSetsClosed();
     }
     
     /**

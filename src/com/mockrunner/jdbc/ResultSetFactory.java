@@ -9,5 +9,5 @@ import com.mockrunner.mock.jdbc.MockResultSet;
  */
 public interface ResultSetFactory
 {
-    public MockResultSet create();
+    public MockResultSet create(String id);
 }

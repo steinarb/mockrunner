@@ -19,6 +19,12 @@ import com.mockrunner.util.SearchUtil;
  * <code>execute</code> method of a statement, if the current
  * SQL string matches.
  * Furthermore it can be used to create <code>ResultSet</code> objects.
+ * Please note that the <code>ResultSet</code> objects you create and
+ * prepare with this handler are cloned when executing statements.
+ * So you cannot rely on object identity. You have to use the id
+ * of the <code>ResultSet</code> to identify it.
+ * The <code>ResultSet</code> objects returned by {@link #getReturnedResultSets}
+ * are actually the instances the excuted statements returned.
  */
 public abstract class AbstractResultSetHandler
 {
@@ -31,14 +37,26 @@ public abstract class AbstractResultSetHandler
     private Map returnsResultSetMap = new HashMap();
     private Set throwsSQLException = new HashSet();
     private Set executedStatements = new HashSet();
+    private Set returnedResultSets = new HashSet();
     
     /**
-     * Returns a new <code>ResultSet</code>.
+     * Creates a new <code>ResultSet</code> with a
+     * random id.
      * @return the new <code>ResultSet</code>
      */
     public MockResultSet createResultSet()
     {
-        return new MockResultSet();
+        return new MockResultSet(String.valueOf(Math.random()));
+    }
+    
+    /**
+     * Creates a new <code>ResultSet</code> with the specified id.
+     * @param id the id
+     * @return the new <code>ResultSet</code>
+     */
+    public MockResultSet createResultSet(String id)
+    {
+        return new MockResultSet(id);
     }
     
     /**
@@ -46,11 +64,27 @@ public abstract class AbstractResultSetHandler
      * the specified factory. Currently there's only
      * the {@link FileResultSetFactory} to create <code>ResultSet</code>
      * objects based on CSV files but you can implement your own factories.
+     * @param factory the {@link ResultSetFactory}
      * @return the new <code>ResultSet</code>
      */
     public MockResultSet createResultSet(ResultSetFactory factory)
     {
-        return factory.create();
+        return factory.create(String.valueOf(Math.random()));
+    }
+    
+    /**
+     * Returns a new <code>ResultSet</code> created by
+     * the specified factory. Currently there's only
+     * the {@link FileResultSetFactory} to create <code>ResultSet</code>
+     * objects based on CSV files but you can implement your own factories.
+     * Uses a random id.
+     * @param id the id
+     * @param factory the {@link ResultSetFactory}
+     * @return the new <code>ResultSet</code>
+     */
+    public MockResultSet createResultSet(String id, ResultSetFactory factory)
+    {
+        return factory.create(id);
     }
     
     /**
@@ -90,12 +124,33 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
+     * Collects all <code>ResultSet</code> objects that were returned by
+     * a <code>Statement</code>, <code>PreparedStatement</code> or
+     * <code>CallableStatement</code>.
+     * @param resultSet the <code>ResultSet</code>
+     */
+    public void addReturnedResultSet(MockResultSet resultSet)
+    {
+        if(null == resultSet) return;
+        returnedResultSets.add(resultSet);
+    }
+    
+    /**
      * Returns the <code>Collection</code> of all executed SQL strings.
      * @param the <code>Collection</code> of executed SQL strings
      */
     public Collection getExecutedStatements()
     {
         return Collections.unmodifiableCollection(executedStatements);
+    }
+    
+    /**
+     * Returns the <code>Collection</code> of all returned <code>ResultSet</code> objects.
+     * @param the <code>Collection</code> of returned <code>ResultSet</code> objects
+     */
+    public Collection getReturnedResultSets()
+    {
+        return Collections.unmodifiableCollection(returnedResultSets);
     }
     
     /**

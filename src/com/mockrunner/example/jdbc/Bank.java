@@ -16,7 +16,7 @@ import java.sql.Statement;
  * 
  * <code>create table account(id int not null primary key,balance int not null)</code>.
  * Check out {@link com.mockrunner.example.servlet.LogoutServletTest} to see how to test this class.
- **/
+ */
 public class Bank
 {
     private String dbURL;
@@ -40,25 +40,39 @@ public class Bank
     
     public void transfer(int sourceId, int targetId, int amount) throws SQLException
     {
-        Statement statement = connection.createStatement();
-        ResultSet result = statement.executeQuery("select balance from account where id=" + sourceId);
-        result.next();
-        int balance = result.getInt(1);
-        result.close();
-        statement.close();
-        if(balance < amount)
+        
+        try
+        {
+            Statement statement = connection.createStatement();
+            ResultSet result = statement.executeQuery("select balance from account where id=" + sourceId);
+            if(!result.next())
+            {
+                result.close();
+                statement.close();
+                connection.rollback();
+                return;
+            }
+            int balance = result.getInt(1);
+            result.close();
+            statement.close();
+            if(balance < amount)
+            {
+                connection.rollback();
+                return;
+            }
+            PreparedStatement preparedStatment = connection.prepareStatement("update account set balance=balance+? where id=?");
+            preparedStatment.setInt(1, -amount);
+            preparedStatment.setInt(2, sourceId);
+            preparedStatment.executeUpdate();
+            preparedStatment.setInt(1, amount);
+            preparedStatment.setInt(2, targetId);
+            preparedStatment.executeUpdate();
+            connection.commit();
+            preparedStatment.close();
+        }
+        catch(SQLException exc)
         {
             connection.rollback();
-            return;
         }
-        PreparedStatement preparedStatment = connection.prepareStatement("update account set balance=balance+? where id=?");
-        preparedStatment.setInt(1, -amount);
-        preparedStatment.setInt(2, sourceId);
-        preparedStatment.executeUpdate();
-        preparedStatment.setInt(1, amount);
-        preparedStatment.setInt(2, targetId);
-        preparedStatment.executeUpdate();
-        connection.commit();
-        preparedStatment.close();
     }
 }

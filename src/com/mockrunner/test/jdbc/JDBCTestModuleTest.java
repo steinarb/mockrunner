@@ -16,6 +16,7 @@ import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
+import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockStatement;
 
 public class JDBCTestModuleTest extends TestCase
@@ -292,6 +293,84 @@ public class JDBCTestModuleTest extends TestCase
         module.verifySQLStatementNotExecuted("call");
         module.setCaseSensitive(false);
         module.verifySQLStatementExecuted("{CALL getData(?, ?, ?, ?)}");
+    }
+    
+    public void testReturnedResultSetsClosed() throws Exception
+    {
+        prepareStatements();
+        preparePreparedStatements();
+        prepareCallableStatements();
+        MockResultSet resultSet1 = module.getStatementResultSetHandler().createResultSet("1");
+        MockResultSet resultSet2 = module.getStatementResultSetHandler().createResultSet("2");
+        MockResultSet resultSet3 = module.getStatementResultSetHandler().createResultSet("3");
+        MockResultSet resultSet4 = module.getStatementResultSetHandler().createResultSet("4");
+        MockResultSet resultSet5 = module.getStatementResultSetHandler().createResultSet("5");
+        module.getStatementResultSetHandler().prepareGlobalResultSet(resultSet1);
+        module.getStatementResultSetHandler().prepareResultSet("select id", resultSet2);
+        module.getStatementResultSetHandler().prepareResultSet("select xyz", resultSet3);
+        module.getPreparedStatementResultSetHandler().prepareResultSet("select name", resultSet4, new String[] {"test"});
+        module.getCallableStatementResultSetHandler().prepareResultSet("call set", resultSet5, new String[] {"xyz"});
+        MockStatement statement = module.getStatement(0);
+        statement.executeQuery("select name");
+        statement.executeQuery("select id");
+        List list = module.getReturnedResultSets();
+        assertTrue(list.size() == 2);
+        assertEquals("1", ((MockResultSet)list.get(0)).getId());
+        assertEquals("2", ((MockResultSet)list.get(1)).getId());
+        MockPreparedStatement preparedStatement = module.getPreparedStatement("insert");
+        preparedStatement.execute();
+        list = module.getReturnedResultSets();
+        assertTrue(list.size() == 2);
+        assertEquals("1", ((MockResultSet)list.get(0)).getId());
+        assertEquals("2", ((MockResultSet)list.get(1)).getId());
+        preparedStatement = (MockPreparedStatement)mockfactory.getMockConnection().prepareStatement("SELECT NAME");
+        preparedStatement.setString(1, "test");
+        preparedStatement.executeQuery();
+        list = module.getReturnedResultSets();
+        assertTrue(list.size() == 3);
+        assertEquals("1", ((MockResultSet)list.get(0)).getId());
+        assertEquals("2", ((MockResultSet)list.get(1)).getId());
+        assertEquals("4", ((MockResultSet)list.get(2)).getId());
+        MockCallableStatement callableStatement = module.getCallableStatement("call set");
+        callableStatement.setString(1, "test");
+        callableStatement.executeQuery();
+        list = module.getReturnedResultSets();
+        assertTrue(list.size() == 3);
+        assertEquals("1", ((MockResultSet)list.get(0)).getId());
+        assertEquals("2", ((MockResultSet)list.get(1)).getId());
+        assertEquals("4", ((MockResultSet)list.get(2)).getId());
+        callableStatement.setString(1, "xyz");
+        callableStatement.executeQuery();
+        list = module.getReturnedResultSets();
+        assertTrue(list.size() == 4);
+        assertEquals("1", ((MockResultSet)list.get(0)).getId());
+        assertEquals("2", ((MockResultSet)list.get(1)).getId());
+        assertEquals("4", ((MockResultSet)list.get(2)).getId());
+        assertEquals("5", ((MockResultSet)list.get(3)).getId());
+        ((MockResultSet)list.get(0)).close();
+        module.verifyResultSetClosed("1");
+        try
+        {
+            module.verifyResultSetClosed("2");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyAllResultSetsClosed();
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        ((MockResultSet)list.get(1)).close();
+        ((MockResultSet)list.get(2)).close();
+        ((MockResultSet)list.get(3)).close();
+        module.verifyAllResultSetsClosed();
     }
     
     public void testStatementsClosed() throws Exception

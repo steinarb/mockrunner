@@ -33,12 +33,12 @@ public class MockStatementTest extends BaseTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        resultSet1 =  new MockResultSet();
+        resultSet1 =  new MockResultSet("");
         resultSet1.addRow(new String[] {"a", "b", "c"});
-        resultSet2 =  new MockResultSet();
+        resultSet2 =  new MockResultSet("");
         resultSet2.addRow(new String[] {"column11", "column21"});
         resultSet2.addRow(new String[] {"column12", "column22"});
-        resultSet3 =  new MockResultSet();
+        resultSet3 =  new MockResultSet("");
         resultSet3.addRow(new String[] {"test1", "test2"});
         resultSet3.addRow(new String[] {"test3", "test4"});
         resultSet3.addRow(new String[] {"test5", "test6"});

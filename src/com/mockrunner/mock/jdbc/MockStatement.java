@@ -106,9 +106,13 @@ public class MockStatement implements Statement
         MockResultSet result = resultSetHandler.getResultSet(sql);
         if(null != result)
         {
-            return cloneResultSet(result);
+            result = cloneResultSet(result);
+            resultSetHandler.addReturnedResultSet(result);
+            return result;
         }
-        return cloneResultSet(resultSetHandler.getGlobalResultSet());
+        result = cloneResultSet(resultSetHandler.getGlobalResultSet());
+        resultSetHandler.addReturnedResultSet(result);
+        return result;
     }
 
     public int executeUpdate(String sql) throws SQLException

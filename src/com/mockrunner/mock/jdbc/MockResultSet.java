@@ -47,6 +47,7 @@ import com.mockrunner.util.StreamUtil;
 public class MockResultSet implements ResultSet, Cloneable
 {
     private Statement statement;
+    private String id;
     private Map columnMap;
     private Map columnMapCopy;
     private Map insertRow;
@@ -64,15 +65,15 @@ public class MockResultSet implements ResultSet, Cloneable
     private int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
     private boolean isDatabaseView;
     private ResultSetMetaData resultSetMetaData;
+    private boolean closed;
     
-    public MockResultSet()
+    public MockResultSet(String id)
     {
-        this("");
+        this(id, "");
     }
     
-    public MockResultSet(String cursorName)
+    public MockResultSet(String id, String cursorName)
     {
-        
         columnMap = new HashMap();
         columnNameList = new ArrayList();
         updatedRows = new ArrayList();
@@ -80,9 +81,11 @@ public class MockResultSet implements ResultSet, Cloneable
         insertedRows = new ArrayList();
         cursor = -1;
         wasNull = false;
+        closed = false;
         isCursorInInsertRow = false;
         isDatabaseView = false;
         this.cursorName = cursorName;
+        this.id = id;
         resultSetMetaData = null;
         copyColumnMap();
     }
@@ -97,6 +100,28 @@ public class MockResultSet implements ResultSet, Cloneable
         {
             throw new RuntimeException(exc.getMessage());
         }
+    }
+    
+    /**
+     * Returns the id of this <code>ResultSet</code>. Ids are used
+     * to identify <code>ResultSet</code> objects in tests, because
+     * they are usually cloned when executing statements, so
+     * you cannot rely on the object identity.
+     * @return the id of this <code>ResultSet</code>
+     */
+    public String getId()
+    {
+        return id;
+    }
+    
+    /**
+     * Returns if this <code>ResultSet</code> is closed.
+     * @return <code>true</code> if this <code>ResultSet</code> is closed,
+     *         <code>false</code> otherwise
+     */
+    public boolean isClosed()
+    {
+        return closed;
     }
     
     /**
@@ -366,7 +391,7 @@ public class MockResultSet implements ResultSet, Cloneable
     
     public void close() throws SQLException
     {
-        
+        closed = true;
     }
 
     public boolean wasNull() throws SQLException

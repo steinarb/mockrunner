@@ -10,7 +10,7 @@ public class FileResultSetFactoryTest extends TestCase
     public void testCreate() throws Exception
     {
         FileResultSetFactory factory = new FileResultSetFactory("src/com/mockrunner/test/jdbc/testresult.txt");
-        MockResultSet resultSet = factory.create();
+        MockResultSet resultSet = factory.create("");
         assertTrue(resultSet.getRowCount() == 5);
         assertTrue(resultSet.getColumnCount() == 3);
         resultSet.next();
@@ -34,7 +34,7 @@ public class FileResultSetFactoryTest extends TestCase
         assertEquals(null, resultSet.getString(2));
         assertEquals("Test", resultSet.getString(3));
         factory.setFirstLineContainsColumnNames(true);
-        resultSet = factory.create();
+        resultSet = factory.create("");
         assertTrue(resultSet.getRowCount() == 4);
         assertTrue(resultSet.getColumnCount() == 3);
         resultSet.next();
