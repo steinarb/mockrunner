@@ -2,6 +2,9 @@ package de.mockrunner.mock;
 
 import org.apache.struts.action.ActionForward;
 
+/**
+ * Mock implementation of <code>ForwardConfig</code>.
+ */
 public class MockForwardConfig extends ActionForward
 {
 	private String name = null;

@@ -4,6 +4,11 @@ import java.util.HashMap;
 
 import javax.servlet.ServletContext;
 
+/**
+ * A simple data repository stored in the <ServletContext>.
+ * The implementation is not thread safe. Used by
+ * {@link de.mockrunner.example.test.StoreDataActionTest}.
+ */
 public class MemoryBasedRepository
 {
     private HashMap dataStore;

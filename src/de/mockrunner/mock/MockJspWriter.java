@@ -6,6 +6,11 @@ import java.io.StringWriter;
 
 import javax.servlet.jsp.JspWriter;
 
+/**
+ * Mock implementation of <code>JspWriter</code>.
+ * Collects the output data. Use {@link #getOutputAsString}
+ * to get it.
+ */
 public class MockJspWriter extends JspWriter
 {
     private PrintWriter printWriter;

@@ -5,6 +5,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.jsp.JspWriter;
 
+/**
+ * Mock implementation of <code>PageContext</code>.
+ */
 public class MockPageContext extends org.apache.struts.mock.MockPageContext
 {
     private MockJspWriter jspWriter;

@@ -9,6 +9,9 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 
+/**
+ * Simple form used in the tests
+ */
 public class TestForm extends ActionForm
 {
     private boolean validationOk = true;

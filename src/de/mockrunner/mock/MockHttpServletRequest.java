@@ -11,6 +11,9 @@ import javax.servlet.http.HttpSession;
 
 import com.mockobjects.servlet.MockRequestDispatcher;
 
+/**
+ * Mock implementation of <code>HttpServletRequest</code>.
+ */
 public class MockHttpServletRequest extends com.mockobjects.servlet.MockHttpServletRequest
 {
     private Map attributes = new HashMap();

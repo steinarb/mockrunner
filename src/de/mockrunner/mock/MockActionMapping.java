@@ -4,6 +4,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
+/**
+ * Mock implementation of <code>ActionMapping</code>.
+ */
 public class MockActionMapping extends ActionMapping
 {
     private String parameter;

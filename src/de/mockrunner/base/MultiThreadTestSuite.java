@@ -12,8 +12,8 @@ import junit.framework.TestSuite;
 
 /**
  * This TestSuite starts all test methods in
- * a number of seperate threads. Doesn't
- * work properly yet. Do not use it :-)
+ * a number of seperate threads. <b>Doesn't
+ * work properly yet. Do not use it :-)</b>
  */
 public class MultiThreadTestSuite extends TestSuite
 {

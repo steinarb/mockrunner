@@ -6,14 +6,21 @@ import de.mockrunner.base.MockObjectFactory;
 import de.mockrunner.example.StoreDataAction;
 
 /**
- * An example how to code a multithread test.
- * Please note that you have to use 
- * createMockObjectFactory(getMockObjectFactory())
- * so that all threads share one ServletContext.
- * Just remove the synchronized block
- * from StoreDataAction to see the test fail.
- * It is planned to implement a better and easier 
- * way for multithread testing in the next release.
+ * Example test for {@link de.mockrunner.example.StoreDataAction}. 
+ * Demonstrates multithread testing. The use of an inner thread 
+ * class and  a single test method is a standard pattern that can 
+ * be used in any multithreading test for Servlets and actions.
+ * Please note that each thread has to call the action with
+ * different sessions and requests but with one 
+ * <code>ServletContext</code> in order to simulate the real
+ * container behaviour. See the constructor of the thread how
+ * to deal with the test module and factory.
+ * Remove the <code>synchronized</code> keyword in
+ * {@link de.mockrunner.example.StoreDataAction} and the test
+ * will fail.
+ * {@link de.mockrunner.base.MultiThreadTestSuite} is meant to
+ * make multithread resting much easier, but it is not working
+ * properly yet.
  */
 public class StoreDataActionTest extends ActionTestCaseAdapter
 { 

@@ -1,5 +1,9 @@
 package de.mockrunner.example;
 
+/**
+ * Example implementation of {@link AuthenticationStrategy}.
+ * Does nothing.
+ */
 public class MySQLAuthenticationStrategy implements AuthenticationStrategy
 {
     private boolean isUserKnown;
