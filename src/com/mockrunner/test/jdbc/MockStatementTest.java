@@ -606,4 +606,63 @@ public class MockStatementTest extends BaseTestCase
         assertEquals(0, statement.getInt(3));
         assertTrue(statement.wasNull());
     }
+    
+    public void testGetMoreResultsStatement() throws Exception
+    {
+        statementHandler.prepareGlobalResultSet(resultSet1);
+        statementHandler.prepareGlobalUpdateCount(2);
+        MockStatement statement = (MockStatement)connection.createStatement();
+        assertFalse(statement.getMoreResults());
+        assertNull(statement.getResultSet());
+        assertEquals(-1, statement.getUpdateCount());
+        statement.execute("select");
+        statement.executeUpdate("insert");
+        assertTrue(statement.getMoreResults());
+        assertEquals(resultSet1.getId(), ((MockResultSet)statement.getResultSet()).getId());
+        assertFalse(statement.getMoreResults());
+        assertEquals(2, statement.getUpdateCount());
+        assertEquals(-1, statement.getUpdateCount());
+        statementHandler.prepareResultSet("select", resultSet2);
+        statement.executeQuery("select");
+        assertTrue(statement.getMoreResults());
+        assertNotNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+    }
+    
+    public void testGetMoreResultsPreparedStatement() throws Exception
+    {
+        preparedStatementHandler.prepareResultSet("select", resultSet1, new ArrayList());
+        preparedStatementHandler.prepareUpdateCount("insert", 3, new ArrayList());
+        MockPreparedStatement preparedStatement = (MockPreparedStatement)connection.prepareStatement("select");
+        assertFalse(preparedStatement.getMoreResults());
+        preparedStatement.execute();
+        assertTrue(preparedStatement.getMoreResults());
+        assertNotNull(preparedStatement.getResultSet());
+        assertFalse(preparedStatement.getMoreResults());
+        preparedStatement = (MockPreparedStatement)connection.prepareStatement("insert");
+        assertEquals(-1, preparedStatement.getUpdateCount());
+        preparedStatement.executeUpdate();
+        assertEquals(3, preparedStatement.getUpdateCount());
+        assertEquals(-1, preparedStatement.getUpdateCount());
+        preparedStatement.execute();
+        assertEquals(3, preparedStatement.getUpdateCount());
+        assertEquals(-1, preparedStatement.getUpdateCount());
+    }
+    
+    public void testGetMoreResultsCallableStatement() throws Exception
+    {
+        callableStatementHandler.prepareResultSet("select", resultSet1);
+        callableStatementHandler.prepareUpdateCount("insert", 3);
+        MockCallableStatement callableStatement = (MockCallableStatement)connection.prepareCall("select");
+        assertFalse(callableStatement.getMoreResults(1));
+        callableStatement.execute("select");
+        assertTrue(callableStatement.getMoreResults(2));
+        assertEquals(resultSet1.getId(), ((MockResultSet)callableStatement.getResultSet()).getId());
+        assertFalse(callableStatement.getMoreResults(3));
+        callableStatement = (MockCallableStatement)connection.prepareCall("insert");
+        assertEquals(-1, callableStatement.getUpdateCount());
+        callableStatement.executeUpdate();
+        assertEquals(3, callableStatement.getUpdateCount());
+        assertEquals(-1, callableStatement.getUpdateCount());
+    }
 }

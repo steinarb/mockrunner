@@ -108,10 +108,12 @@ public class MockStatement implements Statement
         {
             result = cloneResultSet(result);
             resultSetHandler.addReturnedResultSet(result);
+            setNextResultSet(result);
             return result;
         }
         result = cloneResultSet(resultSetHandler.getGlobalResultSet());
         resultSetHandler.addReturnedResultSet(result);
+        setNextResultSet(result);
         return result;
     }
 
@@ -125,9 +127,13 @@ public class MockStatement implements Statement
         Integer returnValue = resultSetHandler.getUpdateCount(sql);
         if(null != returnValue)
         {
-            return returnValue.intValue();
+            int updateCount = returnValue.intValue();
+            setNextUpdateCount(updateCount);
+            return updateCount;
         }
-        return resultSetHandler.getGlobalUpdateCount();
+        int updateCount = resultSetHandler.getGlobalUpdateCount();
+        setNextUpdateCount(updateCount);
+        return updateCount;
     }
 
     public void close() throws SQLException
@@ -195,11 +201,11 @@ public class MockStatement implements Statement
         boolean callExecuteQuery = isQuery(sql);
         if(callExecuteQuery)
         {
-            setNextResultSet(executeQuery(sql));
+            executeQuery(sql);
         }
         else
         {
-            setNextUpdateCount(executeUpdate(sql));
+            executeUpdate(sql);
         }
         return callExecuteQuery;
     }
@@ -235,6 +241,7 @@ public class MockStatement implements Statement
 
     public boolean getMoreResults() throws SQLException
     {
+        if(null != nextResultSet) return true;
         return false;
     }
 
@@ -290,7 +297,7 @@ public class MockStatement implements Statement
 
     public boolean getMoreResults(int current) throws SQLException
     {
-        return false;
+        return getMoreResults();
     }
 
     public ResultSet getGeneratedKeys() throws SQLException
