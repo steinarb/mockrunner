@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.validator.ValidatorResources;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -601,7 +600,7 @@ public class ActionTestModuleTest extends TestCase
         String[] files = new String[2];
         files[0] = "src/com/mockrunner/test/web/validator-rules.xml";
         files[1] = "src/com/mockrunner/test/web/validation.xml";
-        ValidatorResources resources = module.createValidatorResources(files);
+        module.createValidatorResources(files);
         TestValidatorForm form = new TestValidatorForm();
         form.setServlet(mockFactory.getMockActionServlet());
         mockFactory.getMockActionMapping().setName("testForm");

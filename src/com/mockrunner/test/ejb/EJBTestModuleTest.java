@@ -146,7 +146,7 @@ public class EJBTestModuleTest extends TestCase
     
     public void testTransactions() throws Exception
     {
-        MockEjbObject ejbObject = module.deploy("mybean", TestBean.class, TransactionPolicy.REQUIRED);
+        module.deploy("mybean", TestBean.class, TransactionPolicy.REQUIRED);
         InitialContext context = new InitialContext();
         Object home = context.lookup("mybean");
         TestHome testHome = (TestHome)PortableRemoteObject.narrow(home, TestHome.class );
