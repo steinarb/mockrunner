@@ -17,11 +17,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
@@ -33,9 +31,7 @@ import com.mockobjects.sql.MockResultSetMetaData;
  */
 public class MockPreparedStatement extends MockStatement implements PreparedStatement
 {
-    private MockResultSet resultSet = null;
-    private List resultSetsWithParameters = new ArrayList();
-    private List parametersForResultSet = new ArrayList();
+    private PreparedStatementResultSetHandler resultSetHandler;
     private Map paramObjects = new HashMap();
     private String sql;
     private MockParameterMetaData parameterMetaData;
@@ -61,16 +57,9 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         prepareParameterMetaData();
     }
     
-    public void setResultSet(MockResultSet resultSet)
+    public void setResultSetHandler(PreparedStatementResultSetHandler resultSetHandler)
     {
-        this.resultSet = resultSet;
-    }
-    
-    public void addResultSet(MockResultSet resultSet, List parameters)
-    {
-        this.resultSet = resultSet;
-        resultSetsWithParameters.add(resultSet);
-        parametersForResultSet.add(parameters);
+        this.resultSetHandler = resultSetHandler;
     }
     
     private void prepareParameterMetaData()
@@ -85,12 +74,12 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return sql;
     }
     
-    public Map getObjectMap()
+    public Map getParameterMap()
     {
         return Collections.unmodifiableMap(paramObjects);
     }
     
-    public Object getObject(int index)
+    public Object getParameter(int index)
     {
         return paramObjects.get(new Integer(index));
     }

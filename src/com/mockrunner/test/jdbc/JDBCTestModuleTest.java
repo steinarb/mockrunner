@@ -107,18 +107,18 @@ public class JDBCTestModuleTest extends TestCase
         MockPreparedStatement statement = module.getPreparedStatement("update");  
         statement.setInt(1, 3);
         statement.setLong(2, 10000);
-        assertEquals(new Integer(3), statement.getObject(1));
-        assertEquals(new Long(10000), statement.getObject(2));
-        module.verifyPreparedStatementObjectPresent(statement, 1);
-        module.verifyPreparedStatementObjectNotPresent("update", 3);
-        module.verifyPreparedStatementObjectNotPresent(0, 1);
-        module.verifyPreparedStatementObject(statement, 1, new Integer(3));
-        module.verifyPreparedStatementObject(2, 2, new Long(10000));
+        assertEquals(new Integer(3), statement.getParameter(1));
+        assertEquals(new Long(10000), statement.getParameter(2));
+        module.verifyPreparedStatementParameterPresent(statement, 1);
+        module.verifyPreparedStatementParameterNotPresent("update", 3);
+        module.verifyPreparedStatementParameterNotPresent(0, 1);
+        module.verifyPreparedStatementParameter(statement, 1, new Integer(3));
+        module.verifyPreparedStatementParameter(2, 2, new Long(10000));
         statement = module.getPreparedStatement("INSERT INTO TEST (COL1, COL2) VALUES(?, ?)");  
         statement.setString(1, "test1");
         statement.setString(2, "test2");
-        module.verifyPreparedStatementObjectPresent(statement, 2);
-        module.verifyPreparedStatementObjectNotPresent(statement, 3);
-        module.verifyPreparedStatementObject(0, 1, "test1");
+        module.verifyPreparedStatementParameterPresent(statement, 2);
+        module.verifyPreparedStatementParameterNotPresent(statement, 3);
+        module.verifyPreparedStatementParameter(0, 1, "test1");
     }
 }
