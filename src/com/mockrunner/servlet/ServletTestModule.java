@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.WebMockObjectFactory;
+import com.mockrunner.util.StringUtil;
 
 /**
  * Module for servlet and filter tests. Can test
@@ -408,18 +409,13 @@ public class ServletTestModule extends HTMLOutputModule
    
     /**
      * Verifies the servlet output.
-     * @param output the expected output.
+     * @param expectedOutput the expected output.
      * @throws VerifyFailedException if verification fails
-     */  
-    public void verifyOutput(String output)
+     */
+    public void verifyOutput(String expectedOutput)
     {
         String actualOutput = getOutput();
-        if(!caseSensitive)
-        {
-            output = output.toLowerCase();
-            actualOutput = actualOutput.toLowerCase();
-        }
-        if(!output.equals(actualOutput))
+        if(!StringUtil.matchesExact(actualOutput, expectedOutput, caseSensitive))
         {
             throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");
         }
@@ -427,18 +423,28 @@ public class ServletTestModule extends HTMLOutputModule
     
     /**
      * Verifies if the servlet output contains the specified data.
-     * @param output the data
+     * @param expectedOutput the data
      * @throws VerifyFailedException if verification fails
-     */   
-    public void verifyOutputContains(String output)
+     */
+    public void verifyOutputContains(String expectedOutput)
     {
         String actualOutput = getOutput();
-        if(!caseSensitive)
+        if(!StringUtil.matchesContains(actualOutput, expectedOutput, caseSensitive))
         {
-            output = output.toLowerCase();
-            actualOutput = actualOutput.toLowerCase();
+            throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");
         }
-        if(-1 == actualOutput.indexOf(output))
+    }
+    
+    /**
+     * Verifies if the servlet output matches the specified
+     * regular expression.
+     * @param expression the data
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyOutputRegularExpression(String expression)
+    {
+        String actualOutput = getOutput();
+        if(!StringUtil.matchesPerl5(actualOutput, expression, caseSensitive))
         {
             throw new VerifyFailedException("actual output: " + actualOutput + " does not match expected output");
         }

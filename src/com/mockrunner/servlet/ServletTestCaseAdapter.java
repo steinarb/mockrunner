@@ -288,4 +288,12 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     {
         servletTestModule.verifyOutputContains(output);
     }
+    
+    /**
+     * Delegates to {@link ServletTestModule#verifyOutputRegularExpression}
+     */
+    protected void verifyOutputRegularExpression(String output)
+    {
+        servletTestModule.verifyOutputRegularExpression(output);
+    }
 }

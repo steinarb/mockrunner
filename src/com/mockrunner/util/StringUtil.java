@@ -3,6 +3,11 @@ package com.mockrunner.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.oro.text.regex.MalformedPatternException;
+import org.apache.oro.text.regex.Pattern;
+import org.apache.oro.text.regex.Perl5Compiler;
+import org.apache.oro.text.regex.Perl5Matcher;
+
 /**
  * Simple util class for <code>String</code> related methods.
  */
@@ -67,5 +72,72 @@ public class StringUtil
             resultList.add(token);
         }  
         return (String[])resultList.toArray(new String[resultList.size()]);
+    }
+    
+    /**
+     * Returns if the specified strings are equal, ignoring
+     * case, if <code>caseSensitive</code> is <code>false</code>.
+     * @param source the source String
+     * @param target the target String
+     * @param caseSensitive is the comparison case sensitive
+     * @return <code>true</code> if the strings matches
+     *         <code>false</code> otherwise
+     */
+    public static boolean matchesExact(String source, String target, boolean caseSensitive)
+    {
+        if(!caseSensitive)
+        {
+            source = source.toLowerCase();
+            target = target.toLowerCase();
+        }
+        return (source.equals(target));
+    }
+    
+    /**
+     * Returns if <code>source</code> contains <code>target</code>, 
+     * ignoring case, if <code>caseSensitive</code> is <code>false</code>.
+     * @param source the source String
+     * @param target the target String
+     * @param caseSensitive is the comparison case sensitive
+     * @return <code>true</code> if the strings matches
+     *         <code>false</code> otherwise
+     */
+    public static boolean matchesContains(String source, String target, boolean caseSensitive)
+    {
+        if(!caseSensitive)
+        {
+            source = source.toLowerCase();
+            target = target.toLowerCase();
+        }
+        return (-1 != source.indexOf(target));
+    }
+    
+    /**
+     * Returns if the regular expression <code>target</code> matches 
+     * <code>source</code>, ignoring case, if <code>caseSensitive</code> 
+     * is <code>false</code>.
+     * @param source the source String
+     * @param target the target String
+     * @param caseSensitive is the comparison case sensitive
+     * @return <code>true</code> if the strings matches
+     *         <code>false</code> otherwise
+     */
+    public static boolean matchesPerl5(String source, String target, boolean caseSensitive)
+    {
+        int mask = Perl5Compiler.CASE_INSENSITIVE_MASK;
+        if(caseSensitive)
+        {
+            mask = Perl5Compiler.DEFAULT_MASK;
+        }
+        try
+        {
+            Pattern pattern = new Perl5Compiler().compile(target, mask);
+            return (new Perl5Matcher().matches(source, pattern));
+        } 
+        catch(MalformedPatternException exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
     }
 }

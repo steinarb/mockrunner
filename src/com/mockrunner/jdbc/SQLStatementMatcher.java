@@ -6,10 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.oro.text.regex.MalformedPatternException;
-import org.apache.oro.text.regex.Pattern;
-import org.apache.oro.text.regex.Perl5Compiler;
-import org.apache.oro.text.regex.Perl5Matcher;
+import com.mockrunner.util.StringUtil;
 
 /**
  * Helper class for finding matching SQL statements based on various
@@ -144,38 +141,18 @@ public class SQLStatementMatcher
 
     private boolean doSimpleMatch(String source, String query)
     {
-        if(!caseSensitive)
-        {
-            source = source.toLowerCase();
-            query = query.toLowerCase();
-        }
         if(exactMatch)
         {
-            if(source.equals(query)) return true;
+            return StringUtil.matchesExact(source, query, caseSensitive);
         }
         else
         {
-            if(-1 != source.indexOf(query)) return true;
+            return StringUtil.matchesContains(source, query, caseSensitive);
         }
-        return false;
     }
     
     private boolean doPerl5Match(String source, String query)
     {
-        int mask = Perl5Compiler.CASE_INSENSITIVE_MASK;
-        if(caseSensitive)
-        {
-            mask = Perl5Compiler.DEFAULT_MASK;
-        }
-        try
-        {
-            Pattern pattern = new Perl5Compiler().compile(query, mask);
-            return (new Perl5Matcher().matches(source, pattern));
-        } 
-        catch(MalformedPatternException exc)
-        {
-            exc.printStackTrace();
-            throw new RuntimeException(exc.getMessage());
-        }
+        return StringUtil.matchesPerl5(source, query, caseSensitive);
     }
 }

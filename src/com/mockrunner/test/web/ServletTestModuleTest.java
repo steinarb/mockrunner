@@ -62,7 +62,7 @@ public class ServletTestModuleTest extends BaseTestCase
         assertTrue(filter4.wasInitCalled());
     }
     
-    public void testCaseSensitive() throws Exception
+    public void testVerifyOutput() throws Exception
     {
         getWebMockObjectFactory().getMockResponse().getWriter().write("This is a test");
         try
@@ -77,10 +77,20 @@ public class ServletTestModuleTest extends BaseTestCase
         module.setCaseSensitive(false);
         module.verifyOutput("this is a test");
         module.verifyOutputContains("TeSt");
+        module.verifyOutputRegularExpression("THIS.*");
         module.setCaseSensitive(true);
         try
         {
             module.verifyOutputContains("THIS");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyOutputRegularExpression(".*TEST");
             fail();
         }
         catch(VerifyFailedException exc)
