@@ -7,12 +7,14 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingListener;
+import javax.servlet.http.HttpSessionContext;
 
 /**
  * Mock implementation of <code>HttpSession</code>.
  */
-public class MockHttpSession extends com.mockobjects.servlet.MockHttpSession
+public class MockHttpSession implements HttpSession
 {
     public HashMap attributes = new HashMap();
     private String sessionId;
@@ -20,6 +22,7 @@ public class MockHttpSession extends com.mockobjects.servlet.MockHttpSession
     private boolean isValid;
     private long creationTime;
     private ServletContext servletContext;
+    private int maxInactiveInterval = -1;
 
     public MockHttpSession()
     {
@@ -148,5 +151,25 @@ public class MockHttpSession extends com.mockobjects.servlet.MockHttpSession
             MockHttpSessionBindingEvent event = new MockHttpSessionBindingEvent(this, key, attributes.get(key));
             ((HttpSessionBindingListener) value).valueUnbound(event);
         }
+    }
+    
+    public long getLastAccessedTime()
+    {
+        return System.currentTimeMillis();
+    }
+    
+    public void setMaxInactiveInterval(int maxInactiveInterval)
+    {
+        this.maxInactiveInterval = maxInactiveInterval;
+    }
+
+    public int getMaxInactiveInterval()
+    {
+        return maxInactiveInterval;
+    }
+
+    public HttpSessionContext getSessionContext()
+    {
+        return new MockSessionContext();
     }
 }
