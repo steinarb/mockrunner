@@ -13,6 +13,8 @@ mockrunner-0.2.7:
 - added createDynaActionForm() method to Struts test module
 - fixed problem with restoreDrivers() method of JDBCMockObjectFactory 
   (now clears the list of preserved drivers after restoring them)
+- fixed bug in JDBCMockObjectFactory for JDK 1.3 in preserveDrivers()
+  (now clears the list of preserved drivers after restoring them)
 - added registerMockDriver() to JDBCMockObjectFactory
 - added OrderDB example to demonstrate the test of stored procedures
 - added commons-validator.jar and jakarta-oro.jar third party libraries
