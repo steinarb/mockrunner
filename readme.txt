@@ -73,6 +73,7 @@ jdom.jar
 
 Xerces XML Parser 2.0.0 (or higher):
 http://xml.apache.org/xerces2-j/index.html
+xml-apis.jar
 xercesImpl.jar
 
 NekoHTML Parser:

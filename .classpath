@@ -13,5 +13,6 @@
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/xercesImpl.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/nekohtml.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/jdom.jar"/>
+    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/xml-apis.jar"/>
     <classpathentry kind="output" path="classes"/>
 </classpath>
