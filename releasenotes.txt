@@ -5,6 +5,7 @@ mockrunner-0.3.2:
   MockTopicConnectionFactory to provide one factory with one JNDI name
   for both domains
 - renamed ArrayUtil.contains to ArrayUtil.indexOf, contains is misleading
+- fixed bug in MockHttpServletResponse.getWriter()
 - fixed bug in MockResultSet.setFetchDirection
 
 mockrunner-0.3.1:

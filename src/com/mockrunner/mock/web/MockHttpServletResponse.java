@@ -3,6 +3,7 @@ package com.mockrunner.mock.web;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,7 +36,6 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public MockHttpServletResponse()
     {
-        outputStream = new MockServletOutputStream();
         headers = new HashMap();
         characterEncoding = "ISO-8859-1";
         bufferSize = 0;
@@ -44,6 +44,15 @@ public class MockHttpServletResponse implements HttpServletResponse
         errorCode = SC_OK;
         statusCode = SC_OK;
         cookies = new ArrayList();
+        outputStream = new MockServletOutputStream();
+        try
+        {
+            writer = new PrintWriter(new OutputStreamWriter(outputStream, characterEncoding));
+        } 
+        catch(UnsupportedEncodingException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
     }
 
     public String encodeURL(String url)
@@ -68,10 +77,6 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public PrintWriter getWriter() throws IOException
     {
-        if (null == writer)
-        {
-            writer = new PrintWriter(new OutputStreamWriter(getOutputStream(), characterEncoding));
-        }
         return writer;
     }
 

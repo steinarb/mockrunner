@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import com.mockrunner.mock.web.MockHttpServletResponse;
+import com.mockrunner.mock.web.MockServletOutputStream;
 import com.mockrunner.mock.web.WebConstants;
 
 import junit.framework.TestCase;
@@ -53,5 +54,25 @@ public class MockHttpServletResponseTest extends TestCase
         assertNull(response.getContentType());
         response.setContentType("myType");
         assertEquals("myType", response.getContentType());
+    }
+    
+    public void testFlush() throws IOException
+    {
+        response.getOutputStream().write('a');
+        response.flushBuffer();
+        assertEquals("a", ((MockServletOutputStream)response.getOutputStream()).getContent());
+    }
+    
+    public void testReset() throws IOException
+    {
+        response.addHeader("testHeader", "xyz");
+        assertTrue(response.getHeaderList("testHeader").size() == 1);
+        response.getOutputStream().write('a');
+        response.getWriter().write("xyz");
+        response.resetBuffer();
+        assertEquals("", ((MockServletOutputStream)response.getOutputStream()).getContent());
+        assertTrue(response.getHeaderList("testHeader").size() == 1);
+        response.reset();
+        assertNull(response.getHeaderList("testHeader"));
     }
 }
