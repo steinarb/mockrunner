@@ -412,15 +412,51 @@ public class JMSTestModule
     }
     
     /**
+     * @deprecated use {@link #getTransmissionManagerWrapper}
+     */
+    public TransmissionManagerWrapper getTransmissionManager(int indexOfSession)
+    {
+        return getTransmissionManagerWrapper(indexOfSession);
+    }
+    
+    /**
      * Returns the {@link TransmissionManagerWrapper} for the specified session
      * or <code>null</code> if the session does not exist.
      * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @return the {@link TransmissionManagerWrapper}
      */
-    public TransmissionManagerWrapper getTransmissionManager(int indexOfSession)
+    public TransmissionManagerWrapper getTransmissionManagerWrapper(int indexOfSession)
     {
         MockSession session = getSession(indexOfSession);
+        if(null == session) return null;
+        return session.getTransmissionManager();
+    }
+    
+    /**
+     * Returns the {@link TransmissionManagerWrapper} for the specified session
+     * or <code>null</code> if the session does not exist.
+     * The session has to be created using the current {@link MockQueueConnection}.
+     * @param indexOfSession the index of the session
+     * @return the {@link TransmissionManagerWrapper}
+     */
+    public TransmissionManagerWrapper getQueueTransmissionManagerWrapper(int indexOfSession)
+    {
+        MockQueueSession session = getQueueSession(indexOfSession);
+        if(null == session) return null;
+        return session.getTransmissionManager();
+    }
+    
+    /**
+     * Returns the {@link TransmissionManagerWrapper} for the specified session
+     * or <code>null</code> if the session does not exist.
+     * The session has to be created using the current {@link MockTopicConnection}.
+     * @param indexOfSession the index of the session
+     * @return the {@link TransmissionManagerWrapper}
+     */
+    public TransmissionManagerWrapper getTopicTransmissionManagerWrapper(int indexOfSession)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
         if(null == session) return null;
         return session.getTransmissionManager();
     }
@@ -1451,7 +1487,7 @@ public class JMSTestModule
     public void verifyNumberMessageProducers(int indexOfSession, int numberOfProducers)
     {
         checkAndGetSessionByIndex(indexOfSession);
-        TransmissionManagerWrapper manager = getTransmissionManager(indexOfSession);
+        TransmissionManagerWrapper manager = getTransmissionManagerWrapper(indexOfSession);
         if(numberOfProducers != manager.getMessageProducerList().size())
         {
             throw new VerifyFailedException("Expected " + numberOfProducers + " producers, actually " + manager.getMessageProducerList().size() + " producers present");
@@ -1467,7 +1503,7 @@ public class JMSTestModule
     public void verifyAllMessageProducersClosed(int indexOfSession)
     {
         checkAndGetSessionByIndex(indexOfSession);
-        TransmissionManagerWrapper manager = getTransmissionManager(indexOfSession);
+        TransmissionManagerWrapper manager = getTransmissionManagerWrapper(indexOfSession);
         List producers = manager.getMessageProducerList();
         for(int ii = 0; ii < producers.size(); ii++)
         {
@@ -1489,7 +1525,7 @@ public class JMSTestModule
     public void verifyNumberQueueSenders(int indexOfSession, int numberOfSenders)
     {
         checkAndGetQueueSessionByIndex(indexOfSession);
-        QueueTransmissionManager manager = getQueueTransmissionManager(indexOfSession);
+        TransmissionManagerWrapper manager = getQueueTransmissionManagerWrapper(indexOfSession);
         if(numberOfSenders != manager.getQueueSenderList().size())
         {
             throw new VerifyFailedException("Expected " + numberOfSenders + " senders, actually " + manager.getQueueSenderList().size() + " senders present");
@@ -1550,7 +1586,7 @@ public class JMSTestModule
     public void verifyAllQueueSendersClosed(int indexOfSession)
     {
         checkAndGetQueueSessionByIndex(indexOfSession);
-        QueueTransmissionManager manager = getQueueTransmissionManager(indexOfSession);
+        TransmissionManagerWrapper manager = getQueueTransmissionManagerWrapper(indexOfSession);
         List senders = manager.getQueueSenderList();
         for(int ii = 0; ii < senders.size(); ii++)
         {
@@ -1572,7 +1608,7 @@ public class JMSTestModule
     public void verifyNumberTopicPublishers(int indexOfSession, int numberOfPublishers)
     {
         checkAndGetTopicSessionByIndex(indexOfSession);
-        TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
+        TransmissionManagerWrapper manager = getTopicTransmissionManagerWrapper(indexOfSession);
         if(numberOfPublishers != manager.getTopicPublisherList().size())
         {
             throw new VerifyFailedException("Expected " + numberOfPublishers + " publishers, actually " + manager.getTopicPublisherList().size() + " publishers present");
@@ -1633,7 +1669,7 @@ public class JMSTestModule
     public void verifyAllTopicPublishersClosed(int indexOfSession)
     {
         checkAndGetTopicSessionByIndex(indexOfSession);
-        TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
+        TransmissionManagerWrapper manager = getTopicTransmissionManagerWrapper(indexOfSession);
         List publishers = manager.getTopicPublisherList();
         for(int ii = 0; ii < publishers.size(); ii++)
         {
@@ -1655,7 +1691,7 @@ public class JMSTestModule
     public void verifyNumberMessageConsumers(int indexOfSession, int numberOfConsumers)
     {
         checkAndGetSessionByIndex(indexOfSession);
-        TransmissionManagerWrapper manager = getTransmissionManager(indexOfSession);
+        TransmissionManagerWrapper manager = getTransmissionManagerWrapper(indexOfSession);
         if(numberOfConsumers != manager.getMessageConsumerList().size())
         {
             throw new VerifyFailedException("Expected " + numberOfConsumers + " consumers, actually " + manager.getMessageConsumerList().size() + " consumers present");
@@ -1671,7 +1707,7 @@ public class JMSTestModule
     public void verifyAllMessageConsumersClosed(int indexOfSession)
     {
         checkAndGetSessionByIndex(indexOfSession);
-        TransmissionManagerWrapper manager = getTransmissionManager(indexOfSession);
+        TransmissionManagerWrapper manager = getTransmissionManagerWrapper(indexOfSession);
         List consumers = manager.getMessageConsumerList();
         for(int ii = 0; ii < consumers.size(); ii++)
         {

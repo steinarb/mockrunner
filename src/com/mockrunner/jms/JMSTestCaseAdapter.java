@@ -242,12 +242,37 @@ public class JMSTestCaseAdapter extends BaseTestCase
     
     /**
      * Delegates to {@link JMSTestModule#getTransmissionManager}
+     * @deprecated use {#getTransmissionManagerWrapper}
      */
     protected TransmissionManagerWrapper getTransmissionManager(int indexOfSession)
     {
         return jmsTestModule.getTransmissionManager(indexOfSession);
     }
-
+    
+    /**
+     * Delegates to {@link JMSTestModule#getTransmissionManagerWrapper}
+     */
+    protected TransmissionManagerWrapper getTransmissionManagerWrapper(int indexOfSession)
+    {
+        return jmsTestModule.getTransmissionManagerWrapper(indexOfSession);
+    }
+    
+    /**
+     * Delegates to {@link JMSTestModule#getTransmissionManagerWrapper}
+     */
+    protected TransmissionManagerWrapper getQueueTransmissionManagerWrapper(int indexOfSession)
+    {
+        return jmsTestModule.getQueueTransmissionManagerWrapper(indexOfSession);
+    }
+    
+    /**
+     * Delegates to {@link JMSTestModule#getTransmissionManagerWrapper}
+     */
+    protected TransmissionManagerWrapper getTopicTransmissionManagerWrapper(int indexOfSession)
+    {
+        return jmsTestModule.getTopicTransmissionManagerWrapper(indexOfSession);
+    }
+    
     /**
      * Delegates to {@link JMSTestModule#getQueueSessionList}
      */

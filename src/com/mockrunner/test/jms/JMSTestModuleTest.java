@@ -638,7 +638,7 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
-        TransmissionManagerWrapper manager1 = module.getTransmissionManager(0);
+        TransmissionManagerWrapper manager1 = module.getTransmissionManagerWrapper(0);
         QueueTransmissionManager manager2 = manager1.getQueueTransmissionManager();
         TopicTransmissionManager manager3 = manager1.getTopicTransmissionManager();
         GenericTransmissionManager manager4 = manager1.getGenericTransmissionManager();
@@ -835,7 +835,7 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
-        TransmissionManagerWrapper manager1 = module.getTransmissionManager(0);
+        TransmissionManagerWrapper manager1 = module.getTransmissionManagerWrapper(0);
         QueueTransmissionManager manager2 = manager1.getQueueTransmissionManager();
         TopicTransmissionManager manager3 = manager1.getTopicTransmissionManager();
         QueueTransmissionManager queueManager = module.getQueueTransmissionManager(0);
@@ -920,7 +920,7 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
-        QueueTransmissionManager transManager = module.getTransmissionManager(0).getQueueTransmissionManager();
+        QueueTransmissionManager transManager = module.getTransmissionManagerWrapper(0).getQueueTransmissionManager();
         assertEquals(2, transManager.getQueueBrowserList().size());
         assertSame(browser1, transManager.getQueueBrowser(0));
         assertSame(browser2, transManager.getQueueBrowser(1));
@@ -2517,6 +2517,78 @@ public class JMSTestModuleTest extends TestCase
         module.verifyNumberSessions(1);
         module.setCurrentConnectionIndex(0);
         module.verifyNumberSessions(0);
+    }
+    
+    public void testVerifyQueueSenderWithGenericProducers() throws Exception
+    {
+        DestinationManager manager = mockFactory.getDestinationManager();
+        Queue queue = manager.createQueue("queue");
+        MockQueueSession session = (MockQueueSession)queueConnection.createQueueSession(true, Session.AUTO_ACKNOWLEDGE);
+        QueueSender sender1 = session.createSender(queue);
+        QueueSender sender2 = (QueueSender)session.createProducer(queue);
+        QueueSender sender3 = (QueueSender)session.createProducer(null);
+        QueueSender sender4 = session.createSender(queue);
+        QueueSender sender5 = session.createSender(null);
+        module.verifyNumberQueueSenders(0, 5);
+        module.verifyNumberQueueSenders(0, "queue", 3);
+        sender3.close();
+        sender4.close();
+        try
+        {
+            module.verifyAllQueueSendersClosed(0);
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        session.close();
+        module.verifyAllQueueSendersClosed(0);
+        TransmissionManagerWrapper wrapper = module.getQueueTransmissionManagerWrapper(0);
+        assertEquals(5, wrapper.getMessageProducerList().size());
+        assertEquals(5, wrapper.getQueueSenderList().size());
+        assertTrue(wrapper.getQueueSenderList().contains(sender1));
+        assertTrue(wrapper.getQueueSenderList().contains(sender2));
+        assertTrue(wrapper.getQueueSenderList().contains(sender3));
+        assertTrue(wrapper.getQueueSenderList().contains(sender4));
+        assertTrue(wrapper.getQueueSenderList().contains(sender5));
+    }
+    
+    public void testVerifyTopicPublishersWithGenericProducers() throws Exception
+    {
+        DestinationManager manager = mockFactory.getDestinationManager();
+        Topic topic = manager.createTopic("topic");
+        MockTopicSession session1 = (MockTopicSession)topicConnection.createTopicSession(true, Session.AUTO_ACKNOWLEDGE);
+        MockTopicSession session2 = (MockTopicSession)topicConnection.createTopicSession(true, Session.AUTO_ACKNOWLEDGE);
+        TopicPublisher publisher1 = (TopicPublisher)session1.createProducer(topic);
+        TopicPublisher publisher2 = session1.createPublisher(null);
+        TopicPublisher publisher3 = session2.createPublisher(null);
+        TopicPublisher publisher4 = (TopicPublisher)session2.createProducer(null);
+        TopicPublisher publisher5 = (TopicPublisher)session2.createProducer(topic);
+        module.verifyNumberTopicPublishers(0, 2);
+        module.verifyNumberTopicPublishers(1, 3);
+        module.verifyNumberTopicPublishers(0, "topic", 1);
+        module.verifyNumberTopicPublishers(1, "topic", 1);
+        publisher1.close();
+        try
+        {
+            module.verifyAllTopicPublishersClosed(0);
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        publisher2.close();
+        module.verifyAllTopicPublishersClosed(0);
+        session2.close();
+        module.verifyAllTopicPublishersClosed(1);
+        TransmissionManagerWrapper wrapper = module.getTopicTransmissionManagerWrapper(1);
+        assertEquals(3, wrapper.getMessageProducerList().size());
+        assertEquals(3, wrapper.getTopicPublisherList().size());
+        assertTrue(wrapper.getTopicPublisherList().contains(publisher3));
+        assertTrue(wrapper.getTopicPublisherList().contains(publisher4));
+        assertTrue(wrapper.getTopicPublisherList().contains(publisher5));
     }
     
     public static class TestMessageListener implements MessageListener
