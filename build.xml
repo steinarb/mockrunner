@@ -546,7 +546,7 @@
 	            <include name="**/*" />
 	        </fileset>
 	    </copy>
-        <copy todir="${releasedir}/jar">
+        <copy todir="${releasedir}/jar" preservelastmodified="true">
 	        <fileset dir="${lib}">
                 <patternset refid="runtime.jars" />
 	        </fileset>
