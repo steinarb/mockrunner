@@ -9,7 +9,9 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Savepoint;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.mockobjects.sql.MockCallableStatement;
@@ -30,11 +32,6 @@ public class MockConnection implements Connection
     private Map typeMap = new HashMap();
     private String catalog = null;
         
-    public MockPreparedStatement getPreparedStatement(String sql)
-    {
-        return (MockPreparedStatement)preparedStatements.get(sql);
-    }
-    
     public Map getPreparedStatementMap()
     {
         return preparedStatements;
@@ -72,8 +69,14 @@ public class MockConnection implements Connection
     
     public PreparedStatement prepareStatement(String sql) throws SQLException
     {
-        MockPreparedStatement statement = new MockPreparedStatement(this);
-        preparedStatements.put(sql, statement);
+        MockPreparedStatement statement = new MockPreparedStatement(this, sql);
+        List list = (List)preparedStatements.get(sql);
+        if(null == list)
+        {
+            list = new ArrayList();
+            preparedStatements.put(sql, list);
+        }
+        list.add(statement);
         return statement;
     }
 

@@ -1,6 +1,7 @@
 package com.mockrunner.jdbc;
 
 import java.sql.PreparedStatement;
+import java.util.List;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
@@ -70,6 +71,14 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     protected MockPreparedStatement getPreparedStatement(String sql)
     {
         return jdbcTestModule.getPreparedStatement(sql);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#getPreparedStatementList}
+     */
+    protected List getPreparedStatementList(String sql)
+    {
+        return jdbcTestModule.getPreparedStatementList(sql);
     }
 
     /**
