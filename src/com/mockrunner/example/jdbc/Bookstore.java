@@ -11,7 +11,7 @@ import java.util.List;
  * This example simulates the order of some books. It iterates through
  * a <code>List</code> of ISBN numbers. If the current quantity is at least
  * one, it reduces the quantity and adds the corresponding ISBN number to
- * the resukt <code>List</code>.
+ * the result <code>List</code>.
  * 
  * This example uses one table <i>books</i> with at least the columns
  * <i>isbn</i> and <i>quantity</i>.

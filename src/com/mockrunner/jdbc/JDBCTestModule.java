@@ -1067,6 +1067,10 @@ public class JDBCTestModule
      */
     public void verifyResultSetRow(MockResultSet resultSet, int number, List rowData)
     {
+        if(null == resultSet.getRow(number))
+        {
+            throw new VerifyFailedException("ResultSet " + resultSet.getId() + " has no row " + number);
+        }
         if(!resultSet.isRowEqual(number, rowData))
         {
             StringBuffer buffer = new StringBuffer("Actual row data:\n");
@@ -1142,6 +1146,10 @@ public class JDBCTestModule
      */
     public void verifyResultSetColumn(MockResultSet resultSet, int number, List columnData)
     {
+        if(null == resultSet.getColumn(number))
+        {
+            throw new VerifyFailedException("ResultSet " + resultSet.getId() + " has no column " + number);
+        }
         if(!resultSet.isColumnEqual(number, columnData))
         {
             StringBuffer buffer = new StringBuffer("Actual column data:\n");
@@ -1217,6 +1225,10 @@ public class JDBCTestModule
      */
     public void verifyResultSetColumn(MockResultSet resultSet, String name, List columnData)
     {
+        if(null == resultSet.getColumn(name))
+        {
+            throw new VerifyFailedException("ResultSet " + resultSet.getId() + " has no column " + name);
+        }
         if(!resultSet.isColumnEqual(name, columnData))
         {
             StringBuffer buffer = new StringBuffer("Actual column data:\n");
