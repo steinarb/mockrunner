@@ -94,7 +94,7 @@ xml-apis.jar
 xercesImpl.jar
 
 Struts 1.2.4:
-http://jakarta.apache.org/struts
+http://struts.apache.org
 struts.jar
 
 JUnit 3.8.1:
@@ -137,6 +137,26 @@ jdom.jar
 NekoHTML Parser 0.9.4:
 http://www.apache.org/~andyc/neko/doc/html/index.html
 nekohtml.jar
+
+The above libraries are necessary at runtime. If you try to build Mockrunner
+you probably recognize that some libraries are missing. The com.mockrunner.gen
+packages contain tools to generate Java 1.3 and adapter classes and to analyze
+dependencies. If you just want to make small modifications to Mockrunner, you
+probably won't need these tools. In this case, simply delete the com.mockrunner.gen
+packages and the corresponding tests. If you want to use these tools, you need
+the following libaries:
+
+BCEL 5.1:
+http://jakarta.apache.org/bcel
+bcel-5.1.jar
+
+JarAnalyzer 0.92:
+http://www.kirkk.com/wiki/wiki.php/Main/JarAnalyzer
+JarAnalyzer-0.9.2.jar
+
+regexp 1.3
+http://jakarta.apache.org/regexp
+jakarta-regexp-1.3.jar (from JarAnalyzer 0.92 release)
 
 IMPORTANT NOTE: There is a problem when using the JUnit GUI testrunners
 together with Jakarta commons logging. If you are facing strange exceptions
