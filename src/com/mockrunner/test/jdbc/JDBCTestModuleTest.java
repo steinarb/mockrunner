@@ -963,4 +963,55 @@ public class JDBCTestModuleTest extends TestCase
 			//should throw exception
 		}
 	}
+    
+    public void testSQLStatementParameterPreparedStatementBatchParameterSets() throws Exception
+    {
+        MockPreparedStatement preparedStatement = (MockPreparedStatement)mockfactory.getMockConnection().prepareStatement("insert into test");
+        preparedStatement.setString(1, "test1");
+        preparedStatement.setInt(2, 3);
+        preparedStatement.addBatch();
+        preparedStatement.setString(1, "test2");
+        preparedStatement.setInt(2, 4);
+        preparedStatement.addBatch();
+        preparedStatement.executeBatch();
+        module.verifySQLStatementParameter("insert into test", 0, 1, "test1");
+        module.verifySQLStatementParameter("insert into test", 0, 2, new Integer(3));
+        module.verifySQLStatementParameter("insert into test", 1, 1, "test2");
+        module.verifySQLStatementParameter("insert into test", 1, 2, new Integer(4));
+        Map testMap = new HashMap();
+        testMap.put(new Integer(1), "test1");
+        testMap.put(new Integer(2), new Integer(3));
+        module.verifySQLStatementParameter("insert into test", 0, testMap);
+        testMap = new HashMap();
+        testMap.put(new Integer(1), "test2");
+        testMap.put(new Integer(2), new Integer(4));
+        module.verifySQLStatementParameter("insert into test", 1, testMap);
+    }
+    
+    public void testSQLStatementParameterCallableStatementBatchParameterSets() throws Exception
+    {
+        MockCallableStatement callableStatement = (MockCallableStatement)mockfactory.getMockConnection().prepareCall("call getData");
+        callableStatement.setString("xyz1", "test1");
+        callableStatement.setLong(1, 3);
+        callableStatement.addBatch();
+        callableStatement.setString(1, "test2");
+        callableStatement.setInt("xyz1", 4);
+        callableStatement.setInt("xyz2", 7);
+        callableStatement.addBatch();
+        callableStatement.executeBatch();
+        module.verifySQLStatementParameter("call getData", 0, "xyz1", "test1");
+        module.verifySQLStatementParameter("call getData", 0, 1, new Long(3));
+        module.verifySQLStatementParameter("call getData", 1, "xyz1", new Integer(4));
+        module.verifySQLStatementParameter("call getData", 1, "xyz2", new Integer(7));
+        module.verifySQLStatementParameter("call getData", 1, 1, "test2");
+        Map testMap = new HashMap();
+        testMap.put("xyz1", "test1");
+        testMap.put(new Integer(1), new Long(3));
+        module.verifySQLStatementParameter("call getData", 0, testMap);
+        testMap = new HashMap();
+        testMap.put("xyz1", new Integer(4));
+        testMap.put("xyz2", new Integer(7));
+        testMap.put(new Integer(1), "test2");
+        module.verifySQLStatementParameter("call getData", 1, testMap);
+    }
 }

@@ -24,6 +24,8 @@ mockrunner-0.3.2:
   receivers
 - changed session creation in MockHttpServletRequest. If getSession(false)
   is called without a previous created session, this method returns null
+- fixed bug with parameter sets in batch updates, always the latest parameter
+  set has been stored
 - fixed bug 1077690 (JMS spec allows MessageProducers with null destination)
   reported by Peter Ryan
 - fixed bug in MockHttpServletResponse.getWriter()
