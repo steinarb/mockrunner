@@ -23,6 +23,8 @@ public class AllWebTests
         suite.addTest(new TestSuite(WebMockObjectFactoryTest.class));
         suite.addTest(new TestSuite(MapMessageResourcesTest.class));
         suite.addTest(new TestSuite(MockModuleConfigTest.class));
+        suite.addTest(new TestSuite(MockFunctionMapperTest.class));
+        suite.addTest(new TestSuite(MockExpressionEvaluatorTest.class));
         //$JUnit-END$
         return suite;
     }

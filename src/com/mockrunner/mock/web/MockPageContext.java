@@ -9,6 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.jsp.JspWriter;
+//import javax.servlet.jsp.el.ExpressionEvaluator;
+//import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.tagext.BodyContent;
 
 /**
@@ -20,6 +22,8 @@ public class MockPageContext extends org.apache.struts.mock.MockPageContext
     private Stack outStack;
     private Exception exception;
     private Object page;
+    //private ExpressionEvaluator evaluator;
+    //private VariableResolver resolver;
 
     public MockPageContext(ServletConfig config, ServletRequest request, ServletResponse response)
     {
@@ -105,4 +109,24 @@ public class MockPageContext extends org.apache.struts.mock.MockPageContext
         jspWriter = new MockJspWriter();
         outStack = new Stack();
     }
+    /*
+    public void setExpressionEvaluator(ExpressionEvaluator evaluator)
+    {
+        this.evaluator = evaluator;
+    }
+
+    public void setVariableResolver(VariableResolver resolver)
+    {
+        this.resolver = resolver;
+    }
+    
+    public ExpressionEvaluator getExpressionEvaluator()
+    {
+        return evaluator;
+    }
+
+    public VariableResolver getVariableResolver()
+    {
+        return resolver;
+    }*/
 }
