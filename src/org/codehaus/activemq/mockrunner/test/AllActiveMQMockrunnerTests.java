@@ -10,7 +10,6 @@ public class AllActiveMQMockrunnerTests
         TestSuite suite = new TestSuite("Test for org.codehaus.activemq.mockrunner.test");
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(SelectorParserTest.class));
-    
         //$JUnit-END$
         return suite;
     }
