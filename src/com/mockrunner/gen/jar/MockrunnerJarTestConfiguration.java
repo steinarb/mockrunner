@@ -37,8 +37,8 @@ public class MockrunnerJarTestConfiguration
         {
             List j2ee14Jars = getJ2EE14Jars();
             List j2ee13Jars = getJ2EE13Jars();
-            List j2ee14ThirdPartyJarURLs = getURLFromFileList(getThirdPartyStandardJarsJ2EE14());
-            List j2ee13ThirdPartyJarURLs = getURLFromFileList(getThirdPartyStandardJarsJ2EE13());
+            List j2ee14ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJ2EE14());
+            List j2ee13ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJ2EE13());
             List j2ee14mappings = createMappings(j2ee14Jars, j2ee14ThirdPartyJarURLs);
             List j2ee13mappings = createMappings(j2ee13Jars, j2ee13ThirdPartyJarURLs);
             List resultList = new ArrayList();
