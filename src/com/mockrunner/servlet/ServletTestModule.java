@@ -192,7 +192,10 @@ public class ServletTestModule extends HTMLOutputModule
      * is set). Useful if you want to test the interaction of filters
      * and servlets or if a servlet needs some filters to work properly.
      * If you set <i>doChain</i> to <code>true</code> (use {@link #setDoChain}),
-     * this method is called before any call of a servlet method.
+     * this method is called before any call of a servlet method. If a filter
+     * does not call it's chains <code>doFilter</code> method, the chain
+     * breaks and the servlet will not be called (just like it in the
+     * real container).
      * Only filters added with one of the <code>add</code> methods will be 
      * called while going through the chain. The current filter is ignored
      * if it is not in the chain.
