@@ -790,10 +790,13 @@ public class EJBTestModule
         }
         try
         {
-            return Class.forName(classPackage + "." + className);
+            return Class.forName(getClassName(classPackage, className), true, beanClass.getClassLoader());
         }
         catch(ClassNotFoundException exc)
         {
+            System.out.println(classPackage);
+            System.out.println(beanClass.getClassLoader());
+            exc.printStackTrace();
             throw new RuntimeException("Home interface not found: " + exc.getMessage());
         }
     }
@@ -813,12 +816,18 @@ public class EJBTestModule
         }
         try
         {
-            return Class.forName(classPackage + "." + className);
+            return Class.forName(getClassName(classPackage, className), true, beanClass.getClassLoader());
         }
         catch(ClassNotFoundException exc)
         {
             throw new RuntimeException("Interface not found: " + exc.getMessage());
         }
+    }
+    
+    private String getClassName(String packageName, String className)
+    {
+        if(null == packageName || packageName.length() == 0) return className;
+        return packageName + "." + className;
     }
 
     private String truncateImplClassName(String className)
