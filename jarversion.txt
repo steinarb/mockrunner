@@ -1,0 +1,6 @@
+@jarname@
+
+Version: @version@
+Created: @timestamp@
+JDK:     @jdkver@
+J2EE:    @j2eever@

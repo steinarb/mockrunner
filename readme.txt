@@ -73,12 +73,12 @@ when using ActiveMQ in your project.
 Mockrunner depends on some third-party libraries. You have to add them to the classpath.
 You can subclass one of the standard adapters (e.g. ActionTestCaseAdapter)
 which extend BaseTestCase. BaseTestCase provides easy access to all test modules and all
-mock object factories, but it depends on all third-party libraries. However, you don't
+mock object factories. BaseTestCase depends on all third-party libraries but you don't
 have to add all the jar files to the classpath, just those that are related to the 
-test module you use (because the factories are lazy initialized when necessary).
+test module you use, because the factories are lazy initialized when necessary.
 If you only use one technology, e.g. JDBC, it's recommended to subclass the basic
-adapter version (e.g. BasicJDBCTestCaseAdapter), which does not extend BaseTestCase
-and does not depend on all third-party libraries. Please note, that all adapters
+adapter versions (e.g. BasicJDBCTestCaseAdapter), which do not extend BaseTestCase
+and do not depend on all third-party libraries. Please note, that all adapters
 just delegate to their corresponding module. If you don't want to extend a Mockrunner
 adapter, you can always create a module like this:
 

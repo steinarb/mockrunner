@@ -5,11 +5,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -55,7 +55,7 @@ public class MockrunnerTextSummary implements Summary
 
     private void output(Map dependencyMap, PrintWriter writer) 
     {
-        DateFormat timestampFormat = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.US);
+        DateFormat timestampFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm aa");
         String timestamp = timestampFormat.format(new Date(System.currentTimeMillis()));
         writer.println("Created: " + timestamp);
         writer.println();
