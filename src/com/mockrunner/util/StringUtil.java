@@ -10,6 +10,8 @@ import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
+import com.mockrunner.base.NestedApplicationException;
+
 /**
  * Simple util class for <code>String</code> related methods.
  */
@@ -141,7 +143,7 @@ public class StringUtil
         catch(MalformedPatternException exc)
         {
             log.error("Malformed pattern", exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
 }

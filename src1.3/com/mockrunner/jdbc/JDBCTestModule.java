@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
@@ -539,7 +540,7 @@ public class JDBCTestModule
             }
             catch(SQLException exc)
             {
-                throw new RuntimeException(exc.getMessage());
+                throw new NestedApplicationException(exc);
             }
         }
         return null;
@@ -710,7 +711,7 @@ public class JDBCTestModule
         }
         catch(SQLException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     

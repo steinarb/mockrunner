@@ -24,6 +24,7 @@ import org.apache.struts.config.FormPropertyConfig;
 import org.apache.struts.util.MessageResources;
 import org.apache.struts.validator.ValidatorForm;
 
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.mock.web.WebMockObjectFactory;
@@ -743,6 +744,30 @@ public class ActionTestModuleTest extends TestCase
         assertTrue(errors.size() == 1);
         ActionMessage error = (ActionMessage)errors.get().next();
         assertEquals("errors.minlength", error.getKey());
+    }
+    
+    public void testNestedException()
+    {
+        try
+        {
+            module.actionPerform(TestFailureAction.class);
+            fail();
+        } 
+        catch(NestedApplicationException exc)
+        {
+            assertEquals("Expected", exc.getRootCause().getMessage());
+        }
+    }
+    
+    public static class TestFailureAction extends Action
+    {
+        public ActionForward execute(ActionMapping mapping,
+                                     ActionForm form,
+                                     HttpServletRequest request,
+                                     HttpServletResponse response) throws Exception
+        {
+            throw new Exception("Expected");
+        }
     }
     
     public static class TestAction extends Action

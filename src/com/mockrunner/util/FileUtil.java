@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mockrunner.base.NestedApplicationException;
+
 public class FileUtil
 {
     /**
@@ -37,7 +39,7 @@ public class FileUtil
         }
         catch(IOException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
         finally
         {
@@ -49,7 +51,7 @@ public class FileUtil
                 }
                 catch(Exception exc)
                 {
-                    throw new RuntimeException(exc.getMessage());
+                    throw new NestedApplicationException(exc);
                 }
             }
         }

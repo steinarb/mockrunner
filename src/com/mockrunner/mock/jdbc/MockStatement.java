@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.jdbc.AbstractResultSetHandler;
 import com.mockrunner.util.SQLUtil;
 
@@ -44,7 +45,7 @@ public class MockStatement implements Statement
         }
         catch(SQLException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -59,7 +60,7 @@ public class MockStatement implements Statement
         }
         catch(SQLException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         } 
     }
     

@@ -27,6 +27,7 @@ import org.apache.struts.util.MessageResources;
 import org.apache.struts.validator.ValidatorPlugIn;
 
 import com.mockrunner.base.HTMLOutputModule;
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.mock.web.MockActionMapping;
@@ -40,6 +41,8 @@ import com.mockrunner.util.StreamUtil;
  * Per default this class does everything like Struts
  * when calling an action but you can change the behaviour
  * (e.g. disable form population).
+ * Please note: If your action throws an exception, it
+ * will be nested in a {@link com.mockrunner.base.NestedApplicationException}.
  */
 public class ActionTestModule extends HTMLOutputModule
 {
@@ -258,7 +261,7 @@ public class ActionTestModule extends HTMLOutputModule
             catch(FileNotFoundException exc)
             {
                 log.error("File not found", exc);
-                throw new RuntimeException(exc.getMessage());
+                throw new NestedApplicationException(exc);
             }
         }
     }
@@ -904,7 +907,7 @@ public class ActionTestModule extends HTMLOutputModule
         catch(Exception exc)
         {
             log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -929,7 +932,7 @@ public class ActionTestModule extends HTMLOutputModule
         catch(Exception exc)
         {
             log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
 
@@ -950,7 +953,7 @@ public class ActionTestModule extends HTMLOutputModule
         catch(Exception exc)
         {
             log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
 
@@ -968,8 +971,7 @@ public class ActionTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -987,8 +989,7 @@ public class ActionTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
 
@@ -1015,8 +1016,7 @@ public class ActionTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -1043,8 +1043,7 @@ public class ActionTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
 
@@ -1072,8 +1071,7 @@ public class ActionTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -1118,8 +1116,7 @@ public class ActionTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
         return getActionForward();
     }

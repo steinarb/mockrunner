@@ -17,6 +17,8 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mockrunner.base.NestedApplicationException;
+
 /**
  * Mock implementation of <code>HttpServletResponse</code>.
  */
@@ -51,7 +53,7 @@ public class MockHttpServletResponse implements HttpServletResponse
         } 
         catch(UnsupportedEncodingException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
 

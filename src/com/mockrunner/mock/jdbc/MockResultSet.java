@@ -27,6 +27,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.CaseAwareMap;
 import com.mockrunner.util.CollectionUtil;
@@ -136,7 +137,7 @@ public class MockResultSet implements ResultSet, Cloneable
         }
         catch(CloneNotSupportedException exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
