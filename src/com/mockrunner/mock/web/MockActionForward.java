@@ -43,6 +43,15 @@ public class MockActionForward extends MockForwardConfig
         setRedirect(redirect);
         setContextRelative(contextRelative);
     }
+
+    public MockActionForward(String name, String path, boolean redirect, String module)
+    {
+        super();
+        setName(name);
+        setPath(path);
+        setRedirect(redirect);
+        setModule(module);
+    }
     
     public MockActionForward(ActionForward copyMe) 
     {
