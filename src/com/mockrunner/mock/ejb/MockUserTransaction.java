@@ -13,11 +13,20 @@ import javax.transaction.UserTransaction;
  */
 public class MockUserTransaction implements UserTransaction
 {
-    private boolean beginCalled = false;
-    private boolean commitCalled = false;
-    private boolean rollbackCalled = false;
-    private boolean rollbackOnlyCalled = false;
-    private int transactionTimeout = 0;
+    private boolean beginCalled;
+    private boolean commitCalled;
+    private boolean rollbackCalled;
+    private boolean rollbackOnlyCalled;
+    private int transactionTimeout;
+    private int beginCalls;
+    private int commitCalls;
+    private int rollbackCalls;
+    private int rollbackOnlyCalls;
+    
+    public MockUserTransaction()
+    {
+        reset();
+    }
     
     public void reset()
     {
@@ -26,6 +35,11 @@ public class MockUserTransaction implements UserTransaction
         rollbackCalled = false;
         rollbackOnlyCalled = false;
         transactionTimeout = 0;
+        transactionTimeout = 0;
+        beginCalls = 0;
+        commitCalls = 0;
+        rollbackCalls = 0;
+        rollbackOnlyCalls = 0;
     }
     
     public boolean wasBeginCalled()
@@ -53,10 +67,43 @@ public class MockUserTransaction implements UserTransaction
         return transactionTimeout;
     }
     
+    public int getNumberBeginCalls()
+    {
+        return beginCalls;
+    }
+    
+    public int getNumberCommitCalls()
+    {
+        return commitCalls;
+    }
+    
+    public int getNumberRollbackCalls()
+    {
+        return rollbackCalls;
+    }
+    
+    public int getNumberRollbackOnlyCalls()
+    {
+        return rollbackOnlyCalls;
+    }
+    
+    public int getStatus() throws SystemException
+    {
+        if(rollbackCalled) return Status.STATUS_ROLLEDBACK;
+        if(commitCalled) return Status.STATUS_COMMITTED;
+        if(rollbackOnlyCalled) return Status.STATUS_MARKED_ROLLBACK;
+        if(beginCalled) return Status.STATUS_ACTIVE;
+        return Status.STATUS_NO_TRANSACTION;
+    }
+    
     public void begin() throws NotSupportedException, SystemException
     {
-        reset();
         beginCalled = true;
+        commitCalled = false;
+        rollbackCalled = false;
+        rollbackOnlyCalled = false;
+        transactionTimeout = 0;
+        beginCalls++;
     }
 
     public void commit() throws RollbackException, 
@@ -68,25 +115,19 @@ public class MockUserTransaction implements UserTransaction
     {
 
         commitCalled = true;
-    }
-
-    public int getStatus() throws SystemException
-    {
-        if(rollbackCalled) return Status.STATUS_ROLLEDBACK;
-        if(commitCalled) return Status.STATUS_COMMITTED;
-        if(rollbackOnlyCalled) return Status.STATUS_MARKED_ROLLBACK;
-        if(beginCalled) return Status.STATUS_ACTIVE;
-        return Status.STATUS_NO_TRANSACTION;
+        commitCalls++;
     }
 
     public void rollback() throws IllegalStateException, SecurityException, SystemException
     {
         rollbackCalled = true;
+        rollbackCalls++;
     }
 
     public void setRollbackOnly() throws IllegalStateException, SystemException
     {
         rollbackOnlyCalled = true;
+        rollbackOnlyCalls++;
     }
 
     public void setTransactionTimeout(int timeout) throws SystemException
