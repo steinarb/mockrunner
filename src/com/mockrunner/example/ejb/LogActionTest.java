@@ -18,7 +18,7 @@ public class LogActionTest extends ActionTestCaseAdapter
 {
     private JDBCTestModule jdbcModule;
     private EJBTestModule ejbModule;
-    private MockEjbObject bean;
+    private MockEjbObject ejbObject;
     
     protected void setUp() throws Exception
     {
@@ -26,7 +26,7 @@ public class LogActionTest extends ActionTestCaseAdapter
         jdbcModule = createJDBCTestModule();
         ejbModule = createEJBTestModule();
         ejbModule.setInterfacePackage("com.mockrunner.example.ejb.interfaces");
-        bean = ejbModule.deploy("com/mockrunner/example/LogSession", LogSessionBean.class, TransactionPolicy.REQUIRED);
+        ejbObject = ejbModule.deploy("com/mockrunner/example/LogSession", LogSessionBean.class, TransactionPolicy.REQUIRED);
         ejbModule.bindToContext("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
     }
 
