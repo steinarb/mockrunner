@@ -14,7 +14,7 @@ public class MockSavepoint implements Savepoint
     private int id;
     private int number;
     private boolean released;
-    private boolean rollbacked;
+    private boolean rolledback;
     
     public MockSavepoint(int number)
     {
@@ -27,7 +27,7 @@ public class MockSavepoint implements Savepoint
         this.id = idCount++;
         this.number = number;
         released = false;
-        rollbacked = false;
+        rolledback = false;
     }
     
     public int getSavepointId() throws SQLException
@@ -49,19 +49,35 @@ public class MockSavepoint implements Savepoint
     {
         return released;
     }
-
+    
+    /**
+     * @deprecated use {@link #isRolledBack}
+     */
     public boolean isRollbacked()
     {
-        return rollbacked;
+        return isRolledBack();
+    }
+
+    public boolean isRolledBack()
+    {
+        return rolledback;
     }
 
     public void setReleased(boolean released)
     {
         this.released = released;
     }
-
+    
+    /**
+     * @deprecated use {@link #setRolledBack}
+     */
     public void setRollbacked(boolean rollbacked)
     {
-        this.rollbacked = rollbacked;
+        setRolledBack(rollbacked);
+    }
+
+    public void setRolledBack(boolean rollbacked)
+    {
+        this.rolledback = rollbacked;
     }
 }
