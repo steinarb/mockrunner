@@ -1,5 +1,6 @@
 package com.mockrunner.servlet;
 
+import javax.servlet.Filter;
 import javax.servlet.http.HttpServlet;
 
 import com.mockrunner.base.HTMLOutputModule;
@@ -79,6 +80,70 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     {
         return servletTestModule.getServlet();
     }
+    
+    /**
+     * Delegates to {@link ServletTestModule#createFilter}
+     */
+    public Filter createFilter(Class filterClass)
+    {
+        return servletTestModule.createFilter(filterClass);
+    }
+    
+    /**
+     * Delegates to {@link ServletTestModule#getFilter}
+     */
+    public Filter getFilter()
+    {
+        return servletTestModule.getFilter();
+    }
+
+    /**
+     * Delegates to {@link ServletTestModule#createAndAddFilter}
+     */
+    public Filter createAndAddFilter(Class filterClass)
+    {
+        return servletTestModule.createAndAddFilter(filterClass);
+    }
+
+    /**
+     * Delegates to {@link ServletTestModule#addFilter(Class)}
+     */
+    public void addFilter(Class filterClass)
+    {
+        servletTestModule.addFilter(filterClass);
+    }
+
+    /**
+     * Delegates to {@link ServletTestModule#addFilter(Filter)}
+     */
+    public void addFilter(Filter filter)
+    {
+        servletTestModule.addFilter(filter);
+    }
+
+    /**
+     * Delegates to {@link ServletTestModule#setDoChain}
+     */
+    public void setDoChain(boolean doChain)
+    {
+        servletTestModule.setDoChain(doChain);
+    }
+    
+    /**
+     * Delegates to {@link ServletTestModule#doFilter}
+     */
+    public void doFilter()
+    {
+        servletTestModule.doFilter();
+    }
+    
+    /**
+     * Delegates to {@link ServletTestModule#doChain}
+     */
+    public void doChain()
+    {
+        servletTestModule.doChain();
+    }
 
     /**
      * Delegates to {@link ServletTestModule#init}
@@ -130,10 +195,18 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     
     /**
      * Delegates to {@link ServletTestModule#doTrace}
-     */      
+     */    
     public void doTrace()
     {
         servletTestModule.doTrace();
+    }
+    
+    /**
+     * Delegates to {@link ServletTestModule#service}
+     */
+    public void service()
+    {
+        servletTestModule.service();
     }
     
     /**
