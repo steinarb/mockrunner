@@ -35,6 +35,15 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
     {
         Map webFiles = new HashMap();
         
+        webFiles.put("com.mockrunner.tag.DynamicAttribute", new Boolean(false));
+        webFiles.put("com.mockrunner.tag.NestedSimpleTag", new Boolean(false));
+        
+        webFiles.put("com.mockrunner.mock.web.MockVariableResolver", new Boolean(false));
+        webFiles.put("com.mockrunner.mock.web.MockFunctionMapper", new Boolean(false));
+        webFiles.put("com.mockrunner.mock.web.MockJspFragment", new Boolean(false));
+        webFiles.put("com.mockrunner.mock.web.MockExpression", new Boolean(false));
+        webFiles.put("com.mockrunner.mock.web.MockExpressionEvaluator", new Boolean(false));
+        
         return webFiles;
     }
 }
