@@ -13,22 +13,27 @@ import javax.servlet.jsp.tagext.BodyContent;
  */
 public class MockBodyContent extends BodyContent
 {
-    private MockJspWriter bodyWriter;
+    private String body;
     
     public MockBodyContent(JspWriter writer)
     {
         super(writer);
-        bodyWriter = new MockJspWriter();
+        clearBody();
+    }
+    
+    public void setBody(String body)
+    {
+        this.body = body;
     }
 
     public Reader getReader()
     {
-        return new StringReader(bodyWriter.getOutputAsString());
+        return new StringReader(getString());
     }
 
     public String getString()
     {
-        return bodyWriter.getOutputAsString();
+        return body;
     }
 
     public void writeOut(Writer writer) throws IOException
@@ -38,131 +43,131 @@ public class MockBodyContent extends BodyContent
     
     public void clearBody()
     {
-        bodyWriter = new MockJspWriter();
+        body = "";
     }
 
     public void newLine() throws IOException
     {
-        bodyWriter.newLine();
+        
     }
 
     public void print(boolean arg0) throws IOException
     {
-        bodyWriter.print(arg0);
+        
     }
 
     public void print(char arg0) throws IOException
     {
-        bodyWriter.print(arg0);
+        
     }
 
     public void print(int arg0) throws IOException
     {
-        bodyWriter.print(arg0);
+        
     }
 
     public void print(long arg0) throws IOException
     {
-        bodyWriter.print(arg0);
+        
     }
 
     public void print(float arg0) throws IOException
     {
-        bodyWriter.print(arg0);
+        
     }
 
     public void print(double arg0) throws IOException
     {
-        bodyWriter.print(arg0);
+        
     }
 
     public void print(char[] arg0) throws IOException
     {
-        bodyWriter.print(arg0);
+        
     }
 
     public void print(String arg0) throws IOException
     {
-        bodyWriter.print(arg0);
+        
     }
 
     public void print(Object arg0) throws IOException
     {
-        bodyWriter.print(arg0);
+        
     }
 
     public void println() throws IOException
     {
-        bodyWriter.println();
+        
     }
 
     public void println(boolean arg0) throws IOException
     {
-        bodyWriter.println(arg0);
+        
     }
 
     public void println(char arg0) throws IOException
     {
-        bodyWriter.println(arg0);
+        
     }
 
     public void println(int arg0) throws IOException
     {
-        bodyWriter.println(arg0);
+        
     }
 
     public void println(long arg0) throws IOException
     {
-        bodyWriter.println(arg0);
+        
     }
 
     public void println(float arg0) throws IOException
     {
-        bodyWriter.println(arg0);
+        
     }
     
     public void println(double arg0) throws IOException
     {
-        bodyWriter.println(arg0);
+        
     }
 
     public void println(char[] arg0) throws IOException
     {
-        bodyWriter.println(arg0);
+        
     }
 
     public void println(String arg0) throws IOException
     {
-        bodyWriter.println(arg0);
+        
     }
 
     public void println(Object arg0) throws IOException
     {
-        bodyWriter.println(arg0);
+        
     }
 
     public void clear() throws IOException
     {
-        bodyWriter.clear();
+        
     }
 
     public void clearBuffer() throws IOException
     {
-        bodyWriter.clearBuffer();
+        
     }
 
     public void close() throws IOException
     {
-        bodyWriter.close();
+        
     }
 
     public int getRemaining()
     {
-        return bodyWriter.getRemaining();
+        return 0;
     }
 
     public void write(char[] cbuf, int off, int len) throws IOException
     {
-        bodyWriter.write(cbuf, off, len);
+        
     }
 }

@@ -2,6 +2,8 @@ package com.mockrunner.base;
 
 import javax.servlet.jsp.tagext.TagSupport;
 
+import com.mockrunner.mock.MockPageContext;
+
 /**
  * Delegator for {@link TagTestModule}. You can
  * subclass this adapter or use {@link TagTestModule}
@@ -49,39 +51,63 @@ public class TagTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link TagTestModule#createTag}
      */
-    public TagSupport createTag(Class tagClass)
+    protected TagSupport createTag(Class tagClass)
     {
         return tagTestModule.createTag(tagClass);
     }
     
     /**
+     * Delegates to {@link TagTestModule#setBody}
+     */
+    protected void setBody(String body)
+    {
+        tagTestModule.setBody(body);
+    }
+    
+    /**
+     * Delegates to {@link TagTestModule#getBody}
+     */
+    protected String getBody()
+    {
+        return tagTestModule.getBody();
+    }
+    
+    /**
      * Delegates to {@link TagTestModule#getTag}
      */
-    public TagSupport getTag()
+    protected TagSupport getTag()
     {
         return tagTestModule.getTag();
     }
     
     /**
+     * Delegates to {@link TagTestModule#getMockPageContext}
+     */
+    protected MockPageContext getMockPageContext()
+    {
+        return tagTestModule.getMockPageContext();
+    }
+        
+    /**
      * Delegates to {@link TagTestModule#doStartTag}
      */
-    public void doStartTag()
+    protected int doStartTag()
     {
-        tagTestModule.doStartTag();
+        return tagTestModule.doStartTag();
     }
     
     /**
      * Delegates to {@link TagTestModule#doEndTag}
      */
-    public void doEndTag()
+    protected int doEndTag()
     {
-        tagTestModule.doEndTag();
+        return tagTestModule.doEndTag();
     }
     
     /**
      * Delegates to {@link TagTestModule#doInitBody}
      */
-    public void doInitBody()
+    protected void doInitBody()
     {
         tagTestModule.doInitBody();
     }
@@ -89,15 +115,15 @@ public class TagTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link TagTestModule#doAfterBody}
      */
-    public void doAfterBody()
+    protected int doAfterBody()
     {
-        tagTestModule.doAfterBody();
+        return tagTestModule.doAfterBody();
     }
 
     /**
      * Delegates to {@link TagTestModule#release}
      */
-    public void release()
+    protected void release()
     {
         tagTestModule.release();
     }
@@ -105,7 +131,7 @@ public class TagTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link TagTestModule#getOutput}
      */
-    public String getOutput()
+    protected String getOutput()
     {
         return tagTestModule.getOutput();
     }
@@ -113,7 +139,7 @@ public class TagTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link TagTestModule#verifyOutput}
      */
-    public void verifyOutput(String output)
+    protected void verifyOutput(String output)
     {
         tagTestModule.verifyOutput(output);
     }
@@ -121,7 +147,7 @@ public class TagTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link TagTestModule#verifyOutputContains}
      */
-    public void verifyOutputContains(String output)
+    protected void verifyOutputContains(String output)
     {
         tagTestModule.verifyOutputContains(output);
     }
