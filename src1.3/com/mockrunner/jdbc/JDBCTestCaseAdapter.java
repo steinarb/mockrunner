@@ -1051,83 +1051,119 @@ public class JDBCTestCaseAdapter extends BaseTestCase
         jdbcTestModule.verifyCallableStatementOutParameterRegistered(indexOfStatement, nameOfParameter);
     }
     
-	/**
-	 * Delegates to {@link JDBCTestModule#verifySavepointPresent(int)}
-	 */
-	/*protected void verifySavepointPresent(int index)
-	{
-		jdbcTestModule.verifySavepointPresent(index);
-	}*/
+    /**
+     * Delegates to {@link JDBCTestModule#verifySavepointPresent(int)}
+     */
+    /*protected void verifySavepointPresent(int index)
+    {
+        jdbcTestModule.verifySavepointPresent(index);
+    }*/
     
-	/**
-	 * Delegates to {@link JDBCTestModule#verifySavepointPresent(String)}
-	 */   
-	/*protected void verifySavepointPresent(String name)
-	{
-		jdbcTestModule.verifySavepointPresent(name);
-	}*/
+    /**
+     * Delegates to {@link JDBCTestModule#verifySavepointPresent(String)}
+     */   
+    /*protected void verifySavepointPresent(String name)
+    {
+        jdbcTestModule.verifySavepointPresent(name);
+    }*/
     
-	/**
-	 * Delegates to {@link JDBCTestModule#verifySavepointReleased(int)}
-	 */
-	/*protected void verifySavepointReleased(int index)
-	{
-		jdbcTestModule.verifySavepointReleased(index);
-	}*/
+    /**
+     * Delegates to {@link JDBCTestModule#verifySavepointReleased(int)}
+     */
+    /*protected void verifySavepointReleased(int index)
+    {
+        jdbcTestModule.verifySavepointReleased(index);
+    }*/
     
-	/**
-	 * Delegates to {@link JDBCTestModule#verifySavepointReleased(String)}
-	 */      
-	/*protected void verifySavepointReleased(String name)
-	{
-		jdbcTestModule.verifySavepointReleased(name);
-	}*/
+    /**
+     * Delegates to {@link JDBCTestModule#verifySavepointReleased(String)}
+     */      
+    /*protected void verifySavepointReleased(String name)
+    {
+        jdbcTestModule.verifySavepointReleased(name);
+    }*/
   
-	/**
-	 * Delegates to {@link JDBCTestModule#verifySavepointNotReleased(int)}
-	 */
-	/*protected void verifySavepointNotReleased(int index)
-	{
-		jdbcTestModule.verifySavepointNotReleased(index);
-	}*/
+    /**
+     * Delegates to {@link JDBCTestModule#verifySavepointNotReleased(int)}
+     */
+    /*protected void verifySavepointNotReleased(int index)
+    {
+        jdbcTestModule.verifySavepointNotReleased(index);
+    }*/
 
-	/**
-	 * Delegates to {@link JDBCTestModule#verifySavepointNotReleased(String)}
-	 */
-	/*protected void verifySavepointNotReleased(String name)
-	{
-		jdbcTestModule.verifySavepointNotReleased(name);
-	}*/
+    /**
+     * Delegates to {@link JDBCTestModule#verifySavepointNotReleased(String)}
+     */
+    /*protected void verifySavepointNotReleased(String name)
+    {
+        jdbcTestModule.verifySavepointNotReleased(name);
+    }*/
     
-	/**
-	 * Delegates to {@link JDBCTestModule#verifySavepointRollbacked(int)}
-	 */
-	/*protected void verifySavepointRollbacked(int index)
-	{
-		jdbcTestModule.verifySavepointRollbacked(index);
-	}*/
+    /**
+     * Delegates to {@link JDBCTestModule#verifySavepointRolledBack(int)}
+     */
+    /*protected void verifySavepointRolledBack(int index)
+    {
+        jdbcTestModule.verifySavepointRolledBack(index);
+    }*/
 
-	/**
-	 * Delegates to {@link JDBCTestModule#verifySavepointRollbacked(String)}
-	 */
-	/*protected void verifySavepointRollbacked(String name)
-	{
-		jdbcTestModule.verifySavepointRollbacked(name);
-	}*/
+    /**
+     * Delegates to {@link JDBCTestModule#verifySavepointRollbacked(String)}
+     */
+    /*protected void verifySavepointRolledBack(String name)
+    {
+        jdbcTestModule.verifySavepointRolledBack(name);
+    }*/
 
-	/**
-	 * Delegates to {@link JDBCTestModule#verifySavepointNotRollbacked(int)}
-	 */
-	/*protected void verifySavepointNotRollbacked(int index)
-	{
-		jdbcTestModule.verifySavepointNotRollbacked(index);
-	}*/
+    /**
+     * Delegates to {@link JDBCTestModule#verifySavepointNotRolledBack(int)}
+     */
+    /*protected void verifySavepointNotRolledBack(int index)
+    {
+        jdbcTestModule.verifySavepointNotRolledBack(index);
+    }*/
 
-	/**
-	 * Delegates to {@link JDBCTestModule#verifySavepointNotRollbacked(String)}
-	 */
-	/*protected void verifySavepointNotRollbacked(String name)
-	{
-		jdbcTestModule.verifySavepointNotRollbacked(name);
-	}*/
+    /**
+     * Delegates to {@link JDBCTestModule#verifySavepointNotRolledBack(String)}
+     */
+    /*protected void verifySavepointNotRolledBack(String name)
+    {
+        jdbcTestModule.verifySavepointNotRolledBack(name);
+    }*/
+    
+    /**
+     * @deprecated use {@link #verifySavepointRolledBack(int)}
+     * Delegates to {@link JDBCTestModule#verifySavepointRollbacked(int)}
+     */
+    /*protected void verifySavepointRollbacked(int index)
+    {
+        jdbcTestModule.verifySavepointRollbacked(index);
+    }*/
+
+    /**
+     * @deprecated use {@link #verifySavepointRolledBack(String)}
+     * Delegates to {@link JDBCTestModule#verifySavepointRollbacked(String)}
+     */
+    /*protected void verifySavepointRollbacked(String name)
+    {
+        jdbcTestModule.verifySavepointRollbacked(name);
+    }*/
+
+    /**
+     * @deprecated use {@link #verifySavepointNotRolledBack(int)}
+     * Delegates to {@link JDBCTestModule#verifySavepointNotRollbacked(int)}
+     */
+    /*protected void verifySavepointNotRollbacked(int index)
+    {
+        jdbcTestModule.verifySavepointNotRollbacked(index);
+    }*/
+
+    /**
+     * @deprecated use {@link #verifySavepointNotRolledBack(String)}
+     * Delegates to {@link JDBCTestModule#verifySavepointNotRollbacked(String)}
+     */
+    /*protected void verifySavepointNotRollbacked(String name)
+    {
+        jdbcTestModule.verifySavepointNotRollbacked(name);
+    }*/
 }

@@ -38,7 +38,7 @@ public class JavaLineProcessorTest extends TestCase
         testJava.append("\n");
         testJava.append("public anotherMethod()\n");
         testJava.append("{\n");
-        testJava.append("}\n");
+        testJava.append("}  \n");
         testJava.append("}");
         return testJava.toString();
     }

@@ -1100,6 +1100,39 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link JDBCTestModule#verifySavepointRolledBack(int)}
+     */
+    protected void verifySavepointRolledBack(int index)
+    {
+        jdbcTestModule.verifySavepointRolledBack(index);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifySavepointRollbacked(String)}
+     */
+    protected void verifySavepointRolledBack(String name)
+    {
+        jdbcTestModule.verifySavepointRolledBack(name);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifySavepointNotRolledBack(int)}
+     */
+    protected void verifySavepointNotRolledBack(int index)
+    {
+        jdbcTestModule.verifySavepointNotRolledBack(index);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifySavepointNotRolledBack(String)}
+     */
+    protected void verifySavepointNotRolledBack(String name)
+    {
+        jdbcTestModule.verifySavepointNotRolledBack(name);
+    }
+    
+    /**
+     * @deprecated use {@link #verifySavepointRolledBack(int)}
      * Delegates to {@link JDBCTestModule#verifySavepointRollbacked(int)}
      */
     protected void verifySavepointRollbacked(int index)
@@ -1108,6 +1141,7 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
+     * @deprecated use {@link #verifySavepointRolledBack(String)}
      * Delegates to {@link JDBCTestModule#verifySavepointRollbacked(String)}
      */
     protected void verifySavepointRollbacked(String name)
@@ -1116,6 +1150,7 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
+     * @deprecated use {@link #verifySavepointNotRolledBack(int)}
      * Delegates to {@link JDBCTestModule#verifySavepointNotRollbacked(int)}
      */
     protected void verifySavepointNotRollbacked(int index)
@@ -1124,6 +1159,7 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
+     * @deprecated use {@link #verifySavepointNotRolledBack(String)}
      * Delegates to {@link JDBCTestModule#verifySavepointNotRollbacked(String)}
      */
     protected void verifySavepointNotRollbacked(String name)

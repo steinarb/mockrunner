@@ -24,6 +24,7 @@ public class AllWebTests
         suite.addTest(new TestSuite(MockModuleConfigTest.class));
         suite.addTest(new TestSuite(MockFunctionMapperTest.class));
         suite.addTest(new TestSuite(MockExpressionEvaluatorTest.class));
+        suite.addTest(new TestSuite(MockActionForwardTest.class));
         //$JUnit-END$
         return suite;
     }
