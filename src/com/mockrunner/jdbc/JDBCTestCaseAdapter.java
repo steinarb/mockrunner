@@ -343,6 +343,102 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRowInserted(MockResultSet, int)}
+     */
+    protected void verifyResultSetRowInserted(MockResultSet resultSet, int number)
+    {
+        jdbcTestModule.verifyResultSetRowInserted(resultSet, number);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRowInserted(String, int)}
+     */
+    protected void verifyResultSetRowInserted(String id, int number)
+    {
+        jdbcTestModule.verifyResultSetRowInserted(id, number);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRowNotInserted(MockResultSet, int)}
+     */
+    protected void verifyResultSetRowNotInserted(MockResultSet resultSet, int number)
+    {
+        jdbcTestModule.verifyResultSetRowNotInserted(resultSet, number);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRowNotInserted(String, int)}
+     */
+    protected void verifyResultSetRowNotInserted(String id, int number)
+    {
+        jdbcTestModule.verifyResultSetRowNotInserted(id, number);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRowUpdated(MockResultSet, int)}
+     */
+    protected void verifyResultSetRowUpdated(MockResultSet resultSet, int number)
+    {
+        jdbcTestModule.verifyResultSetRowUpdated(resultSet, number);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRowUpdated(String, int)}
+     */
+    protected void verifyResultSetRowUpdated(String id, int number)
+    {
+        jdbcTestModule.verifyResultSetRowUpdated(id, number);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRowNotUpdated(MockResultSet, int)}
+     */
+    protected void verifyResultSetRowNotUpdated(MockResultSet resultSet, int number)
+    {
+        jdbcTestModule.verifyResultSetRowNotUpdated(resultSet, number);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRowNotUpdated(String, int)}
+     */
+    protected void verifyResultSetRowNotUpdated(String id, int number)
+    {
+        jdbcTestModule.verifyResultSetRowNotUpdated(id, number);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRowDeleted(MockResultSet, int)}
+     */
+    protected void verifyResultSetRowDeleted(MockResultSet resultSet, int number)
+    {
+        jdbcTestModule.verifyResultSetRowDeleted(resultSet, number);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRowDeleted(String, int)}
+     */
+    protected void verifyResultSetRowDeleted(String id, int number)
+    {
+        jdbcTestModule.verifyResultSetRowDeleted(id, number);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRowNotDeleted(MockResultSet, int)}
+     */
+    protected void verifyResultSetRowNotDeleted(MockResultSet resultSet, int number)
+    {
+        jdbcTestModule.verifyResultSetRowNotDeleted(resultSet, number);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRowNotDeleted(String, int)}
+     */
+    protected void verifyResultSetRowNotDeleted(String id, int number)
+    {
+        jdbcTestModule.verifyResultSetRowNotDeleted(id, number);
+    }
+    
+    /**
      * Delegates to {@link JDBCTestModule#verifyAllResultSetsClosed}
      */
     protected void verifyAllResultSetsClosed()
@@ -476,6 +572,118 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     protected void verifyCallableStatementClosed(String sql)
     {
         jdbcTestModule.verifyCallableStatementClosed(sql);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRow(MockResultSet, int, List)}
+     */
+    protected void verifyResultSetRow(MockResultSet resultSet, int number, List rowData)
+    {
+        jdbcTestModule.verifyResultSetRow(resultSet, number, rowData);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRow(MockResultSet, int, Object[])}
+     */
+    protected void verifyResultSetRow(MockResultSet resultSet, int number, Object[] rowData)
+    {
+        jdbcTestModule.verifyResultSetRow(resultSet, number, rowData);
+    }
+  
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRow(String, int, List)}
+     */
+    protected void verifyResultSetRow(String id, int number, List rowData)
+    {
+        jdbcTestModule.verifyResultSetRow(id, number, rowData);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetRow(String, int, Object[])}
+     */
+    protected void verifyResultSetRow(String id, int number, Object[] rowData)
+    {
+        jdbcTestModule.verifyResultSetRow(id, number, rowData);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetColumn(MockResultSet, int, List)}
+     */
+    protected void verifyResultSetColumn(MockResultSet resultSet, int number, List columnData)
+    {
+        jdbcTestModule.verifyResultSetColumn(resultSet, number, columnData);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetColumn(MockResultSet, int, Object[])}
+     */
+    protected void verifyResultSetColumn(MockResultSet resultSet, int number, Object[] columnData)
+    {
+        jdbcTestModule.verifyResultSetColumn(resultSet, number, columnData);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetColumn(String, int, List)}
+     */
+    protected void verifyResultSetColumn(String id, int number, List columnData)
+    {
+        jdbcTestModule.verifyResultSetColumn(id, number, columnData);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetColumn(String, int, Object[])}
+     */
+    protected void verifyResultSetColumn(String id, int number, Object[] columnData)
+    {
+        jdbcTestModule.verifyResultSetColumn(id, number, columnData);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetColumn(MockResultSet, int, List)}
+     */
+    protected void verifyResultSetColumn(MockResultSet resultSet, String name, List columnData)
+    {
+        jdbcTestModule.verifyResultSetColumn(resultSet, name, columnData);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetColumn(MockResultSet, int, Object[])}
+     */
+    protected void verifyResultSetColumn(MockResultSet resultSet, String name, Object[] columnData)
+    {
+        jdbcTestModule.verifyResultSetColumn(resultSet, name, columnData);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetColumn(String, int, List)}
+     */
+    protected void verifyResultSetColumn(String id, String name, List columnData)
+    {
+        jdbcTestModule.verifyResultSetColumn(id, name, columnData);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetColumn(String, int, Object[])}
+     */
+    protected void verifyResultSetColumn(String id, String name, Object[] columnData)
+    {
+        jdbcTestModule.verifyResultSetColumn(id, name, columnData);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetEquals(MockResultSet, MockResultSet)}
+     */
+    protected void verifyResultSetEquals(MockResultSet source, MockResultSet target)
+    {
+        jdbcTestModule.verifyResultSetEquals(source, target);
+    }
+
+    /**
+     * Delegates to {@link JDBCTestModule#verifyResultSetEquals(String, MockResultSet)}
+     */
+    protected void verifyResultSetEquals(String id, MockResultSet target)
+    {
+        jdbcTestModule.verifyResultSetEquals(id, target);
     }
     
     /**
