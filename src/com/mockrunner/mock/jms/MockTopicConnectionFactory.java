@@ -3,6 +3,7 @@ package com.mockrunner.mock.jms;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jms.Connection;
 import javax.jms.JMSException;
 import javax.jms.TopicConnection;
 import javax.jms.TopicConnectionFactory;
@@ -23,6 +24,16 @@ public class MockTopicConnectionFactory implements TopicConnectionFactory
         this.destinationManager = destinationManager;
         topicConnections = new ArrayList();
         exception = null;
+    }
+    
+    public Connection createConnection() throws JMSException
+    {
+        return createTopicConnection();
+    }
+
+    public Connection createConnection(String name, String password) throws JMSException
+    {
+        return createTopicConnection();
     }
     
     public TopicConnection createTopicConnection() throws JMSException
