@@ -2,9 +2,9 @@
 mockrunner-0.2.9:
 
 - fixed bugs 951972 and 951963
-- fixed bug (NPE) when JMS correlation ID is null
+- fixed bug (NullPointerException) when a null JMS correlation ID is set
 - changed the default JMS delivery mode to PERSISTENT
-- it's now possible to clone JMS messages before sending
+- it's now possible to clone JMS messages before sending (default is not cloning)
 - fixed problem with MockStatement.getMoreResults(), now returns true, if there
   is a ResultSet
 - added excluded-properties to fix classloader problem with JUnit and commons-logging.jar
