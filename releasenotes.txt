@@ -17,6 +17,7 @@ mockrunner-0.3:
 - added methods to TagTestModule to set a tag instance directly
 - added getExecutedSQLStatementParameterSets method to JDBCTestModule
 - added JDBC MockStruct implementation
+- added Java2HTML version of examples source code
 - updated nekohtml.jar from 0.9.2 to 0.9.3
 
 mockrunner-0.2.9:
