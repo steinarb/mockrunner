@@ -641,4 +641,47 @@ public class MockResultSetTest extends TestCase
         list.add(new MockStruct("test6"));
         assertTrue(cloneResult.isRowEqual(3, list));
     }
+    
+    public void testCaseInsensitiveColumns() throws Exception
+    {
+        resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
+        resultSet.addColumn("first", new String[] {"1", "2", "3"});
+        resultSet.addColumn("second", new String[] {"4", "5", "6"});
+        resultSet.addColumn("third", new String[] {"7", "true", "9"});
+        resultSet.next();
+        assertEquals("1", resultSet.getString("FIRST"));
+        assertEquals("4", resultSet.getString("second"));
+        assertEquals(7, resultSet.getInt("Third"));
+        resultSet.next();
+        assertEquals("2", resultSet.getObject("FirsT"));
+        assertEquals("5", resultSet.getString("sEcond"));
+        assertEquals(true, resultSet.getBoolean("THIRD"));
+        resultSet.next();
+        resultSet.setDatabaseView(true);
+        assertEquals("3", resultSet.getString("FIrST"));
+        assertEquals(6.0, resultSet.getDouble("second"), 0);
+        assertEquals(9, resultSet.getInt("ThiRd"));
+        resultSet.moveToInsertRow();
+        resultSet.updateString("FIRST", "x");
+        resultSet.insertRow();
+        resultSet.moveToCurrentRow();
+        assertEquals("x", resultSet.getString("first"));
+    }
+    
+    public void testCaseSensitiveColumns() throws Exception
+    {
+        resultSet.setColumnsCaseSensitive(true);
+        resultSet.addColumn("first", new String[] {"1"});
+        resultSet.next();
+        assertEquals("1", resultSet.getString("first"));
+        try
+        {
+            resultSet.getString("FIRST");
+            fail();
+        } 
+        catch (SQLException e)
+        {
+            //expected exception
+        }
+    }
 }

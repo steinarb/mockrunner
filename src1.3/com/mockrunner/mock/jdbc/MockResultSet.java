@@ -23,12 +23,12 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.util.ArrayUtil;
+import com.mockrunner.util.CaseAwareMap;
 import com.mockrunner.util.CollectionUtil;
 import com.mockrunner.util.ParameterUtil;
 import com.mockrunner.util.StreamUtil;
@@ -68,6 +68,7 @@ public class MockResultSet implements ResultSet, Cloneable
     private boolean isDatabaseView;
     private ResultSetMetaData resultSetMetaData;
     private boolean closed;
+    private boolean columnsCaseSensitive;
     
     public MockResultSet(String id)
     {
@@ -76,7 +77,15 @@ public class MockResultSet implements ResultSet, Cloneable
     
     public MockResultSet(String id, String cursorName)
     {
-        columnMap = new HashMap();
+        init();
+        this.cursorName = cursorName;
+        this.id = id;
+        columnsCaseSensitive = false;
+    }
+    
+    private void init()
+    {
+        columnMap = createCaseAwareMap();
         columnNameList = new ArrayList();
         updatedRows = new ArrayList();
         deletedRows = new ArrayList();
@@ -86,13 +95,23 @@ public class MockResultSet implements ResultSet, Cloneable
         closed = false;
         isCursorInInsertRow = false;
         isDatabaseView = false;
-        this.cursorName = cursorName;
-        this.id = id;
         resultSetMetaData = null;
         copyColumnMap();
         adjustInsertRow();
     }
     
+    /**
+     * Set if column names are case sensitive. Default is
+     * <code>false</code>. Please note, that switching this
+     * attribute clears and resets the complete <code>ResultSet</code>.
+     * @param columnsCaseSensitive are column names case sensitive
+     */
+    public void setColumnsCaseSensitive(boolean columnsCaseSensitive)
+    {
+        this.columnsCaseSensitive = columnsCaseSensitive;
+        init();
+    }
+
     /**
      * Copies this <code>ResultSet</code>. The data of the
      * <code>ResultSet</code> is copied using the
@@ -1916,7 +1935,7 @@ public class MockResultSet implements ResultSet, Cloneable
     
     private void adjustInsertRow()
     {
-        insertRow = new HashMap();
+        insertRow = createCaseAwareMap();
         Iterator columns = columnMap.keySet().iterator();
         while(columns.hasNext())
         {
@@ -1944,7 +1963,7 @@ public class MockResultSet implements ResultSet, Cloneable
     
     private Map copyColumnDataMap(Map columnMap)
     {
-        Map copy = new HashMap();
+        Map copy = createCaseAwareMap();
         Iterator columns = columnMap.keySet().iterator();
         while(columns.hasNext())
         {
@@ -1959,6 +1978,11 @@ public class MockResultSet implements ResultSet, Cloneable
             copy.put(nextKey, copyList);
         }
         return copy;
+    }
+    
+    private Map createCaseAwareMap()
+    {
+        return new CaseAwareMap(columnsCaseSensitive);
     }
     
     public String toString()
