@@ -30,9 +30,12 @@ import org.apache.oro.text.regex.Perl5Compiler;
 import org.apache.oro.text.regex.Perl5Matcher;
 
 /**
+ * Alwin Ibba: Changed package
+ * Alwin Ibba: Modification to be Java 1.3 compatible
+ * 
  * A filter performing a comparison of two objects
  * 
- * @version $Revision: 1.3 $
+ * @version $Revision: 1.4 $
  */
 public abstract class ComparisonExpression extends BinaryExpression implements BooleanExpression {
 
