@@ -20,7 +20,7 @@ import com.mockrunner.example.StoreDataAction;
  * will fail.
  * {@link com.mockrunner.base.MultiThreadTestSuite} is meant to
  * make multithread testing much easier, but it is not working
- * properly yet.
+ * properly yet, so we do not use it here.
  */
 public class StoreDataActionTest extends ActionTestCaseAdapter
 { 

@@ -46,10 +46,25 @@ public class MockObjectFactory
     {
         createMockObjectsBasedOn(factory);
     }
+    
+    /**
+     * Creates a set of mock objects based on another one.
+     * You can specify, if the created mock objects should
+     * share the same session. They will share one
+     * <code>ServletContext</code> anyway.
+     * @param factory the other factory
+     * @param createNewSession <code>true</code> creates a new session,
+     *                         <code>false</code> uses the session from factory
+     * @see BaseTestCase#createMockObjectFactory(MockObjectFactory, boolean)
+     */
+    public MockObjectFactory(MockObjectFactory factory, boolean createNewSession)
+    {
+        createMockObjectsBasedOn(factory, createNewSession);
+    }
  
     private void createMockObjects()
     {
-        createNewMockObjects();
+        createNewMockObjects(true);
         config = new MockServletConfig();
         context = new MockServletContext();
         setUpDependencies();
@@ -57,17 +72,23 @@ public class MockObjectFactory
 
     private void createMockObjectsBasedOn(MockObjectFactory factory)
     {
-        createNewMockObjects();
+        createMockObjectsBasedOn(factory, true);
+    }
+    
+    private void createMockObjectsBasedOn(MockObjectFactory factory, boolean createNewSession)
+    {
+        createNewMockObjects(createNewSession);
+        if(!createNewSession) session = factory.getMockSession();
         config = factory.getMockServletConfig();
         context = factory.getMockServletContext();
         setUpDependencies();
     }
 
-    private void createNewMockObjects()
+    private void createNewMockObjects(boolean createNewSession)
     {
         request = new MockHttpServletRequest();
         response = new MockHttpServletResponse();
-        session = new MockHttpSession();
+        if(createNewSession) session = new MockHttpSession();
         mapping = new MockActionMapping();
     }
 
