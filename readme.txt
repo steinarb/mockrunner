@@ -116,13 +116,22 @@ JUnit 3.8.1:
 http://www.junit.org
 junit.jar
 
+J2EE 1.4:
+Tomcat 5.0.28:
+http://jakarta.apache.org/tomcat
+servlet-api.jar
+jsp-api.jar
+JBoss 4.0.1:
+http://www.jboss.org
+jboss-j2ee.jar
+
 J2EE 1.3:
 Tomcat 4.1.31:
 http://jakarta.apache.org/tomcat
 servlet.jar
 JBoss 3.2.3:
 http://www.jboss.org
-jboss-j2ee.jar                
+jboss-j2ee.jar
 
 Commons:
 http://jakarta.apache.org/commons       

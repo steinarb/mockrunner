@@ -1,10 +1,34 @@
 package com.mockrunner.test.web;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.jsp.JspContext;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.el.ExpressionEvaluator;
+import javax.servlet.jsp.el.VariableResolver;
+import javax.servlet.jsp.tagext.DynamicAttributes;
+import javax.servlet.jsp.tagext.SimpleTag;
+import javax.servlet.jsp.tagext.TagSupport;
+
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.mock.web.MockJspWriter;
+import com.mockrunner.mock.web.MockPageContext;
+import com.mockrunner.tag.DynamicAttribute;
+import com.mockrunner.tag.DynamicChild;
+import com.mockrunner.tag.NestedBodyTag;
+import com.mockrunner.tag.NestedSimpleTag;
+import com.mockrunner.tag.NestedStandardTag;
+import com.mockrunner.tag.NestedTag;
+import com.mockrunner.tag.TagUtil;
 
 public class TagUtilTest extends BaseTestCase
 {
-    /*private MockPageContext pageContext;
+    private MockPageContext pageContext;
     private Map testMap;
     
     protected void setUp() throws Exception
@@ -346,5 +370,5 @@ public class TagUtilTest extends BaseTestCase
         {
             return value;
         }
-    }*/
+    }
 }

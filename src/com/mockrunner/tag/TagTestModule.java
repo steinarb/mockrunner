@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.JspTag;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -108,10 +109,10 @@ public class TagTestModule extends HTMLOutputModule
      * @param tagClass the class of the tag
      * @return instance of <code>JspTag</code>
      */
-    /*public JspTag createWrappedTag(Class tagClass)
+    public JspTag createWrappedTag(Class tagClass)
     {
         return createWrappedTag(tagClass, new HashMap());
-    }*/
+    }
     
     /**
      * Creates a tag. Internally a {@link NestedTag}
@@ -130,10 +131,10 @@ public class TagTestModule extends HTMLOutputModule
      * @param attributes the attribute map
      * @return instance of <code>JspTag</code>
      */
-    /*public JspTag createWrappedTag(Class tagClass, Map attributes)
+    public JspTag createWrappedTag(Class tagClass, Map attributes)
     {
         return createNestedTag(tagClass, attributes).getWrappedTag();
-    }*/
+    }
     
     /**
      * Creates a {@link NestedTag} and returns it. You can
@@ -239,10 +240,10 @@ public class TagTestModule extends HTMLOutputModule
      * @return instance of {@link NestedStandardTag}, {@link NestedBodyTag} or 
      *                     {@link NestedSimpleTag}
      */
-    /*public NestedTag setTag(JspTag tag)
+    public NestedTag setTag(JspTag tag)
     {
         return setTag(tag, new HashMap());
-    }*/
+    }
     
     /**
      * Creates a {@link NestedTag} and returns it. You can
@@ -260,7 +261,7 @@ public class TagTestModule extends HTMLOutputModule
      * @return instance of {@link NestedStandardTag}, {@link NestedBodyTag} or 
      *                     {@link NestedSimpleTag}
      */
-    /*public NestedTag setTag(JspTag tag, Map attributes)
+    public NestedTag setTag(JspTag tag, Map attributes)
     {
         try
         {
@@ -276,7 +277,7 @@ public class TagTestModule extends HTMLOutputModule
             log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
-    }*/
+    }
     
     /**
      * Specify if the <code>release</code> method should be called
@@ -363,11 +364,11 @@ public class TagTestModule extends HTMLOutputModule
      * class does not need to be a subclass of <code>TagSupport</code>.
      * @return instance of <code>JspTag</code>
      */
-    /*public JspTag getWrappedTag()
+    public JspTag getWrappedTag()
     {
         if(null == tag) return null;
         return tag.getWrappedTag();
-    }*/
+    }
     
     /**
      * Returns the current nested tag. You can
@@ -396,7 +397,7 @@ public class TagTestModule extends HTMLOutputModule
      * @throws <code>RuntimeException</code>, if the tag
      *         is not a simple tag
      */
-    /*public void doTag()
+    public void doTag()
     {
         if(null == tag)
         {
@@ -415,7 +416,7 @@ public class TagTestModule extends HTMLOutputModule
             log.error(exc.getMessage(), exc);
             throw new RuntimeException(exc.getMessage());
         }
-    }*/
+    }
     
     /**
      * Calls the <code>doStartTag</code> method of the current tag.
@@ -429,10 +430,10 @@ public class TagTestModule extends HTMLOutputModule
         {
             throw new RuntimeException("No current tag set");
         }
-        /*if(isSimpleTag()) 
+        if(isSimpleTag()) 
         {
             throw new RuntimeException("Cannot call doStartTag() on simple tags");
-        }*/
+        }
         try
         {
             return ((Tag)tag).doStartTag();
@@ -456,10 +457,10 @@ public class TagTestModule extends HTMLOutputModule
         {
             throw new RuntimeException("No current tag set");
         }
-        /*if(isSimpleTag()) 
+        if(isSimpleTag()) 
         {
             throw new RuntimeException("Cannot call doEndTag() on simple tags");
-        }*/
+        }
         try
         {
             return ((Tag)tag).doEndTag();
@@ -511,10 +512,10 @@ public class TagTestModule extends HTMLOutputModule
         {
             throw new RuntimeException("No current tag set");
         }
-        /*if(isSimpleTag()) 
+        if(isSimpleTag()) 
         {
             throw new RuntimeException("Cannot call doAfterBody() on simple tags");
-        }*/
+        }
         try
         {
             return ((TagSupport)tag).doAfterBody();
@@ -533,10 +534,10 @@ public class TagTestModule extends HTMLOutputModule
      */
     public void release()
     {
-        /*if(isSimpleTag())
+        if(isSimpleTag())
         {
             throw new RuntimeException("Cannot call release() on simple tags");
-        }*/
+        }
         ((Tag)tag).release();
     }
     
@@ -642,8 +643,8 @@ public class TagTestModule extends HTMLOutputModule
         return (tag instanceof NestedBodyTag);
     }
     
-    /*private boolean isSimpleTag()
+    private boolean isSimpleTag()
     {
-        return (tag instanceof SimpleTagSupport);
-    }*/
+        return (tag instanceof NestedSimpleTag);
+    }
 }

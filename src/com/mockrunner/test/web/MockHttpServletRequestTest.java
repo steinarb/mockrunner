@@ -10,6 +10,8 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletRequestAttributeEvent;
+import javax.servlet.ServletRequestAttributeListener;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 
@@ -29,7 +31,7 @@ public class MockHttpServletRequestTest extends TestCase
         request = new MockHttpServletRequest();
     }
     
-    /*public void testAttributeListenerCalled()
+    public void testAttributeListenerCalled()
     {
         TestAttributeListener listener1 = new TestAttributeListener();
         TestAttributeListener listener2 = new TestAttributeListener();
@@ -92,7 +94,7 @@ public class MockHttpServletRequestTest extends TestCase
         assertFalse(listener.wasAttributeReplacedCalled());
         request.removeAttribute("myKey");
         assertFalse(listener.wasAttributeRemovedCalled());
-    }*/
+    }
     
     public void testAddRequestParameter() throws Exception
     {
@@ -242,7 +244,7 @@ public class MockHttpServletRequestTest extends TestCase
         assertNotNull(request.getSession(false));
     }
     
-    /*private class TestAttributeListener implements ServletRequestAttributeListener
+    private class TestAttributeListener implements ServletRequestAttributeListener
     {
         private boolean wasAttributeAddedCalled = false;
         private boolean wasAttributeReplacedCalled = false;
@@ -342,7 +344,7 @@ public class MockHttpServletRequestTest extends TestCase
         {
             return replacedEventValue;
         }
-    }*/
+    }
     
     private class TestRequestDispatcher implements RequestDispatcher
     {

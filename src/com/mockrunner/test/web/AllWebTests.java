@@ -14,10 +14,10 @@ public class AllWebTests
         suite.addTest(new TestSuite(MockHttpServletRequestTest.class));
         suite.addTest(new TestSuite(MockHttpServletResponseTest.class));
         suite.addTest(new TestSuite(MockServletContextTest.class));
-        //suite.addTest(new TestSuite(NestedTagTest.class));
-        //suite.addTest(new TestSuite(TagLifecycleTest.class));
+        suite.addTest(new TestSuite(NestedTagTest.class));
+        suite.addTest(new TestSuite(TagLifecycleTest.class));
         suite.addTest(new TestSuite(ServletTestModuleTest.class));
-        //suite.addTest(new TestSuite(TagTestModuleTest.class));
+        suite.addTest(new TestSuite(TagTestModuleTest.class));
         suite.addTest(new TestSuite(MockPageContextTest.class));
         suite.addTest(new TestSuite(WebMockObjectFactoryTest.class));
         suite.addTest(new TestSuite(MapMessageResourcesTest.class));
@@ -27,9 +27,9 @@ public class AllWebTests
         suite.addTest(new TestSuite(MockActionForwardTest.class));
         suite.addTest(new TestSuite(HTMLOutputModuleTest.class));
         suite.addTest(new TestSuite(MockActionMappingTest.class));
-        //suite.addTest(new TestSuite(TagUtilTest.class));
+        suite.addTest(new TestSuite(TagUtilTest.class));
         suite.addTest(new TestSuite(XmlUtilTest.class));
-        //suite.addTest(new TestSuite(MockJspFragmentTest.class));
+        suite.addTest(new TestSuite(MockJspFragmentTest.class));
         suite.addTest(new TestSuite(MockJspWriterTest.class));
         //$JUnit-END$
         return suite;

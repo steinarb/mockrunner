@@ -1,10 +1,25 @@
 package com.mockrunner.test.web;
 
+import java.io.StringWriter;
+import java.util.HashMap;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.Tag;
+
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.base.VerifyFailedException;
+import com.mockrunner.mock.web.MockJspFragment;
+import com.mockrunner.tag.DynamicAttribute;
+import com.mockrunner.tag.NestedBodyTag;
+import com.mockrunner.tag.NestedSimpleTag;
+import com.mockrunner.tag.NestedStandardTag;
+import com.mockrunner.tag.NestedTag;
+import com.mockrunner.tag.TagTestModule;
 
 public class TagTestModuleTest extends BaseTestCase
 {
-    /*private TagTestModule module;
+    private TagTestModule module;
     
     protected void setUp() throws Exception
     {
@@ -464,5 +479,5 @@ public class TagTestModuleTest extends BaseTestCase
         {
 
         }
-    }*/
+    }
 }

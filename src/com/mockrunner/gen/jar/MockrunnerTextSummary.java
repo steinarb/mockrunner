@@ -24,17 +24,19 @@ public class MockrunnerTextSummary implements Summary
     private final static String TEMPLATE_FILE = "dependtemplate.txt";
     
     private List mockrunnerJars;
+    private List standardJars;
 
     public MockrunnerTextSummary()
     {
         mockrunnerJars = MockrunnerJars.getMockrunnerJars();
+        standardJars = MockrunnerJars.getStandardInterfaceJars();
     }
     
     public void createSummary(File srcDir, File destFile) throws Exception 
     {
         Analyzer analyzer = new Analyzer();
         JarBundle jarBundle[] = analyzer.analyze(srcDir);
-        JarFileExtractor extractor = new JarFileExtractor(mockrunnerJars);
+        JarFileExtractor extractor = new JarFileExtractor(mockrunnerJars, standardJars);
         Map dependencyMap = extractor.createDependencies(jarBundle);
         try
         {

@@ -10,6 +10,7 @@ import java.util.Set;
 public class MockrunnerJars
 {
     private static List mockrunnerJars;
+    private static List standardInterfaceJars;
     private static Map permissions;
     private static Set strutsJars;
     private static Set webJ2EEJars;
@@ -41,11 +42,17 @@ public class MockrunnerJars
         permissions.put("mockrunner-tag.jar", new Permission(false, true, false, false, true));
         permissions.put("mockrunner-struts.jar", new Permission(true, true, false, false, true));
     
+        standardInterfaceJars = new ArrayList();
+        standardInterfaceJars.add("servlet-api.jar");
+        standardInterfaceJars.add("jsp-api.jar");
+        standardInterfaceJars.add("jboss-j2ee.jar");
+        
         strutsJars = new HashSet();
         strutsJars.add("struts.jar");
         
         webJ2EEJars = new HashSet();
-        webJ2EEJars.add("servlet.jar");
+        webJ2EEJars.add("servlet-api.jar");
+        webJ2EEJars.add("jsp-api.jar");
         
         otherJ2EEJars = new HashSet();
         otherJ2EEJars.add("jboss-j2ee.jar");
@@ -64,6 +71,11 @@ public class MockrunnerJars
     public static List getMockrunnerJars()
     {
         return mockrunnerJars;
+    }
+    
+    public static List getStandardInterfaceJars()
+    {
+        return standardInterfaceJars;
     }
     
     public static Permission getPermission(String jar)

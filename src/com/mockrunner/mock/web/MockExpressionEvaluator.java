@@ -1,6 +1,6 @@
 package com.mockrunner.mock.web;
 
-/*import java.util.HashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.jsp.el.ELException;
@@ -8,14 +8,13 @@ import javax.servlet.jsp.el.Expression;
 import javax.servlet.jsp.el.ExpressionEvaluator;
 import javax.servlet.jsp.el.FunctionMapper;
 import javax.servlet.jsp.el.VariableResolver;
-*/
+
 /**
  * Mock implementation of <code>ExpressionEvaluator</code>.
- * <b>Ommited in J2EE 1.3 version</b>
  */
-public class MockExpressionEvaluator //extends ExpressionEvaluator
+public class MockExpressionEvaluator extends ExpressionEvaluator
 {
-    /*private Map expressions = new HashMap();
+    private Map expressions = new HashMap();
     
     public void addObject(String expression, Object object)
     {
@@ -44,5 +43,5 @@ public class MockExpressionEvaluator //extends ExpressionEvaluator
     public Expression parseExpression(String expression, Class expectedType, FunctionMapper mapper) throws ELException
     {
         return new MockExpression(this, expression, expectedType, mapper);
-    }*/
+    }
 }

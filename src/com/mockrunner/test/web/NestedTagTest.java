@@ -1,10 +1,32 @@
 package com.mockrunner.test.web;
 
+import java.io.IOException;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.jsp.JspContext;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.BodyContent;
+import javax.servlet.jsp.tagext.BodyTag;
+import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.jsp.tagext.JspFragment;
+import javax.servlet.jsp.tagext.SimpleTag;
+import javax.servlet.jsp.tagext.Tag;
+import javax.servlet.jsp.tagext.TagSupport;
+
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.mock.web.MockPageContext;
+import com.mockrunner.tag.DynamicAttribute;
+import com.mockrunner.tag.NestedBodyTag;
+import com.mockrunner.tag.NestedSimpleTag;
+import com.mockrunner.tag.NestedStandardTag;
+import com.mockrunner.tag.NestedTag;
 
 public class NestedTagTest extends BaseTestCase
 {
-    /*private NestedTag nestedTagRoot;
+    private NestedTag nestedTagRoot;
     private MockPageContext context;
     private Tag testTag;
     private Tag testTag1;
@@ -419,5 +441,5 @@ public class NestedTagTest extends BaseTestCase
         {
             return 0;
         }
-    }*/
+    }
 }

@@ -11,11 +11,13 @@ import com.kirkk.analyzer.framework.JarBundle;
 
 public class JarFileExtractor
 {
-    private List jars;
+    private List mainJars;
+    private List exceptionJars;
 
-    public JarFileExtractor(List jars)
+    public JarFileExtractor(List mainJars, List exceptionJars)
     {
-        this.jars = new ArrayList(jars);
+        this.mainJars = new ArrayList(mainJars);
+        this.exceptionJars = new ArrayList(exceptionJars);
     }
     
     public JarBundle[] filterBundles(JarBundle jarBundles[])
@@ -23,7 +25,7 @@ public class JarFileExtractor
         List finalList = new ArrayList();
         for(int ii = 0; ii < jarBundles.length; ii++) 
         {
-            if(jars.contains(jarBundles[ii].getJarFileName()))
+            if(mainJars.contains(jarBundles[ii].getJarFileName()))
             {
                 finalList.add(jarBundles[ii]);
             }
@@ -36,7 +38,7 @@ public class JarFileExtractor
         Map finalMap = new HashMap();
         for(int ii = 0; ii < jarBundles.length; ii++) 
         {
-            if(jars.contains(jarBundles[ii].getJarFileName()))
+            if(mainJars.contains(jarBundles[ii].getJarFileName()))
             {
                 Set currentSet = createDependencySet(jarBundles[ii]);
                 finalMap.put(jarBundles[ii].getJarFileName(), currentSet);
@@ -53,8 +55,12 @@ public class JarFileExtractor
         for(int ii = 0; ii < dependendJars.size(); ii++)
         {
             JarBundle currentBundle = (JarBundle)dependendJars.get(ii);
-            resultSet.add(currentBundle.getJarFileName());
-            resultSet.addAll(createDependencySet(currentBundle));
+            String currentJarFileName = currentBundle.getJarFileName();
+            resultSet.add(currentJarFileName);
+            if(!exceptionJars.contains(currentJarFileName))
+            {
+                resultSet.addAll(createDependencySet(currentBundle));
+            }
         }
         return resultSet;
     }

@@ -1,10 +1,21 @@
 package com.mockrunner.test.web;
 
+import java.io.StringWriter;
+
+import javax.servlet.jsp.tagext.TagAdapter;
+
 import junit.framework.TestCase;
+
+import com.mockrunner.mock.web.MockJspFragment;
+import com.mockrunner.mock.web.MockJspWriter;
+import com.mockrunner.mock.web.MockPageContext;
+import com.mockrunner.tag.NestedBodyTag;
+import com.mockrunner.tag.NestedSimpleTag;
+import com.mockrunner.tag.NestedStandardTag;
 
 public class MockJspFragmentTest extends TestCase
 {
-    /*private MockJspFragment fragment;
+    private MockJspFragment fragment;
     private MockPageContext context;
     
     protected void setUp() throws Exception
@@ -113,5 +124,5 @@ public class MockJspFragmentTest extends TestCase
         context.getOut().print("after");
         outText = ((MockJspWriter)context.getOut()).getOutputAsString();
         assertEquals("beforetext1TestTagTestBodyTagTestSimpleTagtext2after", outText);
-    }*/
+    }
 }

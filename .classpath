@@ -22,6 +22,7 @@
 	<classpathentry kind="lib" path="config"/>
 	<classpathentry kind="lib" path="lib/mockejb.jar"/>
 	<classpathentry kind="lib" path="lib/jaranalyzer-0.9.3.jar"/>
-	<classpathentry kind="lib" path="lib/servlet.jar"/>
+	<classpathentry kind="lib" path="lib/jsp-api.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
