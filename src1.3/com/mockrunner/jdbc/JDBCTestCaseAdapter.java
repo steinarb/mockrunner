@@ -30,6 +30,12 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     {
         super(arg0);
     }
+    
+    protected void tearDown() throws Exception
+    {
+        super.tearDown();
+        jdbcTestModule = null;
+    }
 
     /**
      * Creates the <code>JDBCTestModule</code>. If you
