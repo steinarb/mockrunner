@@ -708,6 +708,50 @@ public class JDBCTestModuleTest extends TestCase
 		assertEquals(new Boolean(false), callableStatementMap2.get("name"));
     }
     
+    public void testGetExecutedSQLStatementParameterSets() throws Exception
+    {
+		preparePreparedStatements();
+		prepareCallableStatements();
+		module.getPreparedStatement(0).setString(1, "test");
+		module.getPreparedStatement(0).setShort(2, (short)2);
+		module.getPreparedStatement(1).setBytes(1, new byte[]{1});
+		module.getCallableStatement(1).setBoolean("name", false);
+		module.getPreparedStatement(0).execute();
+		module.getPreparedStatement(1).execute();
+		module.getPreparedStatement(2).execute();
+		module.getCallableStatement(0).execute();
+		module.getCallableStatement(1).execute();
+		module.getPreparedStatement(0).setString(1, "test1");
+		module.getPreparedStatement(0).setShort(2, (short)3);
+		module.getPreparedStatement(0).execute();
+		ParameterSets sets1 = module.getExecutedSQLStatementParameterSets("INSERT INTO TEST (COL1, COL2)");
+		assertEquals(2, sets1.getNumberParameterSets());
+		Map parameterSet1 = sets1.getParameterSet(0);
+		assertEquals(2, parameterSet1.size());
+		assertEquals("test", parameterSet1.get(new Integer(1)));
+		assertEquals(new Short((short)2), parameterSet1.get(new Integer(2)));
+		Map parameterSet2 = sets1.getParameterSet(1);
+		assertEquals(2, parameterSet2.size());
+		assertEquals("test1", parameterSet2.get(new Integer(1)));
+		assertEquals(new Short((short)3), parameterSet2.get(new Integer(2)));
+		module.setUseRegularExpressions(true);
+		ParameterSets sets2 = module.getExecutedSQLStatementParameterSets("insert into test \\(col1, col2, col3\\) .*");
+		assertEquals(1, sets2.getNumberParameterSets());
+		parameterSet1 = sets2.getParameterSet(0);
+		assertEquals(1, parameterSet1.size());
+		assertTrue(Arrays.equals(new byte[]{1}, (byte[])parameterSet1.get(new Integer(1))));
+		ParameterSets sets3 = module.getExecutedSQLStatementParameterSets("{call setData\\(\\?, \\?, \\?, \\?\\)}");
+		assertEquals(1, sets3.getNumberParameterSets());
+		parameterSet1 = sets3.getParameterSet(0);
+		assertEquals(1, parameterSet1.size());
+		assertEquals(new Boolean(false), parameterSet1.get("name"));
+		ParameterSets sets4 = module.getExecutedSQLStatementParameterSets("{call getData\\(\\?, \\?, \\?, \\?\\)}");
+		assertEquals(1, sets4.getNumberParameterSets());
+		parameterSet1 = sets4.getParameterSet(0);
+		assertEquals(0, parameterSet1.size());
+		assertNull(module.getExecutedSQLStatementParameterSets("{call xyz"));
+    }
+    
 	public void testSQLStatementParameterNumber() throws Exception
 	{
 		preparePreparedStatements();
