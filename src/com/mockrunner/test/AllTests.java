@@ -8,6 +8,7 @@ import com.mockrunner.example.ejb.PaySessionTest;
 import com.mockrunner.example.jdbc.BankTest;
 import com.mockrunner.example.jdbc.BookstoreTest;
 import com.mockrunner.example.jdbc.PayActionTest;
+import com.mockrunner.example.jms.PrintMessageServletTest;
 import com.mockrunner.example.servlet.ImageButtonFilterTest;
 import com.mockrunner.example.servlet.LogoutServletTest;
 import com.mockrunner.example.servlet.RedirectServletTest;
@@ -56,6 +57,7 @@ public class AllTests
         suite.addTest(new TestSuite(BookstoreTest.class));
         suite.addTest(new TestSuite(LogActionTest.class));
         suite.addTest(new TestSuite(PaySessionTest.class));
+        suite.addTest(new TestSuite(PrintMessageServletTest.class));
         //$JUnit-END$
         return suite;
     }

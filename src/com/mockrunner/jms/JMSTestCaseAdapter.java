@@ -71,7 +71,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#setCurrentQueueConnectionIndex}
      */
-    public void setCurrentQueueConnectionIndex(int connectionIndex)
+    protected void setCurrentQueueConnectionIndex(int connectionIndex)
     {
         jmsTestModule.setCurrentQueueConnectionIndex(connectionIndex);
     }
@@ -79,7 +79,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getCurrentQueueConnection}
      */
-    public MockQueueConnection getCurrentQueueConnection()
+    protected MockQueueConnection getCurrentQueueConnection()
     {
         return jmsTestModule.getCurrentQueueConnection();
     }
@@ -87,7 +87,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#setCurrentTopicConnectionIndex}
      */
-    public void setCurrentTopicConnectionIndex(int connectionIndex)
+    protected void setCurrentTopicConnectionIndex(int connectionIndex)
     {
         jmsTestModule.setCurrentTopicConnectionIndex(connectionIndex);
     }
@@ -95,7 +95,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getCurrentTopicConnection}
      */
-    public MockTopicConnection getCurrentTopicConnection()
+    protected MockTopicConnection getCurrentTopicConnection()
     {
         return jmsTestModule.getCurrentTopicConnection();
     }
@@ -103,7 +103,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getDestinationManager}
      */
-    public DestinationManager getDestinationManager()
+    protected DestinationManager getDestinationManager()
     {
         return jmsTestModule.getDestinationManager();
     } 
@@ -111,7 +111,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getQueueMessageManager}
      */
-    public MessageManager getQueueMessageManager(int indexOfSession)
+    protected MessageManager getQueueMessageManager(int indexOfSession)
     {
         return jmsTestModule.getQueueMessageManager(indexOfSession);
     }
@@ -119,7 +119,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getTopicMessageManager}
      */
-    public MessageManager getTopicMessageManager(int indexOfSession)
+    protected MessageManager getTopicMessageManager(int indexOfSession)
     {
         return jmsTestModule.getTopicMessageManager(indexOfSession);
     }
@@ -127,7 +127,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getQueueTransmissionManager}
      */
-    public QueueTransmissionManager getQueueTransmissionManager(int indexOfSession)
+    protected QueueTransmissionManager getQueueTransmissionManager(int indexOfSession)
     {
         return jmsTestModule.getQueueTransmissionManager(indexOfSession);
     }
@@ -135,7 +135,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getTopicTransmissionManager}
      */
-    public TopicTransmissionManager getTopicTransmissionManager(int indexOfSession)
+    protected TopicTransmissionManager getTopicTransmissionManager(int indexOfSession)
     {
         return jmsTestModule.getTopicTransmissionManager(indexOfSession);
     }
@@ -143,7 +143,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getQueueSessionList}
      */
-    public List getQueueSessionList()
+    protected List getQueueSessionList()
     {
         return jmsTestModule.getQueueSessionList();
     }
@@ -151,7 +151,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getTopicSessionList}
      */
-    public List getTopicSessionList()
+    protected List getTopicSessionList()
     {
         return jmsTestModule.getTopicSessionList();
     }
@@ -159,7 +159,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getQueueSession}
      */
-    public MockQueueSession getQueueSession(int indexOfSession)
+    protected MockQueueSession getQueueSession(int indexOfSession)
     {
         return jmsTestModule.getQueueSession(indexOfSession);
     }
@@ -167,7 +167,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getTopicSession}
      */
-    public MockTopicSession getTopicSession(int indexOfSession)
+    protected MockTopicSession getTopicSession(int indexOfSession)
     {
         return jmsTestModule.getTopicSession(indexOfSession);
     }
@@ -175,7 +175,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getQueue}
      */
-    public MockQueue getQueue(String name)
+    protected MockQueue getQueue(String name)
     {
         return jmsTestModule.getQueue(name);
     }
@@ -183,7 +183,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getTopic}
      */
-    public MockTopic getTopic(String name)
+    protected MockTopic getTopic(String name)
     {
         return jmsTestModule.getTopic(name);
     }
@@ -191,7 +191,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getTemporaryQueueList}
      */
-    public List getTemporaryQueueList(int indexOfSession)
+    protected List getTemporaryQueueList(int indexOfSession)
     {
         return jmsTestModule.getTemporaryQueueList(indexOfSession);
     }
@@ -199,7 +199,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getTemporaryTopicList}
      */
-    public List getTemporaryTopicList(int indexOfSession)
+    protected List getTemporaryTopicList(int indexOfSession)
     {
         return jmsTestModule.getTemporaryTopicList(indexOfSession);
     }
@@ -207,7 +207,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getTemporaryQueue}
      */
-    public MockTemporaryQueue getTemporaryQueue(int indexOfSession, int indexOfQueue)
+    protected MockTemporaryQueue getTemporaryQueue(int indexOfSession, int indexOfQueue)
     {
         return jmsTestModule.getTemporaryQueue(indexOfSession, indexOfQueue);
     }
@@ -215,7 +215,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getTemporaryTopic}
      */
-    public MockTemporaryTopic getTemporaryTopic(int indexOfSession, int indexOfTopic)
+    protected MockTemporaryTopic getTemporaryTopic(int indexOfSession, int indexOfTopic)
     {
         return jmsTestModule.getTemporaryTopic(indexOfSession, indexOfTopic);
     }
@@ -223,7 +223,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getCurrentMessageListFromQueue}
      */
-    public List getCurrentMessageListFromQueue(String name)
+    protected List getCurrentMessageListFromQueue(String name)
     {
         return jmsTestModule.getCurrentMessageListFromQueue(name);
     }
@@ -231,7 +231,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getCurrentMessageListFromTemporaryQueue}
      */
-    public List getCurrentMessageListFromTemporaryQueue(int indexOfSession, int indexOfQueue)
+    protected List getCurrentMessageListFromTemporaryQueue(int indexOfSession, int indexOfQueue)
     {
         return jmsTestModule.getCurrentMessageListFromTemporaryQueue(indexOfSession, indexOfQueue);
     }
@@ -239,7 +239,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getReceivedMessageListFromQueue}
      */
-    public List getReceivedMessageListFromQueue(String name)
+    protected List getReceivedMessageListFromQueue(String name)
     {
         return jmsTestModule.getReceivedMessageListFromQueue(name);
     }
@@ -247,7 +247,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getReceivedMessageListFromTemporaryQueue}
      */
-    public List getReceivedMessageListFromTemporaryQueue(int indexOfSession, int indexOfQueue)
+    protected List getReceivedMessageListFromTemporaryQueue(int indexOfSession, int indexOfQueue)
     {
         return jmsTestModule.getReceivedMessageListFromTemporaryQueue(indexOfSession, indexOfQueue);
     }
@@ -255,7 +255,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getCurrentMessageListFromTopic}
      */
-    public List getCurrentMessageListFromTopic(String name)
+    protected List getCurrentMessageListFromTopic(String name)
     {
         return jmsTestModule.getCurrentMessageListFromTopic(name);
     }
@@ -263,7 +263,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getCurrentMessageListFromTemporaryTopic}
      */
-    public List getCurrentMessageListFromTemporaryTopic(int indexOfSession, int indexOfTopic)
+    protected List getCurrentMessageListFromTemporaryTopic(int indexOfSession, int indexOfTopic)
     {
         return jmsTestModule.getCurrentMessageListFromTemporaryTopic(indexOfSession, indexOfTopic);
     }
@@ -271,7 +271,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getReceivedMessageListFromTopic}
      */
-    public List getReceivedMessageListFromTopic(String name)
+    protected List getReceivedMessageListFromTopic(String name)
     {
         return jmsTestModule.getReceivedMessageListFromTopic(name);
     }
@@ -279,7 +279,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#getReceivedMessageListFromTemporaryTopic}
      */
-    public List getReceivedMessageListFromTemporaryTopic(int indexOfSession, int indexOfTopic)
+    protected List getReceivedMessageListFromTemporaryTopic(int indexOfSession, int indexOfTopic)
     {
         return jmsTestModule.getReceivedMessageListFromTemporaryTopic(indexOfSession, indexOfTopic);
     }
@@ -287,7 +287,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyQueueConnectionClosed}
      */
-    public void verifyQueueConnectionClosed()
+    protected void verifyQueueConnectionClosed()
     {
         jmsTestModule.verifyQueueConnectionClosed();
     }
@@ -295,7 +295,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyQueueConnectionStarted}
      */
-    public void verifyQueueConnectionStarted()
+    protected void verifyQueueConnectionStarted()
     {
         jmsTestModule.verifyQueueConnectionStarted();
     }
@@ -303,7 +303,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyQueueConnectionStopped}
      */
-    public void verifyQueueConnectionStopped()
+    protected void verifyQueueConnectionStopped()
     {
         jmsTestModule.verifyQueueConnectionStopped();
     }
@@ -311,7 +311,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyTopicConnectionClosed}
      */
-    public void verifyTopicConnectionClosed()
+    protected void verifyTopicConnectionClosed()
     {
         jmsTestModule.verifyTopicConnectionClosed();
     }
@@ -319,7 +319,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyTopicConnectionStarted}
      */
-    public void verifyTopicConnectionStarted()
+    protected void verifyTopicConnectionStarted()
     {
         jmsTestModule.verifyTopicConnectionStarted();
     }
@@ -327,7 +327,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyTopicConnectionStopped}
      */
-    public void verifyTopicConnectionStopped()
+    protected void verifyTopicConnectionStopped()
     {
         jmsTestModule.verifyTopicConnectionStopped();
     }
@@ -335,7 +335,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyQueueSessionClosed}
      */
-    public void verifyQueueSessionClosed(int indexOfSession)
+    protected void verifyQueueSessionClosed(int indexOfSession)
     {
         jmsTestModule.verifyQueueSessionClosed(indexOfSession);
     }
@@ -343,7 +343,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyQueueSessionCommitted}
      */
-    public void verifyQueueSessionCommitted(int indexOfSession)
+    protected void verifyQueueSessionCommitted(int indexOfSession)
     {
         jmsTestModule.verifyQueueSessionCommitted(indexOfSession);
     }
@@ -351,7 +351,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyQueueSessionNotCommitted}
      */
-    public void verifyQueueSessionNotCommitted(int indexOfSession)
+    protected void verifyQueueSessionNotCommitted(int indexOfSession)
     {
         jmsTestModule.verifyQueueSessionNotCommitted(indexOfSession);
     }
@@ -359,7 +359,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyQueueSessionRolledBack}
      */
-    public void verifyQueueSessionRolledBack(int indexOfSession)
+    protected void verifyQueueSessionRolledBack(int indexOfSession)
     {
         jmsTestModule.verifyQueueSessionRolledBack(indexOfSession);
     }
@@ -367,7 +367,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyQueueSessionNotRolledBack}
      */
-    public void verifyQueueSessionNotRolledBack(int indexOfSession)
+    protected void verifyQueueSessionNotRolledBack(int indexOfSession)
     {
         jmsTestModule.verifyQueueSessionNotRolledBack(indexOfSession);
     }
@@ -375,7 +375,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyQueueSessionRecovered}
      */
-    public void verifyQueueSessionRecovered(int indexOfSession)
+    protected void verifyQueueSessionRecovered(int indexOfSession)
     {
         jmsTestModule.verifyQueueSessionRecovered(indexOfSession);
     }
@@ -383,7 +383,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyQueueSessionNotRecovered}
      */
-    public void verifyQueueSessionNotRecovered(int indexOfSession)
+    protected void verifyQueueSessionNotRecovered(int indexOfSession)
     {
         jmsTestModule.verifyQueueSessionNotRecovered(indexOfSession);
     }
@@ -391,7 +391,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyTopicSessionClosed}
      */
-    public void verifyTopicSessionClosed(int indexOfSession)
+    protected void verifyTopicSessionClosed(int indexOfSession)
     {
         jmsTestModule.verifyTopicSessionClosed(indexOfSession);
     }
@@ -399,7 +399,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyTopicSessionCommitted}
      */
-    public void verifyTopicSessionCommitted(int indexOfSession)
+    protected void verifyTopicSessionCommitted(int indexOfSession)
     {
         jmsTestModule.verifyTopicSessionCommitted(indexOfSession);
     }
@@ -407,7 +407,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyTopicSessionNotCommitted}
      */
-    public void verifyTopicSessionNotCommitted(int indexOfSession)
+    protected void verifyTopicSessionNotCommitted(int indexOfSession)
     {
         jmsTestModule.verifyTopicSessionNotCommitted(indexOfSession);
     }
@@ -415,7 +415,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyTopicSessionRolledBack}
      */
-    public void verifyTopicSessionRolledBack(int indexOfSession)
+    protected void verifyTopicSessionRolledBack(int indexOfSession)
     {
         jmsTestModule.verifyTopicSessionRolledBack(indexOfSession);
     }
@@ -423,7 +423,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyTopicSessionNotRolledBack}
      */
-    public void verifyTopicSessionNotRolledBack(int indexOfSession)
+    protected void verifyTopicSessionNotRolledBack(int indexOfSession)
     {
         jmsTestModule.verifyTopicSessionNotRolledBack(indexOfSession);
     }
@@ -431,7 +431,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyTopicSessionRecovered}
      */
-    public void verifyTopicSessionRecovered(int indexOfSession)
+    protected void verifyTopicSessionRecovered(int indexOfSession)
     {
         jmsTestModule.verifyTopicSessionRecovered(indexOfSession);
     }
@@ -439,7 +439,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyTopicSessionNotRecovered}
      */
-    public void verifyTopicSessionNotRecovered(int indexOfSession)
+    protected void verifyTopicSessionNotRecovered(int indexOfSession)
     {
         jmsTestModule.verifyTopicSessionNotRecovered(indexOfSession);
     }
@@ -447,7 +447,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllQueueSessionsClosed}
      */
-    public void verifyAllQueueSessionsClosed()
+    protected void verifyAllQueueSessionsClosed()
     {
         jmsTestModule.verifyAllQueueSessionsClosed();
     }
@@ -455,7 +455,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllQueueSessionsRecovered}
      */
-    public void verifyAllQueueSessionsRecovered()
+    protected void verifyAllQueueSessionsRecovered()
     {
         jmsTestModule.verifyAllQueueSessionsRecovered();
     }
@@ -463,7 +463,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllQueueSessionsCommitted}
      */
-    public void verifyAllQueueSessionsCommitted()
+    protected void verifyAllQueueSessionsCommitted()
     {
         jmsTestModule.verifyAllQueueSessionsCommitted();
     }
@@ -471,7 +471,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllQueueSessionsRolledBack}
      */
-    public void verifyAllQueueSessionsRolledBack()
+    protected void verifyAllQueueSessionsRolledBack()
     {
         jmsTestModule.verifyAllQueueSessionsRolledBack();
     }
@@ -479,7 +479,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllTopicSessionsClosed}
      */
-    public void verifyAllTopicSessionsClosed()
+    protected void verifyAllTopicSessionsClosed()
     {
         jmsTestModule.verifyAllTopicSessionsClosed();
     }
@@ -487,7 +487,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllTopicSessionsRecovered}
      */
-    public void verifyAllTopicSessionsRecovered()
+    protected void verifyAllTopicSessionsRecovered()
     {
         jmsTestModule.verifyAllTopicSessionsRecovered();
     }
@@ -495,7 +495,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllTopicSessionsCommitted}
      */
-    public void verifyAllTopicSessionsCommitted()
+    protected void verifyAllTopicSessionsCommitted()
     {
         jmsTestModule.verifyAllTopicSessionsCommitted();
     }
@@ -503,7 +503,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllTopicSessionsRolledBack}
      */
-    public void verifyAllTopicSessionsRolledBack()
+    protected void verifyAllTopicSessionsRolledBack()
     {
         jmsTestModule.verifyAllTopicSessionsRolledBack();
     }
@@ -511,7 +511,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberQueueSenders(int, int)}
      */
-    public void verifyNumberQueueSenders(int indexOfSession, int numberOfSenders)
+    protected void verifyNumberQueueSenders(int indexOfSession, int numberOfSenders)
     {
         jmsTestModule.verifyNumberQueueSenders(indexOfSession, numberOfSenders);
     }
@@ -519,7 +519,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberQueueSenders(int, String, int)}
      */
-    public void verifyNumberQueueSenders(int indexOfSession, String queueName, int numberOfSenders)
+    protected void verifyNumberQueueSenders(int indexOfSession, String queueName, int numberOfSenders)
     {
         jmsTestModule.verifyNumberQueueSenders(indexOfSession, queueName, numberOfSenders);
     }
@@ -527,7 +527,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyQueueSenderClosed}
      */
-    public void verifyQueueSenderClosed(int indexOfSession, String queueName, int indexOfSender)
+    protected void verifyQueueSenderClosed(int indexOfSession, String queueName, int indexOfSender)
     {
         jmsTestModule.verifyQueueSenderClosed(indexOfSession, queueName, indexOfSender);
     }
@@ -535,7 +535,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllQueueSendersClosed}
      */
-    public void verifyAllQueueSendersClosed(int indexOfSession)
+    protected void verifyAllQueueSendersClosed(int indexOfSession)
     {
         jmsTestModule.verifyAllQueueSendersClosed(indexOfSession);
     }
@@ -543,7 +543,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberTopicPublishers(int, int)}
      */
-    public void verifyNumberTopicPublishers(int indexOfSession, int numberOfPublishers)
+    protected void verifyNumberTopicPublishers(int indexOfSession, int numberOfPublishers)
     {
         jmsTestModule.verifyNumberTopicPublishers(indexOfSession, numberOfPublishers);
     }
@@ -551,7 +551,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberTopicPublishers(int, String, int)}
      */
-    public void verifyNumberTopicPublishers(int indexOfSession, String topicName, int numberOfPublishers)
+    protected void verifyNumberTopicPublishers(int indexOfSession, String topicName, int numberOfPublishers)
     {
         jmsTestModule.verifyNumberTopicPublishers(indexOfSession, topicName, numberOfPublishers);
     } 
@@ -559,7 +559,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyTopicPublisherClosed}
      */
-    public void verifyTopicPublisherClosed(int indexOfSession, String topicName, int indexOfPublisher)
+    protected void verifyTopicPublisherClosed(int indexOfSession, String topicName, int indexOfPublisher)
     {
         jmsTestModule.verifyTopicPublisherClosed(indexOfSession, topicName, indexOfPublisher);
     }
@@ -567,7 +567,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllTopicPublishersClosed}
      */
-    public void verifyAllTopicPublishersClosed(int indexOfSession)
+    protected void verifyAllTopicPublishersClosed(int indexOfSession)
     {
         jmsTestModule.verifyAllTopicPublishersClosed(indexOfSession);
     }
@@ -575,7 +575,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberQueueReceivers(int, int)}
      */
-    public void verifyNumberQueueReceivers(int indexOfSession, int numberOfReceivers)
+    protected void verifyNumberQueueReceivers(int indexOfSession, int numberOfReceivers)
     {
         jmsTestModule.verifyNumberQueueReceivers(indexOfSession, numberOfReceivers);
     }
@@ -583,7 +583,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberQueueReceivers(int, String, int)}
      */
-    public void verifyNumberQueueReceivers(int indexOfSession, String queueName, int numberOfReceivers)
+    protected void verifyNumberQueueReceivers(int indexOfSession, String queueName, int numberOfReceivers)
     {
         jmsTestModule.verifyNumberQueueReceivers(indexOfSession, queueName, numberOfReceivers);
     }
@@ -591,7 +591,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyQueueReceiverClosed}
      */
-    public void verifyQueueReceiverClosed(int indexOfSession, String queueName, int indexOfReceiver)
+    protected void verifyQueueReceiverClosed(int indexOfSession, String queueName, int indexOfReceiver)
     {
         jmsTestModule.verifyQueueReceiverClosed(indexOfSession, queueName, indexOfReceiver);
     }
@@ -599,7 +599,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllQueueReceiversClosed}
      */
-    public void verifyAllQueueReceiversClosed(int indexOfSession)
+    protected void verifyAllQueueReceiversClosed(int indexOfSession)
     {
         jmsTestModule.verifyAllQueueReceiversClosed(indexOfSession);
     }
@@ -607,7 +607,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberTopicSubscribers(int, int)}
      */
-    public void verifyNumberTopicSubscribers(int indexOfSession, int numberOfSubscribers)
+    protected void verifyNumberTopicSubscribers(int indexOfSession, int numberOfSubscribers)
     {
         jmsTestModule.verifyNumberTopicSubscribers(indexOfSession, numberOfSubscribers);
     }
@@ -615,7 +615,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberTopicSubscribers(int, String, int)}
      */
-    public void verifyNumberTopicSubscribers(int indexOfSession, String topicName, int numberOfSubscribers)
+    protected void verifyNumberTopicSubscribers(int indexOfSession, String topicName, int numberOfSubscribers)
     {
         jmsTestModule.verifyNumberTopicSubscribers(indexOfSession, topicName, numberOfSubscribers);
     }
@@ -623,7 +623,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyTopicSubscriberClosed}
      */
-    public void verifyTopicSubscriberClosed(int indexOfSession, String topicName, int indexOfSubscriber)
+    protected void verifyTopicSubscriberClosed(int indexOfSession, String topicName, int indexOfSubscriber)
     {
         jmsTestModule.verifyTopicSubscriberClosed(indexOfSession, topicName, indexOfSubscriber);
     }
@@ -631,7 +631,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllTopicSubscribersClosed}
      */
-    public void verifyAllTopicSubscribersClosed(int indexOfSession)
+    protected void verifyAllTopicSubscribersClosed(int indexOfSession)
     {
         jmsTestModule.verifyAllTopicSubscribersClosed(indexOfSession);
     }
@@ -639,7 +639,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberQueueBrowsers(int, int)}
      */
-    public void verifyNumberQueueBrowsers(int indexOfSession, int numberOfBrowsers)
+    protected void verifyNumberQueueBrowsers(int indexOfSession, int numberOfBrowsers)
     {
         jmsTestModule.verifyNumberQueueBrowsers(indexOfSession, numberOfBrowsers);
     }
@@ -647,7 +647,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberQueueBrowsers(int, String, int)}
      */
-    public void verifyNumberQueueBrowsers(int indexOfSession, String queueName, int numberOfBrowsers)
+    protected void verifyNumberQueueBrowsers(int indexOfSession, String queueName, int numberOfBrowsers)
     {
         jmsTestModule.verifyNumberQueueBrowsers(indexOfSession, queueName, numberOfBrowsers);
     }
@@ -655,7 +655,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyQueueBrowserClosed}
      */
-    public void verifyQueueBrowserClosed(int indexOfSession, String queueName, int indexOfBrowser)
+    protected void verifyQueueBrowserClosed(int indexOfSession, String queueName, int indexOfBrowser)
     {
         jmsTestModule.verifyQueueBrowserClosed(indexOfSession, queueName, indexOfBrowser);
     }
@@ -663,7 +663,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllQueueBrowsersClosed}
      */
-    public void verifyAllQueueBrowsersClosed(int indexOfSession)
+    protected void verifyAllQueueBrowsersClosed(int indexOfSession)
     {
         jmsTestModule.verifyAllQueueBrowsersClosed(indexOfSession);
     }
@@ -671,7 +671,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyDurableTopicSubscriberPresent}
      */
-    public void verifyDurableTopicSubscriberPresent(int indexOfSession, String nameOfSubscriber)
+    protected void verifyDurableTopicSubscriberPresent(int indexOfSession, String nameOfSubscriber)
     {
         jmsTestModule.verifyDurableTopicSubscriberPresent(indexOfSession, nameOfSubscriber);
     }
@@ -679,7 +679,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberDurableTopicSubscribers(int, int)}
      */
-    public void verifyNumberDurableTopicSubscribers(int indexOfSession, int numberOfSubscribers)
+    protected void verifyNumberDurableTopicSubscribers(int indexOfSession, int numberOfSubscribers)
     {
         jmsTestModule.verifyNumberDurableTopicSubscribers(indexOfSession, numberOfSubscribers);
     }
@@ -687,7 +687,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberDurableTopicSubscribers(int, String, int)}
      */
-    public void verifyNumberDurableTopicSubscribers(int indexOfSession, String topicName, int numberOfSubscribers)
+    protected void verifyNumberDurableTopicSubscribers(int indexOfSession, String topicName, int numberOfSubscribers)
     {
         jmsTestModule.verifyNumberDurableTopicSubscribers(indexOfSession, topicName, numberOfSubscribers);
     }
@@ -695,7 +695,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyDurableTopicSubscriberClosed}
      */
-    public void verifyDurableTopicSubscriberClosed(int indexOfSession, String subscriberName)
+    protected void verifyDurableTopicSubscriberClosed(int indexOfSession, String subscriberName)
     {
         jmsTestModule.verifyDurableTopicSubscriberClosed(indexOfSession, subscriberName);
     }
@@ -703,7 +703,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllDurableTopicSubscribersClosed}
      */
-    public void verifyAllDurableTopicSubscribersClosed(int indexOfSession)
+    protected void verifyAllDurableTopicSubscribersClosed(int indexOfSession)
     {
         jmsTestModule.verifyAllDurableTopicSubscribersClosed(indexOfSession);
     }
@@ -711,7 +711,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberQueueSessions}
      */
-    public void verifyNumberQueueSessions(int number)
+    protected void verifyNumberQueueSessions(int number)
     {
         jmsTestModule.verifyNumberQueueSessions(number);
     }
@@ -719,7 +719,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberTopicSessions}
      */
-    public void verifyNumberTopicSessions(int number)
+    protected void verifyNumberTopicSessions(int number)
     {
         jmsTestModule.verifyNumberTopicSessions(number);
     }
@@ -727,7 +727,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberTemporaryQueues}
      */
-    public void verifyNumberTemporaryQueues(int indexOfSession, int numberQueues)
+    protected void verifyNumberTemporaryQueues(int indexOfSession, int numberQueues)
     {
         jmsTestModule.verifyNumberTemporaryQueues(indexOfSession, numberQueues);
     }
@@ -735,7 +735,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberTemporaryTopics}
      */
-    public void verifyNumberTemporaryTopics(int indexOfSession, int numberTopics)
+    protected void verifyNumberTemporaryTopics(int indexOfSession, int numberTopics)
     {
         jmsTestModule.verifyNumberTemporaryTopics(indexOfSession, numberTopics);
     }
@@ -743,7 +743,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyTemporaryQueueDeleted}
      */
-    public void verifyTemporaryQueueDeleted(int indexOfSession, int indexOfQueue)
+    protected void verifyTemporaryQueueDeleted(int indexOfSession, int indexOfQueue)
     {
         jmsTestModule.verifyTemporaryQueueDeleted(indexOfSession, indexOfQueue);
     }
@@ -751,7 +751,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllTemporaryQueuesDeleted}
      */
-    public void verifyAllTemporaryQueuesDeleted(int indexOfSession)
+    protected void verifyAllTemporaryQueuesDeleted(int indexOfSession)
     {
         jmsTestModule.verifyAllTemporaryQueuesDeleted(indexOfSession);
     }
@@ -759,7 +759,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyTemporaryTopicDeleted}
      */
-    public void verifyTemporaryTopicDeleted(int indexOfSession, int indexOfTopic)
+    protected void verifyTemporaryTopicDeleted(int indexOfSession, int indexOfTopic)
     {
         jmsTestModule.verifyTemporaryTopicDeleted(indexOfSession, indexOfTopic);
     }
@@ -767,7 +767,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllTemporaryTopicsDeleted}
      */
-    public void verifyAllTemporaryTopicsDeleted(int indexOfSession)
+    protected void verifyAllTemporaryTopicsDeleted(int indexOfSession)
     {
         jmsTestModule.verifyAllTemporaryTopicsDeleted(indexOfSession);
     }
@@ -775,7 +775,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyMessageEquals}
      */
-    public void verifyMessageEquals(MockMessage message1, MockMessage message2)
+    protected void verifyMessageEquals(MockMessage message1, MockMessage message2)
     {
         jmsTestModule.verifyMessageEquals(message1, message2);
     }
@@ -783,7 +783,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCurrentQueueMessageEquals(String, int, MockMessage)}
      */
-    public void verifyCurrentQueueMessageEquals(String nameOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
+    protected void verifyCurrentQueueMessageEquals(String nameOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
     {
         jmsTestModule.verifyCurrentQueueMessageEquals(nameOfQueue, indexOfSourceMessage, targetMessage);
     }
@@ -791,7 +791,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyReceivedQueueMessageEquals(String, int, MockMessage)}
      */
-    public void verifyReceivedQueueMessageEquals(String nameOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
+    protected void verifyReceivedQueueMessageEquals(String nameOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
     {
         jmsTestModule.verifyReceivedQueueMessageEquals(nameOfQueue, indexOfSourceMessage, targetMessage);
     }
@@ -799,7 +799,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCurrentQueueMessageEquals(int, int, int, MockMessage)}
      */
-    public void verifyCurrentQueueMessageEquals(int indexOfSession, int indexOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
+    protected void verifyCurrentQueueMessageEquals(int indexOfSession, int indexOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
     {
         jmsTestModule.verifyCurrentQueueMessageEquals(indexOfSession, indexOfQueue, indexOfSourceMessage, targetMessage);
     }
@@ -807,7 +807,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyReceivedQueueMessageEquals(int, int, int, MockMessage)}
      */
-    public void verifyReceivedQueueMessageEquals(int indexOfSession, int indexOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
+    protected void verifyReceivedQueueMessageEquals(int indexOfSession, int indexOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
     {
         jmsTestModule.verifyReceivedQueueMessageEquals(indexOfSession, indexOfQueue, indexOfSourceMessage, targetMessage);
     }
@@ -815,7 +815,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCurrentQueueMessages(String, int)}
      */
-    public void verifyNumberOfCurrentQueueMessages(String nameOfQueue, int numberOfMessages)
+    protected void verifyNumberOfCurrentQueueMessages(String nameOfQueue, int numberOfMessages)
     {
         jmsTestModule.verifyNumberOfCurrentQueueMessages(nameOfQueue, numberOfMessages);
     }
@@ -823,7 +823,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfReceivedQueueMessages(String, int)}
      */
-    public void verifyNumberOfReceivedQueueMessages(String nameOfQueue, int numberOfMessages)
+    protected void verifyNumberOfReceivedQueueMessages(String nameOfQueue, int numberOfMessages)
     {
         jmsTestModule.verifyNumberOfReceivedQueueMessages(nameOfQueue, numberOfMessages);
     }
@@ -831,7 +831,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCurrentQueueMessages(int, int, int)}
      */
-    public void verifyNumberOfCurrentQueueMessages(int indexOfSession, int indexOfQueue, int numberOfMessages)
+    protected void verifyNumberOfCurrentQueueMessages(int indexOfSession, int indexOfQueue, int numberOfMessages)
     {
         jmsTestModule.verifyNumberOfCurrentQueueMessages(indexOfSession, indexOfQueue, numberOfMessages);
     }
@@ -839,7 +839,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfReceivedQueueMessages(int, int, int)}
      */
-    public void verifyNumberOfReceivedQueueMessages(int indexOfSession, int indexOfQueue, int numberOfMessages)
+    protected void verifyNumberOfReceivedQueueMessages(int indexOfSession, int indexOfQueue, int numberOfMessages)
     {
         jmsTestModule.verifyNumberOfReceivedQueueMessages(indexOfSession, indexOfQueue, numberOfMessages);
     }
@@ -847,7 +847,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllReceivedQueueMessagesAcknowledged(String)}
      */
-    public void verifyAllReceivedQueueMessagesAcknowledged(String nameOfQueue)
+    protected void verifyAllReceivedQueueMessagesAcknowledged(String nameOfQueue)
     {
         jmsTestModule.verifyAllReceivedQueueMessagesAcknowledged(nameOfQueue);
     }
@@ -855,7 +855,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllReceivedQueueMessagesAcknowledged(int, int)}
      */
-    public void verifyAllReceivedQueueMessagesAcknowledged(int indexOfSession, int indexOfQueue)
+    protected void verifyAllReceivedQueueMessagesAcknowledged(int indexOfSession, int indexOfQueue)
     {
         jmsTestModule.verifyAllReceivedQueueMessagesAcknowledged(indexOfSession, indexOfQueue);
     }
@@ -863,7 +863,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyReceivedQueueMessageAcknowledged(String, int)}
      */
-    public void verifyReceivedQueueMessageAcknowledged(String nameOfQueue, int indexOfMessage)
+    protected void verifyReceivedQueueMessageAcknowledged(String nameOfQueue, int indexOfMessage)
     {
         jmsTestModule.verifyReceivedQueueMessageAcknowledged(nameOfQueue, indexOfMessage);
     }
@@ -871,7 +871,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyReceivedQueueMessageNotAcknowledged(String, int)}
      */
-    public void verifyReceivedQueueMessageNotAcknowledged(String nameOfQueue, int indexOfMessage)
+    protected void verifyReceivedQueueMessageNotAcknowledged(String nameOfQueue, int indexOfMessage)
     {
         jmsTestModule.verifyReceivedQueueMessageNotAcknowledged(nameOfQueue, indexOfMessage);
     }
@@ -879,7 +879,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyReceivedQueueMessageAcknowledged(int, int, int)}
      */
-    public void verifyReceivedQueueMessageAcknowledged(int indexOfSession, int indexOfQueue, int indexOfMessage)
+    protected void verifyReceivedQueueMessageAcknowledged(int indexOfSession, int indexOfQueue, int indexOfMessage)
     {
         jmsTestModule.verifyReceivedQueueMessageAcknowledged(indexOfSession, indexOfQueue, indexOfMessage);
     }
@@ -887,7 +887,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyReceivedQueueMessageNotAcknowledged(int, int, int)}
      */
-    public void verifyReceivedQueueMessageNotAcknowledged(int indexOfSession, int indexOfQueue, int indexOfMessage)
+    protected void verifyReceivedQueueMessageNotAcknowledged(int indexOfSession, int indexOfQueue, int indexOfMessage)
     {
         jmsTestModule.verifyReceivedQueueMessageNotAcknowledged(indexOfSession, indexOfQueue, indexOfMessage);
     }
@@ -895,7 +895,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCreatedQueueMessages}
      */
-    public void verifyNumberOfCreatedQueueMessages(int indexOfSession, int number)
+    protected void verifyNumberOfCreatedQueueMessages(int indexOfSession, int number)
     {
         jmsTestModule.verifyNumberOfCreatedQueueMessages(indexOfSession, number);
     }
@@ -903,7 +903,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCreatedQueueBytesMessages}
      */
-    public void verifyNumberOfCreatedQueueBytesMessages(int indexOfSession, int number)
+    protected void verifyNumberOfCreatedQueueBytesMessages(int indexOfSession, int number)
     {
         jmsTestModule.verifyNumberOfCreatedQueueBytesMessages(indexOfSession, number);
     }
@@ -911,7 +911,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCreatedQueueMapMessages}
      */
-    public void verifyNumberOfCreatedQueueMapMessages(int indexOfSession, int number)
+    protected void verifyNumberOfCreatedQueueMapMessages(int indexOfSession, int number)
     {
         jmsTestModule.verifyNumberOfCreatedQueueMapMessages(indexOfSession, number);
     }
@@ -919,7 +919,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCreatedQueueTextMessages}
      */
-    public void verifyNumberOfCreatedQueueTextMessages(int indexOfSession, int number)
+    protected void verifyNumberOfCreatedQueueTextMessages(int indexOfSession, int number)
     {
         jmsTestModule.verifyNumberOfCreatedQueueTextMessages(indexOfSession, number);
     }
@@ -927,7 +927,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCreatedQueueStreamMessages}
      */
-    public void verifyNumberOfCreatedQueueStreamMessages(int indexOfSession, int number)
+    protected void verifyNumberOfCreatedQueueStreamMessages(int indexOfSession, int number)
     {
         jmsTestModule.verifyNumberOfCreatedQueueStreamMessages(indexOfSession, number);
     }
@@ -935,7 +935,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCreatedQueueObjectMessages}
      */
-    public void verifyNumberOfCreatedQueueObjectMessages(int indexOfSession, int number)
+    protected void verifyNumberOfCreatedQueueObjectMessages(int indexOfSession, int number)
     {
         jmsTestModule.verifyNumberOfCreatedQueueObjectMessages(indexOfSession, number);
     }
@@ -943,7 +943,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedQueueMessageAcknowledged}
      */
-    public void verifyCreatedQueueMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedQueueMessageAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedQueueMessageAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -951,7 +951,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedQueueMessageNotAcknowledged}
      */
-    public void verifyCreatedQueueMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedQueueMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedQueueMessageNotAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -959,7 +959,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedQueueBytesMessageAcknowledged}
      */
-    public void verifyCreatedQueueBytesMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedQueueBytesMessageAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedQueueBytesMessageAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -967,7 +967,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedQueueBytesMessageNotAcknowledged}
      */
-    public void verifyCreatedQueueBytesMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedQueueBytesMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedQueueBytesMessageNotAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -975,7 +975,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedQueueMapMessageAcknowledged}
      */
-    public void verifyCreatedQueueMapMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedQueueMapMessageAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedQueueMapMessageAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -983,7 +983,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedQueueMapMessageNotAcknowledged}
      */
-    public void verifyCreatedQueueMapMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedQueueMapMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedQueueMapMessageNotAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -991,7 +991,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedQueueTextMessageAcknowledged}
      */
-    public void verifyCreatedQueueTextMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedQueueTextMessageAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedQueueTextMessageAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -999,7 +999,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedQueueTextMessageNotAcknowledged}
      */
-    public void verifyCreatedQueueTextMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedQueueTextMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedQueueTextMessageNotAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1007,7 +1007,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedQueueStreamMessageAcknowledged}
      */
-    public void verifyCreatedQueueStreamMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedQueueStreamMessageAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedQueueStreamMessageAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1015,7 +1015,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedQueueStreamMessageNotAcknowledged}
      */
-    public void verifyCreatedQueueStreamMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedQueueStreamMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedQueueStreamMessageNotAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1023,7 +1023,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedQueueObjectMessageAcknowledged}
      */
-    public void verifyCreatedQueueObjectMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedQueueObjectMessageAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedQueueObjectMessageAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1031,7 +1031,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedQueueObjectMessageNotAcknowledged}
      */
-    public void verifyCreatedQueueObjectMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedQueueObjectMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedQueueObjectMessageNotAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1039,7 +1039,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCurrentTopicMessageEquals(String, int, MockMessage)}
      */
-    public void verifyCurrentTopicMessageEquals(String nameOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
+    protected void verifyCurrentTopicMessageEquals(String nameOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
     {
         jmsTestModule.verifyCurrentTopicMessageEquals(nameOfTopic, indexOfSourceMessage, targetMessage);
     }
@@ -1047,7 +1047,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyReceivedTopicMessageEquals(String, int, MockMessage)}
      */
-    public void verifyReceivedTopicMessageEquals(String nameOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
+    protected void verifyReceivedTopicMessageEquals(String nameOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
     {
         jmsTestModule.verifyReceivedTopicMessageEquals(nameOfTopic, indexOfSourceMessage, targetMessage);
     }
@@ -1055,7 +1055,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCurrentTopicMessageEquals(int, int, int, MockMessage)}
      */
-    public void verifyCurrentTopicMessageEquals(int indexOfSession, int indexOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
+    protected void verifyCurrentTopicMessageEquals(int indexOfSession, int indexOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
     {
         jmsTestModule.verifyCurrentTopicMessageEquals(indexOfSession, indexOfTopic, indexOfSourceMessage, targetMessage);
     }
@@ -1063,7 +1063,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyReceivedTopicMessageEquals(int, int, int, MockMessage)}
      */
-    public void verifyReceivedTopicMessageEquals(int indexOfSession, int indexOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
+    protected void verifyReceivedTopicMessageEquals(int indexOfSession, int indexOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
     {
         jmsTestModule.verifyReceivedTopicMessageEquals(indexOfSession, indexOfTopic, indexOfSourceMessage, targetMessage);
     }
@@ -1071,7 +1071,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCurrentTopicMessages(String, int)}
      */
-    public void verifyNumberOfCurrentTopicMessages(String nameOfTopic, int numberOfMessages)
+    protected void verifyNumberOfCurrentTopicMessages(String nameOfTopic, int numberOfMessages)
     {
         jmsTestModule.verifyNumberOfCurrentTopicMessages(nameOfTopic, numberOfMessages);
     }
@@ -1079,7 +1079,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfReceivedTopicMessages(String, int)}
      */
-    public void verifyNumberOfReceivedTopicMessages(String nameOfTopic, int numberOfMessages)
+    protected void verifyNumberOfReceivedTopicMessages(String nameOfTopic, int numberOfMessages)
     {
         jmsTestModule.verifyNumberOfReceivedTopicMessages(nameOfTopic, numberOfMessages);
     }
@@ -1087,7 +1087,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCurrentTopicMessages(int, int, int)}
      */
-    public void verifyNumberOfCurrentTopicMessages(int indexOfSession, int indexOfTopic, int numberOfMessages)
+    protected void verifyNumberOfCurrentTopicMessages(int indexOfSession, int indexOfTopic, int numberOfMessages)
     {
         jmsTestModule.verifyNumberOfCurrentTopicMessages(indexOfSession, indexOfTopic, numberOfMessages);
     }
@@ -1095,7 +1095,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfReceivedTopicMessages(int, int, int)}
      */
-    public void verifyNumberOfReceivedTopicMessages(int indexOfSession, int indexOfTopic, int numberOfMessages)
+    protected void verifyNumberOfReceivedTopicMessages(int indexOfSession, int indexOfTopic, int numberOfMessages)
     {
         jmsTestModule.verifyNumberOfReceivedTopicMessages(indexOfSession, indexOfTopic, numberOfMessages);
     }
@@ -1103,7 +1103,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllReceivedTopicMessagesAcknowledged(String)}
      */
-    public void verifyAllReceivedTopicMessagesAcknowledged(String nameOfTopic)
+    protected void verifyAllReceivedTopicMessagesAcknowledged(String nameOfTopic)
     {
         jmsTestModule.verifyAllReceivedTopicMessagesAcknowledged(nameOfTopic);
     }
@@ -1111,7 +1111,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyAllReceivedTopicMessagesAcknowledged(int, int)}
      */
-    public void verifyAllReceivedTopicMessagesAcknowledged(int indexOfSession, int indexOfTopic)
+    protected void verifyAllReceivedTopicMessagesAcknowledged(int indexOfSession, int indexOfTopic)
     {
         jmsTestModule.verifyAllReceivedTopicMessagesAcknowledged(indexOfSession, indexOfTopic);
     }
@@ -1119,7 +1119,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyReceivedTopicMessageAcknowledged(String, int)}
      */
-    public void verifyReceivedTopicMessageAcknowledged(String nameOfTopic, int indexOfMessage)
+    protected void verifyReceivedTopicMessageAcknowledged(String nameOfTopic, int indexOfMessage)
     {
         jmsTestModule.verifyReceivedTopicMessageAcknowledged(nameOfTopic, indexOfMessage);
     }
@@ -1127,7 +1127,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyReceivedTopicMessageNotAcknowledged(String, int)}
      */
-    public void verifyReceivedTopicMessageNotAcknowledged(String nameOfTopic, int indexOfMessage)
+    protected void verifyReceivedTopicMessageNotAcknowledged(String nameOfTopic, int indexOfMessage)
     {
         jmsTestModule.verifyReceivedTopicMessageNotAcknowledged(nameOfTopic, indexOfMessage);
     }
@@ -1135,7 +1135,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyReceivedTopicMessageAcknowledged(int, int, int)}
      */
-    public void verifyReceivedTopicMessageAcknowledged(int indexOfSession, int indexOfTopic, int indexOfMessage)
+    protected void verifyReceivedTopicMessageAcknowledged(int indexOfSession, int indexOfTopic, int indexOfMessage)
     {
         jmsTestModule.verifyReceivedTopicMessageAcknowledged(indexOfSession, indexOfTopic, indexOfMessage);
     }
@@ -1143,7 +1143,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyReceivedTopicMessageNotAcknowledged(int, int, int)}
      */
-    public void verifyReceivedTopicMessageNotAcknowledged(int indexOfSession, int indexOfTopic, int indexOfMessage)
+    protected void verifyReceivedTopicMessageNotAcknowledged(int indexOfSession, int indexOfTopic, int indexOfMessage)
     {
         jmsTestModule.verifyReceivedTopicMessageNotAcknowledged(indexOfSession, indexOfTopic, indexOfMessage);
     }
@@ -1151,7 +1151,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCreatedTopicMessages}
      */
-    public void verifyNumberOfCreatedTopicMessages(int indexOfSession, int number)
+    protected void verifyNumberOfCreatedTopicMessages(int indexOfSession, int number)
     {
         jmsTestModule.verifyNumberOfCreatedTopicMessages(indexOfSession, number);
     }
@@ -1159,7 +1159,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCreatedTopicBytesMessages}
      */
-    public void verifyNumberOfCreatedTopicBytesMessages(int indexOfSession, int number)
+    protected void verifyNumberOfCreatedTopicBytesMessages(int indexOfSession, int number)
     {
         jmsTestModule.verifyNumberOfCreatedTopicBytesMessages(indexOfSession, number);
     }
@@ -1167,7 +1167,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCreatedTopicMapMessages}
      */
-    public void verifyNumberOfCreatedTopicMapMessages(int indexOfSession, int number)
+    protected void verifyNumberOfCreatedTopicMapMessages(int indexOfSession, int number)
     {
         jmsTestModule.verifyNumberOfCreatedTopicMapMessages(indexOfSession, number);
     }
@@ -1175,7 +1175,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCreatedTopicTextMessages}
      */
-    public void verifyNumberOfCreatedTopicTextMessages(int indexOfSession, int number)
+    protected void verifyNumberOfCreatedTopicTextMessages(int indexOfSession, int number)
     {
         jmsTestModule.verifyNumberOfCreatedTopicTextMessages(indexOfSession, number);
     }
@@ -1183,7 +1183,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCreatedTopicStreamMessages}
      */
-    public void verifyNumberOfCreatedTopicStreamMessages(int indexOfSession, int number)
+    protected void verifyNumberOfCreatedTopicStreamMessages(int indexOfSession, int number)
     {
         jmsTestModule.verifyNumberOfCreatedTopicStreamMessages(indexOfSession, number);
     }
@@ -1191,7 +1191,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyNumberOfCreatedTopicObjectMessages}
      */
-    public void verifyNumberOfCreatedTopicObjectMessages(int indexOfSession, int number)
+    protected void verifyNumberOfCreatedTopicObjectMessages(int indexOfSession, int number)
     {
         jmsTestModule.verifyNumberOfCreatedTopicObjectMessages(indexOfSession, number);
     }
@@ -1199,7 +1199,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedTopicMessageAcknowledged}
      */
-    public void verifyCreatedTopicMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedTopicMessageAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedTopicMessageAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1207,7 +1207,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedTopicMessageNotAcknowledged}
      */
-    public void verifyCreatedTopicMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedTopicMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedTopicMessageNotAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1215,7 +1215,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedTopicBytesMessageAcknowledged}
      */
-    public void verifyCreatedTopicBytesMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedTopicBytesMessageAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedTopicBytesMessageAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1223,7 +1223,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedTopicBytesMessageNotAcknowledged}
      */
-    public void verifyCreatedTopicBytesMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedTopicBytesMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedTopicBytesMessageNotAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1231,7 +1231,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedTopicMapMessageAcknowledged}
      */
-    public void verifyCreatedTopicMapMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedTopicMapMessageAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedTopicMapMessageAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1239,7 +1239,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedTopicMapMessageNotAcknowledged}
      */
-    public void verifyCreatedTopicMapMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedTopicMapMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedTopicMapMessageNotAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1247,7 +1247,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedTopicTextMessageAcknowledged}
      */
-    public void verifyCreatedTopicTextMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedTopicTextMessageAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedTopicTextMessageAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1255,7 +1255,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedTopicTextMessageNotAcknowledged}
      */
-    public void verifyCreatedTopicTextMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedTopicTextMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedTopicTextMessageNotAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1263,7 +1263,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedTopicStreamMessageAcknowledged}
      */
-    public void verifyCreatedTopicStreamMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedTopicStreamMessageAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedTopicStreamMessageAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1271,7 +1271,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedTopicStreamMessageNotAcknowledged}
      */
-    public void verifyCreatedTopicStreamMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedTopicStreamMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedTopicStreamMessageNotAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1279,7 +1279,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedTopicObjectMessageAcknowledged}
      */
-    public void verifyCreatedTopicObjectMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedTopicObjectMessageAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedTopicObjectMessageAcknowledged(indexOfSession, indexOfMessage);
     }
@@ -1287,7 +1287,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#verifyCreatedTopicObjectMessageNotAcknowledged}
      */
-    public void verifyCreatedTopicObjectMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    protected void verifyCreatedTopicObjectMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedTopicObjectMessageNotAcknowledged(indexOfSession, indexOfMessage);
     }

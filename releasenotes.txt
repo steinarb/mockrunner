@@ -1,6 +1,9 @@
 
 mockrunner-0.2.5:
 
+- all TestCaseAdapter methods are protected now
+- added clearOutput and setCaseSensitive methods to ServletTestModule
+- added setCaseSensitive method to ServletTestModule and TagTestModule
 - added JDBC Driver preserve mechanism to JDBCMockObjectFactory
 - synchronized MockServletContext, MockServletConfig and MockHttpSession
   to make them thread safe. Note, that the other mock objects are

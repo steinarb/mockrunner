@@ -71,7 +71,6 @@ public class PrintMessageServlet extends HttpServlet
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
             response.getWriter().write("Error sending print request for " + customerId);
         }
     }
