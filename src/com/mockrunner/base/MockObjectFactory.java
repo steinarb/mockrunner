@@ -272,6 +272,21 @@ public class MockObjectFactory
     }
     
     /**
+     * Can be used to add a wrapper around the mock request. All the
+     * test modules are using the wrapped request returned by
+     * {@link #getWrappedRequest}. The method {@link #getMockRequest}
+     * returns the mock request without any wrapper. Please note, that
+     * it's necessary that the specified wrapper wraps the mock request 
+     * of this factory. The test modules won't work properly, if you wrap
+     * another request object.
+     * @param wrapper the wrapper
+     */
+    public void addRequestWrapper(HttpServletRequest wrapper)
+    {
+        wrappedRequest = wrapper;
+    }
+    
+    /**
      * Can be used to add a wrapper around the mock response. All the
      * test modules are using the wrapped response returned by
      * {@link #getWrappedResponse}. The method {@link #getMockResponse}
@@ -289,5 +304,20 @@ public class MockObjectFactory
         {
             throw new RuntimeException(exc.getMessage());
         }
+    }
+    
+    /**
+     * Can be used to add a wrapper around the mock response. All the
+     * test modules are using the wrapped response returned by
+     * {@link #getWrappedResponse}. The method {@link #getMockResponse}
+     * returns the mock request without any wrapper. Please note, that
+     * it's necessary that the specified wrapper wraps the mock response 
+     * of this factory. The test modules won't work properly, if you wrap
+     * another response object.
+     * @param wrapper the wrapper
+     */
+    public void addResponseWrapper(HttpServletResponse wrapper)
+    {
+        wrappedResponse = wrapper;
     }
 }
