@@ -2,6 +2,7 @@ package de.mockrunner.test;
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import junit.framework.TestCase;
@@ -73,7 +74,7 @@ public class ActionTestModuleTest extends TestCase
         assertFalse(module.hasActionMessages());
         module.setActionMessages(createTestActionMessages());
         assertTrue(module.hasActionMessages());
-        ActionError message = module.getActionMessageByKey("key2");
+        ActionMessage message = module.getActionMessageByKey("key2");
         assertEquals("value2", message.getValues()[1]);
     }
     

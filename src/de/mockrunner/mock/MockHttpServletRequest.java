@@ -26,6 +26,11 @@ public class MockHttpServletRequest extends com.mockobjects.servlet.MockHttpServ
         }
         return null;
     }
+    
+    public void clearParameters()
+    {
+        parameters.clear();
+    }
 
     public String[] getParameterValues(String key)
     {
@@ -51,6 +56,11 @@ public class MockHttpServletRequest extends com.mockobjects.servlet.MockHttpServ
     public Map getParameterMap()
     {
         return Collections.unmodifiableMap(parameters);
+    }
+    
+    public void clearAttributes()
+    {
+        attributes.clear();
     }
 
     public Object getAttribute(String key)

@@ -8,6 +8,11 @@ public class MockServletContext extends com.mockobjects.servlet.MockServletConte
 {
     private HashMap attributes = new HashMap();
     
+    public void clearAttributes()
+    {
+        attributes.clear();
+    }
+        
     public Object getAttribute(String key)
     {
         return attributes.get(key);
@@ -28,5 +33,4 @@ public class MockServletContext extends com.mockobjects.servlet.MockServletConte
     {
         attributes.put(key, value);
     }
-
 }

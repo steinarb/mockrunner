@@ -37,4 +37,14 @@ public abstract class BaseTestCase extends TestCase
     {
         return mockFactory;
     }
+    
+    protected ActionTestModule createActionTestModule(MockObjectFactory mockFactory)
+    {
+        return new ActionTestModule(mockFactory);
+    }
+    
+    protected ActionTestModule createActionTestModule()
+    {
+        return new ActionTestModule(getMockObjectFactory());
+    }
 }
