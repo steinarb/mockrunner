@@ -119,11 +119,11 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         boolean callExecuteQuery = isQuery(getSQL());
         if(callExecuteQuery)
         {
-            setNextResultSet(executeQuery());
+            executeQuery();
         }
         else
         {
-            setNextUpdateCount(executeUpdate());
+            executeUpdate();
         }
         return callExecuteQuery;
     }
@@ -149,6 +149,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             resultSetHandler.addExecutedStatement(getSQL());
             result = cloneResultSet(result);
             resultSetHandler.addReturnedResultSet(result);
+            setNextResultSet(result);
             return result;
         }
         return super.executeQuery(getSQL());
@@ -173,7 +174,9 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         if(null != updateCount)
         {
             resultSetHandler.addExecutedStatement(getSQL());
-            return updateCount.intValue();
+            int updateCountInt = updateCount.intValue();
+            setNextUpdateCount(updateCountInt);
+            return updateCountInt;
         }
         return super.executeUpdate(getSQL());
     }
