@@ -105,7 +105,7 @@ public class JMSTestModule
      * Creates a new connection and uses it for creating a new session and receiver.
      * Registers the specified listener. Starts the connection for message
      * receiving. This method is useful for creating test listeners when
-     * testing senders. It can be used to resgister message driven beans.
+     * testing senders. It can be used to register message driven beans.
      * Note that the created connection is the latest created
      * connection and automatically becomes the default connection for the
      * test module. The created session is transacted.
@@ -130,7 +130,7 @@ public class JMSTestModule
      * Creates a new session and receiver using the specified connection and
      * registers the specified listener. Starts the connection for message
      * receiving. This method is useful for creating test listeners when
-     * testing senders. It can be used to resgister message driven beans.
+     * testing senders. It can be used to register message driven beans.
      * The created session is transacted.
      * @param connection the connection used for creating the session
      * @param queueName the name of the queue used for message receiving
@@ -145,7 +145,7 @@ public class JMSTestModule
      * Creates a new session and receiver using the specified connection and
      * registers the specified listener. Starts the connection for message
      * receiving. This method is useful for creating test listeners when
-     * testing senders. It can be used to resgister message driven beans.
+     * testing senders. It can be used to register message driven beans.
      * @param connection the connection used for creating the session
      * @param queueName the name of the queue used for message receiving
      * @param transacted should the created session be transacted
