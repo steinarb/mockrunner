@@ -22,6 +22,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -38,14 +39,20 @@ public class MockResultSet implements ResultSet
     private Statement statement;
     private Map columnMap;
     private Map columnMapCopy;
+    private Map insertRow;
     private List columnNameList;
+    private List updatedRows;
+    private List deletedRows;
+    private List insertedRows;
     private int cursor;
+    private boolean isCursorInInsertRow;
     private boolean wasNull;
     private String cursorName;
     private int fetchSize = 0;
     private int fetchDirection = ResultSet.FETCH_FORWARD;
     private int resultSetType = ResultSet.TYPE_FORWARD_ONLY;
     private int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
+    private boolean isDatabaseView;
     
     public MockResultSet()
     {
@@ -57,8 +64,13 @@ public class MockResultSet implements ResultSet
         
         columnMap = new HashMap();
         columnNameList = new ArrayList();
+        updatedRows = new ArrayList();
+        deletedRows = new ArrayList();
+        insertedRows = new ArrayList();
         cursor = -1;
         wasNull = false;
+        isCursorInInsertRow = false;
+        isDatabaseView = false;
         this.cursorName = cursorName;
     }
     
@@ -88,6 +100,11 @@ public class MockResultSet implements ResultSet
         this.resultSetConcurrency = resultSetConcurrency;
     }
     
+    public void setDatabaseView(boolean databaseView)
+    {
+        this.isDatabaseView = databaseView;
+    }
+    
     public void addRow(Object[] values)
     {
         List valueList = new ArrayList();
@@ -114,6 +131,7 @@ public class MockResultSet implements ResultSet
            nextColumnList.add(rowCount + 1, nextValue);
         }
         copyColumnMap();
+        adjustFlags();
     }
     
     public void addColumn()
@@ -152,7 +170,9 @@ public class MockResultSet implements ResultSet
         columnMap.put(columnName, column);
         columnNameList.add(columnName);
         adjustColumns();
+        adjustInsertRow();
         copyColumnMap();
+        adjustFlags();
     }
     
     public int getRowCount()
@@ -184,7 +204,15 @@ public class MockResultSet implements ResultSet
     {
         checkColumnName(columnName);
         checkRowBounds();
-        List column = (List)columnMapCopy.get(columnName);
+        List column;
+        if(isDatabaseView)
+        {
+            column = (List)columnMap.get(columnName);
+        }
+        else
+        {
+            column = (List)columnMapCopy.get(columnName);
+        }
         Object value = column.get(cursor);
         wasNull = (null == value);
         return value;
@@ -791,18 +819,21 @@ public class MockResultSet implements ResultSet
 
     public void beforeFirst() throws SQLException
     {
+        if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         checkResultSetType();
         cursor = -1;
     }
 
     public void afterLast() throws SQLException
     {
+        if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         checkResultSetType();
         cursor = getRowCount();
     }
     
     public boolean next() throws SQLException
     {
+        if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         cursor++;
         adjustCursor();
         return false;
@@ -811,6 +842,7 @@ public class MockResultSet implements ResultSet
 
     public boolean first() throws SQLException
     {
+        if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         checkResultSetType();
         cursor = 0;
         return getRowCount() >= 0;
@@ -818,6 +850,7 @@ public class MockResultSet implements ResultSet
 
     public boolean last() throws SQLException
     {
+        if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         checkResultSetType();
         cursor = getRowCount() - 1;
         return getRowCount() >= 0;
@@ -825,6 +858,7 @@ public class MockResultSet implements ResultSet
     
     public boolean absolute(int row) throws SQLException
     {
+        if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         checkResultSetType();
         if(row > 0) cursor = row - 1;
         if(row < 0) cursor = getRowCount() + row;
@@ -834,6 +868,7 @@ public class MockResultSet implements ResultSet
 
     public boolean relative(int rows) throws SQLException
     {
+        if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         checkResultSetType();
         cursor += rows;
         adjustCursor();
@@ -847,6 +882,7 @@ public class MockResultSet implements ResultSet
 
     public boolean previous() throws SQLException
     {
+        if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         checkResultSetType();
         cursor--;
         adjustCursor();
@@ -856,6 +892,13 @@ public class MockResultSet implements ResultSet
     public void setFetchDirection(int fetchDirection) throws SQLException
     {
         this.fetchDirection = fetchDirection;
+        Iterator columns = columnMapCopy.values().iterator();
+        while(columns.hasNext())
+        {
+            List column = (List)columns.next();
+            Collections.reverse(column);
+        }
+        if(-1 != cursor) cursor = getRowCount() - cursor;
     }
 
     public int getFetchDirection() throws SQLException
@@ -896,6 +939,7 @@ public class MockResultSet implements ResultSet
     {
         checkColumnBounds(columnIndex);
         checkRowBounds();
+        if(rowDeleted()) throw new SQLException("row was deleted");
         String columnName = (String)columnNameList.get(columnIndex - 1);
         updateObject(columnName, value);
     }
@@ -915,8 +959,17 @@ public class MockResultSet implements ResultSet
         checkColumnName(columnName);
         checkRowBounds();
         checkResultSetConcurrency();
-        List column = (List)columnMapCopy.get(columnName);
-        column.set(cursor, value);
+        if(rowDeleted()) throw new SQLException("row was deleted");
+        if(isCursorInInsertRow)
+        {
+            List column = (List)insertRow.get(columnName);
+            column.set(0, value);
+        }
+        else
+        {
+            List column = (List)columnMapCopy.get(columnName);
+            column.set(cursor, value);
+        }
     }
     
     public void updateString(int columnIndex, String value) throws SQLException
@@ -1136,62 +1189,67 @@ public class MockResultSet implements ResultSet
     
     public boolean rowUpdated() throws SQLException
     {
-        // TODO Auto-generated method stub
-        return false;
+        checkRowBounds();
+        return ((Boolean)updatedRows.get(cursor)).booleanValue();
     }
 
     public boolean rowInserted() throws SQLException
     {
-        // TODO Auto-generated method stub
-        return false;
+        checkRowBounds();
+        return ((Boolean)insertedRows.get(cursor)).booleanValue();
     }
 
     public boolean rowDeleted() throws SQLException
     {
-        // TODO Auto-generated method stub
-        return false;
+        checkRowBounds();
+        return ((Boolean)deletedRows.get(cursor)).booleanValue();
     }
     
     public void insertRow() throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
+        insertRow(cursor);
     }
 
     public void updateRow() throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
+        if(rowDeleted()) throw new SQLException("row was deleted");
+        checkRowBounds();
+        updateRow(cursor, true);
+        updatedRows.set(cursor, new Boolean(true));
     }
 
     public void deleteRow() throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
+        checkRowBounds();
+        deleteRow(cursor);
+        deletedRows.set(cursor, new Boolean(true));
     }
 
     public void refreshRow() throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        cancelRowUpdates();
     }
 
     public void cancelRowUpdates() throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
+        if(rowDeleted()) throw new SQLException("row was deleted");
+        checkRowBounds();
+        updateRow(cursor, true);
+        updatedRows.set(cursor, new Boolean(false));
     }
 
     public void moveToInsertRow() throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        isCursorInInsertRow = true;
     }
 
     public void moveToCurrentRow() throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        isCursorInInsertRow = false;
     }
     
     private void checkColumnName(String columnName) throws SQLException
@@ -1234,6 +1292,58 @@ public class MockResultSet implements ResultSet
         }
     }
     
+    private void insertRow(int index)
+    {
+        Iterator columnNames = columnMapCopy.keySet().iterator();
+        while(columnNames.hasNext())
+        {
+            String currentColumnName = (String)columnNames.next();
+            List copyColumn = (List)columnMapCopy.get(currentColumnName);
+            List databaseColumn = (List)columnMap.get(currentColumnName);
+            List sourceColumn = (List)insertRow.get(currentColumnName);
+            copyColumn.add(index, sourceColumn.get(0));
+            databaseColumn.add(index, sourceColumn.get(0));  
+        }
+        updatedRows.add(index, new Boolean(false));
+        deletedRows.add(index, new Boolean(false));
+        insertedRows.add(index, new Boolean(true));
+    }
+    
+    private void deleteRow(int index)
+    {
+        Iterator columnNames = columnMapCopy.keySet().iterator();
+        while(columnNames.hasNext())
+        {
+            String currentColumnName = (String)columnNames.next();
+            List copyColumn = (List)columnMapCopy.get(currentColumnName);
+            List databaseColumn = (List)columnMap.get(currentColumnName);
+            copyColumn.set(index, null);
+            databaseColumn.set(index, null);
+        }
+    }
+    
+    private void updateRow(int index, boolean toDatabase)
+    {
+        Iterator columnNames = columnMapCopy.keySet().iterator();
+        while(columnNames.hasNext())
+        {
+            String currentColumnName = (String)columnNames.next();
+            List sourceColumn;
+            List targetColumn;
+            if(toDatabase)
+            {
+                sourceColumn = (List)columnMapCopy.get(currentColumnName);
+                targetColumn = (List)columnMap.get(currentColumnName);
+            }
+            else
+            {
+                sourceColumn = (List)columnMap.get(currentColumnName);
+                targetColumn = (List)columnMapCopy.get(currentColumnName);
+            } 
+            targetColumn.set(index, sourceColumn.get(index));
+        }
+    }
+    
     private void adjustCursor()
     {
         if(cursor < 0) cursor = -1;
@@ -1257,6 +1367,34 @@ public class MockResultSet implements ResultSet
             {
                 nextColumn.add(null);
             }
+        }
+    }
+    
+    private void adjustFlags()
+    {
+        for(int ii = updatedRows.size(); ii < getRowCount(); ii++)
+        {
+            updatedRows.add(new Boolean(false));
+        }
+        for(int ii = deletedRows.size(); ii < getRowCount(); ii++)
+        {
+            deletedRows.add(new Boolean(false));
+        }
+        for(int ii = insertedRows.size(); ii < getRowCount(); ii++)
+        {
+            insertedRows.add(new Boolean(false));
+        }
+    }
+    
+    private void adjustInsertRow()
+    {
+        insertRow = new HashMap();
+        Iterator columns = columnMap.keySet().iterator();
+        while(columns.hasNext())
+        {
+            ArrayList list = new ArrayList(1);
+            list.add(null);
+            insertRow.put((String)columns.next(), list);
         }
     }
     
