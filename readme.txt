@@ -32,7 +32,10 @@ servlet.jar
 
 Struts 1.1:
 http://jakarta.apache.org/struts
-struts.jar             
+struts.jar
+
+Commons (also included in Struts release):
+http://jakarta.apache.org/commons       
 commons-logging.jar
 commons-collections.jar
 commons-beanutils.jar
