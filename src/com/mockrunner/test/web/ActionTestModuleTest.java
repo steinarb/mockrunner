@@ -641,6 +641,19 @@ public class ActionTestModuleTest extends TestCase
         module.verifyForwardName("myName");
     }
     
+    public void testVerifyForwardWithPresetForward()
+    {
+        mockFactory.getMockActionMapping().addForward("success", "myPath");
+        TestForwardAction action = new TestForwardAction();
+        module.actionPerform(action);
+        module.verifyForward("myPath");
+        module.verifyForwardName("success");
+        mockFactory.getMockActionMapping().addForward("success", "anotherPath");
+        module.actionPerform(action);
+        module.verifyForward("anotherPath");
+        module.verifyForwardName("success");
+    }
+    
     public void testActionPerformMappingTypeSet()
     {
         module.actionPerform(TestAction.class);
