@@ -212,7 +212,7 @@ public class TagTestModule extends HTMLOutputModule
      * Sets the body of the tag as a static string. Please
      * note that all childs of the underlying {@link NestedTag}
      * are deleted and the static content is set. If you want
-     * to use nesting tags, please use the method {@link NestedTag#addTextChild}
+     * to use nested tags, please use the method {@link NestedTag#addTextChild}
      * to set static content.
      * @param body the static body content
      */
