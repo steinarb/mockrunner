@@ -12,6 +12,7 @@ public class AllGenTests
         suite.addTest(new TestSuite(JavaLineProcessorTest.class));
         suite.addTest(new TestSuite(JavaLineAssemblerTest.class));
         suite.addTest(new TestSuite(JavaClassGeneratorTest.class));
+        suite.addTest(new TestSuite(PackageImportSorterTest.class));
         //$JUnit-END$
         return suite;
     }
