@@ -49,7 +49,8 @@ public class TransmissionManagerWrapper
      * Returns the underlying {@link GenericTransmissionManager}.
      * @return the {@link GenericTransmissionManager}
      */
-    public GenericTransmissionManager getGenericTransmissionManager() {
+    public GenericTransmissionManager getGenericTransmissionManager() 
+    {
         return genericManager;
     }
 
