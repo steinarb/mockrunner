@@ -24,7 +24,9 @@ import javax.jms.Message;
 /**
  * Represents a property  expression
  * 
- * @version $Revision: 1.2 $
+ * Alwin Ibba: Changed package
+ * 
+ * @version $Revision: 1.3 $
  */
 public class PropertyExpression implements Expression {
 

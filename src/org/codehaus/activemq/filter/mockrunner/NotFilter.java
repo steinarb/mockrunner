@@ -24,8 +24,10 @@ import javax.jms.Message;
 
 /**
  * Represents a logical not operation on another filter
+ * 
+ * Alwin Ibba: Changed package
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class NotFilter implements Filter {
 

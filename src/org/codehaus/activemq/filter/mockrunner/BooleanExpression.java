@@ -22,7 +22,9 @@ package org.codehaus.activemq.filter.mockrunner;
  * A BooleanExpression is an expression that always
  * produces a Boolean result.
  *
- * @version $Revision: 1.2 $
+ * Alwin Ibba: Changed package
+ *
+ * @version $Revision: 1.3 $
  */
 public interface BooleanExpression extends Expression {
 }

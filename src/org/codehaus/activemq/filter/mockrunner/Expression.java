@@ -25,7 +25,9 @@ import javax.jms.Message;
 /**
  * Represents an expression
  * 
- * @version $Revision: 1.2 $
+ * Alwin Ibba: Changed package
+ * 
+ * @version $Revision: 1.3 $
  */
 public interface Expression {
 

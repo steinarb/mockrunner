@@ -28,7 +28,9 @@ import org.codehaus.activemq.filter.mockrunner.PropertyExpression;
 import org.codehaus.activemq.selector.mockrunner.SelectorParser;
 
 /**
- * @version $Revision: 1.3 $
+ * Alwin Ibba: Changed package
+ * 
+ * @version $Revision: 1.4 $
  */
 public class SelectorParserTest extends TestCase {
 

@@ -4,6 +4,8 @@ package org.codehaus.activemq.selector.mockrunner;
 /**
  * An implementation of interface CharStream, where the stream is assumed to
  * contain only ASCII characters (without unicode processing).
+ * 
+ * Alwin Ibba: Changed package
  */
 
 public final class SimpleCharStream {
