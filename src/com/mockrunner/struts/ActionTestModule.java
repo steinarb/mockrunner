@@ -272,7 +272,7 @@ public class ActionTestModule
      */
     public void verifyForward(String path)
     {
-        if (null == getActionForward())
+        if(null == getActionForward())
         {
             throw new VerifyFailedException("ActionForward == null");
         }
@@ -294,7 +294,7 @@ public class ActionTestModule
      */
     public void verifyForwardName(String name)
     {
-        if (null == getActionForward())
+        if(null == getActionForward())
         {
             throw new VerifyFailedException("ActionForward == null");
         }
@@ -311,7 +311,7 @@ public class ActionTestModule
      */
     public void verifyRedirect(boolean redirect)
     {
-        if (null == getActionForward())
+        if(null == getActionForward())
         {
             throw new VerifyFailedException("ActionForward == null");
         }
@@ -341,15 +341,15 @@ public class ActionTestModule
     
     private void verifyNoActionMessages(ActionMessages messages)
     {
-        if (containsMessages(messages))
+        if(containsMessages(messages))
         {
             StringBuffer buffer = new StringBuffer();
             buffer.append("has the following messages/errors: ");
             Iterator iterator = messages.get();
-            while (iterator.hasNext())
+            while(iterator.hasNext())
             {
-                ActionError error = (ActionError) iterator.next();
-                buffer.append(error.getKey() + ";");
+                ActionMessage message = (ActionMessage)iterator.next();
+                buffer.append(message.getKey() + ";");
             }
             throw new VerifyFailedException(buffer.toString());
         }
@@ -361,7 +361,7 @@ public class ActionTestModule
      */
     public void verifyHasActionErrors()
     {
-        if (!containsMessages(getActionErrors()))
+        if(!containsMessages(getActionErrors()))
         {
             throw new VerifyFailedException("no action errors");
         }
@@ -373,7 +373,7 @@ public class ActionTestModule
      */
     public void verifyHasActionMessages()
     {
-        if (!containsMessages(getActionMessages()))
+        if(!containsMessages(getActionMessages()))
         {
             throw new VerifyFailedException("no action messages");
         }
@@ -403,12 +403,12 @@ public class ActionTestModule
     
     private void verifyActionMessagePresent(String messageKey, ActionMessages messages)
     {
-        if (!containsMessages(messages)) throw new VerifyFailedException("no action messages/errors");
+        if(!containsMessages(messages)) throw new VerifyFailedException("no action messages/errors");
         Iterator iterator = messages.get();
         while (iterator.hasNext())
         {
             ActionMessage message = (ActionMessage) iterator.next();
-            if (message.getKey().equals(messageKey))
+            if(message.getKey().equals(messageKey))
             {
                 return;
             }
@@ -441,10 +441,10 @@ public class ActionTestModule
     private void verifyActionMessageNotPresent(String messageKey, ActionMessages messages)
     {
         Iterator iterator = messages.get();
-        while (iterator.hasNext())
+        while(iterator.hasNext())
         {
             ActionMessage message = (ActionMessage) iterator.next();
-            if (message.getKey().equals(messageKey))
+            if(message.getKey().equals(messageKey))
             {
                 throw new VerifyFailedException("message/error " + messageKey + " present");
             }
@@ -478,10 +478,10 @@ public class ActionTestModule
         if (!containsMessages(messages)) throw new VerifyFailedException("no action messages/errors");
         if(messages.size() != messageKeys.length) throw new VerifyFailedException("expected " + messageKeys.length + " messages/errors, received " + messages.size() + " messages/errors");
         Iterator iterator = messages.get();
-        for (int ii = 0; ii < messageKeys.length; ii++)
+        for(int ii = 0; ii < messageKeys.length; ii++)
         {
             ActionMessage message = (ActionMessage) iterator.next();
-            if (!message.getKey().equals(messageKeys[ii]))
+            if(!message.getKey().equals(messageKeys[ii]))
             {
                 throw new VerifyFailedException("mismatch at position " + ii + ", actual: " + message.getKey() + ", expected: " + messageKeys[ii]);
             }
