@@ -12,7 +12,7 @@ import org.apache.struts.util.MessageResourcesFactory;
 
 /**
  * This implementation of <code>MessageResources</code>
- * takes is messages from a <code>Map</code> and can be
+ * takes the messages from a <code>Map</code> and can be
  * used for testing purposes. The <code>Map</code> can
  * also be filled with the contents of a property file.
  * Note: This implementation ignores the specified <code>Locale</code>.
