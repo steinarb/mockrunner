@@ -8,7 +8,7 @@ import de.mockrunner.example.AuthenticationStrategy;
 /**
  * Example test for the {@link de.mockrunner.example.AuthenticationAction}.
  * Demonstrates most of the features of {@link de.mockrunner.base.ActionTestModule} 
- * resp. {@link de.mockrunner.base.ActionTestCaseAdapter}
+ * resp. {@link de.mockrunner.base.ActionTestCaseAdapter}.
  */
 public class AuthenticationActionTest extends ActionTestCaseAdapter
 {

@@ -38,6 +38,11 @@ public class MockHttpSession extends com.mockobjects.servlet.MockHttpSession
     {
         return servletContext;
     }
+    
+    public boolean isValid()
+    {
+        return isValid;
+    }
 
     public boolean isNew()
     {
