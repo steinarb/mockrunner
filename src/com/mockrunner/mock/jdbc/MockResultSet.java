@@ -47,7 +47,7 @@ public class MockResultSet implements ResultSet
     private int resultSetType = ResultSet.TYPE_FORWARD_ONLY;
     private int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
     
-    public MockResultSet(Statement statement)
+    public MockResultSet()
     {
         this("");
     }
@@ -601,13 +601,23 @@ public class MockResultSet implements ResultSet
     
     public Array getArray(int columnIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getObject(columnIndex);
+        if(null != value)
+        {
+            if(value instanceof Array) return (Array)value;
+            return new MockArray(value);
+        }
         return null;
     }
     
     public Array getArray(String columnName) throws SQLException
     {
-        // TODO Auto-generated method stub
+        Object value = getObject(columnName);
+        if(null != value)
+        {
+            if(value instanceof Array) return (Array)value;
+            return new MockArray(value);
+        }
         return null;
     }
     

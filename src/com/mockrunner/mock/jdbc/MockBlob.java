@@ -8,7 +8,7 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.List;
 
-import com.mockrunner.util.CollectionUtil;
+import com.mockrunner.util.ArrayUtil;
 
 /**
  * Mock implementation of a JDBC 3.0 <code>Blob</code>.
@@ -19,7 +19,7 @@ public class MockBlob implements Blob
     
     public MockBlob(byte[] data)
     {
-        blobData = CollectionUtil.getListFromByteArray(data);
+        blobData = ArrayUtil.getListFromByteArray(data);
     }
     
     public long length() throws SQLException
@@ -30,18 +30,18 @@ public class MockBlob implements Blob
     public byte[] getBytes(long pos, int length) throws SQLException
     {
         if(pos < 0) pos = 0;
-        return CollectionUtil.getByteArrayFromList(blobData, (int)(pos - 1), length);
+        return ArrayUtil.getByteArrayFromList(blobData, (int)(pos - 1), length);
     }
 
     public InputStream getBinaryStream() throws SQLException
     {
-        return new ByteArrayInputStream(CollectionUtil.getByteArrayFromList(blobData));
+        return new ByteArrayInputStream(ArrayUtil.getByteArrayFromList(blobData));
     }
 
     public long position(byte[] pattern, long start) throws SQLException
     {
-        byte[] data = CollectionUtil.getByteArrayFromList(blobData);
-        int index = CollectionUtil.contains(data, pattern, (int)(start - 1));
+        byte[] data = ArrayUtil.getByteArrayFromList(blobData);
+        int index = ArrayUtil.contains(data, pattern, (int)(start - 1));
         if(-1 != index) index += 1;
         return index;
     }
@@ -54,14 +54,14 @@ public class MockBlob implements Blob
     public int setBytes(long pos, byte[] bytes) throws SQLException
     {
         if(pos < 0) pos = 0;
-        CollectionUtil.addBytesToList(bytes, blobData, (int)(pos - 1));
+        ArrayUtil.addBytesToList(bytes, blobData, (int)(pos - 1));
         return bytes.length;
     }
 
     public int setBytes(long pos, byte[] bytes, int offset, int len) throws SQLException
     {
         if(pos < 0) pos = 0;
-        CollectionUtil.addBytesToList(bytes, offset, len, blobData, (int)(pos - 1));
+        ArrayUtil.addBytesToList(bytes, offset, len, blobData, (int)(pos - 1));
         return len;
     }
 
@@ -72,7 +72,7 @@ public class MockBlob implements Blob
 
     public void truncate(long len) throws SQLException
     {
-        blobData = CollectionUtil.truncateList(blobData, (int)len);
+        blobData = ArrayUtil.truncateList(blobData, (int)len);
     }
     
     private class BlobOutputStream extends OutputStream
@@ -87,7 +87,7 @@ public class MockBlob implements Blob
         public void write(int byteValue) throws IOException
         {
             byte[] bytes = new byte[] {(byte)byteValue};
-            CollectionUtil.addBytesToList(bytes, blobData, index);
+            ArrayUtil.addBytesToList(bytes, blobData, index);
             index++;
         }
     }
