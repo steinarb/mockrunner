@@ -201,6 +201,15 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
+     * Implementation of {@link NestedTag#addDynamicChild}.
+     */
+    public void addDynamicChild(DynamicChild child)
+    {
+        if(null == child) return;
+        childs.add(child);
+    }
+    
+    /**
      * Implementation of {@link NestedTag#addTagChild(Class)}.
      */
     public NestedTag addTagChild(Class tag)
@@ -213,7 +222,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
      */
     public NestedTag addTagChild(Class tag, Map attributeMap)
     {
-        Object childTag =TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);	
+        Object childTag = TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);	
         return (NestedTag)addChild(childTag);
     }
     
@@ -236,16 +245,16 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     
     /**
      * Implementation of {@link NestedTag#addTagChild(JspTag)}.
-     */
-    /*public NestedTag addTagChild(JspTag tag)
+     *//*
+    public NestedTag addTagChild(JspTag tag)
     {
         return addTagChild(tag, new HashMap());
-    }*/
+    }
     
-    /**
+    *//**
      * Implementation of {@link NestedTag#addTagChild(JspTag, Map)}.
-     */
-    /*public NestedTag addTagChild(JspTag tag, Map attributeMap)
+     *//*
+    public NestedTag addTagChild(JspTag tag, Map attributeMap)
     {
         Object childTag = TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);   
         return (NestedTag)addChild(childTag);

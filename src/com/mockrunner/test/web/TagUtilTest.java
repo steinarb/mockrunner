@@ -1,20 +1,10 @@
 package com.mockrunner.test.web;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.servlet.jsp.tagext.TagSupport;
-
 import com.mockrunner.base.BaseTestCase;
-import com.mockrunner.mock.web.MockPageContext;
-import com.mockrunner.tag.NestedBodyTag;
-import com.mockrunner.tag.NestedStandardTag;
-import com.mockrunner.tag.NestedTag;
-import com.mockrunner.tag.TagUtil;
 
 public class TagUtilTest extends BaseTestCase
 {
-    private MockPageContext pageContext;
+    /*private MockPageContext pageContext;
     private Map testMap;
     
     protected void setUp() throws Exception
@@ -62,7 +52,7 @@ public class TagUtilTest extends BaseTestCase
         {
             //should throw exception
         }
-        /*try
+        try
         {
             TagUtil.createNestedTagInstance(TestBodyTag.class, new TestJspContext(), testMap);
             fail();
@@ -71,7 +61,7 @@ public class TagUtilTest extends BaseTestCase
         {
             //should throw exception
         }
-        TagUtil.createNestedTagInstance(TestSimpleTag.class, new TestJspContext(), testMap);*/
+        TagUtil.createNestedTagInstance(TestSimpleTag.class, new TestJspContext(), testMap);
     }
 
     public void testCreateNestedTagInstance()
@@ -82,9 +72,9 @@ public class TagUtilTest extends BaseTestCase
         tag = (TagSupport)TagUtil.createNestedTagInstance(TestBodyTag.class, pageContext, testMap);
         assertTrue(tag instanceof NestedBodyTag);
         assertTrue(((NestedTag)tag).getTag() instanceof TestBodyTag);
-        /*SimpleTag simpleTag = (SimpleTag)TagUtil.createNestedTagInstance(TestSimpleTag.class, pageContext, testMap);
+        SimpleTag simpleTag = (SimpleTag)TagUtil.createNestedTagInstance(TestSimpleTag.class, pageContext, testMap);
         assertTrue(simpleTag instanceof NestedSimpleTag);
-        assertTrue(((NestedTag)simpleTag).getWrappedTag() instanceof TestSimpleTag);*/
+        assertTrue(((NestedTag)simpleTag).getWrappedTag() instanceof TestSimpleTag);
         
         TestTag testTag = new TestTag();
         tag = (TagSupport)TagUtil.createNestedTagInstance(testTag, pageContext, testMap);
@@ -94,10 +84,10 @@ public class TagUtilTest extends BaseTestCase
         tag = (TagSupport)TagUtil.createNestedTagInstance(testBodyTag, pageContext, testMap);
         assertTrue(tag instanceof NestedBodyTag);
         assertSame(testBodyTag, ((NestedTag)tag).getTag());
-        /*TestSimpleTag testSimpleTag = new TestSimpleTag();
+        TestSimpleTag testSimpleTag = new TestSimpleTag();
         simpleTag = (SimpleTag)TagUtil.createNestedTagInstance(testSimpleTag, pageContext, testMap);
         assertTrue(simpleTag instanceof NestedSimpleTag);
-        assertSame(testSimpleTag, ((NestedTag)simpleTag).getWrappedTag());*/
+        assertSame(testSimpleTag, ((NestedTag)simpleTag).getWrappedTag());
     }
     
     public void testPopulateTag()
@@ -130,9 +120,9 @@ public class TagUtilTest extends BaseTestCase
         testMap.put("floatProperty", "123.x");
         testMap.put("stringProperty", "aString");
         TagUtil.populateTag(testSimpleTag, testMap, false);
-        /*assertEquals(0.0, testSimpleTag.getFloatProperty(), 0.0);
+        assertEquals(0.0, testSimpleTag.getFloatProperty(), 0.0);
         assertTrue(testSimpleTag.getBooleanProperty());
-        assertEquals("aString", testSimpleTag.getStringProperty());*/
+        assertEquals("aString", testSimpleTag.getStringProperty());
     }
     
     public void testPopulateTagWithArbitraryBeans()
@@ -149,7 +139,48 @@ public class TagUtilTest extends BaseTestCase
         assertSame(this, tag.getTagUtilTest());
     }
     
-    /*public void testEvalBody() throws Exception
+    public void testPopulateDynamicAttributesWithNonDynamicBean()
+    {
+        Object object = new Object(); 
+        testMap.put("object", new DynamicAttribute("uri", object));
+        ArbitraryTag tag = new ArbitraryTag();
+        try
+        {
+            TagUtil.populateTag(tag, testMap, false);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        testMap.clear();
+        testMap.put("testobject", object);
+        TagUtil.populateTag(tag, testMap, false);
+    }
+    
+    public void testPopulateDynamicAttributesWithDynamicBean()
+    {
+        Object object = new Object(); 
+        testMap.put("object", new DynamicAttribute("uri", object));
+        DynamicTag tag = new DynamicTag();
+        TagUtil.populateTag(tag, testMap, false);
+        assertNull(tag.getObject());
+        assertEquals(1, tag.getDynamicAttributesMap().size());
+        DynamicAttribute attribute = (DynamicAttribute)tag.getDynamicAttributesMap().get("object");
+        assertEquals("uri", attribute.getUri());
+        assertSame(object, attribute.getValue());
+        tag.clearDynamicAttributes();
+        testMap.put("object", object);
+        testMap.put("testobject", object);
+        TagUtil.populateTag(tag, testMap, false);
+        assertSame(object, tag.getObject());
+        assertEquals(1, tag.getDynamicAttributesMap().size());
+        attribute = (DynamicAttribute)tag.getDynamicAttributesMap().get("testobject");
+        assertNull(attribute.getUri());
+        assertSame(object, attribute.getValue());
+    }
+    
+    public void testEvalBody() throws Exception
     {
         TestTag testStandardTag = new TestTag();
         TestBodyTag testBodyTag = new TestBodyTag();
@@ -161,12 +192,16 @@ public class TagUtilTest extends BaseTestCase
         bodyList.add(standardTag);
         bodyList.add(bodyTag);
         bodyList.add(simpleTag);
+        bodyList.add(new TestDynamicChild("thisisa"));
         bodyList.add("test");
+        bodyList.add(new TestDynamicChild(null));
+        bodyList.add(new Integer(123));
+        bodyList.add(null);
         TagUtil.evalBody(bodyList, pageContext);
         assertTrue(testStandardTag.wasDoStartTagCalled());
         assertTrue(testBodyTag.wasDoStartTagCalled());
         assertTrue(testSimpleTag.wasDoTagCalled());
-        assertEquals("TestTagTestBodyTagTestSimpleTagtest", ((MockJspWriter)pageContext.getOut()).getOutputAsString());
+        assertEquals("TestTagTestBodyTagTestSimpleTagthisisatestnull123null", ((MockJspWriter)pageContext.getOut()).getOutputAsString());
         try
         {
             TagUtil.evalBody(bodyList, "WrongContext");
@@ -176,7 +211,7 @@ public class TagUtilTest extends BaseTestCase
         {
             //should throw exception
         }
-    }*/
+    }
     
     public class ArbitraryTag extends TagSupport
     {
@@ -204,7 +239,38 @@ public class TagUtilTest extends BaseTestCase
         }
     }
     
-    /*private class TestJspContext extends JspContext
+    public class DynamicTag extends TagSupport implements DynamicAttributes
+    {
+        private Map dynamicAttributes = new HashMap();
+        private Object object;
+        
+        public void setDynamicAttribute(String uri, String localName, Object value) throws JspException
+        {
+            dynamicAttributes.put(localName, new DynamicAttribute(uri, value));
+        }
+        
+        public void setObject(Object object)
+        {
+            this.object = object;
+        }
+        
+        public Object getObject()
+        {
+            return object;
+        }
+        
+        public void clearDynamicAttributes()
+        {
+            dynamicAttributes.clear();
+        }
+        
+        public Map getDynamicAttributesMap()
+        {
+            return dynamicAttributes;
+        }
+    }
+    
+    private class TestJspContext extends JspContext
     {
         public Object findAttribute(String name)
         {
@@ -264,6 +330,21 @@ public class TagUtilTest extends BaseTestCase
         public void setAttribute(String name, Object value)
         {
 
+        }
+    }
+    
+    private class TestDynamicChild implements DynamicChild
+    {
+        private String value;
+        
+        public TestDynamicChild(String value)
+        {
+            this.value = value;
+        }
+        
+        public Object evaluate()
+        {
+            return value;
         }
     }*/
 }

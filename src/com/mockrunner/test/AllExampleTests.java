@@ -38,6 +38,7 @@ public class AllExampleTests
         //$JUnit-BEGIN$ 
         suite.addTest(new TestSuite(ConstrainedNumericTextTagTest.class));
         suite.addTest(new TestSuite(TableEnumTagTest.class));
+        //suite.addTest(new TestSuite(FilterImagesTagTest.class));
         suite.addTest(new TestSuite(LogoutServletTest.class));
         suite.addTest(new TestSuite(RedirectServletTest.class));
         suite.addTest(new TestSuite(AuthenticationActionTest.class));

@@ -1,6 +1,7 @@
 package com.mockrunner.tag;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.Tag;
 
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -119,7 +121,29 @@ public class TagUtil
         if(null == attributes || attributes.isEmpty()) return;
         try
         {
-            BeanUtils.copyProperties(tag, attributes);
+            Iterator names = attributes.keySet().iterator();
+            while(names.hasNext()) 
+            {
+                String currentName = (String)names.next();
+                /*Object currentValue = attributes.get(currentName);
+                if(currentValue instanceof DynamicAttribute)
+                {
+                    populateDynamicAttribute(tag, currentName, (DynamicAttribute)currentValue);
+                    return;
+                }*/
+                if(PropertyUtils.isWriteable(tag, currentName)) 
+                {
+                    BeanUtils.copyProperty(tag, currentName, attributes.get(currentName));
+                }
+                /*else if(tag instanceof DynamicAttributes)
+                {
+                    populateDynamicAttribute(tag, currentName, new DynamicAttribute(null, currentValue));
+                }*/
+            }
+        }
+        catch(IllegalArgumentException exc)
+        {
+            throw exc;
         }
         catch(Exception exc)
         {
@@ -128,8 +152,28 @@ public class TagUtil
         }
     }
     
+    /*private static void populateDynamicAttribute(Object tag, String name, DynamicAttribute attribute) throws JspException
+    {
+        if(!(tag instanceof DynamicAttributes))
+        {
+            String message = "Attribute " + name + " specified as dynamic attribute but tag ";
+            message += "is not an instance of avax.servlet.jsp.tagext.DynamicAttributes.";
+            throw new IllegalArgumentException(message);
+        }
+        ((DynamicAttributes)tag).setDynamicAttribute(attribute.getUri(), name, attribute.getValue());
+    }*/
+    
     /**
-     * Handles body evaluation of a tag.
+     * Handles body evaluation of a tag. Iterated through the childs.
+     * If the child is an instance of {@link com.mockrunner.tag.NestedTag},
+     * the {@link com.mockrunner.tag.NestedTag#doLifecycle} method of
+     * this tag is called. If the child is an instance of 
+     * {@link com.mockrunner.tag.DynamicChild}, the 
+     * {@link com.mockrunner.tag.DynamicChild#evaluate} method is called
+     * and the result is written to the out <code>JspWriter</code> as a
+     * string. If the result is another object (usually a string) it is written
+     * to the out <code>JspWriter</code> (the <code>toString</code> method will
+     * be called).
      * @param bodyList the list of body entries
      * @param pageContext the corresponding <code>PageContext</code> or <code>JspContext</code>
      */
@@ -158,11 +202,11 @@ public class TagUtil
                 {
                     if(pageContext instanceof PageContext)
                     {
-                        ((PageContext)pageContext).getOut().print(nextChild.toString());
+                        ((PageContext)pageContext).getOut().print(getChildText(nextChild));
                     }
                     /*else if(pageContext instanceof JspContext)
                     {
-                        ((JspContext)pageContext).getOut().print(nextChild.toString());
+                        ((JspContext)pageContext).getOut().print(getChildText(nextChild));
                     }*/
                     else
                     {
@@ -176,6 +220,18 @@ public class TagUtil
                 }	
             }
         }
+    }
+    
+    private static String getChildText(Object child)
+    {
+        if(null == child) return "null";
+        if(child instanceof DynamicChild)
+        {
+            Object result = ((DynamicChild)child).evaluate();
+            if(null == result) return "null";
+            return result.toString();
+        }
+        return child.toString();
     }
     
     /**

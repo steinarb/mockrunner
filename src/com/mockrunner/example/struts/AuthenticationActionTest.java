@@ -5,7 +5,7 @@ import com.mockrunner.struts.BasicActionTestCaseAdapter;
 /**
  * Example test for the {@link AuthenticationAction}.
  * Demonstrates most of the features of {@link com.mockrunner.struts.ActionTestModule} 
- * resp. {@link com.mockrunner.struts.ActionTestCaseAdapter}.
+ * resp. {@link com.mockrunner.struts.BasicActionTestCaseAdapter}.
  */
 public class AuthenticationActionTest extends BasicActionTestCaseAdapter
 {

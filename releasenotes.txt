@@ -16,6 +16,10 @@ mockrunner-0.3.2:
 - Mockrunner now provides separate jars for all supported technologies
   in addition to the all-in-one jars
 - reorganized package structure of util classes
+- Enhanced tag test framework. Now supports simulated scriptlets and
+  expressions as well as all J2EE 1.4 features (simple tags, dynamic
+  attributes and fragments). Added FilterImagesTagTest to demonstrate
+  some of the new features.
 - it's now possible to set the key under which messages and errors are
   stored in ActionTestModule
 - added getMockConnection method to MockDataSource (patch by Gábor Lipták)

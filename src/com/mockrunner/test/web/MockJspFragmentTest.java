@@ -107,5 +107,11 @@ public class MockJspFragmentTest extends TestCase
         assertEquals("text1TestTagTestBodyTagTestSimpleTagtext2", writer.toString());
         String outText = ((MockJspWriter)context.getOut()).getOutputAsString();
         assertEquals("beforeafter", outText);
+        context.getOut().clearBuffer();
+        context.getOut().print("before");
+        fragment.invoke(null);
+        context.getOut().print("after");
+        outText = ((MockJspWriter)context.getOut()).getOutputAsString();
+        assertEquals("beforetext1TestTagTestBodyTagTestSimpleTagtext2after", outText);
     }*/
 }

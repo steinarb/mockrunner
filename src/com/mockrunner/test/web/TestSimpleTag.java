@@ -1,13 +1,28 @@
 package com.mockrunner.test.web;
 
-
-public class TestSimpleTag //extends SimpleTagSupport
+public class TestSimpleTag //extends SimpleTagSupport implements DynamicAttributes
 {
     /*private boolean booleanProperty;
     private float floatProperty;
     private String stringProperty;
     private String testString;
     private boolean doTagCalled = false;
+    private Map dynamicAttributes = new HashMap();
+    
+    public void setDynamicAttribute(String uri, String localName, Object value) throws JspException
+    {
+        dynamicAttributes.put(localName, new DynamicAttribute(uri, value));
+    }
+    
+    public void clearDynamicAttributes()
+    {
+        dynamicAttributes.clear();
+    }
+    
+    public Map getDynamicAttributesMap()
+    {
+        return dynamicAttributes;
+    }
     
     public void doTag() throws JspException, IOException
     {

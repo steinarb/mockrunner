@@ -183,6 +183,15 @@ public class NestedStandardTag extends TagSupport implements NestedTag
     }
     
     /**
+     * Implementation of {@link NestedTag#addDynamicChild}.
+     */
+    public void addDynamicChild(DynamicChild child)
+    {
+        if(null == child) return;
+        childs.add(child);
+    }
+    
+    /**
      * Implementation of {@link NestedTag#addTagChild(Class)}.
      */
     public NestedTag addTagChild(Class tag)
@@ -218,16 +227,16 @@ public class NestedStandardTag extends TagSupport implements NestedTag
 
     /**
      * Implementation of {@link NestedTag#addTagChild(JspTag)}.
-     */
-    /*public NestedTag addTagChild(JspTag tag)
+     *//*
+    public NestedTag addTagChild(JspTag tag)
     {
         return addTagChild((TagSupport)tag);
-    }*/
+    }
     
-    /**
+    *//**
      * Implementation of {@link NestedTag#addTagChild(JspTag, Map)}.
-     */
-    /*public NestedTag addTagChild(JspTag tag, Map attributeMap)
+     *//*
+    public NestedTag addTagChild(JspTag tag, Map attributeMap)
     {
         Object childTag = TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);   
         return addChild(childTag);

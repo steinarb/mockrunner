@@ -1,5 +1,12 @@
 package com.mockrunner.mock.web;
 
+
+/**
+ * Mock implementation of <code>JspFragment</code>.
+ * The body of a simple tag is a <code>JspFragment</code>.
+ * All child handling methods of {@link com.mockrunner.tag.NestedSimpleTag}
+ * delegate to an underlying instance of this class.
+ */
 public class MockJspFragment //extends JspFragment
 {
     /*private JspContext jspContext;
@@ -18,21 +25,40 @@ public class MockJspFragment //extends JspFragment
         childs = new ArrayList();
     }
     
+    *//**
+     * Returns the parent tag.
+     * @return the parent tag
+     *//*
     public JspTag getParent()
     {
         return parent;
     }
     
+    *//**
+     * Sets the parent tag.
+     * @param parent the parent tag
+     *//*
     public void setParent(JspTag parent)
     {
         this.parent = parent;
     }
     
+    *//**
+     * Returns the <code>JspContext</code>.
+     * @return the <code>JspContext</code>
+     *//*
     public JspContext getJspContext()
     {
         return jspContext;
     }
     
+    *//**
+     * Sets the <code>JspContext</code>. Also calls <code>setJspContext</code>
+     * resp. <code>setPageContext</code> for all child tags.
+     * <code>setPageContext</code> is only called if the specified <code>JspContext</code>
+     * is an instance of <code>PageContext</code>.
+     * @param jspContext the <code>JspContext</code>
+     *//*
     public void setJspContext(JspContext jspContext)
     {
         this.jspContext = jspContext;
@@ -50,13 +76,26 @@ public class MockJspFragment //extends JspFragment
         }
     }
     
+    *//**
+     * Executes the fragment and directs all output to the given Writer, or the JspWriter 
+     * returned by the getOut() method of the JspContext associated with the fragment 
+     * if out is null (copied from <code>JspFragment</code> JavaDoc).
+     * @param writer the Writer to output the fragment to, or null if output should be 
+     *               sent to JspContext.getOut().
+     *//*
     public void invoke(Writer writer) throws JspException, IOException
     {
         if(null == jspContext) return;
-        jspContext.pushBody(writer);
+        if(null != writer)
+        {
+            jspContext.pushBody(writer);
+        }
         TagUtil.evalBody(childs, jspContext);
         jspContext.getOut().flush();
-        jspContext.popBody();
+        if(null != writer)
+        {
+            jspContext.popBody();
+        }
     }
     
     *//**
@@ -94,6 +133,19 @@ public class MockJspFragment //extends JspFragment
     {
         if(null == text) text = "";
         childs.add(text);
+    }
+    
+    *//**
+     * Adds a dynamic child simulating scriptlets and
+     * EL expressions. Check out
+     * {@link com.mockrunner.tag.TagUtil#evalBody(List, Object)}
+     * for details about child handling.
+     * @param child the dynamic child instance
+     *//*
+    public void addDynamicChild(DynamicChild child)
+    {
+        if(null == child) return;
+        childs.add(child);
     }
      
     *//**

@@ -15,7 +15,7 @@ import com.mockrunner.util.web.XmlUtil;
 /**
  * Example test for the {@link TableEnumTag}.
  * Demonstrates the usage of {@link com.mockrunner.tag.TagTestModule} 
- * resp. {@link com.mockrunner.tag.TagTestCaseAdapter} and
+ * resp. {@link com.mockrunner.tag.BasicTagTestCaseAdapter} and
  * {@link com.mockrunner.tag.NestedTag}.
  * Tests the html output of {@link TableEnumTag} with static
  * and dynamic body content (simulated by nesting the <code>WriteTag</code>).
