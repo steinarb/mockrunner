@@ -714,7 +714,7 @@ public class JMSTestModule
     }
     
     /**
-     * Verifies that the queue connection is started.
+     * Verifies that the queue connection is stopped.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyQueueConnectionStopped()
@@ -762,7 +762,7 @@ public class JMSTestModule
     }
 
     /**
-     * Verifies that the topic connection is started.
+     * Verifies that the topic connection is stopped.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyTopicConnectionStopped()
@@ -810,7 +810,7 @@ public class JMSTestModule
     }
 
     /**
-     * Verifies that the current connection is started.
+     * Verifies that the current connection is stopped.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyConnectionStopped()
