@@ -26,7 +26,7 @@ public class MockTextMessageTest extends TestCase
         MockTextMessage message = new MockTextMessage("test");
         message.setText("test2");
         assertEquals("test2", message.getText());
-        message.setReadOnly();
+        message.setReadOnly(true);
         try
         {
             message.setText("test3");

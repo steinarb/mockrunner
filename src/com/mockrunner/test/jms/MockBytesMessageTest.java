@@ -218,6 +218,5 @@ public class MockBytesMessageTest extends TestCase
         newMessage = (MockBytesMessage)message.clone();
         assertNotSame(message, newMessage);
         assertEquals(message, newMessage);
-        assertEquals(12345, newMessage.readLong());
     }
 }

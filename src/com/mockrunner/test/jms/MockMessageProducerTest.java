@@ -111,7 +111,7 @@ public class MockMessageProducerTest extends TestCase
         {
             //should throw exception
         }
-        textMessage.clearBody();
+        textMessage.setReadOnly(false);
         textMessage.setText("test");
         try
         {
@@ -122,7 +122,33 @@ public class MockMessageProducerTest extends TestCase
         {
             //should throw exception
         }
-        textMessage.clearProperties();
+        textMessage.setReadOnlyProperties(false);
+        textMessage.setStringProperty("test", "test");
+    }
+    
+    public void testReadOnlyDoCloneOnSend() throws Exception
+    {
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        MockQueueConnection connection = new MockQueueConnection(destManager, confManager);
+        MockQueueSender sender = new MockQueueSender(connection, new MockSession(connection, true, Session.CLIENT_ACKNOWLEDGE), queue);
+        MockTopicPublisher publisher = new MockTopicPublisher(connection, new MockSession(connection, true, Session.CLIENT_ACKNOWLEDGE), topic);
+        MockTextMessage textMessage = new MockTextMessage();
+        MockMapMessage mapMessage = new MockMapMessage();
+        MockBytesMessage bytesMessage = new MockBytesMessage();
+        MockStreamMessage streamMessage = new MockStreamMessage();
+        MockObjectMessage objectMessage = new MockObjectMessage();
+        confManager.setDoCloneOnSend(true);
+        publisher.publish(textMessage);
+        publisher.publish(mapMessage);
+        sender.send(bytesMessage);
+        sender.send(streamMessage);
+        sender.send(objectMessage);
+        textMessage.setText("test");
+        mapMessage.setObject("name", "value");
+        bytesMessage.writeInt(1);
+        streamMessage.writeLong(2);
+        objectMessage.setObject("Object");
         textMessage.setStringProperty("test", "test");
     }
   

@@ -544,7 +544,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public void reset() throws JMSException
     {
-        setReadOnly();
+        setReadOnly(true);
         try
         {
             outStream.flush();
@@ -594,10 +594,6 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
         {
             message.clearBody();
             message.outStream.write(byteOutStream.toByteArray());
-            if(!isInWriteMode())
-            {
-                message.reset();
-            }
             return message;
         }
         catch(Exception exc)

@@ -210,9 +210,9 @@ public class MockMessageTest extends TestCase
     {
         MockMessage message = new MockMessage();
         message.setStringProperty("string", "test");
-        message.setReadOnly();
+        message.setReadOnly(true);
         message.setDoubleProperty("double", 123);
-        message.setReadOnlyProperties();
+        message.setReadOnlyProperties(true);
         try
         {
             message.setStringProperty("string", "anothertest");
