@@ -10,6 +10,7 @@ mockrunner-0.3.1:
   statements in all framework classes
 - improved version of UserTransaction
 - fixed getPreparedStatementResultSetHandler() problem in BookstoreTest
+- added setResourceAsStream(String path, InputStream inputStream)  to MockServletContext
 - UserTransaction is now automatically bound to java:comp/UserTransaction
 - updated mockejb.jar from 0.5 to 0.6 beta2
 - replaced jakarta-oro.jar from Struts release with jakarta-oro-2.0.8.jar
