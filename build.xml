@@ -401,6 +401,7 @@
             </fileset>
             <fileset dir="${basedir}">
                 <include name="LICENSE*.txt" />
+                <exclude name="LICENSE-jaranalyzer.txt" />
             </fileset>
         </jar>
     </target>
@@ -538,6 +539,7 @@
 	    <copy todir="${releasedir}" filtering="true">
             <fileset dir="${basedir}">
                 <include name="*.txt" />
+                <exclude name="LICENSE-jaranalyzer.txt" />
                 <exclude name="jarversion.txt" />
             </fileset>
 	    </copy>
