@@ -97,7 +97,7 @@ public class MockQueueSession implements QueueSession
         {
             throw new JMSException("queue must be an instance of MockQueue");
         }
-        return connection.getDestinationManager().createQueueReceiver((MockQueue)queue, messageSelector);
+        return connection.getTransmissionManager().createQueueReceiver((MockQueue)queue, messageSelector);
     }
 
     public QueueSender createSender(Queue queue) throws JMSException
@@ -107,7 +107,7 @@ public class MockQueueSession implements QueueSession
         {
             throw new JMSException("queue must be an instance of MockQueue");
         }
-        return connection.getDestinationManager().createQueueSender((MockQueue)queue);
+        return connection.getTransmissionManager().createQueueSender((MockQueue)queue);
     }
 
     public QueueBrowser createBrowser(Queue queue) throws JMSException
@@ -123,7 +123,7 @@ public class MockQueueSession implements QueueSession
         {
             throw new JMSException("queue must be an instance of MockQueue");
         }
-        return connection.getDestinationManager().createQueueBrowser((MockQueue)queue, messageSelector);
+        return connection.getTransmissionManager().createQueueBrowser((MockQueue)queue, messageSelector);
     }
 
     public BytesMessage createBytesMessage() throws JMSException
