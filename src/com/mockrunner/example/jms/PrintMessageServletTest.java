@@ -85,7 +85,7 @@ public class PrintMessageServletTest extends JMSTestCaseAdapter
         QueueSender sender = getQueueTransmissionManager(0).createQueueSender(queue);
         sender.send(new MockObjectMessage(new Integer(3)));
         verifyNumberOfReceivedQueueMessages("testQueue", 4);
-        verifyReceivedQueueMessageNotAcknowledged("testQueue", 3);
+        verifyReceivedQueueMessageAcknowledged("testQueue", 3);
         verifyNumberOfCurrentQueueMessages("testQueue", 0);
     }
     
