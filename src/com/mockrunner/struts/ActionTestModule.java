@@ -271,7 +271,7 @@ public class ActionTestModule
         {
             throw new VerifyFailedException("ActionForward == null");
         }
-        else if (!getActionForward().verifyName(path))
+        else if (!getActionForward().verifyPath(path))
         {
             throw new VerifyFailedException("expected " + path + ", received " + getActionForward().getPath());
         }
