@@ -1,4 +1,4 @@
-package com.mockrunner.test.consistency;
+package com.mockrunner.gen;
 
 import java.io.File;
 import java.util.Map;

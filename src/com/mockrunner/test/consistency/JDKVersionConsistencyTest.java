@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.mockrunner.gen.ConsistencyUtil;
+
 import junit.framework.TestCase;
 
 public class JDKVersionConsistencyTest extends TestCase
