@@ -36,7 +36,7 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        servletTestModule = createServletTestModule(getMockObjectFactory());
+        servletTestModule = createServletTestModule(getWebMockObjectFactory());
     }
     
     /**

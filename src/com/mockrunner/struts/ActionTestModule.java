@@ -13,11 +13,11 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.taglib.html.Constants;
 
-import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.mock.web.MockActionMapping;
 import com.mockrunner.mock.web.MockPageContext;
+import com.mockrunner.mock.web.WebMockObjectFactory;
 
 /**
  * Module for Struts action tests. Simulates Struts
@@ -28,14 +28,14 @@ import com.mockrunner.mock.web.MockPageContext;
  */
 public class ActionTestModule
 {
-    private MockObjectFactory mockFactory;
+    private WebMockObjectFactory mockFactory;
     private MockActionForward forward;
     private ActionForm formObj;
     private Action actionObj;
     private boolean reset;
     private boolean doPopulate;
     
-    public ActionTestModule(MockObjectFactory mockFactory)
+    public ActionTestModule(WebMockObjectFactory mockFactory)
     {
         this.mockFactory = mockFactory;
         reset = true;
@@ -550,7 +550,7 @@ public class ActionTestModule
      * Returns the <code>MockActionMapping</code> passed to 
      * the action. Can be manipulated before and after 
      * {@link #actionPerform}.
-     * Delegates to {@link MockObjectFactory#getMockActionMapping}.
+     * Delegates to {@link com.mockrunner.mock.web.WebMockObjectFactory#getMockActionMapping}.
      * @return the MockActionMapping
      */
     public MockActionMapping getMockActionMapping()
@@ -560,7 +560,7 @@ public class ActionTestModule
 
     /**
      * Returns the <code>MockPageContext</code> object.
-     * Delegates to {@link MockObjectFactory#getMockPageContext}.
+     * Delegates to {@link com.mockrunner.mock.web.WebMockObjectFactory#getMockPageContext}.
      * @return the MockPageContext
      */
     public MockPageContext getMockPageContext()

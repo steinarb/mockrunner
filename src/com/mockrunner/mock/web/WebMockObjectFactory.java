@@ -1,4 +1,4 @@
-package com.mockrunner.base;
+package com.mockrunner.mock.web;
 
 import java.lang.reflect.Constructor;
 
@@ -6,25 +6,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.mockobjects.servlet.MockServletConfig;
-import com.mockobjects.sql.MockDataSource;
-import com.mockrunner.mock.jdbc.MockConnection;
-import com.mockrunner.mock.web.MockActionMapping;
-import com.mockrunner.mock.web.MockFilterChain;
-import com.mockrunner.mock.web.MockFilterConfig;
-import com.mockrunner.mock.web.MockHttpServletRequest;
-import com.mockrunner.mock.web.MockHttpServletResponse;
-import com.mockrunner.mock.web.MockHttpSession;
-import com.mockrunner.mock.web.MockPageContext;
-import com.mockrunner.mock.web.MockServletContext;
 
 /**
- * Used to create all types of mock objects. Maintains
+ * Used to create all types of web mock objects. Maintains
  * the necessary dependencies between the mock objects.
  * If you use the mock objects returned by this
  * factory in your tests you can be sure, they are all
  * up to date.
  */
-public class MockObjectFactory
+public class WebMockObjectFactory
 {
     private HttpServletRequest wrappedRequest;
     private HttpServletResponse wrappedResponse;
@@ -37,13 +27,11 @@ public class MockObjectFactory
     private MockPageContext pageContext;
     private MockFilterConfig filterConfig;
     private MockFilterChain filterChain;
-    private MockDataSource dataSource;
-    private MockConnection connection;
 
     /**
      * Creates a new set of mock objects.
      */
-    public MockObjectFactory()
+    public WebMockObjectFactory()
     {
         createMockObjects();
     }
@@ -54,9 +42,9 @@ public class MockObjectFactory
      * request and session objects, but they will share
      * one <code>ServletContext</code>.
      * @param factory the other factory
-     * @see BaseTestCase#createMockObjectFactory(MockObjectFactory)
+     * @see com.mockrunner.base.BaseTestCase#createWebMockObjectFactory(WebMockObjectFactory)
      */
-    public MockObjectFactory(MockObjectFactory factory)
+    public WebMockObjectFactory(WebMockObjectFactory factory)
     {
         createMockObjectsBasedOn(factory);
     }
@@ -69,9 +57,9 @@ public class MockObjectFactory
      * @param factory the other factory
      * @param createNewSession <code>true</code> creates a new session,
      *                         <code>false</code> uses the session from factory
-     * @see BaseTestCase#createMockObjectFactory(MockObjectFactory, boolean)
+     * @see com.mockrunner.base.BaseTestCase#createWebMockObjectFactory(WebMockObjectFactory, boolean)
      */
-    public MockObjectFactory(MockObjectFactory factory, boolean createNewSession)
+    public WebMockObjectFactory(WebMockObjectFactory factory, boolean createNewSession)
     {
         createMockObjectsBasedOn(factory, createNewSession);
     }
@@ -84,12 +72,12 @@ public class MockObjectFactory
         setUpDependencies();
     }
 
-    private void createMockObjectsBasedOn(MockObjectFactory factory)
+    private void createMockObjectsBasedOn(WebMockObjectFactory factory)
     {
         createMockObjectsBasedOn(factory, true);
     }
     
-    private void createMockObjectsBasedOn(MockObjectFactory factory, boolean createNewSession)
+    private void createMockObjectsBasedOn(WebMockObjectFactory factory, boolean createNewSession)
     {
         createNewMockObjects(createNewSession);
         if(!createNewSession) session = factory.getMockSession();
@@ -108,8 +96,6 @@ public class MockObjectFactory
         mapping = new MockActionMapping();
         filterChain = new MockFilterChain();
         filterConfig = new MockFilterConfig();
-        dataSource = new MockDataSource();
-        connection = new MockConnection();
     }
 
     private void setUpDependencies()
@@ -119,7 +105,6 @@ public class MockObjectFactory
         session.setupServletContext(context);
         pageContext = new MockPageContext(config, request, response);
         filterConfig.setupServletContext(context);
-        dataSource.setupConnection(connection);
     }
     
     /**
@@ -232,25 +217,7 @@ public class MockObjectFactory
     {
         return filterChain;
     }
-    
-    /**
-     * Returns the <code>MockDataSource</code>
-     * @return the <code>MockDataSource</code>
-     */
-    public MockDataSource getMockDataSource()
-    {
-        return dataSource;
-    }
-    
-    /**
-     * Returns the {@link com.mockrunner.mock.jdbc.MockConnection}.
-     * @return the {@link com.mockrunner.mock.jdbc.MockConnection}
-     */
-    public MockConnection getMockConnection()
-    {
-        return connection;
-    }
-    
+ 
     /**
      * Can be used to add a wrapper around the mock request. All the
      * test modules are using the wrapped request returned by

@@ -41,7 +41,7 @@ public class MockStatementTest extends BaseTestCase
         resultSet3.addRow(new String[] {"test1", "test2"});
         resultSet3.addRow(new String[] {"test3", "test4"});
         resultSet3.addRow(new String[] {"test5", "test6"});
-        connection = getMockObjectFactory().getMockConnection();
+        connection = getJDBCMockObjectFactory().getMockConnection();
         statementHandler = connection.getStatementResultSetHandler();
         preparedStatementHandler = connection.getPreparedStatementResultSetHandler();
         callableStatementHandler = connection.getCallableStatementResultSetHandler();

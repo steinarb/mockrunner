@@ -20,7 +20,7 @@ public class TagUtilTest extends BaseTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        pageContext = getMockObjectFactory().getMockPageContext();
+        pageContext = getWebMockObjectFactory().getMockPageContext();
         testMap = new HashMap();
     }
 

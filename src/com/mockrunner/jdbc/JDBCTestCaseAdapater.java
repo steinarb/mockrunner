@@ -33,7 +33,7 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        jdbcTestModule = createJDBCTestModule(getMockObjectFactory());
+        jdbcTestModule = createJDBCTestModule(getJDBCMockObjectFactory());
     }
 
     /**

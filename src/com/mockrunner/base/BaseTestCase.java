@@ -3,6 +3,8 @@ package com.mockrunner.base;
 import junit.framework.TestCase;
 
 import com.mockrunner.jdbc.JDBCTestModule;
+import com.mockrunner.mock.jdbc.*;
+import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.servlet.ServletTestModule;
 import com.mockrunner.struts.ActionTestModule;
 import com.mockrunner.tag.TagTestModule;
@@ -12,7 +14,8 @@ import com.mockrunner.tag.TagTestModule;
  */
 public abstract class BaseTestCase extends TestCase
 {
-    private MockObjectFactory mockFactory;
+    private WebMockObjectFactory webMockFactory;
+    private JDBCMockObjectFactory jdbcMockFactory;
     
     public BaseTestCase()
     {
@@ -25,38 +28,39 @@ public abstract class BaseTestCase extends TestCase
     }
 
     /**
-     * Creates the <code>MockObjectFactory</code>. If you
+     * Creates the {@link WebMockObjectFactory}. If you
      * overwrite this method, you must call 
      * <code>super.setUp()</code>.
      */
     protected void setUp() throws Exception
     {
         super.setUp();
-        mockFactory = createMockObjectFactory();
+        webMockFactory = createWebMockObjectFactory();
+        jdbcMockFactory = createJDBCMockObjectFactory();
     }
 
     /**
-     * Creates a <code>MockObjectFactory</code>. 
-     * @return the created <code>MockObjectFactory</code>
+     * Creates a {@link WebMockObjectFactory}. 
+     * @return the created {@link WebMockObjectFactory}
      */
-    protected MockObjectFactory createMockObjectFactory()
+    protected WebMockObjectFactory createWebMockObjectFactory()
     {
-        MockObjectFactory factory = new MockObjectFactory();
+        WebMockObjectFactory factory = new WebMockObjectFactory();
         return factory;
     }
 
     /**
-     * Same as <code>createMockObjectFactory(otherFactory, true)</code>
+     * Same as <code>createWebMockObjectFactory(otherFactory, true)</code>
      */
-    protected MockObjectFactory createMockObjectFactory(MockObjectFactory otherFactory)
+    protected WebMockObjectFactory createWebMockObjectFactory(WebMockObjectFactory otherFactory)
     {
-        MockObjectFactory factory = new MockObjectFactory(otherFactory);
+        WebMockObjectFactory factory = new WebMockObjectFactory(otherFactory);
         return factory;
     }
     
     /**
-     * Creates a <code>MockObjectFactory</code> based on another on.
-     * The created <code>MockObjectFactory</code> will have its own
+     * Creates a {@link WebMockObjectFactory} based on another on.
+     * The created {@link WebMockObjectFactory} will have its own
      * request and response objects. If you set <i>createNewSession</i>
      * to <code>true</code> it will also have its own session object. 
      * The two factories will share one <code>ServletContext</code>. 
@@ -66,114 +70,142 @@ public abstract class BaseTestCase extends TestCase
      * from the same client.
      * @param otherFactory the othe factory
      * @param createNewSession create a new session for the new factory
-     * @return the created <code>MockObjectFactory</code>
+     * @return the created {@link WebMockObjectFactory}
      */
-    protected MockObjectFactory createMockObjectFactory(MockObjectFactory otherFactory, boolean createNewSession)
+    protected WebMockObjectFactory createWebMockObjectFactory(WebMockObjectFactory otherFactory, boolean createNewSession)
     {
-        MockObjectFactory factory = new MockObjectFactory(otherFactory, createNewSession);
+        WebMockObjectFactory factory = new WebMockObjectFactory(otherFactory, createNewSession);
         return factory;
     }
 
     /**
-     * Gets the current <code>MockObjectFactory</code>.
-     * @return the <code>MockObjectFactory</code>
+     * Gets the current {@link WebMockObjectFactory}.
+     * @return the {@link WebMockObjectFactory}
      */
-    protected MockObjectFactory getMockObjectFactory()
+    protected WebMockObjectFactory getWebMockObjectFactory()
     {
-        return mockFactory;
+        return webMockFactory;
     }
     
     /**
-     * Sets the current <code>MockObjectFactory</code>.
-     * @param mockFactory the <code>MockObjectFactory</code>
+     * Sets the current {@link WebMockObjectFactory}.
+     * @param mockFactory the {@link WebMockObjectFactory}
      */
-    protected void setMockObjectFactory(MockObjectFactory mockFactory)
+    protected void setWebMockObjectFactory(WebMockObjectFactory mockFactory)
     {
-        this.mockFactory = mockFactory;
+        this.webMockFactory = mockFactory;
+    }
+    
+    /**
+     * Creates a {@link JDBCMockObjectFactory}. 
+     * @return the created {@link JDBCMockObjectFactory}
+     */
+    protected JDBCMockObjectFactory createJDBCMockObjectFactory()
+    {
+        JDBCMockObjectFactory factory = new JDBCMockObjectFactory();
+        return factory;
+    }
+    
+    /**
+     * Gets the current {@link JDBCMockObjectFactory}.
+     * @return the {@link JDBCMockObjectFactory}
+     */
+    protected JDBCMockObjectFactory getJDBCMockObjectFactory()
+    {
+        return jdbcMockFactory;
+    }
+
+    /**
+     * Sets the current {@link JDBCMockObjectFactory}.
+     * @param mockFactory the {@link JDBCMockObjectFactory}
+     */
+    protected void setJDBCMockObjectFactory(JDBCMockObjectFactory mockFactory)
+    {
+        this.jdbcMockFactory = mockFactory;
     }
     
     /**
      * Creates an <code>ActionTestModule</code> with the specified
-     * <code>MockObjectFactory</code>.
-     * @param mockFactory the <code>MockObjectFactory</code>
+     * {@link WebMockObjectFactory}.
+     * @param mockFactory the {@link WebMockObjectFactory}
      * @return the created <code>ActionTestModule</code>
      */
-    protected ActionTestModule createActionTestModule(MockObjectFactory mockFactory)
+    protected ActionTestModule createActionTestModule(WebMockObjectFactory mockFactory)
     {
         return new ActionTestModule(mockFactory);
     }
     
     /**
      * Creates an <code>ActionTestModule</code> based on the current
-     * <code>MockObjectFactory</code>.
-     * Same as <code>createActionTestModule(getMockObjectFactory())</code>.
+     * {@link WebMockObjectFactory}.
+     * Same as <code>createActionTestModule(getWebMockObjectFactory())</code>.
      * @return the created <code>ActionTestModule</code>
      */
     protected ActionTestModule createActionTestModule()
     {
-        return new ActionTestModule(getMockObjectFactory());
+        return new ActionTestModule(getWebMockObjectFactory());
     }
     
     /**
      * Creates a <code>TagTestModule</code> with the specified
-     * <code>MockObjectFactory</code>.
+     * {@link WebMockObjectFactory}.
      * @return the created <code>TagTestModule</code>
      */
-    protected TagTestModule createTagTestModule(MockObjectFactory mockFactory)
+    protected TagTestModule createTagTestModule(WebMockObjectFactory mockFactory)
     {
         return new TagTestModule(mockFactory);
     }
     
     /**
      * Creates a <code>TagTestModule</code> based on the current
-     * <code>MockObjectFactory</code>.
-     * Same as <code>createTagTestModule(getMockObjectFactory())</code>.
+     * {@link WebMockObjectFactory}.
+     * Same as <code>createTagTestModule(getWebMockObjectFactory())</code>.
      * @return the created <code>TagTestModule</code>
      */
     protected TagTestModule createTagTestModule()
     {
-        return new TagTestModule(getMockObjectFactory());
+        return new TagTestModule(getWebMockObjectFactory());
     }
     
     /**
      * Creates a <code>ServletTestModule</code> with the specified
-     * <code>MockObjectFactory</code>.
+     * {@link WebMockObjectFactory}.
      * @return the created <code>ServletTestModule</code>
      */
-    protected ServletTestModule createServletTestModule(MockObjectFactory mockFactory)
+    protected ServletTestModule createServletTestModule(WebMockObjectFactory mockFactory)
     {
         return new ServletTestModule(mockFactory);
     }
 
     /**
      * Creates a <code>ServletTestModule</code> based on the current
-     * <code>MockObjectFactory</code>.
-     * Same as <code>createServletTestModule(getMockObjectFactory())</code>.
+     * {@link WebMockObjectFactory}.
+     * Same as <code>createServletTestModule(getWebMockObjectFactory())</code>.
      * @return the created <code>ServletTestModule</code>
      */
     protected ServletTestModule createServletTestModule()
     {
-        return new ServletTestModule(getMockObjectFactory());
+        return new ServletTestModule(getWebMockObjectFactory());
     }
     
     /**
      * Creates a <code>JDBCTestModule</code> with the specified
-     * <code>MockObjectFactory</code>.
+     * {@link JDBCMockObjectFactory}.
      * @return the created <code>TagTestModule</code>
      */
-    protected JDBCTestModule createJDBCTestModule(MockObjectFactory mockFactory)
+    protected JDBCTestModule createJDBCTestModule(JDBCMockObjectFactory mockFactory)
     {
         return new JDBCTestModule(mockFactory);
     }
 
     /**
      * Creates an <code>JDBCTestModule</code> based on the current
-     * <code>MockObjectFactory</code>.
-     * Same as <code>createJDBCTestModule(getMockObjectFactory())</code>.
+     * {@link JDBCMockObjectFactory}.
+     * Same as <code>createJDBCTestModule(getWebMockObjectFactory())</code>.
      * @return the created <code>TagTestModule</code>
      */
     protected JDBCTestModule createJDBCTestModule()
     {
-        return new JDBCTestModule(getMockObjectFactory());
+        return new JDBCTestModule(getJDBCMockObjectFactory());
     }
 }

@@ -1,6 +1,6 @@
 package com.mockrunner.example.struts;
 
-import com.mockrunner.base.MockObjectFactory;
+import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.struts.ActionTestCaseAdapter;
 import com.mockrunner.struts.ActionTestModule;
 
@@ -53,13 +53,13 @@ public class StoreDataActionTest extends ActionTestCaseAdapter
 
     public class StoreTestThread extends Thread
     {
-        private MockObjectFactory mockFactory;
+        private WebMockObjectFactory mockFactory;
         private ActionTestModule module;
         
         public StoreTestThread(String name)
         {
             super(name);
-            mockFactory = createMockObjectFactory(getMockObjectFactory());
+            mockFactory = createWebMockObjectFactory(getWebMockObjectFactory());
             module = createActionTestModule(mockFactory);
         }
 
