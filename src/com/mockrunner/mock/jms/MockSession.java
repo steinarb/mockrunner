@@ -49,11 +49,12 @@ import com.mockrunner.jms.TransmissionManagerWrapper;
  * transaction is committed or rolled back, so you can test 
  * this and rely on the container for the rest.
  * You can set a <code>MessageListener</code> directly to
- * the session. This is not meant for application use in JMS
- * and it's not recommended to do it. This mock session
- * receives any message of any known <code>Queue</code> and
- * <code>Topic</code>, if such a distinguished 
- * <code>MessageListener</code> is registered.
+ * the session. This is an application server internal feature 
+ * and not meant for application use in JMS. 
+ * This mock session dispatches any message of any 
+ * known <code>Queue</code> and <code>Topic</code> to the 
+ * distinguished <code>MessageListener</code>, if such 
+ * a <code>MessageListener</code> is registered.
  */
 public class MockSession implements Session
 {
