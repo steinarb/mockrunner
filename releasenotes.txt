@@ -1,11 +1,14 @@
 
+mockrunner-0.3.1:
+
+- adapted EJBTestModule to new MockEJB 0.6 API (check out
+  migratingfrom0.3.txt for details)
+
 mockrunner-0.3:
 
 - fixed bug 983552 (valueUnbound bug in MockHttpSession)
 - fixed bug 1006853 (addRequestParameter with array parameter)
 - applied patch 988200 (RequestDispatcher by Brian Sanders)
-- adapted EJBTestModule to new MockEJB 0.6 API (check out
-  migratingfrom0.2.9.txt for details)
 - adapted ActionTestModule to Struts 1.2 (Struts 1.1 is still supported,
   check out migratingfrom0.2.9.txt for details), added methods to get
   action errors and messages from request and session
