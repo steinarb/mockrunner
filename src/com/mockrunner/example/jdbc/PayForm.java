@@ -26,12 +26,7 @@ public class PayForm extends ActionForm
     {
         return customerId;
     }
-    
-    public String getName()
-    {
-        return name;
-    }
-
+   
     public void setAmount(double amount)
     {
         this.amount = amount;
@@ -45,10 +40,5 @@ public class PayForm extends ActionForm
     public void setCustomerId(String customerId)
     {
         this.customerId = customerId;
-    }
-    
-    public void setName(String name)
-    {
-        this.name = name;
-    }
+    } 
 }
