@@ -110,23 +110,29 @@ public class PayAction extends Action
     {
         Statement statement = connection.createStatement();
         ResultSet result = statement.executeQuery("select * from openbills where id=" + payForm.getBillId());
-        if(false == result.next())
+        try
         {
-            createErrorAndRollback(request, connection, errors, "unknown.bill.error");
-            return false;
+            if(false == result.next())
+            {
+                createErrorAndRollback(request, connection, errors, "unknown.bill.error");
+                return false;
+            }
+            if(!result.getString("customerid").equals(payForm.getCustomerId()))
+            {
+                createErrorAndRollback(request, connection, errors, "wrong.bill.for.customer");
+                return false;
+            }
+            if(result.getDouble("amount") != payForm.getAmount())
+            {
+                createErrorAndRollback(request, connection, errors, "wrong.amount.for.bill");
+                return false;
+            }
         }
-        if(!result.getString("customerid").equals(payForm.getCustomerId()))
+        finally
         {
-            createErrorAndRollback(request, connection, errors, "wrong.bill.for.customer");
-            return false;
+            result.close();
+            statement.close();    
         }
-        if(result.getDouble("amount") != payForm.getAmount())
-        {
-            createErrorAndRollback(request, connection, errors, "wrong.amount.for.bill");
-            return false;
-        }
-        result.close();
-        statement.close();
         return true;
     }
 }
