@@ -420,6 +420,14 @@ public class ActionTestCaseAdapter extends BaseTestCase
     {
         actionTestModule.actionPerform(action);
     }
+    
+    /**
+     * Delegates to {@link ActionTestModule#actionPerform(Action)}
+     */
+    protected void actionPerform(Action action)
+    {
+        actionTestModule.actionPerform(action);
+    }
 
     /**
      * Delegates to {@link ActionTestModule#actionPerform(Class, Class)}
@@ -428,11 +436,27 @@ public class ActionTestCaseAdapter extends BaseTestCase
     {
         actionTestModule.actionPerform(action, form);
     }
+    
+    /**
+     * Delegates to {@link ActionTestModule#actionPerform(Action, Class)}
+     */
+    protected void actionPerform(Action action, Class form)
+    {
+        actionTestModule.actionPerform(action, form);
+    }
 
     /**
      * Delegates to {@link ActionTestModule#actionPerform(Class, ActionForm)}
      */
     protected void actionPerform(Class action, ActionForm form)
+    {
+        actionTestModule.actionPerform(action, form);
+    }
+    
+    /**
+     * Delegates to {@link ActionTestModule#actionPerform(Action, ActionForm)}
+     */
+    protected void actionPerform(Action action, ActionForm form)
     {
         actionTestModule.actionPerform(action, form);
     }

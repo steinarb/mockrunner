@@ -1,7 +1,6 @@
 package com.mockrunner.struts;
 
 import java.util.Iterator;
-import java.util.Map;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.struts.Globals;
@@ -618,7 +617,7 @@ public class ActionTestModule
     public void generateValidToken()
     {
         String token = String.valueOf(Math.random());
-        mockFactory.getMockSession().setAttribute(Action.TRANSACTION_TOKEN_KEY, token);
+        mockFactory.getMockSession().setAttribute(Globals.TRANSACTION_TOKEN_KEY, token);
         addRequestParameter(Constants.TOKEN_KEY, token);
     }
     
@@ -705,6 +704,25 @@ public class ActionTestModule
             throw new RuntimeException(exc.getMessage());
         }
     }
+    
+    /**
+     * Calls the specified action using
+     * no <code>ActionForm</code>.
+     * @param action the <code>Action</code>
+     * @return the resulting <code>ActionForward</code>
+     */
+    public ActionForward actionPerform(Action action)
+    {
+        try
+        {
+            return actionPerform(action, (ActionForm) null);
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
 
     /**
      * Calls the action of the specified type using
@@ -721,6 +739,34 @@ public class ActionTestModule
      * @return the resulting <code>ActionForward</code>
      */
     public ActionForward actionPerform(Class action, Class form)
+    {
+        try
+        {
+            createActionForm(form);
+            return actionPerform(action, formObj);
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace(System.out);
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
+    /**
+     * Calls the specified action using
+     * the <code>ActionForm</code> of the specified type. 
+     * Creates the appropriate <code>ActionForm</code> and 
+     * populates it before calling the action (if populating is
+     * disabled, the form will not be populated, use {@link #setDoPopulate}). 
+     * If form validation is enabled (use {@link #setValidate}) and 
+     * fails, the action will not be called. In this case,
+     * the returned  <code>ActionForward</code> is based on the 
+     * input attribute. (Set it with {@link #setInput}).
+     * @param action the <code>Action</code>
+     * @param form the <code>Class</code> of the form
+     * @return the resulting <code>ActionForward</code>
+     */
+    public ActionForward actionPerform(Action action, Class form)
     {
         try
         {
@@ -754,7 +800,36 @@ public class ActionTestModule
     {
         try
         {
-            actionObj = (Action) action.newInstance();
+            return actionPerform((Action)action.newInstance(), form);
+        }
+        catch (Exception exc)
+        {
+            exc.printStackTrace();
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
+    /**
+     * Calls the specified action using
+     * the specified <code>ActionForm</code> object. The form 
+     * will be populated before the action is called (if populating is
+     * disabled, the form will not be populated, use {@link #setDoPopulate}).
+     * Please note that request parameters will eventually overwrite
+     * form values. Furthermore the form will be reseted
+     * before populating it. If you do not want that, disable reset 
+     * using {@link #setReset}. If form validation is enabled 
+     * (use {@link #setValidate}) and fails, the action will not be 
+     * called. In this case, the returned <code>ActionForward</code> 
+     * is based on the input attribute. (Set it with {@link #setInput}).
+     * @param action the <code>Action</code>
+     * @param form the <code>ActionForm</code> object
+     * @return the resulting <code>ActionForward</code>
+     */
+    public ActionForward actionPerform(Action action, ActionForm form)
+    {
+        try
+        {
+            actionObj = action;
             formObj = form;
             setActionErrors(null);
             if (null != formObj)
@@ -807,14 +882,7 @@ public class ActionTestModule
 
     private void populateMockRequest() throws Exception
     {
-        Map requestParameters = mockFactory.getMockRequest().getParameterMap();
-        Iterator keys = requestParameters.keySet().iterator();
-        while (keys.hasNext())
-        {
-            String key = (String) keys.next();
-            String[] value = (String[]) requestParameters.get(key);
-            BeanUtils.setProperty(getActionForm(), key, value[0]);
-        }
+        BeanUtils.populate(getActionForm(), mockFactory.getMockRequest().getParameterMap());
     }
    
     private boolean containsMessages(ActionMessages messages)
