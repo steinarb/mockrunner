@@ -38,6 +38,10 @@ import javax.sql.DataSource;
  * 
  * @jboss.resource-manager res-man-name="jdbc/MySQLDB" res-man-jndi-name="java:/MySQLDB"
  **/
+/**
+ * Implementation of a BMP entity bean representing
+ * a user with a username and a password.
+ */
 public class UserEntityBean implements EntityBean
 {
     private EntityContext entityContext;

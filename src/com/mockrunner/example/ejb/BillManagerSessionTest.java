@@ -13,7 +13,6 @@ import org.mockejb.interceptor.MethodPatternPointcut;
 import com.mockrunner.ejb.EJBTestCaseAdapter;
 import com.mockrunner.example.ejb.interfaces.BillEntity;
 import com.mockrunner.example.ejb.interfaces.BillManagerSession;
-import com.mockrunner.jdbc.StatementResultSetHandler;
 
 /**
  * Example test for {@link BillManagerSessionBean} and {@link BillEntityBean}. 
@@ -26,7 +25,6 @@ import com.mockrunner.jdbc.StatementResultSetHandler;
 public class BillManagerSessionTest extends EJBTestCaseAdapter
 {
     private BillManagerSession bean;
-    private StatementResultSetHandler statementHandler;
     
     protected void setUp() throws Exception
     {
