@@ -1,6 +1,5 @@
 package com.mockrunner.mock.jms;
 
-import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Queue;
@@ -39,8 +38,8 @@ public class MockQueueSession extends MockSession implements QueueSession
         return (QueueSender)createProducer(queue);
     }
     
-    protected MessageProducer createProducerForNullDestination(Destination destination)
+    protected MessageProducer createProducerForNullDestination()
     {
-        return getQueueTransmissionManager().createQueueSender((MockQueue)destination);
+        return getGenericTransmissionManager().createQueueSender();
     }
 }

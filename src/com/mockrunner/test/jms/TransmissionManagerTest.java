@@ -168,16 +168,20 @@ public class TransmissionManagerTest extends TestCase
     {
         GenericTransmissionManager manager = session.getGenericTransmissionManager();
         MockMessageProducer producer1 = manager.createMessageProducer();
-        MockMessageProducer producer2 = manager.createMessageProducer();
+        MockMessageProducer producer2 = manager.createQueueSender();
+        MockMessageProducer producer3 = manager.createTopicPublisher();
         assertSame(producer1, manager.getMessageProducer(0));
         assertSame(producer2, manager.getMessageProducer(1));
+        assertSame(producer3, manager.getMessageProducer(2));
         List producerList = manager.getMessageProducerList();
-        assertEquals(2, producerList.size());
+        assertEquals(3, producerList.size());
         assertTrue(producerList.contains(producer1));
         assertTrue(producerList.contains(producer2));
+        assertTrue(producerList.contains(producer3));
         manager.closeAll();
         assertTrue(producer1.isClosed());
         assertTrue(producer2.isClosed());
+        assertTrue(producer3.isClosed());
     }
     
     public void testTransmissionManagerWrapper()

@@ -16,6 +16,9 @@ import junit.framework.TestCase;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
+import com.mockrunner.jms.GenericTransmissionManager;
+import com.mockrunner.jms.QueueTransmissionManager;
+import com.mockrunner.jms.TopicTransmissionManager;
 import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockMessageProducer;
@@ -151,6 +154,16 @@ public class MockSessionTest extends TestCase
         assertTrue(session.createProducer(null) instanceof MockMessageProducer);
         assertFalse(session.createProducer(null) instanceof MockQueueSender);
         assertFalse(session.createProducer(null) instanceof MockTopicPublisher);
+        QueueTransmissionManager queueManager = queueSession.getQueueTransmissionManager();
+        assertEquals(0, queueManager.getQueueSenderList().size());
+        TopicTransmissionManager topicManager = topicSession.getTopicTransmissionManager();
+        assertEquals(0, topicManager.getTopicPublisherList().size());
+        GenericTransmissionManager genericManager = queueSession.getGenericTransmissionManager();
+        assertEquals(2, genericManager.getMessageProducerList().size());
+        genericManager = topicSession.getGenericTransmissionManager();
+        assertEquals(2, genericManager.getMessageProducerList().size());
+        genericManager = session.getGenericTransmissionManager();
+        assertEquals(3, genericManager.getMessageProducerList().size());
     }
     
     public void testCreateConsumerWithQueueSession() throws Exception
