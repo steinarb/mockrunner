@@ -14,7 +14,7 @@ public class TagTestModuleTest extends BaseTestCase
         module = new TagTestModule(getWebMockObjectFactory());
     }    
 
-    public void testCaseSensitive()
+    public void testVerifyOutput()
     {
         module.createNestedTag(TestTag.class);
         module.processTagLifecycle();
@@ -30,10 +30,20 @@ public class TagTestModuleTest extends BaseTestCase
         module.setCaseSensitive(false);
         module.verifyOutput("testtag");
         module.verifyOutputContains("ES");
+        module.verifyOutputRegularExpression("[abT].*");
         module.setCaseSensitive(true);
         try
         {
             module.verifyOutputContains("ES");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyOutputRegularExpression("tesT.*");
             fail();
         }
         catch(VerifyFailedException exc)

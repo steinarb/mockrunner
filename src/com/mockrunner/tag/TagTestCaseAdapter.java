@@ -232,4 +232,12 @@ public class TagTestCaseAdapter extends HTMLOutputTestCase
     {
         tagTestModule.verifyOutputContains(output);
     }
+    
+    /**
+     * Delegates to {@link TagTestModule#verifyOutputRegularExpression}
+     */
+    protected void verifyOutputRegularExpression(String output)
+    {
+        tagTestModule.verifyOutputRegularExpression(output);
+    }
 }
