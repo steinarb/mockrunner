@@ -1957,9 +1957,9 @@ public class JDBCTestModule
     {
         MockCallableStatement statement = getCallableStatement(indexOfStatement);
         if(null == statement)
-            {
-                throw new VerifyFailedException("No callable statement with index " + indexOfStatement + " present");
-            }
+        {
+            throw new VerifyFailedException("No callable statement with index " + indexOfStatement + " present");
+        }
         if(!statement.isOutParameterRegistered(nameOfParameter))
         {
             throw new VerifyFailedException("Out parameter with name " + nameOfParameter +
