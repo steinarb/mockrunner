@@ -22,4 +22,14 @@ public class MockObjectFactory extends WebMockObjectFactory
     {
         super(factory, createNewSession);
     }
+    
+    public MockObjectFactory(WebMockObjectFactory factory)
+    {
+        super(factory);
+    }
+
+    public MockObjectFactory(WebMockObjectFactory factory, boolean createNewSession)
+    {
+        super(factory, createNewSession);
+    }
 }
