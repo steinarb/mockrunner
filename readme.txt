@@ -116,7 +116,6 @@ commons-collections.jar (from Struts 1.2.4 release)
 commons-beanutils.jar (from Struts 1.2.4 release)
 commons-digester.jar (from Struts 1.2.4 release)
 commons-validator.jar (from Struts 1.2.4 release)
-commons-lang-2.0.jar
 
 MockEJB 0.6 beta2:
 http://mockejb.sourceforge.net
