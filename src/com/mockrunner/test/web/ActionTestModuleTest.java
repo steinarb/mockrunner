@@ -59,8 +59,8 @@ public class ActionTestModuleTest extends TestCase
     private ActionMessages createTestActionMessages()
     {
         ActionMessages messages = new ActionMessages();
-        ActionError message1 = new ActionError("key1");
-        ActionError message2 = new ActionError("key2", new String[]{"value1" , "value2"});
+        ActionMessage message1 = new ActionMessage("key1");
+        ActionMessage message2 = new ActionMessage("key2", new String[]{"value1" , "value2"});
         messages.add(ActionErrors.GLOBAL_MESSAGE, message1);
         messages.add(ActionMessages.GLOBAL_MESSAGE, message2);
         return messages;

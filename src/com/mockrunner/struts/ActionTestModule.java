@@ -644,7 +644,7 @@ public class ActionTestModule
      */
     public ActionMessage getActionMessageByKey(String messageKey)
     {
-        return (ActionError)getActionMessageByKey(messageKey, getActionMessages());
+        return (ActionMessage)getActionMessageByKey(messageKey, getActionMessages());
     }
     
     private ActionMessage getActionMessageByKey(String messageKey, ActionMessages messages)
