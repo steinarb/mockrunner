@@ -24,6 +24,8 @@ public class ClassUtilTest extends TestCase
         assertEquals("String", ClassUtil.getClassName("".getClass()));
         assertEquals("OutputStream", ClassUtil.getClassName(OutputStream.class));
         assertEquals("ClassUtilTest$TestClass", ClassUtil.getClassName(TestClass.class));
+        assertEquals("OutputStream[][]", ClassUtil.getClassName(OutputStream[][].class));
+        assertEquals("int[]", ClassUtil.getClassName(int[].class));
     }
     
     public void testIsKeyword()
@@ -42,6 +44,11 @@ public class ClassUtilTest extends TestCase
         assertEquals("classUtilTest", ClassUtil.getArgumentName(ClassUtilTest.class));
         assertEquals("jmsTestModule", ClassUtil.getArgumentName(JMSTestModule.class));
         assertEquals("url", ClassUtil.getArgumentName(URL.class));
+        assertEquals("urls", ClassUtil.getArgumentName(URL[].class));
+        assertEquals("jmsTestModules", ClassUtil.getArgumentName(JMSTestModule[].class));
+        assertEquals("strings", ClassUtil.getArgumentName(String[].class));
+        assertEquals("intValues", ClassUtil.getArgumentName(int[][][].class));
+        assertEquals("doubleValues", ClassUtil.getArgumentName(Double[][].class));
     }
     
     public static class TestClass

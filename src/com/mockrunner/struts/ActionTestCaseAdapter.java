@@ -22,25 +22,26 @@ import com.mockrunner.mock.web.MockActionMapping;
 import com.mockrunner.mock.web.MockPageContext;
 
 /**
- * Delegator for {@link ActionTestModule}. You can
- * subclass this adapter or use {@link ActionTestModule}
- * directly (so your test case can use another base
- * class).
+ * Delegator for {@link com.mockrunner.struts.ActionTestModule}. You can
+ * subclass this adapter or use {@link com.mockrunner.struts.ActionTestModule}
+ * directly (so your test case can use another base class).
+ * <b>This class is generated from the ActionTestModule and should not be
+ * edited directly</b>.
  */
 public class ActionTestCaseAdapter extends HTMLOutputTestCase
 {
     private ActionTestModule actionTestModule;
-    
+
     public ActionTestCaseAdapter()
     {
-        
+
     }
 
-    public ActionTestCaseAdapter(String arg0)
+    public ActionTestCaseAdapter(String name)
     {
-        super(arg0);
+        super(name);
     }
-    
+
     protected void tearDown() throws Exception
     {
         super.tearDown();
@@ -49,17 +50,16 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
 
     /**
      * Creates the {@link com.mockrunner.struts.ActionTestModule}. If you
-     * overwrite this method, you must call 
-     * <code>super.setUp()</code>.
+     * overwrite this method, you must call <code>super.setUp()</code>.
      */
     protected void setUp() throws Exception
     {
         super.setUp();
         actionTestModule = createActionTestModule(getWebMockObjectFactory());
     }
-    
+
     /**
-     * Returns the {@link com.mockrunner.struts.ActionTestModule} as 
+     * Returns the {@link com.mockrunner.struts.ActionTestModule} as
      * {@link com.mockrunner.base.WebTestModule}.
      * @return the {@link com.mockrunner.base.WebTestModule}
      */
@@ -67,9 +67,9 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     {
         return actionTestModule;
     }
-    
+
     /**
-     * Returns the {@link com.mockrunner.struts.ActionTestModule} as 
+     * Returns the {@link com.mockrunner.struts.ActionTestModule} as
      * {@link com.mockrunner.base.HTMLOutputModule}.
      * @return the {@link com.mockrunner.base.HTMLOutputModule}
      */
@@ -77,18 +77,18 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     {
         return actionTestModule;
     }
-    
+
     /**
-     * Gets the {@link com.mockrunner.struts.ActionTestModule}. 
+     * Gets the {@link com.mockrunner.struts.ActionTestModule}.
      * @return the {@link com.mockrunner.struts.ActionTestModule}
      */
     protected ActionTestModule getActionTestModule()
     {
         return actionTestModule;
     }
-    
+
     /**
-     * Sets the {@link com.mockrunner.struts.ActionTestModule}. 
+     * Sets the {@link com.mockrunner.struts.ActionTestModule}.
      * @param actionTestModule the {@link com.mockrunner.struts.ActionTestModule}
      */
     protected void setActionTestModule(ActionTestModule actionTestModule)
@@ -97,399 +97,47 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link ActionTestModule#addMappedPropertyRequestPrefix}
-     */
-    protected String addMappedPropertyRequestPrefix(String str)
-    {
-        return actionTestModule.addMappedPropertyRequestPrefix(str);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#setParameter}
-     */
-    protected void setParameter(String parameter)
-    {
-        actionTestModule.setParameter(parameter);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#setInput}
-     */
-    protected void setInput(String input)
-    {
-        actionTestModule.setInput(input);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#setReset}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setReset(boolean)}
      */
     protected void setReset(boolean reset)
     {
         actionTestModule.setReset(reset);
     }
-    
+
     /**
-     * Delegates to {@link ActionTestModule#setDoPopulate}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setDoPopulate(boolean)}
      */
     protected void setDoPopulate(boolean doPopulate)
     {
         actionTestModule.setDoPopulate(doPopulate);
     }
-    
+
     /**
-     * Delegates to {@link ActionTestModule#setRecognizeMessagesInSession}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setRecognizeMessagesInSession(boolean)}
      */
     protected void setRecognizeMessagesInSession(boolean recognizeInSession)
     {
         actionTestModule.setRecognizeMessagesInSession(recognizeInSession);
     }
-    
+
     /**
-     * Delegates to {@link ActionTestModule#setValidate}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#addMappedPropertyRequestPrefix(String)}
      */
-    protected void setValidate(boolean validate)
+    protected String addMappedPropertyRequestPrefix(String property)
     {
-        actionTestModule.setValidate(validate);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#setResources(MessageResources)}
-     */
-    protected void setResources(MessageResources resources)
-    {
-        actionTestModule.setResources(resources);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#setResources(String, MessageResources)}
-     */
-    protected void setResources(String key, MessageResources resources)
-    {
-        actionTestModule.setResources(key, resources);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#setDataSource(DataSource)}
-     */
-    protected void setDataSource(DataSource dataSource)
-    {
-        actionTestModule.setDataSource(dataSource);
+        return actionTestModule.addMappedPropertyRequestPrefix(property);
     }
 
     /**
-     * Delegates to {@link ActionTestModule#setDataSource(String, DataSource)}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setParameter(String)}
      */
-    protected void setDataSource(String key, DataSource dataSource)
+    protected void setParameter(String parameter)
     {
-        actionTestModule.setDataSource(key, dataSource);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#setLocale}
-     */
-    protected void setLocale(Locale locale)
-    {
-        actionTestModule.setLocale(locale);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#createValidatorResources}
-     */
-    protected ValidatorResources createValidatorResources(String[] resourcesFiles)
-    {
-        return actionTestModule.createValidatorResources(resourcesFiles);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#setValidatorResources}
-     */
-    protected void setValidatorResources(ValidatorResources validatorResources)
-    {
-        actionTestModule.setValidatorResources(validatorResources);
+        actionTestModule.setParameter(parameter);
     }
 
     /**
-     * Delegates to {@link ActionTestModule#verifyRedirect}
-     */
-    protected void verifyRedirect(boolean redirect)
-    {
-        actionTestModule.verifyRedirect(redirect);
-    }
-
-    /**
-     * Delegates to {@link ActionTestModule#verifyForward}
-     */
-    protected void verifyForward(String path)
-    {
-        actionTestModule.verifyForward(path);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#verifyForwardName}
-     */
-    protected void verifyForwardName(String name)
-    {
-        actionTestModule.verifyForwardName(name);
-    }
-
-    /**
-     * Delegates to {@link ActionTestModule#verifyNoActionErrors}
-     */
-    protected void verifyNoActionErrors()
-    {
-        actionTestModule.verifyNoActionErrors();
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#verifyNoActionMessages}
-     */
-    protected void verifyNoActionMessages()
-    {
-        actionTestModule.verifyNoActionMessages();
-    }
-
-    /**
-     * Delegates to {@link ActionTestModule#verifyHasActionErrors}
-     */
-    protected void verifyHasActionErrors()
-    {
-        actionTestModule.verifyHasActionErrors();
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#verifyHasActionMessages}
-     */
-    protected void verifyHasActionMessages()
-    {
-        actionTestModule.verifyHasActionMessages();
-    }
-
-    /**
-     * Delegates to {@link ActionTestModule#verifyActionErrorPresent}
-     */
-    protected void verifyActionErrorPresent(String errorName)
-    {
-        actionTestModule.verifyActionErrorPresent(errorName);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#verifyActionMessagePresent}
-     */
-    protected void verifyActionMessagePresent(String messageName)
-    {
-        actionTestModule.verifyActionMessagePresent(messageName);
-    }
-
-    /**
-     * Delegates to {@link ActionTestModule#verifyActionErrorNotPresent}
-     */
-    protected void verifyActionErrorNotPresent(String errorName)
-    {
-        actionTestModule.verifyActionErrorNotPresent(errorName);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#verifyActionMessageNotPresent}
-     */
-    protected void verifyActionMessageNotPresent(String messageName)
-    {
-        actionTestModule.verifyActionMessageNotPresent(messageName);
-    }
-
-    /**
-     * Delegates to {@link ActionTestModule#verifyActionErrors}
-     */
-    protected void verifyActionErrors(String errorNames[])
-    {
-        actionTestModule.verifyActionErrors(errorNames);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#verifyActionMessages}
-     */
-    protected void verifyActionMessages(String messageNames[])
-    {
-        actionTestModule.verifyActionMessages(messageNames);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#verifyActionErrorValues}
-     */
-    protected void verifyActionErrorValues(String errorKey, Object[] values)
-    {
-        actionTestModule.verifyActionErrorValues(errorKey, values);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#verifyActionMessageValues}
-     */
-    protected void verifyActionMessageValues(String messageKey, Object[] values)
-    {
-        actionTestModule.verifyActionMessageValues(messageKey, values);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#verifyActionErrorValue}
-     */
-    protected void verifyActionErrorValue(String errorKey, Object value)
-    {
-        actionTestModule.verifyActionErrorValue(errorKey, value);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#verifyActionMessageValue}
-     */
-    protected void verifyActionMessageValue(String messageKey, Object value)
-    {
-        actionTestModule.verifyActionMessageValue(messageKey, value);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#verifyActionErrorProperty}
-     */
-    protected void verifyActionErrorProperty(String errorKey, String property)
-    {
-        actionTestModule.verifyActionErrorProperty(errorKey, property);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#verifyActionMessageProperty}
-     */
-    protected void verifyActionMessageProperty(String messageKey, String property)
-    {
-        actionTestModule.verifyActionMessageProperty(messageKey, property);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#verifyNumberActionErrors}
-     */
-    protected void verifyNumberActionErrors(int number)
-    {
-        actionTestModule.verifyNumberActionErrors(number);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#verifyNumberActionMessages}
-     */
-    protected void verifyNumberActionMessages(int number)
-    {
-        actionTestModule.verifyNumberActionMessages(number);
-    }
-
-    /**
-     * Delegates to {@link ActionTestModule#getActionErrorByKey}
-     */
-    protected ActionMessage getActionErrorByKey(String errorKey)
-    {
-        return actionTestModule.getActionErrorByKey(errorKey);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#getActionMessageByKey}
-     */
-    protected ActionMessage getActionMessageByKey(String messageKey)
-    {
-        return actionTestModule.getActionMessageByKey(messageKey);
-    }
-
-    /**
-     * Delegates to {@link ActionTestModule#setActionErrors}
-     */
-    protected void setActionErrors(ActionMessages errors)
-    {
-        actionTestModule.setActionErrors(errors);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#setActionErrorsToSession}
-     */
-    protected void setActionErrorsToSession(ActionMessages errors)
-    {
-        actionTestModule.setActionErrorsToSession(errors);
-    }
-
-    /**
-     * Delegates to {@link ActionTestModule#getActionErrors}
-     */
-    protected ActionMessages getActionErrors()
-    {
-        return actionTestModule.getActionErrors();
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#getActionErrorsFromRequest}
-     */
-    protected ActionMessages getActionErrorsFromRequest()
-    {
-        return actionTestModule.getActionErrorsFromRequest();
-    }    
-    
-    /**
-     * Delegates to {@link ActionTestModule#getActionErrorsFromSession}
-     */
-    protected ActionMessages getActionErrorsFromSession()
-    {
-        return actionTestModule.getActionErrorsFromSession();
-    }
-
-    /**
-     * Delegates to {@link ActionTestModule#hasActionErrors}
-     */
-    protected boolean hasActionErrors()
-    {
-        return actionTestModule.hasActionErrors();
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#setActionMessages}
-     */
-    protected void setActionMessages(ActionMessages messages)
-    {
-        actionTestModule.setActionMessages(messages);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#setActionMessagesToSession}
-     */
-    protected void setActionMessagesToSession(ActionMessages messages)
-    {
-        actionTestModule.setActionMessagesToSession(messages);
-    }
-
-    /**
-     * Delegates to {@link ActionTestModule#getActionMessages}
-     */
-    protected ActionMessages getActionMessages()
-    {
-        return actionTestModule.getActionMessages();
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#getActionMessagesFromRequest}
-     */
-    protected ActionMessages getActionMessagesFromRequest()
-    {
-        return actionTestModule.getActionMessagesFromRequest();
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#getActionMessagesFromSession}
-     */
-    protected ActionMessages getActionMessagesFromSession()
-    {
-        return actionTestModule.getActionMessagesFromSession();
-    }
-
-    /**
-     * Delegates to {@link ActionTestModule#hasActionMessages}
-     */
-    protected boolean hasActionMessages()
-    {
-        return actionTestModule.hasActionMessages();
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#getMockActionMapping}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getMockActionMapping}
      */
     protected MockActionMapping getMockActionMapping()
     {
@@ -497,15 +145,87 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link ActionTestModule#getMockPageContext}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setValidate(boolean)}
      */
-    protected MockPageContext getMockPageContext()
+    protected void setValidate(boolean validate)
     {
-        return actionTestModule.getMockPageContext();
+        actionTestModule.setValidate(validate);
     }
 
     /**
-     * Delegates to {@link ActionTestModule#getActionForward}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setInput(String)}
+     */
+    protected void setInput(String input)
+    {
+        actionTestModule.setInput(input);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setResources(String, MessageResources)}
+     */
+    protected void setResources(String key, MessageResources resources)
+    {
+        actionTestModule.setResources(key, resources);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setResources(MessageResources)}
+     */
+    protected void setResources(MessageResources resources)
+    {
+        actionTestModule.setResources(resources);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setDataSource(String, DataSource)}
+     */
+    protected void setDataSource(String key, DataSource dataSource)
+    {
+        actionTestModule.setDataSource(key, dataSource);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setDataSource(DataSource)}
+     */
+    protected void setDataSource(DataSource dataSource)
+    {
+        actionTestModule.setDataSource(dataSource);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setLocale(Locale)}
+     */
+    protected void setLocale(Locale locale)
+    {
+        actionTestModule.setLocale(locale);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#createValidatorResources(String[])}
+     */
+    protected ValidatorResources createValidatorResources(String[] resourcesFiles)
+    {
+        return actionTestModule.createValidatorResources(resourcesFiles);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setValidatorResources(ValidatorResources)}
+     */
+    protected void setValidatorResources(ValidatorResources validatorResources)
+    {
+        actionTestModule.setValidatorResources(validatorResources);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyForward(String)}
+     */
+    protected void verifyForward(String path)
+    {
+        actionTestModule.verifyForward(path);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getActionForward}
      */
     protected MockActionForward getActionForward()
     {
@@ -513,23 +233,287 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link ActionTestModule#getActionForm}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyForwardName(String)}
      */
-    protected ActionForm getActionForm()
+    protected void verifyForwardName(String name)
     {
-        return actionTestModule.getActionForm();
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#setActionForm}
-     */
-    protected void setActionForm(ActionForm formObj)
-    {
-        actionTestModule.setActionForm(formObj);
+        actionTestModule.verifyForwardName(name);
     }
 
     /**
-     * Delegates to {@link ActionTestModule#getLastAction}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyRedirect(boolean)}
+     */
+    protected void verifyRedirect(boolean redirect)
+    {
+        actionTestModule.verifyRedirect(redirect);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyNoActionErrors}
+     */
+    protected void verifyNoActionErrors()
+    {
+        actionTestModule.verifyNoActionErrors();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getActionErrors}
+     */
+    protected ActionMessages getActionErrors()
+    {
+        return actionTestModule.getActionErrors();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyNoActionMessages}
+     */
+    protected void verifyNoActionMessages()
+    {
+        actionTestModule.verifyNoActionMessages();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getActionMessages}
+     */
+    protected ActionMessages getActionMessages()
+    {
+        return actionTestModule.getActionMessages();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyHasActionErrors}
+     */
+    protected void verifyHasActionErrors()
+    {
+        actionTestModule.verifyHasActionErrors();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyHasActionMessages}
+     */
+    protected void verifyHasActionMessages()
+    {
+        actionTestModule.verifyHasActionMessages();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyActionErrorPresent(String)}
+     */
+    protected void verifyActionErrorPresent(String errorKey)
+    {
+        actionTestModule.verifyActionErrorPresent(errorKey);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyActionMessagePresent(String)}
+     */
+    protected void verifyActionMessagePresent(String messageKey)
+    {
+        actionTestModule.verifyActionMessagePresent(messageKey);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyActionErrorNotPresent(String)}
+     */
+    protected void verifyActionErrorNotPresent(String errorKey)
+    {
+        actionTestModule.verifyActionErrorNotPresent(errorKey);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyActionMessageNotPresent(String)}
+     */
+    protected void verifyActionMessageNotPresent(String messageKey)
+    {
+        actionTestModule.verifyActionMessageNotPresent(messageKey);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyActionErrors(String[])}
+     */
+    protected void verifyActionErrors(String[] errorKeys)
+    {
+        actionTestModule.verifyActionErrors(errorKeys);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyActionMessages(String[])}
+     */
+    protected void verifyActionMessages(String[] messageKeys)
+    {
+        actionTestModule.verifyActionMessages(messageKeys);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyActionErrorValues(String, Object[])}
+     */
+    protected void verifyActionErrorValues(String errorKey, Object[] values)
+    {
+        actionTestModule.verifyActionErrorValues(errorKey, values);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getActionErrorByKey(String)}
+     */
+    protected ActionMessage getActionErrorByKey(String errorKey)
+    {
+        return actionTestModule.getActionErrorByKey(errorKey);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyActionMessageValues(String, Object[])}
+     */
+    protected void verifyActionMessageValues(String messageKey, Object[] values)
+    {
+        actionTestModule.verifyActionMessageValues(messageKey, values);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getActionMessageByKey(String)}
+     */
+    protected ActionMessage getActionMessageByKey(String messageKey)
+    {
+        return actionTestModule.getActionMessageByKey(messageKey);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyActionErrorValue(String, Object)}
+     */
+    protected void verifyActionErrorValue(String errorKey, Object value)
+    {
+        actionTestModule.verifyActionErrorValue(errorKey, value);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyActionMessageValue(String, Object)}
+     */
+    protected void verifyActionMessageValue(String messageKey, Object value)
+    {
+        actionTestModule.verifyActionMessageValue(messageKey, value);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyActionErrorProperty(String, String)}
+     */
+    protected void verifyActionErrorProperty(String errorKey, String property)
+    {
+        actionTestModule.verifyActionErrorProperty(errorKey, property);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyActionMessageProperty(String, String)}
+     */
+    protected void verifyActionMessageProperty(String messageKey, String property)
+    {
+        actionTestModule.verifyActionMessageProperty(messageKey, property);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyNumberActionErrors(int)}
+     */
+    protected void verifyNumberActionErrors(int number)
+    {
+        actionTestModule.verifyNumberActionErrors(number);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#verifyNumberActionMessages(int)}
+     */
+    protected void verifyNumberActionMessages(int number)
+    {
+        actionTestModule.verifyNumberActionMessages(number);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setActionMessages(ActionMessages)}
+     */
+    protected void setActionMessages(ActionMessages messages)
+    {
+        actionTestModule.setActionMessages(messages);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setActionMessagesToSession(ActionMessages)}
+     */
+    protected void setActionMessagesToSession(ActionMessages messages)
+    {
+        actionTestModule.setActionMessagesToSession(messages);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getActionMessagesFromRequest}
+     */
+    protected ActionMessages getActionMessagesFromRequest()
+    {
+        return actionTestModule.getActionMessagesFromRequest();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getActionMessagesFromSession}
+     */
+    protected ActionMessages getActionMessagesFromSession()
+    {
+        return actionTestModule.getActionMessagesFromSession();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#hasActionMessages}
+     */
+    protected boolean hasActionMessages()
+    {
+        return actionTestModule.hasActionMessages();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setActionErrors(ActionMessages)}
+     */
+    protected void setActionErrors(ActionMessages errors)
+    {
+        actionTestModule.setActionErrors(errors);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setActionErrorsToSession(ActionMessages)}
+     */
+    protected void setActionErrorsToSession(ActionMessages errors)
+    {
+        actionTestModule.setActionErrorsToSession(errors);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getActionErrorsFromRequest}
+     */
+    protected ActionMessages getActionErrorsFromRequest()
+    {
+        return actionTestModule.getActionErrorsFromRequest();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getActionErrorsFromSession}
+     */
+    protected ActionMessages getActionErrorsFromSession()
+    {
+        return actionTestModule.getActionErrorsFromSession();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#hasActionErrors}
+     */
+    protected boolean hasActionErrors()
+    {
+        return actionTestModule.hasActionErrors();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getMockPageContext}
+     */
+    protected MockPageContext getMockPageContext()
+    {
+        return actionTestModule.getMockPageContext();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getLastAction}
      */
     protected Action getLastAction()
     {
@@ -537,7 +521,7 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link ActionTestModule#generateValidToken}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#generateValidToken}
      */
     protected void generateValidToken()
     {
@@ -545,15 +529,31 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link ActionTestModule#createActionForm}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getActionForm}
+     */
+    protected ActionForm getActionForm()
+    {
+        return actionTestModule.getActionForm();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setActionForm(ActionForm)}
+     */
+    protected void setActionForm(ActionForm formObj)
+    {
+        actionTestModule.setActionForm(formObj);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#createActionForm(Class)}
      */
     protected ActionForm createActionForm(Class form)
     {
         return actionTestModule.createActionForm(form);
     }
-    
+
     /**
-     * Delegates to {@link ActionTestModule#createDynaActionForm}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#createDynaActionForm(FormBeanConfig)}
      */
     protected DynaActionForm createDynaActionForm(FormBeanConfig formConfig)
     {
@@ -561,7 +561,7 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link ActionTestModule#populateRequestToForm}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#populateRequestToForm}
      */
     protected void populateRequestToForm()
     {
@@ -569,15 +569,23 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link ActionTestModule#actionPerform(Class)}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, ActionForm)}
      */
-    protected ActionForward actionPerform(Class action)
+    protected ActionForward actionPerform(Class action, ActionForm form)
     {
-        return actionTestModule.actionPerform(action);
+        return actionTestModule.actionPerform(action, form);
     }
-    
+
     /**
-     * Delegates to {@link ActionTestModule#actionPerform(Action)}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, Class)}
+     */
+    protected ActionForward actionPerform(Class action, Class form)
+    {
+        return actionTestModule.actionPerform(action, form);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action)}
      */
     protected ActionForward actionPerform(Action action)
     {
@@ -585,15 +593,15 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link ActionTestModule#actionPerform(Class, Class)}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class)}
      */
-    protected ActionForward actionPerform(Class action, Class form)
+    protected ActionForward actionPerform(Class action)
     {
-        return actionTestModule.actionPerform(action, form);
+        return actionTestModule.actionPerform(action);
     }
-    
+
     /**
-     * Delegates to {@link ActionTestModule#actionPerform(Action, Class)}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, Class)}
      */
     protected ActionForward actionPerform(Action action, Class form)
     {
@@ -601,15 +609,7 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link ActionTestModule#actionPerform(Class, ActionForm)}
-     */
-    protected ActionForward actionPerform(Class action, ActionForm form)
-    {
-        return actionTestModule.actionPerform(action, form);
-    }
-    
-    /**
-     * Delegates to {@link ActionTestModule#actionPerform(Action, ActionForm)}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, ActionForm)}
      */
     protected ActionForward actionPerform(Action action, ActionForm form)
     {

@@ -124,11 +124,8 @@ public class JavaClassGenerator
     
     private String getClassName(Class clazz)
     {
-        if(null != superClass)
-        {
-            return ClassUtil.getClassName(clazz);
-        }
-        return null;
+        if(null == clazz) return null;
+        return ClassUtil.getClassName(clazz);
     }
     
     private String[] getClassNames(List classList)
@@ -137,10 +134,10 @@ public class JavaClassGenerator
         List nameList = new ArrayList();
         for(int ii = 0; ii < classList.size(); ii++)
         {
-            Class interfaceClass = (Class)classList.get(ii);
-            if(null != interfaceClass)
+            Class clazz = (Class)classList.get(ii);
+            if(null != clazz)
             {
-                nameList.add(ClassUtil.getClassName(interfaceClass));
+                nameList.add(getClassName(clazz));
             }
         }
         return (String[])nameList.toArray(new String[nameList.size()]);
@@ -153,7 +150,7 @@ public class JavaClassGenerator
         for(int ii = 0; ii < arguments.length; ii++)
         {
             Class clazz = arguments[ii];
-            names[ii] = ClassUtil.getClassName(clazz);
+            names[ii] = getClassName(clazz);
         }
         return names;
     }
@@ -162,6 +159,7 @@ public class JavaClassGenerator
     {
         if(null == arguments || arguments.length <= 0) return null;
         if(null != argumentNames && argumentNames.length >= arguments.length) return argumentNames;
+        if(null == argumentNames) argumentNames = new String[0];
         String[] newNames = new String[arguments.length];
         for(int ii = 0; ii < argumentNames.length; ii++)
         {
@@ -335,6 +333,7 @@ public class JavaClassGenerator
     private void addImportIfNecessary(Class clazz)
     {
         if(null == clazz) return;
+        while(clazz.isArray()) clazz = clazz.getComponentType();
         if(imports.contains(clazz.getName())) return;
         if(clazz.getName().startsWith("java.lang")) return;
         if(belongsToSamePackage(clazz)) return;

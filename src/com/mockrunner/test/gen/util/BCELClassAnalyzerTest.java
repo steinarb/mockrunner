@@ -17,13 +17,33 @@ public class BCELClassAnalyzerTest extends TestCase
         theClass = MyTestClass.class;
         analyzer = new BCELClassAnalyzer(theClass);
         assertDeprecated("method1", false);
-        assertDeprecated("method2", true);
         assertDeprecated("method3", true);
         assertDeprecated("method4", false);
+        checkMethod2();
         theClass = Thread.class;
         analyzer = new BCELClassAnalyzer(theClass);
         assertDeprecated("resume", true);
         assertDeprecated("run", false);
+    }
+    
+    private void checkMethod2()
+    {
+        Method[] methods = theClass.getDeclaredMethods();
+        for(int ii = 0; ii < methods.length; ii++)
+        {
+            if(methods[ii].getName().equals("method2"))
+            {
+                boolean isDeprecated = analyzer.isMethodDeprecated(methods[ii]);
+                if(methods[ii].getParameterTypes()[0].equals(String.class))
+                {
+                    assertTrue(isDeprecated);
+                }
+                else
+                {
+                    assertFalse(isDeprecated);
+                }
+            }
+        }
     }
     
     private void assertDeprecated(String methodName, boolean shouldBeDeprecated)
@@ -54,10 +74,15 @@ public class BCELClassAnalyzerTest extends TestCase
             return null;
         }
         
+        protected String method2(String[] aStringArray)
+        {
+            return null;
+        }
+        
         /**
          * @deprecated
          */
-        public BCELClassAnalyzerTest method3(int anInt, double aDouble) throws Exception
+        public BCELClassAnalyzerTest method3(int[][] anIntArray, double aDouble) throws Exception
         {
             method4(null);
             return null;
@@ -66,6 +91,6 @@ public class BCELClassAnalyzerTest extends TestCase
         private void method4(URL[] urls) throws Exception
         {
             
-        }
+        }  
     }
 }

@@ -10,44 +10,44 @@ import com.mockrunner.base.HTMLOutputTestCase;
 import com.mockrunner.base.WebTestModule;
 
 /**
- * Delegator for {@link ServletTestModule}. You can
- * subclass this adapter or use {@link ServletTestModule}
- * directly (so your test case can use another base
- * class).
+ * Delegator for {@link com.mockrunner.servlet.ServletTestModule}. You can
+ * subclass this adapter or use {@link com.mockrunner.servlet.ServletTestModule}
+ * directly (so your test case can use another base class).
+ * <b>This class is generated from the ServletTestModule and should not be
+ * edited directly</b>.
  */
 public class ServletTestCaseAdapter extends HTMLOutputTestCase
 {
     private ServletTestModule servletTestModule;
-    
+
     public ServletTestCaseAdapter()
     {
 
     }
 
-    public ServletTestCaseAdapter(String arg0)
+    public ServletTestCaseAdapter(String name)
     {
-        super(arg0);
+        super(name);
     }
-    
+
     protected void tearDown() throws Exception
     {
         super.tearDown();
         servletTestModule = null;
     }
-    
+
     /**
      * Creates the {@link com.mockrunner.servlet.ServletTestModule}. If you
-     * overwrite this method, you must call 
-     * <code>super.setUp()</code>.
+     * overwrite this method, you must call <code>super.setUp()</code>.
      */
     protected void setUp() throws Exception
     {
         super.setUp();
         servletTestModule = createServletTestModule(getWebMockObjectFactory());
     }
-    
+
     /**
-     * Returns the {@link com.mockrunner.servlet.ServletTestModule} as 
+     * Returns the {@link com.mockrunner.servlet.ServletTestModule} as
      * {@link com.mockrunner.base.WebTestModule}.
      * @return the {@link com.mockrunner.base.WebTestModule}
      */
@@ -55,9 +55,9 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     {
         return servletTestModule;
     }
-    
+
     /**
-     * Returns the {@link com.mockrunner.servlet.ServletTestModule} as 
+     * Returns the {@link com.mockrunner.servlet.ServletTestModule} as
      * {@link com.mockrunner.base.HTMLOutputModule}.
      * @return the {@link com.mockrunner.base.HTMLOutputModule}
      */
@@ -65,115 +65,27 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     {
         return servletTestModule;
     }
-    
+
     /**
-     * Gets the {@link com.mockrunner.servlet.ServletTestModule}. 
+     * Gets the {@link com.mockrunner.servlet.ServletTestModule}.
      * @return the {@link com.mockrunner.servlet.ServletTestModule}
      */
     protected ServletTestModule getServletTestModule()
     {
         return servletTestModule;
     }
-    
+
     /**
-     * Sets the {@link com.mockrunner.servlet.ServletTestModule}. 
+     * Sets the {@link com.mockrunner.servlet.ServletTestModule}.
      * @param servletTestModule the {@link com.mockrunner.servlet.ServletTestModule}
      */
     protected void setServletTestModule(ServletTestModule servletTestModule)
     {
         this.servletTestModule = servletTestModule;
     }
-    
-    /**
-     * Delegates to {@link ServletTestModule#setCaseSensitive}
-     */
-    protected void setCaseSensitive(boolean caseSensitive)
-    {
-        servletTestModule.setCaseSensitive(caseSensitive);
-    }
-    
-    /**
-     * Delegates to {@link ServletTestModule#createServlet}
-     */
-    protected HttpServlet createServlet(Class servletClass)
-    {
-        return servletTestModule.createServlet(servletClass);
-    }
-    
-    /**
-     * Delegates to {@link ServletTestModule#setServlet(HttpServlet)}
-     */
-    protected void setServlet(HttpServlet servlet)
-    {
-        servletTestModule.setServlet(servlet);
-    }
-    
-    /**
-     * Delegates to {@link ServletTestModule#setServlet(HttpServlet, boolean)}
-     */
-    protected void setServlet(HttpServlet servlet, boolean doInit)
-    {
-        servletTestModule.setServlet(servlet, doInit);
-    }
-    
-    /**
-     * Delegates to {@link ServletTestModule#getServlet}
-     */
-    protected HttpServlet getServlet()
-    {
-        return servletTestModule.getServlet();
-    }
-    
-    /**
-     * Delegates to {@link ServletTestModule#createFilter}
-     */
-    protected Filter createFilter(Class filterClass)
-    {
-        return servletTestModule.createFilter(filterClass);
-    }
-    
-    /**
-     * Delegates to {@link ServletTestModule#addFilter(Filter)}
-     */
-    protected void addFilter(Filter filter)
-    {
-        servletTestModule.addFilter(filter);
-    }
-    
-    /**
-     * Delegates to {@link ServletTestModule#addFilter(Filter, boolean)}
-     */
-    protected void addFilter(Filter filter, boolean doInit)
-    {
-        servletTestModule.addFilter(filter, doInit);
-    }
-    
-    /**
-     * Delegates to {@link ServletTestModule#releaseFilters}
-     */
-    protected void releaseFilters()
-    {
-        servletTestModule.releaseFilters();
-    }
 
     /**
-     * Delegates to {@link ServletTestModule#setDoChain}
-     */
-    protected void setDoChain(boolean doChain)
-    {
-        servletTestModule.setDoChain(doChain);
-    }
-    
-    /**
-     * Delegates to {@link ServletTestModule#doFilter}
-     */
-    protected void doFilter()
-    {
-        servletTestModule.doFilter();
-    }
-
-    /**
-     * Delegates to {@link ServletTestModule#init}
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#init}
      */
     protected void init()
     {
@@ -181,79 +93,167 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link ServletTestModule#doDelete}
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#setServlet(HttpServlet, boolean)}
      */
-    protected void doDelete()
+    protected void setServlet(HttpServlet servlet, boolean doInit)
     {
-        servletTestModule.doDelete();
+        servletTestModule.setServlet(servlet, doInit);
     }
-    
+
     /**
-     * Delegates to {@link ServletTestModule#doGet}
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#setServlet(HttpServlet)}
+     */
+    protected void setServlet(HttpServlet servlet)
+    {
+        servletTestModule.setServlet(servlet);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#doGet}
      */
     protected void doGet()
     {
         servletTestModule.doGet();
     }
-    
+
     /**
-     * Delegates to {@link ServletTestModule#doOptions}
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#doPost}
      */
-    protected void doOptions()
-    {
-        servletTestModule.doOptions();
-    }
-     
-    /**
-     * Delegates to {@link ServletTestModule#doPost}
-     */   
     protected void doPost()
     {
         servletTestModule.doPost();
     }
-    
+
     /**
-     * Delegates to {@link ServletTestModule#doPut}
-     */ 
-    protected void doPut()
-    {
-        servletTestModule.doPut();
-    }
-    
-    /**
-     * Delegates to {@link ServletTestModule#doTrace}
-     */
-    protected void doTrace()
-    {
-        servletTestModule.doTrace();
-    }
-    
-    /**
-     * Delegates to {@link ServletTestModule#doHead}
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#doHead}
      */
     protected void doHead()
     {
         servletTestModule.doHead();
     }
-    
+
     /**
-     * Delegates to {@link ServletTestModule#service}
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#doPut}
+     */
+    protected void doPut()
+    {
+        servletTestModule.doPut();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#doDelete}
+     */
+    protected void doDelete()
+    {
+        servletTestModule.doDelete();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#doOptions}
+     */
+    protected void doOptions()
+    {
+        servletTestModule.doOptions();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#doTrace}
+     */
+    protected void doTrace()
+    {
+        servletTestModule.doTrace();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#service}
      */
     protected void service()
     {
         servletTestModule.service();
     }
-    
+
     /**
-     * Delegates to {@link ServletTestModule#getFilteredRequest}
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#getServlet}
+     */
+    protected HttpServlet getServlet()
+    {
+        return servletTestModule.getServlet();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#setCaseSensitive(boolean)}
+     */
+    protected void setCaseSensitive(boolean caseSensitive)
+    {
+        servletTestModule.setCaseSensitive(caseSensitive);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#createServlet(Class)}
+     */
+    protected HttpServlet createServlet(Class servletClass)
+    {
+        return servletTestModule.createServlet(servletClass);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#createFilter(Class)}
+     */
+    protected Filter createFilter(Class filterClass)
+    {
+        return servletTestModule.createFilter(filterClass);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#addFilter(Filter, boolean)}
+     */
+    protected void addFilter(Filter filter, boolean doInit)
+    {
+        servletTestModule.addFilter(filter, doInit);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#addFilter(Filter)}
+     */
+    protected void addFilter(Filter filter)
+    {
+        servletTestModule.addFilter(filter);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#releaseFilters}
+     */
+    protected void releaseFilters()
+    {
+        servletTestModule.releaseFilters();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#setDoChain(boolean)}
+     */
+    protected void setDoChain(boolean doChain)
+    {
+        servletTestModule.setDoChain(doChain);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#doFilter}
+     */
+    protected void doFilter()
+    {
+        servletTestModule.doFilter();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#getFilteredRequest}
      */
     protected ServletRequest getFilteredRequest()
     {
         return servletTestModule.getFilteredRequest();
     }
-    
+
     /**
-     * Delegates to {@link ServletTestModule#getFilteredResponse}
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#getFilteredResponse}
      */
     protected ServletResponse getFilteredResponse()
     {
@@ -261,34 +261,34 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link ServletTestModule#clearOutput}
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#clearOutput}
      */
     protected void clearOutput()
     {
         servletTestModule.clearOutput();
     }
-    
+
     /**
-     * Delegates to {@link ServletTestModule#verifyOutput}
-     */ 
-    protected void verifyOutput(String output)
-    {
-        servletTestModule.verifyOutput(output);
-    }
-   
-    /**
-     * Delegates to {@link ServletTestModule#verifyOutputContains}
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#verifyOutput(String)}
      */
-    protected void verifyOutputContains(String output)
+    protected void verifyOutput(String expectedOutput)
     {
-        servletTestModule.verifyOutputContains(output);
+        servletTestModule.verifyOutput(expectedOutput);
     }
-    
+
     /**
-     * Delegates to {@link ServletTestModule#verifyOutputRegularExpression}
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#verifyOutputContains(String)}
      */
-    protected void verifyOutputRegularExpression(String output)
+    protected void verifyOutputContains(String expectedOutput)
     {
-        servletTestModule.verifyOutputRegularExpression(output);
+        servletTestModule.verifyOutputContains(expectedOutput);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#verifyOutputRegularExpression(String)}
+     */
+    protected void verifyOutputRegularExpression(String expression)
+    {
+        servletTestModule.verifyOutputRegularExpression(expression);
     }
 }
