@@ -36,7 +36,7 @@ It is planned to include support for other frameworks in the J2EE
 environment in future releases.
 
 To start with Mockrunner check out the JavaDoc and the examples
-in the com.mockrunner.example and com.mockrunner.example.test packages.
+in the com.mockrunner.example packages.
 Most methods are self-explanatory. Just subclass one of the Adapters
 (e.g. ActionTestCaseAdapter) and start testing. If you have your
 own TestCase base class, you can use the Modules (e.g. ActionTestModule).

@@ -1,4 +1,4 @@
-package com.mockrunner.example;
+package com.mockrunner.example.struts;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +17,7 @@ import org.apache.struts.action.ActionMessages;
  * This example action simulates a simple authentication system
  * and generates the approriate <code>ActionErrors</code> and
  * <code>ActionMessages</code>. This action will be tested with
- * {@link com.mockrunner.example.test.AuthenticationActionTest} in order 
+ * {@link AuthenticationActionTest} in order 
  * to demonstrate the usage of {@link com.mockrunner.struts.ActionTestModule}.
  */
 public class AuthenticationAction extends Action

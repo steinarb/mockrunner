@@ -1,4 +1,4 @@
-package com.mockrunner.example;
+package com.mockrunner.example.tag;
 
 import javax.servlet.jsp.JspException;
 
@@ -7,7 +7,7 @@ import org.apache.struts.taglib.html.TextTag;
 /**
  * This example tag extends the Struts <code>TextTag</code>
  * and adds a JavaScript handler for checking numeric constraints.
- * Have a look at {@link com.mockrunner.example.test.ConstrainedNumericTextTagTest} to see
+ * Have a look at {@link ConstrainedNumericTextTagTest} to see
  * how to test tags.
  */
 public class ConstrainedNumericTextTag extends TextTag

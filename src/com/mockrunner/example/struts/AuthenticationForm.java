@@ -1,4 +1,4 @@
-package com.mockrunner.example;
+package com.mockrunner.example.struts;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,7 +11,7 @@ import org.apache.struts.action.ActionMapping;
  * The <code>ActionForm</code> for the {@link AuthenticationAction}.
  * The {@link #validate} method will check if an username and a password
  * is present and generates the approriate <code>ActionErrors</code>.
- * See {@link com.mockrunner.example.test.AuthenticationActionTest}.
+ * See {@link AuthenticationActionTest}.
  */
 public class AuthenticationForm extends ActionForm
 {

@@ -1,4 +1,4 @@
-package com.mockrunner.example;
+package com.mockrunner.example.struts;
 
 import java.util.HashMap;
 
@@ -7,7 +7,7 @@ import javax.servlet.ServletContext;
 /**
  * A simple data repository stored in the <ServletContext>.
  * The implementation is not thread safe. Used by
- * {@link com.mockrunner.example.test.StoreDataActionTest}.
+ * {@link StoreDataActionTest}.
  */
 public class MemoryBasedRepository
 {
