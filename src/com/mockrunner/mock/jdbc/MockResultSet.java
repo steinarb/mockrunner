@@ -90,13 +90,29 @@ public class MockResultSet implements ResultSet, Cloneable
         this.id = id;
         resultSetMetaData = null;
         copyColumnMap();
+        adjustInsertRow();
     }
     
+    /**
+     * Copies this <code>ResultSet</code>. The data of the
+     * <code>ResultSet</code> is copied using the
+     * {@link com.mockrunner.util.ParameterUtil#copyParameter}
+     * method.
+     * @return a copy of this <code>ResultSet</code>
+     */
     public Object clone()
     {
         try
-        {
-            return super.clone();
+        {       
+            MockResultSet copy = (MockResultSet)super.clone();
+            copy.columnNameList = new ArrayList(columnNameList);
+            copy.updatedRows = new ArrayList(updatedRows);
+            copy.deletedRows = new ArrayList(deletedRows);
+            copy.insertedRows = new ArrayList(insertedRows);
+            copy.insertRow = copyColumnDataMap(insertRow);
+            copy.columnMap = copyColumnDataMap(columnMap);
+            copy.columnMapCopy = copyColumnDataMap(columnMapCopy);
+            return copy;
         }
         catch(CloneNotSupportedException exc)
         {
@@ -1907,14 +1923,7 @@ public class MockResultSet implements ResultSet, Cloneable
     
     private void copyColumnMap()
     {
-        columnMapCopy = new HashMap();
-        Iterator columns = columnMap.keySet().iterator();
-        while(columns.hasNext())
-        {
-            String nextKey = (String)columns.next();
-            ArrayList copyList = (ArrayList)((ArrayList)columnMap.get(nextKey)).clone();
-            columnMapCopy.put(nextKey, copyList);
-        }
+        columnMapCopy = copyColumnDataMap(columnMap);
     }
     
     private String determineValidColumnName()
@@ -1926,6 +1935,25 @@ public class MockResultSet implements ResultSet, Cloneable
             count ++;
         }
         return name + count;
+    }
+    
+    private Map copyColumnDataMap(Map columnMap)
+    {
+        Map copy = new HashMap();
+        Iterator columns = columnMap.keySet().iterator();
+        while(columns.hasNext())
+        {
+            List copyList = new ArrayList();
+            String nextKey = (String)columns.next();
+            List nextColumnList = (List)columnMap.get(nextKey);
+            for(int ii = 0; ii < nextColumnList.size(); ii++)
+            {
+                Object copyParameter = ParameterUtil.copyParameter(nextColumnList.get(ii));
+                copyList.add(copyParameter);
+            }
+            copy.put(nextKey, copyList);
+        }
+        return copy;
     }
     
     public String toString()

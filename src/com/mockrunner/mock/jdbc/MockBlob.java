@@ -113,7 +113,7 @@ public class MockBlob implements Blob, Cloneable
         }
         catch(CloneNotSupportedException exc)
         {
-    
+            exc.printStackTrace();
         }
         return null;
     }
