@@ -46,20 +46,20 @@ public class MockHttpServletRequestTest extends TestCase
     {
         request.addHeader("testHeader", "xyz");
         request.addHeader("testHeader", "abc");
-        Enumeration enum = request.getHeaders("testHeader");
+        Enumeration headers = request.getHeaders("testHeader");
         List list = new ArrayList();
-        list.add(enum.nextElement());
-        list.add(enum.nextElement());
-        assertFalse(enum.hasMoreElements());
+        list.add(headers.nextElement());
+        list.add(headers.nextElement());
+        assertFalse(headers.hasMoreElements());
         assertTrue(list.contains("xyz"));
         assertTrue(list.contains("abc"));
         assertNull(request.getHeader("anotherHeader"));
         request.addHeader("dateHeader", "Friday, 06 Feb 2004 22:59:48 GMT");
-        enum = request.getHeaderNames();
+        headers = request.getHeaderNames();
         list = new ArrayList();
-        list.add(enum.nextElement());
-        list.add(enum.nextElement());
-        assertFalse(enum.hasMoreElements());
+        list.add(headers.nextElement());
+        list.add(headers.nextElement());
+        assertFalse(headers.hasMoreElements());
         assertTrue(list.contains("testHeader"));
         assertTrue(list.contains("dateHeader"));
         long date = request.getDateHeader("dateHeader");
