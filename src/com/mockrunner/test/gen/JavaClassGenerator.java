@@ -3,6 +3,7 @@ package com.mockrunner.test.gen;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.ClassUtil;
 
 public class JavaClassGenerator
@@ -14,6 +15,8 @@ public class JavaClassGenerator
     private List interfaces;
     private List memberTypes;
     private List memberNames;
+    private String[] classCommentLines;
+    private boolean createJavaDocComments;
     
     public JavaClassGenerator()
     {
@@ -21,6 +24,12 @@ public class JavaClassGenerator
         interfaces = new ArrayList();
         memberTypes = new ArrayList();
         memberNames = new ArrayList();
+        createJavaDocComments = true;
+    }
+    
+    public void setCreateJavaDocComments(boolean createJavaDocComments)
+    {
+        this.createJavaDocComments = createJavaDocComments;
     }
     
     public void setPackage(String packageInfo)
@@ -70,6 +79,11 @@ public class JavaClassGenerator
         addImportIfNotAlreadyImported(interfaceClass);
     }
     
+    public void setClassComment(String[] commentLines)
+    {
+        classCommentLines = (String[])ArrayUtil.copyArray(commentLines);
+    }
+    
     public void addMemberDeclaration(String memberType, String name)
     {
         memberTypes.add(memberType);
@@ -89,6 +103,7 @@ public class JavaClassGenerator
         assembler.appendPackageInfo(packageInfo);
         assembler.appendImports(imports);
         assembler.appendNewLine();
+        appendCommentBlock(assembler, classCommentLines);
         assembler.appendClassDefintion(className, superClass, (String[])interfaces.toArray(new String[interfaces.size()]));
         assembler.appendLeftBrace();
         assembler.appendNewLine();
@@ -98,6 +113,18 @@ public class JavaClassGenerator
         assembler.appendNewLine();
         assembler.appendRightBrace();
         return assembler.getResult();
+    }
+    
+    private void appendCommentBlock(JavaLineAssembler assembler, String[] commentLines)
+    {
+        if(createJavaDocComments)
+        {
+            assembler.appendJavaDocComment(commentLines);
+        }
+        else
+        {
+            assembler.appendBlockComment(commentLines);
+        }
     }
 
     private void appendMembers(JavaLineAssembler assembler)
