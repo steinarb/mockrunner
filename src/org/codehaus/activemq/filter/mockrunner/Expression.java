@@ -1,6 +1,6 @@
 /** 
  * 
- * Copyright 2004 Hiram Chirino
+ * Copyright 2004 Protique Ltd
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); 
  * you may not use this file except in compliance with the License. 
@@ -15,17 +15,25 @@
  * limitations under the License. 
  * 
  **/
-package org.codehaus.activemq.router.filter.mockrunner;
 
+package org.codehaus.activemq.filter.mockrunner;
+
+import javax.jms.JMSException;
+import javax.jms.Message;
 
 
 /**
- * A BooleanExpression is an expression that always 
- * produces a Boolean result.
+ * Represents an expression
  * 
  * Alwin Ibba: Changed package
  * 
  * @version $Revision: 1.1 $
  */
-public interface BooleanExpression extends Expression {
+public interface Expression {
+
+    /**
+     * @return the value of this expression
+     */
+    public Object evaluate(Message message) throws JMSException;
+
 }

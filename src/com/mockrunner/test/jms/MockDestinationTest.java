@@ -5,7 +5,7 @@ import javax.jms.Message;
 
 import junit.framework.TestCase;
 
-import org.codehaus.activemq.router.filter.mockrunner.Filter;
+import org.codehaus.activemq.filter.mockrunner.Filter;
 import org.codehaus.activemq.selector.mockrunner.SelectorParser;
 
 import com.mockrunner.mock.jms.MockDestination;
@@ -76,6 +76,11 @@ public class MockDestinationTest extends TestCase
         {
             return true;
         }
+        
+        public boolean isWildcard()
+        {
+            return true;
+        }
     }
     
     private static class TestFalseFilter implements Filter
@@ -83,6 +88,11 @@ public class MockDestinationTest extends TestCase
         public boolean matches(Message message) throws JMSException
         {
             return false;
+        }
+        
+        public boolean isWildcard()
+        {
+            return true;
         }
     }
 }

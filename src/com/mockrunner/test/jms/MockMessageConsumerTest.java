@@ -60,7 +60,7 @@ public class MockMessageConsumerTest extends TestCase
         assertEquals("", subscriber.getMessageSelector());
         try
         {
-            subscriber = new MockTopicSubscriber(topicConnection, topicSession, topic, "x", false);
+            subscriber = new MockTopicSubscriber(topicConnection, topicSession, topic, "1x", false);
             fail();
         }
         catch(RuntimeException exc)

@@ -15,8 +15,7 @@
  * limitations under the License. 
  * 
  **/
-package org.codehaus.activemq.router.filter.mockrunner;
-
+package org.codehaus.activemq.filter.mockrunner;
 
 
 /**
@@ -42,55 +41,58 @@ abstract public class BinaryExpression implements Expression {
     public Expression getRight() {
         return right;
     }
-    
-    
+
+
     /**
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        return "("+left.toString()+" "+getExpressionSymbol()+" "+right.toString()+")";
+        return "(" + left.toString() + " " + getExpressionSymbol() + " " + right.toString() + ")";
     }
 
     /**
      * TODO: more efficient hashCode()
-	 * @see java.lang.Object#hashCode()
-	 */
-	public int hashCode() {
-		return toString().hashCode();
-	}
-	
-	/**
-     * TODO: more efficient hashCode()
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	public boolean equals(Object o) {
-		
-		if( o==null || !this.getClass().equals(o.getClass()) )
-			return false;
-		return toString().equals( o.toString() );
-		
-	}
-    
+     *
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
     /**
-     * Returns the symbol that represents this binary expression.  For example, addition is 
+     * TODO: more efficient hashCode()
+     *
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object o) {
+
+        if (o == null || !this.getClass().equals(o.getClass())) {
+            return false;
+        }
+        return toString().equals(o.toString());
+
+    }
+
+    /**
+     * Returns the symbol that represents this binary expression.  For example, addition is
      * represented by "+"
-     * 
+     *
      * @return
      */
     abstract public String getExpressionSymbol();
 
-	/**
-	 * @param expression
-	 */
-	public void setRight(Expression expression) {
-		right = expression;
-	}
+    /**
+     * @param expression
+     */
+    public void setRight(Expression expression) {
+        right = expression;
+    }
 
-	/**
-	 * @param expression
-	 */
-	public void setLeft(Expression expression) {
-		left = expression;
-	}
+    /**
+     * @param expression
+     */
+    public void setLeft(Expression expression) {
+        left = expression;
+    }
 
 }

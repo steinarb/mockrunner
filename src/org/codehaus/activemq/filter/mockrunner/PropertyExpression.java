@@ -14,9 +14,9 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  * 
- **/ 
+ **/
 
-package org.codehaus.activemq.router.filter.mockrunner;
+package org.codehaus.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -35,57 +35,62 @@ public class PropertyExpression implements Expression {
     public PropertyExpression(String name) {
         this.name = name;
     }
-    
+
     public Object evaluate(Message message) throws JMSException {
         Object result = null;
-        if (name != null){
+        if (name != null) {
             result = message.getObjectProperty(name);
         }
-        if (result == null){
+        if (result == null) {
             //see if a defined header property
-            if (name.equals("JMSType")){
+            if (name.equals("JMSType")) {
                 result = message.getJMSType();
-            }else if (name.equals("JMSMessageID")){
+            }
+            else if (name.equals("JMSMessageID")) {
                 result = message.getJMSMessageID();
-            }else if (name.equals("JMSCorrelationID")){
+            }
+            else if (name.equals("JMSCorrelationID")) {
                 result = message.getJMSCorrelationID();
-            }else if (name.equals("JMSPriority")){
+            }
+            else if (name.equals("JMSPriority")) {
                 result = new Integer(message.getJMSPriority());
-            }else if (name.equals("JMSTimestamp")){
+            }
+            else if (name.equals("JMSTimestamp")) {
                 result = new Long(message.getJMSTimestamp());
             }
         }
         return result;
     }
-    
+
     public String getName() {
         return name;
     }
-    
-    
+
+
     /**
      * @see java.lang.Object#toString()
      */
     public String toString() {
         return name;
     }
-    
+
     /**
-	 * @see java.lang.Object#hashCode()
-	 */
-	public int hashCode() {
-		return name.hashCode();
-	}
-	
-	/**
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	public boolean equals(Object o) {
-		
-		if( o==null || !this.getClass().equals(o.getClass()) )
-			return false;
-		return name.equals( ((PropertyExpression)o).name );
-		
-	}
-    
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    /**
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object o) {
+
+        if (o == null || !this.getClass().equals(o.getClass())) {
+            return false;
+        }
+        return name.equals(((PropertyExpression) o).name);
+
+    }
+
 }

@@ -14,41 +14,49 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License. 
  * 
- **/ 
+ **/
 
-package org.codehaus.activemq.router.filter.mockrunner;
+package org.codehaus.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 
 
 /**
- * Represents a filter using an expression
+ * Represents a logical AND operation on two filters
  * 
  * Alwin Ibba: Changed package
- * 
+ *
  * @version $Revision: 1.1 $
  */
-public class ExpressionFilter implements Filter {
+public class AndFilter implements Filter {
 
-    private Expression expression;
+    private Filter left;
+    private Filter right;
 
-    public ExpressionFilter(Expression expression) {
-        this.expression = expression;
+    public AndFilter(Filter left, Filter right) {
+        this.left = left;
+        this.right = right;
     }
-    
+
     public boolean matches(Message message) throws JMSException {
-        Object value = expression.evaluate(message);
-        if (value != null && value instanceof Boolean) {
-            return ((Boolean)value).booleanValue();
+        if (left.matches(message)) {
+            return right.matches(message);
         }
-        return false;
+        else {
+            return false;
+        }
     }
-    
-    /**
-     * @return Returns the expression.
-     */
-    public Expression getExpression() {
-        return expression;
+
+    public boolean isWildcard() {
+        return left.isWildcard() || right.isWildcard();
+    }
+
+    public Filter getLeft() {
+        return left;
+    }
+
+    public Filter getRight() {
+        return right;
     }
 }

@@ -16,7 +16,7 @@
  * limitations under the License. 
  * 
  **/
-package org.codehaus.activemq.router.filter.mockrunner;
+package org.codehaus.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -33,7 +33,7 @@ public abstract class ArithmeticExpression extends BinaryExpression {
     protected static final int INTEGER = 1;
     protected static final int LONG = 2;
     protected static final int DOUBLE = 3;
-    
+
     /**
      * @param left
      * @param right
@@ -50,7 +50,10 @@ public abstract class ArithmeticExpression extends BinaryExpression {
                     String answer = text + rvalue;
                     System.out.println("lvalue: " + lvalue + " rvalue: " + rvalue + " result: " + answer);
                     return answer;
-                } else if (lvalue instanceof Number) { return plus((Number) lvalue, asNumber(rvalue)); }
+                }
+                else if (lvalue instanceof Number) {
+                    return plus((Number) lvalue, asNumber(rvalue));
+                }
                 throw new RuntimeException("Cannot call plus operation on: " + lvalue + " and: " + rvalue);
             }
 
@@ -63,9 +66,12 @@ public abstract class ArithmeticExpression extends BinaryExpression {
     public static Expression createMinus(Expression left, Expression right) {
         return new ArithmeticExpression(left, right) {
             protected Object evaluate(Object lvalue, Object rvalue) {
-                if (lvalue instanceof Number) { return minus((Number) lvalue, asNumber(rvalue)); }
+                if (lvalue instanceof Number) {
+                    return minus((Number) lvalue, asNumber(rvalue));
+                }
                 throw new RuntimeException("Cannot call minus operation on: " + lvalue + " and: " + rvalue);
             }
+
             public String getExpressionSymbol() {
                 return "-";
             }
@@ -76,9 +82,12 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         return new ArithmeticExpression(left, right) {
 
             protected Object evaluate(Object lvalue, Object rvalue) {
-                if (lvalue instanceof Number) { return multiply((Number) lvalue, asNumber(rvalue)); }
+                if (lvalue instanceof Number) {
+                    return multiply((Number) lvalue, asNumber(rvalue));
+                }
                 throw new RuntimeException("Cannot call multiply operation on: " + lvalue + " and: " + rvalue);
             }
+
             public String getExpressionSymbol() {
                 return "*";
             }
@@ -89,9 +98,12 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         return new ArithmeticExpression(left, right) {
 
             protected Object evaluate(Object lvalue, Object rvalue) {
-                if (lvalue instanceof Number) { return divide((Number) lvalue, asNumber(rvalue)); }
+                if (lvalue instanceof Number) {
+                    return divide((Number) lvalue, asNumber(rvalue));
+                }
                 throw new RuntimeException("Cannot call divide operation on: " + lvalue + " and: " + rvalue);
             }
+
             public String getExpressionSymbol() {
                 return "/";
             }
@@ -102,45 +114,48 @@ public abstract class ArithmeticExpression extends BinaryExpression {
         return new ArithmeticExpression(left, right) {
 
             protected Object evaluate(Object lvalue, Object rvalue) {
-                if (lvalue instanceof Number) { return mod((Number) lvalue, asNumber(rvalue)); }
+                if (lvalue instanceof Number) {
+                    return mod((Number) lvalue, asNumber(rvalue));
+                }
                 throw new RuntimeException("Cannot call mod operation on: " + lvalue + " and: " + rvalue);
             }
+
             public String getExpressionSymbol() {
                 return "%";
             }
         };
     }
-    
+
     protected Number plus(Number left, Number right) {
         switch (numberType(left, right)) {
-        case INTEGER:
-            return new Integer(left.intValue() + right.intValue());
-        case LONG:
-            return new Long(left.longValue() + right.longValue());
-        default:
-            return new Double(left.doubleValue() + right.doubleValue());
+            case INTEGER:
+                return new Integer(left.intValue() + right.intValue());
+            case LONG:
+                return new Long(left.longValue() + right.longValue());
+            default:
+                return new Double(left.doubleValue() + right.doubleValue());
         }
     }
 
     protected Number minus(Number left, Number right) {
         switch (numberType(left, right)) {
-        case INTEGER:
-            return new Integer(left.intValue() - right.intValue());
-        case LONG:
-            return new Long(left.longValue() - right.longValue());
-        default:
-            return new Double(left.doubleValue() - right.doubleValue());
+            case INTEGER:
+                return new Integer(left.intValue() - right.intValue());
+            case LONG:
+                return new Long(left.longValue() - right.longValue());
+            default:
+                return new Double(left.doubleValue() - right.doubleValue());
         }
     }
 
     protected Number multiply(Number left, Number right) {
         switch (numberType(left, right)) {
-        case INTEGER:
-            return new Integer(left.intValue() * right.intValue());
-        case LONG:
-            return new Long(left.longValue() * right.longValue());
-        default:
-            return new Double(left.doubleValue() * right.doubleValue());
+            case INTEGER:
+                return new Integer(left.intValue() * right.intValue());
+            case LONG:
+                return new Long(left.longValue() * right.longValue());
+            default:
+                return new Double(left.doubleValue() * right.doubleValue());
         }
     }
 
@@ -149,15 +164,17 @@ public abstract class ArithmeticExpression extends BinaryExpression {
     }
 
     protected Number mod(Number left, Number right) {
-        return new Double( left.doubleValue() % right.doubleValue());
+        return new Double(left.doubleValue() % right.doubleValue());
     }
-    
+
     private int numberType(Number left, Number right) {
         if (isDouble(left) || isDouble(right)) {
             return DOUBLE;
-        } else if (left instanceof Long || right instanceof Long) {
+        }
+        else if (left instanceof Long || right instanceof Long) {
             return LONG;
-        } else {
+        }
+        else {
             return INTEGER;
         }
     }
@@ -169,22 +186,25 @@ public abstract class ArithmeticExpression extends BinaryExpression {
     protected Number asNumber(Object value) {
         if (value instanceof Number) {
             return (Number) value;
-        } else {
+        }
+        else {
             throw new RuntimeException("Cannot convert value: " + value + " into a number");
         }
     }
-    
+
     public Object evaluate(Message message) throws JMSException {
         Object lvalue = left.evaluate(message);
-    	if (lvalue == null) 
-    		return null; 
+        if (lvalue == null) {
+            return null;
+        }
         Object rvalue = right.evaluate(message);
-    	if (rvalue == null) 
-    		return null; 
+        if (rvalue == null) {
+            return null;
+        }
         return evaluate(lvalue, rvalue);
     }
 
-    
+
     /**
      * @param lvalue
      * @param rvalue

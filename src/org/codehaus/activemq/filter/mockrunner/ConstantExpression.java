@@ -16,7 +16,9 @@
  * limitations under the License. 
  * 
  **/
-package org.codehaus.activemq.router.filter.mockrunner;
+package org.codehaus.activemq.filter.mockrunner;
+
+import java.math.BigDecimal;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -35,15 +37,45 @@ public class ConstantExpression implements Expression {
             super(value);
         }
     }
-    
+
     public static final BooleanConstantExpression NULL = new BooleanConstantExpression(null);
     public static final BooleanConstantExpression TRUE = new BooleanConstantExpression(Boolean.TRUE);
     public static final BooleanConstantExpression FALSE = new BooleanConstantExpression(Boolean.FALSE);
-    
+
     private Object value;
 
-    public static ConstantExpression createInteger(String text) {
-        Number value = new Long(text);
+    public static ConstantExpression createFromDecimal(String text) {
+    	    	
+    	// Strip off the 'l' or 'L' if needed.
+    	if( text.endsWith("l") || text.endsWith("L") )
+    		text = text.substring(0, text.length()-1);
+
+    	Number value;
+    	try {
+    		value = new Long(text);
+    	} catch ( NumberFormatException e) {
+    		// The number may be too big to fit in a long.
+        	value = new BigDecimal(text);    		
+    	}
+    	
+        long l = value.longValue();
+        if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE) {
+            value = new Integer(value.intValue());
+        }
+        return new ConstantExpression(value);
+    }
+
+    public static ConstantExpression createFromHex(String text) {
+        Number value = new Long(Long.parseLong(text.substring(2), 16));
+        long l = value.longValue();
+        if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE) {
+            value = new Integer(value.intValue());
+        }
+        return new ConstantExpression(value);
+    }
+
+    public static ConstantExpression createFromOctal(String text) {
+        Number value = new Long(Long.parseLong(text, 8));
         long l = value.longValue();
         if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE) {
             value = new Integer(value.intValue());
@@ -63,56 +95,66 @@ public class ConstantExpression implements Expression {
     public Object evaluate(Message message) throws JMSException {
         return value;
     }
-    
-    
+
+    public Object getValue() {
+        return value;
+    }    
+
     /**
      * @see java.lang.Object#toString()
      */
     public String toString() {
-        if( value == null )
+        if (value == null) {
             return "NULL";
-        if( value instanceof Boolean )
-            return ((Boolean)value).booleanValue() ? "TRUE" : "FALSE";
-        if( value instanceof String )
-            return encodeString((String)value);
+        }
+        if (value instanceof Boolean) {
+            return ((Boolean) value).booleanValue() ? "TRUE" : "FALSE";
+        }
+        if (value instanceof String) {
+            return encodeString((String) value);
+        }
         return value.toString();
     }
-    
-    /**
-     * TODO: more efficient hashCode()
-	 * @see java.lang.Object#hashCode()
-	 */
-	public int hashCode() {
-		return toString().hashCode();
-	}
-	
-	/**
-     * TODO: more efficient hashCode()
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	public boolean equals(Object o) {
-		
-		if( o==null || !this.getClass().equals(o.getClass()) )
-			return false;
-		return toString().equals( o.toString() );
-		
-	}
-    
 
     /**
-     * Encodes the value of string so that it looks like it would look like 
+     * TODO: more efficient hashCode()
+     *
+     * @see java.lang.Object#hashCode()
+     */
+    public int hashCode() {
+        return toString().hashCode();
+    }
+
+    /**
+     * TODO: more efficient hashCode()
+     *
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    public boolean equals(Object o) {
+
+        if (o == null || !this.getClass().equals(o.getClass())) {
+            return false;
+        }
+        return toString().equals(o.toString());
+
+    }
+
+
+    /**
+     * Encodes the value of string so that it looks like it would look like
      * when it was provided in a selector.
-     * 
+     *
      * @param string
      * @return
      */
     private String encodeString(String s) {
         StringBuffer b = new StringBuffer();
         b.append('\'');
-        for( int i=0; i < s.length(); i++ ) {
+        for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if( c== '\'')
+            if (c == '\'') {
                 b.append(c);
+            }
             b.append(c);
         }
         b.append('\'');
