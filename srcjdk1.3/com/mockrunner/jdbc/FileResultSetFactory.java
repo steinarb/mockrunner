@@ -1,16 +1,10 @@
 package com.mockrunner.jdbc;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
 import java.util.List;
-
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.util.common.FileUtil;
-import com.mockrunner.util.common.StreamUtil;
 import com.mockrunner.util.common.StringUtil;
 
 /**
@@ -21,32 +15,43 @@ import com.mockrunner.util.common.StringUtil;
  * the column entries should be trimmed (default is <code>true</code>).
  * If a <code>File</code> is specified, this file is used. If a file name
  * is specified, this class tries to find the file in the local
- * file system and (if not found) to load it with <code>getResourceAsStream</code>.
+ * file system and (if not found) to load it with <code>getResource</code>.
  */
 public class FileResultSetFactory implements ResultSetFactory
 {
-    private final static Log log = LogFactory.getLog(XMLResultSetFactory.class);
-    
-    private String fileName = null;
     private File file = null;
+    private String fileName = null;
     private String delimiter = ";";
     private boolean firstLineContainsColumnNames = false;
     private boolean trim = true;
     
     public FileResultSetFactory(String fileName)
     {
-        this.fileName = fileName;
+        this.file = new File(fileName);
+    	this.fileName = fileName;
     }
     
     public FileResultSetFactory(File file)
     {
-        if (file.exists() && file.isFile()) 
+    	this.file = file;
+    	this.fileName = file.getAbsolutePath();
+    }
+    
+    /**
+     * Get the <code>File</code> being used to read in the 
+     * <code>ResultSet</code>. Returns <code>null</code> if
+     * the file does not exist.
+     * @return the file 
+     */
+    public File getFile()
+    {
+        if(file.exists() && file.isFile())
         {
-            this.file = file;
-        } 
-        else 
+            return file;
+        }
+        else
         {
-            this.file = null;
+            return FileUtil.findFile(fileName);
         }
     }
     
@@ -69,7 +74,7 @@ public class FileResultSetFactory implements ResultSetFactory
     }
 
     /**
-     * Set if the coumn entries should be trimmed.
+     * Set if the column entries should be trimmed.
      * Default is <code>true</code>.
      */
     public void setTrim(boolean trim)
@@ -81,16 +86,12 @@ public class FileResultSetFactory implements ResultSetFactory
     {
         MockResultSet resultSet = new MockResultSet(id);
         List lines = null;
-        if(null != file)
+        File fileToRead = getFile();
+        if(null == fileToRead)
         {
-            lines = FileUtil.getLinesFromFile(file);
+            throw new RuntimeException("File " + fileName + " not found.");
         }
-        else
-        {
-            Reader reader = FileUtil.findFile(fileName);
-            lines = StreamUtil.getLinesFromReader(reader);
-            tryClose(reader);
-        }
+        lines = FileUtil.getLinesFromFile(fileToRead);
         int firstLineNumber = 0;
         if(firstLineContainsColumnNames)
         {
@@ -109,17 +110,5 @@ public class FileResultSetFactory implements ResultSetFactory
             resultSet.addRow(values);
         }
         return resultSet;
-    }
-    
-    private void tryClose(Reader reader)
-    {
-        try
-        {
-            reader.close();
-        } 
-        catch(IOException exc)
-        {
-            log.error(exc.getMessage(), exc);
-        }
     }
 }

@@ -3,9 +3,7 @@ package com.mockrunner.util.common;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.net.URL;
 import java.util.List;
 
 import com.mockrunner.base.NestedApplicationException;
@@ -50,27 +48,29 @@ public class FileUtil
     
     /**
      * Tries to open the file from the file system. If the file
-     * doesn't exist, tries to load the file with <code>getResourceAsStream</code>.
-     * Throws a {@link com.mockrunner.base.NestedApplicationException}, if
-     * the file cannot be found.
-     * @param filePath the file path
+     * doesn't exist, tries to load the file with <code>getResource</code>.
+     * Returns <code>null</code> if the file cannot be found.
+     * @param fileName the file name
      * @return the file as reader
      */
-    public static Reader findFile(String filePath)
+    public static File findFile(String fileName)
     {
-        File file = new File(filePath);
+        File file = new File(fileName);
         try
         {
             if(file.exists() && file.isFile()) 
             {
-                return new FileReader(file);
+                return file;
             }
-            InputStream stream = FileUtil.class.getResourceAsStream(filePath);
-            return new InputStreamReader(stream);
+            URL fileURL = FileUtil.class.getClassLoader().getResource(fileName);
+            if (fileURL != null) return new File(fileURL.getFile());
+            fileURL = FileUtil.class.getResource(fileName);
+            if (fileURL != null) return new File(fileURL.getFile());
+            return null;
         } 
         catch(Exception exc)
         {
-            throw new NestedApplicationException("Error while trying to find the file " + filePath, exc);
+            throw new NestedApplicationException("Error while trying to find the file " + fileName, exc);
         } 
     }
 }

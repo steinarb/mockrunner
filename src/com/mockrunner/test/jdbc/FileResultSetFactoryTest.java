@@ -3,15 +3,14 @@ package com.mockrunner.test.jdbc;
 import java.io.File;
 import java.sql.SQLException;
 
-import com.mockrunner.base.NestedApplicationException;
+import junit.framework.TestCase;
+
 import com.mockrunner.jdbc.FileResultSetFactory;
 import com.mockrunner.mock.jdbc.MockResultSet;
 
-import junit.framework.TestCase;
-
 public class FileResultSetFactoryTest extends TestCase
 {
-    public void testCreate() throws Exception
+    public void testGoodCreate() throws Exception
     {
         FileResultSetFactory factory = new FileResultSetFactory("src/com/mockrunner/test/jdbc/testresult.txt");
         MockResultSet resultSet = factory.create("");
@@ -19,16 +18,34 @@ public class FileResultSetFactoryTest extends TestCase
         factory = new FileResultSetFactory("/com/mockrunner/test/jdbc/testresult.txt");
         resultSet = factory.create("");
         doTestResultSet(factory, resultSet);
+        factory = new FileResultSetFactory("com/mockrunner/test/jdbc/testresult.txt");
+        resultSet = factory.create("");
+        doTestResultSet(factory, resultSet);
         factory = new FileResultSetFactory(new File("src/com/mockrunner/test/jdbc/testresult.txt"));
         resultSet = factory.create("");
         doTestResultSet(factory, resultSet);
-        factory = new FileResultSetFactory("not found");
+        
+    }
+    
+    public void testBadCreate() throws Exception
+    {
+        FileResultSetFactory factory = new FileResultSetFactory("not found");
         try
         {
             factory.create("");
             fail();
         } 
-        catch(NestedApplicationException exc)
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+        factory = new FileResultSetFactory(new File("not found"));
+        try
+        {
+            factory.create("");
+            fail();
+        } 
+        catch(RuntimeException exc)
         {
             //should throw exception
         }
@@ -70,5 +87,17 @@ public class FileResultSetFactoryTest extends TestCase
         assertEquals("Entry1", resultSet.getObject(1));
         assertEquals("Entry2", resultSet.getString(2));
         assertEquals("Entry3", resultSet.getObject(3));
+    }
+    
+    public void testGetFile()
+    {
+        FileResultSetFactory factory = new FileResultSetFactory("src/com/mockrunner/test/jdbc/testresult.txt");
+        assertEquals(new File("src/com/mockrunner/test/jdbc/testresult.txt"), factory.getFile());
+        factory = new FileResultSetFactory(new File("src/com/mockrunner/test/jdbc/testresult.txt"));
+        assertEquals(new File("src/com/mockrunner/test/jdbc/testresult.txt"), factory.getFile());
+        factory = new FileResultSetFactory("badfile");
+        assertNull(factory.getFile());
+        factory = new FileResultSetFactory(new File("badfile"));
+        assertNull(factory.getFile());
     }
 }

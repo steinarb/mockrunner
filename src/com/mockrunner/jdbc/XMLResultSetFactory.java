@@ -1,13 +1,9 @@
 package com.mockrunner.jdbc;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
@@ -25,34 +21,27 @@ import com.mockrunner.util.common.FileUtil;
  * the column entries should be trimmed (default is <code>true</code>).
  * If a <code>File</code> is specified, this file is used. If a file name
  * is specified, this class tries to find the file in the local
- * file system and (if not found) to load it with <code>getResourceAsStream</code>.
+ * file system and (if not found) to load it with <code>getResource</code>.
  */
 public class XMLResultSetFactory implements ResultSetFactory 
 {
-    private final static Log log = LogFactory.getLog(XMLResultSetFactory.class);
-    
     public final static int SYBASE_DIALECT = 0;
     
-    private String fileName = null;
     private File file = null;
+    private String fileName = null;
     private boolean trim = true;
     private int dialect = SYBASE_DIALECT;
     
-    public XMLResultSetFactory(String fileName) 
+    public XMLResultSetFactory(String fileName)
     {
+        this.file = new File(fileName);
         this.fileName = fileName;
     }
     
-    public XMLResultSetFactory(File file) 
+    public XMLResultSetFactory(File file)
     {
-        if (file.exists() && file.isFile()) 
-        {
-            this.file = file;
-        } 
-        else 
-        {
-            this.file = null;
-        }
+        this.file = file;
+        this.fileName = file.getAbsolutePath();
     }
     
     /**
@@ -81,12 +70,19 @@ public class XMLResultSetFactory implements ResultSetFactory
     /**
      * Get the <code>File</code> being used to read in the 
      * <code>ResultSet</code>. Returns <code>null</code> if
-     * a file name was specified.
-     * @return file 
+     * the file does not exist.
+     * @return the file 
      */
-    public File getXMLFile() 
+    public File getXMLFile()
     {
-        return file;
+        if(file.exists() && file.isFile())
+        {
+            return file;
+        }
+        else
+        {
+            return FileUtil.findFile(fileName);
+        }
     }
 
     /**
@@ -144,24 +140,19 @@ public class XMLResultSetFactory implements ResultSetFactory
        MockResultSet resultSet = new MockResultSet(id);
        SAXBuilder builder = new SAXBuilder();
        Document doc = null;
-       
+       File fileToParse = getXMLFile();
+       if(null == fileToParse)
+       {
+           throw new RuntimeException("File " + fileName + " not found.");
+       }
        try 
        {
-           if(null != file)
-           {
-               doc = builder.build(file);
-           }
-           else
-           {
-               Reader reader = FileUtil.findFile(fileName);
-               doc = builder.build(reader);
-               tryClose(reader);
-           }
+           doc = builder.build(fileToParse);
            Element root = doc.getRootElement();
            List rows = root.getChildren("row");
            Iterator ri = rows.iterator();
            boolean firstIteration = true;
-           int colNum = 0;   
+           int colNum = 0;
            while (ri.hasNext()) 
            {
                Element cRow = (Element)ri.next();
@@ -195,20 +186,7 @@ public class XMLResultSetFactory implements ResultSetFactory
        catch(Exception exc) 
        {
            throw new NestedApplicationException("Failure while reading from XML file", exc);
-       } 
-       
+       }
        return resultSet;
-    }
-    
-    private void tryClose(Reader reader)
-    {
-        try
-        {
-            reader.close();
-        } 
-        catch(IOException exc)
-        {
-            log.error(exc.getMessage(), exc);
-        }
     }
 }

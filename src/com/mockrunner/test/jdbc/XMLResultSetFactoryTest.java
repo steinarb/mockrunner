@@ -4,7 +4,6 @@ import java.io.File;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.jdbc.XMLResultSetFactory;
 import com.mockrunner.mock.jdbc.MockResultSet;
 
@@ -17,12 +16,12 @@ public class XMLResultSetFactoryTest extends TestCase
     {
         XMLResultSetFactory goodSybaseXMLRSF = new XMLResultSetFactory("src/com/mockrunner/test/jdbc/xmltestresult.xml");
         MockResultSet goodMRS = goodSybaseXMLRSF.create("Good-ResultSet-ID");
-        assertNull(goodSybaseXMLRSF.getXMLFile());
+        assertNotNull(goodSybaseXMLRSF.getXMLFile());
         doTestGoodResultSet(goodSybaseXMLRSF, goodMRS);
         
         goodSybaseXMLRSF = new XMLResultSetFactory("/com/mockrunner/test/jdbc/xmltestresult.xml");
         goodMRS = goodSybaseXMLRSF.create("Good-ResultSet-ID");
-        assertNull(goodSybaseXMLRSF.getXMLFile());
+        assertNotNull(goodSybaseXMLRSF.getXMLFile());
         doTestGoodResultSet(goodSybaseXMLRSF, goodMRS);
         
         goodSybaseXMLRSF = new XMLResultSetFactory(new File("src/com/mockrunner/test/jdbc/xmltestresult.xml"));
@@ -47,12 +46,36 @@ public class XMLResultSetFactoryTest extends TestCase
         try
         {
             XMLResultSetFactory badXMLRSF = new XMLResultSetFactory("src/com/mockrunner/test/jdbc/nonexisting.xml");
+            assertNull(badXMLRSF.getXMLFile());
             badXMLRSF.create("Bad-ResultSet-ID");
             fail();
-        } 
-        catch(NestedApplicationException exc)
+        }
+        catch(RuntimeException exc)
         {
             //should throw exception
         }
+        try
+        {
+            XMLResultSetFactory badXMLRSF = new XMLResultSetFactory(new File("src/com/mockrunner/test/jdbc/nonexisting.xml"));
+            assertNull(badXMLRSF.getXMLFile());
+            badXMLRSF.create("Bad-ResultSet-ID");
+            fail();
+        }
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+    }
+    
+    public void testGetXMLFile()
+    {
+        XMLResultSetFactory factory = new XMLResultSetFactory("src/com/mockrunner/test/jdbc/xmltestresult.xml");
+        assertEquals(new File("src/com/mockrunner/test/jdbc/xmltestresult.xml"), factory.getXMLFile());
+        factory = new XMLResultSetFactory(new File("src/com/mockrunner/test/jdbc/xmltestresult.xml"));
+        assertEquals(new File("src/com/mockrunner/test/jdbc/xmltestresult.xml"), factory.getXMLFile());
+        factory = new XMLResultSetFactory("badfile");
+        assertNull(factory.getXMLFile());
+        factory = new XMLResultSetFactory(new File("badfile"));
+        assertNull(factory.getXMLFile());
     }
 }
