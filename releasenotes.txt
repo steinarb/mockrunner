@@ -22,6 +22,9 @@ mockrunner-0.3.2:
   some of the new features.
 - it's now possible to set the key under which messages and errors are
   stored in ActionTestModule
+- all test modules now use the wrapped request and response whenever possible
+- added refresh method to WebMockObjectFactory to recreate mock objects
+  dependencies after adding request and response wrappers
 - added getMockConnection method to MockDataSource (patch by Gábor Lipták)
 - JMS MockConnectionFactory now implements MockQueueConnectionFactory and
   MockTopicConnectionFactory to provide one factory with one JNDI name

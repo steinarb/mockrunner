@@ -179,7 +179,7 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public void setResources(MessageResources resources)
     {
-        mockFactory.getMockRequest().setAttribute(Globals.MESSAGES_KEY, resources);
+        mockFactory.getWrappedRequest().setAttribute(Globals.MESSAGES_KEY, resources);
     }
     
     /**

@@ -60,8 +60,18 @@ public class ActionMockObjectFactory extends WebMockObjectFactory
         actionServlet = new MockActionServlet();
         actionServlet.setServletConfig(getMockServletConfig());
         actionServlet.setServletContext(getMockServletContext());
-        getMockRequest().setAttribute(Globals.MAPPING_KEY, mapping);
-        getMockRequest().setAttribute(Globals.MODULE_KEY, moduleConfig);
+        refresh();
+    }
+    
+    /**
+     * Refreshes the mock objects dependencies. May be called after setting request
+     * and response wrappers.
+     */
+    public void refresh()
+    {
+        super.refresh();
+        getWrappedRequest().setAttribute(Globals.MAPPING_KEY, mapping);
+        getWrappedRequest().setAttribute(Globals.MODULE_KEY, moduleConfig);
     }
     
     /**

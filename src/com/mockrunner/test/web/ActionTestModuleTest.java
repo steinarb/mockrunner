@@ -5,7 +5,9 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 
 import junit.framework.TestCase;
 
@@ -819,6 +821,18 @@ public class ActionTestModuleTest extends TestCase
         assertEquals("errors.minlength", error.getKey());
     }
     
+    public void testWrappedRequest()
+    {
+        HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(mockFactory.getMockRequest());
+        HttpServletResponseWrapper responseWrapper = new HttpServletResponseWrapper(mockFactory.getMockResponse());
+        mockFactory.addRequestWrapper(requestWrapper);
+        mockFactory.addResponseWrapper(responseWrapper);
+        TestAction action = new TestAction();
+        module.actionPerform(action);
+        assertSame(requestWrapper, action.getRequest());
+        assertSame(responseWrapper, action.getResponse());
+    }
+    
     public void testNestedException()
     {
         try
@@ -848,6 +862,8 @@ public class ActionTestModuleTest extends TestCase
         private MessageResources resources;
         private MessageResources resourcesForKey;
         private Locale locale;
+        private HttpServletRequest request;
+        private HttpServletResponse response;
     
         public ActionForward execute(ActionMapping mapping,
                                      ActionForm form,
@@ -857,9 +873,21 @@ public class ActionTestModuleTest extends TestCase
             resources = getResources(request);
             resourcesForKey = getResources(request, "test");
             locale = getLocale(request);
+            this.request = request;
+            this.response = response;
             return mapping.findForward("success");
         }
     
+        public HttpServletRequest getRequest()
+        {
+            return request;
+        }
+        
+        public HttpServletResponse getResponse()
+        {
+            return response;
+        }
+        
         public MessageResources getTestResourcesForKey()
         {
             return resourcesForKey;
