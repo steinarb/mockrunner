@@ -457,6 +457,8 @@ public class EJBTestModule
      * specified name can be found. If the found object is no EJB home interface,
      * or if the corresponding <code>create</code> method cannot be found, this
      * method returns <code>null</code>.
+     * This method does not allow <code>null</code> as a parameter, because
+     * the type of the parameter cannot be determined in this case.
      * @param name JNDI name of the bean
      * @param parameters the parameters, <code>null</code> parameters are not allowed,
      *  primitive types are automatically unwrapped
@@ -486,6 +488,8 @@ public class EJBTestModule
      * specified name can be found. If the found object is no EJB home interface,
      * or if the corresponding <code>create</code> method cannot be found, this
      * method returns <code>null</code>.
+     * This method does not allow <code>null</code> as a parameter, because
+     * the type of the parameter cannot be determined in this case.
      * @param name JNDI name of the bean
      * @param createMethod the name of the create method
      * @param parameters the parameters, <code>null</code> parameters are not allowed,
@@ -496,7 +500,31 @@ public class EJBTestModule
     public Object createBean(String name, String createMethod, Object[] parameters)
     {
         Object home = lookupHome(name);
-        return invokeHomeMethod(home, createMethod, parameters);
+        return invokeHomeMethod(home, createMethod, parameters, null);
+    }
+    
+    /**
+     * Create an EJB. The method looks up the home interface, calls
+     * the <code>create</code> method with the specified parameters
+     * and returns the result, which you can cast to the remote interface.
+     * This method works with the mock container but may fail with
+     * a real remote container.
+     * This method throws a <code>RuntimeException</code> if no object with the 
+     * specified name can be found. If the found object is no EJB home interface,
+     * or if the corresponding <code>create</code> method cannot be found, this
+     * method returns <code>null</code>.
+     * This method does allow <code>null</code> as a parameter.
+     * @param name JNDI name of the bean
+     * @param createMethod the name of the create method
+     * @param parameters the parameters, <code>null</code> is allowed as a parameter
+     * @param parameterTypes the type of the specified parameters
+     * @return the bean 
+     * @throws RuntimeException in case of error
+     */
+    public Object createBean(String name, String createMethod, Object[] parameters, Class[] parameterTypes)
+    {
+        Object home = lookupHome(name);
+        return invokeHomeMethod(home, createMethod, parameters, parameterTypes);
     }
     
     /**
@@ -537,6 +565,8 @@ public class EJBTestModule
      * method returns <code>null</code>.
      * The created entity EJB is added to the mock database automatically
      * using the provided primary key.
+     * This method does not allow <code>null</code> as a parameter, because
+     * the type of the parameter cannot be determined in this case.
      * @param name JNDI name of the bean
      * @param parameters the parameters, <code>null</code> parameters are not allowed,
      *  primitive types are automatically unwrapped
@@ -561,6 +591,8 @@ public class EJBTestModule
      * method returns <code>null</code>.
      * The created entity EJB is added to the mock database automatically
      * using the provided primary key.
+     * This method does not allow <code>null</code> as a parameter, because
+     * the type of the parameter cannot be determined in this case.
      * @param name JNDI name of the bean
      * @param createMethod the name of the create method
      * @param parameters the parameters, <code>null</code> parameters are not allowed,
@@ -571,8 +603,33 @@ public class EJBTestModule
      */
     public Object createEntityBean(String name, String createMethod, Object[] parameters, Object primaryKey)
     {
+        return createEntityBean(name, createMethod, parameters, (Class[])null, primaryKey);
+    }
+    
+    /**
+     * Create an entity EJB. The method looks up the home interface, calls
+     * the <code>create</code> method with the specified parameters
+     * and returns the result, which you can cast to the remote interface.
+     * This method works with the mock container but may fail with
+     * a real remote container.
+     * This method throws a <code>RuntimeException</code> if no object with the 
+     * specified name can be found. If the found object is no EJB home interface,
+     * or if the corresponding <code>create</code> method cannot be found, this
+     * method returns <code>null</code>.
+     * The created entity EJB is added to the mock database automatically
+     * using the provided primary key.
+     * This method does allow <code>null</code> as a parameter.
+     * @param name JNDI name of the bean
+     * @param createMethod the name of the create method
+     * @param parameters the parameters, <code>null</code> is allowed as a parameter
+     * @param primaryKey the primary key
+     * @return the bean 
+     * @throws RuntimeException in case of error
+     */
+    public Object createEntityBean(String name, String createMethod, Object[] parameters, Class[] parameterTypes, Object primaryKey)
+    {
         Object home = lookupHome(name);
-        Object remote = invokeHomeMethod(home, createMethod, parameters);
+        Object remote = invokeHomeMethod(home, createMethod, parameters, parameterTypes);
         Class[] interfaces = home.getClass().getInterfaces();
         Class homeInterface = getHomeInterfaceClass(interfaces);
         if(null != homeInterface && null != remote)
@@ -602,7 +659,7 @@ public class EJBTestModule
     public Object findByPrimaryKey(String name, Object primaryKey)
     {
         Object home = lookupHome(name);
-        return invokeHomeMethod(home, "findByPrimaryKey", new Object[] {primaryKey});
+        return invokeHomeMethod(home, "findByPrimaryKey", new Object[] {primaryKey}, null);
     }
     
     private Class getHomeInterfaceClass(Class[] interfaces)
@@ -626,18 +683,43 @@ public class EJBTestModule
         return object;
     }
     
-    private Object invokeHomeMethod(Object home, String createMethod, Object[] parameters)
+    private Object invokeHomeMethod(Object home, String createMethod, Object[] parameters, Class[] parameterTypes)
     {
+        if(null == parameterTypes)
+        {
+            checkNullParameters(createMethod, parameters);
+        }
         try
         {
-            return MethodUtils.invokeMethod(home, createMethod, parameters);
+            if(null == parameterTypes)
+            {
+                return MethodUtils.invokeMethod(home, createMethod, parameters);
+            }
+            else
+            {
+                return MethodUtils.invokeExactMethod(home, createMethod, parameters, parameterTypes);
+            }
         }
         catch(Exception exc)
         {
+            log.error(exc.getMessage(), exc);
             return null;
         }
     }
     
+    private void checkNullParameters(String createMethod, Object[] parameters)
+    {
+        for(int ii = 0; ii < parameters.length; ii++)
+        {
+            if(null == parameters[ii])
+            {
+                String message = "Calling method " + createMethod + " failed. ";
+                message += "Null is not allowed if the parameter types are not specified.";
+                throw new IllegalArgumentException(message);
+            }
+        }
+    }
+
     /**
      * Resets the {@link com.mockrunner.mock.ejb.MockUserTransaction}.
      * Note: If you do not use the {@link com.mockrunner.mock.ejb.MockUserTransaction}

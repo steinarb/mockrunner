@@ -95,30 +95,64 @@ public class EJBTestModuleTest extends TestCase
         }
     }
     
-	public void testCreateEntityBean() throws Exception
-	{
-		ejbModule.setBusinessInterfaceSuffix("Bean");
-		ejbModule.setImplementationSuffix("EJB");
-		ejbModule.deployEntityBean("com/AnEntityBean", TestEntityEJB.class);
-		try
-		{
-			ejbModule.createBean("com/AnEntity");
-			fail();
-		}
-		catch(RuntimeException exc)
-		{
-			//should throw exception
-		}
-		Object bean = ejbModule.createEntityBean("com/AnEntityBean", "myPk");
-		assertTrue(bean instanceof TestEntityBean);
+    public void testCreateEntityBean() throws Exception
+    {
+        ejbModule.setBusinessInterfaceSuffix("Bean");
+        ejbModule.setImplementationSuffix("EJB");
+        ejbModule.deployEntityBean("com/AnEntityBean", TestEntityEJB.class);
+        try
+        {
+            ejbModule.createBean("com/AnEntity");
+            fail();
+        }
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+        Object bean = ejbModule.createEntityBean("com/AnEntityBean", "myPk");
+        assertTrue(bean instanceof TestEntityBean);
         TestEntityHome home = (TestEntityHome)ejbModule.lookup("com/AnEntityBean");
         assertSame(bean, home.findByPrimaryKey("myPk"));
-		bean = ejbModule.createEntityBean("com/AnEntityBean", "createWithName", new Object[] {"xyz"}, "anotherPk");
-		assertSame(bean, home.findByPrimaryKey("anotherPk"));
+        bean = ejbModule.createEntityBean("com/AnEntityBean", "createWithName", new Object[] {"xyz"}, "anotherPk");
+        assertSame(bean, home.findByPrimaryKey("anotherPk"));
         bean = ejbModule.createEntityBean("com/AnEntityBean", new Object[] {new Short((short)1)}, "thirdPk");
         assertSame(bean, home.findByPrimaryKey("thirdPk"));
-		assertNull(ejbModule.createEntityBean("com/AnEntityBean", new Object[] {"xyz"}, "thirdPk"));
-		assertSame(bean, home.findByPrimaryKey("thirdPk"));
+        assertNull(ejbModule.createEntityBean("com/AnEntityBean", new Object[] {"xyz"}, "thirdPk"));
+        assertSame(bean, home.findByPrimaryKey("thirdPk"));
+    }
+    
+    public void testCreateWithNullParameters() throws Exception
+    {
+        ejbModule.deploySessionBean("com/MyLookupTest", TestSessionBean.class);
+        try
+        {
+            ejbModule.createBean("com/MyLookupTest", new Object[] {null});
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        Object bean = ejbModule.createBean("com/MyLookupTest", "create", new Object[] {null}, new Class[] {Integer.class});
+        assertTrue(bean instanceof TestSession);
+        bean = ejbModule.createBean("com/MyLookupTest", "create", new Object[] {new Integer(1), null}, new Class[] {Integer.TYPE, Boolean.class});
+        assertTrue(bean instanceof TestSession);
+        bean = ejbModule.createBean("com/MyLookupTest", "create", new Object[] {new Integer(1), null}, new Class[] {Integer.class, Boolean.class});
+        assertNull(bean);
+        ejbModule.setBusinessInterfaceSuffix("Bean");
+        ejbModule.setImplementationSuffix("EJB");
+        ejbModule.deployEntityBean("com/AnEntityBean", TestEntityEJB.class);
+        try
+        {
+            ejbModule.createEntityBean("com/AnEntityBean", "createWithName", new Object[] {null}, "Pk");
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        bean = ejbModule.createEntityBean("com/AnEntityBean", "createWithName", new Object[] {"xyz"}, new Class[] {String.class}, "Pk");
+        assertTrue(bean instanceof TestEntityBean);
     }
     
     public void testFindByPrimaryKey() throws Exception
@@ -440,7 +474,7 @@ public class EJBTestModuleTest extends TestCase
     
         }
         
-        public void ejbCreate(int testInt) throws CreateException
+        public void ejbCreate(Integer testInt) throws CreateException
         {
 
         }
@@ -485,7 +519,7 @@ public class EJBTestModuleTest extends TestCase
     {
         public TestSession create() throws CreateException, RemoteException;
         
-        public TestSession create(int testInt) throws CreateException, RemoteException;
+        public TestSession create(Integer testInt) throws CreateException, RemoteException;
         
         public TestSession create(int testInt, Boolean testBoolean) throws CreateException, RemoteException;
     
