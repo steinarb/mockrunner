@@ -1,6 +1,8 @@
 
 mockrunner-0.2.5:
 
+- updated nekohtml.jar from 0.8.2 to 0.8.3
+
 mockrunner-0.2.1:
 
 - fixed bugs 823527, 835062 and 836259
