@@ -42,10 +42,18 @@ import com.mockrunner.jms.TransmissionManagerWrapper;
  * otherwise, it will not be acknowledged. According
  * to JMS specification, the acknowledged mode must
  * be ignored for transacted session. This is currently
- * not implemented. However, the framework keeps track if a
- * transaction is committed or rolled back, so
- * you can test this and rely on the container for
- * the rest.
+ * not implemented, i.e. transacted sessions behave like
+ * sessions with acknowledge mode AUTO_ACKNOWLEDGE. 
+ * Messages are acknowledged even if the transaction is 
+ * rolled back. However, the framework keeps track if a
+ * transaction is committed or rolled back, so you can test 
+ * this and rely on the container for the rest.
+ * You can set a <code>MessageListener</code> directly to
+ * the session. This is not meant for application use in JMS
+ * and it's not recommended to do it. This mock session
+ * receives any message of any known <code>Queue</code> and
+ * <code>Topic</code>, if such a distinguished 
+ * <code>MessageListener</code> is registered.
  */
 public class MockSession implements Session
 {
