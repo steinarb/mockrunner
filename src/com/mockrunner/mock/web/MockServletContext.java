@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
@@ -17,6 +18,8 @@ import java.util.Vector;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletContextAttributeEvent;
+import javax.servlet.ServletContextAttributeListener;
 import javax.servlet.ServletException;
 
 import com.mockrunner.util.ArrayUtil;
@@ -36,6 +39,7 @@ public class MockServletContext implements ServletContext
     private Map resourcePaths;
     private Map resourceStreams;
     private String servletContextName;
+    private List attributeListener;
     
     public MockServletContext()
     {
@@ -48,6 +52,12 @@ public class MockServletContext implements ServletContext
         resources = new HashMap();
         resourcePaths = new HashMap();
         resourceStreams = new HashMap();
+        attributeListener = new ArrayList();
+    }
+    
+    public synchronized void addAttributeListener(ServletContextAttributeListener listener)
+    {
+        attributeListener.add(listener);
     }
     
     public synchronized void clearAttributes()
@@ -68,12 +78,19 @@ public class MockServletContext implements ServletContext
 
     public synchronized void removeAttribute(String key)
     {
+        Object value = attributes.get(key);
         attributes.remove(key);
+        if(null != value)
+        {
+            callAttributeListenersRemovedMethod(key, value);
+        }
     }
 
     public synchronized void setAttribute(String key, Object value)
     {
+        Object oldValue = attributes.get(key);
         attributes.put(key, value);
+        handleListenerCalls(key, value, oldValue);
     }
     
     public synchronized RequestDispatcher getNamedDispatcher(String arg0)
@@ -232,5 +249,55 @@ public class MockServletContext implements ServletContext
     public synchronized void log(String message)
     {
 
+    }
+    
+    private void handleListenerCalls(String key, Object value, Object oldValue)
+    {
+        if(null != oldValue)
+        {
+            if(value != null)
+            {
+                callAttributeListenersReplacedMethod(key, oldValue);
+            }
+            else
+            {
+                callAttributeListenersRemovedMethod(key, oldValue);
+            }
+        }
+        else
+        {
+            if(value != null)
+            {
+                callAttributeListenersAddedMethod(key, value);
+            }
+    
+        }
+    }
+    
+    private synchronized void callAttributeListenersAddedMethod(String key, Object value)
+    {
+        for(int ii = 0; ii < attributeListener.size(); ii++)
+        {
+            ServletContextAttributeEvent event = new ServletContextAttributeEvent(this, key, value);
+            ((ServletContextAttributeListener)attributeListener.get(ii)).attributeAdded(event);
+        }
+    }
+
+    private synchronized void callAttributeListenersReplacedMethod(String key, Object value)
+    {
+        for(int ii = 0; ii < attributeListener.size(); ii++)
+        {
+            ServletContextAttributeEvent event = new ServletContextAttributeEvent(this, key, value);
+            ((ServletContextAttributeListener)attributeListener.get(ii)).attributeReplaced(event);
+        }
+    }
+
+    private synchronized void callAttributeListenersRemovedMethod(String key, Object value)
+    {
+        for(int ii = 0; ii < attributeListener.size(); ii++)
+        {
+            ServletContextAttributeEvent event = new ServletContextAttributeEvent(this, key, value);
+            ((ServletContextAttributeListener)attributeListener.get(ii)).attributeRemoved(event);
+        }
     }
 }
