@@ -6,6 +6,7 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.EntityBean;
 import javax.ejb.EntityContext;
+import javax.ejb.FinderException;
 import javax.ejb.MessageDrivenBean;
 import javax.ejb.MessageDrivenContext;
 import javax.ejb.SessionBean;
@@ -62,30 +63,30 @@ public class EJBTestModuleTest extends TestCase
 		MockContextFactory.revertSetAsInitial();
 	}
     
-    public void testLookupSessionBean() throws Exception
+    public void testCreateSessionBean() throws Exception
     {
         ejbModule.deploySessionBean("com/MyLookupTest", TestSessionBean.class);
         try
         {
-            ejbModule.lookupBean("com/MyLookupTestTest");
+            ejbModule.createBean("com/MyLookupTestTest");
             fail();
         }
         catch(RuntimeException exc)
         {
             //should throw exception
         }
-        Object bean = ejbModule.lookupBean("com/MyLookupTest");
+        Object bean = ejbModule.createBean("com/MyLookupTest");
         assertTrue(bean instanceof TestSession);
-        bean = ejbModule.lookupBean("com/MyLookupTest", new Object[] {new Integer(1)});
+        bean = ejbModule.createBean("com/MyLookupTest", new Object[] {new Integer(1)});
         assertTrue(bean instanceof TestSession);
-        bean = ejbModule.lookupBean("com/MyLookupTest", new Object[] {new Integer(1), new Boolean(true)});
+        bean = ejbModule.createBean("com/MyLookupTest", new Object[] {new Integer(1), new Boolean(true)});
         assertTrue(bean instanceof TestSession);
-        bean = ejbModule.lookupBean("com/MyLookupTest", "createWithPostfix", new Object[] {new Integer(1), new Boolean(true)});
+        bean = ejbModule.createBean("com/MyLookupTest", "createWithPostfix", new Object[] {new Integer(1), new Boolean(true)});
         assertTrue(bean instanceof TestSession);
-        assertNull(ejbModule.lookupBean("com/MyLookupTest", "createWithPostfiy", new Object[] {new Integer(1), new Boolean(true)}));
+        assertNull(ejbModule.createBean("com/MyLookupTest", "createWithPostfiy", new Object[] {new Integer(1), new Boolean(true)}));
         try
         {
-            ejbModule.lookupBean("com/MyLookupTestTest", new Object[] {new Boolean(true), new Integer(1)});
+            ejbModule.createBean("com/MyLookupTestTest", new Object[] {new Boolean(true), new Integer(1)});
             fail();
         }
         catch(RuntimeException exc)
@@ -94,26 +95,29 @@ public class EJBTestModuleTest extends TestCase
         }
     }
     
-	public void testLookupEntityBean() throws Exception
+	public void testCreateEntityBean() throws Exception
 	{
 		ejbModule.setBusinessInterfaceSuffix("Bean");
 		ejbModule.setImplementationSuffix("EJB");
 		ejbModule.deployEntityBean("com/AnEntityBean", TestEntityEJB.class);
 		try
 		{
-			ejbModule.lookupBean("com/AnEntity");
+			ejbModule.createBean("com/AnEntity");
 			fail();
 		}
 		catch(RuntimeException exc)
 		{
 			//should throw exception
 		}
-		Object bean = ejbModule.lookupBean("com/AnEntityBean");
+		Object bean = ejbModule.createEntityBean("com/AnEntityBean", "myPk");
 		assertTrue(bean instanceof TestEntityBean);
-		bean = ejbModule.lookupBean("com/AnEntityBean", "createWithName", new Object[] {"xyz"});
-		assertTrue(bean instanceof TestEntityBean);
-		assertNull(ejbModule.lookupBean("com/AnEntityBean", new Object[] {"xyz"}));
-	}
+        TestEntityHome home = (TestEntityHome)ejbModule.lookup("com/AnEntityBean");
+        assertSame(bean, home.findByPrimaryKey("myPk"));
+		bean = ejbModule.createEntityBean("com/AnEntityBean", "createWithName", new Object[] {"xyz"}, "anotherPk");
+		assertSame(bean, home.findByPrimaryKey("anotherPk"));
+        assertTrue(bean instanceof TestEntityBean);
+		assertNull(ejbModule.createBean("com/AnEntityBean", new Object[] {"xyz"}));
+    }
         
     public void testDeploySessionBeanClass() throws Exception
     {
@@ -525,12 +529,18 @@ public class EJBTestModuleTest extends TestCase
 		public String getName() throws RemoteException;
 		public void setName(String name) throws RemoteException;
 	}
+    
+    public static interface SuperEntityHome extends javax.ejb.EJBHome
+    {
+        
+    }
 
-	public static interface TestEntityHome extends javax.ejb.EJBHome
+	public static interface TestEntityHome extends SuperEntityHome
 	{
 		public TestEntityBean create() throws CreateException, RemoteException;
 		public TestEntityBean createWithName(String name) throws CreateException, RemoteException;
-	}
+        public TestEntityBean findByPrimaryKey(String pk) throws FinderException, RemoteException;
+    }
 	
 	public static class TestMessageBean implements MessageDrivenBean, MessageListener
 	{
