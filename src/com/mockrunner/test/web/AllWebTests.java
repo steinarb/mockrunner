@@ -7,7 +7,7 @@ public class AllWebTests
 {
     public static Test suite()
     {
-        TestSuite suite = new TestSuite("Test for com.mockrunner.web.test");
+        TestSuite suite = new TestSuite("Test for com.mockrunner.test.web");
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(ActionTestModuleTest.class));
         suite.addTest(new TestSuite(MockHttpSessionTest.class));
