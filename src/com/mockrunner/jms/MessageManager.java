@@ -3,6 +3,8 @@ package com.mockrunner.jms;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jms.JMSException;
+
 import com.mockrunner.mock.jms.MockBytesMessage;
 import com.mockrunner.mock.jms.MockMapMessage;
 import com.mockrunner.mock.jms.MockMessage;
@@ -40,7 +42,9 @@ public class MessageManager
      */
     public MockMessage createMessage()
     {
-        return null;
+        MockMessage message = new MockMessage();
+        messages.add(message);
+        return message;
     }
     
     /**
@@ -52,7 +56,8 @@ public class MessageManager
      */
     public MockMessage getMessage(int index)
     {
-        return null;
+        if(messages.size() <= index) return null;
+        return (MockMessage)messages.get(index);
     }
     
     /**
@@ -62,7 +67,9 @@ public class MessageManager
      */
     public MockBytesMessage createBytesMessage()
     {
-        return null;
+        MockBytesMessage message = new MockBytesMessage();
+        byteMessages.add(message);
+        return message;
     }
 
     /**
@@ -74,7 +81,8 @@ public class MessageManager
      */
     public MockBytesMessage getBytesMessage(int index)
     {
-        return null;
+        if(byteMessages.size() <= index) return null;
+        return (MockBytesMessage)byteMessages.get(index);
     }
     
     /**
@@ -84,7 +92,9 @@ public class MessageManager
      */
     public MockMapMessage createMapMessage()
     {
-        return null;
+        MockMapMessage message = new MockMapMessage();
+        mapMessages.add(message);
+        return message;
     }
 
     /**
@@ -96,7 +106,8 @@ public class MessageManager
      */
     public MockMapMessage getMapMessage(int index)
     {
-        return null;
+        if(mapMessages.size() <= index) return null;
+        return (MockMapMessage)mapMessages.get(index);
     }
     
     /**
@@ -106,7 +117,17 @@ public class MessageManager
      */
     public MockTextMessage createTextMessage(String text)
     {
-        return null;
+        MockTextMessage message = new MockTextMessage();
+        try
+        {
+            message.setText(text);
+        }
+        catch(JMSException exc)
+        {
+            
+        }
+        textMessages.add(message);
+        return message;
     }
 
     /**
@@ -118,7 +139,8 @@ public class MessageManager
      */
     public MockTextMessage getTextMessage(int index)
     {
-        return null;
+        if(textMessages.size() <= index) return null;
+        return (MockTextMessage)textMessages.get(index);
     }
     
     /**
@@ -128,7 +150,9 @@ public class MessageManager
      */
     public MockStreamMessage createStreamMessage()
     {
-        return null;
+        MockStreamMessage message = new MockStreamMessage();
+        streamMessages.add(message);
+        return message;
     }
 
     /**
@@ -140,7 +164,8 @@ public class MessageManager
      */
     public MockStreamMessage getStreamMessage(int index)
     {
-        return null;
+        if(streamMessages.size() <= index) return null;
+        return (MockStreamMessage)streamMessages.get(index);
     }
     
     /**
@@ -150,7 +175,17 @@ public class MessageManager
      */
     public MockObjectMessage createObjectMessage(java.io.Serializable object)
     {
-        return null;
+        MockObjectMessage message = new MockObjectMessage();
+        try
+        {
+            message.setObject(object);
+        }
+        catch(JMSException exc)
+        {
+            
+        }
+        objectMessages.add(message);
+        return message;
     }
 
     /**
@@ -162,6 +197,7 @@ public class MessageManager
      */
     public MockObjectMessage getObjectMessage(int index)
     {
-        return null;
+        if(objectMessages.size() <= index) return null;
+        return (MockObjectMessage)objectMessages.get(index);
     }
 }
