@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.mock.jdbc.MockResultSet;
-import com.mockrunner.util.SearchUtil;
 
 /**
  * Abstract base class for all <code>ResultSet</code> handlers.
@@ -217,7 +216,8 @@ public abstract class AbstractResultSetHandler
      */
     public MockResultSet getResultSet(String sql)
     {
-        List list = SearchUtil.getMatchingObjectsResolveCollection(resultSetsForStatement, sql, getCaseSensitive(), getExactMatch(), true);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch());
+        List list = matcher.getMatchingObjects(resultSetsForStatement, sql, true, true);
         if(null != list && list.size() > 0)
         {
             return (MockResultSet)list.get(0);
@@ -247,7 +247,8 @@ public abstract class AbstractResultSetHandler
      */
     public Integer getUpdateCount(String sql)
     {
-        List list = SearchUtil.getMatchingObjectsResolveCollection(updateCountForStatement, sql, getCaseSensitive(), getExactMatch(), true);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch());
+        List list = matcher.getMatchingObjects(updateCountForStatement, sql, true, true);
         if(null != list && list.size() > 0)
         {
             return (Integer)list.get(0);
@@ -279,7 +280,8 @@ public abstract class AbstractResultSetHandler
      */
     public Boolean getReturnsResultSet(String sql)
     {
-        List list = SearchUtil.getMatchingObjectsResolveCollection(returnsResultSetMap, sql, getCaseSensitive(), getExactMatch(), true);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch());
+        List list = matcher.getMatchingObjects(returnsResultSetMap, sql, true, true);
         if(null != list && list.size() > 0)
         {
             return (Boolean)list.get(0);
@@ -296,7 +298,8 @@ public abstract class AbstractResultSetHandler
      */
     public boolean getThrowsSQLException(String sql)
     {
-        if(SearchUtil.contains(throwsSQLException, sql, getCaseSensitive(), getExactMatch(), true)) return true;
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch());
+        if(matcher.contains(throwsSQLException, sql, true)) return true;
         return false;
     }
     
