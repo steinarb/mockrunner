@@ -5,6 +5,8 @@ import java.io.Reader;
 import java.sql.SQLException;
 import java.util.Arrays;
 
+import org.apache.commons.beanutils.MethodUtils;
+
 import com.mockrunner.mock.jdbc.MockArray;
 import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockClob;
@@ -27,7 +29,8 @@ public class ParameterUtil
      * are copied into new allocated streams resp. arrays.
      * <code>Ref</code>, <code>Array</code>, <code>Blob</code> and 
      * <code>Clob</code> objects are cloned. All other objects are
-     * returned unchanged.
+     * returned clone by calling the clone method. If the object is not
+     * cloneable, it is returned unchanged.
      * @param source the parameter to copy
      * @return a copy of the parameter
      */
@@ -61,6 +64,17 @@ public class ParameterUtil
         if(source instanceof Reader)
         {
             return StreamUtil.copyReader((Reader)source);
+        }
+        if(source instanceof Cloneable)
+        {
+        	try
+			{
+				return MethodUtils.invokeExactMethod(source, "clone", null);
+			}
+			catch(Exception exc)
+			{
+				return source;
+			}
         }
         return source;
     }

@@ -17,6 +17,7 @@ public class AllJDBCTests
         suite.addTest(new TestSuite(MockStatementTest.class));
         suite.addTest(new TestSuite(FileResultSetFactoryTest.class));
         suite.addTest(new TestSuite(JDBCMockObjectFactoryTest.class));
+		suite.addTest(new TestSuite(AbstractParameterResultSetHandlerTest.class));
         //$JUnit-END$
         return suite;
     }

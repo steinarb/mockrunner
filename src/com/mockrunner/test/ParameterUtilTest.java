@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.Date;
 
 import junit.framework.TestCase;
 
@@ -68,5 +69,20 @@ public class ParameterUtilTest extends TestCase
         MockArray copyMockArray = (MockArray)ParameterUtil.copyParameter(testMockArray);
         assertFalse(testMockArray == copyMockArray);
         assertTrue(ParameterUtil.compareParameter(testMockArray, copyMockArray));
+        Date testDate = new Date();
+        Date copyDate = (Date)ParameterUtil.copyParameter(testDate);
+        assertNotSame(testDate, copyDate);
+        assertEquals(testDate, copyDate);
+        TestParameter parameter = new TestParameter();
+		TestParameter copyParameter = (TestParameter)ParameterUtil.copyParameter(parameter);
+    	assertSame(parameter, copyParameter);
     }
+    
+    public static class TestParameter implements Cloneable
+    {
+		public Object clone() throws CloneNotSupportedException
+		{
+			throw new RuntimeException("OOPPSS");
+		}
+	}
 }
