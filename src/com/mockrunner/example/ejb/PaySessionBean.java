@@ -15,18 +15,18 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 /*
- * @ejb:bean name="PaySession"
+ * @ejb.bean name="PaySession"
  *           display-name="PaySessionBean"
  *           type="Stateless"
  *           transaction-type="Container"
  *           jndi-name="com/mockrunner/example/PaySession"
  * 
- * @ejb:resource-ref res-ref-name="jdbc/MySQLDB"
+ * @ejb.resource-ref res-ref-name="jdbc/MySQLDB"
  *                   res-type="javax.sql.DataSource"
  *                   res-auth="Container"
  *                   res-sharing-scope="Shareable"
  * 
- * @jboss:resource-manager res-man-name="jdbc/MySQLDB"
+ * @jboss.resource-manager res-man-name="jdbc/MySQLDB"
  *                         res-man-jndi-name="java:/MySQLDB"
  */
 /**
@@ -39,8 +39,8 @@ public class PaySessionBean implements SessionBean
     private SessionContext sessionContext;
     
     /*
-     * @ejb:interface-method
-     * @ejb:transaction type="Required"
+     * @ejb.interface-method
+     * @ejb.transaction type="Required"
      */
     public void payBill(String customerId, String billId, double amount) throws PaySessionException
     {
@@ -135,7 +135,7 @@ public class PaySessionBean implements SessionBean
     }
     
     /*
-     * @ejb:create-method
+     * @ejb.create-method
      */
     public void ejbCreate() throws CreateException
     {

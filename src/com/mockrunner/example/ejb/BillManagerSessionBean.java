@@ -14,7 +14,7 @@ import com.mockrunner.example.ejb.interfaces.BillEntity;
 import com.mockrunner.example.ejb.interfaces.BillEntityHome;
 
 /*
- * @ejb:bean name="BillManagerSession"
+ * @ejb.bean name="BillManagerSession"
  *           display-name="BillManagerSessionBean"
  *           type="Stateless"
  *           transaction-type="Container"
@@ -31,8 +31,8 @@ public class BillManagerSessionBean implements SessionBean
     private SessionContext sessionContext;
     
     /*
-     * @ejb:interface-method
-     * @ejb:transaction type="Required"
+     * @ejb.interface-method
+     * @ejb.transaction type="Required"
      **/
     public void markAsPaid()
     {
@@ -56,7 +56,7 @@ public class BillManagerSessionBean implements SessionBean
     }
     
     /*
-     * @ejb:create-method
+     * @ejb.create-method
      **/
     public void ejbCreate() throws CreateException
     {
