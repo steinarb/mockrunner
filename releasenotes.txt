@@ -2,3 +2,4 @@
 mockrunner-0.1:
 
 - Inital release (includes examples and JavaDoc)
+- Supports Struts 1.1.0 and Servlet API 2.3

@@ -3,7 +3,7 @@ package com.mockrunner.example.test;
 import com.mockrunner.example.AuthenticationStrategy;
 
 /**
- * Mock implementation of {@link de.mockrunner.example.AuthenticationStrategy}
+ * Mock implementation of {@link com.mockrunner.example.AuthenticationStrategy}
  * because we do not want a database connection into the tests.
  * Used by {@link AuthenticationActionTest}.
  */

@@ -6,7 +6,7 @@ import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.example.StoreDataAction;
 
 /**
- * Example test for {@link de.mockrunner.example.StoreDataAction}. 
+ * Example test for {@link com.mockrunner.example.StoreDataAction}. 
  * Demonstrates multithread testing. The use of an inner thread 
  * class and  a single test method is a standard pattern that can 
  * be used in any multithreading test for Servlets and actions.
@@ -16,9 +16,9 @@ import com.mockrunner.example.StoreDataAction;
  * container behaviour. See the constructor of the thread how
  * to deal with the test module and factory.
  * Remove the <code>synchronized</code> keyword in
- * {@link de.mockrunner.example.StoreDataAction} and the test
+ * {@link com.mockrunner.example.StoreDataAction} and the test
  * will fail.
- * {@link de.mockrunner.base.MultiThreadTestSuite} is meant to
+ * {@link com.mockrunner.base.MultiThreadTestSuite} is meant to
  * make multithread testing much easier, but it is not working
  * properly yet.
  */

@@ -58,8 +58,8 @@
            		 windowtitle="Mockrunner">
 
 			    <fileset dir="${src}" defaultexcludes="yes">
-			    	<include name="de/mockrunner/**" />
-			    	<exclude name="de/mockrunner/test/**" />
+			    	<include name="com/mockrunner/**" />
+			    	<exclude name="com/mockrunner/test/**" />
 			    </fileset>
 
     			<doctitle><![CDATA[<h1>Mockrunner</h1>]]></doctitle>

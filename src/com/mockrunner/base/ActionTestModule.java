@@ -19,7 +19,7 @@ import com.mockrunner.mock.MockActionMapping;
 import com.mockrunner.mock.MockPageContext;
 
 /**
- * Module for Struts action tests. Simulates the Struts container
+ * Module for Struts action tests. Simulates Struts
  * without reading the <i>struts-config.xml</i> file
  */
 public class ActionTestModule
