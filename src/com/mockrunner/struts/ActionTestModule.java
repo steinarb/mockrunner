@@ -28,7 +28,7 @@ import com.mockrunner.mock.web.WebMockObjectFactory;
  * without reading the <i>struts-config.xml</i> file.
  * Per default this class does everything like Struts
  * when calling an action but you can change the behaviour
- * (e.g. disable form poulation).
+ * (e.g. disable form population).
  */
 public class ActionTestModule
 {
