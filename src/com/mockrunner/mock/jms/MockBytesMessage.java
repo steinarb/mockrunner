@@ -23,13 +23,28 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     private DataOutputStream outStream;
     private ByteArrayOutputStream byteOutStream;
     private DataInputStream inStream;
+    private long bodyLength;
     private boolean isInWriteMode;
     
     public MockBytesMessage()
     {
-        isInWriteMode = true;
-        byteOutStream = new ByteArrayOutputStream();
-        outStream = new DataOutputStream(byteOutStream);
+        try
+        {
+            clearBody();
+        }
+        catch(JMSException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
+    public long getBodyLength() throws JMSException
+    {
+        if(isInWriteMode)
+        {
+            throw new MessageNotReadableException("Message is in write mode");
+        }
+        return bodyLength;
     }
 
     public boolean readBoolean() throws JMSException
@@ -538,6 +553,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
         {
             throw new JMSException(exc.getMessage());
         }
+        bodyLength = byteOutStream.size();
         inStream = new DataInputStream(new ByteArrayInputStream(byteOutStream.toByteArray()));
     }
     
@@ -545,6 +561,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     {
         super.clearBody();
         isInWriteMode = true;
+        bodyLength = 0;
         byteOutStream = new ByteArrayOutputStream();
         outStream = new DataOutputStream(byteOutStream);
     }
@@ -572,5 +589,4 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
         }
         return value;
     }
-
 }
