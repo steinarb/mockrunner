@@ -13,17 +13,12 @@ import javax.servlet.jsp.tagext.BodyContent;
  */
 public class MockBodyContent extends BodyContent
 {
-    private String body;
+    private MockJspWriter body;
     
     public MockBodyContent(JspWriter writer)
     {
         super(writer);
-        clearBody();
-    }
-    
-    public void setBody(String body)
-    {
-        this.body = body;
+        body = new MockJspWriter();
     }
 
     public Reader getReader()
@@ -33,7 +28,7 @@ public class MockBodyContent extends BodyContent
 
     public String getString()
     {
-        return body;
+        return body.getOutputAsString();
     }
 
     public void writeOut(Writer writer) throws IOException
@@ -43,131 +38,131 @@ public class MockBodyContent extends BodyContent
     
     public void clearBody()
     {
-        body = "";
+        body = new MockJspWriter();
     }
 
     public void newLine() throws IOException
     {
-        
+        body.newLine();
     }
 
     public void print(boolean arg0) throws IOException
     {
-        
+        body.print(arg0);
     }
 
     public void print(char arg0) throws IOException
     {
-        
+        body.print(arg0);
     }
 
     public void print(int arg0) throws IOException
     {
-        
+        body.print(arg0);
     }
 
     public void print(long arg0) throws IOException
     {
-        
+        body.print(arg0);
     }
 
     public void print(float arg0) throws IOException
     {
-        
+        body.print(arg0);
     }
 
     public void print(double arg0) throws IOException
     {
-        
+        body.print(arg0);
     }
 
     public void print(char[] arg0) throws IOException
     {
-        
+        body.print(arg0);
     }
 
     public void print(String arg0) throws IOException
     {
-        
+        body.print(arg0);
     }
 
     public void print(Object arg0) throws IOException
     {
-        
+        body.print(arg0);
     }
 
     public void println() throws IOException
     {
-        
+        body.println();
     }
 
     public void println(boolean arg0) throws IOException
     {
-        
+        body.println(arg0);
     }
 
     public void println(char arg0) throws IOException
     {
-        
+        body.println(arg0);
     }
 
     public void println(int arg0) throws IOException
     {
-        
+        body.println(arg0);
     }
 
     public void println(long arg0) throws IOException
     {
-        
+        body.println(arg0);
     }
 
     public void println(float arg0) throws IOException
     {
-        
+        body.println(arg0);
     }
     
     public void println(double arg0) throws IOException
     {
-        
+        body.println(arg0);
     }
 
     public void println(char[] arg0) throws IOException
     {
-        
+        body.println(arg0);
     }
 
     public void println(String arg0) throws IOException
     {
-        
+        body.println(arg0);
     }
 
     public void println(Object arg0) throws IOException
     {
-        
+        body.println(arg0);
     }
 
     public void clear() throws IOException
     {
-        
+        body.clear();
     }
 
     public void clearBuffer() throws IOException
     {
-        
+        body.clearBuffer();
     }
 
     public void close() throws IOException
     {
-        
+        body.close();
     }
 
     public int getRemaining()
     {
-        return 0;
+        return body.getRemaining();
     }
 
     public void write(char[] cbuf, int off, int len) throws IOException
     {
-        
+        body.write(cbuf, off, len);
     }
 }

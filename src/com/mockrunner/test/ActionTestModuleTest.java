@@ -6,10 +6,10 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
 import junit.framework.TestCase;
-import com.mockrunner.base.ActionTestModule;
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.MockActionForward;
+import com.mockrunner.struts.ActionTestModule;
 
 /**
  * Test for {@link com.mockrunner.base.ActionTestModule}

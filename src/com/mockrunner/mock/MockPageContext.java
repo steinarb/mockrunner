@@ -16,7 +16,6 @@ public class MockPageContext extends org.apache.struts.mock.MockPageContext
 {
     private JspWriter jspWriter;
     private Stack outStack;
-    private String body;
 
     public MockPageContext(ServletConfig config, ServletRequest request, ServletResponse response)
     {
@@ -24,12 +23,7 @@ public class MockPageContext extends org.apache.struts.mock.MockPageContext
         jspWriter = new MockJspWriter();
         outStack = new Stack();
     }
-    
-    public void setBody(String body)
-    {
-        this.body = body;
-    }
-
+  
     public JspWriter getOut()
     {
         return jspWriter;
@@ -68,7 +62,6 @@ public class MockPageContext extends org.apache.struts.mock.MockPageContext
     {
         outStack.push(jspWriter);
         MockBodyContent bodyContent = new MockBodyContent(jspWriter);
-        bodyContent.setBody(body);
         jspWriter = bodyContent;
         return bodyContent;
     }

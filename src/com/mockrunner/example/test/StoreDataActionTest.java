@@ -1,9 +1,9 @@
 package com.mockrunner.example.test;
 
-import com.mockrunner.base.ActionTestCaseAdapter;
-import com.mockrunner.base.ActionTestModule;
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.example.StoreDataAction;
+import com.mockrunner.struts.ActionTestCaseAdapter;
+import com.mockrunner.struts.ActionTestModule;
 
 /**
  * Example test for {@link com.mockrunner.example.StoreDataAction}. 

@@ -1,5 +1,8 @@
 package com.mockrunner.base;
 
+import com.mockrunner.struts.*;
+import com.mockrunner.tag.*;
+
 import junit.framework.TestCase;
 
 /**

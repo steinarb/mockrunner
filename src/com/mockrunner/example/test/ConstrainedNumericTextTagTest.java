@@ -1,12 +1,12 @@
 package com.mockrunner.example.test;
 
-import com.mockrunner.base.TagTestCaseAdapter;
 import com.mockrunner.example.ConstrainedNumericTextTag;
+import com.mockrunner.tag.TagTestCaseAdapter;
 
 /**
  * Example test for the {@link com.mockrunner.example.ConstrainedNumericTextTag}.
- * Demonstrates the usage of {@link com.mockrunner.base.TagTestModule} 
- * resp. {@link com.mockrunner.base.TagTestCaseAdapter}.
+ * Demonstrates the usage of {@link com.mockrunner.tag.TagTestModule} 
+ * resp. {@link com.mockrunner.tag.TagTestCaseAdapter}.
  */
 public class ConstrainedNumericTextTagTest extends TagTestCaseAdapter
 {

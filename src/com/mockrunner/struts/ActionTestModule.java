@@ -1,4 +1,4 @@
-package com.mockrunner.base;
+package com.mockrunner.struts;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -14,6 +14,8 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.taglib.html.Constants;
 
+import com.mockrunner.base.MockObjectFactory;
+import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.MockActionForward;
 import com.mockrunner.mock.MockActionMapping;
 import com.mockrunner.mock.MockPageContext;
@@ -689,12 +691,13 @@ public class ActionTestModule
      * Calls the action of the specified type using
      * no <code>ActionForm</code>.
      * @param action the <code>Class</code> of the action
+     * @return the resulting <code>ActionForward</code>
      */
-    public void actionPerform(Class action)
+    public ActionForward actionPerform(Class action)
     {
         try
         {
-            actionPerform(action, (ActionForm) null);
+            return actionPerform(action, (ActionForm) null);
         }
         catch (Exception exc)
         {
@@ -711,18 +714,18 @@ public class ActionTestModule
      * disabled, the form will not be populated, use {@link #setDoPopulate}). 
      * If form validation is enabled (use {@link #setValidate}) and 
      * fails, the action will not be called. In this case,
-     * the returned  <code>ActionForward</code> (get it with 
-     * {@link #getActionForward}) is based on the input attribute. 
-     * (Set it with {@link #setInput}).
+     * the returned  <code>ActionForward</code> is based on the 
+     * input attribute. (Set it with {@link #setInput}).
      * @param action the <code>Class</code> of the action
      * @param form the <code>Class</code> of the form
+     * @return the resulting <code>ActionForward</code>
      */
-    public void actionPerform(Class action, Class form)
+    public ActionForward actionPerform(Class action, Class form)
     {
         try
         {
             createActionForm(form);
-            actionPerform(action, formObj);
+            return actionPerform(action, formObj);
         }
         catch (Exception exc)
         {
@@ -742,12 +745,12 @@ public class ActionTestModule
      * using {@link #setReset}. If form validation is enabled 
      * (use {@link #setValidate}) and fails, the action will not be 
      * called. In this case, the returned <code>ActionForward</code> 
-     * (get it with  {@link #getActionForward}) is based on the input 
-     * attribute. (Set it with {@link #setInput}).
+     * is based on the input attribute. (Set it with {@link #setInput}).
      * @param action the <code>Class</code> of the action
      * @param form the <code>ActionForm</code> object
+     * @return the resulting <code>ActionForward</code>
      */
-    public void actionPerform(Class action, ActionForm form)
+    public ActionForward actionPerform(Class action, ActionForm form)
     {
         try
         {
@@ -773,6 +776,7 @@ public class ActionTestModule
             exc.printStackTrace();
             throw new RuntimeException(exc.getMessage());
         }
+        return getActionForward();
     }
 
     private void setResult(ActionForward currentForward)

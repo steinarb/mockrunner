@@ -1,14 +1,14 @@
 package com.mockrunner.example.test;
 
-import com.mockrunner.base.ActionTestCaseAdapter;
 import com.mockrunner.example.AuthenticationAction;
 import com.mockrunner.example.AuthenticationForm;
 import com.mockrunner.example.AuthenticationStrategy;
+import com.mockrunner.struts.ActionTestCaseAdapter;
 
 /**
  * Example test for the {@link com.mockrunner.example.AuthenticationAction}.
- * Demonstrates most of the features of {@link com.mockrunner.base.ActionTestModule} 
- * resp. {@link com.mockrunner.base.ActionTestCaseAdapter}.
+ * Demonstrates most of the features of {@link com.mockrunner.struts.ActionTestModule} 
+ * resp. {@link com.mockrunner.struts.ActionTestCaseAdapter}.
  */
 public class AuthenticationActionTest extends ActionTestCaseAdapter
 {
