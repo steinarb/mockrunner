@@ -3,6 +3,7 @@ package com.mockrunner.test;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import com.mockrunner.example.ejb.LogActionTest;
 import com.mockrunner.example.jdbc.BankTest;
 import com.mockrunner.example.jdbc.BookstoreTest;
 import com.mockrunner.example.jdbc.PayActionTest;
@@ -47,6 +48,7 @@ public class AllTests
         suite.addTest(new TestSuite(BankTest.class));
         suite.addTest(new TestSuite(PayActionTest.class));
         suite.addTest(new TestSuite(BookstoreTest.class));
+        suite.addTest(new TestSuite(LogActionTest.class));
         //$JUnit-END$
         return suite;
     }

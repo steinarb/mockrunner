@@ -18,6 +18,7 @@ public class JDBCMockObjectFactory
     private MockDataSource dataSource;
     private MockDriver driver;
     private MockConnection connection;
+    private MockUserTransaction transaction;
     
     /**
      * Creates a new set of mock objects.
@@ -27,6 +28,7 @@ public class JDBCMockObjectFactory
         dataSource = new MockDataSource();
         driver = new MockDriver();
         connection = new MockConnection();
+        transaction = new MockUserTransaction();
         setUpDependencies();
     }
     
@@ -74,5 +76,14 @@ public class JDBCMockObjectFactory
     public MockConnection getMockConnection()
     {
         return connection;
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.mock.jdbc.MockUserTransaction}.
+     * @return the {@link com.mockrunner.mock.jdbc.MockUserTransaction}
+     */
+    public MockUserTransaction getMockUserTransaction()
+    {
+        return transaction;
     }
 }

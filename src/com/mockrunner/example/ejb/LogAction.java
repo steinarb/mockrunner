@@ -12,6 +12,11 @@ import org.apache.struts.action.ActionMapping;
 import com.mockrunner.example.ejb.interfaces.LogSession;
 import com.mockrunner.example.ejb.interfaces.LogSessionHome;
 
+/**
+ * This example action takes a message parameter from the request
+ * and uses the {@link LogSessionBean} to log the message.
+ * See {@link LogActionTest} for an example test of this action.
+ */
 public class LogAction extends Action
 {
     public ActionForward execute(ActionMapping mapping,

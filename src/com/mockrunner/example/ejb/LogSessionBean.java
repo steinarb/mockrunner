@@ -14,22 +14,23 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 /*
- * Commented out to be ignored by JavaDoc. If you want to
- * recreate interfaces with XDoclet make this comment a
- * valid doc comment.
- * 
- * @ejb:bean name="LogSession"
- *           display-name="LogSessionBean"
+ * @ejb:bean name="TestSession"
+ *           display-name="TestSessionBean"
  *           type="Stateless"
  *           transaction-type="Container"
- *           jndi-name="com/mockrunner/example/LogSession"
- * @ejb:env-entry name="DataSource_Name"
- *                value="DefaultDS"
- * @ejb:resource_ref res-name="jdbc/DefaultDS"
+ *           jndi-name="de/test/TestSession"
+ * 
+ * @ejb:resource-ref res-ref-name="jdbc/MySQLDB"
+ *                   res-type="javax.sql.DataSource"
+ *                   res-auth="Container"
+ *                   res-sharing-scope="Shareable"
+ * 
+ * @jboss:resource-manager res-man-name="jdbc/MySQLDB"
+ *                         res-man-jndi-name="java:/MySQLDB"
  */
 /**
- * This simple example EJB implements a logging
- * mechanism using JDBC.
+ * This simple example EJB can be used to write
+ * log messages to a database.
  */
 public class LogSessionBean implements SessionBean
 {
@@ -49,13 +50,13 @@ public class LogSessionBean implements SessionBean
         try
         {
             InitialContext context = new InitialContext();
-            DataSource dataSource = (DataSource)context.lookup("java:/DefaultDS");
+            DataSource dataSource = (DataSource)context.lookup("java:comp/env/jdbc/MySQLDB");
             connection = dataSource.getConnection();
             statement = connection.createStatement();
             statement.execute("create table logtable(" +
                               "timestamp bigint not null," +
-                              "threadid char(40) not null," + 
-                              "message char(300) not null)");
+                              "threadid varchar not null," + 
+                              "message varchar not null)");
         }
         catch(Exception exc)
         {
@@ -93,7 +94,7 @@ public class LogSessionBean implements SessionBean
         try
         {
             InitialContext context = new InitialContext();
-            DataSource dataSource = (DataSource)context.lookup("java:/DefaultDS");
+            DataSource dataSource = (DataSource)context.lookup("java:comp/env/jdbc/MySQLDB");
             connection = dataSource.getConnection();
             statement = connection.prepareStatement("insert into logtable values(?, ?, ?)");
             statement.setLong(1, System.currentTimeMillis());
@@ -103,7 +104,6 @@ public class LogSessionBean implements SessionBean
         }
         catch(Exception exc)
         {
-            exc.printStackTrace();
             sessionContext.setRollbackOnly();
             throw new EJBException(exc.getMessage());
         }
