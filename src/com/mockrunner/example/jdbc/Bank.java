@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- * This example class simulates a bank. I can be used to
+ * This example class simulates a bank. It can be used to
  * transfer an amount of money from one account to another.
  * It uses a table with the name <i>account</i>. The first column
  * is the account <i>id</i>, the second stores the current <i>balance</i>.
