@@ -2,14 +2,11 @@ package com.mockrunner.test.util;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.List;
 
-import com.mockrunner.base.NestedApplicationException;
-import com.mockrunner.util.common.FileUtil;
-import com.mockrunner.util.common.StreamUtil;
-
 import junit.framework.TestCase;
+
+import com.mockrunner.util.common.FileUtil;
 
 public class FileUtilTest extends TestCase
 {
@@ -22,23 +19,19 @@ public class FileUtilTest extends TestCase
     
     public void testFindFile() throws IOException
     {
-        Reader reader = FileUtil.findFile("src/com/mockrunner/test/util/testlines.txt");
-        List lineList = StreamUtil.getLinesFromReader(reader);
-        reader.close();
+        File file = FileUtil.findFile("src/com/mockrunner/test/util/testlines.txt");
+        assertNotNull(file);
+        List lineList = FileUtil.getLinesFromFile(file);
         doTestLines(lineList);
-        reader = FileUtil.findFile("/com/mockrunner/test/util/testlines.txt");
-        lineList = StreamUtil.getLinesFromReader(reader);
+        file = FileUtil.findFile("/com/mockrunner/test/util/testlines.txt");
+        assertNotNull(file);
+        lineList = FileUtil.getLinesFromFile(file);
         doTestLines(lineList);
-        reader.close();
-        try
-        {
-            FileUtil.findFile("notfound");
-            fail();
-        } 
-        catch(NestedApplicationException exc)
-        {
-            //should throw exception
-        }
+        file = FileUtil.findFile("com/mockrunner/test/util/testlines.txt");
+        assertNotNull(file);
+        lineList = FileUtil.getLinesFromFile(file);
+        assertNotNull(FileUtil.findFile("FileUtil.class"));
+        assertNull(FileUtil.findFile("notfound"));
     }
     
     private void doTestLines(List lineList)
