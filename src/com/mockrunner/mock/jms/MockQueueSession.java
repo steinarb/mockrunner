@@ -9,8 +9,6 @@ import javax.jms.Session;
 
 /**
  * Mock implementation of JMS <code>QueueSession</code>.
- * Please note that message selectors are not supported
- * at the moment.
  */
 public class MockQueueSession extends MockSession implements QueueSession
 {
