@@ -1,5 +1,6 @@
 package com.mockrunner.test;
 
+import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.TagSupport;
 
@@ -10,7 +11,46 @@ public class TestTag extends TagSupport
     private double testDouble;
     private boolean releaseCalled = false;
     private PageContext context;
+    private int doStartTagReturnValue = TagSupport.EVAL_BODY_INCLUDE;
+    private int doEndTagReturnValue = TagSupport.EVAL_PAGE;
+    private int doAfterBodyReturnValue = TagSupport.SKIP_BODY;
+    private boolean doStartTagCalled = false;
+    private boolean doEndTagCalled = false;
+    private boolean doAfterBodyCalled = false;
+    
+    public void setDoAfterBodyReturnValue(int doAfterBodyReturnValue)
+    {
+        this.doAfterBodyReturnValue = doAfterBodyReturnValue;
+    }
 
+    public void setDoEndTagReturnValue(int doEndTagReturnValue)
+    {
+        this.doEndTagReturnValue = doEndTagReturnValue;
+    }
+
+    public void setDoStartTagReturnValue(int doStartTagReturnValue)
+    {
+        this.doStartTagReturnValue = doStartTagReturnValue;
+    }
+
+    public int doStartTag() throws JspException
+    {
+        doStartTagCalled = true;
+        return doStartTagReturnValue;
+    }
+    
+    public int doAfterBody() throws JspException
+    {
+        doAfterBodyCalled = true;
+        return doAfterBodyReturnValue;
+    }
+
+    public int doEndTag() throws JspException
+    {
+        doEndTagCalled = true;
+        return doEndTagReturnValue;
+    }
+    
     public double getTestDouble()
     {
         return testDouble;
@@ -46,9 +86,24 @@ public class TestTag extends TagSupport
         releaseCalled = true;
     }
 
-    public boolean getReleaseCalled()
+    public boolean wasReleaseCalled()
     {
         return releaseCalled;
+    }
+    
+    public boolean wasDoAfterBodyCalled()
+    {
+        return doAfterBodyCalled;
+    }
+
+    public boolean wasDoEndTagCalled()
+    {
+        return doEndTagCalled;
+    }
+
+    public boolean wasDoStartTagCalled()
+    {
+        return doStartTagCalled;
     }
   
     public void setPageContext(PageContext context)
