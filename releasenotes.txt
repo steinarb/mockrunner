@@ -25,6 +25,8 @@ mockrunner-0.3.2:
   (check out bug report 1077690)
 - TransmissionManagerWrapper now allows transparent access to senders and
   receivers
+- refactored MockPageContext, it does no longer depend on 
+  org.apache.struts.mock.MockPageContext
 - changed session creation in MockHttpServletRequest. If getSession(false)
   is called without a previous created session, this method returns null
 - fixed bug with parameter sets in batch updates, always the latest parameter

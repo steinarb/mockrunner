@@ -663,6 +663,7 @@ public class ActionTestModuleTest extends TestCase
     
     public void testSetResourcesAndLocale()
     {
+        mockFactory.getMockRequest().getSession(true);
         MapMessageResources resources1 = new MapMessageResources();
         MapMessageResources resources2 = new MapMessageResources();
         module.setResources(resources1);
@@ -672,6 +673,7 @@ public class ActionTestModuleTest extends TestCase
         module.actionPerform(testAction);
         assertEquals(resources1, testAction.getTestResources());
         assertEquals(resources2, testAction.getTestResourcesForKey());
+        System.out.println(testAction.getTestLocale());
         assertEquals(Locale.TRADITIONAL_CHINESE, testAction.getTestLocale());
     }
     
