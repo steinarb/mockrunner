@@ -445,7 +445,7 @@ public class MockSession implements Session
         getConnection().throwJMSException();
         if(null == destination)
         {
-            return createProducerForNullDestination(destination);
+            return createProducerForNullDestination();
         }
         if(destination instanceof MockQueue)
         {
@@ -518,7 +518,7 @@ public class MockSession implements Session
         }
     }
     
-    protected MessageProducer createProducerForNullDestination(Destination destination)
+    protected MessageProducer createProducerForNullDestination()
     {
         return getGenericTransmissionManager().createMessageProducer();
     }

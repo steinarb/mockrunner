@@ -9,14 +9,20 @@ import javax.jms.MessageProducer;
 
 import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockMessageProducer;
+import com.mockrunner.mock.jms.MockQueueSender;
 import com.mockrunner.mock.jms.MockSession;
+import com.mockrunner.mock.jms.MockTopicPublisher;
 
 /**
- * This class is used to create generic producers.
- * If you use a generic <code>Session</code> and create
- * a <code>MessageProducer</code> with a <code>null</code>
- * destination, you get a generic instance of <code>MessageProducer</code>
- * using this class.
+ * This class is used to create generic producers that are not
+ * associated with a destination.
+ * If you create a <code>MessageProducer</code> with a <code>null</code>
+ * destination, this class is used to create a <code>MessageProducer</code>
+ * which is not associated with any destination.
+ * If the session used to create the producer is a <code>QueueSession</code>,
+ * you'll get a <code>QueueSender</code>. For a <code>TopicSession</code>,
+ * you'll get a <code>TopicPublisher</code>. For a generic session,
+ * you'll get a generic instance of <code>MessageProducer</code>.
  */
 public class GenericTransmissionManager
 {
@@ -65,6 +71,28 @@ public class GenericTransmissionManager
     public MockMessageProducer createMessageProducer()
     {
         MockMessageProducer producer = new MockMessageProducer(connection, session, null);
+        messageProducerList.add(producer);
+        return producer;
+    }
+    
+    /**
+     * Creates a new <code>QueueSender</code>.
+     * @return the created <code>QueueSender</code>
+     */
+    public MockQueueSender createQueueSender()
+    {
+        MockQueueSender producer = new MockQueueSender(connection, session, null);
+        messageProducerList.add(producer);
+        return producer;
+    }
+    
+    /**
+     * Creates a new <code>TopicPublisher</code>.
+     * @return the created <code>TopicPublisher</code>
+     */
+    public MockTopicPublisher createTopicPublisher()
+    {
+        MockTopicPublisher producer = new MockTopicPublisher(connection, session, null);
         messageProducerList.add(producer);
         return producer;
     }

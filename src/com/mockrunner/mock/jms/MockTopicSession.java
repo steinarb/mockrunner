@@ -1,6 +1,5 @@
 package com.mockrunner.mock.jms;
 
-import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.Session;
@@ -39,8 +38,8 @@ public class MockTopicSession extends MockSession implements TopicSession
         return (TopicSubscriber)createConsumer(topic, messageSelector, noLocal);
     }
     
-    protected MessageProducer createProducerForNullDestination(Destination destination)
+    protected MessageProducer createProducerForNullDestination()
     {
-        return getTopicTransmissionManager().createTopicPublisher((MockTopic)destination);
+        return getGenericTransmissionManager().createTopicPublisher();
     }
 }
