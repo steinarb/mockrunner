@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServlet;
 
 import com.mockrunner.base.BasicHTMLOutputTestCase;
 import com.mockrunner.base.HTMLOutputModule;
-import com.mockrunner.base.WebTestModule;
 import com.mockrunner.mock.web.WebMockObjectFactory;
 
 /**
@@ -18,13 +17,13 @@ import com.mockrunner.mock.web.WebMockObjectFactory;
  * does not extend {@link com.mockrunner.base.BaseTestCase}. If you want
  * to use several modules in conjunction, consider subclassing
  * {@link com.mockrunner.servlet.ServletTestCaseAdapter}.
- * <b>This class is generated from the ServletTestModule and should not be
- * edited directly</b>.
+ * <b>This class is generated from the {@link com.mockrunner.servlet.ServletTestModule}
+ * and should not be edited directly</b>.
  */
 public class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
 {
     private ServletTestModule servletTestModule;
-    private WebMockObjectFactory webMockFactory;
+    private WebMockObjectFactory webMockObjectFactory;
 
     public BasicServletTestCaseAdapter()
     {
@@ -40,7 +39,7 @@ public class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
     {
         super.tearDown();
         servletTestModule = null;
-        webMockFactory = null;
+        webMockObjectFactory = null;
     }
 
     /**
@@ -50,13 +49,13 @@ public class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        webMockFactory = createWebMockObjectFactory();
+        webMockObjectFactory = createWebMockObjectFactory();
         servletTestModule = createServletTestModule(getWebMockObjectFactory());
     }
-    
+
     /**
-     * Creates a {@link WebMockObjectFactory}. 
-     * @return the created {@link WebMockObjectFactory}
+     * Creates a {@link com.mockrunner.mock.web.WebMockObjectFactory}.
+     * @return the created {@link com.mockrunner.mock.web.WebMockObjectFactory}
      */
     protected WebMockObjectFactory createWebMockObjectFactory()
     {
@@ -64,26 +63,26 @@ public class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Same as <code>createWebMockObjectFactory(otherFactory, true)</code>
+     * Same as <code>createWebMockObjectFactory(otherFactory, true)</code>.
      */
     protected WebMockObjectFactory createWebMockObjectFactory(WebMockObjectFactory otherFactory)
     {
         return new WebMockObjectFactory(otherFactory);
     }
-    
+
     /**
-     * Creates a {@link WebMockObjectFactory} based on another on.
-     * The created {@link WebMockObjectFactory} will have its own
+     * Creates a {@link com.mockrunner.mock.web.WebMockObjectFactory} based on another on.
+     * The created {@link com.mockrunner.mock.web.WebMockObjectFactory} will have its own
      * request and response objects. If you set <i>createNewSession</i>
-     * to <code>true</code> it will also have its own session object. 
-     * The two factories will share one <code>ServletContext</code>. 
+     * to <code>true</code> it will also have its own session object.
+     * The two factories will share one <code>ServletContext</code>.
      * Especially important for multithreading tests.
      * If you set <i>createNewSession</i> to false, the two factories
      * will share one session. This setting simulates multiple requests
      * from the same client.
-     * @param otherFactory the othe factory
+     * @param otherFactory the other factory
      * @param createNewSession create a new session for the new factory
-     * @return the created {@link WebMockObjectFactory}
+     * @return the created {@link com.mockrunner.mock.web.WebMockObjectFactory}
      */
     protected WebMockObjectFactory createWebMockObjectFactory(WebMockObjectFactory otherFactory, boolean createNewSession)
     {
@@ -91,36 +90,26 @@ public class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Gets the current {@link WebMockObjectFactory}.
-     * @return the {@link WebMockObjectFactory}
+     * Gets the {@link com.mockrunner.mock.web.WebMockObjectFactory}.
+     * @return the {@link com.mockrunner.mock.web.WebMockObjectFactory}
      */
     protected WebMockObjectFactory getWebMockObjectFactory()
     {
-        return webMockFactory;
+        return webMockObjectFactory;
     }
-    
+
     /**
-     * Sets the current {@link WebMockObjectFactory}.
-     * @param mockFactory the {@link WebMockObjectFactory}
+     * Sets the {@link com.mockrunner.mock.web.WebMockObjectFactory}.
+     * @param webMockObjectFactory the {@link com.mockrunner.mock.web.WebMockObjectFactory}
      */
-    protected void setWebMockObjectFactory(WebMockObjectFactory mockFactory)
+    protected void setWebMockObjectFactory(WebMockObjectFactory webMockObjectFactory)
     {
-        this.webMockFactory = mockFactory;
-    }
-    
-    /**
-     * Creates a {@link com.mockrunner.servlet.ServletTestModule} with the specified
-     * {@link WebMockObjectFactory}.
-     * @return the created {@link com.mockrunner.servlet.ServletTestModule}
-     */
-    protected ServletTestModule createServletTestModule(WebMockObjectFactory mockFactory)
-    {
-        return new ServletTestModule(mockFactory);
+        this.webMockObjectFactory = webMockObjectFactory;
     }
 
     /**
      * Creates a {@link com.mockrunner.servlet.ServletTestModule} based on the current
-     * {@link WebMockObjectFactory}.
+     * {@link com.mockrunner.mock.web.WebMockObjectFactory}.
      * Same as <code>createServletTestModule(getWebMockObjectFactory())</code>.
      * @return the created {@link com.mockrunner.servlet.ServletTestModule}
      */
@@ -130,13 +119,13 @@ public class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Returns the {@link com.mockrunner.servlet.ServletTestModule} as
-     * {@link com.mockrunner.base.WebTestModule}.
-     * @return the {@link com.mockrunner.base.WebTestModule}
+     * Creates a {@link com.mockrunner.servlet.ServletTestModule} with the specified
+     * {@link com.mockrunner.mock.web.WebMockObjectFactory}.
+     * @return the created {@link com.mockrunner.servlet.ServletTestModule}
      */
-    protected WebTestModule getWebTestModule()
+    protected ServletTestModule createServletTestModule(WebMockObjectFactory mockFactory)
     {
-        return servletTestModule;
+        return new ServletTestModule(mockFactory);
     }
 
     /**

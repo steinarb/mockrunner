@@ -9,7 +9,6 @@ import java.util.List;
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.HTMLOutputTestCase;
-import com.mockrunner.base.WebTestModule;
 import com.mockrunner.gen.util.JavaClassGenerator.ConstructorDeclaration;
 import com.mockrunner.gen.util.JavaClassGenerator.MethodDeclaration;
 import com.mockrunner.util.ArrayUtil;
@@ -26,7 +25,9 @@ public class StandardAdapterProcessor implements AdapterProcessor
         BCELClassAnalyzer analyzer = new BCELClassAnalyzer(module); 
         classGenerator.setCreateJavaDocComments(true);
         classGenerator.setPackage(module.getPackage());
-        classGenerator.setClassName(prepareName(module));
+        String className = getClassNameFromBaseName(getBaseName(module));
+        name = getJavaFileName(module, className);
+        classGenerator.setClassName(className);
         Class superClass = getSuperClass(module);
         if(null != superClass)
         {
@@ -55,7 +56,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
     {
         return output;
     }
-    
+
     private Class determineFactoryClass(Class module)
     {
         Constructor[] constructors = module.getDeclaredConstructors();
@@ -85,63 +86,28 @@ public class StandardAdapterProcessor implements AdapterProcessor
         method.setName("setUp");
         method.setExceptions(new Class[] {Exception.class});
         String[] comment = new String[2];
-        comment[0] = "Creates the " + getJavaDocModuleLink(memberInfo.getModule()) + ". If you";
+        comment[0] = "Creates the " + getJavaDocLink(memberInfo.getModule()) + ". If you";
         comment[1] = "overwrite this method, you must call <code>super.setUp()</code>.";
         method.setCommentLines(comment);
         method.setCodeLines(getSetUpMethodCodeLines(memberInfo));
         classGenerator.addMethodDeclaration(method);
     }
     
-    private void addHTMLOutputAndWebTestMethods(JavaClassGenerator classGenerator, MemberInfo memberInfo)
+    private void addHTMLOutputMethods(JavaClassGenerator classGenerator, MemberInfo memberInfo)
     {
         Class module = memberInfo.getModule();
-        if(!HTMLOutputModule.class.isAssignableFrom(module)) return;
-        String[] codeLines = new String[] {"return " + memberInfo.getModuleMember() + ";"};
-        MethodDeclaration webTestMethod = createProtectedMethod();
-        webTestMethod.setName("getWebTestModule");
-        webTestMethod.setReturnType(WebTestModule.class);
-        String[] comment = new String[3];
-        comment[0] = "Returns the " + getJavaDocModuleLink(module) + " as";
-        comment[1] = "{@link com.mockrunner.base.WebTestModule}.";
-        comment[2] = "@return the {@link com.mockrunner.base.WebTestModule}";
-        webTestMethod.setCommentLines(comment);
-        webTestMethod.setCodeLines(codeLines);
-        classGenerator.addMethodDeclaration(webTestMethod);
+        if(!HTMLOutputModule.class.isAssignableFrom(module)) return;  
         MethodDeclaration htmlOutputMethod = createProtectedMethod();
         htmlOutputMethod.setName("getHTMLOutputModule");
         htmlOutputMethod.setReturnType(HTMLOutputModule.class);
-        comment = new String[3];
-        comment[0] = "Returns the " + getJavaDocModuleLink(module) + " as";
-        comment[1] = "{@link com.mockrunner.base.HTMLOutputModule}.";
-        comment[2] = "@return the {@link com.mockrunner.base.HTMLOutputModule}";
+        String[] comment = new String[3];
+        comment[0] = "Returns the " + getJavaDocLink(module) + " as";
+        comment[1] = getJavaDocLink(HTMLOutputModule.class) + ".";
+        comment[2] = "@return the " + getJavaDocLink(HTMLOutputModule.class);
         htmlOutputMethod.setCommentLines(comment);
+        String[] codeLines = new String[] {"return " + memberInfo.getModuleMember() + ";"};
         htmlOutputMethod.setCodeLines(codeLines);
         classGenerator.addMethodDeclaration(htmlOutputMethod);
-    }
-    
-    private void addGetAndSetModuleMethods(JavaClassGenerator classGenerator, MemberInfo memberInfo)
-    {
-        Class module = memberInfo.getModule();
-        String memberName = memberInfo.getModuleMember();
-        MethodDeclaration getMethod = createProtectedMethod();
-        getMethod.setName("get" + ClassUtil.getClassName(module));
-        getMethod.setReturnType(module);
-        String[] comment = new String[2];
-        comment[0] = "Gets the " + getJavaDocModuleLink(module) + ".";
-        comment[1] = "@return the {@link " + module.getName() + "}";
-        getMethod.setCommentLines(comment);
-        getMethod.setCodeLines(new String[] {"return " + memberName + ";"});
-        classGenerator.addMethodDeclaration(getMethod);
-        MethodDeclaration setMethod = createProtectedMethod();
-        setMethod.setName("set" + ClassUtil.getClassName(module));
-        comment = new String[2];
-        comment[0] = "Sets the " + getJavaDocModuleLink(module) + ".";
-        comment[1] = "@param " + memberName + " the {@link " + module.getName() + "}";
-        setMethod.setCommentLines(comment);
-        setMethod.setArguments(new Class[] {module});
-        setMethod.setArgumentNames(new String[] {memberName});
-        setMethod.setCodeLines(new String[] {"this." + memberName + " = " + memberName + ";"});
-        classGenerator.addMethodDeclaration(setMethod);
     }
     
     private void addDelegatorMethods(JavaClassGenerator classGenerator, BCELClassAnalyzer analyzer, List excludedMethods, MemberInfo memberInfo)
@@ -277,29 +243,50 @@ public class StandardAdapterProcessor implements AdapterProcessor
         return buffer.toString();
     }
     
-    private String getJavaDocModuleLink(Class module)
+    protected String getBaseName(Class module)
     {
-        return "{@link " + module.getName() + "}";
+        String name = ClassUtil.getClassName(module);
+        int moduleIndex = name.indexOf("Module");
+        if(moduleIndex > -1)
+        {
+            name = name.substring(0, moduleIndex);
+        }
+        return name;
     }
-
-    private MethodDeclaration createProtectedMethod()
+    
+    protected void addGetAndSetMethodPair(JavaClassGenerator classGenerator, Class clazz, String memberName)
+    {
+        MethodDeclaration getMethod = createProtectedMethod();
+        getMethod.setName("get" + ClassUtil.getClassName(clazz));
+        getMethod.setReturnType(clazz);
+        String[] comment = new String[2];
+        comment[0] = "Gets the " + getJavaDocLink(clazz) + ".";
+        comment[1] = "@return the " + getJavaDocLink(clazz);
+        getMethod.setCommentLines(comment);
+        getMethod.setCodeLines(new String[] {"return " + memberName + ";"});
+        classGenerator.addMethodDeclaration(getMethod);
+        MethodDeclaration setMethod = createProtectedMethod();
+        setMethod.setName("set" + ClassUtil.getClassName(clazz));
+        comment = new String[2];
+        comment[0] = "Sets the " + getJavaDocLink(clazz) + ".";
+        comment[1] = "@param " + memberName + " the " + getJavaDocLink(clazz);
+        setMethod.setCommentLines(comment);
+        setMethod.setArguments(new Class[] {clazz});
+        setMethod.setArgumentNames(new String[] {memberName});
+        setMethod.setCodeLines(new String[] {"this." + memberName + " = " + memberName + ";"});
+        classGenerator.addMethodDeclaration(setMethod);
+    }
+    
+    protected String getJavaDocLink(Class clazz)
+    {
+        return "{@link " + clazz.getName() + "}";
+    }
+    
+    protected MethodDeclaration createProtectedMethod()
     {
         MethodDeclaration method = new MethodDeclaration();
         method.setModifier(Modifier.PROTECTED);
         return method;
-    }
-    
-    private String prepareName(Class module)
-    {
-        String className = ClassUtil.getClassName(module);
-        int moduleIndex = className.indexOf("Module");
-        if(moduleIndex > -1)
-        {
-            className = className.substring(0, moduleIndex);
-        }
-        className = prepareClassNameFromBaseName(className);
-        name = ClassUtil.getPackageName(module).replace('.', '/') + "/" + className + ".java";
-        return className;
     }
     
     protected void addMemberDeclarations(JavaClassGenerator classGenerator, MemberInfo memberInfo)
@@ -325,20 +312,20 @@ public class StandardAdapterProcessor implements AdapterProcessor
     
     protected void addAdditionalControlMethods(JavaClassGenerator classGenerator, MemberInfo memberInfo)
     {
-        addHTMLOutputAndWebTestMethods(classGenerator, memberInfo);
-        addGetAndSetModuleMethods(classGenerator, memberInfo);
+        addHTMLOutputMethods(classGenerator, memberInfo);
+        addGetAndSetMethodPair(classGenerator, memberInfo.getModule(), memberInfo.getModuleMember());
     }
 
     protected String[] getClassComment(Class module)
     {
-        String name = module.getName();
+        String link = getJavaDocLink(module);
         String[] comment = new String[7];
-        comment[0] = "Delegator for {@link " + name + "}. You can";
-        comment[1] = "subclass this adapter or use {@link " + name + "}";
+        comment[0] = "Delegator for " + link + ". You can";
+        comment[1] = "subclass this adapter or use " + link;
         comment[2] = "directly (so your test case can use another base class).";
-        comment[3] = "This adapter extends {@link com.mockrunner.base.BaseTestCase}.";
+        comment[3] = "This adapter extends " + getJavaDocLink(BaseTestCase.class) + ".";
         comment[4] = "It can be used if you want to use several modules in conjunction.";
-        comment[5] = "<b>This class is generated from the {@link " + name + "}";
+        comment[5] = "<b>This class is generated from the " + link;
         comment[6] = "and should not be edited directly</b>.";
         return comment;
     }
@@ -351,8 +338,13 @@ public class StandardAdapterProcessor implements AdapterProcessor
         }
         return BaseTestCase.class;
     }
-
-    protected String prepareClassNameFromBaseName(String className)
+    
+    protected String getJavaFileName(Class module, String className)
+    {
+        return ClassUtil.getPackageName(module).replace('.', '/') + "/" + className + ".java";
+    }
+    
+    protected String getClassNameFromBaseName(String className)
     {
         return className + "CaseAdapter";
     }

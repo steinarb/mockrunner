@@ -19,6 +19,11 @@ public abstract class HTMLOutputTestCase extends WebTestCase
         super(arg0);
     }
 
+    protected WebTestModule getWebTestModule()
+    {
+        return getHTMLOutputModule();
+    }
+    
     /**
      * Implemented by concrete subclasses.
      */ 

@@ -78,18 +78,18 @@ public abstract class BaseTestCase extends TestCase
     }
     
     /**
-     * Creates a {@link WebMockObjectFactory} based on another on.
-     * The created {@link WebMockObjectFactory} will have its own
+     * Creates a {@link com.mockrunner.mock.web.WebMockObjectFactory} based on another on.
+     * The created {@link com.mockrunner.mock.web.WebMockObjectFactory} will have its own
      * request and response objects. If you set <i>createNewSession</i>
-     * to <code>true</code> it will also have its own session object. 
-     * The two factories will share one <code>ServletContext</code>. 
+     * to <code>true</code> it will also have its own session object.
+     * The two factories will share one <code>ServletContext</code>.
      * Especially important for multithreading tests.
      * If you set <i>createNewSession</i> to false, the two factories
      * will share one session. This setting simulates multiple requests
      * from the same client.
-     * @param otherFactory the othe factory
+     * @param otherFactory the other factory
      * @param createNewSession create a new session for the new factory
-     * @return the created {@link WebMockObjectFactory}
+     * @return the created {@link com.mockrunner.mock.web.WebMockObjectFactory}
      */
     protected WebMockObjectFactory createWebMockObjectFactory(WebMockObjectFactory otherFactory, boolean createNewSession)
     {
