@@ -11,6 +11,12 @@ there is only one instance. The purpose of this refactoring is to provide a web 
 object factory that is independent from struts and can be used without having 
 struts.jar in the classpath.
 
+Reorganized package structure of util classes. XmlUtil is now in com.mockrunner.util.web
+package, the other util classes are in com.mockrunner.util.common package. Except for
+XmlUtil, these classes are not meant for application use, so it is unlikely that you are
+affected by this refactoring.
+
+
 Older API changes:
 
 Starting with version 0.3.1, Mockrunner supports the MockEJB 0.6 API
