@@ -104,6 +104,35 @@ public class MockBytesMessageTest extends TestCase
         assertTrue(Arrays.equals(data, new byte[] { 1 }));
     }
     
+    public void testGetBodyLength() throws Exception
+    {
+        MockBytesMessage message = new MockBytesMessage();
+        message.writeInt(3);
+        try
+        {
+            message.getBodyLength();
+            fail();
+        }
+        catch(MessageNotReadableException exc)
+        {
+            //should throw exception
+        }
+        message.reset();
+        assertEquals(4, message.getBodyLength());
+        message.clearBody();
+        try
+        {
+            message.getBodyLength();
+            fail();
+        }
+        catch(MessageNotReadableException exc)
+        {
+            //should throw exception
+        }
+        message.reset();
+        assertEquals(0, message.getBodyLength());
+    }
+    
     public void testEquals() throws Exception
     {
         MockBytesMessage message1 = new MockBytesMessage();
