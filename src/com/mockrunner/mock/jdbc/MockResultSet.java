@@ -6,6 +6,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Array;
 import java.sql.Blob;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mockobjects.sql.MockResultSetMetaData;
+import com.mockrunner.util.StreamUtil;
 
 /**
  * Mock implementation of <code>ResultSet</code>.
@@ -88,18 +90,30 @@ public class MockResultSet implements ResultSet
     
     public void addRow(List values)
     {
+        int missingColumns = values.size() - columnNameList.size();
+        for(int yy = 0; yy < missingColumns; yy++)
+        {
+            addColumn();
+        }
+        adjustColumns();
         int rowCount = getRowCount();
-        for(int ii = 0; ii < columnNameList.size(); ii++)
+        for(int ii = 0; ii < values.size(); ii++)
         {   
-            Object nextValue = null;
-            if(ii < values.size())
-            {
-                nextValue = values.get(ii);
-            }
-            List nextColumnList = (List)columnNameList.get(ii);
-            nextColumnList.add(rowCount + 1, nextValue);
+           Object nextValue = values.get(ii);
+           List nextColumnList = (List)columnNameList.get(ii);
+           nextColumnList.add(rowCount + 1, nextValue);
         }
         copyColumnMap();
+    }
+    
+    public void addColumn()
+    {
+        addColumn(determineValidColumnName());
+    }
+    
+    public void addColumn(String columnName)
+    {
+        addColumn(columnName, new ArrayList());
     }
     
     public void addColumn(Object[] values)
@@ -156,11 +170,6 @@ public class MockResultSet implements ResultSet
         return getObject(columnName);
     }
     
-    public Object getObject(String colName, Map map) throws SQLException
-    {
-        return getObject(colName);
-    }
-
     public Object getObject(String columnName) throws SQLException
     {
         checkColumnName(columnName);
@@ -169,6 +178,16 @@ public class MockResultSet implements ResultSet
         Object value = column.get(cursor);
         wasNull = (null == value);
         return value;
+    }
+    
+    public Object getObject(int columnIndex, Map map) throws SQLException
+    {
+        return getObject(columnIndex);
+    }
+
+    public Object getObject(String colName, Map map) throws SQLException
+    {
+        return getObject(colName);
     }
 
     public String getString(int columnIndex) throws SQLException
@@ -425,6 +444,16 @@ public class MockResultSet implements ResultSet
         }
         return null;
     }
+    
+    public Date getDate(int columnIndex, Calendar calendar) throws SQLException
+    {
+        return getDate(columnIndex);
+    }
+
+    public Date getDate(String columnName, Calendar calendar) throws SQLException
+    {
+        return getDate(columnName);
+    }
 
     public Time getTime(int columnIndex) throws SQLException
     {
@@ -447,6 +476,16 @@ public class MockResultSet implements ResultSet
         }
         return null;
     }
+    
+    public Time getTime(int columnIndex, Calendar calendar) throws SQLException
+    {
+        return getTime(columnIndex);
+    }
+
+    public Time getTime(String columnName, Calendar calendar) throws SQLException
+    {
+        return getTime(columnName);
+    }
 
     public Timestamp getTimestamp(int columnIndex) throws SQLException
     {
@@ -467,6 +506,100 @@ public class MockResultSet implements ResultSet
             if(value instanceof Timestamp) return (Timestamp)value;
             return Timestamp.valueOf(value.toString());
         }
+        return null;
+    }
+    
+    public Timestamp getTimestamp(int columnIndex, Calendar calendar) throws SQLException
+    {
+        return getTimestamp(columnIndex);
+    }
+
+    public Timestamp getTimestamp(String columnName, Calendar calendar) throws SQLException
+    {
+        return getTimestamp(columnName);
+    }
+    
+    public URL getURL(int columnIndex) throws SQLException
+    {
+        Object value = getObject(columnIndex);
+        if(null != value)
+        {
+            if(value instanceof URL) return (URL)value;
+            try
+            {
+                return new URL(value.toString());
+            }
+            catch(MalformedURLException exc)
+            {
+            
+            }
+        }
+        return null;
+    }
+
+    public URL getURL(String columnName) throws SQLException
+    {
+        Object value = getObject(columnName);
+        if(null != value)
+        {
+            if(value instanceof URL) return (URL)value;
+            try
+            {
+                return new URL(value.toString());
+            }
+            catch(MalformedURLException exc)
+            {
+            
+            }
+        }
+        return null;
+    }
+    
+    public Blob getBlob(int columnIndex) throws SQLException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    public Blob getBlob(String columnName) throws SQLException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public Clob getClob(int columnIndex) throws SQLException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    public Clob getClob(String columnName) throws SQLException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    public Array getArray(int columnIndex) throws SQLException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    public Array getArray(String columnName) throws SQLException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    public Ref getRef(int columnIndex) throws SQLException
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public Ref getRef(String columnName) throws SQLException
+    {
+        // TODO Auto-generated method stub
         return null;
     }
 
@@ -579,6 +712,11 @@ public class MockResultSet implements ResultSet
     public ResultSetMetaData getMetaData() throws SQLException
     {
         return new MockResultSetMetaData();
+    }
+    
+    public Statement getStatement() throws SQLException
+    {
+        return statement;
     }
 
     public boolean isBeforeFirst() throws SQLException
@@ -704,24 +842,6 @@ public class MockResultSet implements ResultSet
         throw new SQLException("No column with name " + columnName + " found");
     }
 
-    public boolean rowUpdated() throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public boolean rowInserted() throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return false;
-    }
-
-    public boolean rowDeleted() throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return false;
-    }
-    
     public void updateObject(int columnIndex, Object value) throws SQLException
     {
         checkColumnBounds(columnIndex);
@@ -888,42 +1008,99 @@ public class MockResultSet implements ResultSet
         updateObject(columnName, timeStamp);
     }
 
-    public void updateAsciiStream(int columnIndex, InputStream x, int length) throws SQLException
+    public void updateAsciiStream(int columnIndex, InputStream stream, int length) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        updateBinaryStream(columnIndex, stream, length);
+    }
+    
+    public void updateAsciiStream(String columnName, InputStream stream, int length) throws SQLException
+    {
+        updateBinaryStream(columnName, stream, length);
     }
 
-    public void updateBinaryStream(int columnIndex, InputStream x, int length) throws SQLException
+    public void updateBinaryStream(int columnIndex, InputStream stream, int length) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        byte[] data = StreamUtil.getStreamAsByteArray(stream);
+        updateObject(columnIndex, new ByteArrayInputStream(data));
+    }
+    
+    public void updateBinaryStream(String columnName, InputStream stream, int length) throws SQLException
+    {
+        byte[] data = StreamUtil.getStreamAsByteArray(stream);
+        updateObject(columnName, new ByteArrayInputStream(data));
     }
 
-    public void updateCharacterStream(int columnIndex, Reader x, int length) throws SQLException
+    public void updateCharacterStream(int columnIndex, Reader reader, int length) throws SQLException
     {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateAsciiStream(String columnName, InputStream x, int length) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateBinaryStream(String columnName, InputStream x, int length) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
+        String data = StreamUtil.getReaderAsString(reader);
+        updateObject(columnIndex, new StringReader(data));
     }
 
     public void updateCharacterStream(String columnName, Reader reader, int length) throws SQLException
     {
-        // TODO Auto-generated method stub
+        String data = StreamUtil.getReaderAsString(reader);
+        updateObject(columnName, new StringReader(data));
+    }
+    
+    public void updateRef(int columnIndex, Ref ref) throws SQLException
+    {
+        updateObject(columnIndex, ref);
+    }
+
+    public void updateRef(String columnName, Ref ref) throws SQLException
+    {
+        updateObject(columnName, ref);
+    }
+
+    public void updateBlob(int columnIndex, Blob blob) throws SQLException
+    {
+        updateObject(columnIndex, blob);
+    }
+
+    public void updateBlob(String columnName, Blob blob) throws SQLException
+    {
+        updateObject(columnName, blob);
 
     }
 
+    public void updateClob(int columnIndex, Clob clob) throws SQLException
+    {
+        updateObject(columnIndex, clob);
+    }
+
+    public void updateClob(String columnName, Clob clob) throws SQLException
+    {
+        updateObject(columnName, clob);
+    }
+
+    public void updateArray(int columnIndex, Array array) throws SQLException
+    {
+        updateObject(columnIndex, array);
+    }
+
+    public void updateArray(String columnName, Array array) throws SQLException
+    {
+        updateObject(columnName, array);
+    }
+    
+    public boolean rowUpdated() throws SQLException
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public boolean rowInserted() throws SQLException
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    public boolean rowDeleted() throws SQLException
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
+    
     public void insertRow() throws SQLException
     {
         // TODO Auto-generated method stub
@@ -961,162 +1138,6 @@ public class MockResultSet implements ResultSet
     }
 
     public void moveToCurrentRow() throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public Statement getStatement() throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Object getObject(int i, Map map) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Ref getRef(int i) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Blob getBlob(int i) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Clob getClob(int i) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Array getArray(int i) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Ref getRef(String colName) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Blob getBlob(String colName) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Clob getClob(String colName) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Array getArray(String colName) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Date getDate(int columnIndex, Calendar cal) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Date getDate(String columnName, Calendar cal) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Time getTime(int columnIndex, Calendar cal) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Time getTime(String columnName, Calendar cal) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Timestamp getTimestamp(int columnIndex, Calendar cal) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public Timestamp getTimestamp(String columnName, Calendar cal) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public URL getURL(int columnIndex) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public URL getURL(String columnName) throws SQLException
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void updateRef(int columnIndex, Ref x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateRef(String columnName, Ref x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateBlob(int columnIndex, Blob x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateBlob(String columnName, Blob x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateClob(int columnIndex, Clob x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateClob(String columnName, Clob x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateArray(int columnIndex, Array x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateArray(String columnName, Array x) throws SQLException
     {
         // TODO Auto-generated method stub
 

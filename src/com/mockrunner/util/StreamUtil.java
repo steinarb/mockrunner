@@ -3,6 +3,7 @@ package com.mockrunner.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 
 /**
  * Simple util class for manipulating streams
@@ -33,6 +34,33 @@ public class StreamUtil
         finally
         {
             return byteStream.toByteArray();
+        }
+    }
+    
+    /**
+     * Returns the contents of the reader as a string.
+     * @param reader the <code>Reader</code>
+     * @return the reader content as <code>String</code>
+     */
+    public static String getReaderAsString(Reader reader)
+    {
+        StringBuffer buffer = new StringBuffer();
+        try
+        {
+            int nextValue = reader.read();
+            while(-1 != nextValue)
+            {
+                buffer.append((char)nextValue);
+                nextValue = reader.read();
+            }
+        }
+        catch(IOException exc)
+        {
+   
+        }
+        finally
+        {
+            return buffer.toString();
         }
     }
 }
