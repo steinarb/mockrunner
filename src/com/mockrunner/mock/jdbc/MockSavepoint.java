@@ -3,6 +3,9 @@ package com.mockrunner.mock.jdbc;
 import java.sql.SQLException;
 import java.sql.Savepoint;
 
+/**
+ * Mock implementation of <code>Savepoint</code>.
+ */
 public class MockSavepoint implements Savepoint
 {
     private String name;
