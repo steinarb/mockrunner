@@ -1,5 +1,14 @@
 package com.mockrunner.example.tag;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.tagext.SimpleTagSupport;
+
+
 /**
  * The purpose of this simple tag is to filter images. If its
  * body contains HTML image tags of the form
@@ -11,9 +20,9 @@ package com.mockrunner.example.tag;
  * attribute. Of course this attribute can be set dynamically with the help
  * of an EL or scripting expression.
  */
-public class FilterImagesTag //extends SimpleTagSupport
+public class FilterImagesTag extends SimpleTagSupport
 {
-    /*private final static Pattern pattern = Pattern.compile("<\\s*img[^<>]+src\\s*=\\s*\"[^<>]*\".*?>");
+    private final static Pattern pattern = Pattern.compile("<\\s*img[^<>]+src\\s*=\\s*\"[^<>]*\".*?>");
     
     private boolean doFilter = false;
     
@@ -50,5 +59,5 @@ public class FilterImagesTag //extends SimpleTagSupport
         }
         matcher.appendTail(output);
         return output.toString();
-    }*/
+    }
 }

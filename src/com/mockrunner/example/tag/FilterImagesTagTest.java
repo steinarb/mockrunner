@@ -1,6 +1,14 @@
 package com.mockrunner.example.tag;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.mockrunner.mock.web.WebMockObjectFactory;
+import com.mockrunner.tag.AbstractDynamicChild;
 import com.mockrunner.tag.BasicTagTestCaseAdapter;
+import com.mockrunner.tag.NestedSimpleTag;
 
 /**
  * Example test for the {@link FilterImagesTag}.
@@ -17,7 +25,7 @@ import com.mockrunner.tag.BasicTagTestCaseAdapter;
  */
 public class FilterImagesTagTest extends BasicTagTestCaseAdapter
 { 
-    /*private void prepareFilterImagesTag(String filterAttribute)
+    private void prepareFilterImagesTag(String filterAttribute)
     {
         Map attributeMap = new HashMap();
         attributeMap.put("filter", filterAttribute);
@@ -57,5 +65,5 @@ public class FilterImagesTagTest extends BasicTagTestCaseAdapter
             HttpServletRequest request = getWebMockObjectFactory().getMockRequest();
             return "<img src=\"" +  request.getAttribute("url") + "\">";
         }
-    }*/
+    }
 }
