@@ -33,6 +33,15 @@ import com.mockrunner.util.StreamUtil;
 
 /**
  * Mock implementation of <code>ResultSet</code>.
+ * Can be used to add simulated database entries.
+ * You can add Java objects of any type. This
+ * mock implementation does not care about SQL
+ * data types and tries to perform the necessary
+ * type conversions for the Java objects (e.g. it will convert a 
+ * <code>String</code> "1" to <code>int</code> 1). 
+ * Please check out the documentation of <code>ResultSet</code> 
+ * for the description of the methods in this interface. 
+ * The additional methods are described here.
  */
 public class MockResultSet implements ResultSet
 {
@@ -74,6 +83,13 @@ public class MockResultSet implements ResultSet
         this.cursorName = cursorName;
     }
     
+    /**
+     * Sets the <code>Statement</code> for this <code>ResultSet</code>.
+     * The <code>ResultSet</code> takes the result set type, result
+     * set concurrency and the fetch direction from the specified
+     * <code>Statement</code>.
+     * @param statement the statement
+     */
     public void setStatement(Statement statement)
     {
         this.statement = statement;
@@ -90,21 +106,61 @@ public class MockResultSet implements ResultSet
         }
     }
     
+    /**
+     * Sets the result set type. It's not possible to set
+     * this in a real <code>ResultSet</code>, but in tests
+     * it can make sense to change it.
+     * @param resultSetType the result set type
+     */
     public void setResultSetType(int resultSetType)
     {
         this.resultSetType = resultSetType;
     }
     
+    /**
+     * Sets the result set concurrency. It's not possible to set
+     * this in a real <code>ResultSet</code>, but in tests
+     * it can make sense to change it.
+     * @param resultSetConcurrency the result set concurrency
+     */
     public void setResultSetConcurrency(int resultSetConcurrency)
     {
         this.resultSetConcurrency = resultSetConcurrency;
     }
     
+    /**
+     * The <code>MockResultSet</code> keeps the data that's
+     * stored in the simulated database and a copy of the data
+     * that represents the current <code>ResultSet</code> data.
+     * The <code>update</code> methods only update the 
+     * <code>ResultSet</code> data. This data will be persisted
+     * when you call {@link #updateRow}. When you set <i>databaseView</i> 
+     * to <code>true</code> the <code>get</code> methods will return the 
+     * data in the database, otherwise the current <code>ResultSet</code> 
+     * data is returned.
+     * @param databaseView <code>false</code> = get the data from the 
+     *        <code>ResultSet</code>, <code>true</code> = get the data
+     *        from the database, default is <code>false</code>
+     *
+     */
     public void setDatabaseView(boolean databaseView)
     {
         this.isDatabaseView = databaseView;
     }
     
+    /**
+     * Adds a row to the simulated database table.
+     * If there are not enough columns (initially there
+     * are no columns, you have to specify them with the
+     * <code>addColumn</code> methods) the missing columns will
+     * be added automatically. Automatically created columns
+     * will get the name <i>ColumnX</i> where <i>X</i> is
+     * the column index.
+     * @param values the row data as array, the array index
+     *        corresponds to the column index, i.e.
+     *        values[0] will be stored in the first column
+     *        and so on
+     */
     public void addRow(Object[] values)
     {
         List valueList = new ArrayList();
@@ -115,6 +171,19 @@ public class MockResultSet implements ResultSet
         addRow(valueList);
     }
     
+    /**
+     * Adds a row to the simulated database table.
+     * If there are not enough columns (initially there
+     * are no columns, you have to specify them with the
+     * <code>addColumn</code> methods) the missing columns will
+     * be added automatically. Automatically created columns
+     * will get the name <i>ColumnX</i> where <i>X</i> is
+     * the column index.
+     * @param values the row data as <code>List</code>, the index
+     *        in the <code>List</code> corresponds to the column 
+     *        index, i.e. values.get(0) will be stored in the first 
+     *        column and so on
+     */
     public void addRow(List values)
     {
         int missingColumns = values.size() - columnNameList.size();
@@ -135,26 +204,78 @@ public class MockResultSet implements ResultSet
         adjustFlags();
     }
     
+    /**
+     * Adds a column to the simulated database table.
+     * The column will get the name <i>ColumnX</i> where 
+     * <i>X</i> is the column index. The first added column
+     * will have the name <i>Column1</i>. No data will be stored
+     * in the column.
+     */
     public void addColumn()
     {
         addColumn(determineValidColumnName());
     }
     
+    /**
+     * Adds a column to the simulated database table.
+     * The column will get the specified name.
+     * No data will be stored in the column.
+     * @param columnName the column name
+     */
     public void addColumn(String columnName)
     {
         addColumn(columnName, new ArrayList());
     }
     
+    /**
+     * Adds a column to the simulated database table.
+     * The column will get the name <i>ColumnX</i> where 
+     * <i>X</i> is the column index. 
+     * The specified data will be stored in the new column. If there
+     * are other columns with not enough rows, the other
+     * columns will be extended and filled with <code>null</code>
+     * values.
+     * @param values the column data as array, the array index
+     *        corresponds to the row index, i.e.
+     *        values[0] will be stored in the first row
+     *        and so on
+     */
     public void addColumn(Object[] values)
     {
         addColumn(determineValidColumnName(), values);
     }
 
+    /**
+     * Adds a column to the simulated database table.
+     * The column will get the name <i>ColumnX</i> where 
+     * <i>X</i> is the column index. 
+     * The specified data will be stored in the new column. If there
+     * are other columns with not enough rows, the other
+     * columns will be extended and filled with <code>null</code>
+     * values.
+     * @param values the column data as <code>List</code>, the index
+     *        in the <code>List</code> corresponds to the row 
+     *        index, i.e. values.get(0) will be stored in the first 
+     *        row and so on
+     */
     public void addColumn(List values)
     {
         addColumn(determineValidColumnName(), values);
     }
     
+    /**
+     * Adds a column to the simulated database table.
+     * The column will get the specified name.
+     * The specified data will be stored in the new column. If there
+     * are other columns with not enough rows, the other
+     * columns will be extended and filled with <code>null</code>
+     * values.
+     * @param columnName the column name
+     * @param values the column data as array, the array index
+     *        corresponds to the row index, i.e.
+     *        values[0] will be stored in the first row
+     *        and so on
+     */
     public void addColumn(String columnName, Object[] values)
     {
         List columnValues = new ArrayList();
@@ -165,6 +286,19 @@ public class MockResultSet implements ResultSet
         addColumn(columnName, columnValues);
     }
     
+    /**
+     * Adds a column to the simulated database table.
+     * The column will get the specified name.
+     * The specified data will be stored in the new column. If there
+     * are other columns with not enough rows, the other
+     * columns will be extended and filled with <code>null</code>
+     * values.
+     * @param columnName the column name
+     * @param values the column data as <code>List</code>, the index
+     *        in the <code>List</code> corresponds to the row 
+     *        index, i.e. values.get(0) will be stored in the first 
+     *        row and so on
+     */
     public void addColumn(String columnName, List values)
     {
         List column = new ArrayList(values);
@@ -176,6 +310,10 @@ public class MockResultSet implements ResultSet
         adjustFlags();
     }
     
+    /**
+     * Returns the current number of rows.
+     * @return the number of rows
+     */
     public int getRowCount()
     {
         if(columnMapCopy.size() == 0) return 0;
