@@ -13,8 +13,30 @@ public class MockJspFragment //extends JspFragment
 {
     //private JspContext jspContext;
     private List childs;
+    //private JspTag parent;
     
-    /*public JspContext getJspContext()
+    /*public MockJspFragment(JspContext jspContext)
+    {
+        this(jspContext, null);
+    }
+    
+    public MockJspFragment(JspContext jspContext, JspTag parent)
+    {
+        this.jspContext = jspContext;
+        this.parent = parent;
+    }
+    
+    public JspTag getParent()
+    {
+        return parent;
+    }
+    
+    public void setParent(JspTag parent)
+    {
+        this.parent = parent;
+    }
+    
+    public JspContext getJspContext()
     {
         return jspContext;
     }
