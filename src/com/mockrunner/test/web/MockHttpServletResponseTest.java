@@ -21,7 +21,7 @@ public class MockHttpServletResponseTest extends TestCase
         assertTrue(response.getHeaderList("testHeader").contains("abc"));
         assertEquals("abc", response.getHeader("testHeader"));
         response.addDateHeader("dateHeader", 0);
-        assertEquals("01.01.1970", response.getHeader("dateHeader"));
+        assertEquals("Thu, 1 Jan 1970 01:00:00 +0100", response.getHeader("dateHeader"));
         response.addIntHeader("intHeader", 0);
         assertEquals("0", response.getHeader("intHeader"));
     }

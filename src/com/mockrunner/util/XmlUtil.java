@@ -9,7 +9,6 @@ import org.cyberneko.html.HTMLConfiguration;
 import org.jdom.Element;
 import org.jdom.input.DOMBuilder;
 import org.jdom.output.XMLOutputter;
-import org.w3c.dom.ls.DOMInput;
 import org.xml.sax.InputSource;
 
 /**
@@ -148,26 +147,6 @@ public class XmlUtil
         {
             parser.parse(new InputSource(new StringReader(source)));
             return parser.getDocument();
-        }
-        catch(Exception exc)
-        {
-            exc.printStackTrace();
-            throw new RuntimeException(exc.getMessage());
-        }
-    }
-    
-    /**
-     * Parses the specified XML with the specified parser.
-     * The main purpose of this method is to use a custom parser.
-     * @param parser the parser
-     * @param data the data as <code>DOMInput</code>
-     * @return the parsed document as org.w3c.dom.Document
-     */
-    public static org.w3c.dom.Document parse(org.w3c.dom.ls.DOMParser parser, DOMInput data)
-    {
-        try
-        {
-            return parser.parse(data);
         }
         catch(Exception exc)
         {

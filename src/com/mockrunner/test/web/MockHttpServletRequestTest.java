@@ -27,7 +27,7 @@ public class MockHttpServletRequestTest extends TestCase
         assertTrue(list.contains("xyz"));
         assertTrue(list.contains("abc"));
         assertNull(request.getHeader("anotherHeader"));
-        request.addHeader("dateHeader", "3.3.1980");
+        request.addHeader("dateHeader", "Friday, 06 Feb 2004 22:59:48 GMT");
         enum = request.getHeaderNames();
         list = new ArrayList();
         list.add(enum.nextElement());
@@ -36,9 +36,9 @@ public class MockHttpServletRequestTest extends TestCase
         assertTrue(list.contains("testHeader"));
         assertTrue(list.contains("dateHeader"));
         long date = request.getDateHeader("dateHeader");
-        assertEquals(320886000000l, date);
+        assertEquals(1076108388000l, date);
         assertEquals(-1, request.getDateHeader("anotherDateHeader"));
-        request.setHeader("dateHeader", "xy.1980");
+        request.setHeader("dateHeader", "3.3.1980");
         try
         {
             request.getDateHeader("dateHeader");

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -92,7 +93,7 @@ public class MockHttpServletResponse implements HttpServletResponse
     public void addDateHeader(String key, long date)
     {
         Date dateValue = new Date(date);
-        String dateString = DateFormat.getDateInstance().format(dateValue);
+        String dateString = new SimpleDateFormat(WebConstants.DATE_FORMAT_HEADER, Locale.US).format(dateValue);
         addHeader(key, dateString);
     }
 
