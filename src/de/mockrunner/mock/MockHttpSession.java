@@ -91,6 +91,11 @@ public class MockHttpSession extends com.mockobjects.servlet.MockHttpSession
         if (!isValid) throw new IllegalStateException("session invalid");
         removeAttribute(key);
     }
+    
+    public void clearAttributes()
+    {
+        attributes.clear();
+    }
 
     public Object getAttribute(String key)
     {

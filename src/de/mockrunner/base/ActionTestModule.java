@@ -28,16 +28,30 @@ public class ActionTestModule
     private MockActionForward forward;
     private ActionForm formObj;
     private Action actionObj;
+    private boolean reset;
     
     public ActionTestModule(MockObjectFactory mockFactory)
     {
         this.mockFactory = mockFactory;
+        reset = true;
+    }
+    
+    /**
+     * Set if the reset method should be called before
+     * populating a form with {@link #populateRequestToForm}.
+     * Default is true which is the standard Struts behaviour.
+     * @param reset should reset be called
+     */
+    public void setReset(boolean reset)
+    {
+        this.reset = reset;
     }
 
     /**
      * Convinience method for map backed properties. Creates a String
      * <i>value(property)</i>.
      * @param property the property
+     * @return the String in map backed propery style
      */
     public String addMappedPropertyRequestPrefix(String property)
     {
@@ -56,8 +70,8 @@ public class ActionTestModule
     }
 
     /**
-     * Sets if Form validation should be performed before calling the Action.
-     * Delegates to {@link MockActionMapping#setValidate}.
+     * Sets if Form validation should be performed before calling the action.
+     * Delegates to {@link MockActionMapping#setValidate}. Default is false.
      * @param validate should validation be performed
      */
     public void setValidate(boolean validate)
@@ -66,7 +80,7 @@ public class ActionTestModule
     }
     
     /**
-     * Sets the input attribute. If Form validation fails, the
+     * Sets the input attribute. If form validation fails, the
      * input attribute can be verified with {@link #verifyForward}.
      * Delegates to {@link MockActionMapping#setInput}.
      * @param input the input attribute
@@ -78,6 +92,7 @@ public class ActionTestModule
 
     /**
      * Verifies the forward path returned by the action.
+     * @param path the expected path
      * @throws VerifyFailedException if verification fails
      */
     public void verifyForward(String path)
@@ -94,6 +109,7 @@ public class ActionTestModule
     
     /**
      * Verifies the redirect attribute.
+     * @param redirect the expected redirect attribute
      * @throws VerifyFailedException if verification fails
      */
     public void verifyRedirect(boolean redirect)
@@ -169,7 +185,7 @@ public class ActionTestModule
     /**
      * Verifies that an action error with the specified key
      * is present.
-     * @param errorKey the error key
+     * @param errorKey the expected error key
      * @throws VerifyFailedException if verification fails
      */
     public void verifyActionErrorPresent(String errorKey)
@@ -180,7 +196,7 @@ public class ActionTestModule
     /**
      * Verifies that an action message with the specified key
      * is present.
-     * @param messageKey the message key
+     * @param messageKey the expected message key
      * @throws VerifyFailedException if verification fails
      */
     public void verifyActionMessagePresent(String messageKey)
@@ -241,7 +257,7 @@ public class ActionTestModule
     /**
      * Verifies that the specified action errors are present.
      * Regards number and order of action errors.
-     * @param errorKeys the array of error keys
+     * @param errorKeys the array of expected error keys
      * @throws VerifyFailedException if verification fails
      */
     public void verifyActionErrors(String errorKeys[])
@@ -252,7 +268,7 @@ public class ActionTestModule
     /**
      * Verifies that the specified action messages are present.
      * Regards number and order of action messages.
-     * @param messageKeys the array of message keys
+     * @param messageKeys the array of expected message keys
      * @throws VerifyFailedException if verification fails
      */
     public void verifyActionMessages(String messageKeys[])
@@ -345,11 +361,21 @@ public class ActionTestModule
         verifyActionMessageValues(messageKey, new Object[] { value });
     }
     
+    /**
+     * Verifies the number of action errors.
+     * @param number the expected number of errors
+     * @throws VerifyFailedException if verification fails
+     */
     public void verifyNumberActionErrors(int number)
     {
         verifyNumberActionMessages(number, getActionErrors());
     }
     
+    /**
+     * Verifies the number of action messages.
+     * @param number the expected number of messages
+     * @throws VerifyFailedException if verification fails
+     */
     public void verifyNumberActionMessages(int number)
     {
         verifyNumberActionMessages(number, getActionMessages());
@@ -366,12 +392,24 @@ public class ActionTestModule
         throw new VerifyFailedException("no action messages/errors");
     }
 
+    /**
+     * Returns the action error with the specified key or null
+     * if such an error does not exist.
+     * @param errorKey the error key
+     * @return the action error with the specified key
+     */
     public ActionError getActionErrorByKey(String errorKey)
     {
         return (ActionError)getActionMessageByKey(errorKey, getActionErrors());
     }
     
-    public ActionError getActionMessageByKey(String messageKey)
+    /**
+     * Returns the action message with the specified key or null
+     * if such a message does not exist.
+     * @param errorKey the error key
+     * @return the action message with the specified key
+     */
+    public ActionMessage getActionMessageByKey(String messageKey)
     {
         return (ActionError)getActionMessageByKey(messageKey, getActionMessages());
     }
@@ -391,68 +429,136 @@ public class ActionTestModule
         return null;
     }
     
+    /**
+     * Sets the specified <code>ActionMessages</code> object 
+     * as the currently present messages.
+     * @param messages the ActionMessages object
+     */
     public void setActionMessages(ActionMessages messages)
     {
         mockFactory.getMockRequest().setAttribute(Globals.MESSAGE_KEY, messages);
     }
 
+    /**
+     * Get the currently present action messages. Can be called
+     * after {@link #actionPerform} to get the messages the action
+     * has set.
+     * @return the action messages
+     */
     public ActionMessages getActionMessages()
     {
         return (ActionMessages) mockFactory.getMockRequest().getAttribute(Globals.MESSAGE_KEY);
     }
     
+    /**
+     * Returns if action messages are present.
+     * @return true if messages are present, false otherwise
+     */
     public boolean hasActionMessages()
     {
         ActionMessages messages = getActionMessages();
         return containsMessages(messages);
     }
 
+    /**
+     * Sets the specified <code>ActionErrors</code> object 
+     * as the currently present errors.
+     * @param messages the ActionErrors object
+     */
     public void setActionErrors(ActionErrors errors)
     {
         mockFactory.getMockRequest().setAttribute(Globals.ERROR_KEY, errors);
     }
 
+    /**
+     * Get the currently present action errors. Can be called
+     * after {@link #actionPerform} to get the errors the action
+     * has set.
+     * @return the action errors
+     */
     public ActionErrors getActionErrors()
     {
         return (ActionErrors) mockFactory.getMockRequest().getAttribute(Globals.ERROR_KEY);
     }
 
+    /**
+     * Returns if action errors are present.
+     * @return true if errors are present, false otherwise
+     */
     public boolean hasActionErrors()
     {
         ActionErrors errors = getActionErrors();
         return containsMessages(errors);
     }
 
+    /**
+     * Returns the <code>MockActionMapping</code> passed to 
+     * the action. Can be manipulated before and after 
+     * {@link #actionPerform}.
+     * Delegates to {@link MockObjectFactory#getMockActionMapping}.
+     * @return the MockActionMapping
+     */
     public MockActionMapping getMockActionMapping()
     {
         return mockFactory.getMockActionMapping();
     }
 
+    /**
+     * Returns the <code>MockPageContext</code> object.
+     * Delegates to {@link MockObjectFactory#getMockPageContext}.
+     * @return the MockPageContext
+     */
     public MockPageContext getMockPageContext()
     {
         return mockFactory.getMockPageContext();
     }
 
+    /**
+     * Returns the current <code>ActionForward</code>. 
+     * Can be called after {@link #actionPerform} to get 
+     * the <code>ActionForward</code> the action
+     * has returned.
+     * @return the MockActionForward
+     */
     public MockActionForward getActionForward()
     {
         return forward;
     }
 
-    protected Action getLastAction()
+    /**
+     * Returns the last tested <code>Action</code> object.
+     * @return the <code>Action</code> object
+     */
+    public Action getLastAction()
     {
         return actionObj;
     }
 
+    /**
+     * Adds an empty request parameter. Same as
+     * <code>addRequestParameter(key, "")</code>.
+     * @param key the request key
+     */
     public void addRequestParameter(String key)
     {
         addRequestParameter(key, "");
     }
 
+    /**
+     * Adds a request parameter. Request parameters are populated
+     * to the <code>ActionForm</code>. To add parameters for map 
+     * backed properties use the <i>value(property)</i> style.
+     * @param key the request key
+     * @param key the request value
+     */
     public void addRequestParameter(String key, String value)
     {
         mockFactory.getMockRequest().setupAddParameter(key, value);
     }
 
+    /**
+     * Generates a token and sets it to the session and the request.
+     */
     public void generateValidToken()
     {
         String token = String.valueOf(Math.random());
@@ -460,16 +566,31 @@ public class ActionTestModule
         addRequestParameter(Constants.TOKEN_KEY, token);
     }
     
+    /**
+     * Returns the currently set <code>ActionForm</code>.
+     * @return the <code>ActionForm</code> object
+     */
     public ActionForm getActionForm()
     {
         return formObj;
     }
 
+    /**
+     * Sets the specified <code>ActionForm</code> object as the
+     * current <code>ActionForm</code>. Will be used in next test.
+     * @param formObj the <code>ActionForm</code> object
+     */
     public void setActionForm(ActionForm formObj)
     {
         this.formObj = formObj;
     }
 
+    /**
+     * Creates a new <code>ActionForm</code> object of the specified
+     * type and sets it as the current <code>ActionForm</code>. Will be 
+     * used in next test.
+     * @param form the <code>Class</code> of the form
+     */
     public ActionForm createActionForm(Class form)
     {
         try
@@ -489,6 +610,14 @@ public class ActionTestModule
         }
     }
 
+    /**
+     * Populates the current request parameters to the
+     * <code>ActionForm</code>. The form will be reseted 
+     * before populating if reset is enabled ({@link #setReset}.
+     * If form validation is enabled (use {@link #setValidate} the
+     * form will be validated after populating it and the
+     * appropriate <code>ActionErrors</code> will be set.
+     */
     public void populateRequestToForm()
     {
         try
@@ -502,6 +631,11 @@ public class ActionTestModule
         }
     }
 
+    /**
+     * Calls the action of the specified type using
+     * no <code>ActionForm</code>.
+     * @param action the <code>Class</code> of the action
+     */
     public void actionPerform(Class action)
     {
         try
@@ -515,6 +649,19 @@ public class ActionTestModule
         }
     }
 
+    /**
+     * Calls the action of the specified type using
+     * the <code>ActionForm</code> of the specified type. 
+     * Creates the appropriate <code>ActionForm</code> and 
+     * populates it before calling the action. If form 
+     * validation is enabled (use {@link #setValidate} and 
+     * fails, the action will not be called. The returned 
+     * <code>ActionForward</code> (get it with {@link #getActionForward}) 
+     * is based on the input attribute you can set with {@link #setInput},
+     * if form validation fails.
+     * @param action the <code>Class</code> of the action
+     * @param form the <code>Class</code> of the form
+     */
     public void actionPerform(Class action, Class form)
     {
         try
@@ -529,6 +676,22 @@ public class ActionTestModule
         }
     }
 
+    /**
+     * Calls the action of the specified type using
+     * the specified <code>ActionForm</code> object. The form 
+     * will be populated before the action is called. Please
+     * note that request parameters will eventually overwrite
+     * form values. Furthermore the form will be reseted
+     * before populating it. If you do not want that, disable reset
+     * {@link #setReset}.
+     * If form validation is enabled  (use {@link #setValidate} 
+     * and fails, the action will not be called. The returned 
+     * <code>ActionForward</code> (get it with {@link #getActionForward}) 
+     * is based on the input attribute you can set with {@link #setInput},
+     * if form validation fails.
+     * @param action the <code>Class</code> of the action
+     * @param form the <code>ActionForm</code> object
+     */
     public void actionPerform(Class action, ActionForm form)
     {
         try
