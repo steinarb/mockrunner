@@ -5,7 +5,8 @@ import java.io.File;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 
-/* Very simple ant task for the JarAnalyzer project
+/* 
+ * Very simple ant task for the JarAnalyzer
  * http://www.kirkk.com/wiki/wiki.php/Main/JarAnalyzer
  * by Kirk Knoernschild
  */
@@ -13,6 +14,7 @@ public class JarAnalyzerTask extends Task
 {
     private File srcdir;
     private File destfile;
+    private String summaryclass;
     
     public void setSrcdir(File srcdir)
     {
@@ -24,12 +26,19 @@ public class JarAnalyzerTask extends Task
         this.destfile = destfile;
     }
     
+    public void setSummaryclass(String summaryclass)
+    {
+        this.summaryclass = summaryclass;
+    }
+    
     public void execute() throws BuildException
     {
         validateAttributes();
         try
         {
-            new TextSummary().createSummary(srcdir, destfile);
+            Class clazz = Class.forName(summaryclass);
+            Summary summary = (Summary)clazz.newInstance();
+            summary.createSummary(srcdir, destfile);
             log(destfile + " successfully created");
         } 
         catch(Exception exc)
@@ -55,6 +64,10 @@ public class JarAnalyzerTask extends Task
         if(destfile.isDirectory())
         {
             throw new BuildException("srcdir must be a file");
+        }
+        if(null == summaryclass)
+        {
+            throw new BuildException("Missing summaryclass");
         }
     }
 }
