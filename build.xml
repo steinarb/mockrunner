@@ -81,6 +81,18 @@
             </fileset>
         </path>
         
+        <path id="classpathj2ee1.3.jar">
+            <fileset dir="${lib}">
+                <include name="*.jar" />
+                <exclude name="jboss-j2ee.jar" />
+                <exclude name="servlet-api.jar" />
+                <exclude name="jsp-api.jar" />
+            </fileset>
+            <fileset dir="${lib}/j2ee1.3">
+                <include name="*.jar" />
+            </fileset>
+        </path>
+        
         <patternset id="runtime.jars">
             <include name="**/*" />
             <exclude name="bcel-5.1.jar" />
@@ -182,6 +194,29 @@
                 <path refid="classpath.jar" />
             </classpath>
         </javac>
+        <antcall target="compilej2ee1.3" />
+    </target>
+    
+    <target name="compilej2ee1.3" if="dobuild.j2ee1.3" depends="init">
+        <mkdir dir="${buildj2ee1.3}" />
+        <javac destdir="${buildj2ee1.3}" executable="${java1.4.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+            <classpath>
+                <path refid="classpathj2ee1.3.jar" />
+            </classpath>
+            <src path="${src}/com/mockrunner/base" />
+            <src path="${src}/com/mockrunner/servlet" />
+            <src path="${src}/com/mockrunner/struts" />
+            <src path="${src}/com/mockrunner/ejb" />
+            <src path="${src}/com/mockrunner/mock/ejb" />
+            <src path="${src}/com/mockrunner/jms" />
+            <src path="${src}/com/mockrunner/mock/jms" />
+            <src path="${src}/com/mockrunner/jdbc" />
+            <src path="${src}/com/mockrunner/mock/jdbc" />
+            <src path="${src}/com/mockrunner/util/common" />
+            <src path="${src}/com/mockrunner/util/web" />
+            <src path="${src}/org/codehaus" />
+            <src path="${srcj2ee1.3}" />
+        </javac>
     </target>
 
     <target name="compilejdk1.3" if="java1.3.home" depends="init">
@@ -204,13 +239,35 @@
             <src path="${src}/org/codehaus" />
             <src path="${srcjdk1.3}" />
         </javac>
+        <antcall target="compilejdk1.3j2ee1.3" />
+    </target>
+    
+    <target name="compilejdk1.3j2ee1.3" if="dobuild.j2ee1.3" depends="init">
+        <mkdir dir="${buildjdk1.3j2ee1.3}" />
+        <javac destdir="${buildjdk1.3j2ee1.3}" target="1.2" executable="${java1.3.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+            <classpath>
+                <path refid="classpathj2ee1.3.jar" />
+            </classpath>
+            <src path="${src}/com/mockrunner/base" />
+            <src path="${src}/com/mockrunner/servlet" />
+            <src path="${src}/com/mockrunner/struts" />
+            <src path="${src}/com/mockrunner/ejb" />
+            <src path="${src}/com/mockrunner/mock/ejb" />
+            <src path="${src}/com/mockrunner/jms" />
+            <src path="${src}/com/mockrunner/mock/jms" />
+            <src path="${src}/com/mockrunner/util/common" />
+            <src path="${src}/com/mockrunner/util/web" />
+            <src path="${src}/org/codehaus" />
+            <src path="${srcjdk1.3}" />
+            <src path="${srcj2ee1.3}" />
+        </javac>
     </target>
     
     <target name="jars" depends="compile">
         <antcall target="jar">
             <param name="jarname" value="mockrunner.jar" />
             <param name="jdkver" value="1.4" />
-            <param name="j2eever" value="1.3" />
+            <param name="j2eever" value="1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
@@ -238,31 +295,63 @@
         <antcall target="jar">
             <param name="jarname" value="mockrunner-servlet.jar" />
             <param name="jdkver" value="1.3 and 1.4" />
-            <param name="j2eever" value="1.3" />
+            <param name="j2eever" value="1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="servlet.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-tag.jar" />
             <param name="jdkver" value="1.3 and 1.4" />
-            <param name="j2eever" value="1.3" />
+            <param name="j2eever" value="1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="tag.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-struts.jar" />
             <param name="jdkver" value="1.3 and 1.4" />
-            <param name="j2eever" value="1.3" />
+            <param name="j2eever" value="1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="struts.jar.classes" />
         </antcall>
+        <antcall target="jarsj2ee1.3" />
     </target>
-        
+    
+    <target name="jarsj2ee1.3" if="dobuild.j2ee1.3" depends="compilej2ee1.3">
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-j2ee.13.jar" />
+            <param name="jdkver" value="1.4" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${buildj2ee1.3}" />
+            <param name="jarpattern" value="full.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-servlet-j2ee.1.3.jar" />
+            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${buildj2ee1.3}" />
+            <param name="jarpattern" value="servlet.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-tag-j2ee.1.3.jar" />
+            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${buildj2ee1.3}" />
+            <param name="jarpattern" value="tag.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-struts-j2ee.1.3.jar" />
+            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${buildj2ee1.3}" />
+            <param name="jarpattern" value="struts.jar.classes" />
+        </antcall>
+    </target>
+    
     <target name="jarsjdk1.3" if="java1.3.home" depends="compilejdk1.3">
         <antcall target="jar">
             <param name="jarname" value="mockrunner-jdk1.3.jar" />
             <param name="jdkver" value="1.3" />
-            <param name="j2eever" value="1.3" />
+            <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.3}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
@@ -272,6 +361,17 @@
             <param name="j2eever" value="1.3 and 1.4" />
             <param name="builddir" value="${buildjdk1.3}" />
             <param name="jarpattern" value="jdbc.jar.classes" />
+        </antcall>
+        <antcall target="jarsjdk1.3j2ee1.3" />
+    </target>
+    
+    <target name="jarsjdk1.3j2ee1.3" if="dobuild.j2ee1.3" depends="compilejdk1.3j2ee1.3">
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-jdk1.3-j2ee.1.3.jar" />
+            <param name="jdkver" value="1.3" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${buildjdk1.3j2ee1.3}" />
+            <param name="jarpattern" value="full.jar.classes" />
         </antcall>
     </target>
 
@@ -303,7 +403,7 @@
         </jar>
     </target>
     
-    <target name="dependencies" depends="jars,jarsjdk1.3">
+    <target name="dependencies" depends="jars,jarsjdk1.3,jarsj2ee1.3,jarsjdk1.3j2ee1.3">
         <mkdir dir="${dependencies}" />
         <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
             <classpath>
@@ -367,7 +467,7 @@
         </javadoc>
     </target>
 
-	<target name="java2html" if="java2html.home" depends="javadoc">
+	<target name="java2html" if="java2html.home" depends="init">
 	    <mkdir dir="${doc}/examples" />
 	    <taskdef name="java2html" classname="com.java2html.Java2HTMLTask" classpath="${java2html.home}/j2h.jar" />
 	
@@ -378,7 +478,7 @@
 	    </java2html>
 	</target>
 
-	<target name="release" depends="clean,jars,jarsjdk1.3,javadoc,java2html,dependencies">
+	<target name="release" depends="clean,jars,jarsjdk1.3,jarsj2ee1.3,jarsjdk1.3j2ee1.3,javadoc,java2html,dependencies">
 	    <delete dir="${releasedir}" />
 	    <delete file="${releasefile}" />
 	    <mkdir dir="${releasedir}" />
@@ -453,6 +553,8 @@
 	    <delete dir="${doc}" />
 	    <delete dir="${build}" />
 	    <delete dir="${buildjdk1.3}" />
+        <delete dir="${buildj2ee1.3}" />
+        <delete dir="${buildjdk1.3j2ee1.3}" />   
         <delete dir="${dependencies}" />   
 	</target>
 

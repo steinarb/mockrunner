@@ -115,6 +115,7 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
         
         JavaLineProcessor tagUtilProc = new JavaLineProcessor();
         tagUtilProc.addLine("import javax.servlet.jsp.JspContext;");
+        tagUtilProc.addLine("import javax.servlet.jsp.tagext.DynamicAttributes;");
         tagUtilProc.addLine("import javax.servlet.jsp.tagext.SimpleTag;");
         tagUtilProc.addBlock("else if(tag instanceof SimpleTag)");
         tagUtilProc.addBlock("private static void checkJspContext(Object pageContext)");
