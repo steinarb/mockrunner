@@ -1,12 +1,11 @@
 package com.mockrunner.mock.ejb;
 
-import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 import javax.transaction.UserTransaction;
 
 import org.mockejb.MockContainer;
-import org.mockejb.MockContext;
+import org.mockejb.jndi.MockContextFactory;
 
 /**
  * Used to create all types of EJB mock objects. 
@@ -26,27 +25,23 @@ import org.mockejb.MockContext;
 public class EJBMockObjectFactory
 {
     private UserTransaction transaction;
+    private MockContainer container;
     
     /**
      * Creates a new set of mock objects.
      */
     public EJBMockObjectFactory()
-    {
-        activateMockContainer();
-        createTransactionFromContext();
-    }
-    
-    private void activateMockContainer()
-    {
-        if(!MockContainer.isActive()) return;
-        System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "org.mockejb.MockContextFactory");
+    { 
+        initializeMockEJB();
     }
 
-    private void createTransactionFromContext()
+    private void initializeMockEJB()
     {
         try
         {
+            MockContextFactory.setAsInitial();
             InitialContext context = new InitialContext();
+            container = new MockContainer(context);
             try
             {
                 transaction = (UserTransaction)context.lookup("javax.transaction.UserTransaction");
@@ -54,7 +49,7 @@ public class EJBMockObjectFactory
             catch(NameNotFoundException nameExc)
             {
                 transaction = new MockUserTransaction();
-                MockContext.add("javax.transaction.UserTransaction", transaction);
+                context.rebind("javax.transaction.UserTransaction", transaction);
             }
         }
         catch(Exception exc)
@@ -85,5 +80,14 @@ public class EJBMockObjectFactory
     public UserTransaction getUserTransaction()
     {
         return transaction;
+    }
+    
+    /**
+     * Returns the MockEJB <code>MockContainer</code>.
+     * @return the <code>MockContainer</code>
+     */
+    public MockContainer getMockContainer()
+    {
+        return container;
     }
 }
