@@ -78,6 +78,8 @@
             <src path="${src}/com/mockrunner/util"/>
             <src path="${src}/com/mockrunner/ejb"/>
             <src path="${src}/com/mockrunner/mock/ejb"/>
+            <src path="${src}/com/mockrunner/jms"/>
+            <src path="${src}/com/mockrunner/mock/jms"/>
             <src path="${src}/org/apache"/>
             <src path="${src1.3}"/>
 		</javac>	
