@@ -1,7 +1,9 @@
 package com.mockrunner.mock.jms;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Stack;
+import java.util.Vector;
 
 import javax.jms.JMSException;
 import javax.jms.MessageEOFException;
@@ -407,5 +409,63 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         super.clearBody();
         data = new Stack();
         isInWriteMode = true;
+    }
+    
+    /**
+     * Compares the underlying stream data.
+     */
+    public boolean equals(Object otherObject)
+    {
+        if(null == otherObject) return false;
+        if(!(otherObject instanceof MockStreamMessage)) return false;
+        MockStreamMessage otherMessage = (MockStreamMessage)otherObject;
+        if(data.size() != otherMessage.data.size()) return false;
+        Vector otherData = otherMessage.data;
+        if(isInWriteMode != otherMessage.isInWriteMode)
+        {
+            otherData = new Vector(otherData);
+            Collections.reverse(otherData);
+        }
+        for(int ii = 0; ii < data.size(); ii++)
+        {
+            Object nextValue = data.get(ii);
+            Object otherValue = otherData.get(ii);
+            if(null == nextValue)
+            {
+                if(null != otherValue) return false;
+            }
+            else if(nextValue instanceof byte[])
+            {
+                if(null == otherValue) return false;
+                if(!(otherValue instanceof byte[])) return false;
+                if(!Arrays.equals((byte[])nextValue, (byte[])otherValue)) return false;
+            }
+            else
+            {
+                if(!nextValue.equals(otherValue)) return false;
+            }
+        }
+        return true;
+    }
+
+    public int hashCode()
+    {
+        int value = 0;
+        for(int ii = 0; ii < data.size(); ii++)
+        {
+            Object nextValue = data.get(ii);
+            if(nextValue instanceof byte[])
+            {
+                for(int yy = 0; yy < ((byte[])nextValue).length; yy++)
+                {
+                    value += ((byte[])nextValue)[yy];
+                }
+            }
+            else if(nextValue != null)
+            {
+                value += nextValue.hashCode();
+            }
+        }
+        return value;
     }
 }

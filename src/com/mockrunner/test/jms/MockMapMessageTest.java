@@ -83,4 +83,39 @@ public class MockMapMessageTest extends TestCase
         }
         assertNull(message.getString("null"));
     }
+    
+    public void testEquals() throws Exception
+    {
+        MockMapMessage message1 = new MockMapMessage();
+        message1.setInt("name1", 1);
+        message1.setString("name2", "text");
+        message1.setBytes("name3", new byte[] {1, 2, 3});
+        MockMapMessage message2 = null;
+        assertFalse(message1.equals(message2));
+        message2 = new MockMapMessage();
+        assertFalse(message1.equals(message2));
+        assertTrue(message2.equals(new MockMapMessage()));
+        assertEquals(message2.hashCode(), new MockMapMessage().hashCode());
+        message2.setInt("name1", 1);
+        message2.setString("name2", "text");
+        message2.setBytes("name3", new byte[] {1, 2, 1});
+        assertFalse(message1.equals(message2));
+        assertFalse(message2.equals(message1));
+        message2.setBytes("name3", new byte[] {1, 2, 3});
+        assertTrue(message1.equals(message2));
+        assertTrue(message2.equals(message1));
+        assertEquals(message1.hashCode(), message2.hashCode());
+        message2.setString("name4", "text");
+        assertFalse(message1.equals(message2));
+        message2.setString("name4", null);
+        assertFalse(message1.equals(message2));
+        assertFalse(message2.equals(message1));
+        message1.setString("name4", null);
+        assertTrue(message1.equals(message2));
+        assertTrue(message2.equals(message1));
+        assertEquals(message1.hashCode(), message2.hashCode());
+        message2.setBytes("name3", new byte[] {});
+        assertFalse(message1.equals(message2));
+        assertFalse(message2.equals(message1));
+    }
 }

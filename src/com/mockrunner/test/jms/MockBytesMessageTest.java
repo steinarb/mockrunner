@@ -103,4 +103,35 @@ public class MockBytesMessageTest extends TestCase
         message.readBytes(data, 1);
         assertTrue(Arrays.equals(data, new byte[] { 1 }));
     }
+    
+    public void testEquals() throws Exception
+    {
+        MockBytesMessage message1 = new MockBytesMessage();
+        message1.writeChar('t');
+        message1.writeUTF("est");
+        message1.writeByte((byte)1);
+        message1.writeLong(2345);
+        MockBytesMessage message2 = new MockBytesMessage();
+        message2.writeChar('t');
+        message2.writeUTF("est");
+        message2.writeByte((byte)1);
+        assertFalse(message1.equals(message2));
+        assertFalse(message2.equals(message1));
+        message2.writeLong(2345);
+        assertTrue(message1.equals(message2));
+        assertTrue(message2.equals(message1));
+        assertEquals(message1.hashCode(), message2.hashCode());
+        message1.reset();
+        assertTrue(message1.equals(message2));
+        assertTrue(message2.equals(message1));
+        assertTrue(new MockBytesMessage().equals(new MockBytesMessage()));
+        assertEquals(new MockBytesMessage().hashCode(), new MockBytesMessage().hashCode());
+        message1 = new MockBytesMessage();
+        message1.writeUTF("test");
+        message1.writeInt(3);
+        message2 = new MockBytesMessage();
+        message2.writeInt(3);
+        message2.writeUTF("test");
+        assertFalse(message1.equals(message2));
+    }
 }
