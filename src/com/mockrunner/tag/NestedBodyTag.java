@@ -17,6 +17,7 @@ import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.mockrunner.mock.MockBodyContent;
+import com.mockrunner.util.*;
 
 public class NestedBodyTag extends BodyTagSupport implements NestedTag
 {
@@ -210,4 +211,9 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
 	{
 		tag.setBodyContent(arg0);
 	}
+    
+    public String toString()
+    {
+        return TagUtil.dumpTag(this, new StringBuffer(), 0);
+    }
 }

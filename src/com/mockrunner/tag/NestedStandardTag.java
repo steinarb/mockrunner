@@ -12,6 +12,8 @@ import javax.servlet.jsp.tagext.IterationTag;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import com.mockrunner.util.*;
+
 public class NestedStandardTag extends TagSupport implements NestedTag
 {
 	private TagSupport tag;
@@ -172,4 +174,9 @@ public class NestedStandardTag extends TagSupport implements NestedTag
 	{
 		tag.setValue(arg0, arg1);
 	}
+    
+    public String toString()
+    {
+        return TagUtil.dumpTag(this, new StringBuffer(), 0);
+    }
 }

@@ -10,7 +10,7 @@ import com.mockrunner.mock.MockPageContext;
 import com.mockrunner.tag.NestedBodyTag;
 import com.mockrunner.tag.NestedStandardTag;
 import com.mockrunner.tag.NestedTag;
-import com.mockrunner.tag.TagUtil;
+import com.mockrunner.util.TagUtil;
 
 public class TagUtilTest extends BaseTestCase
 {
@@ -49,12 +49,12 @@ public class TagUtilTest extends BaseTestCase
         assertEquals("test", tag.getTestString());
         assertEquals(12.3, tag.getTestDouble(), 0.00);
         assertEquals(new Integer(100), tag.getTestInteger());
-        assertFalse(tag.getReleaseCalled());
+        assertFalse(tag.wasReleaseCalled());
         testMap.put("testInteger", "3");
         testMap.put("noValidProperty", "123");
         testMap.put("testDouble", "notValid");
         TagUtil.populateTag(tag, testMap, true);
-        assertTrue(tag.getReleaseCalled());
+        assertTrue(tag.wasReleaseCalled());
         assertEquals(new Integer(3), tag.getTestInteger());
         assertEquals(0.0, tag.getTestDouble(), 0.00);
     }
