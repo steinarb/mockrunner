@@ -1403,15 +1403,12 @@ public class JMSTestModule
      * @param nameOfQueue the name of the queue
      * @param indexOfSourceMessage the index of the message in the queue
      * @param targetMessage the message that will be used for comparison
+     * @throws VerifyFailedException if verification fails
      */
     public void verifyCurrentQueueMessageEquals(String nameOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
     {
         checkQueueByName(nameOfQueue);
         List messageList = getCurrentMessageListFromQueue(nameOfQueue);
-        if(null == messageList)
-        {
-            throw new VerifyFailedException("No queue with name " + nameOfQueue + " exists");
-        }
         if(indexOfSourceMessage >= messageList.size())
         {
             throw new VerifyFailedException("Queue " + nameOfQueue + " contains only " + messageList.size() + " messages");
@@ -1427,15 +1424,12 @@ public class JMSTestModule
      * @param nameOfQueue the name of the queue
      * @param indexOfSourceMessage the index of the received message
      * @param targetMessage the message that will be used for comparison
+     * @throws VerifyFailedException if verification fails
      */
     public void verifyReceivedQueueMessageEquals(String nameOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
     {
         checkQueueByName(nameOfQueue);
         List messageList = getReceivedMessageListFromQueue(nameOfQueue);
-        if(null == messageList)
-        {
-            throw new VerifyFailedException("No queue with name " + nameOfQueue + " exists");
-        }
         if(indexOfSourceMessage >= messageList.size())
         {
             throw new VerifyFailedException("Queue " + nameOfQueue + " received only " + messageList.size() + " messages");
@@ -1452,9 +1446,11 @@ public class JMSTestModule
      * @param indexOfQueue the index of the temporary queue
      * @param indexOfSourceMessage the index of the message in the queue
      * @param targetMessage the message that will be used for comparison
+     * @throws VerifyFailedException if verification fails
      */
     public void verifyCurrentQueueMessageEquals(int indexOfSession, int indexOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
     {
+        checkAndGetQueueSessionByIndex(indexOfSession);
         List messageList = getCurrentMessageListFromTemporaryQueue(indexOfSession, indexOfQueue);
         if(null == messageList)
         {
@@ -1476,9 +1472,11 @@ public class JMSTestModule
      * @param indexOfQueue the index of the temporary queue
      * @param indexOfSourceMessage the index of the received message
      * @param targetMessage the message that will be used for comparison
+     * @throws VerifyFailedException if verification fails
      */
     public void verifyReceivedQueueMessageEquals(int indexOfSession, int indexOfQueue, int indexOfSourceMessage, MockMessage targetMessage)
     {
+        checkAndGetQueueSessionByIndex(indexOfSession);
         List messageList = getReceivedMessageListFromTemporaryQueue(indexOfSession, indexOfQueue);
         if(null == messageList)
         {
@@ -1502,10 +1500,6 @@ public class JMSTestModule
     {
         checkQueueByName(nameOfQueue);
         List list = getCurrentMessageListFromQueue(nameOfQueue);
-        if(null == list)
-        {
-            throw new VerifyFailedException("No queue with name " + nameOfQueue + " exists");
-        }
         if(numberOfMessages != list.size())
         {
             throw new VerifyFailedException("Expected " + numberOfMessages + " messages in queue " + nameOfQueue + ", received " + list.size() + " messages");
@@ -1522,10 +1516,6 @@ public class JMSTestModule
     {
         checkQueueByName(nameOfQueue);
         List list = getReceivedMessageListFromQueue(nameOfQueue);
-        if(null == list)
-        {
-            throw new VerifyFailedException("No queue with name " + nameOfQueue + " exists");
-        }
         if(numberOfMessages != list.size())
         {
             throw new VerifyFailedException("Expected " + numberOfMessages + " messages received by queue " + nameOfQueue + ", received " + list.size() + " messages");
@@ -1541,6 +1531,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfCurrentQueueMessages(int indexOfSession, int indexOfQueue, int numberOfMessages)
     {
+        checkAndGetQueueSessionByIndex(indexOfSession);
         List list = getCurrentMessageListFromTemporaryQueue(indexOfSession, indexOfQueue);
         if(null == list)
         {
@@ -1561,6 +1552,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfReceivedQueueMessages(int indexOfSession, int indexOfQueue, int numberOfMessages)
     {
+        checkAndGetQueueSessionByIndex(indexOfSession);
         List list = getReceivedMessageListFromTemporaryQueue(indexOfSession, indexOfQueue);
         if(null == list)
         {
@@ -1569,6 +1561,100 @@ public class JMSTestModule
         if(numberOfMessages != list.size())
         {
             throw new VerifyFailedException("Expected " + numberOfMessages + " messages, received " + list.size() + " messages");
+        }
+    }
+    
+    /**
+     * Verifies that a received message is acknowledged.
+     * @param nameOfQueue the name of the queue
+     * @param indexOfMessage the index of the received message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyReceivedQueueMessageAcknowledged(String nameOfQueue, int indexOfMessage)
+    {
+        checkQueueByName(nameOfQueue);
+        List messageList = getReceivedMessageListFromQueue(nameOfQueue);
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Queue " + nameOfQueue + " received only " + messageList.size() + " messages");
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of queue " + nameOfQueue + " is not acknowledged");
+        }
+    }
+    
+    /**
+     * Verifies that a received message is not acknowledged.
+     * @param nameOfQueue the name of the queue
+     * @param indexOfMessage the index of the received message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyReceivedQueueMessageNotAcknowledged(String nameOfQueue, int indexOfMessage)
+    {
+        checkQueueByName(nameOfQueue);
+        List messageList = getReceivedMessageListFromQueue(nameOfQueue);
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Queue " + nameOfQueue + " received only " + messageList.size() + " messages");
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of queue " + nameOfQueue + " is acknowledged");
+        }
+    }
+    
+    /**
+     * Verifies that a received message is acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfQueue the index of the temporary queue
+     * @param indexOfMessage the index of the received message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyReceivedQueueMessageAcknowledged(int indexOfSession, int indexOfQueue, int indexOfMessage)
+    {
+        checkAndGetQueueSessionByIndex(indexOfSession);
+        List messageList = getReceivedMessageListFromTemporaryQueue(indexOfSession, indexOfQueue);
+        if(null == messageList)
+        {
+            throw new VerifyFailedException("Temporary queue with index " + indexOfQueue + " of session with index " + indexOfSession +  " does not exist");
+        }
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Temporary queue with index " + indexOfQueue + " received only " + messageList.size() + " messages");
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of temporary queue " + indexOfQueue + " is not acknowledged");
+        }
+    }
+    
+    /**
+     * Verifies that a received message is not acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfQueue the index of the temporary queue
+     * @param indexOfMessage the index of the received message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyReceivedQueueMessageNotAcknowledged(int indexOfSession, int indexOfQueue, int indexOfMessage)
+    {
+        checkAndGetQueueSessionByIndex(indexOfSession);
+        List messageList = getReceivedMessageListFromTemporaryQueue(indexOfSession, indexOfQueue);
+        if(null == messageList)
+        {
+            throw new VerifyFailedException("Temporary queue with index " + indexOfQueue + " of session with index " + indexOfSession +  " does not exist");
+        }
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Temporary queue with index " + indexOfQueue + " received only " + messageList.size() + " messages");
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of temporary queue " + indexOfQueue + " is acknowledged");
         }
     }
     
@@ -1675,21 +1761,282 @@ public class JMSTestModule
     }
     
     /**
+     * Verifies that a message created with {@link MockQueueSession#createMessage} 
+     * is acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifCreatedQueueMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetQueueSessionByIndex(indexOfSession);
+        List messageList = getQueueMessageManager(indexOfSession).getMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+    
+    /**
+     * Verifies that a message created with {@link MockQueueSession#createMessage} 
+     * is not acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifCreatedQueueMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetQueueSessionByIndex(indexOfSession);
+        List messageList = getQueueMessageManager(indexOfSession).getMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        } 
+    }
+    
+    /**
+     * Verifies that a bytes message created with {@link MockQueueSession#createMessage} 
+     * is acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedQueueBytesMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetQueueSessionByIndex(indexOfSession);
+        List messageList = getQueueMessageManager(indexOfSession).getBytesMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " bytes messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+    
+    /**
+     * Verifies that a bytes message created with {@link MockQueueSession#createMessage} 
+     * is not acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedQueueBytesMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetQueueSessionByIndex(indexOfSession);
+        List messageList = getQueueMessageManager(indexOfSession).getBytesMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " bytes messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+    
+    /**
+     * Verifies that a map message created with {@link MockQueueSession#createMessage} 
+     * is acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedQueueMapMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetQueueSessionByIndex(indexOfSession);
+        List messageList = getQueueMessageManager(indexOfSession).getMapMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " map messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+    
+    /**
+     * Verifies that a map message created with {@link MockQueueSession#createMessage} 
+     * is not acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedQueueMapMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetQueueSessionByIndex(indexOfSession);
+        List messageList = getQueueMessageManager(indexOfSession).getMapMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " map messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+    
+    /**
+     * Verifies that a text message created with {@link MockQueueSession#createMessage} 
+     * is acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedQueueTextMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetQueueSessionByIndex(indexOfSession);
+        List messageList = getQueueMessageManager(indexOfSession).getTextMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " text messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+    
+    /**
+     * Verifies that a text message created with {@link MockQueueSession#createMessage} 
+     * is not acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedQueueTextMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetQueueSessionByIndex(indexOfSession);
+        List messageList = getQueueMessageManager(indexOfSession).getTextMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " text messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+    
+    /**
+     * Verifies that a stream message created with {@link MockQueueSession#createMessage} 
+     * is acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedQueueStreamMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetQueueSessionByIndex(indexOfSession);
+        List messageList = getQueueMessageManager(indexOfSession).getStreamMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " stream messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+    
+    /**
+     * Verifies that a stream message created with {@link MockQueueSession#createMessage} 
+     * is not acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedQueueStreamMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetQueueSessionByIndex(indexOfSession);
+        List messageList = getQueueMessageManager(indexOfSession).getStreamMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " stream messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+    
+    /**
+     * Verifies that a object message created with {@link MockQueueSession#createMessage} 
+     * is acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedQueueObjectMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetQueueSessionByIndex(indexOfSession);
+        List messageList = getQueueMessageManager(indexOfSession).getObjectMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " object messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+    
+    /**
+     * Verifies that a object message created with {@link MockQueueSession#createMessage} 
+     * is not acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedQueueObjectMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetQueueSessionByIndex(indexOfSession);
+        List messageList = getQueueMessageManager(indexOfSession).getObjectMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " object messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+    
+    /**
      * Verifies that a message in the specified topic is equal to
      * the specified message by calling the <code>equals()</code> method. 
      * All mock messages provide a suitable implementation of <code>equals()</code>.
      * @param nameOfTopic the name of the topic
      * @param indexOfSourceMessage the index of the message in the topic
      * @param targetMessage the message that will be used for comparison
+     * @throws VerifyFailedException if verification fails
      */
     public void verifyCurrentTopicMessageEquals(String nameOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
     {
         checkTopicByName(nameOfTopic);
         List messageList = getCurrentMessageListFromTopic(nameOfTopic);
-        if(null == messageList)
-        {
-            throw new VerifyFailedException("No topic with name " + nameOfTopic + " exists");
-        }
         if(indexOfSourceMessage >= messageList.size())
         {
             throw new VerifyFailedException("Topic " + nameOfTopic + " contains only " + messageList.size() + " messages");
@@ -1705,15 +2052,12 @@ public class JMSTestModule
      * @param nameOfTopic the name of the topic
      * @param indexOfSourceMessage the index of the received message
      * @param targetMessage the message that will be used for comparison
+     * @throws VerifyFailedException if verification fails
      */
     public void verifyReceivedTopicMessageEquals(String nameOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
     {
         checkTopicByName(nameOfTopic);
         List messageList = getReceivedMessageListFromTopic(nameOfTopic);
-        if(null == messageList)
-        {
-            throw new VerifyFailedException("No topic with name " + nameOfTopic + " exists");
-        }
         if(indexOfSourceMessage >= messageList.size())
         {
             throw new VerifyFailedException("Topic " + nameOfTopic + " received only " + messageList.size() + " messages");
@@ -1730,9 +2074,11 @@ public class JMSTestModule
      * @param indexOfTopic the index of the temporary topic
      * @param indexOfSourceMessage the index of the message in the topic
      * @param targetMessage the message that will be used for comparison
+     * @throws VerifyFailedException if verification fails
      */
     public void verifyCurrentTopicMessageEquals(int indexOfSession, int indexOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
     {
+        checkAndGetTopicSessionByIndex(indexOfSession);
         List messageList = getCurrentMessageListFromTemporaryTopic(indexOfSession, indexOfTopic);
         if(null == messageList)
         {
@@ -1754,9 +2100,11 @@ public class JMSTestModule
      * @param indexOfTopic the index of the temporary topic
      * @param indexOfSourceMessage the index of the received message
      * @param targetMessage the message that will be used for comparison
+     * @throws VerifyFailedException if verification fails
      */
     public void verifyReceivedTopicMessageEquals(int indexOfSession, int indexOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
     {
+        checkAndGetTopicSessionByIndex(indexOfSession);
         List messageList = getReceivedMessageListFromTemporaryTopic(indexOfSession, indexOfTopic);
         if(null == messageList)
         {
@@ -1780,10 +2128,6 @@ public class JMSTestModule
     {
         checkTopicByName(nameOfTopic);
         List list = getCurrentMessageListFromTopic(nameOfTopic);
-        if(null == list)
-        {
-            throw new VerifyFailedException("No topic with name " + nameOfTopic + " exists");
-        }
         if(numberOfMessages != list.size())
         {
             throw new VerifyFailedException("Expected " + numberOfMessages + " messages in topic " + nameOfTopic + ", received " + list.size() + " messages");
@@ -1800,10 +2144,6 @@ public class JMSTestModule
     {
         checkTopicByName(nameOfTopic);
         List list = getReceivedMessageListFromTopic(nameOfTopic);
-        if(null == list)
-        {
-            throw new VerifyFailedException("No topic with name " + nameOfTopic + " exists");
-        }
         if(numberOfMessages != list.size())
         {
             throw new VerifyFailedException("Expected " + numberOfMessages + " messages received by topic " + nameOfTopic + ", received " + list.size() + " messages");
@@ -1819,6 +2159,7 @@ public class JMSTestModule
      */
     public void verifyNumberOfCurrentTopicMessages(int indexOfSession, int indexOfTopic, int numberOfMessages)
     {
+        checkAndGetTopicSessionByIndex(indexOfSession);
         List list = getCurrentMessageListFromTemporaryTopic(indexOfSession, indexOfTopic);
         if(null == list)
         {
@@ -1833,12 +2174,13 @@ public class JMSTestModule
     /**
      * Verifies the number of messages received by a temporary topic.
      * @param indexOfSession the index of the session
-     * @param indexOfTopic the index of the temporary topiv
+     * @param indexOfTopic the index of the temporary topic
      * @param numberOfMessages the expected number of messages
      * @throws VerifyFailedException if verification fails
      */
     public void verifyNumberOfReceivedTopicMessages(int indexOfSession, int indexOfTopic, int numberOfMessages)
     {
+        checkAndGetTopicSessionByIndex(indexOfSession);
         List list = getReceivedMessageListFromTemporaryTopic(indexOfSession, indexOfTopic);
         if(null == list)
         {
@@ -1847,6 +2189,100 @@ public class JMSTestModule
         if(numberOfMessages != list.size())
         {
             throw new VerifyFailedException("Expected " + numberOfMessages + " messages, received " + list.size() + " messages");
+        }
+    }
+    
+    /**
+     * Verifies that a received message is acknowledged.
+     * @param nameOfTopic the name of the topic
+     * @param indexOfMessage the index of the received message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyReceivedTopicMessageAcknowledged(String nameOfTopic, int indexOfMessage)
+    {
+        checkTopicByName(nameOfTopic);
+        List messageList = getReceivedMessageListFromTopic(nameOfTopic);
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Topic " + nameOfTopic + " received only " + messageList.size() + " messages");
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of topic " + nameOfTopic + " is not acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a received message is not acknowledged.
+     * @param nameOfTopic the name of the topic
+     * @param indexOfMessage the index of the received message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyReceivedTopicMessageNotAcknowledged(String nameOfTopic, int indexOfMessage)
+    {
+        checkTopicByName(nameOfTopic);
+        List messageList = getReceivedMessageListFromTopic(nameOfTopic);
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Topic " + nameOfTopic + " received only " + messageList.size() + " messages");
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of topic " + nameOfTopic + " is acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a received message is acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfTopic the index of the temporary topic
+     * @param indexOfMessage the index of the received message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyReceivedTopicMessageAcknowledged(int indexOfSession, int indexOfTopic, int indexOfMessage)
+    {
+        checkAndGetTopicSessionByIndex(indexOfSession);
+        List messageList = getReceivedMessageListFromTemporaryTopic(indexOfSession, indexOfTopic);
+        if(null == messageList)
+        {
+            throw new VerifyFailedException("Temporary topic with index " + indexOfTopic + " of session with index " + indexOfSession +  " does not exist");
+        }
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Temporary topic with index " + indexOfTopic + " received only " + messageList.size() + " messages");
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of temporary topic " + indexOfTopic + " is not acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a received message is not acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfTopic the index of the temporary topic
+     * @param indexOfMessage the index of the received message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyReceivedTopicMessageNotAcknowledged(int indexOfSession, int indexOfTopic, int indexOfMessage)
+    {
+        checkAndGetTopicSessionByIndex(indexOfSession);
+        List messageList = getReceivedMessageListFromTemporaryTopic(indexOfSession, indexOfTopic);
+        if(null == messageList)
+        {
+            throw new VerifyFailedException("Temporary topic with index " + indexOfTopic + " of session with index " + indexOfSession +  " does not exist");
+        }
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Temporary topic with index " + indexOfTopic + " received only " + messageList.size() + " messages");
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of temporary topic " + indexOfTopic + " is not acknowledged");
         }
     }
 
@@ -1949,6 +2385,270 @@ public class JMSTestModule
         if(number != getTopicMessageManager(indexOfSession).getObjectMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " object messages, received " + getTopicMessageManager(indexOfSession).getObjectMessageList().size() + " object messages");
+        }
+    }
+    
+    /**
+     * Verifies that a message created with {@link MockTopicSession#createMessage} 
+     * is acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifCreatedTopicMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetTopicSessionByIndex(indexOfSession);
+        List messageList = getTopicMessageManager(indexOfSession).getMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a message created with {@link MockTopicSession#createMessage} 
+     * is not acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifCreatedTopicMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetTopicSessionByIndex(indexOfSession);
+        List messageList = getTopicMessageManager(indexOfSession).getMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a bytes message created with {@link MockTopicSession#createMessage} 
+     * is acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedTopicBytesMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetTopicSessionByIndex(indexOfSession);
+        List messageList = getTopicMessageManager(indexOfSession).getBytesMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " bytes messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a bytes message created with {@link MockTopicSession#createMessage} 
+     * is not acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedTopicBytesMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetTopicSessionByIndex(indexOfSession);
+        List messageList = getTopicMessageManager(indexOfSession).getBytesMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " bytes messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a map message created with {@link MockTopicSession#createMessage} 
+     * is acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedTopicMapMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetTopicSessionByIndex(indexOfSession);
+        List messageList = getTopicMessageManager(indexOfSession).getMapMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " map messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a map message created with {@link MockTopicSession#createMessage} 
+     * is not acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedTopicMapMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetTopicSessionByIndex(indexOfSession);
+        List messageList = getTopicMessageManager(indexOfSession).getMapMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " map messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a text message created with {@link MockTopicSession#createMessage} 
+     * is acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedTopicTextMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetTopicSessionByIndex(indexOfSession);
+        List messageList = getTopicMessageManager(indexOfSession).getTextMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " text messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a text message created with {@link MockTopicSession#createMessage} 
+     * is not acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedTopicTextMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetTopicSessionByIndex(indexOfSession);
+        List messageList = getTopicMessageManager(indexOfSession).getTextMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " text messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a stream message created with {@link MockTopicSession#createMessage} 
+     * is acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedTopicStreamMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetTopicSessionByIndex(indexOfSession);
+        List messageList = getTopicMessageManager(indexOfSession).getStreamMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " stream messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a stream message created with {@link MockTopicSession#createMessage} 
+     * is not acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedTopicStreamMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetTopicSessionByIndex(indexOfSession);
+        List messageList = getTopicMessageManager(indexOfSession).getStreamMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " stream messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a object message created with {@link MockTopicSession#createMessage} 
+     * is acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedTopicObjectMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetTopicSessionByIndex(indexOfSession);
+        List messageList = getTopicMessageManager(indexOfSession).getObjectMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " object messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a object message created with {@link MockTopicSession#createMessage} 
+     * is not acknowledged.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedTopicObjectMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetTopicSessionByIndex(indexOfSession);
+        List messageList = getTopicMessageManager(indexOfSession).getObjectMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " object messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
         }
     }
     
