@@ -20,8 +20,7 @@ import com.mockrunner.mock.jms.MockTopicSubscriber;
 
 /**
  * Module for JMS tests.
- * Note that all indices are zero based numbers,
- * i.e. the n-th created session, sender etc.
+ * Note that all indices are zero based.
  */
 public class JMSTestModule
 {
@@ -1569,7 +1568,7 @@ public class JMSTestModule
     /**
      * Verifies that a message in the specified queue is equal to
      * the specified message by calling the <code>equals()</code> method. 
-     * All mock messages provide a suitable implementation of mock message.
+     * All mock messages provide a suitable implementation of <code>equals()</code>.
      * @param nameOfQueue the name of the queue
      * @param indexOfSourceMessage the index of the message in the queue
      * @param targetMessage the message that will be used for comparison
@@ -1592,7 +1591,7 @@ public class JMSTestModule
     /**
      * Verifies that a received message is equal to the specified message 
      * by calling the <code>equals()</code> method. 
-     * All mock messages provide a suitable implementation of mock message.
+     * All mock messages provide a suitable implementation of <code>equals()</code>.
      * @param nameOfQueue the name of the queue
      * @param indexOfSourceMessage the index of the received message
      * @param targetMessage the message that will be used for comparison
@@ -1615,7 +1614,7 @@ public class JMSTestModule
     /**
      * Verifies that a message in the specified temporary queue is equal to
      * the specified message by calling the <code>equals()</code> method. 
-     * All mock messages provide a suitable implementation of mock message.
+     * All mock messages provide a suitable implementation of <code>equals()</code>.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
      * @param indexOfSourceMessage the index of the message in the queue
@@ -1639,7 +1638,7 @@ public class JMSTestModule
     /**
      * Verifies that a received message is equal to the specified message 
      * by calling the <code>equals()</code> method. 
-     * All mock messages provide a suitable implementation of mock message.
+     * All mock messages provide a suitable implementation of <code>equals()</code>.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
      * @param indexOfSourceMessage the index of the received message
@@ -1740,7 +1739,8 @@ public class JMSTestModule
     
     /**
      * Verifies the number of messages created with
-     * {@link MockQueueSession#createMessage}
+     * {@link MockQueueSession#createMessage}. Only
+     * recognizes messages that were sent to queues.
      * @param indexOfSession the index of the session
      * @param number the expected number of messages
      * @throws VerifyFailedException if verification fails
@@ -1760,7 +1760,8 @@ public class JMSTestModule
     
     /**
      * Verifies the number of bytes messages created with
-     * {@link MockQueueSession#createBytesMessage}
+     * {@link MockQueueSession#createBytesMessage}. Only
+     * recognizes messages that were sent to queues.
      * @param indexOfSession the index of the session
      * @param number the expected number of bytes messages
      * @throws VerifyFailedException if verification fails
@@ -1780,7 +1781,8 @@ public class JMSTestModule
     
     /**
      * Verifies the number of map messages created with
-     * {@link MockQueueSession#createMapMessage}
+     * {@link MockQueueSession#createMapMessage}. Only
+     * recognizes messages that were sent to queues.
      * @param indexOfSession the index of the session
      * @param number the expected number of map messages
      * @throws VerifyFailedException if verification fails
@@ -1800,7 +1802,8 @@ public class JMSTestModule
     
     /**
      * Verifies the number of text messages created with
-     * {@link MockQueueSession#createTextMessage}
+     * {@link MockQueueSession#createTextMessage}. Only
+     * recognizes messages that were sent to queues.
      * @param indexOfSession the index of the session
      * @param number the expected number of text messages
      * @throws VerifyFailedException if verification fails
@@ -1820,7 +1823,8 @@ public class JMSTestModule
     
     /**
      * Verifies the number of stream messages created with
-     * {@link MockQueueSession#createStreamMessage}
+     * {@link MockQueueSession#createStreamMessage}. Only
+     * recognizes messages that were sent to queues.
      * @param indexOfSession the index of the session
      * @param number the expected number of stream messages
      * @throws VerifyFailedException if verification fails
@@ -1840,7 +1844,8 @@ public class JMSTestModule
     
     /**
      * Verifies the number of object messages created with
-     * {@link MockQueueSession#createObjectMessage}
+     * {@link MockQueueSession#createObjectMessage}. Only
+     * recognizes messages that were sent to queues.
      * @param indexOfSession the index of the session
      * @param number the expected number of object messages
      * @throws VerifyFailedException if verification fails
@@ -1855,6 +1860,304 @@ public class JMSTestModule
         if(number != getQueueMessageManager(indexOfSession).getObjectMessageList().size())
         {
             throw new VerifyFailedException("Expected " + number + " object messages, received " + getQueueMessageManager(indexOfSession).getObjectMessageList().size() + " object messages");
+        }
+    }
+    
+    /**
+     * Verifies that a message in the specified topic is equal to
+     * the specified message by calling the <code>equals()</code> method. 
+     * All mock messages provide a suitable implementation of <code>equals()</code>.
+     * @param nameOfTopic the name of the topic
+     * @param indexOfSourceMessage the index of the message in the topic
+     * @param targetMessage the message that will be used for comparison
+     */
+    public void verifyCurrentTopicMessageEquals(String nameOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
+    {
+        List messageList = getCurrentMessageListFromTopic(nameOfTopic);
+        if(null == messageList)
+        {
+            throw new VerifyFailedException("No topic with name " + nameOfTopic + " exists");
+        }
+        if(indexOfSourceMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Topic " + nameOfTopic + " contains only " + messageList.size() + " messages");
+        }
+        MockMessage sourceMessage = (MockMessage)messageList.get(indexOfSourceMessage);
+        verifyMessageEquals(sourceMessage, targetMessage);
+    }
+
+    /**
+     * Verifies that a received message is equal to the specified message 
+     * by calling the <code>equals()</code> method. 
+     * All mock messages provide a suitable implementation of <code>equals()</code>.
+     * @param nameOfTopic the name of the topic
+     * @param indexOfSourceMessage the index of the received message
+     * @param targetMessage the message that will be used for comparison
+     */
+    public void verifyReceivedTopicMessageEquals(String nameOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
+    {
+        List messageList = getReceivedMessageListFromTopic(nameOfTopic);
+        if(null == messageList)
+        {
+            throw new VerifyFailedException("No topic with name " + nameOfTopic + " exists");
+        }
+        if(indexOfSourceMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Topic " + nameOfTopic + " received only " + messageList.size() + " messages");
+        }
+        MockMessage sourceMessage = (MockMessage)messageList.get(indexOfSourceMessage);
+        verifyMessageEquals(sourceMessage, targetMessage);
+    }
+
+    /**
+     * Verifies that a message in the specified temporary topic is equal to
+     * the specified message by calling the <code>equals()</code> method. 
+     * All mock messages provide a suitable implementation of <code>equals()</code>.
+     * @param indexOfSession the index of the session
+     * @param indexOfTopic the index of the temporary topic
+     * @param indexOfSourceMessage the index of the message in the topic
+     * @param targetMessage the message that will be used for comparison
+     */
+    public void verifyCurrentTopicMessageEquals(int indexOfSession, int indexOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
+    {
+        List messageList = getCurrentMessageListFromTemporaryTopic(indexOfSession, indexOfTopic);
+        if(null == messageList)
+        {
+            throw new VerifyFailedException("Temporary topic with index " + indexOfTopic + " of session with index " + indexOfSession +  " does not exist");
+        }
+        if(indexOfSourceMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Temporary topic with index " + indexOfTopic + " contains only " + messageList.size() + " messages");
+        }
+        MockMessage sourceMessage = (MockMessage)messageList.get(indexOfSourceMessage);
+        verifyMessageEquals(sourceMessage, targetMessage);
+    }
+
+    /**
+     * Verifies that a received message is equal to the specified message 
+     * by calling the <code>equals()</code> method. 
+     * All mock messages provide a suitable implementation of <code>equals()</code>.
+     * @param indexOfSession the index of the session
+     * @param indexOfTopic the index of the temporary topic
+     * @param indexOfSourceMessage the index of the received message
+     * @param targetMessage the message that will be used for comparison
+     */
+    public void verifyReceivedTopicMessageEquals(int indexOfSession, int indexOfTopic, int indexOfSourceMessage, MockMessage targetMessage)
+    {
+        List messageList = getReceivedMessageListFromTemporaryTopic(indexOfSession, indexOfTopic);
+        if(null == messageList)
+        {
+            throw new VerifyFailedException("Temporary topic with index " + indexOfTopic + " of session with index " + indexOfSession +  " does not exist");
+        }
+        if(indexOfSourceMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Temporary topic with index " + indexOfTopic + " received only " + messageList.size() + " messages");
+        }
+        MockMessage sourceMessage = (MockMessage)messageList.get(indexOfSourceMessage);
+        verifyMessageEquals(sourceMessage, targetMessage);
+    }
+
+    /**
+     * Verifies the number of messages in a topic.
+     * @param nameOfTopic the name of the topic
+     * @param numberOfMessages the expected number of messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfCurrentTopicMessages(String nameOfTopic, int numberOfMessages)
+    {
+        List list = getCurrentMessageListFromTopic(nameOfTopic);
+        if(null == list)
+        {
+            throw new VerifyFailedException("No topic with name " + nameOfTopic + " exists");
+        }
+        if(numberOfMessages != list.size())
+        {
+            throw new VerifyFailedException("Expected " + numberOfMessages + " messages in topic " + nameOfTopic + ", received " + list.size() + " messages");
+        }
+    }
+
+    /**
+     * Verifies the number of messages received by a topic.
+     * @param nameOfTopic the name of the topic
+     * @param numberOfMessages the expected number of messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfReceivedTopicMessages(String nameOfTopic, int numberOfMessages)
+    {
+        List list = getReceivedMessageListFromTopic(nameOfTopic);
+        if(null == list)
+        {
+            throw new VerifyFailedException("No topic with name " + nameOfTopic + " exists");
+        }
+        if(numberOfMessages != list.size())
+        {
+            throw new VerifyFailedException("Expected " + numberOfMessages + " messages received by topic " + nameOfTopic + ", received " + list.size() + " messages");
+        }
+    }
+
+    /**
+     * Verifies the number of messages in a temporary topic.
+     * @param indexOfSession the index of the session
+     * @param indexOfTopic the index of the temporary topic
+     * @param numberOfMessages the expected number of messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfCurrentTopicMessages(int indexOfSession, int indexOfTopic, int numberOfMessages)
+    {
+        List list = getCurrentMessageListFromTemporaryTopic(indexOfSession, indexOfTopic);
+        if(null == list)
+        {
+            throw new VerifyFailedException("Temporary topic with index " + indexOfTopic + " of session with index " + indexOfSession +  " does not exist");
+        }
+        if(numberOfMessages != list.size())
+        {
+            throw new VerifyFailedException("Expected " + numberOfMessages + " messages, received " + list.size() + " messages");
+        }
+    }
+
+    /**
+     * Verifies the number of messages received by a temporary topic.
+     * @param indexOfSession the index of the session
+     * @param indexOfTopic the index of the temporary topiv
+     * @param numberOfMessages the expected number of messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfReceivedTopicMessages(int indexOfSession, int indexOfTopic, int numberOfMessages)
+    {
+        List list = getReceivedMessageListFromTemporaryQueue(indexOfSession, indexOfTopic);
+        if(null == list)
+        {
+            throw new VerifyFailedException("Temporary topic with index " + indexOfTopic + " of session with index " + indexOfSession +  " does not exist");
+        }
+        if(numberOfMessages != list.size())
+        {
+            throw new VerifyFailedException("Expected " + numberOfMessages + " messages, received " + list.size() + " messages");
+        }
+    }
+
+    /**
+     * Verifies the number of messages created with
+     * {@link MockTopicSession#createMessage}. Only
+     * recognizes messages that were sent to topics.
+     * @param indexOfSession the index of the session
+     * @param number the expected number of messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfTopicMessages(int indexOfSession, int number)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        if(number != getTopicMessageManager(indexOfSession).getMessageList().size())
+        {
+            throw new VerifyFailedException("Expected " + number + " messages, received " + getTopicMessageManager(indexOfSession).getMessageList().size() + " messages");
+        }
+    }
+
+    /**
+     * Verifies the number of bytes messages created with
+     * {@link MockTopicSession#createBytesMessage}. Only
+     * recognizes messages that were sent to topics.
+     * @param indexOfSession the index of the session
+     * @param number the expected number of bytes messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfTopicBytesMessages(int indexOfSession, int number)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        if(number != getTopicMessageManager(indexOfSession).getBytesMessageList().size())
+        {
+            throw new VerifyFailedException("Expected " + number + " bytes messages, received " + getTopicMessageManager(indexOfSession).getBytesMessageList().size() + " bytes messages");
+        }
+    }
+
+    /**
+     * Verifies the number of map messages created with
+     * {@link MockTopicSession#createMapMessage}. Only
+     * recognizes messages that were sent to topics.
+     * @param indexOfSession the index of the session
+     * @param number the expected number of map messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfTopicMapMessages(int indexOfSession, int number)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        if(number != getTopicMessageManager(indexOfSession).getMapMessageList().size())
+        {
+            throw new VerifyFailedException("Expected " + number + " map messages, received " + getTopicMessageManager(indexOfSession).getMapMessageList().size() + " map messages");
+        }
+    }
+
+    /**
+     * Verifies the number of text messages created with
+     * {@link MockTopicSession#createTextMessage}. Only
+     * recognizes messages that were sent to topics.
+     * @param indexOfSession the index of the session
+     * @param number the expected number of text messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfTopicTextMessages(int indexOfSession, int number)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        if(number != getTopicMessageManager(indexOfSession).getTextMessageList().size())
+        {
+            throw new VerifyFailedException("Expected " + number + " text messages, received " + getTopicMessageManager(indexOfSession).getTextMessageList().size() + " text messages");
+        }
+    }
+
+    /**
+     * Verifies the number of stream messages created with
+     * {@link MockTopicSession#createStreamMessage}. Only
+     * recognizes messages that were sent to topics.
+     * @param indexOfSession the index of the session
+     * @param number the expected number of stream messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfTopicStreamMessages(int indexOfSession, int number)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        if(number != getTopicMessageManager(indexOfSession).getStreamMessageList().size())
+        {
+            throw new VerifyFailedException("Expected " + number + " stream messages, received " + getTopicMessageManager(indexOfSession).getStreamMessageList().size() + " stream messages");
+        }
+    }
+
+    /**
+     * Verifies the number of object messages created with
+     * {@link MockTopicSession#createObjectMessage}. Only
+     * recognizes messages that were sent to topics.
+     * @param indexOfSession the index of the session
+     * @param number the expected number of object messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfTopicObjectMessages(int indexOfSession, int number)
+    {
+        MockTopicSession session = getTopicSession(indexOfSession);
+        if(null == session)
+        {
+            throw new VerifyFailedException("TopicSession with index " + indexOfSession + " is not present.");
+        }
+        if(number != getTopicMessageManager(indexOfSession).getObjectMessageList().size())
+        {
+            throw new VerifyFailedException("Expected " + number + " object messages, received " + getTopicMessageManager(indexOfSession).getObjectMessageList().size() + " object messages");
         }
     }
 }
