@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Array;
@@ -21,6 +22,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -33,6 +35,7 @@ public class MockResultSet implements ResultSet
 {
     private Statement statement;
     private Map columnMap;
+    private Map columnMapCopy;
     private List columnNameList;
     private int cursor;
     private boolean wasNull;
@@ -44,16 +47,22 @@ public class MockResultSet implements ResultSet
     
     public MockResultSet(Statement statement)
     {
-        this(statement, "");
+        this("");
     }
     
-    public MockResultSet(Statement statement, String cursorName)
+    public MockResultSet(String cursorName)
     {
-        this.statement = statement;
+        
         columnMap = new HashMap();
         columnNameList = new ArrayList();
         cursor = -1;
         wasNull = false;
+        this.cursorName = cursorName;
+    }
+    
+    public void setStatement(Statement statement)
+    {
+        this.statement = statement;
         try
         {
             fetchDirection = statement.getFetchDirection();
@@ -63,9 +72,18 @@ public class MockResultSet implements ResultSet
         }
         catch(SQLException exc)
         {
-        
+
         }
-        this.cursorName = cursorName;
+    }
+    
+    public void addRow(Object[] values)
+    {
+        List valueList = new ArrayList();
+        for(int ii = 0; ii < values.length; ii++)
+        {   
+            valueList.add(values[ii]);
+        }
+        addRow(valueList);
     }
     
     public void addRow(List values)
@@ -81,12 +99,26 @@ public class MockResultSet implements ResultSet
             List nextColumnList = (List)columnNameList.get(ii);
             nextColumnList.add(rowCount + 1, nextValue);
         }
+        copyColumnMap();
     }
     
-    public void addColumn(String columnName, Object value)
+    public void addColumn(Object[] values)
+    {
+        addColumn(determineValidColumnName(), values);
+    }
+
+    public void addColumn(List values)
+    {
+        addColumn(determineValidColumnName(), values);
+    }
+    
+    public void addColumn(String columnName, Object[] values)
     {
         List columnValues = new ArrayList();
-        columnValues.add(value);
+        for(int ii = 0; ii < values.length; ii++)
+        {
+            columnValues.add(values[ii]);
+        }
         addColumn(columnName, columnValues);
     }
     
@@ -96,6 +128,7 @@ public class MockResultSet implements ResultSet
         columnMap.put(columnName, column);
         columnNameList.add(columnName);
         adjustColumns();
+        copyColumnMap();
     }
     
     public int getRowCount()
@@ -119,7 +152,6 @@ public class MockResultSet implements ResultSet
     {
         checkColumnBounds(columnIndex);
         checkRowBounds();
-        Object value = null;
         String columnName = (String)columnNameList.get(columnIndex - 1);
         return getObject(columnName);
     }
@@ -133,7 +165,7 @@ public class MockResultSet implements ResultSet
     {
         checkColumnName(columnName);
         checkRowBounds();
-        List column = (List)columnMap.get(columnName);
+        List column = (List)columnMapCopy.get(columnName);
         Object value = column.get(cursor);
         wasNull = (null == value);
         return value;
@@ -448,16 +480,6 @@ public class MockResultSet implements ResultSet
         return getBinaryStream(columnName);
     }
 
-    public InputStream getUnicodeStream(int columnIndex) throws SQLException
-    {
-        return getBinaryStream(columnIndex);
-    }
-    
-    public InputStream getUnicodeStream(String columnName) throws SQLException
-    {
-        return getBinaryStream(columnName);
-    }
-
     public InputStream getBinaryStream(int columnIndex) throws SQLException
     {
         Object value = getObject(columnIndex);
@@ -476,6 +498,42 @@ public class MockResultSet implements ResultSet
         {
             if(value instanceof InputStream) return (InputStream)value;
             return new ByteArrayInputStream(getBytes(columnName));
+        }
+        return null;
+    }
+    
+    public InputStream getUnicodeStream(int columnIndex) throws SQLException
+    {
+        Object value = getObject(columnIndex);
+        if(null != value)
+        {
+            if(value instanceof InputStream) return (InputStream)value;
+            try
+            {
+                return new ByteArrayInputStream(getString(columnIndex).getBytes("UTF-8"));
+            }
+            catch(UnsupportedEncodingException exc)
+            {
+            
+            }
+        }
+        return null;
+    }
+
+    public InputStream getUnicodeStream(String columnName) throws SQLException
+    {
+        Object value = getObject(columnName);
+        if(null != value)
+        {
+            if(value instanceof InputStream) return (InputStream)value;
+            try
+            {
+                return new ByteArrayInputStream(getString(columnName).getBytes("UTF-8"));
+            }
+            catch(UnsupportedEncodingException exc)
+            {
+            
+            }
         }
         return null;
     }
@@ -664,113 +722,170 @@ public class MockResultSet implements ResultSet
         return false;
     }
     
-    public void updateObject(int columnIndex, Object x) throws SQLException
+    public void updateObject(int columnIndex, Object value) throws SQLException
     {
-        
+        checkColumnBounds(columnIndex);
+        checkRowBounds();
+        String columnName = (String)columnNameList.get(columnIndex - 1);
+        updateObject(columnName, value);
     }
     
-    public void updateObject(int columnIndex, Object x, int scale) throws SQLException
+    public void updateObject(int columnIndex, Object value, int scale) throws SQLException
     {
-        
-
+        updateObject(columnIndex, value);
     }
     
     public void updateObject(String columnName, Object value, int scale) throws SQLException
     {
-        checkColumnName(columnName);
-        checkRowBounds();
-        List column = (List)columnMap.get(columnName);
-        column.set(cursor, value);
+        updateObject(columnName, value);
     }
 
-    public void updateObject(String columnName, Object x) throws SQLException
+    public void updateObject(String columnName, Object value) throws SQLException
     {
-        // TODO Auto-generated method stub
+        checkColumnName(columnName);
+        checkRowBounds();
+        List column = (List)columnMapCopy.get(columnName);
+        column.set(cursor, value);
+    }
+    
+    public void updateString(int columnIndex, String value) throws SQLException
+    {
+        updateObject(columnIndex, value);
+    }
 
+    public void updateString(String columnName, String value) throws SQLException
+    {
+        updateObject(columnName, value);
     }
 
     public void updateNull(int columnIndex) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        updateObject(columnIndex, null);
+    }
+    
+    public void updateNull(String columnName) throws SQLException
+    {
+        updateObject(columnName, null);
     }
 
-    public void updateBoolean(int columnIndex, boolean x) throws SQLException
+    public void updateBoolean(int columnIndex, boolean booleanValue) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        updateObject(columnIndex, new Boolean(booleanValue));
+    }
+    
+    public void updateBoolean(String columnName, boolean booleanValue) throws SQLException
+    {
+        updateObject(columnName, new Boolean(booleanValue));
     }
 
-    public void updateByte(int columnIndex, byte x) throws SQLException
+    public void updateByte(int columnIndex, byte byteValue) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        updateObject(columnIndex, new Byte(byteValue));
+    }
+    
+    public void updateByte(String columnName, byte byteValue) throws SQLException
+    {
+        updateObject(columnName, new Byte(byteValue));
     }
 
-    public void updateShort(int columnIndex, short x) throws SQLException
+    public void updateShort(int columnIndex, short shortValue) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        updateObject(columnIndex, new Short(shortValue));
+    }
+    
+    public void updateShort(String columnName, short shortValue) throws SQLException
+    {
+        updateObject(columnName, new Short(shortValue));
     }
 
-    public void updateInt(int columnIndex, int x) throws SQLException
+    public void updateInt(int columnIndex, int intValue) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        updateObject(columnIndex, new Integer(intValue));
+    }
+    
+    public void updateInt(String columnName, int intValue) throws SQLException
+    {
+        updateObject(columnName, new Integer(intValue));
+    }
+    
+    public void updateLong(int columnIndex, long longValue) throws SQLException
+    {
+        updateObject(columnIndex, new Long(longValue));
+    }
+    
+    public void updateLong(String columnName, long longValue) throws SQLException
+    {
+        updateObject(columnName, new Long(longValue));
     }
 
-    public void updateLong(int columnIndex, long x) throws SQLException
+    public void updateFloat(int columnIndex, float floatValue) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        updateObject(columnIndex, new Float(floatValue));
+    }
+    
+    public void updateFloat(String columnName, float floatValue) throws SQLException
+    {
+        updateObject(columnName, new Float(floatValue));
     }
 
-    public void updateFloat(int columnIndex, float x) throws SQLException
+    public void updateDouble(int columnIndex, double doubleValue) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        updateObject(columnIndex, new Double(doubleValue));
+    }
+    
+    public void updateDouble(String columnName, double doubleValue) throws SQLException
+    {
+        updateObject(columnName, new Double(doubleValue));
+    }
+      
+    public void updateBigDecimal(int columnIndex, BigDecimal bigDecimal) throws SQLException
+    {
+        updateObject(columnIndex, bigDecimal);
+    }
+    
+    public void updateBigDecimal(String columnName, BigDecimal bigDecimal) throws SQLException
+    {
+        updateObject(columnName, bigDecimal);
     }
 
-    public void updateDouble(int columnIndex, double x) throws SQLException
+    public void updateBytes(int columnIndex, byte[] byteArray) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        updateObject(columnIndex, byteArray);
+    }
+    
+    public void updateBytes(String columnName, byte[] byteArray) throws SQLException
+    {
+        updateObject(columnName, byteArray);
+    }
+    
+    public void updateDate(int columnIndex, Date date) throws SQLException
+    {
+        updateObject(columnIndex, date);
     }
 
-    public void updateBigDecimal(int columnIndex, BigDecimal x) throws SQLException
+    public void updateDate(String columnName, Date date) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        updateObject(columnName, date);
+    }
+    
+    public void updateTime(int columnIndex, Time time) throws SQLException
+    {
+        updateObject(columnIndex, time);
     }
 
-    public void updateString(int columnIndex, String x) throws SQLException
+    public void updateTime(String columnName, Time time) throws SQLException
     {
-        // TODO Auto-generated method stub
-
+        updateObject(columnName, time);
+    }
+    
+    public void updateTimestamp(int columnIndex, Timestamp timeStamp) throws SQLException
+    {
+        updateObject(columnIndex, timeStamp);
     }
 
-    public void updateBytes(int columnIndex, byte[] x) throws SQLException
+    public void updateTimestamp(String columnName, Timestamp timeStamp) throws SQLException
     {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateDate(int columnIndex, Date x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateTime(int columnIndex, Time x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateTimestamp(int columnIndex, Timestamp x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
+        updateObject(columnName, timeStamp);
     }
 
     public void updateAsciiStream(int columnIndex, InputStream x, int length) throws SQLException
@@ -786,90 +901,6 @@ public class MockResultSet implements ResultSet
     }
 
     public void updateCharacterStream(int columnIndex, Reader x, int length) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateNull(String columnName) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateBoolean(String columnName, boolean x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateByte(String columnName, byte x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateShort(String columnName, short x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateInt(String columnName, int x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateLong(String columnName, long x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateFloat(String columnName, float x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateDouble(String columnName, double x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateBigDecimal(String columnName, BigDecimal x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateString(String columnName, String x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateBytes(String columnName, byte[] x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateDate(String columnName, Date x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateTime(String columnName, Time x) throws SQLException
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void updateTimestamp(String columnName, Timestamp x) throws SQLException
     {
         // TODO Auto-generated method stub
 
@@ -1131,6 +1162,44 @@ public class MockResultSet implements ResultSet
     
     private void adjustColumns()
     {
-        //TODO Implement me
+        int rowCount = 0;
+        Iterator columns = columnMap.values().iterator();
+        while(columns.hasNext())
+        {
+            List nextColumn = (List)columns.next();
+            rowCount = Math.max(rowCount, nextColumn.size());
+        }
+        columns = columnMap.values().iterator();
+        while(columns.hasNext())
+        {
+            List nextColumn = (List)columns.next();
+            for(int ii = nextColumn.size(); ii < rowCount; ii++) 
+            {
+                nextColumn.add(null);
+            }
+        }
+    }
+    
+    private void copyColumnMap()
+    {
+        columnMapCopy = new HashMap();
+        Iterator columns = columnMap.keySet().iterator();
+        while(columns.hasNext())
+        {
+            String nextKey = (String)columns.next();
+            ArrayList copyList = (ArrayList)((ArrayList)columnMap.get(nextKey)).clone();
+            columnMapCopy.put(nextKey, copyList);
+        }
+    }
+    
+    private String determineValidColumnName()
+    {
+        String name = "Column";
+        int count = 1;
+        while(columnMap.containsKey(name + count))
+        {
+            count ++;
+        }
+        return name + count;
     }
 }
