@@ -29,7 +29,7 @@ public class PaySessionTest extends EJBTestCaseAdapter
         super.setUp();
         jdbcModule = createJDBCTestModule();
         setInterfacePackage("com.mockrunner.example.ejb.interfaces");
-        ejbObject = deploy("com/mockrunner/example/PaySession", PaySessionBean.class, TransactionPolicy.REQUIRED);  
+        ejbObject = deploy("com/mockrunner/example/PaySession", PaySessionBean.class, TransactionPolicy.REQUIRED);
         bindToContext("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
         bean = (PaySession)lookupBean("com/mockrunner/example/PaySession");
         statementHandler = getJDBCMockObjectFactory().getMockConnection().getStatementResultSetHandler();
