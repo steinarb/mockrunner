@@ -1,8 +1,8 @@
 package com.mockrunner.test;
 
-import com.mockrunner.base.NestedApplicationException;
-
 import junit.framework.TestCase;
+
+import com.mockrunner.base.NestedApplicationException;
 
 public class NestedApplicationExceptionTest extends TestCase
 {

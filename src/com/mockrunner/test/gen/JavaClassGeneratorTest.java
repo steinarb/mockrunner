@@ -3,6 +3,8 @@ package com.mockrunner.test.gen;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServlet;
+
 import junit.framework.TestCase;
 
 import com.mockrunner.test.gen.JavaClassGenerator.ConstructorDeclaration;
@@ -33,6 +35,8 @@ public class JavaClassGeneratorTest extends TestCase
         generator.addInterfaceImplementation(Map.class);
         generator.addInterfaceImplementation(List.class);
         generator.addImport(XmlUtil.class);
+        generator.addImport(HttpServlet.class);
+        generator.addImport(TestCase.class);
         generator.addMemberDeclaration(XmlUtil.class, "util");
         generator.addMemberDeclaration(String.class, "name");
         generator.addConstructorDeclaration();
@@ -59,18 +63,20 @@ public class JavaClassGeneratorTest extends TestCase
         method3.setCommentLines(new String[] {"Comment"});
         method3.setCodeLines(new String[] {"Line1", "Line2"});
         generator.addMethodDeclaration(method3);
+        System.out.println(generator.generate());
         assertEquals(getExpected(), generator.generate());
     }
     
     private String getExpected()
     {
         return "package com.mockrunner.test.gen;" + NL + NL +
-               "import com.mockrunner.util.ClassUtil;" + NL +
-               "import java.util.Map;" + NL +
                "import java.util.List;" + NL +
-               "import com.mockrunner.util.XmlUtil;" + NL +
-               "import com.mockrunner.test.gen.JavaClassGeneratorTest;" + NL +
-               "import com.mockrunner.util.CollectionUtil;" + NL + NL +
+               "import java.util.Map;" + NL + NL +
+               "import javax.servlet.http.HttpServlet;" + NL + NL +
+               "import com.mockrunner.util.ClassUtil;" + NL +
+               "import com.mockrunner.util.CollectionUtil;" + NL +
+               "import com.mockrunner.util.XmlUtil;" + NL + NL +
+               "import junit.framework.TestCase;" + NL + NL +
                "/**" + NL +
                " * This is" + NL +
                " * a comment" + NL +

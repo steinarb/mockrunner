@@ -2,7 +2,12 @@ package com.mockrunner.test.gen;
 
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.ClassUtil;
@@ -10,10 +15,10 @@ import com.mockrunner.util.StringUtil;
 
 public class JavaClassGenerator
 {
-    private String packageInfo;
+    private Package packageInfo;
     private List imports;
     private String className;
-    private String superClass;
+    private Class superClass;
     private List interfaces;
     private List memberTypes;
     private List memberNames;
@@ -43,9 +48,9 @@ public class JavaClassGenerator
         this.createJavaDocComments = createJavaDocComments;
     }
     
-    public void setPackage(Package packageObj)
+    public void setPackage(Package packageInfo)
     {
-        this.packageInfo = packageObj.getName();
+        this.packageInfo = packageInfo;
     }
     
     public void setClassName(String className)
@@ -55,8 +60,7 @@ public class JavaClassGenerator
     
     public void setSuperClass(Class superClass)
     {
-        this.superClass = ClassUtil.getClassName(superClass);
-        addImportIfNecessary(superClass);
+        this.superClass = superClass;
     }
     
     public void addImport(Class importClass)
@@ -66,8 +70,7 @@ public class JavaClassGenerator
     
     public void addInterfaceImplementation(Class interfaceClass)
     {
-        interfaces.add(ClassUtil.getClassName(interfaceClass));
-        addImportIfNecessary(interfaceClass);
+        interfaces.add(interfaceClass);
     }
     
     public void setClassComment(String[] commentLines)
@@ -77,9 +80,8 @@ public class JavaClassGenerator
     
     public void addMemberDeclaration(Class memberType, String name)
     {
-        memberTypes.add(ClassUtil.getClassName(memberType));
+        memberTypes.add(memberType);
         memberNames.add(name);
-        addImportIfNecessary(memberType);
     }
     
     public void addConstructorDeclaration()
@@ -90,24 +92,20 @@ public class JavaClassGenerator
     public void addConstructorDeclaration(ConstructorDeclaration constructor)
     {
         constructors.add(constructor);
-        addImportsForArguments(constructor);
     }
     
     public void addMethodDeclaration(MethodDeclaration method)
     {
         methods.add(method);
-        addImportsForArguments(method);
-        addImportForReturnType(method);
     }
 
     public String generate()
     {
         JavaLineAssembler assembler = new JavaLineAssembler();
-        assembler.appendPackageInfo(packageInfo);
-        assembler.appendImports(imports);
-        assembler.appendNewLine();
+        assembler.appendPackageInfo(getPackageName());
+        appendImportBlocks(assembler);
         appendCommentBlock(assembler, classCommentLines);
-        assembler.appendClassDefintion(className, superClass, (String[])interfaces.toArray(new String[interfaces.size()]));
+        assembler.appendClassDefintion(className, getClassName(superClass), getClassNames(interfaces));
         assembler.appendLeftBrace();
         assembler.appendNewLine();
         assembler.setIndentLevel(1);
@@ -117,6 +115,62 @@ public class JavaClassGenerator
         assembler.setIndentLevel(0);
         assembler.appendRightBrace();
         return assembler.getResult();
+    }
+    
+    private String getPackageName()
+    {
+        if(null != packageInfo)
+        {
+            return packageInfo.getName();
+        }
+        return null;
+    }
+    
+    private String getClassName(Class clazz)
+    {
+        if(null != superClass)
+        {
+            return ClassUtil.getClassName(clazz);
+        }
+        return null;
+    }
+    
+    private String[] getClassNames(List classList)
+    {
+        if(null == classList || classList.size() <= 0) return null;
+        List nameList = new ArrayList();
+        for(int ii = 0; ii < classList.size(); ii++)
+        {
+            Class interfaceClass = (Class)classList.get(ii);
+            if(null != interfaceClass)
+            {
+                nameList.add(ClassUtil.getClassName(interfaceClass));
+            }
+        }
+        return (String[])nameList.toArray(new String[nameList.size()]);
+    }
+    
+    private String[] getClassNames(Class[] arguments)
+    {
+        if(null == arguments || arguments.length <= 0) return null;
+        String[] names = new String[arguments.length];
+        for(int ii = 0; ii < arguments.length; ii++)
+        {
+            Class clazz = arguments[ii];
+            names[ii] = ClassUtil.getClassName(clazz);
+        }
+        return names;
+    }
+    
+    private void appendImportBlocks(JavaLineAssembler assembler)
+    {
+        List importBlocks = processImports();
+        for(int ii = 0; ii < importBlocks.size(); ii++)
+        {
+            Set currentBlock = (Set)importBlocks.get(ii);
+            assembler.appendImports(new ArrayList(currentBlock));
+            assembler.appendNewLine();
+        }
     }
     
     private void appendCommentBlock(JavaLineAssembler assembler, String[] commentLines)
@@ -133,9 +187,11 @@ public class JavaClassGenerator
 
     private void appendMembers(JavaLineAssembler assembler)
     {
-        for(int ii = 0; ii < memberTypes.size(); ii++)
+        String[] memberTypeNames = getClassNames(memberTypes);
+        if(null == memberTypeNames) return;
+        for(int ii = 0; ii < memberTypeNames.length; ii++)
         {
-            assembler.appendMemberDeclaration((String)memberTypes.get(ii), (String)memberNames.get(ii));
+            assembler.appendMemberDeclaration(memberTypeNames[ii], (String)memberNames.get(ii));
         }
     }
     
@@ -146,8 +202,8 @@ public class JavaClassGenerator
             MethodDeclaration declaration = (MethodDeclaration)methods.get(ii);
             appendMethodHeader(assembler, declaration);
             String[] modifiers = prepareModifiers(declaration.getModifier());
-            String returnType = ClassUtil.getClassName(declaration.getReturnType());
-            String[] argumentTypes = prepareArgumentTypes(declaration.getArguments());
+            String returnType = getClassName(declaration.getReturnType());
+            String[] argumentTypes = getClassNames(declaration.getArguments());
             assembler.appendMethodDeclaration(modifiers, returnType, declaration.getName(), argumentTypes, declaration.getArgumentNames());
             appendMethodBody(assembler, declaration);
         }
@@ -159,7 +215,7 @@ public class JavaClassGenerator
         {
             ConstructorDeclaration declaration = (ConstructorDeclaration)constructors.get(ii);
             appendMethodHeader(assembler, declaration);
-            String[] argumentTypes = prepareArgumentTypes(declaration.getArguments());
+            String[] argumentTypes = getClassNames(declaration.getArguments());
             assembler.appendConstructorDeclaration(className, argumentTypes, declaration.getArgumentNames());
             appendMethodBody(assembler, declaration);
         }
@@ -196,18 +252,139 @@ public class JavaClassGenerator
         return StringUtil.split(modifierString, " ", true);
     }
     
-    private String[] prepareArgumentTypes(Class[] arguments)
+    private List processImports()
     {
-        if(null == arguments || arguments.length <= 0) return null;
-        String[] names = new String[arguments.length];
-        for(int ii = 0; ii < arguments.length; ii++)
-        {
-            Class clazz = arguments[ii];
-            names[ii] = ClassUtil.getClassName(clazz);
-        }
-        return names;
+        addMissingImports();
+        Map blocks = prepareImportBlocks();
+        return sortImportBlocks(blocks);
     }
     
+    private List sortImportBlocks(Map blocks)
+    {
+        List sortedBlockKeys = new ArrayList();
+        addDefaultDomains(blocks, sortedBlockKeys);
+        addNonDefaultDomains(blocks, sortedBlockKeys);
+        List sortedBlocks = new ArrayList();
+        for(int ii = 0; ii < sortedBlockKeys.size(); ii++)
+        {
+            String key = (String)sortedBlockKeys.get(ii);
+            Set currentBlock = (Set)blocks.get(key);
+            sortedBlocks.add(currentBlock);
+        }
+        return sortedBlocks;
+    }
+    
+    private void addNonDefaultDomains(Map blocks, List sortedBlockKeys)
+    {
+        Iterator keys = blocks.keySet().iterator();
+        while(keys.hasNext())
+        {
+            String key = (String)keys.next();
+            if(!(key.equals("java") || key.equals("javax") || key.equals("org") || key.equals("com")))
+            {
+                addLexicographically(sortedBlockKeys, key);
+            }
+        }
+    }
+    
+    private void addDefaultDomains(Map blocks, List sortedBlockKeys)
+    {
+        Iterator keys = blocks.keySet().iterator();
+        while(keys.hasNext())
+        {
+            String key = (String)keys.next();
+            if(key.equals("java"))
+            {
+                addAtIndex(sortedBlockKeys, 0, key);
+            }
+            if(key.equals("javax"))
+            {
+                addAtIndex(sortedBlockKeys, 1, key);
+            }
+            if(key.equals("org"))
+            {
+                addAtIndex(sortedBlockKeys, 2, key);
+            }
+            if(key.equals("com"))
+            {
+                addAtIndex(sortedBlockKeys, 3, key);
+            }
+        }
+    }
+    
+    private void addLexicographically(List sortedBlockKeys, String key)
+    {
+        for(int ii = 0; ii < sortedBlockKeys.size(); ii++)
+        {
+            String currentBlockKey = (String)sortedBlockKeys.get(ii);
+            if(currentBlockKey.compareTo(key) > 0)
+            {
+                addAtIndex(sortedBlockKeys, ii - 1, key);
+                return;
+            }
+        }
+        sortedBlockKeys.add(key);
+    }
+
+    private void addAtIndex(List list, int index, Object object)
+    {
+        if(index < 0)
+        {
+            index = 0;
+        }
+        if(index < list.size())
+        {
+            list.add(index, object);
+        }
+        else
+        {
+            list.add(object);
+        }
+    }
+    
+    private Map prepareImportBlocks()
+    {
+        Map importBlockMap = new HashMap();
+        for(int ii = 0; ii < imports.size(); ii++)
+        {
+            String blockKey = getBlockKey((String)imports.get(ii));
+            Set blockSet = (Set)importBlockMap.get(blockKey);
+            if(null == blockSet)
+            {
+                blockSet = new TreeSet();
+                importBlockMap.put(blockKey, blockSet);
+            }
+            blockSet.add(imports.get(ii));
+        }
+        return importBlockMap;
+    }
+    
+    private String getBlockKey(String packageInfo)
+    {
+        if(null == packageInfo || packageInfo.trim().length() <= 0) return "";
+        int index = packageInfo.indexOf('.');
+        if(index < 0) return packageInfo;
+        return packageInfo.substring(0, index);
+    }
+    
+    private void addMissingImports()
+    {
+        addImportIfNecessary(superClass);
+        addImportsIfNecessary(interfaces);
+        addImportsIfNecessary(memberTypes);
+        for(int ii = 0; ii < constructors.size(); ii++)
+        {
+            ConstructorDeclaration declaration = (ConstructorDeclaration)constructors.get(ii);
+            addImportsForArguments(declaration);
+        }
+        for(int ii = 0; ii < methods.size(); ii++)
+        {
+            MethodDeclaration declaration = (MethodDeclaration)methods.get(ii);
+            addImportForReturnType(declaration);
+            addImportsForArguments(declaration);
+        }
+    }
+
     private void addImportsForArguments(ConstructorDeclaration declaration)
     {
         Class[] arguments = declaration.getArguments();
@@ -224,14 +401,44 @@ public class JavaClassGenerator
         if(null == returnType) return;
         addImportIfNecessary(returnType);
     }
+    
+    private void addImportsIfNecessary(List classes)
+    {
+        if(null == classes) return;
+        for(int ii = 0; ii < classes.size(); ii++)
+        {
+            addImportIfNecessary((Class)classes.get(ii));
+        }
+    }
 
     private void addImportIfNecessary(Class clazz)
     {
         if(null == clazz) return;
         if(imports.contains(clazz.getName())) return;
         if(clazz.getName().startsWith("java.lang")) return;
+        if(belongsToSamePackage(clazz)) return;
         if(clazz.isPrimitive()) return;
         addImport(clazz);
+    }
+    
+    private boolean belongsToSamePackage(Class clazz)
+    {
+        String thisPackageName = getPackageName();
+        Package classPackage = clazz.getPackage();
+        String classPackageName = "";
+        if(null != classPackage)
+        {
+            classPackageName = classPackage.getName();
+        }
+        if(null == thisPackageName)
+        {
+            thisPackageName = "";
+        }
+        if(null == classPackageName)
+        {
+            classPackageName = "";
+        }
+        return thisPackageName.equals(classPackageName);
     }
     
     public static class ConstructorDeclaration
