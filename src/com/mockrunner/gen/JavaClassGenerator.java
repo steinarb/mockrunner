@@ -200,7 +200,8 @@ public class JavaClassGenerator
             String[] modifiers = prepareModifiers(declaration.getModifier());
             String returnType = getClassName(declaration.getReturnType());
             String[] argumentTypes = getClassNames(declaration.getArguments());
-            assembler.appendMethodDeclaration(modifiers, returnType, declaration.getName(), argumentTypes, declaration.getArgumentNames());
+            String[] exceptionTypes = getClassNames(declaration.getExceptions());
+            assembler.appendMethodDeclaration(modifiers, returnType, declaration.getName(), argumentTypes, declaration.getArgumentNames(), exceptionTypes);
             appendMethodBody(assembler, declaration);
         }
     }
@@ -212,7 +213,8 @@ public class JavaClassGenerator
             ConstructorDeclaration declaration = (ConstructorDeclaration)constructors.get(ii);
             appendMethodHeader(assembler, declaration);
             String[] argumentTypes = getClassNames(declaration.getArguments());
-            assembler.appendConstructorDeclaration(className, argumentTypes, declaration.getArgumentNames());
+            String[] exceptionTypes = getClassNames(declaration.getExceptions());
+            assembler.appendConstructorDeclaration(className, argumentTypes, declaration.getArgumentNames(), exceptionTypes);
             appendMethodBody(assembler, declaration);
         }
     }
@@ -220,7 +222,7 @@ public class JavaClassGenerator
     private void appendMethodHeader(JavaLineAssembler assembler, ConstructorDeclaration declaration)
     {
         assembler.appendNewLine();
-        assembler.appendBlockComment(declaration.getCommentLines());
+        appendCommentBlock(assembler, declaration.getCommentLines());
     }
 
     private void appendMethodBody(JavaLineAssembler assembler, ConstructorDeclaration declaration)
@@ -264,12 +266,24 @@ public class JavaClassGenerator
         {
             ConstructorDeclaration declaration = (ConstructorDeclaration)constructors.get(ii);
             addImportsForArguments(declaration);
+            addImportsForExceptions(declaration);
         }
         for(int ii = 0; ii < methods.size(); ii++)
         {
             MethodDeclaration declaration = (MethodDeclaration)methods.get(ii);
             addImportForReturnType(declaration);
             addImportsForArguments(declaration);
+            addImportsForExceptions(declaration);
+        }
+    }
+    
+    private void addImportsForExceptions(ConstructorDeclaration declaration)
+    {
+        Class[] exceptions = declaration.getExceptions();
+        if(null == exceptions || exceptions.length <= 0) return;
+        for(int ii = 0; ii < exceptions.length; ii++)
+        {
+            addImportIfNecessary(exceptions[ii]);
         }
     }
 
@@ -335,6 +349,7 @@ public class JavaClassGenerator
         private String[] argumentNames;
         private String[] codeLines;
         private String[] commentLines;
+        private Class[] exceptions;
 
         public String[] getCodeLines()
         {
@@ -378,6 +393,17 @@ public class JavaClassGenerator
         public void setArguments(Class[] arguments)
         {
             this.arguments = (Class[])ArrayUtil.copyArray(arguments);
+        }
+        
+        public Class[] getExceptions()
+        {
+            if(null == exceptions) return null;
+            return (Class[])ArrayUtil.copyArray(exceptions);
+        }
+        
+        public void setExceptions(Class[] exceptions)
+        {
+            this.exceptions = (Class[])ArrayUtil.copyArray(exceptions);
         }
     }
     

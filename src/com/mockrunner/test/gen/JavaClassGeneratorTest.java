@@ -1,5 +1,6 @@
 package com.mockrunner.test.gen;
 
+import java.beans.IntrospectionException;
 import java.util.List;
 import java.util.Map;
 
@@ -45,6 +46,7 @@ public class JavaClassGeneratorTest extends TestCase
         constructor.setCommentLines(new String[] {"A", "comment"});
         constructor.setArguments(new Class[] {String.class, JavaClassGeneratorTest.class});
         constructor.setArgumentNames(new String[] {"string1", "generator1"});
+        constructor.setExceptions(new Class[] {Exception.class});
         constructor.setCodeLines(new String[] {"Line1", "Line2"});
         generator.addConstructorDeclaration(constructor);
         MethodDeclaration method1 = new MethodDeclaration();
@@ -62,6 +64,7 @@ public class JavaClassGeneratorTest extends TestCase
         method3.setName("thirdMethod");
         method3.setReturnType(Integer.TYPE);
         method3.setCommentLines(new String[] {"Comment"});
+        method3.setExceptions(new Class[] {IntrospectionException.class, RuntimeException.class});
         method3.setCodeLines(new String[] {"Line1", "Line2"});
         generator.addMethodDeclaration(method3);
         assertEquals(getExpected(), generator.generate());
@@ -70,6 +73,7 @@ public class JavaClassGeneratorTest extends TestCase
     private String getExpected()
     {
         return "package com.mockrunner.test.gen;" + NL + NL +
+               "import java.beans.IntrospectionException;" + NL +
                "import java.util.List;" + NL +
                "import java.util.Map;" + NL + NL +
                "import javax.servlet.http.HttpServlet;" + NL + NL +
@@ -88,16 +92,16 @@ public class JavaClassGeneratorTest extends TestCase
                "    public MyClass()" + NL +
                "    {" + NL + NL +
                "    }" + NL + NL +
-               "    /*" + NL +
+               "    /**" + NL +
                "     * A" + NL +
                "     * comment" + NL +
                "     */" + NL +
-               "    public MyClass(String string1, JavaClassGeneratorTest generator1)" + NL +
+               "    public MyClass(String string1, JavaClassGeneratorTest generator1) throws Exception" + NL +
                "    {" + NL +
                "        Line1" + NL +
                "        Line2" + NL +
                "    }" + NL + NL +
-               "    /*" + NL +
+               "    /**" + NL +
                "     * Another" + NL +
                "     * comment" + NL +
                "     */" + NL +
@@ -108,10 +112,10 @@ public class JavaClassGeneratorTest extends TestCase
                "    public CollectionUtil anotherMethod(String string1, double double1)" + NL +
                "    {" + NL + NL +
                "    }" + NL + NL +
-               "    /*" + NL +
+               "    /**" + NL +
                "     * Comment" + NL +
                "     */" + NL +
-               "    public int thirdMethod()" + NL +
+               "    public int thirdMethod() throws IntrospectionException, RuntimeException" + NL +
                "    {" + NL +
                "        Line1" + NL +
                "        Line2" + NL +

@@ -40,6 +40,23 @@ public class StringUtil
     }
     
     /**
+     * Converts the character at the specified index to
+     * lowercase and returns the resulting string.
+     * @param string the string to convert
+     * @param index the index where the character is set to lowercase
+     * @return the converted string
+     * @throws IndexOutOfBoundsException if the index is negative or 
+     *         greater than or equal to the length of the string
+     */
+    public static String lowerCase(String string, int index)
+    {
+        StringBuffer buffer = new StringBuffer(string);
+        char character = buffer.charAt(index);
+        buffer.setCharAt(index, Character.toLowerCase(character));
+        return buffer.toString();
+    }
+    
+    /**
      * Appends the entries in the specified <code>List</code> as strings
      * with a terminating <i>"\n"</i> after each row.
      * @param buffer the buffer

@@ -41,10 +41,12 @@ public class AdapterGenerator
             processor.process(nextUnit.getModule());
             writeOutputFile(processor);
         }
+        System.out.println("Adapters successfully created");
     }
     
     private void writeOutputFile(AdapterProcessor processor) throws FileNotFoundException, IOException
     {
+        System.out.println("Writing output file " + processor.getName());
         File currentFile = new File(SRCDIR + "/" + processor.getName());
         FileOutputStream currentStream = new FileOutputStream(currentFile);
         Writer currentWriter = new OutputStreamWriter(currentStream, Charset.forName("ISO-8859-1"));

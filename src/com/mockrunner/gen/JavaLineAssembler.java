@@ -194,10 +194,15 @@ public class JavaLineAssembler
     
     public void appendConstructorDeclaration(String name, String[] parameterTypes, String[] parameterNames)
     {
+        appendConstructorDeclaration(name, parameterTypes, parameterNames, null);
+    }
+    
+    public void appendConstructorDeclaration(String name, String[] parameterTypes, String[] parameterNames, String[] exceptions)
+    {
         if(null == name || name.length() <= 0) return;
         StringBuffer buffer = new StringBuffer(30);
         buffer.append("public ");
-        appendSignature(name, parameterTypes, parameterNames, buffer);
+        appendSignature(name, parameterTypes, parameterNames, exceptions, buffer);
         appendLine(buffer.toString());
     }
     
@@ -218,6 +223,11 @@ public class JavaLineAssembler
     
     public void appendMethodDeclaration(String[] modifiers, String returnType, String name, String[] parameterTypes, String[] parameterNames)
     {
+        appendMethodDeclaration(modifiers, returnType, name, parameterTypes, parameterNames, null);
+    }
+    
+    public void appendMethodDeclaration(String[] modifiers, String returnType, String name, String[] parameterTypes, String[] parameterNames, String[] exceptions)
+    {
         if(null == name || name.length() <= 0) return;
         if(null == returnType || returnType.length() <= 0)
         {
@@ -230,16 +240,24 @@ public class JavaLineAssembler
         }
         buffer.append(prepareModifierList(modifiers));
         buffer.append(returnType + " ");
-        appendSignature(name, parameterTypes, parameterNames, buffer);
+        appendSignature(name, parameterTypes, parameterNames, exceptions, buffer);
         appendLine(buffer.toString());
     }
     
-    private void appendSignature(String name, String[] parameterTypes, String[] parameterNames, StringBuffer buffer)
+    private void appendSignature(String name, String[] parameterTypes, String[] parameterNames, String[] exceptions, StringBuffer buffer)
     {
         buffer.append(name);
         buffer.append("(");
         buffer.append(prepareCommaSeparatedList(parameterTypes, getParameterNameList(parameterTypes, parameterNames)));
         buffer.append(")");
+        appendThrowsClause(exceptions, buffer);
+    }
+    
+    private void appendThrowsClause(String[] exceptions, StringBuffer buffer)
+    {
+        if(null == exceptions || exceptions.length <= 0) return;
+        String throwsClause = prepareCommaSeparatedList(exceptions, null);
+        buffer.append(" throws " + throwsClause);
     }
 
     public void appendComment(String oneLineComment)
