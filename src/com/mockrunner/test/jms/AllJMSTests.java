@@ -7,7 +7,7 @@ public class AllJMSTests
 {
     public static Test suite()
     {
-        TestSuite suite = new TestSuite("Test for com.mockrunner.jms.test");
+        TestSuite suite = new TestSuite("Test for com.mockrunner.test.jms");
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(MockConnectionTest.class));
         suite.addTest(new TestSuite(MockMessageTest.class));
