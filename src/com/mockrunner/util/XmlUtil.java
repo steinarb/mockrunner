@@ -87,7 +87,8 @@ public class XmlUtil
     /**
      * Returns a parser suitable for parsing HTML documents.
      * The NekoHTML parser is used with some settings to
-     * preserve case of tag names. This method is used by {@link #parseHTML}.
+     * preserve case of tag names and disable namespace processing. 
+     * This method is used by {@link #parseHTML}.
      * @return instance of <code>org.apache.xerces.parsers.DOMParser</code>
      *         with Neko configuration
      */
@@ -99,6 +100,7 @@ public class XmlUtil
             config.setProperty("http://cyberneko.org/html/properties/names/elems", "match");
             config.setProperty("http://cyberneko.org/html/properties/names/attrs", "no-change");
             DOMParser parser = new DOMParser(config);
+            parser.setFeature("http://xml.org/sax/features/namespaces", false);
             return parser;
         }
         catch(Exception exc)
