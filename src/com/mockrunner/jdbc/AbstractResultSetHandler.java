@@ -1,12 +1,10 @@
 package com.mockrunner.jdbc;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.util.SearchUtil;
@@ -35,9 +33,9 @@ public abstract class AbstractResultSetHandler
     private int globalUpdateCount = 0;
     private Map updateCountForStatement = new HashMap();
     private Map returnsResultSetMap = new HashMap();
-    private Set throwsSQLException = new HashSet();
-    private Set executedStatements = new HashSet();
-    private Set returnedResultSets = new HashSet();
+    private List throwsSQLException = new ArrayList();
+    private List executedStatements = new ArrayList();
+    private List returnedResultSets = new ArrayList();
     
     /**
      * Creates a new <code>ResultSet</code> with a
@@ -136,21 +134,21 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Returns the <code>Collection</code> of all executed SQL strings.
-     * @param the <code>Collection</code> of executed SQL strings
+     * Returns the <code>List</code> of all executed SQL strings.
+     * @param the <code>List</code> of executed SQL strings
      */
-    public Collection getExecutedStatements()
+    public List getExecutedStatements()
     {
-        return Collections.unmodifiableCollection(executedStatements);
+        return Collections.unmodifiableList(executedStatements);
     }
     
     /**
-     * Returns the <code>Collection</code> of all returned <code>ResultSet</code> objects.
-     * @param the <code>Collection</code> of returned <code>ResultSet</code> objects
+     * Returns the <code>List</code> of all returned <code>ResultSet</code> objects.
+     * @param the <code>List</code> of returned <code>ResultSet</code> objects
      */
-    public Collection getReturnedResultSets()
+    public List getReturnedResultSets()
     {
-        return Collections.unmodifiableCollection(returnedResultSets);
+        return Collections.unmodifiableList(returnedResultSets);
     }
     
     /**

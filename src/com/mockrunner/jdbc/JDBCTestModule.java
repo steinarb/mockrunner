@@ -17,6 +17,7 @@ import com.mockrunner.mock.jdbc.MockStatement;
 import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.ParameterUtil;
 import com.mockrunner.util.SearchUtil;
+import com.mockrunner.util.StringUtil;
 
 /**
  * Module for JDBC tests.
@@ -599,7 +600,10 @@ public class JDBCTestModule
      */
     public void verifyResultSetRowInserted(MockResultSet resultSet, int number)
     {
-    
+        if(!resultSet.rowInserted(number))
+        {
+            throw new VerifyFailedException("Row number " + number + " of ResultSet " + resultSet.getId() + " not inserted.");
+        }
     }
     
     /**
@@ -628,7 +632,10 @@ public class JDBCTestModule
      */
     public void verifyResultSetRowNotInserted(MockResultSet resultSet, int number)
     {
-
+        if(resultSet.rowInserted(number))
+        {
+            throw new VerifyFailedException("Row number " + number + " of ResultSet " + resultSet.getId() + " was inserted.");
+        }
     }
     
     /**
@@ -657,7 +664,10 @@ public class JDBCTestModule
      */
     public void verifyResultSetRowUpdated(MockResultSet resultSet, int number)
     {
-
+        if(!resultSet.rowUpdated(number))
+        {
+            throw new VerifyFailedException("Row number " + number + " of ResultSet " + resultSet.getId() + " not updated.");
+        }
     }
     
     /**
@@ -686,7 +696,10 @@ public class JDBCTestModule
      */
     public void verifyResultSetRowNotUpdated(MockResultSet resultSet, int number)
     {
-
+        if(resultSet.rowUpdated(number))
+        {
+            throw new VerifyFailedException("Row number " + number + " of ResultSet " + resultSet.getId() + " was updated.");
+        }
     }
 
     /**
@@ -715,7 +728,10 @@ public class JDBCTestModule
      */
     public void verifyResultSetRowDeleted(MockResultSet resultSet, int number)
     {
-        
+        if(!resultSet.rowDeleted(number))
+        {
+            throw new VerifyFailedException("Row number " + number + " of ResultSet " + resultSet.getId() + " not deleted.");
+        }
     }
     
     /**
@@ -744,7 +760,10 @@ public class JDBCTestModule
      */
     public void verifyResultSetRowNotDeleted(MockResultSet resultSet, int number)
     {
-
+        if(resultSet.rowDeleted(number))
+        {
+            throw new VerifyFailedException("Row number " + number + " of ResultSet " + resultSet.getId() + " was deleted.");
+        }
     }
 
     /**
@@ -1048,7 +1067,15 @@ public class JDBCTestModule
      */
     public void verifyResultSetRow(MockResultSet resultSet, int number, List rowData)
     {
-    
+        if(!resultSet.isRowEqual(number, rowData))
+        {
+            StringBuffer buffer = new StringBuffer("Actual row data:\n");
+            StringUtil.appendObjectsAsString(buffer, resultSet.getRow(number));
+            buffer.append("\n");
+            buffer.append("Expected row data:\n");
+            StringUtil.appendObjectsAsString(buffer, rowData);
+            throw new VerifyFailedException("Mismatch in row data.\n" + buffer.toString());
+        }
     }
     
     /**
@@ -1115,7 +1142,15 @@ public class JDBCTestModule
      */
     public void verifyResultSetColumn(MockResultSet resultSet, int number, List columnData)
     {
-
+        if(!resultSet.isColumnEqual(number, columnData))
+        {
+            StringBuffer buffer = new StringBuffer("Actual column data:\n");
+            StringUtil.appendObjectsAsString(buffer, resultSet.getColumn(number));
+            buffer.append("\n");
+            buffer.append("Expected column data:\n");
+            StringUtil.appendObjectsAsString(buffer, columnData);
+            throw new VerifyFailedException("Mismatch in column data.\n" + buffer.toString());
+        }
     }
 
     /**
@@ -1182,7 +1217,15 @@ public class JDBCTestModule
      */
     public void verifyResultSetColumn(MockResultSet resultSet, String name, List columnData)
     {
-
+        if(!resultSet.isColumnEqual(name, columnData))
+        {
+            StringBuffer buffer = new StringBuffer("Actual column data:\n");
+            StringUtil.appendObjectsAsString(buffer, resultSet.getColumn(name));
+            buffer.append("\n");
+            buffer.append("Expected column data:\n");
+            StringUtil.appendObjectsAsString(buffer, columnData);
+            throw new VerifyFailedException("Mismatch in column data.\n" + buffer.toString());
+        }
     }
 
     /**
@@ -1246,7 +1289,15 @@ public class JDBCTestModule
      */
     public void verifyResultSetEquals(MockResultSet source, MockResultSet target)
     {
-        
+        if(!source.isEqual(target))
+        {
+            StringBuffer buffer = new StringBuffer("Source data:\n");  
+            buffer.append(source.toString());
+            buffer.append("\n");
+            buffer.append("Target data:\n");
+            buffer.append(target.toString());
+            throw new VerifyFailedException("Mismatch in ResultSet data.\n" + buffer.toString());
+        }
     }
     
     /**

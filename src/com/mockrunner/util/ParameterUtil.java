@@ -16,65 +16,6 @@ import java.util.Arrays;
 public class ParameterUtil
 {
     /**
-     * Returns a suitable hashcode for a <code>PreparedStatement</code>,
-     * <code>CallableStatement</code> or <code>ResultSet</code> parameter.
-     * Since parameters can be of the type <code>byte[]</code>,
-     * <code>InputStream</code>, <code>Reader</code>, <code>Ref</code>,
-     * <code>Array</code>, <code>Blob</code> or <code>Clob</code>,
-     * this method recognizes these types of objects.
-     * If two parameters are equals, this method is guaranteed to
-     * return the same int value.
-     * @param parameter the parameter
-     * @return a suitable hashcode
-     */
-    public static int createHashCodeForParameter(Object parameter)
-    {
-        try
-        {
-            if(null == parameter) return 0;
-            if(parameter instanceof Number || parameter instanceof String)
-            {
-                return parameter.hashCode();
-            }
-            if(parameter instanceof byte[])
-            {
-                return new Integer(addBytes((byte[])parameter)).hashCode();
-            }
-            if(parameter instanceof Blob)
-            {
-                byte[] array = ((Blob)parameter).getBytes(1, (int)((Blob)parameter).length());
-                return new Integer(addBytes(array)).hashCode();
-            }
-            if(parameter instanceof Clob)
-            {
-                String string = ((Clob)parameter).getSubString(1, (int)((Clob)parameter).length());
-                return string.hashCode();
-            }
-            if(parameter instanceof InputStream)
-            {
-                InputStream stream = (InputStream)parameter;
-                if(stream.markSupported()) stream.mark(Integer.MAX_VALUE);
-                byte[] array = StreamUtil.getStreamAsByteArray(stream);
-                if(stream.markSupported()) stream.reset();
-                return new Integer(addBytes(array)).hashCode();
-            }
-            if(parameter instanceof Reader)
-            {
-                Reader reader = (Reader)parameter;
-                if(reader.markSupported()) reader.mark(Integer.MAX_VALUE);
-                String string = StreamUtil.getReaderAsString(reader);
-                if(reader.markSupported()) reader.reset();
-                return string.hashCode();
-            }
-        }
-        catch(Exception exc)
-        {
-            return 0;
-        }
-        return 0;
-    }
-    
-    /**
      * Compares two parameters of a <code>PreparedStatement</code> or
      * <code>CallableStatement</code>. You can use it to compare
      * parameters of a <code>ResultSet</code>. It is used by
@@ -124,16 +65,6 @@ public class ParameterUtil
             return compareClob(source, target);
         }
         return source.equals(target);
-    }
-    
-    private static int addBytes(byte[] data)
-    {
-        int sum = 0;
-        for(int ii = 0; ii < data.length; ii++)
-        {
-            sum += data[ii];
-        }
-        return sum;
     }
     
     private static boolean compareClob(Object source, Object target)

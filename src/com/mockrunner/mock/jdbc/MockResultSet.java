@@ -32,6 +32,7 @@ import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.CollectionUtil;
 import com.mockrunner.util.ParameterUtil;
 import com.mockrunner.util.StreamUtil;
+import com.mockrunner.util.StringUtil;
 
 /**
  * Mock implementation of <code>ResultSet</code>.
@@ -391,6 +392,45 @@ public class MockResultSet implements ResultSet, Cloneable
     }
     
     /**
+     * Returns if the row with the specified number was inserted
+     * The first row has the number 1.
+     * @param number the number of the row
+     * @return <code>true</code> if the row was inserted,
+     *         <code>false</code> otherwise
+     */
+    public boolean rowInserted(int number)
+    {
+        if(number < 1) return false;
+        return ((Boolean)insertedRows.get(number - 1)).booleanValue();
+    }
+    
+    /**
+     * Returns if the row with the specified number was deleted
+     * The first row has the number 1.
+     * @param number the number of the row
+     * @return <code>true</code> if the row was deleted,
+     *         <code>false</code> otherwise
+     */
+    public boolean rowDeleted(int number)
+    {
+        if(number < 1) return false;
+        return ((Boolean)deletedRows.get(number - 1)).booleanValue();
+    }
+    
+    /**
+     * Returns if the row with the specified number was updated
+     * The first row has the number 1.
+     * @param number the number of the row
+     * @return <code>true</code> if the row was updated,
+     *         <code>false</code> otherwise
+     */
+    public boolean rowUpdated(int number)
+    {
+        if(number < 1) return false;
+        return ((Boolean)updatedRows.get(number - 1)).booleanValue();
+    }
+    
+    /**
      * Returns if the row with the specified number is
      * equal to the specified data. Uses {@link com.mockrunner.util.ParameterUtil#compareParameter}.
      * The first row has the number 1.
@@ -399,7 +439,7 @@ public class MockResultSet implements ResultSet, Cloneable
      * @return <code>true</code> if the row is equal to the specified data,
      *         <code>false</code> otherwise
      */
-    public boolean equalsRow(int number, List rowData)
+    public boolean isRowEqual(int number, List rowData)
     {
         List currentRow = getRow(number);
         if(null == currentRow) return false;
@@ -423,7 +463,7 @@ public class MockResultSet implements ResultSet, Cloneable
      * @return <code>true</code> if the column is equal to the specified data,
      *         <code>false</code> otherwise
      */
-    public boolean equalsColumn(int number, List columnData)
+    public boolean isColumnEqual(int number, List columnData)
     {
         List currentColumn = getColumn(number);
         if(null == currentColumn) return false;
@@ -447,7 +487,7 @@ public class MockResultSet implements ResultSet, Cloneable
      * @return <code>true</code> if the column is equal to the specified data,
      *         <code>false</code> otherwise
      */
-    public boolean equalsColumn(String name, List columnData)
+    public boolean isColumnEqual(String name, List columnData)
     {
         List currentColumn = getColumn(name);
         if(null == currentColumn) return false;
@@ -468,12 +508,9 @@ public class MockResultSet implements ResultSet, Cloneable
      * @return <code>true</code> if the two <code>ResultSet</code> objects are equal,
      *         <code>false</code> otherwise
      */
-    public boolean equals(Object object)
+    public boolean isEqual(MockResultSet resultSet)
     {
-        if(null == object) return false;
-        if(!(object instanceof MockResultSet)) return false;
-        if(object == this) return true;
-        MockResultSet other = (MockResultSet)object;
+        if(null == resultSet) return false;
         Map thisMap;
         Map otherMap;
         if(isDatabaseView)
@@ -484,13 +521,13 @@ public class MockResultSet implements ResultSet, Cloneable
         {
             thisMap = columnMapCopy;  
         }
-        if(other.isDatabaseView)
+        if(resultSet.isDatabaseView)
         {
-            otherMap = other.columnMap;
+            otherMap = resultSet.columnMap;
         }
         else
         {
-            otherMap = other.columnMapCopy;
+            otherMap = resultSet.columnMapCopy;
         }
         Iterator keys = thisMap.keySet().iterator();
         while(keys.hasNext())
@@ -509,35 +546,6 @@ public class MockResultSet implements ResultSet, Cloneable
             }
         }
         return true;
-    }
-
-    /**
-     * Suitable implementation of <code>hashCode()</code>
-     * @return the hashcode
-     */
-    public int hashCode()
-    {
-        int hashCode = 0;
-        Map dataMap;
-        if(isDatabaseView)
-        {
-            dataMap = columnMap;
-        }
-        else
-        {
-            dataMap = columnMapCopy;
-        }
-        Iterator keys = dataMap.keySet().iterator();
-        while(keys.hasNext())
-        {
-            String currentKey = (String)keys.next();
-            List dataList =  (List)dataMap.get(currentKey);      
-            for(int ii = 0; ii < dataList.size(); ii++)
-            {
-                hashCode += ParameterUtil.createHashCodeForParameter(dataList.get(ii));  
-            }
-        }
-        return hashCode;
     }
     
     /**
@@ -1874,5 +1882,21 @@ public class MockResultSet implements ResultSet, Cloneable
             count ++;
         }
         return name + count;
+    }
+    
+    public String toString()
+    {
+        StringBuffer buffer = new StringBuffer("ResultSet " + id + ":\n");
+        buffer.append("Number of rows: " + getRowCount() + "\n");
+        buffer.append("Number of columns: " + getColumnCount() + "\n");
+        buffer.append("Column names:\n");
+        StringUtil.appendObjectsAsString(buffer, columnNameList);
+        buffer.append("Data:\n");
+        for(int ii = 1; ii <= getRowCount(); ii++)
+        {
+            buffer.append("Row number " + ii + ":\n");
+            StringUtil.appendObjectsAsString(buffer, getRow(ii));
+        }
+        return buffer.toString();
     }
 }
