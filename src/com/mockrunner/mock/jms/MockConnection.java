@@ -18,6 +18,10 @@ import com.mockrunner.jms.DestinationManager;
 
 /**
  * Mock implementation of JMS <code>Connection</code>.
+ * Please note: The interfaces <code>ConnectionConsumer</code>,
+ * <code>ServerSessionPool</code> and <code>ServerSession</code>
+ * are not meant for application use. Mockrunner provides very
+ * simple mock implementations but usually you won't need them.
  */
 public class MockConnection implements Connection
 {

@@ -189,6 +189,8 @@ public class TopicTransmissionManager
      * <code>Topic</code>. Usually this method is called
      * by {@link com.mockrunner.mock.jms.MockTopicSession#createSubscriber}.
      * @param topic the <code>Topic</code>
+     * @param messageSelector the message selector
+     * @param noLocal the no local flag
      * @return the created <code>TopicSubscriber</code>
      */
     public MockTopicSubscriber createTopicSubscriber(MockTopic topic, String messageSelector, boolean noLocal)
@@ -268,6 +270,9 @@ public class TopicTransmissionManager
      * <code>Topic</code>. Usually this method is called
      * by {@link com.mockrunner.mock.jms.MockTopicSession#createDurableSubscriber}.
      * @param topic the <code>Topic</code>
+     * @param name the name of the <code>TopicSubscriber</code>
+     * @param messageSelector the message selector
+     * @param noLocal the no local flag
      * @return the created <code>TopicSubscriber</code>
      */
     public MockTopicSubscriber createDurableTopicSubscriber(MockTopic topic, String name, String messageSelector, boolean noLocal)
