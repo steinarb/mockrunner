@@ -7,6 +7,9 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+/**
+ * Mock implementation of <code>RequestDispatcher</code>.
+ */
 public class MockRequestDispatcher implements RequestDispatcher
 {
     private ServletRequest forwardedRequest;
@@ -24,5 +27,25 @@ public class MockRequestDispatcher implements RequestDispatcher
     {
         includedRequest = request;
         includedResponse = response;
+    }
+    
+    public ServletRequest getForwardedRequest()
+    {
+        return forwardedRequest;
+    }
+
+    public ServletResponse getForwardedResponse()
+    {
+        return forwardedResponse;
+    }
+
+    public ServletRequest getIncludedRequest()
+    {
+        return includedRequest;
+    }
+
+    public ServletResponse getIncludedResponse()
+    {
+        return includedResponse;
     }
 }
