@@ -193,6 +193,27 @@ public class ArrayUtil
     }
     
     /**
+     * Returns a copy of the specified array. If <i>array</i>
+     * is not an array, the object itself will be returned.
+     * Otherwise a copy of the array will be returned. The components
+     * themselves are not cloned.
+     * @param array the array
+     * @return the copy of the array
+     */
+    public static Object copyArray(Object array)
+    {
+        if(!array.getClass().isArray()) return array;
+        Class componentType = array.getClass().getComponentType();
+        int length = Array.getLength(array);
+        Object copy = Array.newInstance(componentType, Array.getLength(array));
+        for(int ii = 0; ii < length; ii++)
+        {
+            Array.set(copy, ii, Array.get(array, ii));
+        }
+        return copy;
+    }
+    
+    /**
      * Returns an object array by wrapping primitive types. If the 
      * specified array is of primitive component type, an <code>Object[]</code>
      * with the corresponding wrapper component type is returned.

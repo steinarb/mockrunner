@@ -2,6 +2,7 @@ package com.mockrunner.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.Reader;
 import java.io.StringReader;
 
 import junit.framework.TestCase;
@@ -43,10 +44,23 @@ public class StreamUtilTest extends TestCase
         String sourceString = "This is a test";
         String targetString = "This is a test";
         StringReader sourceReader = new StringReader(sourceString);
-        assertTrue(StreamUtil.compareReader(sourceReader, new StringReader(targetString)));
+        assertTrue(StreamUtil.compareReaders(sourceReader, new StringReader(targetString)));
         assertTrue('T' == (char)sourceReader.read());
-        assertTrue(StreamUtil.compareReader(sourceReader, new StringReader("his is a test")));
-        assertFalse(StreamUtil.compareReader(sourceReader, new StringReader("This is a test")));       
-        assertFalse(StreamUtil.compareReader(new StringReader("this is a test"), new StringReader("This is a test")));
+        assertTrue(StreamUtil.compareReaders(sourceReader, new StringReader("his is a test")));
+        assertFalse(StreamUtil.compareReaders(sourceReader, new StringReader("This is a test")));       
+        assertFalse(StreamUtil.compareReaders(new StringReader("this is a test"), new StringReader("This is a test")));
+    }
+    
+    public void testCopyStreamAndReader() throws Exception
+    {
+        InputStream sourceStream = new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5});
+        InputStream copyStream = StreamUtil.copyStream(sourceStream);
+        assertTrue(StreamUtil.compareStreams(sourceStream, copyStream));
+        assertEquals(1, copyStream.read());
+        assertFalse(StreamUtil.compareStreams(sourceStream, copyStream));
+        Reader sourceReader = new StringReader("This is a String");
+        Reader copyReader = StreamUtil.copyReader(sourceReader);
+        assertTrue(StreamUtil.compareReaders(sourceReader, copyReader));
+        assertEquals('T', copyReader.read());
     }
 }

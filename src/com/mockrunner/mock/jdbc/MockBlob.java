@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.mockrunner.util.ArrayUtil;
@@ -13,7 +14,7 @@ import com.mockrunner.util.ArrayUtil;
 /**
  * Mock implementation of a JDBC 3.0 <code>Blob</code>.
  */
-public class MockBlob implements Blob
+public class MockBlob implements Blob, Cloneable
 {
     private List blobData;
     
@@ -100,5 +101,20 @@ public class MockBlob implements Blob
             buffer.append("[" + blobData.get(ii).toString() + "] ");
         }
         return buffer.toString();
+    }
+    
+    public Object clone()
+    {
+        try
+        {
+            MockBlob blob = (MockBlob)super.clone();
+            blob.blobData = new ArrayList(blobData);
+            return blob;
+        }
+        catch(CloneNotSupportedException exc)
+        {
+    
+        }
+        return null;
     }
 }

@@ -10,7 +10,7 @@ import com.mockrunner.util.ArrayUtil;
 /**
  * Mock implementation of a JDBC 3.0 <code>Array</code>.
  */
-public class MockArray implements Array
+public class MockArray implements Array, Cloneable
 {
     private Object array;
     
@@ -90,5 +90,20 @@ public class MockArray implements Array
             buffer.append("[" + arrayData[ii].toString() + "] ");
         }
         return buffer.toString();
+    }
+    
+    public Object clone()
+    {
+        try
+        {
+            MockArray copy = (MockArray)super.clone();
+            copy.array = ArrayUtil.copyArray(array);
+            return copy;
+        }
+        catch(CloneNotSupportedException exc)
+        {
+        
+        }
+        return null;
     }
 }

@@ -9,12 +9,66 @@ import java.sql.Ref;
 import java.sql.SQLException;
 import java.util.Arrays;
 
+import com.mockrunner.mock.jdbc.MockArray;
+import com.mockrunner.mock.jdbc.MockBlob;
+import com.mockrunner.mock.jdbc.MockClob;
+import com.mockrunner.mock.jdbc.MockRef;
+
 /**
  * Util class for <code>PreparedStatement</code> and <code>ResultSet</code>
  * parameters.
  */
 public class ParameterUtil
 {
+    /**
+     * Copies a parameter of a <code>PreparedStatement</code>,
+     * <code>CallableStatement</code> or <code>ResultSet</code>.
+     * Since the parameters can be of the type <code>byte[]</code>,
+     * <code>InputStream</code>, <code>Reader</code>, <code>Ref</code>,
+     * <code>Array</code>, <code>Blob</code> or <code>Clob</code>,
+     * this method can handle these types of objects.
+     * <code>InputStream</code>, <code>Reader</code> and arrays
+     * are copied into new allocated streams resp. arrays.
+     * <code>Ref</code>, <code>Array</code>, <code>Blob</code> and 
+     * <code>Clob</code> objects are cloned. All other objects are
+     * returned unchanged.
+     * @param source the parameter to copy
+     * @return a copy of the parameter
+     */
+    public static Object copyParameter(Object source)
+    {
+        if(null == source) return null;
+        if(source instanceof MockRef)
+        {
+            return ((MockRef)source).clone();
+        }
+        if(source instanceof MockArray)
+        {
+            return ((MockArray)source).clone();
+        }
+        if(source instanceof MockBlob)
+        {
+            return ((MockBlob)source).clone();
+        }
+        if(source instanceof MockClob)
+        {
+            return ((MockClob)source).clone();
+        }
+        if(source.getClass().isArray())
+        {
+            return ArrayUtil.copyArray(source);
+        }
+        if(source instanceof InputStream)
+        {
+            return StreamUtil.copyStream((InputStream)source);
+        }
+        if(source instanceof Reader)
+        {
+            return StreamUtil.copyReader((Reader)source);
+        }
+        return source;
+    }
+    
     /**
      * Compares two parameters of a <code>PreparedStatement</code> or
      * <code>CallableStatement</code>. You can use it to compare
@@ -46,7 +100,7 @@ public class ParameterUtil
         }
         if(source instanceof Reader && target instanceof Reader)
         {
-            return StreamUtil.compareReader((Reader)source, (Reader)target);
+            return StreamUtil.compareReaders((Reader)source, (Reader)target);
         }
         if(source instanceof Ref && target instanceof Ref)
         {
@@ -63,7 +117,7 @@ public class ParameterUtil
         if(source instanceof Clob && target instanceof Clob)
         {
             return compareClob(source, target);
-        } 
+        }
         return source.equals(target);
     }
     
