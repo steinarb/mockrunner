@@ -4,12 +4,17 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Vector;
 
+import javax.servlet.RequestDispatcher;
+
+import com.mockobjects.servlet.MockRequestDispatcher;
+
 /**
  * Mock implementation of <code>ServletContext</code>.
  */
 public class MockServletContext extends com.mockobjects.servlet.MockServletContext
 {
     private HashMap attributes = new HashMap();
+    private MockRequestDispatcher dispatcher = new MockRequestDispatcher();
     
     public void clearAttributes()
     {
@@ -35,5 +40,15 @@ public class MockServletContext extends com.mockobjects.servlet.MockServletConte
     public void setAttribute(String key, Object value)
     {
         attributes.put(key, value);
+    }
+    
+    public RequestDispatcher getNamedDispatcher(String arg0)
+    {
+        return dispatcher;
+    }
+
+    public RequestDispatcher getRequestDispatcher(String arg0)
+    {
+        return dispatcher;
     }
 }
