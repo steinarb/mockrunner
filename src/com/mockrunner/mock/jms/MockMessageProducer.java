@@ -130,7 +130,7 @@ public abstract class MockMessageProducer implements MessageProducer
         }
         if(!disableMessageId)
         {
-            message.setJMSMessageID(String.valueOf(Math.random()));
+            message.setJMSMessageID("ID:" + String.valueOf(Math.random()));
         }
         if(message instanceof BytesMessage)
         {

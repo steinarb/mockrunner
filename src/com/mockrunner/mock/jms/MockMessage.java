@@ -33,7 +33,7 @@ public class MockMessage implements Message
     
     public MockMessage()
     {
-        messageId = String.valueOf(Math.random());
+        messageId = "ID:" + String.valueOf(Math.random());
         timestamp = System.currentTimeMillis();
         deliveryMode = DeliveryMode.NON_PERSISTENT;
         redelivered = false;
