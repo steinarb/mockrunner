@@ -34,5 +34,10 @@ public class MockRef implements Ref
     public void setObject(Object object) throws SQLException
     {
         this.object = object;
-    }   
+    }
+     
+    public String toString()
+    {
+        return "Ref data: " + object.toString();
+    }
 }

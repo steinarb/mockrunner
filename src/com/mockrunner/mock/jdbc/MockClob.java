@@ -137,4 +137,9 @@ public class MockClob implements Clob
             index++;
         }
     }
+    
+    public String toString()
+    {
+        return "Clob data: " + clobData.toString();
+    }
 }

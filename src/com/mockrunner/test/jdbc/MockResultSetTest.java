@@ -512,6 +512,20 @@ public class MockResultSetTest extends TestCase
         otherResult.updateRow();
         assertTrue(resultSet.isEqual(otherResult));
         assertTrue(otherResult.isEqual(resultSet));
+        otherResult = new MockResultSet("");
+        otherResult.addRow(new Integer[] {new Integer(1), new Integer(2), new Integer(3)});
+        otherResult.addRow(new Integer[] {new Integer(4), new Integer(5), new Integer(6)});
+        otherResult.addRow(new Integer[] {new Integer(7), new Integer(8), new Integer(9)});
+        testList = new ArrayList();
+        testList.add("1");
+        testList.add("4");
+        testList.add("7");
+        assertTrue(otherResult.isColumnEqual(1, testList));
+        testList = new ArrayList();
+        testList.add("7");
+        testList.add("8");
+        testList.add("9");
+        assertTrue(otherResult.isRowEqual(3, testList));
     }
     
     public void testRowsInsertedDeletedUpdated() throws Exception

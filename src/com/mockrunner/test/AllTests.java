@@ -4,6 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import com.mockrunner.example.jdbc.BankTest;
+import com.mockrunner.example.jdbc.BookstoreTest;
 import com.mockrunner.example.jdbc.PayActionTest;
 import com.mockrunner.example.servlet.ImageButtonFilterTest;
 import com.mockrunner.example.servlet.LogoutServletTest;
@@ -45,6 +46,7 @@ public class AllTests
         suite.addTest(new TestSuite(ImageButtonFilterTest.class));
         suite.addTest(new TestSuite(BankTest.class));
         suite.addTest(new TestSuite(PayActionTest.class));
+        suite.addTest(new TestSuite(BookstoreTest.class));
         //$JUnit-END$
         return suite;
     }

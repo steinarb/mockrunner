@@ -91,4 +91,14 @@ public class MockBlob implements Blob
             index++;
         }
     }
+    
+    public String toString()
+    {
+        StringBuffer buffer = new StringBuffer("Blob data: ");
+        for(int ii = 0; ii < blobData.size(); ii++)
+        {
+            buffer.append("[" + blobData.get(ii).toString() + "] ");
+        }
+        return buffer.toString();
+    }
 }
