@@ -70,71 +70,84 @@
         
         <patternset id="full.jar.classes">
             <include name="**/*" />
+            <exclude name="*.txt" />
             <exclude name="com/mockrunner/example/**" />
             <exclude name="com/mockrunner/test/**" />
             <exclude name="com/mockrunner/gen/**" />
         </patternset>
         
         <patternset id="basic.jar.base.classes">
-            <include name="com/mockrunner/base/**" />
-            <exclude name="com/mockrunner/base/BaseTestCase.java" />
-            <exclude name="com/mockrunner/base/HTMLOutputTestCase.java" />
-            <exclude name="com/mockrunner/base/WebTestCase.java" />
+            <include name="com/mockrunner/base/*Exception.*" />
+            <include name="com/mockrunner/base/MultiThreadTestSuite.*" />
         </patternset>  
         
         <patternset id="jms.jar.classes">
+            <patternset refid="basic.jar.base.classes"/>
             <include name="com/mockrunner/jms/**" />
             <include name="com/mockrunner/mock/jms/**" />
             <include name="com/mockrunner/util/common/**" />
             <include name="org/codehaus/**" />
-            <exclude name="com/mockrunner/jms/JMSTestCaseAdapter.java" />
+            <exclude name="com/mockrunner/jms/JMSTestCaseAdapter.*" />
         </patternset>
         
         <patternset id="jdbc.jar.classes">
+            <patternset refid="basic.jar.base.classes"/>
             <include name="com/mockrunner/jdbc/**" />
             <include name="com/mockrunner/mock/jdbc/**" />
             <include name="com/mockrunner/util/common/**" />
-            <exclude name="com/mockrunner/jdbc/JDBCTestCaseAdapter.java" />
+            <exclude name="com/mockrunner/jdbc/JDBCTestCaseAdapter.*" />
         </patternset>
         
         <patternset id="ejb.jar.classes">
+            <patternset refid="basic.jar.base.classes"/>
             <include name="com/mockrunner/ejb/**" />
             <include name="com/mockrunner/mock/ejb/**" />
             <include name="com/mockrunner/util/common/**" />
-            <exclude name="com/mockrunner/ejb/EJBTestCaseAdapter.java" />
+            <exclude name="com/mockrunner/ejb/EJBTestCaseAdapter.*" />
+        </patternset>
+        
+        <patternset id="basic.jar.web.base.classes">
+            <include name="com/mockrunner/base/**" />
+            <exclude name="com/mockrunner/base/BaseTestCase.*" />
+            <exclude name="com/mockrunner/base/WebTestCase.*" />
+            <exclude name="com/mockrunner/base/HTMLOutputTestCase.*" />
         </patternset>
         
         <patternset id="basic.jar.web.mock.classes">
             <include name="com/mockrunner/mock/web/**" />
-            <exclude name="com/mockrunner/servlet/ServletTestCaseAdapter.java" />
-            <exclude name="com/mockrunner/mock/web/ActionMockObjectFactory.java" />
-            <exclude name="com/mockrunner/mock/web/MockActionForward.java" />
-            <exclude name="com/mockrunner/mock/web/MockActionMapping.java" />
-            <exclude name="com/mockrunner/mock/web/MockActionServlet.java" />
-            <exclude name="com/mockrunner/mock/web/MockForwardConfig.java" />
-            <exclude name="com/mockrunner/mock/web/MockModuleConfig.java" />
-        </patternset>    
+            <exclude name="com/mockrunner/mock/web/ActionMockObjectFactory.*" />
+            <exclude name="com/mockrunner/mock/web/MockActionForward.*" />
+            <exclude name="com/mockrunner/mock/web/MockActionMapping.*" />
+            <exclude name="com/mockrunner/mock/web/MockActionServlet.*" />
+            <exclude name="com/mockrunner/mock/web/MockForwardConfig.*" />
+            <exclude name="com/mockrunner/mock/web/MockModuleConfig.*" />
+        </patternset>
         
         <patternset id="servlet.jar.classes">
+            <patternset refid="basic.jar.web.base.classes"/>
+            <patternset refid="basic.jar.web.mock.classes"/>
             <include name="com/mockrunner/servlet/**" />
             <include name="com/mockrunner/util/web/**" />
             <include name="com/mockrunner/util/common/**" />
-            <exclude name="com/mockrunner/servlet/ServletTestCaseAdapter.java" />
+            <exclude name="com/mockrunner/servlet/ServletTestCaseAdapter.*" />
         </patternset>
         
         <patternset id="tag.jar.classes">
+            <patternset refid="basic.jar.web.base.classes"/>
+            <patternset refid="basic.jar.web.mock.classes"/>
             <include name="com/mockrunner/tag/**" />
             <include name="com/mockrunner/util/web/**" />
             <include name="com/mockrunner/util/common/**" />
-            <exclude name="com/mockrunner/tag/TagTestCaseAdapter.java" />
+            <exclude name="com/mockrunner/tag/TagTestCaseAdapter.*" />
         </patternset>
         
         <patternset id="struts.jar.classes">
+            <patternset refid="basic.jar.web.base.classes"/>
             <include name="com/mockrunner/struts/**" />
             <include name="com/mockrunner/mock/web/**" />
             <include name="com/mockrunner/util/web/**" />
             <include name="com/mockrunner/util/common/**" />
-            <exclude name="com/mockrunner/servlet/ActionTestCaseAdapter.java" />
+            <exclude name="com/mockrunner/servlet/ActionTestCaseAdapter.*" />
         </patternset>
 
     </target>
@@ -176,12 +189,63 @@
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${build}" />
+            <param name="jarpattern" value="full.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-jdk1.3.jar" />
             <param name="jdkver" value="1.3" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${build1.3}" />
+            <param name="jarpattern" value="full.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-jms.jar" />
+            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="j2eever" value="1.3 and 1.4" />
+            <param name="builddir" value="${build}" />
+            <param name="jarpattern" value="jms.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-ejb.jar" />
+            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="j2eever" value="1.3 and 1.4" />
+            <param name="builddir" value="${build}" />
+            <param name="jarpattern" value="ejb.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-jdbc.jar" />
+            <param name="jdkver" value="1.4" />
+            <param name="j2eever" value="1.3 and 1.4" />
+            <param name="builddir" value="${build}" />
+            <param name="jarpattern" value="jdbc.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-jdbc-jdk1.3.jar" />
+            <param name="jdkver" value="1.3" />
+            <param name="j2eever" value="1.3 and 1.4" />
+            <param name="builddir" value="${build1.3}" />
+            <param name="jarpattern" value="jdbc.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-servlet.jar" />
+            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${build}" />
+            <param name="jarpattern" value="servlet.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-tag.jar" />
+            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${build}" />
+            <param name="jarpattern" value="tag.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-struts.jar" />
+            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${build}" />
+            <param name="jarpattern" value="struts.jar.classes" />
         </antcall>
     </target>
     
@@ -192,14 +256,17 @@
         <filter token="jdkver" value="${jdkver}" />
         <filter token="j2eever" value="${j2eever}" />
         <delete file="${builddir}/${jarname}" />
-        <copy todir="${builddir}" filtering="true">
+        <copy todir="${builddir}" overwrite="true" filtering="true">
             <fileset dir="${basedir}">
                 <include name="jarversion.txt" />
             </fileset>
         </copy>
         <jar jarfile="${builddir}/${jarname}">
             <fileset dir="${builddir}">
-                <patternset refid="full.jar.classes"/>
+                <patternset refid="${jarpattern}"/>
+            </fileset>
+            <fileset dir="${builddir}">
+                <include name="*.txt" />
             </fileset>
             <fileset dir="${config}">
                 <include name="junit/**" />
@@ -280,6 +347,7 @@
 	    <mkdir dir="${releasedir}/src1.3" />
 	    <mkdir dir="${releasedir}/doc" />
 	    <mkdir dir="${releasedir}/lib" />
+        <mkdir dir="${releasedir}/lib/div" />   
 	    <mkdir dir="${releasedir}/jar" />
         <filter token="version" value="${version}" />
         <filter token="timestamp" value="${timestamp}" />
@@ -309,12 +377,24 @@
 	    </copy>
 	    <copy todir="${releasedir}/lib">
             <fileset dir="${build}">
-                <include name="*.jar" />
+                <include name="mockrunner.jar" />
             </fileset>
         </copy>
         <copy todir="${releasedir}/lib">
             <fileset dir="${build1.3}">
+                <include name="mockrunner-jdk1.3.jar" />
+            </fileset>
+        </copy>
+        <copy todir="${releasedir}/lib/div">
+            <fileset dir="${build}">
                 <include name="*.jar" />
+                <exclude name="mockrunner.jar" />
+            </fileset>
+        </copy>
+        <copy todir="${releasedir}/lib/div">
+            <fileset dir="${build1.3}">
+                <include name="*.jar" />
+                <exclude name="mockrunner-jdk1.3.jar" />
             </fileset>
         </copy>
 	    <copy todir="${releasedir}/jar">
