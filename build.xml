@@ -18,10 +18,19 @@
          to your JDK1.4 installation.
         </fail>
    	</target>
+	
+	<target name="checkJava2HTML" unless="java2html.home">
+		<fail>
+	     Property "java2html.home" not set. Please create a file
+	     ".ant.properties" in this directory and set "java2html.home"
+	     to your Java2HTML installation (location of j2h.jar).
+		</fail>
+    </target>
    
 	<target name="checkenvironment">
 	    <antcall target="checkJDK1.3"/>
 	    <antcall target="checkJDK1.4"/>
+		<antcall target="checkJava2HTML"/>
 	</target>
 	
 	<target name="init" depends="checkenvironment">
@@ -155,7 +164,24 @@
   		</javadoc>
     </target>
 	
-	<target name="release" depends="clean,jar,jar1.3,javadoc">
+    <target name="java2html" depends="javadoc">
+    	<mkdir dir="${doc}/examples"/>
+    	<taskdef name="java2html" classname="com.java2html.Java2HTMLTask" classpath="${java2html.home}/j2h.jar"/>
+    	               
+    	<java2html title="Mockrunner" 
+    			   simple="no"
+    	           tabsize="4"
+    			   marginsize="0"
+    			   header="true"
+    			   footer="false"
+    			   destination="${doc}/examples">
+    			   <fileset dir="${src}">
+    			   		<include name="com/mockrunner/example/**/*.java"/>
+    			   </fileset>
+    	</java2html>
+    </target>
+	
+	<target name="release" depends="clean,jar,jar1.3,javadoc,java2html">
 		<delete dir="${releasedir}"/>
 		<delete file="${releasefile}"/>
 		<mkdir dir="${releasedir}"/>
