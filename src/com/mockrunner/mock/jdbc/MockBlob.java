@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.mockrunner.util.ArrayUtil;
+import com.mockrunner.util.CollectionUtil;
 
 /**
  * Mock implementation of a JDBC 3.0 <code>Blob</code>.
@@ -73,7 +74,7 @@ public class MockBlob implements Blob, Cloneable
 
     public void truncate(long len) throws SQLException
     {
-        blobData = ArrayUtil.truncateList(blobData, (int)len);
+        blobData = CollectionUtil.truncateList(blobData, (int)len);
     }
     
     private class BlobOutputStream extends OutputStream

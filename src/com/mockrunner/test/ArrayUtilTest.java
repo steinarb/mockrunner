@@ -114,22 +114,7 @@ public class ArrayUtilTest extends TestCase
             assertEquals(testArray[ii - 100], nextByteFromList);
         }
     }
-    
-    public void testTruncateList()
-    {
-        ArrayList list = new ArrayList();
-        for(int ii = 0; ii < 100; ii++)
-        {
-            list.add("Test" + ii);
-        }
-        List truncatedList = ArrayUtil.truncateList(list, 50);
-        assertTrue(truncatedList.size() == 50);
-        for(int ii = 0; ii < 50; ii++)
-        {
-            assertEquals("Test" + ii, truncatedList.get(ii));
-        }
-    }
-    
+
     public void testTruncateArray()
     {
         String[] stringArray = new String[] {"This", "is", "an", "array", "of", "strings"};
