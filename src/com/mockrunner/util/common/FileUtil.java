@@ -66,7 +66,7 @@ public class FileUtil
                 return new FileReader(file);
             }
             InputStream stream = FileUtil.class.getResourceAsStream(filePath);
-            return new InputStreamReader(stream, "ISO-8859-1");
+            return new InputStreamReader(stream);
         } 
         catch(Exception exc)
         {
