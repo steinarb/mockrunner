@@ -106,56 +106,102 @@ public class MockObjectFactory
         filterConfig.setupGetServletContext(context);
     }
     
+    /**
+     * Returns a new {@link com.mockrunner.mock.MockFilterChain}
+     * regardless of the other mockobjects.
+     * @return the {@link com.mockrunner.mock.MockFilterChain}
+     */
     public MockFilterChain createNewMockFilterChain()
     {
         return new MockFilterChain();
     }
-
+    
+    /**
+     * Returns the <code>MockServletConfig</code>
+     * @return the <code>MockServletConfig</code>
+     */
     public MockServletConfig getMockServletConfig()
     {
         return config;
     }
 
+    /**
+     * Returns the {@link com.mockrunner.mock.MockServletContext}.
+     * @return the {@link com.mockrunner.mock.MockServletContext}
+     */
     public MockServletContext getMockServletContext()
     {
         return context;
     }
 
+    /**
+     * Returns the {@link com.mockrunner.mock.MockHttpServletRequest}.
+     * @return the {@link com.mockrunner.mock.MockHttpServletRequest}
+     */
     public MockHttpServletRequest getMockRequest()
     {
         return request;
     }
 
+    /**
+     * Returns the {@link com.mockrunner.mock.MockHttpServletResponse}.
+     * @return the {@link com.mockrunner.mock.MockHttpServletResponse}
+     */
     public MockHttpServletResponse getMockResponse()
     {
         return response;
     }
 
+    /**
+     * Returns the {@link com.mockrunner.mock.MockHttpSession}.
+     * @return the {@link com.mockrunner.mock.MockHttpSession}
+     */
     public MockHttpSession getMockSession()
     {
         return session;
     }
 
+    /**
+     * Returns the {@link com.mockrunner.mock.MockHttpSession}.
+     * @return the {@link com.mockrunner.mock.MockHttpSession}
+     * @deprecated use {@link #getMockSession}
+     */
     public MockHttpSession getSession()
     {
         return getMockSession();
     }
 
+    /**
+     * Returns the {@link com.mockrunner.mock.MockActionMapping}.
+     * @return the {@link com.mockrunner.mock.MockActionMapping}
+     */
     public MockActionMapping getMockActionMapping()
     {
         return mapping;
     }
 
+    /**
+     * Returns the {@link com.mockrunner.mock.MockPageContext}.
+     * @return the {@link com.mockrunner.mock.MockPageContext}
+     */
     public MockPageContext getMockPageContext()
     {
         return pageContext;
     }
     
+    /**
+     * Returns the {@link com.mockrunner.mock.MockFilterConfig}.
+     * @return the {@link com.mockrunner.mock.MockFilterConfig}
+     */
     public MockFilterConfig getMockFilterConfig()
     {
         return filterConfig;
     }
 
+    /**
+     * Returns the {@link com.mockrunner.mock.MockFilterChain}.
+     * @return the {@link com.mockrunner.mock.MockFilterChain}
+     */
     public MockFilterChain getMockFilterChain()
     {
         return filterChain;
