@@ -3,6 +3,8 @@ package com.mockrunner.test.jms;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
+import javax.jms.MessageFormatException;
+
 import com.mockrunner.mock.jms.MockMessage;
 
 import junit.framework.TestCase;
@@ -22,7 +24,7 @@ public class MockMessageTest extends TestCase
             message.getLongProperty("string1");
             fail();
         }
-        catch(Exception exc)
+        catch(NumberFormatException exc)
         {
             //should throw Exception
         }
@@ -39,7 +41,7 @@ public class MockMessageTest extends TestCase
             message.getLongProperty("float1");
             fail();
         }
-        catch(Exception exc)
+        catch(MessageFormatException exc)
         {
             //should throw Exception
         }
@@ -48,7 +50,7 @@ public class MockMessageTest extends TestCase
             message.getFloatProperty("double1");
             fail();
         }
-        catch(Exception exc)
+        catch(MessageFormatException exc)
         {
             //should throw Exception
         }
@@ -65,7 +67,7 @@ public class MockMessageTest extends TestCase
             message.getBooleanProperty("byte1");
             fail();
         }
-        catch(Exception exc)
+        catch(MessageFormatException exc)
         {
             //should throw Exception
         }
@@ -79,7 +81,7 @@ public class MockMessageTest extends TestCase
             message.getShortProperty("int1");
             fail();
         }
-        catch(Exception exc)
+        catch(MessageFormatException exc)
         {
             //should throw Exception
         }
@@ -92,7 +94,7 @@ public class MockMessageTest extends TestCase
             message.getDoubleProperty("boolean1");
             fail();
         }
-        catch(Exception exc)
+        catch(MessageFormatException exc)
         {
             //should throw Exception
         }
@@ -109,5 +111,15 @@ public class MockMessageTest extends TestCase
         assertTrue(nameList.contains("int1"));
         assertTrue(nameList.contains("byte1"));
         assertTrue(nameList.contains("boolean1"));
+        message.setObjectProperty("null", null);
+        try
+        {
+            message.getDoubleProperty("null");
+        }
+        catch(MessageFormatException exc)
+        {
+            //should throw Exception
+        }
+        assertNull(message.getObjectProperty("null"));
     }
 }
