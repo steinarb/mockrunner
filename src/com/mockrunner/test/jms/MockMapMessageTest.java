@@ -119,4 +119,23 @@ public class MockMapMessageTest extends TestCase
         assertFalse(message1.equals(message2));
         assertFalse(message2.equals(message1));
     }
+    
+    public void testClone() throws Exception
+    {
+        MockMapMessage message = new MockMapMessage();
+        MockMapMessage newMessage = (MockMapMessage)message.clone();
+        assertNotSame(message, newMessage);
+        assertEquals(message, newMessage);
+        message.setFloat("float", 2.0f);
+        message.setString("string", "text");
+        byte[] myArray = new byte[]{1, 2, 3};
+        message.setBytes("bytes", myArray);
+        newMessage = (MockMapMessage)message.clone();
+        assertNotSame(message, newMessage);
+        assertEquals(message, newMessage);
+        assertEquals(2.0f, message.getFloat("float"), 0);
+        assertEquals("text", message.getString("string"));
+        assertNotSame(myArray, message.getBytes("bytes"));
+        assertTrue(Arrays.equals(myArray, message.getBytes("bytes")));
+    }
 }

@@ -2,6 +2,7 @@ package com.mockrunner.test.jms;
 
 import java.util.Arrays;
 
+import javax.jms.JMSException;
 import javax.jms.MessageEOFException;
 import javax.jms.MessageFormatException;
 import javax.jms.MessageNotReadableException;
@@ -265,5 +266,42 @@ public class MockStreamMessageTest extends TestCase
         assertTrue(message1.equals(message2));
         assertTrue(message2.equals(message1));
         assertEquals(message1.hashCode(), message2.hashCode());
+    }
+    
+    public void testClone() throws Exception
+    {
+        MockStreamMessage message = new MockStreamMessage();
+        MockStreamMessage newMessage = (MockStreamMessage)message.clone();
+        assertNotSame(message, newMessage);
+        assertEquals(message, newMessage);
+        message = new MockStreamMessage();
+        message.writeByte((byte)1);
+        message.writeBytes(new byte[]{1, 2, 3, 4, 5});
+        message.writeBoolean(true);
+        newMessage = (MockStreamMessage)message.clone();
+        assertNotSame(message, newMessage);
+        assertEquals(message, newMessage);
+        try
+        {
+            newMessage.readBoolean();
+            fail();
+        }
+        catch(JMSException exc)
+        {
+            //should throw exception
+        }
+        newMessage.reset();
+        assertEquals(1, newMessage.readByte());
+        byte[] myArray = new byte[5];
+        newMessage.readBytes(myArray);
+        assertTrue(Arrays.equals(new byte[]{1, 2, 3, 4, 5}, myArray));
+        assertTrue(newMessage.readBoolean());
+        message = new MockStreamMessage();
+        message.writeString("test1");
+        message.writeString("test2");
+        message.reset();
+        newMessage = (MockStreamMessage)message.clone();
+        assertEquals("test1", message.readString());
+        assertEquals("test2", message.readString());
     }
 }

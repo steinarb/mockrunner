@@ -15,7 +15,7 @@ import javax.jms.MessageFormatException;
 /**
  * Mock implementation of JMS <code>Message</code>.
  */
-public class MockMessage implements Message
+public class MockMessage implements Message, Cloneable
 {
     private String messageId;
     private long timestamp;
@@ -395,5 +395,19 @@ public class MockMessage implements Message
     public void clearBody() throws JMSException
     {
 
+    }
+    
+    public Object clone()
+    {
+        try
+        {
+            MockMessage clone = (MockMessage)super.clone();
+            clone.properties = new HashMap(properties);
+            return clone;
+        }
+        catch(CloneNotSupportedException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
     }
 }

@@ -344,4 +344,25 @@ public class MockMapMessage extends MockMessage implements MapMessage
         }
         return value;
     }
+    
+    public Object clone()
+    {
+        MockMapMessage message = (MockMapMessage)super.clone();
+        message.data = new HashMap(data.size());
+        Iterator keys = data.keySet().iterator();
+        while(keys.hasNext())
+        {
+            Object nextKey = keys.next();
+            Object nextValue = data.get(nextKey);
+            if(nextValue instanceof byte[])
+            {
+                message.data.put(nextKey, ArrayUtil.copyArray(nextValue));
+            }
+            else
+            {
+                message.data.put(nextKey, nextValue);
+            }
+        }
+        return message;
+    }
 }

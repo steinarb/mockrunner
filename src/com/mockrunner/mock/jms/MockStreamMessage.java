@@ -468,4 +468,23 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         }
         return value;
     }
+    
+    public Object clone()
+    {
+        MockStreamMessage message = (MockStreamMessage)super.clone();
+        message.data = new Stack();
+        for(int ii = 0; ii < data.size(); ii++)
+        {
+            Object nextValue = data.get(ii);
+            if(nextValue instanceof byte[])
+            {
+                message.data.add(ArrayUtil.copyArray(nextValue));
+            }
+            else
+            {
+                message.data.add(nextValue);
+            }
+        }
+        return message;
+    }
 }

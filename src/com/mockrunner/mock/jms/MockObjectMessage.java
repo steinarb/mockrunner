@@ -1,5 +1,9 @@
 package com.mockrunner.mock.jms;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import javax.jms.JMSException;
@@ -56,5 +60,25 @@ public class MockObjectMessage extends MockMessage implements ObjectMessage
     {
         if(null == object) return 0;
         return object.hashCode();
+    }
+    
+    public Object clone()
+    {
+        MockObjectMessage message = (MockObjectMessage)super.clone();
+        try
+        {
+            ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutStream = new ObjectOutputStream(byteOutStream);
+            objectOutStream.writeObject(object);
+            objectOutStream.flush();
+            ByteArrayInputStream byteInStream = new ByteArrayInputStream(byteOutStream.toByteArray());
+            ObjectInputStream objectInStream = new ObjectInputStream(byteInStream);
+            message.object = (Serializable)objectInStream.readObject();
+            return message;
+        }
+        catch(Exception exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
     }
 }
