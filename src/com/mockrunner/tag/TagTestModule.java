@@ -16,7 +16,8 @@ import com.mockrunner.mock.MockPageContext;
 import com.mockrunner.util.*;
 
 /**
- * Module for custom tag tests.
+ * Module for custom tag tests. Simulates the container by
+ * performing the tag lifecycle.
  */
 public class TagTestModule
 {
@@ -312,7 +313,7 @@ public class TagTestModule
     }
     
     /**
-     * Verifies the output data.
+     * Verifies the tag output.
      * @param output the expected output.
      * @throws VerifyFailedException if verification fails
      */
@@ -326,7 +327,7 @@ public class TagTestModule
     }
     
     /**
-     * Verifies if the output data contains the specified data.
+     * Verifies if the tag output contains the specified data.
      * @param output the data
      * @throws VerifyFailedException if verification fails
      */

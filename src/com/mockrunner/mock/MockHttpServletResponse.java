@@ -1,10 +1,15 @@
 package com.mockrunner.mock;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+
 /**
  * Mock implementation of <code>HttpServletResponse</code>.
  */
 public class MockHttpServletResponse extends com.mockobjects.servlet.MockHttpServletResponse
 {
+    private PrintWriter writer;
+    
     public String encodeURL(String url)
     {
         return url;
@@ -23,5 +28,14 @@ public class MockHttpServletResponse extends com.mockobjects.servlet.MockHttpSer
     public String encodeUrl(String url)
     {
         return url;
+    }
+    
+    public PrintWriter getWriter() throws IOException
+    {
+        if(null == writer)
+        {
+            writer = new PrintWriter(getOutputStream());
+        }
+        return writer;
     }
 }
