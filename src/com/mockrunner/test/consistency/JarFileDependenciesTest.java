@@ -80,7 +80,6 @@ public class JarFileDependenciesTest extends TestCase
             copyFile(nextFile, nextCopyFile);
         }
         boolean failure = doFilesContainIllegalDependencies(tempDir);
-        System.gc();
         delete(tempDir);
         assertFalse("There are illegal dependencies", failure);
     }
@@ -101,8 +100,6 @@ public class JarFileDependenciesTest extends TestCase
                 failure = true;
             }
         }
-        analyzer = null;
-        System.gc();
         return failure;
     }
     
