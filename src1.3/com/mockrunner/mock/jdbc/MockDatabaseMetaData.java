@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Mock implementation of <code>DatabaseMetaData</code>.
@@ -11,32 +15,32 @@ import java.sql.SQLException;
 public class MockDatabaseMetaData implements DatabaseMetaData
 {
     private int databaseMajorVersion = 1;
-    private int databaseMinorVersion;
+    private int databaseMinorVersion = 0;
     private int defaultTransactionLevel = Connection.TRANSACTION_READ_COMMITTED;
     private int driverMajorVersion = 1;
-    private int driverMinorVersion;
+    private int driverMinorVersion = 0;
     private int jdbcMajorVersion = 3;
-    private int jdbcMinorVersion;
-    private int maxBinaryLiteralLength;
-    private int maxCatalogNameLength;
-    private int maxCharLiteralLength;
-    private int maxColumnNameLength;
-    private int maxColumnsInGroupBy;
-    private int maxColumnsInIndex;
-    private int maxColumnsInOrderBy;
-    private int maxColumnsInSelect;
-    private int maxColumnsInTable;
-    private int maxConnections;
-    private int maxCursorNameLength;
-    private int maxIndexLength;
-    private int maxProcedureNameLength;
-    private int maxRowSize;
-    private int maxSchemaNameLength;
-    private int maxStatementLength;
-    private int maxStatements;
-    private int maxTableNameLength;
-    private int maxTablesInSelect;
-    private int maxUserNameLength;
+    private int jdbcMinorVersion = 0;
+    private int maxBinaryLiteralLength = 0;
+    private int maxCatalogNameLength = 0;
+    private int maxCharLiteralLength = 0;
+    private int maxColumnNameLength = 0;
+    private int maxColumnsInGroupBy = 0;
+    private int maxColumnsInIndex = 0;
+    private int maxColumnsInOrderBy = 0;
+    private int maxColumnsInSelect = 0;
+    private int maxColumnsInTable = 0;
+    private int maxConnections = 0;
+    private int maxCursorNameLength = 0;
+    private int maxIndexLength = 0;
+    private int maxProcedureNameLength = 0;
+    private int maxRowSize = 0;
+    private int maxSchemaNameLength = 0;
+    private int maxStatementLength = 0;
+    private int maxStatements = 0;
+    private int maxTableNameLength = 0;
+    private int maxTablesInSelect = 0;
+    private int maxUserNameLength = 0;
     private int resultSetHoldability = ResultSet.CONCUR_READ_ONLY;
     //private int sqlStateType = sqlStateSQL99;
     private boolean allProceduresAreCallable = true;
@@ -157,23 +161,23 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     private ResultSet schemas;
     private ResultSet tableTypes;
     private ResultSet typeInfo;
-    private ResultSet exportedKeys;
-    private ResultSet importedKeys;
-    private ResultSet primaryKeys;
-    private ResultSet procedures;
-    private ResultSet superTables;
-    private ResultSet superTypes;
-    private ResultSet tablePrivileges;
-    private ResultSet versionColumns;
-    private ResultSet bestRowIdentifier;
-    private ResultSet indexInfo;
-    private ResultSet udts;
-    private ResultSet attributes;
-    private ResultSet columnPrivileges;
-    private ResultSet columns;
-    private ResultSet procedureColumns;
-    private ResultSet tables;
-    private ResultSet crossReference;
+    private Map exportedKeysMap = new HashMap();
+    private Map importedKeysMap = new HashMap();
+    private Map primaryKeysMap = new HashMap();
+    private Map proceduresMap = new HashMap();
+    private Map superTablesMap = new HashMap();
+    private Map superTypesMap = new HashMap();
+    private Map tablePrivilegesMap = new HashMap();
+    private Map versionColumnsMap = new HashMap();
+    private Map bestRowIdentifierMap = new HashMap();
+    private Map indexInfoMap = new HashMap();
+    private Map udtsMap = new HashMap();
+    private Map attributesMap = new HashMap();
+    private Map columnPrivilegesMap = new HashMap();
+    private Map columnsMap = new HashMap();
+    private Map procedureColumnsMap = new HashMap();
+    private Map tablesMap = new HashMap();
+    private Map crossReferenceMap = new HashMap();
     
     public int getDatabaseMajorVersion() throws SQLException
     {
@@ -184,7 +188,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         databaseMajorVersion = version;
     }
-
+    
     public int getDatabaseMinorVersion() throws SQLException
     {
         return databaseMinorVersion;
@@ -204,7 +208,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.defaultTransactionLevel = defaultTransactionLevel;
     }
-
+    
     public int getDriverMajorVersion()
     {
         return driverMajorVersion;
@@ -214,7 +218,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.driverMajorVersion = driverMajorVersion;
     }
-
+    
     public int getDriverMinorVersion()
     {
         return driverMinorVersion;
@@ -224,7 +228,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.driverMinorVersion = driverMinorVersion;
     }
-
+    
     public int getJDBCMajorVersion() throws SQLException
     {
         return jdbcMajorVersion;
@@ -234,7 +238,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.jdbcMajorVersion = jdbcMajorVersion;
     }
-
+    
     public int getJDBCMinorVersion() throws SQLException
     {
         return jdbcMinorVersion;
@@ -244,7 +248,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.jdbcMinorVersion = jdbcMinorVersion;
     }
-
+    
     public int getMaxBinaryLiteralLength() throws SQLException
     {
         return maxBinaryLiteralLength;
@@ -254,7 +258,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxBinaryLiteralLength = maxBinaryLiteralLength;
     }
-
+    
     public int getMaxCatalogNameLength() throws SQLException
     {
         return maxCatalogNameLength;
@@ -264,7 +268,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxCatalogNameLength = maxCatalogNameLength;
     }
-
+    
     public int getMaxCharLiteralLength() throws SQLException
     {
         return maxCharLiteralLength;
@@ -274,7 +278,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxCharLiteralLength = maxCharLiteralLength;
     }
-
+    
     public int getMaxColumnNameLength() throws SQLException
     {
         return maxColumnNameLength;
@@ -284,7 +288,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxColumnNameLength = maxColumnNameLength;
     }
-
+    
     public int getMaxColumnsInGroupBy() throws SQLException
     {
         return maxColumnsInGroupBy;
@@ -294,7 +298,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxColumnsInGroupBy = maxColumnsInGroupBy;
     }
-
+    
     public int getMaxColumnsInIndex() throws SQLException
     {
         return maxColumnsInIndex;
@@ -304,7 +308,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxColumnsInIndex = maxColumnsInIndex;
     }
-
+    
     public int getMaxColumnsInOrderBy() throws SQLException
     {
         return maxColumnsInOrderBy;
@@ -314,7 +318,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxColumnsInOrderBy = maxColumnsInOrderBy;
     }
-
+    
     public int getMaxColumnsInSelect() throws SQLException
     {
         return maxColumnsInSelect;
@@ -324,7 +328,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxColumnsInSelect = maxColumnsInSelect;
     }
-
+    
     public int getMaxColumnsInTable() throws SQLException
     {
         return maxColumnsInTable;
@@ -334,7 +338,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxColumnsInTable = maxColumnsInTable;
     }
-
+    
     public int getMaxConnections() throws SQLException
     {
         return maxConnections;
@@ -344,7 +348,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxConnections = maxConnections;
     }
-
+    
     public int getMaxCursorNameLength() throws SQLException
     {
         return maxCursorNameLength;
@@ -354,7 +358,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxCursorNameLength = maxCursorNameLength;
     }
-
+    
     public int getMaxIndexLength() throws SQLException
     {
         return maxIndexLength;
@@ -364,7 +368,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxIndexLength = maxIndexLength;
     }
-
+    
     public int getMaxProcedureNameLength() throws SQLException
     {
         return maxProcedureNameLength;
@@ -374,7 +378,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxProcedureNameLength = maxProcedureNameLength;
     }
-
+    
     public int getMaxRowSize() throws SQLException
     {
         return maxRowSize;
@@ -384,7 +388,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxRowSize = maxRowSize;
     }
-
+    
     public int getMaxSchemaNameLength() throws SQLException
     {
         return maxSchemaNameLength;
@@ -394,7 +398,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxSchemaNameLength = maxSchemaNameLength;
     }
-
+    
     public int getMaxStatementLength() throws SQLException
     {
         return maxStatementLength;
@@ -404,7 +408,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxStatementLength = maxStatementLength;
     }
-
+    
     public int getMaxStatements() throws SQLException
     {
         return maxStatements;
@@ -414,7 +418,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxStatements = maxStatements;
     }
-
+    
     public int getMaxTableNameLength() throws SQLException
     {
         return maxTableNameLength;
@@ -424,7 +428,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxTableNameLength = maxTableNameLength;
     }
-
+    
     public int getMaxTablesInSelect() throws SQLException
     {
         return maxTablesInSelect;
@@ -434,7 +438,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxTablesInSelect = maxTablesInSelect;
     }
-
+    
     public int getMaxUserNameLength() throws SQLException
     {
         return maxUserNameLength;
@@ -444,7 +448,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.maxUserNameLength = maxUserNameLength;
     }
-
+    
     public int getResultSetHoldability() throws SQLException
     {
         return resultSetHoldability;
@@ -454,17 +458,17 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.resultSetHoldability = resultSetHoldability;
     }
-
+    
     /*public int getSQLStateType() throws SQLException
     {
         return sqlStateType;
-    }
+    }*/
     
-    public void setSQLStateType(int sqlStateType)
+    /*public void setSQLStateType(int sqlStateType)
     {
         this.sqlStateType = sqlStateType;
     }*/
-
+    
     public boolean allProceduresAreCallable() throws SQLException
     {
         return allProceduresAreCallable;
@@ -474,7 +478,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         allProceduresAreCallable = callable;
     }
-
+    
     public boolean allTablesAreSelectable() throws SQLException
     {
         return allTablesAreSelectable;
@@ -484,7 +488,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         allTablesAreSelectable = selectable;
     }
-
+    
     public boolean dataDefinitionCausesTransactionCommit() throws SQLException
     {
         return dataDefinitionCausesTransactionCommit;
@@ -494,7 +498,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         dataDefinitionCausesTransactionCommit = causesCommit;
     }
-
+    
     public boolean dataDefinitionIgnoredInTransactions() throws SQLException
     {
         return dataDefinitionIgnoredInTransactions;
@@ -504,7 +508,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         dataDefinitionIgnoredInTransactions = ignored;
     }
-
+    
     public boolean doesMaxRowSizeIncludeBlobs() throws SQLException
     {
         return doesMaxRowSizeIncludeBlobs;
@@ -514,7 +518,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         doesMaxRowSizeIncludeBlobs = includeBlobs;
     }
-
+    
     public boolean isCatalogAtStart() throws SQLException
     {
         return isCatalogAtStart;
@@ -524,7 +528,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.isCatalogAtStart = isCatalogAtStart;
     }
-
+    
     public boolean isReadOnly() throws SQLException
     {
         return isReadOnly;
@@ -534,7 +538,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.isReadOnly = isReadOnly;
     }
-
+    
     public boolean locatorsUpdateCopy() throws SQLException
     {
         return locatorsUpdateCopy;
@@ -544,7 +548,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.locatorsUpdateCopy = locatorsUpdateCopy;
     }
-
+    
     public boolean nullPlusNonNullIsNull() throws SQLException
     {
         return nullPlusNonNullIsNull;
@@ -554,7 +558,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.nullPlusNonNullIsNull = nullPlusNonNullIsNull;
     }
-
+    
     public boolean nullsAreSortedAtEnd() throws SQLException
     {
         return nullsAreSortedAtEnd;
@@ -564,7 +568,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.nullsAreSortedAtEnd = nullsAreSortedAtEnd;
     }
-
+    
     public boolean nullsAreSortedAtStart() throws SQLException
     {
         return nullsAreSortedAtStart;
@@ -574,7 +578,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.nullsAreSortedAtStart = nullsAreSortedAtStart;
     }
-
+    
     public boolean nullsAreSortedHigh() throws SQLException
     {
         return nullsAreSortedHigh;
@@ -584,7 +588,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.nullsAreSortedHigh = nullsAreSortedHigh;
     }
-
+    
     public boolean nullsAreSortedLow() throws SQLException
     {
         return nullsAreSortedLow;
@@ -594,7 +598,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.nullsAreSortedLow = nullsAreSortedLow;
     }
-
+    
     public boolean storesLowerCaseIdentifiers() throws SQLException
     {
         return storesLowerCaseIdentifiers;
@@ -604,7 +608,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.storesLowerCaseIdentifiers = storesLowerCaseIdentifiers;
     }
-
+    
     public boolean storesLowerCaseQuotedIdentifiers() throws SQLException
     {
         return storesLowerCaseQuotedIdentifiers;
@@ -614,7 +618,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.storesLowerCaseQuotedIdentifiers = storesLowerCaseQuotedIdentifiers;
     }
-
+    
     public boolean storesMixedCaseIdentifiers() throws SQLException
     {
         return storesMixedCaseIdentifiers;
@@ -624,7 +628,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.storesMixedCaseIdentifiers = storesMixedCaseIdentifiers;
     }
-
+    
     public boolean storesMixedCaseQuotedIdentifiers() throws SQLException
     {
         return storesMixedCaseQuotedIdentifiers;
@@ -634,7 +638,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.storesMixedCaseQuotedIdentifiers = storesMixedCaseQuotedIdentifiers;
     }
-
+    
     public boolean storesUpperCaseIdentifiers() throws SQLException
     {
         return storesUpperCaseIdentifiers;
@@ -644,7 +648,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.storesUpperCaseIdentifiers = storesUpperCaseIdentifiers;
     }
-
+    
     public boolean storesUpperCaseQuotedIdentifiers() throws SQLException
     {
         return storesUpperCaseQuotedIdentifiers;
@@ -654,7 +658,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.storesUpperCaseQuotedIdentifiers = storesUpperCaseQuotedIdentifiers;
     }
-
+    
     public boolean supportsANSI92EntryLevelSQL() throws SQLException
     {
         return supportsANSI92EntryLevelSQL;
@@ -664,7 +668,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsANSI92EntryLevelSQL = supportsANSI92EntryLevelSQL;
     }
-
+    
     public boolean supportsANSI92FullSQL() throws SQLException
     {
         return supportsANSI92FullSQL;
@@ -674,7 +678,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsANSI92FullSQL = supportsANSI92FullSQL;
     }
-
+    
     public boolean supportsANSI92IntermediateSQL() throws SQLException
     {
         return supportsANSI92IntermediateSQL;
@@ -684,7 +688,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsANSI92IntermediateSQL = supportsANSI92IntermediateSQL;
     }
-
+    
     public boolean supportsAlterTableWithAddColumn() throws SQLException
     {
         return supportsAlterTableWithAddColumn;
@@ -694,7 +698,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsAlterTableWithAddColumn = supportsAlterTableWithAddColumn;
     }
-
+    
     public boolean supportsAlterTableWithDropColumn() throws SQLException
     {
         return supportsAlterTableWithDropColumn;
@@ -704,7 +708,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsAlterTableWithDropColumn = supportsAlterTableWithDropColumn;
     }
-
+    
     public boolean supportsBatchUpdates() throws SQLException
     {
         return supportsBatchUpdates;
@@ -714,7 +718,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsBatchUpdates = supportsBatchUpdates;
     }
-
+    
     public boolean supportsCatalogsInDataManipulation() throws SQLException
     {
         return supportsCatalogsInDataManipulation;
@@ -724,7 +728,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsCatalogsInDataManipulation = supportsCatalogsInDataManipulation;
     }
-
+    
     public boolean supportsCatalogsInIndexDefinitions() throws SQLException
     {
         return supportsCatalogsInIndexDefinitions;
@@ -734,7 +738,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsCatalogsInIndexDefinitions = supportsCatalogsInIndexDefinitions;
     }
-
+    
     public boolean supportsCatalogsInPrivilegeDefinitions() throws SQLException
     {
         return supportsCatalogsInPrivilegeDefinitions;
@@ -744,7 +748,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsCatalogsInPrivilegeDefinitions = supportsCatalogsInPrivilegeDefinitions;
     }
-
+    
     public boolean supportsCatalogsInProcedureCalls() throws SQLException
     {
         return supportsCatalogsInProcedureCalls;
@@ -754,7 +758,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsCatalogsInProcedureCalls = supportsCatalogsInProcedureCalls;
     }
-
+    
     public boolean supportsCatalogsInTableDefinitions() throws SQLException
     {
         return supportsCatalogsInTableDefinitions;
@@ -764,7 +768,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsCatalogsInTableDefinitions = supportsCatalogsInTableDefinitions;
     }
-
+    
     public boolean supportsColumnAliasing() throws SQLException
     {
         return supportsColumnAliasing;
@@ -774,7 +778,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsColumnAliasing = supportsColumnAliasing;
     }
-
+    
     public boolean supportsConvert() throws SQLException
     {
         return supportsConvert;
@@ -784,7 +788,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsConvert = supportsConvert;
     }
-
+    
     public boolean supportsCoreSQLGrammar() throws SQLException
     {
         return supportsCoreSQLGrammar;
@@ -794,7 +798,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsCoreSQLGrammar = supportsCoreSQLGrammar;
     }
-
+    
     public boolean supportsCorrelatedSubqueries() throws SQLException
     {
         return supportsCorrelatedSubqueries;
@@ -804,7 +808,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsCorrelatedSubqueries = supportsCorrelatedSubqueries;
     }
-
+    
     public boolean supportsDataDefinitionAndDataManipulationTransactions() throws SQLException
     {
         return supportsDataDefinitionAndDataManipulationTransactions;
@@ -814,7 +818,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsDataDefinitionAndDataManipulationTransactions = supportsDataDefinitionAndDataManipulationTransactions;
     }
-
+    
     public boolean supportsDataManipulationTransactionsOnly() throws SQLException
     {
         return supportsDataManipulationTransactionsOnly;
@@ -824,7 +828,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsDataManipulationTransactionsOnly = supportsDataManipulationTransactionsOnly;
     }
-
+    
     public boolean supportsDifferentTableCorrelationNames() throws SQLException
     {
         return supportsDifferentTableCorrelationNames;
@@ -834,7 +838,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsDifferentTableCorrelationNames = supportsDifferentTableCorrelationNames;
     }
-
+    
     public boolean supportsExpressionsInOrderBy() throws SQLException
     {
         return supportsExpressionsInOrderBy;
@@ -844,7 +848,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsExpressionsInOrderBy = supportsExpressionsInOrderBy;
     }
-
+    
     public boolean supportsExtendedSQLGrammar() throws SQLException
     {
         return supportsExtendedSQLGrammar;
@@ -854,7 +858,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsExtendedSQLGrammar = supportsExtendedSQLGrammar;
     }
-
+    
     public boolean supportsFullOuterJoins() throws SQLException
     {
         return supportsFullOuterJoins;
@@ -864,7 +868,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsFullOuterJoins = supportsFullOuterJoins;
     }
-
+    
     public boolean supportsGetGeneratedKeys() throws SQLException
     {
         return supportsGetGeneratedKeys;
@@ -874,7 +878,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsGetGeneratedKeys = supportsGetGeneratedKeys;
     }
-
+    
     public boolean supportsGroupBy() throws SQLException
     {
         return supportsGroupBy;
@@ -884,7 +888,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsGroupBy = supportsGroupBy;
     }
-
+    
     public boolean supportsGroupByBeyondSelect() throws SQLException
     {
         return supportsGroupByBeyondSelect;
@@ -894,7 +898,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsGroupByBeyondSelect = supportsGroupByBeyondSelect;
     }
-
+    
     public boolean supportsGroupByUnrelated() throws SQLException
     {
         return supportsGroupByUnrelated;
@@ -904,7 +908,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsGroupByUnrelated = supportsGroupByUnrelated;
     }
-
+    
     public boolean supportsIntegrityEnhancementFacility() throws SQLException
     {
         return supportsIntegrityEnhancementFacility;
@@ -914,7 +918,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsIntegrityEnhancementFacility = supportsIntegrityEnhancementFacility;
     }
-
+    
     public boolean supportsLikeEscapeClause() throws SQLException
     {
         return supportsLikeEscapeClause;
@@ -924,7 +928,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsLikeEscapeClause = supportsLikeEscapeClause;
     }
-
+    
     public boolean supportsLimitedOuterJoins() throws SQLException
     {
         return supportsLimitedOuterJoins;
@@ -934,7 +938,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsLimitedOuterJoins = supportsLimitedOuterJoins;
     }
-
+    
     public boolean supportsMinimumSQLGrammar() throws SQLException
     {
         return supportsMinimumSQLGrammar;
@@ -944,7 +948,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsMinimumSQLGrammar = supportsMinimumSQLGrammar;
     }
-
+    
     public boolean supportsMixedCaseIdentifiers() throws SQLException
     {
         return supportsMixedCaseIdentifiers;
@@ -954,7 +958,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsMixedCaseIdentifiers = supportsMixedCaseIdentifiers;
     }
-
+    
     public boolean supportsMixedCaseQuotedIdentifiers() throws SQLException
     {
         return supportsMixedCaseQuotedIdentifiers;
@@ -964,7 +968,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsMixedCaseQuotedIdentifiers = supportsMixedCaseQuotedIdentifiers;
     }
-
+    
     public boolean supportsMultipleOpenResults() throws SQLException
     {
         return supportsMultipleOpenResults;
@@ -974,7 +978,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsMultipleOpenResults = supportsMultipleOpenResults;
     }
-
+    
     public boolean supportsMultipleResultSets() throws SQLException
     {
         return supportsMultipleResultSets;
@@ -984,7 +988,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsMultipleResultSets = supportsMultipleResultSets;
     }
-
+    
     public boolean supportsMultipleTransactions() throws SQLException
     {
         return supportsMultipleTransactions;
@@ -994,7 +998,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsMultipleTransactions = supportsMultipleTransactions;
     }
-
+    
     public boolean supportsNamedParameters() throws SQLException
     {
         return supportsNamedParameters;
@@ -1004,7 +1008,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsNamedParameters = supportsNamedParameters;
     }
-
+    
     public boolean supportsNonNullableColumns() throws SQLException
     {
         return supportsNonNullableColumns;
@@ -1014,7 +1018,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsNonNullableColumns = supportsNonNullableColumns;
     }
-
+    
     public boolean supportsOpenCursorsAcrossCommit() throws SQLException
     {
         return supportsOpenCursorsAcrossCommit;
@@ -1024,7 +1028,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsOpenCursorsAcrossCommit = supportsOpenCursorsAcrossCommit;
     }
-
+    
     public boolean supportsOpenCursorsAcrossRollback() throws SQLException
     {
         return supportsOpenCursorsAcrossRollback;
@@ -1034,7 +1038,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsOpenCursorsAcrossRollback = supportsOpenCursorsAcrossRollback;
     }
-
+    
     public boolean supportsOpenStatementsAcrossCommit() throws SQLException
     {
         return supportsOpenStatementsAcrossCommit;
@@ -1044,7 +1048,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsOpenStatementsAcrossCommit = supportsOpenStatementsAcrossCommit;
     }
-
+    
     public boolean supportsOpenStatementsAcrossRollback() throws SQLException
     {
         return supportsOpenStatementsAcrossRollback;
@@ -1054,7 +1058,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsOpenStatementsAcrossRollback = supportsOpenStatementsAcrossRollback;
     }
-
+    
     public boolean supportsOrderByUnrelated() throws SQLException
     {
         return supportsOrderByUnrelated;
@@ -1064,7 +1068,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsOrderByUnrelated = supportsOrderByUnrelated;
     }
-
+    
     public boolean supportsOuterJoins() throws SQLException
     {
         return supportsOuterJoins;
@@ -1074,7 +1078,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsOuterJoins = supportsOuterJoins;
     }
-
+    
     public boolean supportsPositionedDelete() throws SQLException
     {
         return supportsPositionedDelete;
@@ -1084,7 +1088,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsPositionedDelete = supportsPositionedDelete;
     }
-
+    
     public boolean supportsPositionedUpdate() throws SQLException
     {
         return supportsPositionedUpdate;
@@ -1094,7 +1098,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsPositionedUpdate = supportsPositionedUpdate;
     }
-
+    
     public boolean supportsSavepoints() throws SQLException
     {
         return supportsSavepoints;
@@ -1104,7 +1108,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsSavepoints = supportsSavepoints;
     }
-
+    
     public boolean supportsSchemasInDataManipulation() throws SQLException
     {
         return supportsSchemasInDataManipulation;
@@ -1114,7 +1118,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsSchemasInDataManipulation = supportsSchemasInDataManipulation;
     }
-
+    
     public boolean supportsSchemasInIndexDefinitions() throws SQLException
     {
         return supportsSchemasInIndexDefinitions;
@@ -1124,7 +1128,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsSchemasInIndexDefinitions = supportsSchemasInIndexDefinitions;
     }
-
+    
     public boolean supportsSchemasInPrivilegeDefinitions() throws SQLException
     {
         return supportsSchemasInPrivilegeDefinitions;
@@ -1134,7 +1138,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsSchemasInPrivilegeDefinitions = supportsSchemasInPrivilegeDefinitions;
     }
-
+    
     public boolean supportsSchemasInProcedureCalls() throws SQLException
     {
         return supportsSchemasInProcedureCalls;
@@ -1144,7 +1148,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsSchemasInProcedureCalls = supportsSchemasInProcedureCalls;
     }
-
+    
     public boolean supportsSchemasInTableDefinitions() throws SQLException
     {
         return supportsSchemasInTableDefinitions;
@@ -1154,7 +1158,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsSchemasInTableDefinitions = supportsSchemasInTableDefinitions;
     }
-
+    
     public boolean supportsSelectForUpdate() throws SQLException
     {
         return supportsSelectForUpdate;
@@ -1164,7 +1168,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsSelectForUpdate = supportsSelectForUpdate;
     }
-
+    
     public boolean supportsStatementPooling() throws SQLException
     {
         return supportsStatementPooling;
@@ -1174,7 +1178,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsStatementPooling = supportsStatementPooling;
     }
-
+    
     public boolean supportsStoredProcedures() throws SQLException
     {
         return supportsStoredProcedures;
@@ -1184,7 +1188,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsStoredProcedures = supportsStoredProcedures;
     }
-
+    
     public boolean supportsSubqueriesInComparisons() throws SQLException
     {
         return supportsSubqueriesInComparisons;
@@ -1194,7 +1198,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsSubqueriesInComparisons = supportsSubqueriesInComparisons;
     }
-
+    
     public boolean supportsSubqueriesInExists() throws SQLException
     {
         return supportsSubqueriesInExists;
@@ -1204,7 +1208,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsSubqueriesInExists = supportsSubqueriesInExists;
     }
-
+    
     public boolean supportsSubqueriesInIns() throws SQLException
     {
         return supportsSubqueriesInIns;
@@ -1214,7 +1218,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsSubqueriesInIns = supportsSubqueriesInIns;
     }
-
+    
     public boolean supportsSubqueriesInQuantifieds() throws SQLException
     {
         return supportsSubqueriesInQuantifieds;
@@ -1224,7 +1228,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsSubqueriesInQuantifieds = supportsSubqueriesInQuantifieds;
     }
-
+    
     public boolean supportsTableCorrelationNames() throws SQLException
     {
         return supportsTableCorrelationNames;
@@ -1234,7 +1238,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsTableCorrelationNames = supportsTableCorrelationNames;
     }
-
+    
     public boolean supportsTransactions() throws SQLException
     {
         return supportsTransactions;
@@ -1244,7 +1248,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsTransactions = supportsTransactions;
     }
-
+    
     public boolean supportsUnion() throws SQLException
     {
         return supportsUnion;
@@ -1254,7 +1258,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsUnion = supportsUnion;
     }
-
+    
     public boolean supportsUnionAll() throws SQLException
     {
         return supportsUnionAll;
@@ -1264,7 +1268,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsUnionAll = supportsUnionAll;
     }
-
+    
     public boolean usesLocalFilePerTable() throws SQLException
     {
         return usesLocalFilePerTable;
@@ -1274,7 +1278,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.usesLocalFilePerTable = usesLocalFilePerTable;
     }
-
+    
     public boolean usesLocalFiles() throws SQLException
     {
         return usesLocalFiles;
@@ -1284,7 +1288,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.usesLocalFiles = usesLocalFiles;
     }
-
+    
     public boolean deletesAreDetected(int type) throws SQLException
     {
         return deletesAreDetected;
@@ -1294,7 +1298,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.deletesAreDetected = deletesAreDetected;
     }
-
+    
     public boolean insertsAreDetected(int type) throws SQLException
     {
         return insertsAreDetected;
@@ -1304,7 +1308,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.insertsAreDetected = insertsAreDetected;
     }
-
+    
     public boolean othersDeletesAreVisible(int type) throws SQLException
     {
         return othersDeletesAreVisible;
@@ -1314,7 +1318,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.othersDeletesAreVisible = othersDeletesAreVisible;
     }
-
+    
     public boolean othersInsertsAreVisible(int type) throws SQLException
     {
         return othersInsertsAreVisible;
@@ -1324,7 +1328,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.othersInsertsAreVisible = othersInsertsAreVisible;
     }
-
+    
     public boolean othersUpdatesAreVisible(int type) throws SQLException
     {
         return othersUpdatesAreVisible;
@@ -1334,7 +1338,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.othersUpdatesAreVisible = othersUpdatesAreVisible;
     }
-
+    
     public boolean ownDeletesAreVisible(int type) throws SQLException
     {
         return ownDeletesAreVisible;
@@ -1344,7 +1348,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.ownDeletesAreVisible = ownDeletesAreVisible;
     }
-
+    
     public boolean ownInsertsAreVisible(int type) throws SQLException
     {
         return ownInsertsAreVisible;
@@ -1354,7 +1358,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.ownInsertsAreVisible = ownInsertsAreVisible;
     }
-
+    
     public boolean ownUpdatesAreVisible(int type) throws SQLException
     {
         return ownUpdatesAreVisible;
@@ -1364,7 +1368,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.ownUpdatesAreVisible = ownUpdatesAreVisible;
     }
-
+    
     public boolean supportsResultSetHoldability(int holdability) throws SQLException
     {
         return supportsResultSetHoldability;
@@ -1374,7 +1378,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsResultSetHoldability = supportsResultSetHoldability;
     }
-
+    
     public boolean supportsResultSetType(int type) throws SQLException
     {
         return supportsResultSetType;
@@ -1384,7 +1388,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsResultSetType = supportsResultSetType;
     }
-
+    
     public boolean supportsTransactionIsolationLevel(int level) throws SQLException
     {
         return supportsTransactionIsolationLevel;
@@ -1394,7 +1398,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsTransactionIsolationLevel = supportsTransactionIsolationLevel;
     }
-
+    
     public boolean updatesAreDetected(int type) throws SQLException
     {
         return updatesAreDetected;
@@ -1404,12 +1408,12 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.updatesAreDetected = updatesAreDetected;
     }
-
+    
     public boolean supportsConvert(int fromType, int toType) throws SQLException
     {
         return supportsConvert;
     }
-  
+    
     public boolean supportsResultSetConcurrency(int type, int concurrency) throws SQLException
     {
         return supportsResultSetConcurrency;
@@ -1419,7 +1423,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.supportsResultSetConcurrency = supportsResultSetConcurrency;
     }
-
+    
     public String getCatalogSeparator() throws SQLException
     {
         return catalogSeparator;
@@ -1429,7 +1433,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.catalogSeparator = catalogSeparator;
     }
-
+    
     public String getCatalogTerm() throws SQLException
     {
         return catalogTerm;
@@ -1439,7 +1443,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.catalogTerm = catalogTerm;
     }
-
+    
     public String getDatabaseProductName() throws SQLException
     {
         return databaseProductName;
@@ -1449,7 +1453,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.databaseProductName = databaseProductName;
     }
-
+    
     public String getDatabaseProductVersion() throws SQLException
     {
         return databaseProductVersion;
@@ -1459,7 +1463,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.databaseProductVersion = databaseProductVersion;
     }
-
+    
     public String getDriverName() throws SQLException
     {
         return driverName;
@@ -1469,7 +1473,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.driverName = driverName;
     }
-
+    
     public String getDriverVersion() throws SQLException
     {
         return driverVersion;
@@ -1479,7 +1483,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.driverVersion = driverVersion;
     }
-
+    
     public String getExtraNameCharacters() throws SQLException
     {
         return extraNameCharacters;
@@ -1489,7 +1493,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.extraNameCharacters = extraNameCharacters;
     }
-
+    
     public String getIdentifierQuoteString() throws SQLException
     {
         return identifierQuoteString;
@@ -1499,7 +1503,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.identifierQuoteString = identifierQuoteString;
     }
-
+    
     public String getNumericFunctions() throws SQLException
     {
         return numericFunctions;
@@ -1509,7 +1513,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.numericFunctions = numericFunctions;
     }
-
+    
     public String getProcedureTerm() throws SQLException
     {
         return procedureTerm;
@@ -1519,7 +1523,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.procedureTerm = procedureTerm;
     }
-
+    
     public String getSQLKeywords() throws SQLException
     {
         return sqlKeywords;
@@ -1529,7 +1533,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.sqlKeywords = sqlKeywords;
     }
-
+    
     public String getSchemaTerm() throws SQLException
     {
         return schemaTerm;
@@ -1539,7 +1543,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.schemaTerm = schemaTerm;
     }
-
+    
     public String getSearchStringEscape() throws SQLException
     {
         return searchStringEscape;
@@ -1549,7 +1553,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.searchStringEscape = searchStringEscape;
     }
-
+    
     public String getStringFunctions() throws SQLException
     {
         return stringFunctions;
@@ -1559,7 +1563,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.stringFunctions = stringFunctions;
     }
-
+    
     public String getSystemFunctions() throws SQLException
     {
         return systemFunctions;
@@ -1569,7 +1573,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.systemFunctions = systemFunctions;
     }
-
+    
     public String getTimeDateFunctions() throws SQLException
     {
         return timeDateFunctions;
@@ -1579,7 +1583,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.timeDateFunctions = timeDateFunctions;
     }
-
+    
     public String getURL() throws SQLException
     {
         return url;
@@ -1589,7 +1593,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.url = url;
     }
-
+    
     public String getUserName() throws SQLException
     {
         return userName;
@@ -1599,7 +1603,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.userName = userName;
     }
-
+    
     public Connection getConnection() throws SQLException
     {
         return connection;
@@ -1609,7 +1613,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.connection = connection;
     }
-
+    
     public ResultSet getCatalogs() throws SQLException
     {
         return catalogs;
@@ -1619,7 +1623,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.catalogs = catalogs;
     }
-
+    
     public ResultSet getSchemas() throws SQLException
     {
         return schemas;
@@ -1629,7 +1633,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.schemas = schemas;
     }
-
+    
     public ResultSet getTableTypes() throws SQLException
     {
         return tableTypes;
@@ -1639,7 +1643,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.tableTypes = tableTypes;
     }
-
+    
     public ResultSet getTypeInfo() throws SQLException
     {
         return typeInfo;
@@ -1649,174 +1653,759 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     {
         this.typeInfo = typeInfo;
     }
-
+    
     public ResultSet getExportedKeys(String catalog, String schema, String table) throws SQLException
     {
-        return exportedKeys;
+        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schema, table);
+        return findMatchingDatabaseIdentifier(expected, exportedKeysMap);
     }
     
     public void setExportedKeys(ResultSet exportedKeys)
     {
-        this.exportedKeys = exportedKeys;
+        exportedKeysMap.put(new DatabaseIdentifierImpl(), exportedKeys);
     }
-
+    
+    public void setExportedKeys(String catalog, String schema, String table, ResultSet exportedKeys)
+    {
+        exportedKeysMap.put(new DatabaseIdentifierImpl(catalog, schema, table), exportedKeys);
+    }
+    
+    public void clearExportedKeys()
+    {
+        exportedKeysMap.clear();
+    }
+    
     public ResultSet getImportedKeys(String catalog, String schema, String table) throws SQLException
     {
-        return importedKeys;
+        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schema, table);
+        return findMatchingDatabaseIdentifier(expected, importedKeysMap);
     }
     
     public void setImportedKeys(ResultSet importedKeys)
     {
-        this.importedKeys = importedKeys;
+        importedKeysMap.put(new DatabaseIdentifierImpl(), importedKeys);
     }
-
+    
+    public void setImportedKeys(String catalog, String schema, String table, ResultSet importedKeys)
+    {
+        importedKeysMap.put(new DatabaseIdentifierImpl(catalog, schema, table), importedKeys);
+    }
+    
+    public void clearImportedKeys()
+    {
+        importedKeysMap.clear();
+    }
+    
     public ResultSet getPrimaryKeys(String catalog, String schema, String table) throws SQLException
     {
-        return primaryKeys;
+        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schema, table);
+        return findMatchingDatabaseIdentifier(expected, primaryKeysMap);
     }
     
     public void setPrimaryKeys(ResultSet primaryKeys)
     {
-        this.primaryKeys = primaryKeys;
+        primaryKeysMap.put(new DatabaseIdentifierImpl(), primaryKeys);
     }
-
+    
+    public void setPrimaryKeys(String catalog, String schema, String table, ResultSet primaryKeys)
+    {
+        primaryKeysMap.put(new DatabaseIdentifierImpl(catalog, schema, table), primaryKeys);
+    }
+    
+    public void clearPrimaryKeys()
+    {
+        primaryKeysMap.clear();
+    }
+    
     public ResultSet getProcedures(String catalog, String schemaPattern, String procedureNamePattern) throws SQLException
     {
-        return procedures;
+        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, procedureNamePattern);
+        return findMatchingDatabaseIdentifier(expected, proceduresMap);
     }
     
     public void setProcedures(ResultSet procedures)
     {
-        this.procedures = procedures;
+        proceduresMap.put(new DatabaseIdentifierImpl(), procedures);
     }
-
+    
+    public void setProcedures(String catalog, String schemaPattern, String procedureNamePattern, ResultSet procedures)
+    {
+        proceduresMap.put(new DatabaseIdentifierImpl(catalog, schemaPattern, procedureNamePattern), procedures);
+    }
+    
+    public void clearProcedures()
+    {
+        proceduresMap.clear();
+    }
+    
     public ResultSet getSuperTables(String catalog, String schemaPattern, String tableNamePattern) throws SQLException
     {
-        return superTables;
+        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern);
+        return findMatchingDatabaseIdentifier(expected, superTablesMap);
     }
     
     public void setSuperTables(ResultSet superTables)
     {
-        this.superTables = superTables;
+        superTablesMap.put(new DatabaseIdentifierImpl(), superTables);
     }
-
+    
+    public void setSuperTables(String catalog, String schemaPattern, String tableName, ResultSet superTables)
+    {
+        superTablesMap.put(new DatabaseIdentifierImpl(catalog, schemaPattern, tableName), superTables);
+    }
+    
+    public void clearSuperTables()
+    {
+        superTablesMap.clear();
+    }
+    
     public ResultSet getSuperTypes(String catalog, String schemaPattern, String typeNamePattern) throws SQLException
     {
-        return superTypes;
+        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, typeNamePattern);
+        return findMatchingDatabaseIdentifier(expected, superTypesMap);
     }
     
     public void setSuperTypes(ResultSet superTypes)
     {
-        this.superTypes = superTypes;
+        superTypesMap.put(new DatabaseIdentifierImpl(), superTypes);
     }
-
+    
+    public void setSuperTypes(String catalog, String schemaPattern, String typeNamePattern, ResultSet superTypes)
+    {
+        superTypesMap.put(new DatabaseIdentifierImpl(catalog, schemaPattern, typeNamePattern), superTypes);
+    }
+    
+    public void clearSuperTypes()
+    {
+        superTypesMap.clear();
+    }
+    
     public ResultSet getTablePrivileges(String catalog, String schemaPattern, String tableNamePattern) throws SQLException
     {
-        return tablePrivileges;
+        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern);
+        return findMatchingDatabaseIdentifier(expected, tablePrivilegesMap);
     }
     
     public void setTablePrivileges(ResultSet tablePrivileges)
     {
-        this.tablePrivileges = tablePrivileges;
+        tablePrivilegesMap.put(new DatabaseIdentifierImpl(), tablePrivileges);
     }
-
+    
+    public void setTablePrivileges(String catalog, String schemaPattern, String tableNamePattern, ResultSet tablePrivileges)
+    {
+        tablePrivilegesMap.put(new DatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern), tablePrivileges);
+    }
+    
+    public void clearTablePrivileges()
+    {
+        tablePrivilegesMap.clear();
+    }
+    
     public ResultSet getVersionColumns(String catalog, String schema, String table) throws SQLException
     {
-        return versionColumns;
+        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schema, table);
+        return findMatchingDatabaseIdentifier(expected, versionColumnsMap);
     }
     
     public void setVersionColumns(ResultSet versionColumns)
     {
-        this.versionColumns = versionColumns;
+        versionColumnsMap.put(new DatabaseIdentifierImpl(), versionColumns);
     }
-
+    
+    public void setVersionColumns(String catalog, String schema, String table, ResultSet versionColumns)
+    {
+        versionColumnsMap.put(new DatabaseIdentifierImpl(catalog, schema, table), versionColumns);
+    }
+    
+    public void clearVersionColumns()
+    {
+        versionColumnsMap.clear();
+    }
+    
     public ResultSet getBestRowIdentifier(String catalog, String schema, String table, int scope, boolean nullable) throws SQLException
     {
-        return bestRowIdentifier;
+        DatabaseIdentifier expected = new RowIdentifierDatabaseIdentifierImpl(catalog, schema, table, scope, nullable);
+        return findMatchingDatabaseIdentifier(expected, bestRowIdentifierMap);
     }
     
     public void setBestRowIdentifier(ResultSet bestRowIdentifier)
     {
-        this.bestRowIdentifier = bestRowIdentifier;
+        bestRowIdentifierMap.put(new RowIdentifierDatabaseIdentifierImpl(), bestRowIdentifier);
     }
-
+    
+    public void setBestRowIdentifier(String catalog, String schema, String table, int scope, boolean nullable, ResultSet bestRowIdentifier)
+    {
+        bestRowIdentifierMap.put(new RowIdentifierDatabaseIdentifierImpl(catalog, schema, table, scope, nullable), bestRowIdentifier);
+    }
+    
+    public void clearBestRowIdentifier()
+    {
+        bestRowIdentifierMap.clear();
+    }
+    
     public ResultSet getIndexInfo(String catalog, String schema, String table, boolean unique, boolean approximate) throws SQLException
     {
-        return indexInfo;
+        DatabaseIdentifier expected = new IndexInfoDatabaseIdentifierImpl(catalog, schema, table, unique, approximate);
+        return findMatchingDatabaseIdentifier(expected, indexInfoMap);
     }
     
     public void setIndexInfo(ResultSet indexInfo)
     {
-        this.indexInfo = indexInfo;
+        indexInfoMap.put(new IndexInfoDatabaseIdentifierImpl(), indexInfo);
     }
-
+    
+    public void setIndexInfo(String catalog, String schema, String table, boolean unique, boolean approximate, ResultSet indexInfo)
+    {
+        indexInfoMap.put(new IndexInfoDatabaseIdentifierImpl(catalog, schema, table, unique, approximate), indexInfo);
+    }
+    
+    public void clearIndexInfo()
+    {
+        indexInfoMap.clear();
+    }
+    
     public ResultSet getUDTs(String catalog, String schemaPattern, String typeNamePattern, int[] types) throws SQLException
     {
-        return udts;
+        DatabaseIdentifier expected = new UDTDatabaseIdentifierImpl(catalog, schemaPattern, typeNamePattern, types);
+        return findMatchingDatabaseIdentifier(expected, udtsMap);
     }
     
     public void setUDTs(ResultSet udts)
     {
-        this.udts = udts;
+        udtsMap.put(new UDTDatabaseIdentifierImpl(), udts);
     }
-
+    
+    public void setUDTs(String catalog, String schemaPattern, String typeNamePattern, int[] types, ResultSet udts)
+    {
+        udtsMap.put(new UDTDatabaseIdentifierImpl(catalog, schemaPattern, typeNamePattern, types), udts);
+    }
+    
+    public void clearUDTs()
+    {
+        udtsMap.clear();
+    }
+    
     public ResultSet getAttributes(String catalog, String schemaPattern, String typeNamePattern, String attributeNamePattern) throws SQLException
     {
-        return attributes;
+        DatabaseIdentifier expected = new AttributesDatabaseIdentifierImpl(catalog, schemaPattern, typeNamePattern, attributeNamePattern);
+        return findMatchingDatabaseIdentifier(expected, attributesMap);
     }
     
     public void setAttributes(ResultSet attributes)
     {
-        this.attributes = attributes;
+        attributesMap.put(new AttributesDatabaseIdentifierImpl(), attributes);
     }
-
+    
+    public void setAttributes(String catalog, String schemaPattern, String typeNamePattern, String attributeNamePattern, ResultSet attributes)
+    {
+        attributesMap.put(new AttributesDatabaseIdentifierImpl(catalog, schemaPattern, typeNamePattern, attributeNamePattern), attributes);
+    }
+    
+    public void clearAttributes()
+    {
+        attributesMap.clear();
+    }
+    
     public ResultSet getColumnPrivileges(String catalog, String schema, String table, String columnNamePattern) throws SQLException
     {
-        return columnPrivileges;
+        DatabaseIdentifier expected = new ColumnDatabaseIdentifierImpl(catalog, schema, table, columnNamePattern);
+        return findMatchingDatabaseIdentifier(expected, columnPrivilegesMap);
     }
     
     public void setColumnPrivileges(ResultSet columnPrivileges)
     {
-        this.columnPrivileges = columnPrivileges;
+        columnPrivilegesMap.put(new ColumnDatabaseIdentifierImpl(), columnPrivileges);
     }
-
+    
+    public void setColumnPrivileges(String catalog, String schema, String table, String columnNamePattern, ResultSet columnPrivileges)
+    {
+        columnPrivilegesMap.put(new ColumnDatabaseIdentifierImpl(catalog, schema, table, columnNamePattern), columnPrivileges);
+    }
+    
+    public void clearColumnPrivileges()
+    {
+        columnPrivilegesMap.clear();
+    }
+    
     public ResultSet getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) throws SQLException
     {
-        return columns;
+        DatabaseIdentifier expected = new ColumnDatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern, columnNamePattern);
+        return findMatchingDatabaseIdentifier(expected, columnsMap);
     }
     
     public void setColumns(ResultSet columns)
     {
-        this.columns = columns;
+        columnsMap.put(new ColumnDatabaseIdentifierImpl(), columns);
     }
-
+    
+    public void setColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern, ResultSet columns)
+    {
+        columnsMap.put(new ColumnDatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern, columnNamePattern), columns);
+    }
+    
+    public void clearColumns()
+    {
+        columnsMap.clear();
+    }
+    
     public ResultSet getProcedureColumns(String catalog, String schemaPattern, String procedureNamePattern, String columnNamePattern) throws SQLException
     {
-        return procedureColumns;
+        DatabaseIdentifier expected = new ColumnDatabaseIdentifierImpl(catalog, schemaPattern, procedureNamePattern, columnNamePattern);
+        return findMatchingDatabaseIdentifier(expected, procedureColumnsMap);
     }
     
     public void setProcedureColumns(ResultSet procedureColumns)
     {
-        this.procedureColumns = procedureColumns;
+        procedureColumnsMap.put(new ColumnDatabaseIdentifierImpl(), procedureColumns);
     }
-
+    
+    public void setProcedureColumns(String catalog, String schemaPattern, String procedureNamePattern, String columnNamePattern, ResultSet procedureColumns)
+    {
+        procedureColumnsMap.put(new ColumnDatabaseIdentifierImpl(catalog, schemaPattern, procedureNamePattern, columnNamePattern), procedureColumns);
+    }
+    
+    public void clearProcedureColumns()
+    {
+        procedureColumnsMap.clear();
+    }
+    
     public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) throws SQLException
     {
-        return tables;
+        DatabaseIdentifier expected = new TableDatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern, types);
+        return findMatchingDatabaseIdentifier(expected, tablesMap);
     }
     
     public void setTables(ResultSet tables)
     {
-        this.tables = tables;
+        tablesMap.put(new TableDatabaseIdentifierImpl(), tables);
     }
-
+    
+    public void setTables(String catalog, String schemaPattern, String tableNamePattern, String[] types, ResultSet tables)
+    {
+        tablesMap.put(new TableDatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern, types), tables);
+    }
+    
+    public void clearTables()
+    {
+        tablesMap.clear();
+    }
+    
     public ResultSet getCrossReference(String primaryCatalog, String primarySchema, String primaryTable, String foreignCatalog, String foreignSchema, String foreignTable) throws SQLException
     {
-        return crossReference;
+        DatabaseIdentifier identifier1 = new DatabaseIdentifierImpl(primaryCatalog, primarySchema, primaryTable);
+        DatabaseIdentifier identifier2 = new DatabaseIdentifierImpl(foreignCatalog, foreignSchema, foreignTable);
+        DatabaseIdentifier expected = new DatabaseIdentifierImplWrapper(identifier1, identifier2);
+        return findMatchingDatabaseIdentifier(expected, crossReferenceMap);
     }
-
+    
     public void setCrossReference(ResultSet crossReference)
     {
-        this.crossReference = crossReference;
+        DatabaseIdentifier identifier1 = new DatabaseIdentifierImpl();
+        DatabaseIdentifier identifier2 = new DatabaseIdentifierImpl();
+        crossReferenceMap.put(new DatabaseIdentifierImplWrapper(identifier1, identifier2), crossReference);
+    }
+    
+    public void setCrossReference(String primaryCatalog, String primarySchema, String primaryTable, String foreignCatalog, String foreignSchema, String foreignTable, ResultSet crossReference)
+    {
+        DatabaseIdentifier identifier1 = new DatabaseIdentifierImpl(primaryCatalog, primarySchema, primaryTable);
+        DatabaseIdentifier identifier2 = new DatabaseIdentifierImpl(foreignCatalog, foreignSchema, foreignTable);
+        crossReferenceMap.put(new DatabaseIdentifierImplWrapper(identifier1, identifier2), crossReference);
+    }
+    
+    public void clearCrossReference()
+    {
+        crossReferenceMap.clear();
+    }
+    
+    private ResultSet findMatchingDatabaseIdentifier(DatabaseIdentifier expected, Map theMap)
+    {
+        Iterator keys = theMap.keySet().iterator();
+        while(keys.hasNext())
+        {
+            DatabaseIdentifier next = (DatabaseIdentifier)keys.next();
+            if(next.isGlobal() || expected.equals(next)) return (ResultSet)theMap.get(next);
+        }
+        return null;
+    }
+    
+    private interface DatabaseIdentifier
+    {
+        public boolean isGlobal();
+    }
+    
+    private class DatabaseIdentifierImpl implements DatabaseIdentifier
+    {
+        private boolean isGlobal;
+        private String catalog;
+        private String schema;
+        private String table;
+        
+        public DatabaseIdentifierImpl()
+        {
+            isGlobal = true;
+        }
+        
+        public DatabaseIdentifierImpl(String catalog, String schema, String table)
+        {
+            isGlobal = false;
+            this.catalog = catalog;
+            this.schema = schema;
+            this.table = table;
+        }
+        
+        public String getCatalog()
+        {
+            return catalog;
+        }
+        
+        public boolean isGlobal()
+        {
+            return isGlobal;
+        }
+        
+        public String getSchema()
+        {
+            return schema;
+        }
+        
+        public String getTable()
+        {
+            return table;
+        }
+        
+        public boolean equals(Object object)
+        {
+            if(null == object) return false;
+            if(!(object instanceof DatabaseIdentifierImpl)) return false;
+            DatabaseIdentifierImpl other = (DatabaseIdentifierImpl)object;
+            if(isGlobal != other.isGlobal()) return false;
+            if(null != catalog && !catalog.equals(other.getCatalog())) return false;
+            if(null != other.getCatalog() && !other.getCatalog().equals(catalog)) return false;
+            if(null != schema && !schema.equals(other.getSchema())) return false;
+            if(null != other.getSchema() && !other.getSchema().equals(schema)) return false;
+            if(null != table && !table.equals(other.getTable())) return false;
+            if(null != other.getTable() && !other.getTable().equals(table)) return false;
+            return true;
+        }
+        
+        public int hashCode()
+        {
+            int hashCode = 0;
+            if(null != catalog) hashCode += catalog.hashCode();
+            if(null != schema) hashCode += schema.hashCode();
+            if(null != table) hashCode += table.hashCode();
+            return hashCode;
+        }
+    }
+    
+    private class AttributesDatabaseIdentifierImpl extends DatabaseIdentifierImpl
+    {
+        private boolean isGlobal;
+        private String attributeNamePattern;
+        
+        public AttributesDatabaseIdentifierImpl()
+        {
+            isGlobal = true;
+        }
+        
+        public AttributesDatabaseIdentifierImpl(String catalog, String schema, String table, String attributeNamePattern)
+        {
+            super(catalog, schema, table);
+            this.attributeNamePattern = attributeNamePattern;
+        }
+        
+        public String getAttributeNamePattern()
+        {
+            return attributeNamePattern;
+        }
+        
+        public boolean equals(Object object)
+        {
+            if(!super.equals(object)) return false;
+            if(!(object instanceof AttributesDatabaseIdentifierImpl)) return false;
+            AttributesDatabaseIdentifierImpl other = (AttributesDatabaseIdentifierImpl)object;
+            if(null != attributeNamePattern && !attributeNamePattern.equals(other.getAttributeNamePattern())) return false;
+            if(null != other.getAttributeNamePattern() && !other.getAttributeNamePattern().equals(attributeNamePattern)) return false;
+            return true;
+        }
+        
+        public int hashCode()
+        {
+            int hashCode = super.hashCode();
+            if(null != attributeNamePattern) hashCode += attributeNamePattern.hashCode();
+            return hashCode;
+        }
+    }
+    
+    private class ColumnDatabaseIdentifierImpl extends DatabaseIdentifierImpl
+    {
+        private boolean isGlobal;
+        private String columnNamePattern;
+        
+        public ColumnDatabaseIdentifierImpl()
+        {
+            isGlobal = true;
+        }
+        
+        public ColumnDatabaseIdentifierImpl(String catalog, String schema, String table, String columnNamePattern)
+        {
+            super(catalog, schema, table);
+            this.columnNamePattern = columnNamePattern;
+        }
+        
+        public String getColumnNamePattern()
+        {
+            return columnNamePattern;
+        }
+        
+        public boolean equals(Object object)
+        {
+            if(!super.equals(object)) return false;
+            if(!(object instanceof ColumnDatabaseIdentifierImpl)) return false;
+            ColumnDatabaseIdentifierImpl other = (ColumnDatabaseIdentifierImpl)object;
+            if(null != columnNamePattern && !columnNamePattern.equals(other.getColumnNamePattern())) return false;
+            if(null != other.getColumnNamePattern() && !other.getColumnNamePattern().equals(columnNamePattern)) return false;
+            return true;
+        }
+        
+        public int hashCode()
+        {
+            int hashCode = super.hashCode();
+            if(null != columnNamePattern) hashCode += columnNamePattern.hashCode();
+            return hashCode;
+        }
+    }
+    
+    private class RowIdentifierDatabaseIdentifierImpl extends DatabaseIdentifierImpl
+    {
+        private int scope;
+        private boolean nullable;
+        
+        public RowIdentifierDatabaseIdentifierImpl()
+        {
+            
+        }
+        
+        public RowIdentifierDatabaseIdentifierImpl(String catalog, String schema, String table, int scope, boolean nullable)
+        {
+            super(catalog, schema, table);
+            this.scope = scope;
+            this.nullable = nullable;
+        }
+        
+        public boolean isNullable()
+        {
+            return nullable;
+        }
+        
+        public int getScope()
+        {
+            return scope;
+        }
+        
+        public boolean equals(Object object)
+        {
+            if(!super.equals(object)) return false;
+            if(!(object instanceof RowIdentifierDatabaseIdentifierImpl)) return false;
+            RowIdentifierDatabaseIdentifierImpl other = (RowIdentifierDatabaseIdentifierImpl)object;
+            if(scope != other.getScope()) return false;
+            if(nullable != other.isNullable()) return false;
+            return true;
+        }
+        
+        public int hashCode()
+        {
+            int hashCode = super.hashCode() + scope;
+            hashCode += nullable ? 1 : 2;
+            return hashCode;
+        }
+    }
+    
+    private class IndexInfoDatabaseIdentifierImpl extends DatabaseIdentifierImpl
+    {
+        private boolean unique;
+        private boolean approximate;
+        
+        public IndexInfoDatabaseIdentifierImpl()
+        {
+            
+        }
+        
+        public IndexInfoDatabaseIdentifierImpl(String catalog, String schema, String table, boolean unique, boolean approximate)
+        {
+            super(catalog, schema, table);
+            this.unique = unique;
+            this.approximate = approximate;
+        }
+        
+        public boolean isApproximate()
+        {
+            return approximate;
+        }
+        
+        public boolean isUnique()
+        {
+            return unique;
+        }
+        
+        public boolean equals(Object object)
+        {
+            if(!super.equals(object)) return false;
+            if(!(object instanceof IndexInfoDatabaseIdentifierImpl)) return false;
+            IndexInfoDatabaseIdentifierImpl other = (IndexInfoDatabaseIdentifierImpl)object;
+            if(unique != other.isUnique()) return false;
+            if(approximate != other.isApproximate()) return false;
+            return true;
+        }
+        
+        public int hashCode()
+        {
+            int hashCode = super.hashCode();
+            hashCode += unique ? 1 : 2;
+            hashCode += approximate ? 3 : 4;
+            return hashCode;
+        }
+    }
+    
+    private class TableDatabaseIdentifierImpl extends DatabaseIdentifierImpl
+    {
+        private String[] types;
+        
+        public TableDatabaseIdentifierImpl()
+        {
+            
+        }
+        
+        public TableDatabaseIdentifierImpl(String catalog, String schema, String table, String[] types)
+        {
+            super(catalog, schema, table);
+            this.types = types;
+        }
+        
+        public String[] getTypes()
+        {
+            return types;
+        }
+        
+        public boolean equals(Object object)
+        {
+            if(!super.equals(object)) return false;
+            if(!(object instanceof TableDatabaseIdentifierImpl)) return false;
+            TableDatabaseIdentifierImpl other = (TableDatabaseIdentifierImpl)object;
+            if(null == types && null == other.getTypes()) return true;
+            if(null == types) return false;
+            if(null == other.getTypes()) return false;
+            return Arrays.equals(types, other.getTypes());
+        }
+        
+        public int hashCode()
+        {
+            int hashCode = super.hashCode();
+            if(null != types)
+            {
+                for(int ii = 0; ii < types.length; ii++)
+                {
+                    if(null != types[ii])
+                    {
+                        hashCode += types[ii].hashCode();
+                    }
+                }
+            }
+            return hashCode;
+        }
+    }
+    
+    private class UDTDatabaseIdentifierImpl extends DatabaseIdentifierImpl
+    {
+        private int[] types;
+        
+        public UDTDatabaseIdentifierImpl()
+        {
+            
+        }
+        
+        public UDTDatabaseIdentifierImpl(String catalog, String schema, String table, int[] types)
+        {
+            super(catalog, schema, table);
+            this.types = types;
+        }
+        
+        public int[] getTypes()
+        {
+            return types;
+        }
+        
+        public boolean equals(Object object)
+        {
+            if(!super.equals(object)) return false;
+            if(!(object instanceof UDTDatabaseIdentifierImpl)) return false;
+            UDTDatabaseIdentifierImpl other = (UDTDatabaseIdentifierImpl)object;
+            if(null == types && null == other.getTypes()) return true;
+            if(null == types) return false;
+            if(null == other.getTypes()) return false;
+            return Arrays.equals(types, other.getTypes());
+        }
+        
+        public int hashCode()
+        {
+            int hashCode = super.hashCode();
+            if(null != types)
+            {
+                for(int ii = 0; ii < types.length; ii++)
+                {
+                    hashCode += types[ii];
+                }
+            }
+            return hashCode;
+        }
+    }
+    
+    private class DatabaseIdentifierImplWrapper implements DatabaseIdentifier
+    {
+        private DatabaseIdentifier identifier1;
+        private DatabaseIdentifier identifier2;
+        
+        public DatabaseIdentifierImplWrapper(DatabaseIdentifier identifier1, DatabaseIdentifier identifier2)
+        {
+            this.identifier1 = identifier1;
+            this.identifier2 = identifier2;
+        }
+        
+        public DatabaseIdentifier getIdentifier1()
+        {
+            return identifier1;
+        }
+        
+        public DatabaseIdentifier getIdentifier2()
+        {
+            return identifier2;
+        }
+        
+        public boolean isGlobal()
+        {
+            if(null == identifier1) return false;
+            if(null == identifier2) return false;
+            return (identifier1.isGlobal() && identifier1.isGlobal());
+        }
+        
+        public boolean equals(Object object)
+        {
+            if(null == object) return false;
+            if(!(object instanceof DatabaseIdentifierImplWrapper)) return false;
+            DatabaseIdentifierImplWrapper other = (DatabaseIdentifierImplWrapper)object;
+            if(null != identifier1 && !identifier1.equals(other.getIdentifier1())) return false;
+            if(null != other.getIdentifier1() && !other.getIdentifier1().equals(identifier1)) return false;
+            if(null != identifier2 && !identifier2.equals(other.getIdentifier2())) return false;
+            if(null != other.getIdentifier2() && !other.getIdentifier2().equals(identifier2)) return false;
+            return true;
+        }
+        
+        public int hashCode()
+        {
+            int hashCode = 0;
+            if(null != identifier1) hashCode += identifier1.hashCode();
+            if(null != identifier2) hashCode += identifier2.hashCode();
+            return hashCode;
+        }
     }
 }
