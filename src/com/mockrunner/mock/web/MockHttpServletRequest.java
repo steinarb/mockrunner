@@ -7,6 +7,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -213,7 +214,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         if(null == header) return -1;
         try
         {
-            Date dateValue = DateFormat.getDateInstance().parse(header);
+            Date dateValue = new SimpleDateFormat(WebConstants.DATE_FORMAT_HEADER, Locale.US).parse(header);
             return dateValue.getTime();
         }
         catch (ParseException exc)

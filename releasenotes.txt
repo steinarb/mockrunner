@@ -1,6 +1,9 @@
 
-mockrunner-0.3:
+mockrunner-0.2.6:
 
+- removed XMLUtil.parse(org.w3c.dom.ls.DOMParser parser, DOMInput data) method
+  (because of incompatibility with Xerces 2.6.1).
+- fixed problem with date parsing in ServletRequest and ServletResponse.
 - added MapMessageResources to Struts test framework in order
   to support messages resources.
 - added MockModuleConfig and MockActionServlet, used by some
