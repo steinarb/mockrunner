@@ -40,6 +40,11 @@
 
 	<target name="jar" depends="compile">
 		<delete file="${build}/mockrunner.jar"/>
+		<copy todir="${build}" filtering="true">
+    		<fileset dir="${basedir}">
+				<include name="version.txt"/>
+			</fileset>	
+  		</copy>
 		<jar jarfile="${build}/mockrunner.jar">
 			<fileset dir="${build}"/>
 			<fileset dir="${basedir}">

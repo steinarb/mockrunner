@@ -12,7 +12,6 @@ import javax.servlet.jsp.tagext.IterationTag;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
-
 public class NestedStandardTag extends TagSupport implements NestedTag
 {
 	private TagSupport tag;
@@ -87,16 +86,17 @@ public class NestedStandardTag extends TagSupport implements NestedTag
 		childs.add(text);
 	}
 	
-	public void addTagChild(Class tag)
+	public NestedTag addTagChild(Class tag)
 	{
-		addTagChild(tag, new HashMap());
+		return addTagChild(tag, new HashMap());
 	}
 	
-	public void addTagChild(Class tag, Map attributeMap)
+	public NestedTag addTagChild(Class tag, Map attributeMap)
 	{
 		TagSupport tagSupport = TagUtil.createNestedTagInstance(tag, this.pageContext, attributeMap);	
 		tagSupport.setParent(this.tag);
 		childs.add(tagSupport);
+        return (NestedTag)tagSupport;
 	}
 	
 	public int doAfterBody() throws JspException
@@ -155,7 +155,11 @@ public class NestedStandardTag extends TagSupport implements NestedTag
 		tag.setPageContext(pageContext);
 		for(int ii = 0; ii < childs.size(); ii++)
 		{
-			((TagSupport)childs.get(ii)).setPageContext(pageContext);
+			Object child = childs.get(ii);
+            if(child instanceof TagSupport)
+            {
+                ((TagSupport)child).setPageContext(pageContext);
+            }
 		}
 	}
 
