@@ -139,8 +139,8 @@ public class JDBCMockObjectFactory
     }
 
     /**
-     * Returns the <code>MockDataSource</code>
-     * @return the <code>MockDataSource</code>
+     * Returns the {@link com.mockrunner.mock.jdbc.MockDataSource}.
+     * @return the {@link com.mockrunner.mock.jdbc.MockDataSource}
      */
     public MockDataSource getMockDataSource()
     {
