@@ -1,9 +1,12 @@
 package com.mockrunner.test.util;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.Arrays;
 
 import junit.framework.TestCase;
 
@@ -62,5 +65,17 @@ public class StreamUtilTest extends TestCase
         Reader copyReader = StreamUtil.copyReader(sourceReader);
         assertTrue(StreamUtil.compareReaders(sourceReader, copyReader));
         assertEquals('T', copyReader.read());
+    }
+    
+    public void testCopyStream() throws Exception
+    {
+        byte[] sourceArray = new byte[] {1, 2, 3, 4, 5};
+        ByteArrayInputStream sourceStream = new ByteArrayInputStream(sourceArray);
+        ByteArrayOutputStream destStream = new ByteArrayOutputStream();
+        StreamUtil.copyStream(sourceStream, destStream);
+        assertTrue(Arrays.equals(sourceArray, destStream.toByteArray()));
+        sourceStream = new ByteArrayInputStream(new byte[0]);
+        destStream = new ByteArrayOutputStream();
+        assertTrue(Arrays.equals(new byte[0], destStream.toByteArray()));
     }
 }

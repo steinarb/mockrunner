@@ -1,4 +1,4 @@
-package com.mockrunner.test;
+package com.mockrunner.test.consistency;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;

@@ -1,4 +1,4 @@
-package com.mockrunner.test;
+package com.mockrunner.test.consistency;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,29 +18,30 @@ public class JDKVersionConsistencyTest extends TestCase
     
     private void compareDirTrees(String sourceDir, String destinationDir) throws Exception
     {
-        File jdk13dir = new File(sourceDir);
-        File jdkdir = new File(destinationDir);
-        Map file13Map = new HashMap();
-        Map fileMap = new HashMap();
-        addJavaSrcFiles(sourceDir, jdk13dir, file13Map);
-        addJavaSrcFiles(destinationDir, jdkdir, fileMap);
+        ConsistencyUtil util = new ConsistencyUtil();
+        File sourceFile = new File(sourceDir);
+        File destFile = new File(destinationDir);
+        Map sourceMap = new HashMap();
+        Map destMap = new HashMap();
+        util.addJavaSrcFiles(sourceDir, sourceFile, sourceMap);
+        util.addJavaSrcFiles(destinationDir, destFile, destMap);
         boolean ok = true;
-        Iterator file13Iterator = file13Map.keySet().iterator();
-        while(file13Iterator.hasNext())
+        Iterator sourceIterator = sourceMap.keySet().iterator();
+        while(sourceIterator.hasNext())
         {
-            String currentFileName = (String)file13Iterator.next();
-            File current13File = (File)file13Map.get(currentFileName);
-            File currentFile = (File)fileMap.get(currentFileName);
-            if(null == currentFile)
+            String currentFileName = (String)sourceIterator.next();
+            File currentSourceFile = (File)sourceMap.get(currentFileName);
+            File currentDestFile = (File)destMap.get(currentFileName);
+            if(null == currentDestFile)
             {
-                System.out.println("File " + current13File.getPath() + " not found under src");
+                System.out.println("File " + currentSourceFile.getPath() + " not found under src");
                 ok = false;
             }
             else
             {
-                if(!compareFiles(current13File, currentFile))
+                if(!compareFiles(currentSourceFile, currentDestFile))
                 {
-                    System.out.println("Mismatch in file " + current13File.getPath());
+                    System.out.println("Mismatch in file " + currentSourceFile.getPath());
                     System.out.println();
                     ok = false;
                 }
@@ -84,23 +85,5 @@ public class JDKVersionConsistencyTest extends TestCase
         filteredLine = filteredLine.replaceAll("/\\*", "");
         filteredLine = filteredLine.replaceAll("\\*/", "");
         return filteredLine.trim();
-    }
-    
-    private void addJavaSrcFiles(String rootDir, File dir, Map resultMap)
-    {
-        File[] fileList = dir.listFiles();
-        for(int ii = 0; ii < fileList.length; ii++)
-        {
-            File currentFile = fileList[ii];
-            if(currentFile.isDirectory())
-            {
-                addJavaSrcFiles(rootDir, currentFile, resultMap);
-            }
-            else if(currentFile.isFile() && currentFile.getName().endsWith(".java"))
-            {
-                String key = currentFile.getPath().substring(rootDir.length());
-                resultMap.put(key, currentFile);
-            }
-        }
     }
 }

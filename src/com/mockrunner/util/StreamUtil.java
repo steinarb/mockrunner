@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
@@ -124,6 +125,20 @@ public class StreamUtil
         }
     }
     
+    /**
+     * Copies the specified input stream to the specified output stream
+     * @param input the input stream
+     * @param output the output stream
+     */
+    public static void copyStream(InputStream input, OutputStream output) throws IOException 
+    {
+        int nextByte = 0;
+        while (-1 != (nextByte = input.read())) 
+        {
+            output.write(nextByte);
+        }
+    }
+  
     /**
      * Returns a copy of the specified reader. If the specified reader supports
      * marking, it will be reseted after the copy.
