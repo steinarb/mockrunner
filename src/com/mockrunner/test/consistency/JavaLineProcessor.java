@@ -19,6 +19,16 @@ public class JavaLineProcessor
         parser = new JavaLineParser();
     }
     
+    public void addLine(String line)
+    {
+        parser.addLine(line);
+    }
+    
+    public void addBlock(String block)
+    {
+        parser.addBlock(block);
+    }
+    
     public void addLines(List lines)
     {
         parser.addLines(lines);

@@ -154,12 +154,12 @@ public class JavaLineProcessorTest extends TestCase
         JavaLineProcessor processor = new JavaLineProcessor();
         List lineList = new ArrayList();
         lineList.add("import java.io.FileReader");
-        lineList.add("java.io.FileInputStream");
         processor.addLines(lineList);
+        processor.addLine("java.io.FileInputStream");
         List blockList = new ArrayList();
         blockList.add("public test()");
-        blockList.add("anotherMethod");
         processor.addBlocks(blockList);
+        processor.addBlock("anotherMethod");
         String result = processor.process(testCode);
         assertTrue(-1 != result.indexOf("//import java.io.FileReader"));
         assertTrue(-1 != result.indexOf("//import java.io.FileInputStream"));
