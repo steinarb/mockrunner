@@ -75,6 +75,8 @@
 		<mkdir dir="${releasedir}"/>
 		<mkdir dir="${releasedir}/src"/>
 		<mkdir dir="${releasedir}/doc"/>
+		<mkdir dir="${releasedir}/lib"/>
+		<mkdir dir="${releasedir}/jar"/>
 		<delete file="${releasefile}"/>
 		<copy todir="${releasedir}" filtering="true">
     		<fileset dir="${basedir}">
@@ -91,7 +93,12 @@
 				<include name="**/*"/>
 			</fileset>
   		</copy>
-  		<copy todir="${releasedir}" file="${build}/mockrunner.jar"/>
+  		<copy todir="${releasedir}/lib" file="${build}/mockrunner.jar"/>
+  		<copy todir="${releasedir}/jar">
+  			<fileset dir="${lib}">
+				<include name="**/*"/>
+			</fileset>
+  		</copy>
   		<zip destfile="${releasefile}" basedir="${bin}"/>
 	</target>
 	
