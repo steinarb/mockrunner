@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Concrete handler for {@link MockStatement}.
+ * Concrete handler for {@link AbstractResultSetHandler}.
  */
 public class StatementResultSetHandler extends AbstractResultSetHandler
 {

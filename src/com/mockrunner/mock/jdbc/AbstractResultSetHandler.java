@@ -10,7 +10,10 @@ import com.mockrunner.util.SearchUtil;
 /**
  * Abstract base class for all <code>ResultSet</code> handlers.
  * Used to coordinate <code>ResultSet</code> objects for a
- * statements.
+ * statement. You can use this class to prepare <code>ResultSet</code>
+ * objects and update count values that are returned by the
+ * <code>execute</code> method of a statement, if the current
+ * SQL string matches.
  */
 public abstract class AbstractResultSetHandler
 {
@@ -38,8 +41,10 @@ public abstract class AbstractResultSetHandler
      * Defaults to <code>false</code>, i.e. any SQL string
      * does not need to match exactly. If the original statement 
      * is <i>insert into mytable values(?, ?, ?)</i>
-     * <code>getResultSet("insert into mytable")</code>
-     * will match this statement.
+     * the string <i>insert into mytable</i> will match this statement.
+     * Usually <code>false</code> is the best choice, so
+     * prepared <code>ResultSet</code> objects do not have
+     * to match exactly the current statements SQL string.
      * @param exactMatch enable or disable exact matching
      */
     public void setExactMatch(boolean exactMatch)
@@ -76,7 +81,7 @@ public abstract class AbstractResultSetHandler
      */
     public MockResultSet getResultSet(String sql)
     {
-        List list = SearchUtil.getMatchingObjects(resultSetsForStatement, sql, getCaseSensitive(), getExactMatch());
+        List list = SearchUtil.getMatchingObjects(resultSetsForStatement, sql, getCaseSensitive(), getExactMatch(), true);
         if(null != list && list.size() > 0)
         {
             return (MockResultSet)list.get(0);
@@ -86,6 +91,9 @@ public abstract class AbstractResultSetHandler
     
     /**
      * Returns the global <code>ResultSet</code>.
+     * The statement returns the global <code>ResultSet</code>
+     * if no <code>ResultSet</code> can be found for the current
+     * SQL string.
      * @return the global {@link MockResultSet}
      */
     public MockResultSet getGlobalResultSet()
@@ -104,7 +112,7 @@ public abstract class AbstractResultSetHandler
      */
     public Integer getUpdateCount(String sql)
     {
-        List list = SearchUtil.getMatchingObjects(updateCountForStatement, sql, getCaseSensitive(), getExactMatch());
+        List list = SearchUtil.getMatchingObjects(updateCountForStatement, sql, getCaseSensitive(), getExactMatch(), true);
         if(null != list && list.size() > 0)
         {
             return (Integer)list.get(0);
@@ -113,7 +121,11 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Returns the global update count for execute update calls.
+     * Returns the global update count for <code>executeUpdate</code>
+     * calls.
+     * The statement returns the global update count
+     * if no update count can be found for the current
+     * SQL string.
      * @return the global update count
      */
     public int getGlobalUpdateCount()
@@ -124,12 +136,15 @@ public abstract class AbstractResultSetHandler
     /**
      * Returns if the specified SQL string is a select that returns
      * a <code>ResultSet</code>.
+     * Usually you do not have to specify this.
+     * It is assumed that an SQL string returns a <code>ResultSet</code> 
+     * if it contains <i>SELECT</i>.
      * @param sql the SQL string
      * @return <code>true</code> if the SQL string returns a <code>ResultSet</code>
      */
     public Boolean getReturnsResultSet(String sql)
     {
-        List list = SearchUtil.getMatchingObjects(returnsResultSetMap, sql, getCaseSensitive(), getExactMatch());
+        List list = SearchUtil.getMatchingObjects(returnsResultSetMap, sql, getCaseSensitive(), getExactMatch(), true);
         if(null != list && list.size() > 0)
         {
             return (Boolean)list.get(0);
@@ -149,6 +164,9 @@ public abstract class AbstractResultSetHandler
 
     /**
      * Prepare the global <code>ResultSet</code>.
+     * The statement returns the global <code>ResultSet</code>
+     * if no <code>ResultSet</code> can be found for the current
+     * SQL string.
      * @param resultSet the {@link MockResultSet}
      */
     public void prepareGlobalResultSet(MockResultSet resultSet)
@@ -157,7 +175,8 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Prepare the update count for execute update calls for a specified SQL string.
+     * Prepare the update count for <code>executeUpdate</code> calls 
+     * for a specified SQL string.
      * @param sql the SQL string
      * @param updateCount the update count
      */
@@ -167,7 +186,10 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Prepare the global update count for execute update calls.
+     * Prepare the global update count for <code>executeUpdate</code> calls.
+     * The statement returns the global update count
+     * if no update count can be found for the current
+     * SQL string.
      * @param updateCount the update count
      */
     public void prepareGlobalUpdateCount(int updateCount)

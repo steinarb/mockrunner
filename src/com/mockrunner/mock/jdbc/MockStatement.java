@@ -289,6 +289,7 @@ public class MockStatement implements Statement
     
     protected MockResultSet cloneResultSet(MockResultSet resultSet) throws SQLException
     {
+        if(null == resultSet) return null;
         MockResultSet clone = (MockResultSet)resultSet.clone();
         clone.setStatement(this);
         return clone;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class StringUtil
 {
     /**
-     * Appends <i>number</i> tabs to the buffer
+     * Appends <i>number</i> tabs (\t) to the buffer.
      * @param buffer the buffer
      * @param number the number of tabs to append
      */

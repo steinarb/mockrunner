@@ -18,19 +18,22 @@ public class SearchUtilTest extends TestCase
         testMap.put("Test2", "TestObject2");
         testMap.put("Test3", "TestObject3");
         testMap.put("Test", "TestObject");
-        List resultList = SearchUtil.getMatchingObjects(testMap, "Test", true, true);
+        List resultList = SearchUtil.getMatchingObjects(testMap, "Test", true, true, false);
+        assertTrue(resultList.size() == 1);
         assertTrue(resultList.contains("TestObject"));
         assertFalse(resultList.contains("TestObject1"));
         assertFalse(resultList.contains("TestObject2"));
         assertFalse(resultList.contains("TestObject3"));
-        resultList = SearchUtil.getMatchingObjects(testMap, "Test", true, false);
+        resultList = SearchUtil.getMatchingObjects(testMap, "Test", true, false, false);
+        assertTrue(resultList.size() == 4);
         assertTrue(resultList.contains("TestObject"));
         assertTrue(resultList.contains("TestObject1"));
         assertTrue(resultList.contains("TestObject2"));
         assertTrue(resultList.contains("TestObject3"));
-        resultList = SearchUtil.getMatchingObjects(testMap, "test", true, false);
+        resultList = SearchUtil.getMatchingObjects(testMap, "test", true, false, false);
         assertTrue(resultList.isEmpty());
-        resultList = SearchUtil.getMatchingObjects(testMap, "test", false, false);
+        resultList = SearchUtil.getMatchingObjects(testMap, "test", false, false, false);
+        assertTrue(resultList.size() == 4);
         assertTrue(resultList.contains("TestObject"));
         assertTrue(resultList.contains("TestObject1"));
         assertTrue(resultList.contains("TestObject2"));
@@ -40,7 +43,8 @@ public class SearchUtilTest extends TestCase
         testList.add("TestList2");
         testList.add("TestList3");
         testMap.put("Test4", testList);
-        resultList = SearchUtil.getMatchingObjects(testMap, "", true, false);
+        resultList = SearchUtil.getMatchingObjects(testMap, "", true, false, false);
+        assertTrue(resultList.size() == 7);
         assertTrue(resultList.contains("TestObject"));
         assertTrue(resultList.contains("TestObject1"));
         assertTrue(resultList.contains("TestObject2"));
@@ -48,6 +52,11 @@ public class SearchUtilTest extends TestCase
         assertTrue(resultList.contains("TestList1"));
         assertTrue(resultList.contains("TestList2"));
         assertTrue(resultList.contains("TestList3"));
+        resultList = SearchUtil.getMatchingObjects(testMap, "", true, false, true);
+        assertTrue(resultList.isEmpty());
+        resultList = SearchUtil.getMatchingObjects(testMap, "TestObjectObject", true, false, true);
+        assertTrue(resultList.size() == 1);
+        assertTrue(resultList.contains("TestObject"));
     }
     
     public void testDoesStringMatch()

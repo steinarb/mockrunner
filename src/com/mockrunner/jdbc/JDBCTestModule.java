@@ -8,6 +8,8 @@ import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockStatement;
+import com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler;
+import com.mockrunner.mock.jdbc.StatementResultSetHandler;
 import com.mockrunner.util.SearchUtil;
 
 /**
@@ -49,6 +51,34 @@ public class JDBCTestModule
     public void setExactMatch(boolean exactMatch)
     {
         this.exactMatch = exactMatch;
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.mock.jdbc.StatementResultSetHandler}. 
+     * The {@link com.mockrunner.mock.jdbc.StatementResultSetHandler}
+     * contains methods that can be used to specify the 
+     * {@link com.mockrunner.mock.jdbc.MockResultSet} objects
+     * and update counts that a {@link com.mockrunner.mock.jdbc.MockStatement} 
+     * should return when executing an SQL statement.
+     * @return the {@link com.mockrunner.mock.jdbc.StatementResultSetHandler}
+     */
+    public StatementResultSetHandler getStatementResultSetHandler()
+    {
+        return mockFactory.getMockConnection().getStatementResultSetHandler();
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler}.
+     * The {@link com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler}
+     * contains methods that can be used to specify the 
+     * {@link com.mockrunner.mock.jdbc.MockResultSet} objects
+     * and update counts that a {@link com.mockrunner.mock.jdbc.MockPreparedStatement} 
+     * should return when executing an SQL statement.
+     * @return the {@link com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler}
+     */
+    public PreparedStatementResultSetHandler getPreparedStatementResultSetHandler()
+    {
+        return mockFactory.getMockConnection().getPreparedStatementResultSetHandler();
     }
     
     /**
@@ -127,7 +157,7 @@ public class JDBCTestModule
     public List getPreparedStatements(String sql)
     {
         Map sqlStatements = mockFactory.getMockConnection().getPreparedStatementResultSetHandler().getPreparedStatementMap();
-        return SearchUtil.getMatchingObjects(sqlStatements, sql, caseSensitive, exactMatch); 
+        return SearchUtil.getMatchingObjects(sqlStatements, sql, caseSensitive, exactMatch, false); 
     }
     
     /**
