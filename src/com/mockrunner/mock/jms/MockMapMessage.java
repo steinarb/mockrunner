@@ -10,6 +10,7 @@ import java.util.Vector;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
 import javax.jms.MessageFormatException;
+import javax.jms.MessageNotWriteableException;
 
 import com.mockrunner.util.common.ArrayUtil;
 
@@ -266,11 +267,15 @@ public class MockMapMessage extends MockMessage implements MapMessage
 
     public void setObject(String name, Object object) throws JMSException
     {
-        if(null == object)
+        if(!isInWriteMode())
         {
-            data.put(name, object);
-            return;
+            throw new MessageNotWriteableException("Message is in read mode");
         }
+        if(null == name || name.length() <= 0)
+        {
+            throw new IllegalArgumentException("Property names must not be null or empty strings");
+        }
+        if(null == object) return;
         if((object instanceof Number) || (object instanceof Boolean) || (object instanceof Character) || (object instanceof String) || (object instanceof byte[]))
         {
             data.put(name, object);

@@ -3,10 +3,11 @@ package com.mockrunner.test.jms;
 import java.util.Arrays;
 
 import javax.jms.MessageFormatException;
-
-import com.mockrunner.mock.jms.MockMapMessage;
+import javax.jms.MessageNotWriteableException;
 
 import junit.framework.TestCase;
+
+import com.mockrunner.mock.jms.MockMapMessage;
 
 public class MockMapMessageTest extends TestCase
 {
@@ -14,6 +15,7 @@ public class MockMapMessageTest extends TestCase
     {
         MockMapMessage message = new MockMapMessage();
         message.setBoolean("boolean1", true);
+        assertTrue(message.itemExists("boolean1"));
         assertEquals("true", message.getString("boolean1"));
         assertEquals(true, message.getBoolean("boolean1"));
         message.setString("string1", "12.3");
@@ -72,6 +74,7 @@ public class MockMapMessageTest extends TestCase
         }
         assertTrue(Arrays.equals((byte[])message.getObject("bytes1"), new byte[] {1, 2, 3}));
         message.setObject("null", null);
+        assertFalse(message.itemExists("null"));
         try
         {
             message.getInt("null");
@@ -82,6 +85,79 @@ public class MockMapMessageTest extends TestCase
             //should throw exception
         }
         assertNull(message.getString("null"));
+    }
+    
+    public void testReadOnly() throws Exception
+    {
+        MockMapMessage message = new MockMapMessage();
+        message.setString("test", "test");
+        message.setBoolean("boolean", true);
+        message.setReadOnly();
+        try
+        {
+            message.setString("test", "anothertest");
+            fail();
+        } 
+        catch(MessageNotWriteableException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            message.setBoolean("boolean", false);
+            fail();
+        } 
+        catch(MessageNotWriteableException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            message.setInt("int", 1);
+            fail();
+        } 
+        catch(MessageNotWriteableException exc)
+        {
+            //should throw exception
+        }
+        assertEquals("test", message.getString("test"));
+        assertTrue(message.getBoolean("boolean"));
+        assertFalse(message.itemExists("int"));
+        message.clearBody();
+        message.setInt("int", 1);
+        assertTrue(message.itemExists("int"));
+    }
+    
+    public void testNullName() throws Exception
+    {
+        MockMapMessage message = new MockMapMessage();
+        try
+        {
+            message.setDouble(null, 123.4);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            message.setBytes("", new byte[0]);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            message.setString(null, "test");
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
     }
     
     public void testEquals() throws Exception
@@ -111,7 +187,7 @@ public class MockMapMessageTest extends TestCase
         message2.setString("name4", null);
         assertFalse(message1.equals(message2));
         assertFalse(message2.equals(message1));
-        message1.setString("name4", null);
+        message1.setString("name4", "text");
         assertTrue(message1.equals(message2));
         assertTrue(message2.equals(message1));
         assertEquals(message1.hashCode(), message2.hashCode());

@@ -1,6 +1,7 @@
 package com.mockrunner.mock.jms;
 
 import javax.jms.JMSException;
+import javax.jms.MessageNotWriteableException;
 import javax.jms.TextMessage;
 
 /**
@@ -12,7 +13,7 @@ public class MockTextMessage extends MockMessage implements TextMessage
     
     public MockTextMessage()
     {
-
+        this(null);
     }
 
     public MockTextMessage(String text)
@@ -22,6 +23,10 @@ public class MockTextMessage extends MockMessage implements TextMessage
 
     public void setText(String text) throws JMSException
     {
+        if(!isInWriteMode())
+        {
+            throw new MessageNotWriteableException("Message is in read mode");
+        }
         this.text = text;
     }
 

@@ -6,12 +6,13 @@ import java.util.Enumeration;
 
 import javax.jms.DeliveryMode;
 import javax.jms.MessageFormatException;
+import javax.jms.MessageNotWriteableException;
+
+import junit.framework.TestCase;
 
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockTopic;
-
-import junit.framework.TestCase;
 
 public class MockMessageTest extends TestCase
 {
@@ -115,16 +116,139 @@ public class MockMessageTest extends TestCase
         assertTrue(nameList.contains("int1"));
         assertTrue(nameList.contains("byte1"));
         assertTrue(nameList.contains("boolean1"));
+    }
+    
+    public void testNullPropertyName() throws Exception
+    {
+        MockMessage message = new MockMessage();
+        try
+        {
+            message.setDoubleProperty(null, 123.4);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            message.setObjectProperty("", "test");
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            message.setByteProperty(null, (byte)1);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+    }
+    
+    public void testNullProperties() throws Exception
+    {
+        MockMessage message = new MockMessage();
         message.setObjectProperty("null", null);
+        assertFalse(message.propertyExists("null"));
+        assertNull(message.getObjectProperty("null"));
+        assertNull(message.getStringProperty("test"));
         try
         {
             message.getDoubleProperty("null");
-        }
-        catch(MessageFormatException exc)
+            fail();
+        } 
+        catch(NullPointerException exc)
         {
-            //should throw Exception
+            //should throw exception
         }
-        assertNull(message.getObjectProperty("null"));
+        try
+        {
+            message.getFloatProperty("null");
+            fail();
+        } 
+        catch(NullPointerException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            message.getByteProperty("null");
+            fail();
+        } 
+        catch(NumberFormatException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            message.getIntProperty("test");
+            fail();
+        } 
+        catch(NumberFormatException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            message.getShortProperty("null");
+            fail();
+        } 
+        catch(NumberFormatException exc)
+        {
+            //should throw exception
+        }
+        assertFalse(message.getBooleanProperty("null"));
+        assertFalse(message.getBooleanProperty("test"));
+    }
+    
+    public void testReadOnlyProperties() throws Exception
+    {
+        MockMessage message = new MockMessage();
+        message.setStringProperty("string", "test");
+        message.setReadOnly();
+        message.setDoubleProperty("double", 123);
+        message.setReadOnlyProperties();
+        try
+        {
+            message.setStringProperty("string", "anothertest");
+            fail();
+        } 
+        catch(MessageNotWriteableException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            message.setDoubleProperty("double", 456);
+            fail();
+        } 
+        catch(MessageNotWriteableException exc)
+        {
+            //should throw exception
+        }
+        message.clearBody();
+        try
+        {
+            message.setBooleanProperty("boolean", true);
+            fail();
+        } 
+        catch(MessageNotWriteableException exc)
+        {
+            //should throw exception
+        }
+        assertEquals("test", message.getStringProperty("string"));
+        assertEquals(123, message.getDoubleProperty("double"), 0);
+        assertFalse(message.getBooleanProperty("boolean"));
+        assertFalse(message.propertyExists("boolean"));
+        message.clearProperties();
+        message.setBooleanProperty("boolean", true);
+        assertTrue(message.getBooleanProperty("boolean"));
+        assertTrue(message.propertyExists("boolean"));
     }
     
     public void testSetAndGetCorrelationID() throws Exception

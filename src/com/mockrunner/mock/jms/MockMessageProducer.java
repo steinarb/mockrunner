@@ -188,6 +188,11 @@ public class MockMessageProducer implements MessageProducer
         {
             message.setJMSMessageID("ID:" + String.valueOf(Math.random()));
         }
+        if(message instanceof MockMessage)
+        {
+            ((MockMessage)message).setReadOnly();
+            ((MockMessage)message).setReadOnlyProperties();
+        }
         if(message instanceof BytesMessage)
         {
             ((BytesMessage)message).reset();

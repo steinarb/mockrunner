@@ -6,19 +6,23 @@ import javax.jms.InvalidDestinationException;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.jms.MessageNotWriteableException;
 import javax.jms.Session;
 
 import junit.framework.TestCase;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
+import com.mockrunner.mock.jms.MockBytesMessage;
 import com.mockrunner.mock.jms.MockConnection;
+import com.mockrunner.mock.jms.MockMapMessage;
 import com.mockrunner.mock.jms.MockMessageProducer;
 import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueConnection;
 import com.mockrunner.mock.jms.MockQueueSender;
 import com.mockrunner.mock.jms.MockSession;
+import com.mockrunner.mock.jms.MockStreamMessage;
 import com.mockrunner.mock.jms.MockTextMessage;
 import com.mockrunner.mock.jms.MockTopic;
 import com.mockrunner.mock.jms.MockTopicConnection;
@@ -34,6 +38,92 @@ public class MockMessageProducerTest extends TestCase
         super.setUp();
         queue = new MockQueue("Queue");
         topic = new MockTopic("Topic");
+    }
+    
+    public void testReadOnly() throws Exception
+    {
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        MockQueueConnection connection = new MockQueueConnection(destManager, confManager);
+        MockQueueSender sender = new MockQueueSender(connection, new MockSession(connection, true, Session.CLIENT_ACKNOWLEDGE), queue);
+        MockTopicPublisher publisher = new MockTopicPublisher(connection, new MockSession(connection, true, Session.CLIENT_ACKNOWLEDGE), topic);
+        MockTextMessage textMessage = new MockTextMessage();
+        MockMapMessage mapMessage = new MockMapMessage();
+        MockBytesMessage bytesMessage = new MockBytesMessage();
+        MockStreamMessage streamMessage = new MockStreamMessage();
+        MockObjectMessage objectMessage = new MockObjectMessage();
+        sender.send(textMessage);
+        sender.send(mapMessage);
+        publisher.publish(bytesMessage);
+        publisher.publish(streamMessage);
+        publisher.publish(objectMessage);
+        try
+        {
+            textMessage.setText("test");
+            fail();
+        } 
+        catch(MessageNotWriteableException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            mapMessage.setObject("name", "value");
+            fail();
+        } 
+        catch(MessageNotWriteableException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            bytesMessage.writeInt(1);
+            fail();
+        } 
+        catch(MessageNotWriteableException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            streamMessage.writeLong(2);
+            fail();
+        } 
+        catch(MessageNotWriteableException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            objectMessage.setObject("Object");
+            fail();
+        } 
+        catch(MessageNotWriteableException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            textMessage.setStringProperty("test", "test");
+            fail();
+        } 
+        catch(MessageNotWriteableException exc)
+        {
+            //should throw exception
+        }
+        textMessage.clearBody();
+        textMessage.setText("test");
+        try
+        {
+            textMessage.setStringProperty("test", "test");
+            fail();
+        } 
+        catch(MessageNotWriteableException exc)
+        {
+            //should throw exception
+        }
+        textMessage.clearProperties();
+        textMessage.setStringProperty("test", "test");
     }
   
     public void testSendWithQueueSender() throws Exception

@@ -25,7 +25,6 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     private DataOutputStream outStream;
     private ByteArrayOutputStream byteOutStream;
     private DataInputStream inStream;
-    private boolean isInWriteMode;
     
     public MockBytesMessage()
     {
@@ -41,7 +40,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     
     public long getBodyLength() throws JMSException
     {
-        if(isInWriteMode)
+        if(isInWriteMode())
         {
             throw new MessageNotReadableException("Message is in write mode");
         }
@@ -50,7 +49,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public boolean readBoolean() throws JMSException
     {
-        if(isInWriteMode)
+        if(isInWriteMode())
         {
             throw new MessageNotReadableException("Message is in write mode");
         }
@@ -70,7 +69,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public byte readByte() throws JMSException
     {
-        if(isInWriteMode)
+        if(isInWriteMode())
         {
             throw new MessageNotReadableException("Message is in write mode");
         }
@@ -90,7 +89,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public int readUnsignedByte() throws JMSException
     {
-        if(isInWriteMode)
+        if(isInWriteMode())
         {
             throw new MessageNotReadableException("Message is in write mode");
         }
@@ -110,7 +109,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public short readShort() throws JMSException
     {
-        if(isInWriteMode)
+        if(isInWriteMode())
         {
             throw new MessageNotReadableException("Message is in write mode");
         }
@@ -130,7 +129,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public int readUnsignedShort() throws JMSException
     {
-        if(isInWriteMode)
+        if(isInWriteMode())
         {
             throw new MessageNotReadableException("Message is in write mode");
         }
@@ -150,7 +149,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public char readChar() throws JMSException
     {
-        if(isInWriteMode)
+        if(isInWriteMode())
         {
             throw new MessageNotReadableException("Message is in write mode");
         }
@@ -170,7 +169,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public int readInt() throws JMSException
     {
-        if(isInWriteMode)
+        if(isInWriteMode())
         {
             throw new MessageNotReadableException("Message is in write mode");
         }
@@ -190,7 +189,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public long readLong() throws JMSException
     {
-        if(isInWriteMode)
+        if(isInWriteMode())
         {
             throw new MessageNotReadableException("Message is in write mode");
         }
@@ -210,7 +209,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public float readFloat() throws JMSException
     {
-        if(isInWriteMode)
+        if(isInWriteMode())
         {
             throw new MessageNotReadableException("Message is in write mode");
         }
@@ -230,7 +229,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public double readDouble() throws JMSException
     {
-        if(isInWriteMode)
+        if(isInWriteMode())
         {
             throw new MessageNotReadableException("Message is in write mode");
         }
@@ -250,7 +249,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public String readUTF() throws JMSException
     {
-        if(isInWriteMode)
+        if(isInWriteMode())
         {
             throw new MessageNotReadableException("Message is in write mode");
         }
@@ -270,7 +269,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public int readBytes(byte[] data) throws JMSException
     {
-        if(isInWriteMode)
+        if(isInWriteMode())
         {
             throw new MessageNotReadableException("Message is in write mode");
         }
@@ -290,7 +289,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public int readBytes(byte[] data, int length) throws JMSException
     {
-        if(isInWriteMode)
+        if(isInWriteMode())
         {
             throw new MessageNotReadableException("Message is in write mode");
         }
@@ -310,7 +309,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public void writeBoolean(boolean value) throws JMSException
     {
-        if(!isInWriteMode)
+        if(!isInWriteMode())
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
@@ -326,7 +325,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public void writeByte(byte value) throws JMSException
     {
-        if(!isInWriteMode)
+        if(!isInWriteMode())
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
@@ -342,7 +341,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public void writeShort(short value) throws JMSException
     {
-        if(!isInWriteMode)
+        if(!isInWriteMode())
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
@@ -358,7 +357,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public void writeChar(char value) throws JMSException
     {
-        if(!isInWriteMode)
+        if(!isInWriteMode())
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
@@ -374,7 +373,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public void writeInt(int value) throws JMSException
     {
-        if(!isInWriteMode)
+        if(!isInWriteMode())
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
@@ -390,7 +389,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public void writeLong(long value) throws JMSException
     {
-        if(!isInWriteMode)
+        if(!isInWriteMode())
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
@@ -406,7 +405,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public void writeFloat(float value) throws JMSException
     {
-        if(!isInWriteMode)
+        if(!isInWriteMode())
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
@@ -422,7 +421,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public void writeDouble(double value) throws JMSException
     {
-        if(!isInWriteMode)
+        if(!isInWriteMode())
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
@@ -438,7 +437,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public void writeUTF(String value) throws JMSException
     {
-        if(!isInWriteMode)
+        if(!isInWriteMode())
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
@@ -454,7 +453,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public void writeBytes(byte[] data) throws JMSException
     {
-        if(!isInWriteMode)
+        if(!isInWriteMode())
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
@@ -470,7 +469,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public void writeBytes(byte[] data, int offset, int length) throws JMSException
     {
-        if(!isInWriteMode)
+        if(!isInWriteMode())
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
@@ -486,7 +485,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public void writeObject(Object object) throws JMSException
     {
-        if(!isInWriteMode)
+        if(!isInWriteMode())
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
@@ -545,7 +544,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public void reset() throws JMSException
     {
-        isInWriteMode = false;
+        setReadOnly();
         try
         {
             outStream.flush();
@@ -560,7 +559,6 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     public void clearBody() throws JMSException
     {
         super.clearBody();
-        isInWriteMode = true;
         byteOutStream = new ByteArrayOutputStream();
         outStream = new DataOutputStream(byteOutStream);
     }
@@ -596,7 +594,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
         {
             message.clearBody();
             message.outStream.write(byteOutStream.toByteArray());
-            if(!isInWriteMode)
+            if(!isInWriteMode())
             {
                 message.reset();
             }
