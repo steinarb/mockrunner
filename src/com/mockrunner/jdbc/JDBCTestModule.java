@@ -38,7 +38,14 @@ public class JDBCTestModule
     /**
      * Set if specified SQL statements should be handled case sensitive.
      * Defaults to to <code>false</code>, i.e. <i>INSERT</i> is the same
-     * as <i>insert</i>.
+     * as <i>insert</i>. 
+     * Please note that this method controls SQL statement
+     * matching for this class, e.g. what statements the method
+     * {@link #getPreparedStatements(String)} returns or what statements
+     * are taken into account by the method {@link #verifySQLStatementExecuted(String)}.
+     * In contrast to {@link AbstractResultSetHandler#setCaseSensitive(boolean)} it does 
+     * not control the prepared results that are returned when the tested application
+     * executes a matching statement.
      * @param caseSensitive enable or disable case sensitivity
      */
     public void setCaseSensitive(boolean caseSensitive)
@@ -54,6 +61,13 @@ public class JDBCTestModule
      * exactly. If the original statement is <i>insert into mytable values(?, ?, ?)</i>
      * <code>verifyPreparedStatementPresent("insert into mytable")</code>
      * will pass.
+     * Please note that this method controls SQL statement
+     * matching for this class, e.g. what statements the method
+     * {@link #getPreparedStatements(String)} returns or what statements
+     * are taken into account by the method {@link #verifySQLStatementExecuted(String)}.
+     * In contrast to {@link AbstractResultSetHandler#setExactMatch(boolean)} it does 
+     * not control the prepared results that are returned when the tested application
+     * executes a matching statement.
      * @param exactMatch enable or disable exact matching
      */
     public void setExactMatch(boolean exactMatch)
@@ -68,6 +82,13 @@ public class JDBCTestModule
      * cannot use regular expressions and matching is based
      * on string comparison (which is much faster). Enable
      * this feature only if necessary.
+     * Please note that this method controls SQL statement
+     * matching for this class, e.g. what statements the method
+     * {@link #getPreparedStatements(String)} returns or what statements
+     * are taken into account by the method {@link #verifySQLStatementExecuted(String)}.
+     * In contrast to {@link AbstractResultSetHandler#setUseRegularExpressions(boolean)} it does 
+     * not control the prepared results that are returned when the tested application
+     * executes a matching statement.
      * @param useRegularExpressions should regular expressions be used
      */
     public void setUseRegularExpressions(boolean useRegularExpressions)
@@ -276,7 +297,7 @@ public class JDBCTestModule
      * If there are more than one {@link com.mockrunner.mock.jdbc.MockPreparedStatement}
      * objects with the specified SQL, the first one will be returned.
      * Please note that you can modify the search parameters with 
-     * {@link #setCaseSensitive} and {@link #setExactMatch}.
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and {@link #setUseRegularExpressions}.
      * @param sql the SQL statement used to create the <code>PreparedStatement</code>
      * @return the <code>PreparedStatement</code> or <code>null</code>, if there is no macth
      */
@@ -302,8 +323,9 @@ public class JDBCTestModule
     /**
      * Returns all {@link com.mockrunner.mock.jdbc.MockPreparedStatement} with
      * the specified SQL statement as a <code>List</code>. If there are no matches, an empty
-     * <code>List</code> will be returned. Please note that you can modify
-     * the search parameters with {@link #setCaseSensitive} and {@link #setExactMatch}.
+     * <code>List</code> will be returned.
+     * Please note that you can modify the search parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and {@link #setUseRegularExpressions}.
      * @param sql the SQL statement used to create the <code>PreparedStatement</code>
      * @return the <code>List</code> of <code>PreparedStatement</code> objects
      */
@@ -330,12 +352,11 @@ public class JDBCTestModule
     
     /**
      * Returns a {@link com.mockrunner.mock.jdbc.MockCallableStatement} that was 
-     * created using a {@link com.mockrunner.mock.jdbc.MockConnection} by its SQL statement
-     * (the stored procedure name).
+     * created using a {@link com.mockrunner.mock.jdbc.MockConnection} by its SQL statement.
      * If there are more than one {@link com.mockrunner.mock.jdbc.MockCallableStatement}
      * objects with the specified SQL, the first one will be returned.
      * Please note that you can modify the search parameters with 
-     * {@link #setCaseSensitive} and {@link #setExactMatch}.
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and {@link #setUseRegularExpressions}.
      * @param sql the SQL statement used to create the <code>CallableStatement</code>
      * @return the <code>CallableStatement</code> or <code>null</code>, if there is no macth
      */
@@ -360,10 +381,10 @@ public class JDBCTestModule
     
     /**
      * Returns all {@link com.mockrunner.mock.jdbc.MockCallableStatement} with
-     * the specified SQL statement (name of the stored procedure) as a <code>List</code>. 
+     * the specified SQL statement as a <code>List</code>. 
      * If there are no matches, an empty <code>List</code> will be returned. 
-     * Please note that you can modify the search parameters with {@link #setCaseSensitive} 
-     * and {@link #setExactMatch}.
+     * Please note that you can modify the search parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and {@link #setUseRegularExpressions}.
      * @param sql the SQL statement used to create the <code>CallableStatement</code>
      * @return the <code>List</code> of <code>CallableStatement</code> objects
      */

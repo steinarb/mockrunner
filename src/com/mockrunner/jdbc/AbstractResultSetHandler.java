@@ -89,6 +89,12 @@ public abstract class AbstractResultSetHandler
      * Set if specified SQL strings should be handled case sensitive.
      * Defaults to to <code>false</code>, i.e. <i>INSERT</i> is the same
      * as <i>insert</i>.
+     * Please note that this method controls SQL statement
+     * matching for prepared results and update counts, i.e. what
+     * statements the tested application has to execute to receive
+     * a specified result. Unlike {@link JDBCTestModule#setCaseSensitive(boolean)}
+     * it does not control the statement matching of {@link JDBCTestModule}
+     * methods.
      * @param caseSensitive enable or disable case sensitivity
      */
     public void setCaseSensitive(boolean caseSensitive)
@@ -98,13 +104,19 @@ public abstract class AbstractResultSetHandler
 
     /**
      * Set if specified SQL statements must match exactly.
-     * Defaults to <code>false</code>, i.e. any SQL string
+     * Defaults to <code>false</code>, i.e. the SQL string
      * does not need to match exactly. If the original statement 
      * is <i>insert into mytable values(?, ?, ?)</i>
      * the string <i>insert into mytable</i> will match this statement.
      * Usually <code>false</code> is the best choice, so
      * prepared <code>ResultSet</code> objects do not have
      * to match exactly the current statements SQL string.
+     * Please note that this method controls SQL statement
+     * matching for prepared results and update counts, i.e. what
+     * statements the tested application has to execute to receive
+     * a specified result. Unlike {@link JDBCTestModule#setExactMatch(boolean)}
+     * it does not control the statement matching of {@link JDBCTestModule}
+     * methods.
      * @param exactMatch enable or disable exact matching
      */
     public void setExactMatch(boolean exactMatch)
@@ -119,6 +131,12 @@ public abstract class AbstractResultSetHandler
      * cannot use regular expressions and matching is based
      * on string comparison (which is much faster). Enable
      * this feature only if necessary.
+     * Please note that this method controls SQL statement
+     * matching for prepared results and update counts, i.e. what
+     * statements the tested application has to execute to receive
+     * a specified result. Unlike {@link JDBCTestModule#setUseRegularExpressions(boolean)}
+     * it does not control the statement matching of {@link JDBCTestModule}
+     * methods.
      * @param useRegularExpressions should regular expressions be used
      */
     public void setUseRegularExpressions(boolean useRegularExpressions)
@@ -224,8 +242,8 @@ public abstract class AbstractResultSetHandler
     /**
      * Returns the first <code>ResultSet</code> that matches the
      * specified SQL string. Please note that you can modify
-     * the search parameters with {@link #setCaseSensitive} and 
-     * {@link #setExactMatch}.
+     * the match parameters with {@link #setCaseSensitive},
+     * {@link #setExactMatch} and {@link #setUseRegularExpressions}.
      * @param sql the SQL string
      * @return the corresponding {@link MockResultSet}
      */
@@ -255,8 +273,8 @@ public abstract class AbstractResultSetHandler
     /**
      * Returns the first update count that matches the
      * specified SQL string. Please note that you can modify
-     * the search parameters with {@link #setCaseSensitive} and 
-     * {@link #setExactMatch}.
+     * the match parameters with {@link #setCaseSensitive},
+     * {@link #setExactMatch} and {@link #setUseRegularExpressions}.
      * @param sql the SQL string
      * @return the corresponding update count
      */
@@ -290,6 +308,9 @@ public abstract class AbstractResultSetHandler
      * Usually you do not have to specify this.
      * It is assumed that an SQL string returns a <code>ResultSet</code> 
      * if it contains <i>SELECT</i>.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions}.
      * @param sql the SQL string
      * @return <code>true</code> if the SQL string returns a <code>ResultSet</code>
      */
@@ -307,6 +328,9 @@ public abstract class AbstractResultSetHandler
     /**
      * Returns if the specified SQL string should raise an exception.
      * This can be used to simulate database exceptions.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions}.
      * @param sql the SQL string
      * @return <code>true</code> if the specified SQL string should raise an exception,
      *         <code>false</code> otherwise
@@ -320,6 +344,9 @@ public abstract class AbstractResultSetHandler
     
     /**
      * Prepare a <code>ResultSet</code> for a specified SQL string.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions}.
      * @param sql the SQL string
      * @param resultSet the corresponding {@link MockResultSet}
      */
@@ -342,7 +369,9 @@ public abstract class AbstractResultSetHandler
     
     /**
      * Prepare the update count for <code>executeUpdate</code> calls 
-     * for a specified SQL string.
+     * for a specified SQL string. Please note that you can modify
+     * the match parameters with {@link #setCaseSensitive},
+     * {@link #setExactMatch} and {@link #setUseRegularExpressions}.
      * @param sql the SQL string
      * @param updateCount the update count
      */
@@ -368,6 +397,9 @@ public abstract class AbstractResultSetHandler
      * a <code>ResultSet</code>. Usually you do not have to specify this.
      * It is assumed that an SQL string returns a <code>ResultSet</code> 
      * if it contains <i>SELECT</i>.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions}.
      * @param sql the SQL string
      * @param returnsResultSet specify if the SQL string returns a <code>ResultSet</code>
      */
@@ -379,6 +411,9 @@ public abstract class AbstractResultSetHandler
     /**
      * Prepare if the specified SQL string should raise an exception.
      * This can be used to simulate database exceptions.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions}.
      * @param sql the SQL string
      */
     public void prepareThrowsSQLException(String sql)

@@ -80,9 +80,9 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
     /**
      * Returns the first update count that matches the
      * specified SQL string and the specified parameters. 
-     * Please note that you can modify the search parameters for 
-     * the SQL string with {@link #setCaseSensitive} and
-     * {@link #setExactMatch} and the search parameters for the 
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
      * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param parameters the parameters
@@ -106,9 +106,9 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
     /**
      * Returns the first <code>ResultSet</code> that matches the
      * specified SQL string and the specified parameters.
-     * Please note that you can modify the search parameters for 
-     * the SQL string with {@link #setCaseSensitive} and
-     * {@link #setExactMatch} and the search parameters for the 
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
      * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param parameters the parameters
@@ -132,7 +132,11 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
     /**
      * Returns if the specified SQL string with the specified parameters
      * should raise an exception.
-     * This can be used to simulate database exceptions
+     * This can be used to simulate database exceptions.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param parameters the parameters
      * @return <code>true</code> if the specified SQL string should raise an exception,
@@ -222,6 +226,10 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * <code>PreparedStatement</code> objects start with 1 as the first
      * parameter. So <code>parameters[0]</code> maps to the
      * parameter with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param resultSet the corresponding {@link MockResultSet}
      * @param parameters the parameters
@@ -239,6 +247,10 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * <code>PreparedStatement</code> objects start with 1 as the first
      * parameter. So <code>parameters.get(0)</code> maps to the
      * parameter with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param resultSet the corresponding {@link MockResultSet}
      * @param parameters the parameters
@@ -260,6 +272,10 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * to the corresponding parameter. The <code>Integer</code> object
      * is the index of the parameter. In the case of a <code>CallableStatement</code>
      * there are also allowed <code>String</code> keys for named parameters.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param resultSet the corresponding {@link MockResultSet}
      * @param parameters the parameters
@@ -284,6 +300,10 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * Please keep in mind that parameters in <code>PreparedStatement</code> 
      * objects start with 1 as the first parameter. So <code>parameters[0]</code> 
      * maps to the parameter with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param parameters the parameters
      */
@@ -302,6 +322,10 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * <code>PreparedStatement</code> objects start with 1 as the first
      * parameter. So <code>parameters.get(0)</code> maps to the parameter 
      * with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param parameters the parameters
      */
@@ -319,6 +343,10 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * Prepare if the specified SQL string with the specified parameters
      * should raise an exception.
      * This can be used to simulate database exceptions.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param parameters the parameters
      */
@@ -341,6 +369,10 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * <code>PreparedStatement</code> objects start with 1 as the first
      * parameter. So <code>parameters[0]</code> maps to the
      * parameter with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param updateCount the update count
      * @param parameters the parameters
@@ -358,6 +390,10 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * <code>PreparedStatement</code> objects start with 1 as the first
      * parameter. So <code>parameters.get(0)</code> maps to the
      * parameter with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param updateCount the update count
      * @param parameters the parameters
@@ -379,6 +415,10 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * to the corresponding parameter. The <code>Integer</code> object
      * is the index of the parameter. In the case of a <code>CallableStatement</code>
      * there are also allowed <code>String</code> keys for named parameters.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param updateCount the update count
      * @param parameters the parameters

@@ -19,9 +19,10 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     
     /**
      * Returns the first out parameter <code>Map</code> that matches 
-     * the specified SQL string. Please note that you can modify
-     * the search parameters with {@link #setCaseSensitive} and 
-     * {@link #setExactMatch}.
+     * the specified SQL string.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions}.
      * @param sql the SQL string
      * @return the corresponding out parameter <code>Map</code>
      */
@@ -39,9 +40,9 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     /**
      * Returns the first out parameter <code>Map</code> that matches 
      * the specified SQL string and the specified parameters. 
-     * Please note that you can modify the search parameters for 
-     * the SQL string with {@link #setCaseSensitive} and
-     * {@link #setExactMatch} and the search parameters for the 
+     * PPlease note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
      * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param parameters the parameters
@@ -98,6 +99,9 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     /**
      * Prepare an out parameter <code>Map</code> for a specified 
      * SQL string.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions}.
      * @param sql the SQL string
      * @param outParameters the out parameter <code>Map</code>
      */
@@ -114,6 +118,10 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      * <code>CallableStatement</code> objects start with 1 as the first
      * parameter. So <code>parameters[0]</code> maps to the
      * parameter with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param outParameters the corresponding out parameter <code>Map</code>
      * @param parameters the parameters
@@ -131,6 +139,10 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      * <code>CallableStatement</code> objects start with 1 as the first
      * parameter. So <code>parameters.get(0)</code> maps to the
      * parameter with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param outParameters the corresponding out parameter <code>Map</code>
      * @param parameters the parameters
@@ -152,6 +164,10 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      * <code>String</code> objects to the corresponding parameter. 
      * An <code>Integer</code> object is the index of the parameter.
      * A <code>String</code> is the name of the parameter.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param outParameters the corresponding out parameter <code>Map</code>
      * @param parameters the parameters
