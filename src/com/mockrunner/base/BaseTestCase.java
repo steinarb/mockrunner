@@ -3,7 +3,7 @@ package com.mockrunner.base;
 import junit.framework.TestCase;
 
 import com.mockrunner.jdbc.JDBCTestModule;
-import com.mockrunner.mock.jdbc.*;
+import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.servlet.ServletTestModule;
 import com.mockrunner.struts.ActionTestModule;
