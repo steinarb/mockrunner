@@ -30,7 +30,7 @@ public abstract class MockMessageProducer implements MessageProducer
         closed = false;
         disableMessageId = false;
         disableTimestamp = false;
-        deliveryMode = DeliveryMode.NON_PERSISTENT;
+        deliveryMode = DeliveryMode.PERSISTENT;
         priority = 4;
         timeToLive = 0;
     }

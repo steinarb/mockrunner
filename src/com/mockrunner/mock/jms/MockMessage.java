@@ -1,5 +1,6 @@
 package com.mockrunner.mock.jms;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,8 +12,6 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageFormatException;
 
-import com.mockrunner.util.ArrayUtil;
-
 /**
  * Mock implementation of JMS <code>Message</code>.
  */
@@ -20,7 +19,7 @@ public class MockMessage implements Message
 {
     private String messageId;
     private long timestamp;
-    private byte[] correlationId;
+    private String correlationId;
     private Destination replyTo;
     private Destination destination;
     private int deliveryMode;
@@ -35,7 +34,7 @@ public class MockMessage implements Message
     {
         messageId = "ID:" + String.valueOf(Math.random());
         timestamp = System.currentTimeMillis();
-        deliveryMode = DeliveryMode.NON_PERSISTENT;
+        deliveryMode = DeliveryMode.PERSISTENT;
         redelivered = false;
         expiration = 0;
         priority = 4;
@@ -70,22 +69,44 @@ public class MockMessage implements Message
 
     public byte[] getJMSCorrelationIDAsBytes() throws JMSException
     {
-        return correlationId;
+        if(null == correlationId) return null;
+        try
+        {
+            return correlationId.getBytes("ISO-8859-1");
+        }
+        catch(UnsupportedEncodingException exc)
+        {
+            throw new JMSException(exc.getMessage());
+        }
     }
 
     public void setJMSCorrelationIDAsBytes(byte[] correlationId) throws JMSException
     {
-        this.correlationId = (byte[])ArrayUtil.copyArray(correlationId);
+        try
+        {
+            if(null == correlationId)
+            {
+                this.correlationId = null;
+            }
+            else
+            {
+                this.correlationId = new String(correlationId, "ISO-8859-1");
+            }
+        }
+        catch(UnsupportedEncodingException exc)
+        {
+            throw new JMSException(exc.getMessage());
+        }
     }
 
     public void setJMSCorrelationID(String correlationId) throws JMSException
     {
-        this.correlationId = (byte[])ArrayUtil.copyArray(correlationId.getBytes());
+        this.correlationId = correlationId;
     }
 
     public String getJMSCorrelationID() throws JMSException
     {
-        return new String(correlationId);
+        return correlationId;
     }
 
     public Destination getJMSReplyTo() throws JMSException
