@@ -73,17 +73,7 @@ fit the needs of Mockrunner. The corresponding classes are in a different packag
 than the original ActiveMQ classes, so you should not face classloading problems
 when using ActiveMQ in your project.
 
-Mockrunner depends on some third-party libraries. Most of them are included
-in the release. Not included are the following libraries.
-You have to download them. Please add the specified jars to the classpath:
-
-Xerces XML Parser 2.0.0 (or higher):
-http://xml.apache.org/xerces2-j/index.html
-xml-apis.jar
-xercesImpl.jar
-
-The following libraries are included in the Mockrunner release. Just add them 
-to the classpath. 
+Mockrunner depends on some third-party libraries.  Just add them to the classpath. 
 If you extend one of the test adapters (e.g. JDBCTestCaseAdapter), you have 
 to add all third-party libraries to the classpath, because the base class 
 for all adapters, BaseTestCase, depends on them. If you only use one test 
@@ -97,6 +87,11 @@ In this case you don't have to add all libraries, just those that are
 related to the test module you use.
 
 The third-party libraries included in the Mockrunner release are:
+
+Xerces XML Parser 2.6.2:
+http://xml.apache.org/xerces2-j/index.html
+xml-apis.jar
+xercesImpl.jar
 
 Struts 1.2.4:
 http://jakarta.apache.org/struts
