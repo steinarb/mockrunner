@@ -36,6 +36,7 @@ public abstract class BaseTestCase extends TestCase
     protected void tearDown() throws Exception
     {
         super.tearDown();
+        jdbcMockFactory.restoreDrivers();
         webMockFactory = null;
         jdbcMockFactory = null;
         ejbMockFactory = null;

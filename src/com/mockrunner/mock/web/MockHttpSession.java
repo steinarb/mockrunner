@@ -32,37 +32,37 @@ public class MockHttpSession implements HttpSession
         sessionId = new Double(Math.random()).toString();
     }
 
-    public void setupServletContext(ServletContext servletContext)
+    public synchronized void setupServletContext(ServletContext servletContext)
     {
         this.servletContext = servletContext;
     }
 
-    public ServletContext getServletContext()
+    public synchronized ServletContext getServletContext()
     {
         return servletContext;
     }
     
-    public boolean isValid()
+    public synchronized boolean isValid()
     {
         return isValid;
     }
 
-    public boolean isNew()
+    public synchronized boolean isNew()
     {
         return isNew;
     }
 
-    public void setUpIsNew(boolean isNew)
+    public synchronized void setUpIsNew(boolean isNew)
     {
         this.isNew = isNew;
     }
 
-    public long getCreationTime()
+    public synchronized long getCreationTime()
     {
         return creationTime;
     }
 
-    public void invalidate()
+    public synchronized void invalidate()
     {
         Map clone = new HashMap(attributes);
         Iterator keys = clone.keySet().iterator();
@@ -73,69 +73,69 @@ public class MockHttpSession implements HttpSession
         isValid = false;
     }
 
-    public String getId()
+    public synchronized String getId()
     {
         return sessionId;
     }
 
-    public Object getValue(String key)
+    public synchronized Object getValue(String key)
     {
         if (!isValid) throw new IllegalStateException("session invalid");
         return getAttribute(key);
     }
 
-    public String[] getValueNames()
+    public synchronized String[] getValueNames()
     {
         if (!isValid) throw new IllegalStateException("session invalid");
         Vector attKeys = new Vector(attributes.keySet());
         return (String[]) attKeys.toArray();
     }
 
-    public void putValue(String key, Object value)
+    public synchronized void putValue(String key, Object value)
     {
         if (!isValid) throw new IllegalStateException("session invalid");
         setAttribute(key, value);
     }
 
-    public void removeValue(String key)
+    public synchronized void removeValue(String key)
     {
         if (!isValid) throw new IllegalStateException("session invalid");
         removeAttribute(key);
     }
     
-    public void clearAttributes()
+    public synchronized void clearAttributes()
     {
         attributes.clear();
     }
 
-    public Object getAttribute(String key)
+    public synchronized Object getAttribute(String key)
     {
         if (!isValid) throw new IllegalStateException("session invalid");
         return attributes.get(key);
     }
 
-    public Enumeration getAttributeNames()
+    public synchronized Enumeration getAttributeNames()
     {
         if (!isValid) throw new IllegalStateException("session invalid");
         Vector attKeys = new Vector(attributes.keySet());
         return attKeys.elements();
     }
 
-    public void removeAttribute(String key)
+    public synchronized void removeAttribute(String key)
     {
         if (!isValid) throw new IllegalStateException("session invalid");
         callValueUnboundMethod(key, attributes.get(key));
         attributes.remove(key);
     }
 
-    public void setAttribute(String key, Object value)
+    public synchronized void setAttribute(String key, Object value)
     {
         if (!isValid) throw new IllegalStateException("session invalid");
         callValueBoundMethod(key, value);
         attributes.put(key, value);
     }
 
-    private void callValueBoundMethod(String key, Object value)
+    private synchronized void callValueBoundMethod(String key, Object value)
     {
         if (value instanceof HttpSessionBindingListener)
         {
@@ -144,7 +144,7 @@ public class MockHttpSession implements HttpSession
         }
     }
 
-    private void callValueUnboundMethod(String key, Object value)
+    private synchronized void callValueUnboundMethod(String key, Object value)
     {
         if (value instanceof HttpSessionBindingListener)
         {
@@ -153,22 +153,22 @@ public class MockHttpSession implements HttpSession
         }
     }
     
-    public long getLastAccessedTime()
+    public synchronized long getLastAccessedTime()
     {
         return System.currentTimeMillis();
     }
     
-    public void setMaxInactiveInterval(int maxInactiveInterval)
+    public synchronized void setMaxInactiveInterval(int maxInactiveInterval)
     {
         this.maxInactiveInterval = maxInactiveInterval;
     }
 
-    public int getMaxInactiveInterval()
+    public synchronized int getMaxInactiveInterval()
     {
         return maxInactiveInterval;
     }
 
-    public HttpSessionContext getSessionContext()
+    public synchronized HttpSessionContext getSessionContext()
     {
         return new MockSessionContext();
     }

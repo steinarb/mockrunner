@@ -1,6 +1,10 @@
 
 mockrunner-0.2.5:
 
+- added JDBC Driver preserve mechanism to JDBCMockObjectFactory
+- synchronized MockServletContext, MockServletConfig and MockHttpSession
+  to make them thread safe. Note, that the other mock objects are
+  not thread safe at the moment.
 - updated nekohtml.jar from 0.8.2 to 0.8.3
 
 mockrunner-0.2.1:

@@ -16,6 +16,19 @@ import com.mockrunner.jms.MessageManager;
 
 /**
  * Mock implementation of JMS <code>Session</code>.
+ * 
+ * Please note that this implementation does not
+ * implement transaction isolation at the moment.
+ * Messages are immediately sent. If acknowledge
+ * mode is AUTO_ACKNOWLEDGE or DUPS_OK_ACKNOWLEDGE,
+ * the message will be automatically acknowledged,
+ * otherwise, it will not be acknowledged. According
+ * to JMS specification, the acknowledged mode must
+ * be ignored for transacted session. This is currently
+ * not implemented. However, the framework keeps track if a
+ * transaction is committed or rolled back, so
+ * you can test this and rely on the container for
+ * the rest.
  */
 public class MockSession implements Session
 {

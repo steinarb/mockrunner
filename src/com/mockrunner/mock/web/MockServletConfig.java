@@ -22,37 +22,37 @@ public class MockServletConfig implements ServletConfig
         initParameters = new HashMap();
     }
 
-    public String getServletName()
+    public synchronized String getServletName()
     {
         return servletName;
     }
     
-    public void setServletName(String servletName)
+    public synchronized void setServletName(String servletName)
     {
         this.servletName = servletName;
     }
 
-    public ServletContext getServletContext()
+    public synchronized ServletContext getServletContext()
     {
         return servletContext;
     }
     
-    public void setServletContext(ServletContext servletContext)
+    public synchronized void setServletContext(ServletContext servletContext)
     {
         this.servletContext = servletContext;
     }
 
-    public String getInitParameter(String name)
+    public synchronized String getInitParameter(String name)
     {
         return (String)initParameters.get(name);
     }
     
-    public void setInitParameter(String name, String value) 
+    public synchronized void setInitParameter(String name, String value) 
     {
         initParameters.put(name, value);
     }
 
-    public Enumeration getInitParameterNames()
+    public synchronized Enumeration getInitParameterNames()
     {
         return new Vector(initParameters.keySet()).elements();
     }
