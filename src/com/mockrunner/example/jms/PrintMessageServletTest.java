@@ -91,7 +91,7 @@ public class PrintMessageServletTest extends JMSTestCaseAdapter
         servletModule.doGet();
         servletModule.verifyOutputContains("successfully");
         servletModule.clearOutput();
-        getCurrentQueueConnection().setJMSException(new JMSException("TestException"));
+        getJMSMockObjectFactory().getMockQueueConnectionFactory().setJMSException(new JMSException("TestException"));
         servletModule.doGet();
         servletModule.verifyOutputContains("error");
     }

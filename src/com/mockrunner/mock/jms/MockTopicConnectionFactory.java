@@ -16,16 +16,19 @@ public class MockTopicConnectionFactory implements TopicConnectionFactory
 {
     private DestinationManager destinationManager;
     private List topicConnections;
+    private JMSException exception;
     
     public MockTopicConnectionFactory(DestinationManager destinationManager)
     {
         this.destinationManager = destinationManager;
         topicConnections = new ArrayList();
+        exception = null;
     }
     
     public TopicConnection createTopicConnection() throws JMSException
     {
-        TopicConnection connection = new MockTopicConnection(destinationManager);
+        MockTopicConnection connection = new MockTopicConnection(destinationManager);
+        connection.setJMSException(exception);
         topicConnections.add(connection);
         return connection;
     }
@@ -33,6 +36,19 @@ public class MockTopicConnectionFactory implements TopicConnectionFactory
     public TopicConnection createTopicConnection(String name, String password) throws JMSException
     {
         return createTopicConnection();
+    }
+    
+    /**
+     * Set an exception that will be passed to all
+     * created connections. This can be used to
+     * simulate server errors. Check out
+     * {@link MockConnection#setJMSException}
+     * for details.
+     * @param exception the exception
+     */
+    public void setJMSException(JMSException exception)
+    {
+        this.exception = exception;
     }
     
     /**

@@ -8,11 +8,13 @@ import javax.jms.QueueSession;
 import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueConnection;
+import com.mockrunner.mock.jms.MockQueueConnectionFactory;
 import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
 import com.mockrunner.mock.jms.MockQueueSession;
 import com.mockrunner.mock.jms.MockTopic;
 import com.mockrunner.mock.jms.MockTopicConnection;
+import com.mockrunner.mock.jms.MockTopicConnectionFactory;
 import com.mockrunner.mock.jms.MockTopicPublisher;
 import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
@@ -30,6 +32,62 @@ public class MockConnectionTest extends TestCase
         DestinationManager manager = new DestinationManager();
         queueConnection = new MockQueueConnection(manager);
         topicConnection = new MockTopicConnection(manager);
+    }
+    
+    public void testFactories() throws Exception
+    {
+        MockQueueConnectionFactory queueFactory = new MockQueueConnectionFactory(new DestinationManager());
+        MockQueueConnection queueConnection1 = (MockQueueConnection)queueFactory.createQueueConnection();
+        MockQueueConnection queueConnection2 = (MockQueueConnection)queueFactory.createQueueConnection();
+        JMSException exception = new JMSException("");
+        queueFactory.setJMSException(exception);
+        MockQueueConnection queueConnection3 = (MockQueueConnection)queueFactory.createQueueConnection("", "");
+        assertEquals(queueConnection1, queueFactory.getQueueConnection(0));
+        assertEquals(queueConnection2, queueFactory.getQueueConnection(1));
+        assertEquals(queueConnection3, queueFactory.getQueueConnection(2));
+        assertEquals(queueConnection3, queueFactory.getLatestQueueConnection());
+        assertNull(queueFactory.getQueueConnection(3));
+        queueConnection1.throwJMSException();
+        queueConnection2.throwJMSException();
+        try
+        {
+            queueConnection3.throwJMSException();
+            fail();
+        }
+        catch(JMSException exc)
+        {
+            assertEquals(exc, exception);
+        }
+        MockTopicConnectionFactory topicFactory = new MockTopicConnectionFactory(new DestinationManager());
+        topicFactory.setJMSException(exception);
+        MockTopicConnection topicConnection1 = (MockTopicConnection)topicFactory.createTopicConnection(null, null);
+        MockTopicConnection topicConnection2 = (MockTopicConnection)topicFactory.createTopicConnection();
+        topicFactory.setJMSException(null);
+        MockTopicConnection topicConnection3 = (MockTopicConnection)topicFactory.createTopicConnection();
+        assertEquals(topicConnection1, topicFactory.getTopicConnection(0));
+        assertEquals(topicConnection2, topicFactory.getTopicConnection(1));
+        assertEquals(topicConnection3, topicFactory.getTopicConnection(2));
+        assertEquals(topicConnection3, topicFactory.getLatestTopicConnection());
+        assertNull(topicFactory.getTopicConnection(3));
+        try
+        {
+            topicConnection1.throwJMSException();
+            fail();
+        }
+        catch(JMSException exc)
+        {
+            assertEquals(exc, exception);
+        }
+        try
+        {
+            topicConnection2.throwJMSException();
+            fail();
+        }
+        catch(JMSException exc)
+        {
+            assertEquals(exc, exception);
+        }
+        topicConnection3.throwJMSException();
     }
     
     public void testClose() throws Exception

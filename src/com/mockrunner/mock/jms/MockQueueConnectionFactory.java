@@ -16,16 +16,19 @@ public class MockQueueConnectionFactory implements QueueConnectionFactory
 {
     private DestinationManager destinationManager;
     private List queueConnections;
+    private JMSException exception;
     
     public MockQueueConnectionFactory(DestinationManager destinationManager)
     {
         queueConnections = new ArrayList();
         this.destinationManager = destinationManager;
+        exception = null;
     }
     
     public QueueConnection createQueueConnection() throws JMSException
     {
-        QueueConnection connection = new MockQueueConnection(destinationManager);
+        MockQueueConnection connection = new MockQueueConnection(destinationManager);
+        connection.setJMSException(exception);
         queueConnections.add(connection);
         return connection;
     }
@@ -33,6 +36,19 @@ public class MockQueueConnectionFactory implements QueueConnectionFactory
     public QueueConnection createQueueConnection(String name, String password) throws JMSException
     {
         return createQueueConnection();
+    }
+    
+    /**
+     * Set an exception that will be passed to all
+     * created connections. This can be used to
+     * simulate server errors. Check out
+     * {@link MockConnection#setJMSException}
+     * for details.
+     * @param exception the exception
+     */
+    public void setJMSException(JMSException exception)
+    {
+        this.exception = exception;
     }
     
     /**
