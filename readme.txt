@@ -7,14 +7,14 @@ The JDBC test framework can be used standalone or in conjunction with MockEJB
 Mockrunner extends JUnit and simulates the necessary behaviour without calling 
 the real infrastructure. It does not need a running application server or
 a database. Furthermore it does not call the webcontainer or the
-Struts ActionServlet. This makes it very fast and enables the user to 
-manipulate all involved classes and mockobjects in all steps of the test 
-making it possible to write very sophisticated unit-tests for J2EE based 
-applications without any overhead.
+Struts ActionServlet. It is very fast and enables the user to manipulate all 
+involved classes and mockobjects in all steps of the test. 
+It can be used to write very sophisticated unit-tests for J2EE based 
+applications without any overhead. 
 
 Mockrunner does not read any configuration file like web.xml 
 or struts-config.xml. You can specify all parameters using the 
-Mockrunner API. This makes it possible to test servlets, filters, tags
+Mockrunner API. So it is possible to test servlets, filters, tags
 and Struts actions as reusable components regardless of the settings 
 you use in one or another application. It is not possible to test the
 definitions in the configuration files. If you want to do that you can
