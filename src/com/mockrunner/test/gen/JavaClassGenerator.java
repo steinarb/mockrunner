@@ -144,19 +144,12 @@ public class JavaClassGenerator
         for(int ii = 0; ii < methods.size(); ii++)
         {
             MethodDeclaration declaration = (MethodDeclaration)methods.get(ii);
-            assembler.appendNewLine();
-            assembler.appendBlockComment(declaration.getCommentLines());
+            appendMethodHeader(assembler, declaration);
             String[] modifiers = prepareModifiers(declaration.getModifier());
-            String[] argumentTypes = prepareArgumentTypes(declaration.getArguments());
             String returnType = ClassUtil.getClassName(declaration.getReturnType());
+            String[] argumentTypes = prepareArgumentTypes(declaration.getArguments());
             assembler.appendMethodDeclaration(modifiers, returnType, declaration.getName(), argumentTypes, declaration.getArgumentNames());
-            assembler.appendIndent();
-            assembler.appendLeftBrace();
-            assembler.appendNewLine();
-            appendCodeLines(assembler, declaration.getCodeLines());
-            assembler.appendIndent();
-            assembler.appendRightBrace();
-            assembler.appendNewLine();
+            appendMethodBody(assembler, declaration);
         }
     }
     
@@ -165,20 +158,30 @@ public class JavaClassGenerator
         for(int ii = 0; ii < constructors.size(); ii++)
         {
             ConstructorDeclaration declaration = (ConstructorDeclaration)constructors.get(ii);
-            assembler.appendNewLine();
-            assembler.appendBlockComment(declaration.getCommentLines());
+            appendMethodHeader(assembler, declaration);
             String[] argumentTypes = prepareArgumentTypes(declaration.getArguments());
             assembler.appendConstructorDeclaration(className, argumentTypes, declaration.getArgumentNames());
-            assembler.appendIndent();
-            assembler.appendLeftBrace();
-            assembler.appendNewLine();
-            appendCodeLines(assembler, declaration.getCodeLines());
-            assembler.appendIndent();
-            assembler.appendRightBrace();
-            assembler.appendNewLine();
+            appendMethodBody(assembler, declaration);
         }
     }
     
+    private void appendMethodHeader(JavaLineAssembler assembler, ConstructorDeclaration declaration)
+    {
+        assembler.appendNewLine();
+        assembler.appendBlockComment(declaration.getCommentLines());
+    }
+
+    private void appendMethodBody(JavaLineAssembler assembler, ConstructorDeclaration declaration)
+    {
+        assembler.appendIndent();
+        assembler.appendLeftBrace();
+        assembler.appendNewLine();
+        appendCodeLines(assembler, declaration.getCodeLines());
+        assembler.appendIndent();
+        assembler.appendRightBrace();
+        assembler.appendNewLine();
+    }
+
     private void appendCodeLines(JavaLineAssembler assembler, String[] codeLines)
     {
         assembler.setIndentLevel(2);
