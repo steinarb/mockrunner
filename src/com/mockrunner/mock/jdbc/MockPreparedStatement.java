@@ -22,14 +22,12 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 
 import com.mockobjects.sql.MockResultSetMetaData;
-import com.mockrunner.util.CollectionUtil;
 
 /**
  * Mock implementation of <code>PreparedStatement</code>.
@@ -135,7 +133,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return executeQuery(paramObjects);
     }
     
-    private ResultSet executeQuery(Map params) throws SQLException
+    protected ResultSet executeQuery(Map params) throws SQLException
     {
         MockResultSet result = resultSetHandler.getResultSet(getSQL(), params);
         if(null != result)
@@ -151,7 +149,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return executeUpdate(paramObjects);
     }
     
-    private int executeUpdate(Map params) throws SQLException
+    protected int executeUpdate(Map params) throws SQLException
     {
         Integer updateCount = resultSetHandler.getUpdateCount(getSQL(), params);
         if(null != updateCount)
@@ -163,15 +161,20 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     }
     
     public int[] executeBatch() throws SQLException
+    {        
+        return executeBatch(this.batchParameters);
+    }
+    
+    protected int[] executeBatch(List batchParams) throws SQLException
     {
-        int[] results = new int[batchParameters.size()];
+        int[] results = new int[batchParams.size()];
         if(isQuery(getSQL()))
         {
             throw new BatchUpdateException("SQL " + getSQL() + " returned a ResultSet.", null);
         }
         for(int ii = 0; ii < results.length; ii++)
         {
-            Map currentParameters = (Map)batchParameters.get(ii);
+            Map currentParameters = (Map)batchParams.get(ii);
             results[ii] = executeUpdate(currentParameters);
         }
         return results;

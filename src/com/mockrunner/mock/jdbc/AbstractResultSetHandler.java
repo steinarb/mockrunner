@@ -156,8 +156,7 @@ public abstract class AbstractResultSetHandler
      * Returns the first update count that matches the
      * specified SQL string. Please note that you can modify
      * the search parameters with {@link #setCaseSensitive} and 
-     * {@link #setExactMatch}. Returns <code>null</code> if no
-     * return value is present for the specified SQL string.
+     * {@link #setExactMatch}.
      * @param sql the SQL string
      * @return the corresponding update count
      */

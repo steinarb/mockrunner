@@ -15,7 +15,7 @@ import com.mockrunner.util.SearchUtil;
  * that support parameters, i.e. <code>PreparedStatement</code>
  * and <code>CallableStatement</code>.
  */
-abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandler
+public abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandler
 {
     private boolean exactMatchParameter = false;
     private Map resultSetsForStatement = new HashMap();
@@ -38,10 +38,10 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
     /**
      * Returns the first update count that matches the
      * specified SQL string and the specified parameters. 
-     * Please note that you can modify the search parameters with 
-     * {@link #setCaseSensitive} and {@link #setExactMatch}. 
-     * Returns <code>null</code> if no return value is present
-     * for the specified SQL string.
+     * Please note that you can modify the search parameters for 
+     * the SQL string with {@link #setCaseSensitive} and
+     * {@link #setExactMatch} and the search parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param parameters the parameters
      * @return the corresponding update count
@@ -85,7 +85,7 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
         return null;
     }
 
-    private boolean doParameterMatch(Map expectedParameters, Map actualParameters)
+    protected boolean doParameterMatch(Map expectedParameters, Map actualParameters)
     {
         if(exactMatchParameter)
         {
@@ -147,8 +147,8 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
      * parameter. So <code>parameters[0]</code> maps to the
      * parameter with index 1.
      * @param sql the SQL string
-     * @param paramters the parameters
      * @param resultSet the corresponding {@link MockResultSet}
+     * @param paramters the parameters
      */
     public void prepareResultSet(String sql, MockResultSet resultSet, Object[] parameters)
     {
@@ -164,8 +164,8 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
      * parameter. So <code>parameters.get(0)</code> maps to the
      * parameter with index 1.
      * @param sql the SQL string
-     * @param paramters the parameters
      * @param resultSet the corresponding {@link MockResultSet}
+     * @param paramters the parameters
      */
     public void prepareResultSet(String sql, MockResultSet resultSet, List parameters)
     {
@@ -185,8 +185,8 @@ abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandle
      * is the index of the parameter. In the case of a <code>CallableStatement</code>
      * there are allowed also <code>String</code> keys for named parameters.
      * @param sql the SQL string
-     * @param paramters the parameters
      * @param resultSet the corresponding {@link MockResultSet}
+     * @param paramters the parameters
      */
     public void prepareResultSet(String sql, MockResultSet resultSet, Map parameters)
     {
