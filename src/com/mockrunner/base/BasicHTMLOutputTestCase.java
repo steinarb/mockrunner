@@ -4,17 +4,17 @@ import java.io.BufferedReader;
 
 /**
  * Delegator for {@link HTMLOutputModule}. The corresponding
- * adapters extend this class. This class is used for the standard
- * adapter versions, that extend {@link BaseTestCase}.
+ * adapters extend this class. This class is used for the basic
+ * adapter versions.
  */
-public abstract class HTMLOutputTestCase extends WebTestCase
+public abstract class BasicHTMLOutputTestCase extends BasicWebTestCase
 {
-    public HTMLOutputTestCase()
+    public BasicHTMLOutputTestCase()
     {
 
     }
 
-    public HTMLOutputTestCase(String arg0)
+    public BasicHTMLOutputTestCase(String arg0)
     {
         super(arg0);
     }

@@ -1,18 +1,20 @@
 package com.mockrunner.base;
 
+import junit.framework.TestCase;
+
 /**
  * Delegator for {@link WebTestModule}. The corresponding
- * adapters extend this class. This class is used for the standard
- * adapter versions, that extend {@link BaseTestCase}.
+ * adapters extend this class. This class is used for the basic
+ * adapter versions.
  */
-public abstract class WebTestCase extends BaseTestCase
+public abstract class BasicWebTestCase extends TestCase
 {
-    public WebTestCase()
+    public BasicWebTestCase()
     {
 
     }
 
-    public WebTestCase(String arg0)
+    public BasicWebTestCase(String arg0)
     {
         super(arg0);
     }
