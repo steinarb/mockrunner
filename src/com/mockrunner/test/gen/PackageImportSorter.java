@@ -1,10 +1,11 @@
 package com.mockrunner.test.gen;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
+import com.mockrunner.util.StringUtil;
 
 public class PackageImportSorter
 {
@@ -21,13 +22,67 @@ public class PackageImportSorter
     
     public List sortBlocks(List imports)
     {
-        List importLines = new ArrayList(imports);
         List groups = new ArrayList();
         for(int ii = 0; ii < order.length; ii++)
         {
             groups.add(new Group(order[ii]));
         }
+        for(int ii = 0; ii < imports.size(); ii++)
+        {
+            String currentImport = (String)imports.get(ii);
+            classifyImport(groups, currentImport);
+        }
         return null;
+    }
+    
+    private void classifyImport(List groups, String currentImport)
+    {
+        int maxMatchingCharsBefore = 0;
+        int maxMatchingCharsAfter = 0;
+        List beforeGroups = new ArrayList();
+        List afterGroups = new ArrayList();
+        for(int ii = 0; ii < groups.size(); ii++)
+        {
+            Group currentGroup = (Group)groups.get(ii);
+            int match = determineGroupMatch(currentGroup, currentImport);
+            if(0 == match)
+            {
+                currentGroup.addToActualGroup(currentImport);
+                return;
+            }
+            int matchingChars = StringUtil.compare(currentImport, currentGroup.getGroupName());
+            if(match < 0)
+            {
+                if(matchingChars >= maxMatchingCharsBefore)
+                {
+                    if(matchingChars > maxMatchingCharsBefore)
+                    {
+                        beforeGroups.clear();
+                    }
+                    maxMatchingCharsBefore = matchingChars;
+                    beforeGroups.add(currentGroup);
+                }
+                
+            }
+            else
+            {
+                if(matchingChars >= maxMatchingCharsAfter)
+                {
+                    if(matchingChars > maxMatchingCharsAfter)
+                    {
+                        afterGroups.clear();
+                    }
+                    maxMatchingCharsAfter = matchingChars;
+                    afterGroups.add(currentGroup);
+                }
+            }
+        }
+    }
+    
+    private int determineGroupMatch(Group group, String currentImport)
+    {
+        if(currentImport.startsWith(group.getGroupName())) return 0;
+        return currentImport.compareTo(group.getGroupName());
     }
     
     private class Group
