@@ -26,7 +26,7 @@ public class BillManagerSessionTest extends EJBTestCaseAdapter
         super.setUp();
         setInterfacePackage("com.mockrunner.example.ejb.interfaces");
         deploySessionBean("com/mockrunner/example/BillManagerSession", BillManagerSessionBean.class, TransactionPolicy.REQUIRED);
-        bean = (BillManagerSession)lookupBean("com/mockrunner/example/BillManagerSession");
+        bean = (BillManagerSession)createBean("com/mockrunner/example/BillManagerSession");
         deployEntityBean("java:comp/env/ejb/BillEntity", BillEntityBean.class, TransactionPolicy.REQUIRED);
         
     }
@@ -36,7 +36,9 @@ public class BillManagerSessionTest extends EJBTestCaseAdapter
         AspectSystem aspectSystem =  AspectSystemFactory.getAspectSystem();
         FindUnpaidInterceptor interceptor = new FindUnpaidInterceptor();
         aspectSystem.add(new MethodPatternPointcut("BillEntity\\.findUnpaid"), interceptor);
-        
+        //BillEntityHome entityHome = (BillEntityHome)lookup("java:comp/env/ejb/BillEntity");
+        //System.out.println(entityHome.create(new Integer(1)));
+        //System.out.println(createBean("java:comp/env/ejb/BillEntity", "create", new Object[] {new Integer(1)}));
     }
     
     private class FindUnpaidInterceptor implements Interceptor

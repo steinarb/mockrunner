@@ -409,7 +409,15 @@ public class EJBTestModule
     }
     
     /**
-     * Lookup an EJB. The method looks up the home interface, calls
+     * @deprecated use {@link #createBean(String)}
+     */
+    public Object lookupBean(String name)
+    {
+        return createBean(name);
+    }
+    
+    /**
+     * Create an EJB. The method looks up the home interface, calls
      * the <code>create</code> method and returns the result, which
      * you can cast to the remote interface. This method only works
      * with <code>create</code> methods that have an empty parameter list.
@@ -424,13 +432,21 @@ public class EJBTestModule
      * @return the bean
      * @throws RuntimeException in case of error
      */
-    public Object lookupBean(String name)
+    public Object createBean(String name)
     {
-        return lookupBean(name, new Object[0]);
+        return createBean(name, new Object[0]);
     }
     
     /**
-     * Lookup an EJB. The method looks up the home interface, calls
+     * @deprecated use {@link #createBean(String, Object[])}
+     */
+    public Object lookupBean(String name, Object[] parameters)
+    {
+        return createBean(name, parameters);
+    }
+    
+    /**
+     * Create an EJB. The method looks up the home interface, calls
      * the <code>create</code> method with the specified parameters
      * and returns the result, which you can cast to the remote interface.
      * The <code>create</code> method must have the name <code>create</code>
@@ -447,13 +463,21 @@ public class EJBTestModule
      * @return the bean 
      * @throws RuntimeException in case of error
      */
-    public Object lookupBean(String name, Object[] parameters)
+    public Object createBean(String name, Object[] parameters)
     {
-        return lookupBean(name, "create", parameters);
+        return createBean(name, "create", parameters);
     }
     
     /**
-     * Lookup an EJB. The method looks up the home interface, calls
+     * @deprecated use {@link #createBean(String, String, Object[])}
+     */
+    public Object lookupBean(String name, String createMethod, Object[] parameters)
+    {
+        return createBean(name, createMethod, parameters);
+    }
+    
+    /**
+     * Create an EJB. The method looks up the home interface, calls
      * the <code>create</code> method with the specified parameters
      * and returns the result, which you can cast to the remote interface.
      * This method works with the mock container but may fail with
@@ -469,14 +493,121 @@ public class EJBTestModule
      * @return the bean 
      * @throws RuntimeException in case of error
      */
-    public Object lookupBean(String name, String createMethod, Object[] parameters)
+    public Object createBean(String name, String createMethod, Object[] parameters)
+    {
+        Object home = lookupHome(name);
+        return invokeCreate(home, createMethod, parameters);
+    }
+    
+    /**
+     * Create an entity EJB. The method looks up the home interface, calls
+     * the <code>create</code> method and returns the result, which
+     * you can cast to the remote interface. This method only works
+     * with <code>create</code> methods that have an empty parameter list.
+     * The <code>create</code> method must have the name <code>create</code>
+     * with no postfix.
+     * It works with the mock container but may fail with a real remote container.
+     * This method throws a <code>RuntimeException</code> if no object with the 
+     * specified name can be found. If the found object is no EJB home interface,
+     * or if the corresponding <code>create</code> method cannot be found, this
+     * method returns <code>null</code>.
+     * The created entity EJB is added to the mock database automatically
+     * using the provided primary key.
+     * @param name the name of the bean
+     * @param primaryKey the primary key
+     * @return the bean
+     * @throws RuntimeException in case of error
+     */
+    public Object createEntityBean(String name, Object primaryKey)
+    {
+        return createEntityBean(name, new Object[0], primaryKey);
+    }
+    
+    /**
+     * Create an entity EJB. The method looks up the home interface, calls
+     * the <code>create</code> method with the specified parameters
+     * and returns the result, which you can cast to the remote interface.
+     * The <code>create</code> method must have the name <code>create</code>
+     * with no postfix.
+     * This method works with the mock container but may fail with
+     * a real remote container.
+     * This method throws a <code>RuntimeException</code> if no object with the 
+     * specified name can be found. If the found object is no EJB home interface,
+     * or if the corresponding <code>create</code> method cannot be found, this
+     * method returns <code>null</code>.
+     * The created entity EJB is added to the mock database automatically
+     * using the provided primary key.
+     * @param name the name of the bean
+     * @param parameters the parameters, <code>null</code> parameters are not allowed,
+     *  primitive types are automatically unwrapped
+     * @param primaryKey the primary key
+     * @return the bean 
+     * @throws RuntimeException in case of error
+     */
+    public Object createEntityBean(String name, Object[] parameters, Object primaryKey)
+    {
+        return createEntityBean(name, "create", new Object[0], primaryKey);
+    }
+    
+    /**
+     * Create an entity EJB. The method looks up the home interface, calls
+     * the <code>create</code> method with the specified parameters
+     * and returns the result, which you can cast to the remote interface.
+     * This method works with the mock container but may fail with
+     * a real remote container.
+     * This method throws a <code>RuntimeException</code> if no object with the 
+     * specified name can be found. If the found object is no EJB home interface,
+     * or if the corresponding <code>create</code> method cannot be found, this
+     * method returns <code>null</code>.
+     * The created entity EJB is added to the mock database automatically
+     * using the provided primary key.
+     * @param name the name of the bean
+     * @param createMethod the name of the create method
+     * @param parameters the parameters, <code>null</code> parameters are not allowed,
+     *  primitive types are automatically unwrapped
+     * @param primaryKey the primary key
+     * @return the bean 
+     * @throws RuntimeException in case of error
+     */
+    public Object createEntityBean(String name, String createMethod, Object[] parameters, Object primaryKey)
+    {
+        Object home = lookupHome(name);
+        Object remote = invokeCreate(home, createMethod, parameters);
+        Class[] interfaces = home.getClass().getInterfaces();
+        Class homeInterface = getHomeInterfaceClass(interfaces);
+        if(null != homeInterface)
+        {
+            mockFactory.getMockContainer().getEntityDatabase().add(homeInterface, primaryKey, remote);
+        }
+        return remote;
+    }
+    
+    private Class getHomeInterfaceClass(Class[] interfaces)
+    {
+        for(int ii = 0; ii < interfaces.length; ii++)
+        {
+            Class current = interfaces[ii];
+            if(EJBHome.class.isAssignableFrom(current) || EJBLocalHome.class.isAssignableFrom(current))
+            {
+                 return current;
+            }
+        }
+        return null;
+    }
+
+    private Object lookupHome(String name)
     {
         Object object = lookup(name);
         if(null == object) return null;
         if(!(object instanceof EJBHome || object instanceof EJBLocalHome)) return null;
+        return object;
+    }
+    
+    private Object invokeCreate(Object home, String createMethod, Object[] parameters)
+    {
         try
         {
-            return MethodUtils.invokeMethod(object, createMethod, parameters);
+            return MethodUtils.invokeMethod(home, createMethod, parameters);
         }
         catch(Exception exc)
         {

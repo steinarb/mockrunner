@@ -241,14 +241,24 @@ public class EJBTestCaseAdapter extends BaseTestCase
 
     /**
      * Delegates to {@link EJBTestModule#lookupBean(String)}
+     * @deprecated use {@link #createBean(String)}
      */
     protected Object lookupBean(String name)
     {
         return ejbTestModule.lookupBean(name);
     }
+    
+    /**
+     * Delegates to {@link EJBTestModule#createBean(String)}
+     */
+    protected Object createBean(String name)
+    {
+        return ejbTestModule.createBean(name);
+    }
 
     /**
      * Delegates to {@link EJBTestModule#lookupBean(String, Object[])}
+     * @deprecated use {@link #createBean(String, Object[])}
      */
     protected Object lookupBean(String name, Object[] parameters)
     {
@@ -256,13 +266,54 @@ public class EJBTestCaseAdapter extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link EJBTestModule#createBean(String, Object[])}
+     */
+    protected Object createBean(String name, Object[] parameters)
+    {
+        return ejbTestModule.createBean(name, parameters);
+    }
+    
+    /**
      * Delegates to {@link EJBTestModule#lookupBean(String, String, Object[])}
+     * @deprecated use {@link #createBean(String, String, Object[])}
      */
     protected Object lookupBean(String name, String createMethod, Object[] parameters)
     {
         return ejbTestModule.lookupBean(name, createMethod, parameters);
     }
-
+    
+    /**
+     * Delegates to {@link EJBTestModule#createBean(String, String, Object[])}
+     */
+    protected Object createBean(String name, String createMethod, Object[] parameters)
+    {
+        return ejbTestModule.createBean(name, createMethod, parameters);
+    }
+    
+    /**
+     * Delegates to {@link EJBTestModule#createEntityBean(String, Object)}
+     */
+    protected Object createEntityBean(String name, Object primaryKey)
+    {
+        return ejbTestModule.createEntityBean(name, primaryKey);
+    }
+    
+    /**
+     * Delegates to {@link EJBTestModule#createEntityBean(String, Object[], Object)}
+     */
+    protected Object createEntityBean(String name, Object[] parameters, Object primaryKey)
+    {
+        return ejbTestModule.createEntityBean(name, parameters, primaryKey);
+    }
+    
+    /**
+     * Delegates to {@link EJBTestModule#createEntityBean(String, String, Object[], Object)}
+     */
+    protected Object createEntityBean(String name, String createMethod, Object[] parameters, Object primaryKey)
+    {
+        return ejbTestModule.createEntityBean(name, createMethod, parameters, primaryKey);
+    }
+    
     /**
      * Delegates to {@link EJBTestModule#resetUserTransaction}
      */

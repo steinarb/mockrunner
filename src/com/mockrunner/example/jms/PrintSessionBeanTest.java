@@ -30,7 +30,7 @@ public class PrintSessionBeanTest extends JMSTestCaseAdapter
         ejbModule = createEJBTestModule();
         ejbModule.setInterfacePackage("com.mockrunner.example.jms.interfaces");
         ejbModule.deploySessionBean("com/mockrunner/example/PrintSession", PrintSessionBean.class, TransactionPolicy.REQUIRED);
-        bean = (PrintSession)ejbModule.lookupBean("com/mockrunner/example/PrintSession");
+        bean = (PrintSession)ejbModule.createBean("com/mockrunner/example/PrintSession");
 		QueueConnectionFactory factory = getJMSMockObjectFactory().getMockQueueConnectionFactory();
 		Queue queue = getDestinationManager().createQueue("testQueue");
 		ejbModule.deployMessageBean("java:/ConnectionFactory", "queue/testQueue", factory, queue, new PrintMessageDrivenBean());
