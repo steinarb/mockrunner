@@ -1,7 +1,9 @@
 
 mockrunner-0.2.8:
 
-- added doHead() to ServletTestModule 
+- added doHead() to ServletTestModule
+- updated nekohtml.jar from 0.9 to 0.9.1
+- namespace processing is fixed in NekoHTML 0.9.1
 
 mockrunner-0.2.7:
 

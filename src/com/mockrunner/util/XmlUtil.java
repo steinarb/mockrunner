@@ -36,7 +36,7 @@ public class XmlUtil
      * @param document the <code>org.jdom.Document</code>
      * @return the body <code>Element</code>
      */
-    public static Element getBodyFragmentJDOMDocument(org.jdom.Document document)
+    public static Element getBodyFragmentFromJDOMDocument(org.jdom.Document document)
     {
         Element element = document.getRootElement().getChild("BODY");
         if(null == element)
@@ -49,6 +49,14 @@ public class XmlUtil
             if(null != childs && childs.size() > 0) return (Element)childs.get(0);
         }
         return null;
+    }
+    
+    /**
+     * @deprecated use {@link #getBodyFragmentFromJDOMDocument}
+     */
+    public static Element getBodyFragmentJDOMDocument(org.jdom.Document document)
+    {
+        return getBodyFragmentFromJDOMDocument(document);
     }
     
     /**
@@ -100,7 +108,6 @@ public class XmlUtil
             config.setProperty("http://cyberneko.org/html/properties/names/elems", "match");
             config.setProperty("http://cyberneko.org/html/properties/names/attrs", "no-change");
             DOMParser parser = new DOMParser(config);
-            parser.setFeature("http://xml.org/sax/features/namespaces", false);
             return parser;
         }
         catch(Exception exc)
