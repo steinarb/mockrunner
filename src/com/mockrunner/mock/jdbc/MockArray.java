@@ -59,7 +59,7 @@ public class MockArray implements Array
         Integer[] firstColumn = new Integer[count];
         for(int ii = 0; ii < count; ii++)
         {
-            firstColumn[ii] = new Integer(ii);
+            firstColumn[ii] = new Integer(ii + 1);
         }
         Object[] secondColumn = ArrayUtil.convertToObjectArray(array);
         secondColumn = (Object[])ArrayUtil.truncateArray(secondColumn, (int)(index - 1), count);
