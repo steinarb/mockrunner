@@ -1,7 +1,8 @@
+- add message selector support to JMS test framework
 - add support for mulitple ResultSet returns
 - add better support of HTML fragments
 - get MultiThreadTestSuite working
 - make MockObjectFactory more generic (custom mock objects)
 - ant integration
 - add more ResultSetFactories (e.g. with type based definitions)
-- add EJBTestModule that utilizes MockEJB
+
