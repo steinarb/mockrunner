@@ -19,6 +19,11 @@ import com.mockrunner.util.common.StringUtil;
 
 /**
  * Util class for tag test framework.
+ * Please note, that the methods of this class take
+ * <code>Object</code> parameters where <code>JspTag</code>
+ * or <code>JspContext</code> would be suitable. The reason is,
+ * that these classes do not exist in J2EE 1.3. This class is
+ * usable with J2EE 1.3 and J2EE 1.4.
  */
 public class TagUtil
 {
@@ -30,12 +35,12 @@ public class TagUtil
      * resp. {@link com.mockrunner.tag.NestedBodyTag} depending on the
      * type of specified tag.
      * @param tag the tag class
-     * @param pageContext the corresponding <code>PageContext</code>
+     * @param pageContext the corresponding <code>PageContext</code> or <code>JspContext</code>
      * @param attributes the attribute map
      * @return the instance of {@link com.mockrunner.tag.NestedTag}
      * @throws IllegalArgumentException if <code>tag</code> is <code>null</code>
      */
-    public static Object createNestedTagInstance(Class tag, PageContext pageContext, Map attributes)
+    public static Object createNestedTagInstance(Class tag, Object pageContext, Map attributes)
     {
         if(null == tag) throw new IllegalArgumentException("tag must not be null");
         Object tagObject;
@@ -57,29 +62,48 @@ public class TagUtil
      * resp. {@link com.mockrunner.tag.NestedBodyTag} depending on the
      * type of specified tag.
      * @param tag the tag
-     * @param pageContext the corresponding <code>PageContext</code>
+     * @param pageContext the corresponding <code>PageContext</code> or <code>JspContext</code>
      * @param attributes the attribute map
      * @return the instance of {@link com.mockrunner.tag.NestedTag}
      * @throws IllegalArgumentException if <code>tag</code> is <code>null</code>
      */
-    public static Object createNestedTagInstance(Object tag, PageContext pageContext, Map attributes)
+    public static Object createNestedTagInstance(Object tag, Object pageContext, Map attributes)
     {
         if(null == tag) throw new IllegalArgumentException("tag must not be null");
         Object nestedTag = null;
         if(tag instanceof BodyTag)
         {
-            nestedTag = new NestedBodyTag((BodyTag)tag, pageContext, attributes);
+            checkPageContext(pageContext);
+            nestedTag = new NestedBodyTag((BodyTag)tag, (PageContext)pageContext, attributes);
         }
         else if(tag instanceof Tag)
         {
-            nestedTag = new NestedStandardTag((Tag)tag, pageContext, attributes);
+            checkPageContext(pageContext);
+            nestedTag = new NestedStandardTag((Tag)tag, (PageContext)pageContext, attributes);
         }
         /*else if(tag instanceof SimpleTag)
         {
-            nestedTag = new NestedSimpleTag((SimpleTag)tag, pageContext, attributes);
+            checkJspContext(pageContext);
+            nestedTag = new NestedSimpleTag((SimpleTag)tag, (JspContext)pageContext, attributes);
         }*/
+        else
+        {
+            throw new IllegalArgumentException("tag must be an instance of Tag or SimpleTag");
+        }
         return nestedTag;
     }
+    
+    private static void checkPageContext(Object pageContext)
+    {
+        if(pageContext instanceof PageContext) return;
+        throw new IllegalArgumentException("pageContext must be an instance of PageContext");
+    }
+    
+    /*private static void checkJspContext(Object pageContext)
+    {
+        if(pageContext instanceof JspContext) return;
+        throw new IllegalArgumentException("pageContext must be an instance of JspContext");
+    }*/
     
     /**
      * Populates the specified attributes to the specified tag. Calls the
@@ -106,8 +130,10 @@ public class TagUtil
     
     /**
      * Handles body evaluation of a tag.
+     * @param bodyList the list of body entries
+     * @param pageContext the corresponding <code>PageContext</code> or <code>JspContext</code>
      */
-    public static void evalBody(List bodyList, PageContext pageContext) throws JspException
+    public static void evalBody(List bodyList, Object pageContext) throws JspException
     {
         for(int ii = 0; ii < bodyList.size(); ii++)
         {
@@ -122,11 +148,26 @@ public class TagUtil
                 int result = ((NestedStandardTag)nextChild).doLifecycle();
                 if(Tag.SKIP_PAGE == result) return;
             }
+            /*else if(nextChild instanceof NestedSimpleTag)
+            {
+                ((NestedSimpleTag)nextChild).doLifecycle();
+            }*/
             else
             {
                 try
                 {
-                    pageContext.getOut().print(nextChild.toString());
+                    if(pageContext instanceof PageContext)
+                    {
+                        ((PageContext)pageContext).getOut().print(nextChild.toString());
+                    }
+                    /*else if(pageContext instanceof JspContext)
+                    {
+                        ((JspContext)pageContext).getOut().print(nextChild.toString());
+                    }*/
+                    else
+                    {
+                        throw new IllegalArgumentException("pageContext must be an instance of JspContext");
+                    }
                 }
                 catch(IOException exc)
                 {

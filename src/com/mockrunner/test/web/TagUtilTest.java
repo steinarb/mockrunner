@@ -24,7 +24,7 @@ public class TagUtilTest extends BaseTestCase
         testMap = new HashMap();
     }
     
-    public void testCreateNestedTagInstanceInvalidParameters()
+    public void testCreateNestedTagInstanceParameters()
     {
         try
         {
@@ -44,6 +44,34 @@ public class TagUtilTest extends BaseTestCase
         {
             //should throw exception
         }
+        try
+        {
+            TagUtil.createNestedTagInstance("abc", pageContext, testMap);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            TagUtil.createNestedTagInstance(TestSimpleTag.class, "abc", testMap);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        /*try
+        {
+            TagUtil.createNestedTagInstance(TestBodyTag.class, new TestJspContext(), testMap);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        TagUtil.createNestedTagInstance(TestSimpleTag.class, new TestJspContext(), testMap);*/
     }
 
     public void testCreateNestedTagInstance()
@@ -97,6 +125,14 @@ public class TagUtilTest extends BaseTestCase
         assertNull(tag.getTestInteger());
         assertNull(tag.getTestString());
         assertEquals(0, tag.getTestDouble(), 0.0);
+        TestSimpleTag testSimpleTag = new TestSimpleTag();
+        testMap.put("booleanProperty", "true");
+        testMap.put("floatProperty", "123.x");
+        testMap.put("stringProperty", "aString");
+        TagUtil.populateTag(testSimpleTag, testMap, false);
+        /*assertEquals(0.0, testSimpleTag.getFloatProperty(), 0.0);
+        assertTrue(testSimpleTag.getBooleanProperty());
+        assertEquals("aString", testSimpleTag.getStringProperty());*/
     }
     
     public void testPopulateTagWithArbitraryBeans()
@@ -112,6 +148,35 @@ public class TagUtilTest extends BaseTestCase
         assertEquals("abc", tag.getObject());
         assertSame(this, tag.getTagUtilTest());
     }
+    
+    /*public void testEvalBody() throws Exception
+    {
+        TestTag testStandardTag = new TestTag();
+        TestBodyTag testBodyTag = new TestBodyTag();
+        TestSimpleTag testSimpleTag = new TestSimpleTag();
+        NestedStandardTag standardTag = (NestedStandardTag)TagUtil.createNestedTagInstance(testStandardTag, pageContext, new HashMap());
+        NestedBodyTag bodyTag = (NestedBodyTag)TagUtil.createNestedTagInstance(testBodyTag, pageContext, new HashMap());
+        NestedSimpleTag simpleTag = (NestedSimpleTag)TagUtil.createNestedTagInstance(testSimpleTag, pageContext, new HashMap());
+        List bodyList = new ArrayList();
+        bodyList.add(standardTag);
+        bodyList.add(bodyTag);
+        bodyList.add(simpleTag);
+        bodyList.add("test");
+        TagUtil.evalBody(bodyList, pageContext);
+        assertTrue(testStandardTag.wasDoStartTagCalled());
+        assertTrue(testBodyTag.wasDoStartTagCalled());
+        assertTrue(testSimpleTag.wasDoTagCalled());
+        assertEquals("TestTagTestBodyTagTestSimpleTagtest", ((MockJspWriter)pageContext.getOut()).getOutputAsString());
+        try
+        {
+            TagUtil.evalBody(bodyList, "WrongContext");
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+    }*/
     
     public class ArbitraryTag extends TagSupport
     {
@@ -138,4 +203,67 @@ public class TagUtilTest extends BaseTestCase
             this.tagUtilTest = tagUtilTest;
         }
     }
+    
+    /*private class TestJspContext extends JspContext
+    {
+        public Object findAttribute(String name)
+        {
+            return null;
+        }
+        
+        public Object getAttribute(String name, int scope)
+        {
+            return null;
+        }
+        
+        public Object getAttribute(String name)
+        {
+            return null;
+        }
+        
+        public Enumeration getAttributeNamesInScope(int scope)
+        {
+            return null;
+        }
+        
+        public int getAttributesScope(String name)
+        {
+            return 0;
+        }
+        
+        public ExpressionEvaluator getExpressionEvaluator()
+        {
+            return null;
+        }
+        
+        public JspWriter getOut()
+        {
+            return null;
+        }
+        
+        public VariableResolver getVariableResolver()
+        {
+            return null;
+        }
+        
+        public void removeAttribute(String name, int scope)
+        {
+
+        }
+        
+        public void removeAttribute(String name)
+        {
+
+        }
+        
+        public void setAttribute(String name, Object value, int scope)
+        {
+
+        }
+        
+        public void setAttribute(String name, Object value)
+        {
+
+        }
+    }*/
 }

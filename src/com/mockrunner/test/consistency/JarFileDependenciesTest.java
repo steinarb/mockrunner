@@ -37,9 +37,9 @@ public class JarFileDependenciesTest extends TestCase
     private List getReleasedJars()
     {
         String jarDirName = getBaseDir() + LIB_DIR;
-        File[] jarFiles1 = new File(jarDirName).listFiles(new JarFileFiler());
+        File[] jarFiles1 = new File(jarDirName).listFiles(new JarFileFilter());
         jarDirName += File.separator + DIV_DIR;
-        File[] jarFiles2 = new File(jarDirName).listFiles(new JarFileFiler());
+        File[] jarFiles2 = new File(jarDirName).listFiles(new JarFileFilter());
         List jarFiles = new ArrayList();
         jarFiles.addAll(Arrays.asList(jarFiles1));
         jarFiles.addAll(Arrays.asList(jarFiles2));
@@ -173,7 +173,7 @@ public class JarFileDependenciesTest extends TestCase
         }
     }
     
-    private class JarFileFiler implements FilenameFilter
+    private class JarFileFilter implements FilenameFilter
     {
         public boolean accept(File dir, String name)
         {

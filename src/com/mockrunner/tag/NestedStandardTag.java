@@ -236,12 +236,12 @@ public class NestedStandardTag extends TagSupport implements NestedTag
     /**
      * Delegates to wrapped tag.
      * @throws <code>RuntimeException</code>, if the wrapped tag
-     *         is not an instance of <code>TagSupport</code>
+     *         is not an instance of <code>IterationTag</code>
      */
     public int doAfterBody() throws JspException
     {
-        checkTagSupport();
-        return ((TagSupport)tag).doAfterBody();
+        checkIterationTag();
+        return ((IterationTag)tag).doAfterBody();
     }
     
     /**
@@ -390,6 +390,14 @@ public class NestedStandardTag extends TagSupport implements NestedTag
         }*/
         childs.add(childTag);
         return (NestedTag)childTag;
+    }
+    
+    private void checkIterationTag()
+    {
+        if(!(tag instanceof IterationTag))
+        {
+            throw new RuntimeException("This method can only be called if the wrapped tag is an instance of IterationTag.");
+        }
     }
     
     private void checkTagSupport()

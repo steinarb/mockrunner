@@ -270,7 +270,7 @@ public class TagTestModule extends HTMLOutputModule
     {
         if(null == tag)
         {
-            throw new RuntimeException("Not current tag set");
+            throw new RuntimeException("No current tag set");
         }
         try
         {
@@ -291,7 +291,7 @@ public class TagTestModule extends HTMLOutputModule
     {
         if(null == tag)
         {
-            throw new RuntimeException("Not current tag set");
+            throw new RuntimeException("No current tag set");
         }
         try
         {
@@ -312,7 +312,7 @@ public class TagTestModule extends HTMLOutputModule
     {
         if(null == tag)
         {
-            throw new RuntimeException("Not current tag set");
+            throw new RuntimeException("No current tag set");
         }
         if(!isBodyTag()) 
         {
@@ -338,7 +338,7 @@ public class TagTestModule extends HTMLOutputModule
     {
         if(null == tag)
         {
-            throw new RuntimeException("Not current tag set");
+            throw new RuntimeException("No current tag set");
         }
         try
         {
@@ -371,7 +371,7 @@ public class TagTestModule extends HTMLOutputModule
     {
         if(null == tag)
         {
-            throw new RuntimeException("Not current tag set");
+            throw new RuntimeException("No current tag set");
         }
         try
         {

@@ -22,6 +22,7 @@ public class TagLifecycleTest extends BaseTestCase
     private NestedTag level2child2;
     private NestedTag level3child1;
     private NestedTag level3child2;
+    //private NestedTag level3child3;
     
     private TestTag rootTag;
     private TestBodyTag level1child1Tag;
@@ -31,6 +32,7 @@ public class TagLifecycleTest extends BaseTestCase
     private TestBodyTag level2child2Tag;
     private TestTag level3child1Tag;
     private TestTag level3child2Tag;
+    //private TestSimpleTag level3child3Tag;
 
     protected void setUp() throws Exception
     {
@@ -48,6 +50,7 @@ public class TagLifecycleTest extends BaseTestCase
         level1child2.addTextChild("level2textchild2");
         level3child1 = level2child1.addTagChild(TestTag.class, testMap);
         level3child2 = level2child2.addTagChild(TestTag.class, testMap);
+        //level3child3 = level2child2.addTagChild(TestSimpleTag.class, testMap);
         
         rootTag = (TestTag)root.getTag();
         level1child1Tag = (TestBodyTag)level1child1.getTag();
@@ -57,6 +60,7 @@ public class TagLifecycleTest extends BaseTestCase
         level2child2Tag = (TestBodyTag)level2child2.getTag();
         level3child1Tag = (TestTag)level3child1.getTag();
         level3child2Tag = (TestTag)level3child2.getTag();
+        //level3child3Tag = (TestSimpleTag)level3child3.getWrappedTag();
     }
     
     public void testMethodsCalled() throws Exception
@@ -99,6 +103,15 @@ public class TagLifecycleTest extends BaseTestCase
         assertFalse(level3child2Tag.wasDoStartTagCalled());
         assertFalse(level3child2Tag.wasDoAfterBodyCalled());
         assertFalse(level3child2Tag.wasDoEndTagCalled());
+        /*assertFalse(level3child3Tag.wasDoTagCalled());
+        
+        level1child2Tag.setDoStartTagReturnValue(TagSupport.EVAL_BODY_INCLUDE);
+        root.doLifecycle();
+        
+        assertTrue(level3child2Tag.wasDoStartTagCalled());
+        assertTrue(level3child2Tag.wasDoAfterBodyCalled());
+        assertTrue(level3child2Tag.wasDoEndTagCalled());
+        assertTrue(level3child3Tag.wasDoTagCalled());*/
     }
     
     public void testPopulated() throws Exception
@@ -115,6 +128,14 @@ public class TagLifecycleTest extends BaseTestCase
         assertNull(level2child2Tag.getTestString());
         assertNull(level3child1Tag.getTestString());
         assertNull(level3child2Tag.getTestString());
+        //assertNull(level3child3Tag.getTestString());
+        level1child2Tag.setDoStartTagReturnValue(TagSupport.EVAL_BODY_INCLUDE);
+        root.doLifecycle();
+        assertEquals("test",level2child1Tag.getTestString());
+        assertEquals("test", level2child2Tag.getTestString());
+        assertEquals("test", level3child1Tag.getTestString());
+        assertEquals("test", level3child2Tag.getTestString());
+        //assertEquals("test", level3child3Tag.getTestString());
     }
     
     public void testOutput() throws Exception
@@ -133,6 +154,11 @@ public class TagLifecycleTest extends BaseTestCase
         level1child3Tag.setDoAfterBodyReturnValue(BodyTagSupport.EVAL_BODY_AGAIN);
         root.doLifecycle();
         assertEquals("TestTagTestBodyTagroottextTestTagTestBodyTaglevel1textchild3level1textchild3", getTagOutput());
+        /*clearOutput();
+        level1child2Tag.setDoStartTagReturnValue(TagSupport.EVAL_BODY_INCLUDE);
+        level1child3Tag.setDoStartTagReturnValue(BodyTagSupport.SKIP_BODY);
+        root.doLifecycle();
+        assertEquals("TestTagTestBodyTagroottextTestTagTestTagTestTagTestBodyTagTestTagTestSimpleTaglevel2textchild2TestBodyTag", getTagOutput());*/
     }
     
     private String getTagOutput()

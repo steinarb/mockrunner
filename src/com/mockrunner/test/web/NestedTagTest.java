@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.jsp.tagext.BodyTagSupport;
-import javax.servlet.jsp.tagext.TagSupport;
+import javax.servlet.jsp.tagext.Tag;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.web.MockPageContext;
@@ -16,11 +16,14 @@ public class NestedTagTest extends BaseTestCase
 {
     private NestedTag nestedTagRoot;
     private MockPageContext context;
-    private TagSupport testTag;
-    private TagSupport testTag1;
-    private TagSupport testTag11;
+    private Tag testTag;
+    private Tag testTag1;
+    private Tag testTag11;
+    //private SimpleTag testTag111;
     private NestedTag testTagChild1;
     private NestedTag testTagChild11;
+    //private NestedTag testTagChild111;
+    //private SimpleTag rootSimpleTag;
     private Map testMap;
     
     protected void setUp() throws Exception
@@ -53,20 +56,60 @@ public class NestedTagTest extends BaseTestCase
         testTag11 = (TestBodyTag)testTagChild11.getTag();
     }
     
-    public void testAddTagChild()
+    /*private void prepareSimpleTagTest()
+    {
+        Map map = new HashMap();
+        map.put("stringProperty", "test");
+        map.put("floatProperty", "1");
+        rootSimpleTag = new TestSimpleTag();
+        nestedTagRoot = new NestedSimpleTag(rootSimpleTag, context, map);
+        testTagChild1 = nestedTagRoot.addTagChild(TestTag.class, testMap);
+        testTagChild11 = testTagChild1.addTagChild(new TestBodyTag(), testMap);
+        testTagChild1.addTextChild("simpletest");
+        testTag1 = (TestTag)testTagChild1.getTag();
+        testTag11 = (TestBodyTag)testTagChild11.getTag();
+        testTagChild111 = testTagChild11.addTagChild(TestSimpleTag.class);
+        testTag111 = (SimpleTag)testTagChild111.getWrappedTag();
+    }*/
+    
+    /*public void testGetWrappedTag()
+    {
+        BodyTag testBodyTag = new TestBodyTag();
+        Tag testStandardTag = new TestTag();
+        SimpleTag testSimpleTag = new TestSimpleTag();
+        NestedBodyTag nestedBodyTag = new NestedBodyTag(testBodyTag, context);
+        NestedStandardTag nestedStandardTag = new NestedStandardTag(testStandardTag, context);
+        NestedSimpleTag nestedSimpleTag = new NestedSimpleTag(testSimpleTag, context);
+        assertSame(testBodyTag, nestedBodyTag.getTag());
+        assertSame(testBodyTag, nestedBodyTag.getWrappedTag());
+        assertSame(testStandardTag, nestedStandardTag.getTag());
+        assertSame(testStandardTag, nestedStandardTag.getWrappedTag());
+        assertSame(testSimpleTag, nestedSimpleTag.getWrappedTag());
+        try
+        {
+            nestedSimpleTag.getTag();
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+    }*/
+    
+    /*public void testAddTagChild()
     {
         testTag = new TestBodyTag();
         nestedTagRoot = new NestedBodyTag((BodyTagSupport)testTag, context, testMap);
-        TestTag testTag = new TestTag();
-        nestedTagRoot.addTagChild(testTag);
-        nestedTagRoot.addTagChild(testTag);
-        nestedTagRoot.addTagChild(testTag);
+        TestTag childTestTag = new TestTag();
+        nestedTagRoot.addTagChild(childTestTag);
+        nestedTagRoot.addTagChild(childTestTag);
+        nestedTagRoot.addTagChild(TestSimpleTag.class);
         nestedTagRoot.addTagChild(TestBodyTag.class);
         assertEquals(4, nestedTagRoot.getChilds().size());
-        assertSame(testTag, ((NestedTag)nestedTagRoot.getChild(0)).getTag());
-        assertSame(testTag, ((NestedTag)nestedTagRoot.getChild(1)).getTag());
-        assertSame(testTag, ((NestedTag)nestedTagRoot.getChild(2)).getTag());
-        assertNotSame(testTag, ((NestedBodyTag)nestedTagRoot.getChild(3)).getTag());
+        assertSame(childTestTag, ((NestedTag)nestedTagRoot.getChild(0)).getTag());
+        assertSame(childTestTag, ((NestedTag)nestedTagRoot.getChild(1)).getTag());
+        assertNotSame(childTestTag, ((NestedTag)nestedTagRoot.getChild(2)).getWrappedTag());
+        assertNotSame(childTestTag, ((NestedBodyTag)nestedTagRoot.getChild(3)).getTag());
         NestedBodyTag bodyTag = (NestedBodyTag)nestedTagRoot.getChild(3);
         bodyTag.addTagChild(TestTag.class);
         bodyTag.addTagChild(new TestTag());
@@ -77,7 +120,23 @@ public class NestedTagTest extends BaseTestCase
         assertTrue(((NestedTag)bodyTag.getChild(1)).getTag() instanceof TestTag);
         assertTrue(((NestedTag)bodyTag.getChild(2)).getTag() instanceof TestBodyTag);
         assertTrue(((NestedTag)bodyTag.getChild(3)).getTag() instanceof TestBodyTag);
-    }
+        NestedSimpleTag simpleTag = (NestedSimpleTag)nestedTagRoot.getChild(2);
+        simpleTag.addTagChild(TestBodyTag.class);
+        simpleTag.addTagChild(new TestSimpleTag());
+        assertEquals(2, simpleTag.getChilds().size());
+        assertTrue(((NestedTag)simpleTag.getChild(0)).getWrappedTag() instanceof TestBodyTag);
+        assertTrue(((NestedTag)simpleTag.getChild(1)).getWrappedTag() instanceof TestSimpleTag);
+    }*/
+    
+    /*public void testFindTag()
+    {
+        AnotherTestTag anotherTestTag = new AnotherTestTag();
+        NestedStandardTag root = new NestedStandardTag(anotherTestTag, context);
+        NestedTag child1 = root.addTagChild(TestTag.class, testMap);
+        NestedTag child11 = child1.addTagChild(TestTag.class, testMap);
+        Tag foundTag = TagSupport.findAncestorWithClass((Tag)child11.getWrappedTag(), AnotherTestTag.class);
+        assertNotNull(foundTag);
+    }*/
     
     public void testPopulateAttributesStandard()
     {
@@ -96,6 +155,14 @@ public class NestedTagTest extends BaseTestCase
         assertNull(((TestTag)testTag1).getTestString());
         assertNull(((TestBodyTag)testTag11).getTestString());
     }
+    
+    /*public void testPopulateAttributesSimple()
+    {
+        prepareSimpleTagTest();
+        nestedTagRoot.populateAttributes();
+        assertEquals("test", ((TestSimpleTag)rootSimpleTag).getStringProperty());
+        assertEquals(1, ((TestSimpleTag)rootSimpleTag).getFloatProperty(), 0.0);
+    }*/
 
     public void testSetPageContextStandard()
     {
@@ -116,6 +183,17 @@ public class NestedTagTest extends BaseTestCase
         assertTrue(((TestTag)testTag1).getPageContext() == newContext);
         assertTrue(((TestBodyTag)testTag11).getPageContext() == newContext);
     }
+    
+    /*public void testSetJspContextSimple()
+    {
+        prepareSimpleTagTest();
+        MockPageContext newContext = new MockPageContext(null, null, null);
+        ((NestedSimpleTag)nestedTagRoot).setJspContext(newContext);
+        assertTrue(((TestSimpleTag)rootSimpleTag).getJspContext() == newContext);
+        assertTrue(((TestTag)testTag1).getPageContext() == newContext);
+        assertTrue(((TestBodyTag)testTag11).getPageContext() == newContext);
+        assertTrue(((TestSimpleTag)testTag111).getJspContext() == newContext);
+    }*/
     
     public void testSetDoReleaseStandard() throws Exception
     {
@@ -146,4 +224,180 @@ public class NestedTagTest extends BaseTestCase
         assertTrue(((TestTag)testTag1).wasReleaseCalled());
         assertTrue(((TestBodyTag)testTag11).wasReleaseCalled());
     }
+    
+    /*public void testChildsWithCustomFragmentSimpleTag() throws Exception
+    {
+        TestSimpleTag testSimpleTag = new TestSimpleTag();
+        NestedSimpleTag nestedSimpleTag = new NestedSimpleTag(testSimpleTag, context);
+        nestedSimpleTag.setJspBody(new TestJspFragment());
+        nestedSimpleTag.addTagChild(TestTag.class);
+        nestedSimpleTag.addTextChild("text");
+        assertNull(nestedSimpleTag.getChilds());
+        assertNull(nestedSimpleTag.getChild(0));
+        nestedSimpleTag.removeChilds();
+        assertNull(nestedSimpleTag.getChilds());
+        assertNull(nestedSimpleTag.getChild(0));
+    }*/
+    
+    /*public void testNotTagSupportInstanceStandard() throws Exception
+    {
+        MyTestTag myTag = new MyTestTag();
+        NestedStandardTag tag = new NestedStandardTag(myTag, context);
+        assertSame(myTag, tag.getWrappedTag());
+        try
+        {
+            tag.getTag();
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            tag.getId();
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            tag.getValue("");
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            tag.removeValue("");
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+    }
+    
+    public void testNotTagSupportInstanceBody() throws Exception
+    {
+        MyTestTag myTag = new MyTestTag();
+        NestedBodyTag tag = new NestedBodyTag(myTag, context);
+        assertSame(myTag, tag.getWrappedTag());
+        try
+        {
+            tag.getTag();
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            tag.getId();
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            tag.setValue("", "");
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            tag.getPreviousOut();
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            tag.getBodyContent();
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+    }*/
+    
+    /*private class TestJspFragment extends JspFragment
+    {
+        public JspContext getJspContext()
+        {
+            return null;
+        }
+        
+        public void invoke(Writer writer) throws JspException, IOException
+        {
+
+        }
+    }*/
+    
+    /*private class AnotherTestTag extends TagSupport
+    {
+        
+    }
+    
+    private class MyTestTag implements BodyTag
+    {
+        public int doEndTag() throws JspException
+        {
+            return 0;
+        }
+        
+        public int doStartTag() throws JspException
+        {
+            return 0;
+        }
+        
+        public Tag getParent()
+        {
+            return null;
+        }
+        
+        public void release()
+        {
+
+        }
+        
+        public void setPageContext(PageContext context)
+        {
+
+        }
+        
+        public void setParent(Tag parent)
+        {
+            // TODO Auto-generated method stub
+
+        }
+        
+        public void doInitBody() throws JspException
+        {
+
+        }
+        
+        public void setBodyContent(BodyContent content)
+        {
+
+        }
+        
+        public int doAfterBody() throws JspException
+        {
+            return 0;
+        }
+    }*/
 }
