@@ -20,7 +20,7 @@ import com.mockrunner.util.ParameterUtil;
 import com.mockrunner.util.SearchUtil;
 
 /**
- * Module for JDBC tests. Not complete yet.
+ * Module for JDBC tests.
  */
 public class JDBCTestModule
 {
