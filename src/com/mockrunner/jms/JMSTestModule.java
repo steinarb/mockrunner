@@ -2183,7 +2183,7 @@ public class JMSTestModule
     /**
      * Verifies that the specified messages are equal by calling the
      * <code>equals()</code> method. All mock messages provide a
-     * suitable implementation of mock message.
+     * suitable implementation of <code>equals()</code>.
      * @param message1 the first message
      * @param message2 the second message
      * @throws VerifyFailedException if verification fails
