@@ -88,7 +88,6 @@ public class BaseTestCaseTest extends BaseTestCase
 
     public static class TestDriver implements Driver
     {
-
         public boolean acceptsURL(String url) throws SQLException
         {
             return false;

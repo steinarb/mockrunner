@@ -9,6 +9,8 @@ import org.apache.commons.logging.LogFactory;
 import org.mockejb.MockContainer;
 import org.mockejb.jndi.MockContextFactory;
 
+import com.mockrunner.ejb.Configuration;
+
 /**
  * Used to create all types of EJB mock objects. 
  * Maintains the necessary dependencies between the mock objects.
@@ -17,17 +19,19 @@ import org.mockejb.jndi.MockContextFactory;
  * up to date.
  * This factory takes the <code>UserTransaction</code>
  * from the MockEJB mock context. If there's no transaction
- * deployed to the mock context, the factory will create and deploy a
+ * bound to the mock context, the factory will create and bind a
  * {@link com.mockrunner.mock.ejb.MockUserTransaction}.
- * If the deployed transaction is no
+ * If the bound transaction is no
  * {@link com.mockrunner.mock.ejb.MockUserTransaction}
  * the method {@link #getMockUserTransaction} returns <code>null</code>.
  * Use {@link #getUserTransaction} instead in this case.
+ * You can configure the JNDI name of the <code>UserTransaction</code>
+ * with the class {@link com.mockrunner.ejb.Configuration}.
  */
 public class EJBMockObjectFactory
 {
     private final static Log log = LogFactory.getLog(EJBMockObjectFactory.class);
-    private static String transactionJNDIName = "javax.transaction.UserTransaction";
+    private Configuration configuration;
     private UserTransaction transaction;
     private MockContainer container;
     
@@ -36,15 +40,18 @@ public class EJBMockObjectFactory
      */
     public EJBMockObjectFactory()
     { 
-        
+        this(new Configuration());
+    }
+    
+    /**
+     * Creates a new set of mock objects based on the specified configuration.
+     */
+    public EJBMockObjectFactory(Configuration configuration)
+    { 
+        this.configuration = configuration;
         initializeMockEJB();
     }
 
-    public static void setTransactionJNDIName(String transactionJNDIName)
-    {
-        EJBMockObjectFactory.transactionJNDIName = transactionJNDIName;
-    }
-    
     private void initializeMockEJB()
     {
         try
@@ -54,14 +61,17 @@ public class EJBMockObjectFactory
             container = new MockContainer(context);
             try
             {
-                transaction = (UserTransaction)context.lookup(transactionJNDIName);
+                transaction = (UserTransaction)context.lookup(configuration.getUserTransactionJNDIName());
             }
-            catch(NameNotFoundException nameExc1)
+            catch(NameNotFoundException nameExc)
             {
                 transaction = new MockUserTransaction();
-                context.rebind(transactionJNDIName, transaction);
-                context.rebind("javax.transaction.UserTransaction", transaction);
-                context.rebind("java:comp/UserTransaction", transaction);
+                if(configuration.getBindMockUserTransactionToJNDI())
+                {
+                    context.rebind(configuration.getUserTransactionJNDIName(), transaction);
+                    context.rebind("javax.transaction.UserTransaction", transaction);
+                    context.rebind("java:comp/UserTransaction", transaction);
+                }
             }
         }
         catch(Exception exc)
