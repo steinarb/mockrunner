@@ -4,22 +4,34 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.struts.util.MessageResourcesFactory;
+
 import junit.framework.TestCase;
 
 import com.mockrunner.struts.MapMessageResources;
+import com.mockrunner.struts.MapMessageResourcesFactory;
 
 public class MapMessageResourcesTest extends TestCase
 {
     private MapMessageResources resources;
+    private Map testMap;
+    private String tempFactoryClass;
      
     protected void setUp() throws Exception
     {
         super.setUp();
-        Map testMap = new HashMap();
+        tempFactoryClass = MessageResourcesFactory.getFactoryClass();
+        testMap = new HashMap();
         testMap.put("test.property.one", "TestOne");
         testMap.put("test.property.two", "TestTwo {0} {1}");
         testMap.put("test.property.three", "Test{0}Three");
         resources = new MapMessageResources(testMap);
+    }
+    
+    protected void tearDown() throws Exception
+    {
+        super.tearDown();
+        MessageResourcesFactory.setFactoryClass(tempFactoryClass);
     }
 
     public void testGetMessages()
@@ -39,5 +51,20 @@ public class MapMessageResourcesTest extends TestCase
         assertNull(resources.getMessage("test.property.one"));
         assertFalse(resources.isPresent("test.property.one"));
         assertFalse(resources.isPresent(Locale.GERMAN, "test.property.one"));
+    }
+    
+    public void testMessageResourcesFactory()
+    {
+        MessageResourcesFactory.setFactoryClass("com.mockrunner.struts.MapMessageResourcesFactory");
+        assertTrue(MessageResourcesFactory.createFactory() instanceof MapMessageResourcesFactory);
+        MapMessageResourcesFactory factory = (MapMessageResourcesFactory)MessageResourcesFactory.createFactory();
+        resources = (MapMessageResources)factory.createResources("");
+        assertFalse(resources.isPresent("test.property.one"));
+        MapMessageResourcesFactory.setMessageMap(testMap);
+        resources = (MapMessageResources)factory.createResources("");
+        assertTrue(resources.isPresent("test.property.one"));
+        MapMessageResourcesFactory.setMessageMap(null);
+        resources = (MapMessageResources)factory.createResources("");
+        assertFalse(resources.isPresent("test.property.one"));
     }
 }
