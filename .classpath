@@ -5,7 +5,6 @@
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/struts.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/junit.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/mockobjects-core-0.09.jar"/>
-    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/mockobjects-jdk1.3-j2ee1.3-0.09.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/commons-beanutils.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/commons-collections.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/commons-logging.jar"/>
@@ -17,5 +16,6 @@
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/mockejb.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/jboss-j2ee.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/mockobjects-jdk1.4-0.09.jar"/>
+    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/mockobjects-jdk1.4-j2ee1.3-0.09.jar"/>
     <classpathentry kind="output" path="classes"/>
 </classpath>
