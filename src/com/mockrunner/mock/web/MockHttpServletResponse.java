@@ -40,16 +40,16 @@ public class MockHttpServletResponse implements HttpServletResponse
     {
         headers = new HashMap();
         characterEncoding = "ISO-8859-1";
-        bufferSize = 0;
+        bufferSize = 8192;
         wasErrorSent = false;
         wasRedirectSent = false;
         errorCode = SC_OK;
         statusCode = SC_OK;
         cookies = new ArrayList();
-        outputStream = new MockServletOutputStream();
+        outputStream = new MockServletOutputStream(characterEncoding);
         try
         {
-            writer = new PrintWriter(new OutputStreamWriter(outputStream, characterEncoding));
+            writer = new PrintWriter(new OutputStreamWriter(outputStream, characterEncoding), true);
         } 
         catch(UnsupportedEncodingException exc)
         {
@@ -193,6 +193,7 @@ public class MockHttpServletResponse implements HttpServletResponse
     public void setCharacterEncoding(String encoding)
     {
         characterEncoding = encoding;
+        outputStream.setEncoding(encoding);
     }
 
     public Locale getLocale()
