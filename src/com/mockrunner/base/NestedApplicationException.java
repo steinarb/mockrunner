@@ -36,10 +36,8 @@ public class NestedApplicationException extends RuntimeException
      */
     public Throwable getRootCause()
     {
-        if(!(nested instanceof NestedApplicationException))
-        {
-            return nested;
-        }
+        if(nested == null) return null;
+        if(!(nested instanceof NestedApplicationException)) return nested;
         return ((NestedApplicationException)nested).getRootCause();
     }
 }
