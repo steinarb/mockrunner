@@ -4,13 +4,16 @@ import java.util.Locale;
 
 import javax.sql.DataSource;
 
+import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.validator.ValidatorResources;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.config.FormBeanConfig;
 import org.apache.struts.util.MessageResources;
 
 import com.mockrunner.base.BaseTestCase;
@@ -432,6 +435,14 @@ public class ActionTestCaseAdapter extends BaseTestCase
     {
         return actionTestModule.getActionForm();
     }
+    
+    /**
+     * Delegates to {@link ActionTestModule#setActionForm}
+     */
+    protected void setActionForm(ActionForm formObj)
+    {
+        actionTestModule.setActionForm(formObj);
+    }
 
     /**
      * Delegates to {@link ActionTestModule#getLastAction}
@@ -472,6 +483,14 @@ public class ActionTestCaseAdapter extends BaseTestCase
     {
         return actionTestModule.createActionForm(form);
     }
+    
+    /**
+     * Delegates to {@link ActionTestModule#createDynaActionForm}
+     */
+    protected DynaBean createDynaActionForm(FormBeanConfig formConfig)
+    {
+        return actionTestModule.createDynaActionForm(formConfig);
+    }
 
     /**
      * Delegates to {@link ActionTestModule#populateRequestToForm}
@@ -484,48 +503,48 @@ public class ActionTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link ActionTestModule#actionPerform(Class)}
      */
-    protected void actionPerform(Class action)
+    protected ActionForward actionPerform(Class action)
     {
-        actionTestModule.actionPerform(action);
+        return actionTestModule.actionPerform(action);
     }
     
     /**
      * Delegates to {@link ActionTestModule#actionPerform(Action)}
      */
-    protected void actionPerform(Action action)
+    protected ActionForward actionPerform(Action action)
     {
-        actionTestModule.actionPerform(action);
+        return actionTestModule.actionPerform(action);
     }
 
     /**
      * Delegates to {@link ActionTestModule#actionPerform(Class, Class)}
      */
-    protected void actionPerform(Class action, Class form)
+    protected ActionForward actionPerform(Class action, Class form)
     {
-        actionTestModule.actionPerform(action, form);
+        return actionTestModule.actionPerform(action, form);
     }
     
     /**
      * Delegates to {@link ActionTestModule#actionPerform(Action, Class)}
      */
-    protected void actionPerform(Action action, Class form)
+    protected ActionForward actionPerform(Action action, Class form)
     {
-        actionTestModule.actionPerform(action, form);
+        return actionTestModule.actionPerform(action, form);
     }
 
     /**
      * Delegates to {@link ActionTestModule#actionPerform(Class, ActionForm)}
      */
-    protected void actionPerform(Class action, ActionForm form)
+    protected ActionForward actionPerform(Class action, ActionForm form)
     {
-        actionTestModule.actionPerform(action, form);
+        return actionTestModule.actionPerform(action, form);
     }
     
     /**
      * Delegates to {@link ActionTestModule#actionPerform(Action, ActionForm)}
      */
-    protected void actionPerform(Action action, ActionForm form)
+    protected ActionForward actionPerform(Action action, ActionForm form)
     {
-        actionTestModule.actionPerform(action, form);
+        return actionTestModule.actionPerform(action, form);
     }
 }

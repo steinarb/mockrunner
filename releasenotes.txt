@@ -2,6 +2,7 @@
 mockrunner-0.2.8:
 
 - added doHead() to ServletTestModule
+- added some missing methods to test adapters
 - applied patch (by Steven Blundy), MockResultSet.isBeforeFirst() now returns 
   false, if the ResultSet is empty. MockResultSet.isLast() also returns false
   in case of an empty ResultSet

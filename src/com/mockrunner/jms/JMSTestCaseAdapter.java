@@ -5,10 +5,12 @@ import java.util.List;
 import javax.jms.MessageListener;
 
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.mock.jms.MockConnection;
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueConnection;
 import com.mockrunner.mock.jms.MockQueueSession;
+import com.mockrunner.mock.jms.MockSession;
 import com.mockrunner.mock.jms.MockTemporaryQueue;
 import com.mockrunner.mock.jms.MockTemporaryTopic;
 import com.mockrunner.mock.jms.MockTopic;
@@ -103,6 +105,22 @@ public class JMSTestCaseAdapter extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link JMSTestModule#setCurrentConnectionIndex}
+     */
+    protected void setCurrentConnectionIndex(int connectionIndex)
+    {
+        jmsTestModule.setCurrentConnectionIndex(connectionIndex);
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#getCurrentConnection}
+     */
+    protected MockConnection getCurrentConnection()
+    {
+        return jmsTestModule.getCurrentConnection();
+    }
+    
+    /**
      * Delegates to {@link JMSTestModule#registerTestMessageListenerForQueue(String, MessageListener)}
      */
     protected void registerTestMessageListenerForQueue(String queueName, MessageListener listener)
@@ -113,7 +131,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#registerTestMessageListenerForQueue(MockConnection, String, MessageListener)}
      */
-    protected void registerTestMessageListenerForQueue(MockQueueConnection connection, String queueName, MessageListener listener)
+    protected void registerTestMessageListenerForQueue(MockConnection connection, String queueName, MessageListener listener)
     {
         jmsTestModule.registerTestMessageListenerForQueue(connection, queueName,listener);
     }
@@ -121,7 +139,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#registerTestMessageListenerForQueue(MockConnection, String, boolean, int, MessageListener)}
      */
-    protected void registerTestMessageListenerForQueue(MockQueueConnection connection, String queueName, boolean transacted, int acknowledgeMode, MessageListener listener)
+    protected void registerTestMessageListenerForQueue(MockConnection connection, String queueName, boolean transacted, int acknowledgeMode, MessageListener listener)
     {
         jmsTestModule.registerTestMessageListenerForQueue(connection, queueName, transacted, acknowledgeMode, listener);
     }
@@ -137,7 +155,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#registerTestMessageListenerForTopic(MockConnection, String, MessageListener)}
      */
-    protected void registerTestMessageListenerForTopic(MockTopicConnection connection, String topicName, MessageListener listener)
+    protected void registerTestMessageListenerForTopic(MockConnection connection, String topicName, MessageListener listener)
     {
         jmsTestModule.registerTestMessageListenerForTopic(connection, topicName, listener);
     }
@@ -145,7 +163,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link JMSTestModule#registerTestMessageListenerForTopic(MockConnection, String, boolean, int, MessageListener)}
      */
-    protected void registerTestMessageListenerForTopic(MockTopicConnection connection, String topicName, boolean transacted, int acknowledgeMode, MessageListener listener)
+    protected void registerTestMessageListenerForTopic(MockConnection connection, String topicName, boolean transacted, int acknowledgeMode, MessageListener listener)
     {
         jmsTestModule.registerTestMessageListenerForTopic(connection, topicName, transacted, acknowledgeMode, listener);
     }
@@ -173,6 +191,14 @@ public class JMSTestCaseAdapter extends BaseTestCase
     {
         return jmsTestModule.getTopicMessageManager(indexOfSession);
     }
+    
+    /**
+     * Delegates to {@link JMSTestModule#getMessageManager}
+     */
+    protected MessageManager getMessageManager(int indexOfSession)
+    {
+        return jmsTestModule.getMessageManager(indexOfSession);
+    }
 
     /**
      * Delegates to {@link JMSTestModule#getQueueTransmissionManager}
@@ -188,6 +214,14 @@ public class JMSTestCaseAdapter extends BaseTestCase
     protected TopicTransmissionManager getTopicTransmissionManager(int indexOfSession)
     {
         return jmsTestModule.getTopicTransmissionManager(indexOfSession);
+    }
+    
+    /**
+     * Delegates to {@link JMSTestModule#getTransmissionManager}
+     */
+    protected TransmissionManagerWrapper getTransmissionManager(int indexOfSession)
+    {
+        return jmsTestModule.getTransmissionManager(indexOfSession);
     }
 
     /**
@@ -205,6 +239,14 @@ public class JMSTestCaseAdapter extends BaseTestCase
     {
         return jmsTestModule.getTopicSessionList();
     }
+    
+    /**
+     * Delegates to {@link JMSTestModule#getSessionList}
+     */
+    protected List getSessionList()
+    {
+        return jmsTestModule.getSessionList();
+    }
 
     /**
      * Delegates to {@link JMSTestModule#getQueueSession}
@@ -220,6 +262,14 @@ public class JMSTestCaseAdapter extends BaseTestCase
     protected MockTopicSession getTopicSession(int indexOfSession)
     {
         return jmsTestModule.getTopicSession(indexOfSession);
+    }
+    
+    /**
+     * Delegates to {@link JMSTestModule#getSession}
+     */
+    protected MockSession getSession(int indexOfSession)
+    {
+        return jmsTestModule.getSession(indexOfSession);
     }
 
     /**
@@ -381,6 +431,30 @@ public class JMSTestCaseAdapter extends BaseTestCase
     {
         jmsTestModule.verifyTopicConnectionStopped();
     }
+    
+    /**
+     * Delegates to {@link JMSTestModule#verifyConnectionClosed}
+     */
+    protected void verifyConnectionClosed()
+    {
+        jmsTestModule.verifyConnectionClosed();
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#verifyConnectionStarted}
+     */
+    protected void verifyConnectionStarted()
+    {
+        jmsTestModule.verifyConnectionStarted();
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#verifyConnectionStopped}
+     */
+    protected void verifyConnectionStopped()
+    {
+        jmsTestModule.verifyConnectionStopped();
+    }
 
     /**
      * Delegates to {@link JMSTestModule#verifyQueueSessionClosed}
@@ -493,6 +567,62 @@ public class JMSTestCaseAdapter extends BaseTestCase
     {
         jmsTestModule.verifyTopicSessionNotRecovered(indexOfSession);
     }
+    
+    /**
+     * Delegates to {@link JMSTestModule#verifySessionClosed}
+     */
+    protected void verifySessionClosed(int indexOfSession)
+    {
+        jmsTestModule.verifySessionClosed(indexOfSession);
+    }
+    
+    /**
+     * Delegates to {@link JMSTestModule#verifySessionCommitted}
+     */
+    protected void verifySessionCommitted(int indexOfSession)
+    {
+        jmsTestModule.verifySessionCommitted(indexOfSession);
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#verifySessionNotCommitted}
+     */
+    protected void verifySessionNotCommitted(int indexOfSession)
+    {
+        jmsTestModule.verifySessionNotCommitted(indexOfSession);
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#verifySessionRolledBack}
+     */
+    protected void verifySessionRolledBack(int indexOfSession)
+    {
+        jmsTestModule.verifySessionRolledBack(indexOfSession);
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#verifySessionNotRolledBack}
+     */
+    protected void verifySessionNotRolledBack(int indexOfSession)
+    {
+        jmsTestModule.verifySessionNotRolledBack(indexOfSession);
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#verifySessionRecovered}
+     */
+    protected void verifySessionRecovered(int indexOfSession)
+    {
+        jmsTestModule.verifySessionRecovered(indexOfSession);
+    }
+    
+    /**
+     * Delegates to {@link JMSTestModule#verifySessionNotRecovered}
+     */
+    protected void verifySessionNotRecovered(int indexOfSession)
+    {
+        jmsTestModule.verifySessionNotRecovered(indexOfSession);
+    }
 
     /**
      * Delegates to {@link JMSTestModule#verifyAllQueueSessionsClosed}
@@ -557,6 +687,54 @@ public class JMSTestCaseAdapter extends BaseTestCase
     {
         jmsTestModule.verifyAllTopicSessionsRolledBack();
     }
+    
+    /**
+     * Delegates to {@link JMSTestModule#verifyAllSessionsClosed}
+     */
+    protected void verifyAllSessionsClosed()
+    {
+        jmsTestModule.verifyAllSessionsClosed();
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#verifyAllSessionsRecovered}
+     */
+    protected void verifyAllSessionsRecovered()
+    {
+        jmsTestModule.verifyAllSessionsRecovered();
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#verifyAllSessionsCommitted}
+     */
+    protected void verifyAllSessionsCommitted()
+    {
+        jmsTestModule.verifyAllSessionsCommitted();
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#verifyAllSessionsRolledBack}
+     */
+    protected void verifyAllSessionsRolledBack()
+    {
+        jmsTestModule.verifyAllSessionsRolledBack();
+    }
+    
+    /**
+     * Delegates to {@link JMSTestModule#verifyNumberConnectionProducers}
+     */
+    protected void verifyNumberConnectionProducers(int indexOfSession, int numberOfProducers)
+    {
+        jmsTestModule.verifyNumberConnectionProducers(indexOfSession, numberOfProducers);
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#verifyAllConnectionProducersClosed}
+     */
+    protected void verifyAllConnectionProducersClosed(int indexOfSession)
+    {
+        jmsTestModule.verifyAllConnectionProducersClosed(indexOfSession);
+    }
 
     /**
      * Delegates to {@link JMSTestModule#verifyNumberQueueSenders(int, int)}
@@ -620,6 +798,22 @@ public class JMSTestCaseAdapter extends BaseTestCase
     protected void verifyAllTopicPublishersClosed(int indexOfSession)
     {
         jmsTestModule.verifyAllTopicPublishersClosed(indexOfSession);
+    }
+    
+    /**
+     * Delegates to {@link JMSTestModule#verifyNumberMessageConsumers}
+     */
+    protected void verifyNumberMessageConsumers(int indexOfSession, int numberOfConsumers)
+    {
+        jmsTestModule.verifyNumberMessageConsumers(indexOfSession, numberOfConsumers);
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#verifyAllMessageConsumersClosed}
+     */
+    protected void verifyAllMessageConsumersClosed(int indexOfSession)
+    {
+        jmsTestModule.verifyAllMessageConsumersClosed(indexOfSession);
     }
 
     /**
@@ -772,6 +966,14 @@ public class JMSTestCaseAdapter extends BaseTestCase
     protected void verifyNumberTopicSessions(int number)
     {
         jmsTestModule.verifyNumberTopicSessions(number);
+    }
+    
+    /**
+     * Delegates to {@link JMSTestModule#verifyNumberSessions}
+     */
+    protected void verifyNumberSessions(int number)
+    {
+        jmsTestModule.verifyNumberSessions(number);
     }
 
     /**
@@ -1340,5 +1542,95 @@ public class JMSTestCaseAdapter extends BaseTestCase
     protected void verifyCreatedTopicObjectMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedTopicObjectMessageNotAcknowledged(indexOfSession, indexOfMessage);
+    }
+  
+    protected void verifyNumberOfCreatedMessages(int indexOfSession, int number)
+    {
+        jmsTestModule.verifyNumberOfCreatedMessages(indexOfSession, number);
+    }
+
+    protected void verifyNumberOfCreatedBytesMessages(int indexOfSession, int number)
+    {
+        jmsTestModule.verifyNumberOfCreatedBytesMessages(indexOfSession, number);
+    }
+
+    protected void verifyNumberOfCreatedMapMessages(int indexOfSession, int number)
+    {
+        jmsTestModule.verifyNumberOfCreatedMapMessages(indexOfSession, number);
+    }
+
+    protected void verifyNumberOfCreatedTextMessages(int indexOfSession, int number)
+    {
+        jmsTestModule.verifyNumberOfCreatedTextMessages(indexOfSession, number);
+    }
+
+    protected void verifyNumberOfCreatedStreamMessages(int indexOfSession, int number)
+    {
+        jmsTestModule.verifyNumberOfCreatedStreamMessages(indexOfSession, number);
+    }
+
+    protected void verifyNumberOfCreatedObjectMessages(int indexOfSession, int number)
+    {
+        jmsTestModule.verifyNumberOfCreatedObjectMessages(indexOfSession, number);
+    }
+    
+    protected void verifyCreatedMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        jmsTestModule.verifyCreatedMessageAcknowledged(indexOfSession, indexOfMessage);
+    }
+
+    protected void verifyCreatedMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        jmsTestModule.verifyCreatedMessageNotAcknowledged(indexOfSession, indexOfMessage);
+    }
+
+    protected void verifyCreatedBytesMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        jmsTestModule.verifyCreatedBytesMessageAcknowledged(indexOfSession, indexOfMessage);
+    }
+
+    protected void verifyCreatedBytesMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        jmsTestModule.verifyCreatedBytesMessageNotAcknowledged(indexOfSession, indexOfMessage);
+    }
+
+    protected void verifyCreatedMapMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        jmsTestModule.verifyCreatedMapMessageAcknowledged(indexOfSession, indexOfMessage);
+    }
+
+    protected void verifyCreatedMapMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        jmsTestModule.verifyCreatedMapMessageNotAcknowledged(indexOfSession, indexOfMessage);
+    }
+
+    protected void verifyCreatedTextMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        jmsTestModule.verifyCreatedTextMessageAcknowledged(indexOfSession, indexOfMessage);
+    }
+
+    protected void verifyCreatedTextMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        jmsTestModule.verifyCreatedTextMessageNotAcknowledged(indexOfSession, indexOfMessage);
+    }
+
+    protected void verifyCreatedStreamMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        jmsTestModule.verifyCreatedStreamMessageAcknowledged(indexOfSession, indexOfMessage);
+    }
+
+    protected void verifyCreatedStreamMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        jmsTestModule.verifyCreatedStreamMessageNotAcknowledged(indexOfSession, indexOfMessage);
+    }
+
+    protected void verifyCreatedObjectMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        jmsTestModule.verifyCreatedObjectMessageAcknowledged(indexOfSession, indexOfMessage);
+    }
+
+    protected void verifyCreatedObjectMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        jmsTestModule.verifyCreatedObjectMessageNotAcknowledged(indexOfSession, indexOfMessage);
     }
 }
