@@ -82,6 +82,7 @@
             <src path="${src}/com/mockrunner/jms"/>
             <src path="${src}/com/mockrunner/mock/jms"/>
             <src path="${src}/org/apache"/>
+            <src path="${src}/org/codehaus"/>
             <src path="${src1.3}"/>
 		</javac>	
 	</target>

@@ -1,5 +1,7 @@
 package com.mockrunner.test;
 
+import org.codehaus.activemq.mockrunner.test.AllActiveMQMockrunnerTests;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -38,6 +40,7 @@ public class AllTests
         suite.addTest(AllJDBCTests.suite());
         suite.addTest(AllEJBTests.suite());
         suite.addTest(AllJMSTests.suite());
+        suite.addTest(AllActiveMQMockrunnerTests.suite());
         suite.addTest(new TestSuite(AdapterConsistencyTest.class));
         suite.addTest(new TestSuite(JDKVersionConsistencyTest.class));
         suite.addTest(new TestSuite(BaseTestCaseTest.class));
