@@ -132,6 +132,14 @@ public class EJBTestCaseAdapter extends BaseTestCase
     {
         return ejbTestModule.deploy(jndiName, beanClass);
     }
+    
+    /**
+     * Delegates to {@link EJBTestModule#deploy(String, Class, boolean)}
+     */
+    public MockEjbObject deploy(String jndiName, Class beanClass, boolean stateful)
+    {
+        return ejbTestModule.deploy(jndiName, beanClass, stateful);
+    }
 
     /**
      * Delegates to {@link EJBTestModule#deploy(String, Class, TransactionPolicy)}
@@ -139,6 +147,14 @@ public class EJBTestCaseAdapter extends BaseTestCase
     public MockEjbObject deploy(String jndiName, Class beanClass, TransactionPolicy policy)
     {
         return ejbTestModule.deploy(jndiName, beanClass, policy);
+    }
+    
+    /**
+     * Delegates to {@link EJBTestModule#deploy(String, Class, boolean, TransactionPolicy)}
+     */
+    public MockEjbObject deploy(String jndiName, Class beanClass, boolean stateful, TransactionPolicy policy)
+    {
+        return ejbTestModule.deploy(jndiName, beanClass, stateful, policy);
     }
 
     /**
