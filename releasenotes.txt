@@ -1,4 +1,6 @@
 
+mockrunner-0.3.2:
+
 mockrunner-0.3.1:
 
 - adapted EJBTestModule to new MockEJB 0.6 API (check out
