@@ -1,5 +1,9 @@
 package com.mockrunner.struts;
 
+import java.util.Locale;
+
+import javax.sql.DataSource;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -117,13 +121,45 @@ public class ActionTestCaseAdapter extends BaseTestCase
     }
     
     /**
-     * Delegates to {@link ActionTestModule#setResources}
+     * Delegates to {@link ActionTestModule#setResources(MessageResources)}
      */
     public void setResources(MessageResources resources)
     {
         actionTestModule.setResources(resources);
     }
     
+    /**
+     * Delegates to {@link ActionTestModule#setResources(String, MessageResources)}
+     */
+    public void setResources(String key, MessageResources resources)
+    {
+        actionTestModule.setResources(key, resources);
+    }
+    
+    /**
+     * Delegates to {@link ActionTestModule#setDataSource(DataSource)}
+     */
+    public void setDataSource(DataSource dataSource)
+    {
+        actionTestModule.setDataSource(dataSource);
+    }
+
+    /**
+     * Delegates to {@link ActionTestModule#setDataSource(String, DataSource)}
+     */
+    public void setDataSource(String key, DataSource dataSource)
+    {
+        actionTestModule.setDataSource(key, dataSource);
+    }
+    
+    /**
+     * Delegates to {@link ActionTestModule#setLocale}
+     */
+    public void setLocale(Locale locale)
+    {
+        actionTestModule.setLocale(locale);
+    }
+
     /**
      * Delegates to {@link ActionTestModule#verifyRedirect}
      */

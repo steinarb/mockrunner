@@ -1,6 +1,9 @@
 package com.mockrunner.struts;
 
 import java.util.Iterator;
+import java.util.Locale;
+
+import javax.sql.DataSource;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.struts.Globals;
@@ -119,10 +122,65 @@ public class ActionTestModule
      * takes the resources from the servlet context with the same key.
      * If your action uses this method, you have to set the resources
      * manually to the servlet context.
+     * @param resources the messages resources
      */
     public void setResources(MessageResources resources)
     {
         mockFactory.getMockRequest().setAttribute(Globals.MESSAGES_KEY, resources);
+    }
+    
+    /**
+     * Sets the specified messages resources as a servlet context 
+     * attribute using the specified key and the module config prefix.
+     * You can use this method, if your action calls 
+     * <code>Action.getResources(HttpServletRequest, String)</code>.
+     * Please note that the {@link com.mockrunner.mock.web.MockModuleConfig}
+     * is set by Mockrunner as the current module. It has the name <i>testmodule</i>
+     * but this can be changed with
+     * {@link com.mockrunner.mock.web.MockModuleConfig#setPrefix}.
+     * @param key the key of the messages resources
+     * @param resources the messages resources
+     */
+    public void setResources(String key, MessageResources resources)
+    {
+        key = key + mockFactory.getMockModuleConfig().getPrefix();
+        mockFactory.getMockServletContext().setAttribute(key, resources);
+    }
+    
+    /**
+     * Sets the specified <code>DataSource</code>.
+     * You can use this method, if your action calls 
+     * <code>Action.getDataSource(HttpServletRequest)</code>.
+     * @param dataSource <code>DataSource</code>
+     */
+    public void setDataSource(DataSource dataSource)
+    {
+        setDataSource(Globals.DATA_SOURCE_KEY, dataSource);
+    }
+    
+    /**
+     * Sets the specified <code>DataSource</code>.
+     * You can use this method, if your action calls 
+     * <code>Action.getDataSource(HttpServletRequest, String)</code>.
+     * @param key the key of the <code>DataSource</code>
+     * @param dataSource <code>DataSource</code>
+     */
+    public void setDataSource(String key, DataSource dataSource)
+    {
+        key = key + mockFactory.getMockModuleConfig().getPrefix();
+        mockFactory.getMockServletContext().setAttribute(key, dataSource);
+    }
+    
+    /**
+     * Sets the specified locale as a session attribute
+     * using <code>Globals.LOCALE_KEY</code> as the key. You can
+     * use this method, if your action calls 
+     * <code>Action.getLocale(HttpServletRequest)</code>.
+     * @param locale the locale
+     */
+    public void setLocale(Locale locale)
+    {
+        mockFactory.getMockSession().setAttribute(Globals.LOCALE_KEY, locale);
     }
 
     /**
@@ -846,6 +904,7 @@ public class ActionTestModule
         try
         {
             actionObj = action;
+            actionObj.setServlet(mockFactory.getMockActionServlet());
             formObj = form;
             setActionErrors(null);
             if (null != formObj)

@@ -1,5 +1,7 @@
 package com.mockrunner.test.web;
 
+import java.util.Locale;
+
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMessage;
@@ -10,6 +12,7 @@ import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.struts.ActionTestModule;
+import com.mockrunner.struts.MapMessageResources;
 
 public class ActionTestModuleTest extends TestCase
 {
@@ -465,5 +468,31 @@ public class ActionTestModuleTest extends TestCase
         module.verifyForward("success");
         module.verifyNoActionErrors();
         assertNull(module.getActionForm());
+    }
+    
+    public void testActionPerformServletSet()
+    {
+        TestForm form = (TestForm)module.createActionForm(TestForm.class);
+        module.actionPerform(TestAction.class, form);
+        assertEquals(mockfactory.getMockActionServlet(), module.getLastAction().getServlet());
+        TestAction testAction = new TestAction();
+        module.actionPerform(testAction, form);
+        assertEquals(mockfactory.getMockActionServlet(), testAction.getServlet());
+        module.actionPerform(TestAction.class, TestForm.class);
+        assertEquals(mockfactory.getMockActionServlet(), module.getLastAction().getServlet());
+    }
+    
+    public void testSetResourcesAndLocale()
+    {
+        MapMessageResources resources1 = new MapMessageResources();
+        MapMessageResources resources2 = new MapMessageResources();
+        module.setResources(resources1);
+        module.setResources("test", resources2);
+        module.setLocale(Locale.TRADITIONAL_CHINESE);
+        TestAction testAction = new TestAction();
+        module.actionPerform(testAction);
+        assertEquals(resources1, testAction.getTestResources());
+        assertEquals(resources2, testAction.getTestResourcesForKey());
+        assertEquals(Locale.TRADITIONAL_CHINESE, testAction.getTestLocale());
     }
 }

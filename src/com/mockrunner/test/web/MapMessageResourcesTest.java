@@ -43,7 +43,7 @@ public class MapMessageResourcesTest extends TestCase
         assertTrue(resources.isPresent("test.property.one"));
         assertTrue(resources.isPresent(Locale.CHINESE, "test.property.two"));
         assertFalse(resources.isPresent("test.property.four"));
-        resources.setMessage("test.property.four", "xyz");
+        resources.putMessage("test.property.four", "xyz");
         assertEquals("xyz", resources.getMessage("test.property.four"));
         assertEquals("TestTwo 0 1", resources.getMessage("test.property.two", "0", "1"));
         assertEquals("TestTestThree", resources.getMessage("test.property.three", "Test"));
@@ -66,5 +66,13 @@ public class MapMessageResourcesTest extends TestCase
         MapMessageResourcesFactory.setMessageMap(null);
         resources = (MapMessageResources)factory.createResources("");
         assertFalse(resources.isPresent("test.property.one"));
+    }
+    
+    public void testLoadFromFile()
+    {
+        resources.putMessages("src/com/mockrunner/test/web/test.properties");
+        assertEquals("test1", resources.getMessage("test.property1"));
+        assertEquals("test2", resources.getMessage("test.property2"));
+        assertEquals("test3", resources.getMessage("test.property3"));
     }
 }

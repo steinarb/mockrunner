@@ -9,7 +9,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * This example actions does the same as 
+ * This example action does the same as 
  * {@link com.mockrunner.example.servlet.LogoutServlet}.
  * It is used to demonstrate the testing of actions with
  * specified filters since {@link com.mockrunner.struts.ActionTestModule}

@@ -11,8 +11,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
 /**
- * The example from the webpage. This action fulfils the order for some type 
- * of product. If there's not enough in the stock, an error is returned.
+ * This action fulfils the order for some type of product. 
+ * If there's not enough in the stock, an error is returned.
  * This action will be tested with {@link OrderActionTest} in order 
  * to demonstrate the usage of {@link com.mockrunner.struts.ActionTestModule}.
  */

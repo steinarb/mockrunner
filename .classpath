@@ -15,5 +15,6 @@
     <classpathentry kind="lib" path="lib/struts.jar"/>
     <classpathentry kind="lib" path="lib/xercesImpl.jar"/>
     <classpathentry kind="lib" path="lib/xml-apis.jar"/>
+    <classpathentry kind="lib" path="lib/commons-digester.jar"/>
     <classpathentry kind="output" path="classes"/>
 </classpath>
