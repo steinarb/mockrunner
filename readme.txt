@@ -98,7 +98,7 @@ commons-collections.jar
 commons-beanutils.jar
 commons-lang.jar
 
-MockEjb 0.4:
+MockEJB 0.5:
 http://mockejb.sourceforge.net
 mockejb.jar
 
@@ -106,7 +106,7 @@ JDOM Beta 9 (or higher):
 http://www.jdom.org
 jdom.jar
 
-NekoHTML Parser 0.8.1:
+NekoHTML Parser 0.8.2:
 http://www.apache.org/~andyc/neko/doc/html/index.html
 nekohtml.jar
 
