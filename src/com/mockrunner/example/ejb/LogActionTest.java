@@ -2,7 +2,6 @@ package com.mockrunner.example.ejb;
 
 import org.mockejb.MockEjbObject;
 import org.mockejb.TransactionPolicy;
-import org.mockejb.jndi.MockContextFactory;
 
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.jdbc.JDBCTestModule;
@@ -29,12 +28,6 @@ public class LogActionTest extends ActionTestCaseAdapter
         ejbModule.setInterfacePackage("com.mockrunner.example.ejb.interfaces");
         bean = ejbModule.deploy("com/mockrunner/example/LogSession", LogSessionBean.class, TransactionPolicy.REQUIRED);
         ejbModule.bindToContext("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
-    }
-    
-    protected void tearDown() throws Exception
-    {
-        super.tearDown();
-        MockContextFactory.revertSetAsInitial();
     }
 
     public void testLogActionSuccess()
