@@ -1,7 +1,9 @@
 
 mockrunner-0.3.2:
 
-- reorganized package structure of util classes
+- lazy initializing mock object factories in BaseTestCase as
+  suggested by Gabor Liptak. This makes the standard adapters
+  useable without all the third party dependencies.
 - introduced basic adapter versions (e.g. BasicJMSTestCaseAdapter)
   which do not extend BaseTestCase
 - adapters (both standard and basic) are generated now with the
@@ -9,6 +11,7 @@ mockrunner-0.3.2:
 - moved struts mock object creation to ActionMockObjectFactory (a subclass
   of WebMockObjectFactory) to free WebMockObjectFactory from struts
   dependencies (check out migratingfrom0.3.1.txt for details)
+- reorganized package structure of util classes
 - added getMockConnection method to MockDataSource (patch by Gabor Liptak)
 - JMS MockConnectionFactory now implements MockQueueConnectionFactory and
   MockTopicConnectionFactory to provide one factory with one JNDI name
