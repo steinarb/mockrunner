@@ -229,6 +229,30 @@ public class JavaLineAssemblerTest extends TestCase
         assertEquals("abstract synchronized MyReturnType myMethod(String string0, int int1, Integer int2, double param3)" + NL, assembler.getResult());
     }
     
+    public void testAppendConstructorDeclaration()
+    {
+        assembler.setIndentLevel(1);
+        assembler.appendConstructorDeclaration("");
+        assertEquals("", assembler.getResult());
+        assembler.appendConstructorDeclaration(null);
+        assertEquals("", assembler.getResult());
+        assembler.appendConstructorDeclaration("MyConstrcutor");
+        assertEquals("    public MyConstrcutor()" + NL, assembler.getResult());
+    }
+    
+    public void testAppendConstructorDeclarationWithParameters()
+    {
+        assembler.setIndentLevel(1);
+        assembler.appendConstructorDeclaration("", new String[0], new String[0]);
+        assertEquals("", assembler.getResult());
+        assembler.appendConstructorDeclaration(null, new String[] {"1"}, new String[] {"2"});
+        assertEquals("", assembler.getResult());
+        String[] types = new String[] {"String", "int", "Integer", "double"};
+        String[] names = new String[] {"string0", "int1", "int2"};
+        assembler.appendConstructorDeclaration("MyConstrcutor", types, names);
+        assertEquals("    public MyConstrcutor(String string0, int int1, Integer int2, double param3)" + NL, assembler.getResult());
+    }
+    
     public void testAppendComment()
     {
         assembler.setIndentLevel(1);

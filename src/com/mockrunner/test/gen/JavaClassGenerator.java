@@ -19,6 +19,7 @@ public class JavaClassGenerator
     private String[] classCommentLines;
     private boolean createJavaDocComments;
     private List methods;
+    private List constructors;
     
     public JavaClassGenerator()
     {
@@ -33,6 +34,7 @@ public class JavaClassGenerator
         memberNames = new ArrayList();
         createJavaDocComments = true;
         methods = new ArrayList();
+        constructors = new ArrayList();
     }
 
     public void setCreateJavaDocComments(boolean createJavaDocComments)
@@ -79,6 +81,16 @@ public class JavaClassGenerator
         addImportIfNecessary(memberType);
     }
     
+    public void addConstructorDeclaration()
+    {
+        constructors.add(new ConstructorDeclaration());
+    }
+    
+    public void addConstructorDeclaration(ConstructorDeclaration constructor)
+    {
+        constructors.add(constructor);
+    }
+    
     public void addMethodDeclaration(MethodDeclaration method)
     {
         methods.add(method);
@@ -96,6 +108,7 @@ public class JavaClassGenerator
         assembler.appendNewLine();
         assembler.setIndentLevel(1);
         appendMembers(assembler);
+        appendConstructors(assembler);
         assembler.setIndentLevel(0);
         assembler.appendNewLine();
         assembler.appendRightBrace();
@@ -121,6 +134,37 @@ public class JavaClassGenerator
             assembler.appendMemberDeclaration((String)memberTypes.get(ii), (String)memberNames.get(ii));
         }
     }
+    
+    private void appendConstructors(JavaLineAssembler assembler)
+    {
+        for(int ii = 0; ii < constructors.size(); ii++)
+        {
+            ConstructorDeclaration declaration = (ConstructorDeclaration)constructors.get(ii);
+            assembler.appendNewLine();
+            assembler.appendBlockComment(declaration.getCommentLines());
+            String[] argumentTypes = prepareArgumentTypes(declaration.getArguments());
+            assembler.appendConstructorDeclaration(className, argumentTypes, declaration.getArgumentNames());
+            assembler.appendIndent();
+            assembler.appendLeftBrace();
+            assembler.appendNewLine();
+            assembler.appendIndent();
+            assembler.appendRightBrace();
+            assembler.appendNewLine();
+        }
+    }
+    
+    private String[] prepareArgumentTypes(Class[] arguments)
+    {
+        if(null == arguments || arguments.length <= 0) return null;
+        String[] names = new String[arguments.length];
+        for(int ii = 0; ii < arguments.length; ii++)
+        {
+            Class clazz = arguments[ii];
+            addImportIfNecessary(clazz);
+            names[ii] = ClassUtil.getClassName(clazz);
+        }
+        return names;
+    }
 
     private void addImportIfNecessary(Class clazz)
     {
@@ -130,15 +174,63 @@ public class JavaClassGenerator
         }
     }
     
-    public final static class MethodDeclaration
+    public static class ConstructorDeclaration
     {
-        private int modifier;
-        private Class returnType;
-        private String name;
         private Class[] arguments;
         private String[] argumentNames;
         private String[] codeLines;
         private String[] commentLines;
+
+        public String[] getCodeLines()
+        {
+            if(null == codeLines) return null;
+            return (String[])ArrayUtil.copyArray(codeLines);
+        }
+        
+        public void setCodeLines(String[] codeLines)
+        {
+            this.codeLines = (String[])ArrayUtil.copyArray(codeLines);
+        }
+        
+        public String[] getCommentLines()
+        {
+            if(null == commentLines) return null;
+            return (String[])ArrayUtil.copyArray(commentLines);
+        }
+        
+        public void setCommentLines(String[] commentLines)
+        {
+            this.commentLines = (String[])ArrayUtil.copyArray(commentLines);
+        }
+       
+        public String[] getArgumentNames()
+        {
+            if(null == argumentNames) return null;
+            return (String[])ArrayUtil.copyArray(argumentNames);
+        }
+        
+        public void setArgumentNames(String[] argumentNames)
+        {
+            this.argumentNames = (String[])ArrayUtil.copyArray(argumentNames);
+        }
+        
+        public Class[] getArguments()
+        {
+            if(null == arguments) return null;
+            return (Class[])ArrayUtil.copyArray(arguments);
+        }
+        
+        public void setArguments(Class[] arguments)
+        {
+            this.arguments = (Class[])ArrayUtil.copyArray(arguments);
+        }
+    }
+    
+    public static class MethodDeclaration extends ConstructorDeclaration
+    {
+        private int modifier;
+        private Class returnType;
+        private String name;
   
         public MethodDeclaration()
         {
@@ -152,35 +244,16 @@ public class JavaClassGenerator
         
         public MethodDeclaration(int modifier, String name)
         {
+            this(modifier, name, Void.TYPE);
+        }
+        
+        public MethodDeclaration(int modifier, String name, Class returnType)
+        {
             setModifier(modifier);
-            setReturnType(Void.TYPE);
+            setReturnType(returnType);
             setName(name);
-            arguments = null;
-            argumentNames = null;
-            codeLines = null;
-            commentLines = null;
         }
-        
-        public String[] getCodeLines()
-        {
-            return (String[])ArrayUtil.copyArray(codeLines);
-        }
-        
-        public void setCodeLines(String[] codeLines)
-        {
-            this.codeLines = (String[])ArrayUtil.copyArray(codeLines);
-        }
-        
-        public String[] getCommentLines()
-        {
-            return (String[])ArrayUtil.copyArray(commentLines);
-        }
-        
-        public void setCommentLines(String[] commentLines)
-        {
-            this.commentLines = (String[])ArrayUtil.copyArray(commentLines);
-        }
-        
+
         public int getModifier()
         {
             return modifier;
@@ -209,26 +282,6 @@ public class JavaClassGenerator
         public void setReturnType(Class returnType)
         {
             this.returnType = returnType;
-        }
-        
-        public String[] getArgumentNames()
-        {
-            return (String[])ArrayUtil.copyArray(argumentNames);
-        }
-        
-        public void setArgumentNames(String[] argumentNames)
-        {
-            this.argumentNames = (String[])ArrayUtil.copyArray(argumentNames);
-        }
-        
-        public Class[] getArguments()
-        {
-            return (Class[])ArrayUtil.copyArray(arguments);
-        }
-        
-        public void setArguments(Class[] arguments)
-        {
-            this.arguments = (Class[])ArrayUtil.copyArray(arguments);
         }
     }
 }

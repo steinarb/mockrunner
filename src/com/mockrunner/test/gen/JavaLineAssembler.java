@@ -172,6 +172,20 @@ public class JavaLineAssembler
         appendLine("private " + type + " " + name + ";");
     }
     
+    public void appendConstructorDeclaration(String name)
+    {
+        appendConstructorDeclaration(name, null, null);
+    }
+    
+    public void appendConstructorDeclaration(String name, String[] parameterTypes, String[] parameterNames)
+    {
+        if(null == name || name.length() <= 0) return;
+        StringBuffer buffer = new StringBuffer(30);
+        buffer.append("public ");
+        appendSignature(name, parameterTypes, parameterNames, buffer);
+        appendLine(buffer.toString());
+    }
+    
     public void appendMethodDeclaration(String name)
     {
         appendMethodDeclaration("void", name);
@@ -201,13 +215,18 @@ public class JavaLineAssembler
         }
         buffer.append(prepareModifierList(modifiers));
         buffer.append(returnType + " ");
+        appendSignature(name, parameterTypes, parameterNames, buffer);
+        appendLine(buffer.toString());
+    }
+    
+    private void appendSignature(String name, String[] parameterTypes, String[] parameterNames, StringBuffer buffer)
+    {
         buffer.append(name);
         buffer.append("(");
         buffer.append(prepareCommaSeparatedList(parameterTypes, getParameterNameList(parameterTypes, parameterNames)));
         buffer.append(")");
-        appendLine(buffer.toString());
     }
-    
+
     public void appendComment(String oneLineComment)
     {
         if(null == oneLineComment || oneLineComment.length() <= 0) return;
