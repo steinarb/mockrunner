@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.validator.ValidatorResources;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -550,7 +549,7 @@ public class ActionTestModuleTest extends TestCase
         assertEquals(Locale.TRADITIONAL_CHINESE, testAction.getTestLocale());
     }
     
-    public void testSResourcesAddToModuleConfig()
+    public void testSetResourcesAddToModuleConfig()
     {
         MapMessageResources resources1 = new MapMessageResources();
         MapMessageResources resources2 = new MapMessageResources();
@@ -564,7 +563,7 @@ public class ActionTestModuleTest extends TestCase
         assertNotNull(mockFactory.getMockModuleConfig().findMessageResourcesConfig("test3"));
     }
     
-    public void testCreateDynaActionForm()
+    public void testDynaActionForm()
     {
         FormBeanConfig config = new FormBeanConfig();
         config.setType(TestDynaForm.class.getName());
@@ -578,21 +577,23 @@ public class ActionTestModuleTest extends TestCase
         property2.setInitial("2");
         config.addFormPropertyConfig(property1);
         config.addFormPropertyConfig(property2);
-        DynaBean bean = module.createDynaActionForm(config);
-        assertTrue(bean instanceof TestDynaForm);
-        String prop1Value = (String)bean.get("property1");
+        DynaActionForm form = module.createDynaActionForm(config);
+        String prop1Value = (String)form.get("property1");
         assertEquals("testValue1", prop1Value);
-        Integer prop2Value = (Integer)bean.get("property2");
+        Integer prop2Value = (Integer)form.get("property2");
         assertEquals(new Integer(2), prop2Value);
         try
         {
-            bean.set("property3", "3");
+            form.set("property3", "3");
             fail();
         }
         catch(IllegalArgumentException exc)
         {
             //should throw exception
         }
+        module.addRequestParameter("property2", "123");
+        module.actionPerform(TestAction.class, form);
+        assertEquals(new Integer(123), form.get("property2"));
     }
 
     public void testCreateValidatorResources()

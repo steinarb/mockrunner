@@ -9,7 +9,6 @@ import javax.servlet.ServletException;
 import javax.sql.DataSource;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.validator.ValidatorResources;
 import org.apache.struts.Globals;
 import org.apache.struts.action.Action;
@@ -19,6 +18,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.DynaActionForm;
 import org.apache.struts.action.DynaActionFormClass;
 import org.apache.struts.config.FormBeanConfig;
 import org.apache.struts.config.MessageResourcesConfig;
@@ -847,7 +847,7 @@ public class ActionTestModule
      * form config.
      * @param formConfig the <code>FormBeanConfig</code>
      */
-    public DynaBean createDynaActionForm(FormBeanConfig formConfig)
+    public DynaActionForm createDynaActionForm(FormBeanConfig formConfig)
     {
         try
         {
@@ -857,7 +857,8 @@ public class ActionTestModule
                 return null;
             }
             DynaActionFormClass formClass = DynaActionFormClass.createDynaActionFormClass(formConfig);
-            return formClass.newInstance();
+            formObj = (DynaActionForm)formClass.newInstance();
+            return (DynaActionForm)formObj;
         }
         catch (Exception exc)
         {

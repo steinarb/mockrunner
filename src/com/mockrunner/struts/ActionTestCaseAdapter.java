@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.beanutils.DynaBean;
 import org.apache.commons.validator.ValidatorResources;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -13,6 +12,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
+import org.apache.struts.action.DynaActionForm;
 import org.apache.struts.config.FormBeanConfig;
 import org.apache.struts.util.MessageResources;
 
@@ -495,7 +495,7 @@ public class ActionTestCaseAdapter extends BaseTestCase
     /**
      * Delegates to {@link ActionTestModule#createDynaActionForm}
      */
-    protected DynaBean createDynaActionForm(FormBeanConfig formConfig)
+    protected DynaActionForm createDynaActionForm(FormBeanConfig formConfig)
     {
         return actionTestModule.createDynaActionForm(formConfig);
     }

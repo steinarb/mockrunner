@@ -5,6 +5,8 @@ mockrunner-0.2.9:
 - fixed problem with MockStatement.getMoreResults(), now returns true, if there
   is a ResultSet
 - added verifyForwardName() to ActionTestModule
+- fixed problem with ActionTestModule.createDynaActionForm(), now returns
+  DynaActionForm instance
 - fixed bug in MockHttpSession.setAttribute(), valueUnbound will now be called
   if attribute is replaced
 - added Servlet 2.4 methods to MockHttpServletRequest and MockHttpServletResponse
