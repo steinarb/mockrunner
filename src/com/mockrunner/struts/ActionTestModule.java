@@ -491,7 +491,7 @@ public class ActionTestModule
      */
     public void setActionMessages(ActionMessages messages)
     {
-        mockFactory.getMockRequest().setAttribute(Globals.MESSAGE_KEY, messages);
+        mockFactory.getWrappedRequest().setAttribute(Globals.MESSAGE_KEY, messages);
     }
 
     /**
@@ -502,7 +502,7 @@ public class ActionTestModule
      */
     public ActionMessages getActionMessages()
     {
-        return (ActionMessages) mockFactory.getMockRequest().getAttribute(Globals.MESSAGE_KEY);
+        return (ActionMessages) mockFactory.getWrappedRequest().getAttribute(Globals.MESSAGE_KEY);
     }
     
     /**
@@ -522,7 +522,7 @@ public class ActionTestModule
      */
     public void setActionErrors(ActionErrors errors)
     {
-        mockFactory.getMockRequest().setAttribute(Globals.ERROR_KEY, errors);
+        mockFactory.getWrappedRequest().setAttribute(Globals.ERROR_KEY, errors);
     }
 
     /**
@@ -533,7 +533,7 @@ public class ActionTestModule
      */
     public ActionErrors getActionErrors()
     {
-        return (ActionErrors) mockFactory.getMockRequest().getAttribute(Globals.ERROR_KEY);
+        return (ActionErrors) mockFactory.getWrappedRequest().getAttribute(Globals.ERROR_KEY);
     }
 
     /**
@@ -838,7 +838,7 @@ public class ActionTestModule
             }
             if (!hasActionErrors())
             {
-                ActionForward currentForward = (ActionForward) actionObj.execute(getMockActionMapping(), formObj, mockFactory.getMockRequest(), mockFactory.getMockResponse());
+                ActionForward currentForward = (ActionForward) actionObj.execute(getMockActionMapping(), formObj, mockFactory.getWrappedRequest(), mockFactory.getWrappedResponse());
                 setResult(currentForward);
             }
             else
@@ -868,21 +868,21 @@ public class ActionTestModule
 
     private void handleActionForm() throws Exception
     {
-        if(reset) getActionForm().reset(getMockActionMapping(), mockFactory.getMockRequest());
+        if(reset) getActionForm().reset(getMockActionMapping(), mockFactory.getWrappedRequest());
         if(doPopulate) populateMockRequest();
         if(getMockActionMapping().getValidate())
         {
-            ActionErrors errors = formObj.validate(getMockActionMapping(), mockFactory.getMockRequest());
+            ActionErrors errors = formObj.validate(getMockActionMapping(), mockFactory.getWrappedRequest());
             if (containsMessages(errors))
             {
-                mockFactory.getMockRequest().setAttribute(Globals.ERROR_KEY, errors);
+                mockFactory.getWrappedRequest().setAttribute(Globals.ERROR_KEY, errors);
             }
         }
     }
 
     private void populateMockRequest() throws Exception
     {
-        BeanUtils.populate(getActionForm(), mockFactory.getMockRequest().getParameterMap());
+        BeanUtils.populate(getActionForm(), mockFactory.getWrappedRequest().getParameterMap());
     }
    
     private boolean containsMessages(ActionMessages messages)

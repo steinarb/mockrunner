@@ -136,6 +136,26 @@ public class ServletTestModule extends HTMLOutputModule
     }
     
     /**
+     * Adds an empty request parameter. Same as
+     * <code>addRequestParameter(key, "")</code>.
+     * @param key the request key
+     */
+    public void addRequestParameter(String key)
+    {
+        addRequestParameter(key, "");
+    }
+
+    /**
+     * Adds a request parameter.
+     * @param key the request key
+     * @param key the request value
+     */
+    public void addRequestParameter(String key, String value)
+    {
+        mockFactory.getMockRequest().setupAddParameter(key, value);
+    }
+    
+    /**
      * Loops through the filter chain and calls the current servlets
      * <code>service</code> method at the end (only if a current servlet
      * is set). You can use it to test single filters or the interaction 
@@ -150,7 +170,7 @@ public class ServletTestModule extends HTMLOutputModule
     {
         try
         {
-            mockFactory.getMockFilterChain().doFilter(mockFactory.getMockRequest(), mockFactory.getMockResponse());
+            mockFactory.getMockFilterChain().doFilter(mockFactory.getWrappedRequest(), mockFactory.getWrappedResponse());
         }
         catch(Exception exc)
         {
@@ -336,7 +356,7 @@ public class ServletTestModule extends HTMLOutputModule
             }
             else
             {
-                servlet.service(mockFactory.getMockRequest(), mockFactory.getMockResponse());
+                servlet.service(mockFactory.getWrappedRequest(), mockFactory.getWrappedResponse());
             }            
         }
         catch(Exception exc)

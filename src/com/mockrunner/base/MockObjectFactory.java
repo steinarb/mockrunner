@@ -1,5 +1,10 @@
 package com.mockrunner.base;
 
+import java.lang.reflect.Constructor;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.mockobjects.servlet.MockServletConfig;
 import com.mockobjects.sql.MockDataSource;
 import com.mockrunner.mock.jdbc.MockConnection;
@@ -21,6 +26,8 @@ import com.mockrunner.mock.web.MockServletContext;
  */
 public class MockObjectFactory
 {
+    private HttpServletRequest wrappedRequest;
+    private HttpServletResponse wrappedResponse;
     private MockHttpServletRequest request;
     private MockHttpServletResponse response;
     private MockServletConfig config;
@@ -95,6 +102,8 @@ public class MockObjectFactory
     {
         request = new MockHttpServletRequest();
         response = new MockHttpServletResponse();
+        wrappedRequest = request;
+        wrappedResponse = response;
         if(createNewSession) session = new MockHttpSession();
         mapping = new MockActionMapping();
         filterChain = new MockFilterChain();
@@ -147,6 +156,26 @@ public class MockObjectFactory
     public MockHttpServletResponse getMockResponse()
     {
         return response;
+    }
+    
+    /**
+     * Returns the wrapped <code>HttpServletRequest</code>. If no
+     * wrapper is specified, this method returns the mock request itself.
+     * @return the wrapped <code>HttpServletRequest</code>
+     */
+    public HttpServletRequest getWrappedRequest()
+    {
+        return wrappedRequest;
+    }
+
+    /**
+     * Returns the wrapped <code>HttpServletResponse</code>. If no
+     * wrapper is specified, this method returns the mock response itself.
+     * @return the wrapped <code>HttpServletRequest</code>
+     */
+    public HttpServletResponse getWrappedResponse()
+    {
+        return wrappedResponse;
     }
 
     /**
@@ -220,5 +249,45 @@ public class MockObjectFactory
     public MockConnection getMockConnection()
     {
         return connection;
+    }
+    
+    /**
+     * Can be used to add a wrapper around the mock request. All the
+     * test modules are using the wrapped request returned by
+     * {@link #getWrappedRequest}. The method {@link #getMockRequest}
+     * returns the mock request without any wrapper.
+     * @param wrapper the wrapper, must be of type <code>HttpServletRequestWrapper</code>
+     */
+    public void addRequestWrapper(Class wrapper)
+    {
+        try
+        {
+            Constructor constructor = wrapper.getConstructor(new Class[] {HttpServletRequest.class});
+            wrappedRequest = (HttpServletRequest)constructor.newInstance(new Object[] {wrappedRequest});
+        }
+        catch(Exception exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
+    /**
+     * Can be used to add a wrapper around the mock response. All the
+     * test modules are using the wrapped response returned by
+     * {@link #getWrappedResponse}. The method {@link #getMockResponse}
+     * returns the mock request without any wrapper.
+     * @param wrapper the wrapper, must be of type <code>HttpServletResponseWrapper</code>
+     */
+    public void addResponseWrapper(Class wrapper)
+    {
+        try
+        {
+            Constructor constructor = wrapper.getConstructor(new Class[] {HttpServletResponse.class});
+            wrappedResponse = (HttpServletResponse)constructor.newInstance(new Object[] {wrappedResponse});
+        }
+        catch(Exception exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
     }
 }
