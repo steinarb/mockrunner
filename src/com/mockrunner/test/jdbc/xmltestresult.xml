@@ -1,0 +1,14 @@
+<resultset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<row>
+	   <pub_id>0736</pub_id>
+	   <pub_name>New Age Books</pub_name>
+	</row>
+	<row>
+	   <pub_id>0877</pub_id>
+	   <pub_name>Binnet &amp; Hardley</pub_name>
+	</row>
+	<row>
+	   <pub_id>1389</pub_id>
+	   <pub_name>Algodata Infosystems</pub_name>
+	</row>
+</resultset>
