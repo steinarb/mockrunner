@@ -17,5 +17,6 @@
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/jboss-j2ee.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/mockobjects-jdk1.4-0.09.jar"/>
     <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/mockobjects-jdk1.4-j2ee1.3-0.09.jar"/>
+    <classpathentry kind="lib" path="H:/eclipse/workspace/mockrunner/lib/commons-lang.jar"/>
     <classpathentry kind="output" path="classes"/>
 </classpath>

@@ -22,6 +22,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.mockobjects.sql.MockResultSetMetaData;
 
 /**
@@ -31,23 +33,34 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 {
     private Map setObjects = new HashMap();
     private String sql;
+    private MockParameterMetaData parameterMetaData;
     
     public MockPreparedStatement(Connection connection, String sql)
     {
         super(connection);
         this.sql = sql;
+        prepareParameterMetaData();
     }
     
     public MockPreparedStatement(Connection connection, String sql, int resultSetType, int resultSetConcurrency)
     {
         super(connection, resultSetType, resultSetConcurrency);
         this.sql = sql;
+        prepareParameterMetaData();
     }
 
     public MockPreparedStatement(Connection connection, String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability)
     {
         super(connection, resultSetType, resultSetConcurrency, resultSetHoldability);
         this.sql = sql;
+        prepareParameterMetaData();
+    }
+    
+    private void prepareParameterMetaData()
+    {
+        int number = StringUtils.countMatches(sql, "?");
+        parameterMetaData = new MockParameterMetaData();
+        parameterMetaData.setupParameterCount(number);
     }
   
     public String getSQL()
@@ -112,7 +125,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public ParameterMetaData getParameterMetaData() throws SQLException
     {
-        return new MockParameterMetaData();
+        return parameterMetaData;
     }
 
     public void setArray(int parameterIndex, Array array) throws SQLException

@@ -3,8 +3,6 @@ package com.mockrunner.mock.jdbc;
 import java.sql.ParameterMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Mock implementation of <code>ParameterMetaData</code>.
@@ -67,5 +65,4 @@ public class MockParameterMetaData implements ParameterMetaData
     {
         return "";
     }
-
 }
