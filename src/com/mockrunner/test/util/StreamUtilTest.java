@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.List;
 
 import junit.framework.TestCase;
 
@@ -62,5 +63,16 @@ public class StreamUtilTest extends TestCase
         Reader copyReader = StreamUtil.copyReader(sourceReader);
         assertTrue(StreamUtil.compareReaders(sourceReader, copyReader));
         assertEquals('T', copyReader.read());
+    }
+    
+    public void testGetLinesFromReader()
+    {
+        String testString = "This is line1\nThis is line2\nThis is line3";
+        StringReader reader = new StringReader(testString);
+        List lines = StreamUtil.getLinesFromReader(reader);
+        assertEquals(3, lines.size());
+        assertEquals("This is line1", lines.get(0));
+        assertEquals("This is line2", lines.get(1));
+        assertEquals("This is line3", lines.get(2));
     }
 }

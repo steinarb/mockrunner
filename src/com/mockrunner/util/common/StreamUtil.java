@@ -1,15 +1,20 @@
 package com.mockrunner.util.common;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import com.mockrunner.base.NestedApplicationException;
 
 /**
  * Simple util class for manipulating streams
@@ -202,5 +207,30 @@ public class StreamUtil
             log.error("Exception while comparing readers", exc);
             return false;
         }
+    }
+    
+    /**
+     * Reads the lines from the specified reader and adds them to a <code>List</code>.
+     * @param reader the reader
+     * @return the <code>List</code> with the lines
+     */
+    public static List getLinesFromReader(Reader reader)
+    {
+        List resultList = new ArrayList();
+        try
+        {
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            String line = bufferedReader.readLine();
+            while(line != null)
+            {
+                resultList.add(line);
+                line = bufferedReader.readLine();
+            }
+        } 
+        catch(IOException exc)
+        {
+            throw new NestedApplicationException(exc);
+        }
+        return resultList;
     }
 }

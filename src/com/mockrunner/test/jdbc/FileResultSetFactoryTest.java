@@ -1,5 +1,8 @@
 package com.mockrunner.test.jdbc;
 
+import java.io.File;
+import java.sql.SQLException;
+
 import com.mockrunner.jdbc.FileResultSetFactory;
 import com.mockrunner.mock.jdbc.MockResultSet;
 
@@ -11,6 +14,17 @@ public class FileResultSetFactoryTest extends TestCase
     {
         FileResultSetFactory factory = new FileResultSetFactory("src/com/mockrunner/test/jdbc/testresult.txt");
         MockResultSet resultSet = factory.create("");
+        doTestResultSet(factory, resultSet);
+        factory = new FileResultSetFactory("/com/mockrunner/test/jdbc/testresult.txt");
+        resultSet = factory.create("");
+        doTestResultSet(factory, resultSet);
+        factory = new FileResultSetFactory(new File("src/com/mockrunner/test/jdbc/testresult.txt"));
+        resultSet = factory.create("");
+        doTestResultSet(factory, resultSet);
+    }
+
+    private void doTestResultSet(FileResultSetFactory factory, MockResultSet resultSet) throws SQLException
+    {
         assertTrue(resultSet.getRowCount() == 5);
         assertTrue(resultSet.getColumnCount() == 3);
         resultSet.next();

@@ -1,10 +1,16 @@
 package com.mockrunner.jdbc;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.List;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.util.common.FileUtil;
+import com.mockrunner.util.common.StreamUtil;
 import com.mockrunner.util.common.StringUtil;
 
 /**
@@ -13,25 +19,35 @@ import com.mockrunner.util.common.StringUtil;
  * of the columns (default is <i>";"</i>). Furthermore you can specify if the first line
  * contains the column names (default is <code>false</code>) and if
  * the column entries should be trimmed (default is <code>true</code>).
+ * If a <code>File</code> is specified, this file is used. If a file name
+ * is specified, this class tries to find the file in the local
+ * file system and (if not found) to load it with <code>getResourceAsStream</code>.
  */
 public class FileResultSetFactory implements ResultSetFactory
 {
-    private File file;
-    private String delimiter;
-    private boolean firstLineContainsColumnNames;
-    private boolean trim;
+    private final static Log log = LogFactory.getLog(XMLResultSetFactory.class);
+    
+    private String fileName = null;
+    private File file = null;
+    private String delimiter = ";";
+    private boolean firstLineContainsColumnNames = false;
+    private boolean trim = true;
     
     public FileResultSetFactory(String fileName)
     {
-        this(new File(fileName));
+        this.fileName = fileName;
     }
     
     public FileResultSetFactory(File file)
     {
-        this.file = file;
-        delimiter = ";";
-        firstLineContainsColumnNames = false;
-        trim = true;
+        if (file.exists() && file.isFile()) 
+        {
+            this.file = file;
+        } 
+        else 
+        {
+            this.file = null;
+        }
     }
     
     /**
@@ -64,7 +80,17 @@ public class FileResultSetFactory implements ResultSetFactory
     public MockResultSet create(String id)
     {
         MockResultSet resultSet = new MockResultSet(id);
-        List lines = FileUtil.getLinesFromFile(file);
+        List lines = null;
+        if(null != file)
+        {
+            lines = FileUtil.getLinesFromFile(file);
+        }
+        else
+        {
+            Reader reader = FileUtil.findFile(fileName);
+            lines = StreamUtil.getLinesFromReader(reader);
+            tryClose(reader);
+        }
         int firstLineNumber = 0;
         if(firstLineContainsColumnNames)
         {
@@ -83,5 +109,17 @@ public class FileResultSetFactory implements ResultSetFactory
             resultSet.addRow(values);
         }
         return resultSet;
+    }
+    
+    private void tryClose(Reader reader)
+    {
+        try
+        {
+            reader.close();
+        } 
+        catch(IOException exc)
+        {
+            log.error(exc.getMessage(), exc);
+        }
     }
 }
