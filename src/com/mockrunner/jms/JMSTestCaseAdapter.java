@@ -2,6 +2,8 @@ package com.mockrunner.jms;
 
 import java.util.List;
 
+import javax.jms.MessageListener;
+
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockQueue;
@@ -100,6 +102,38 @@ public class JMSTestCaseAdapter extends BaseTestCase
         return jmsTestModule.getCurrentTopicConnection();
     }
     
+    /**
+     * Delegates to {@link JMSTestModule#registerTestMessageListenerForQueue(String, MessageListener)}
+     */
+    public void registerTestMessageListenerForQueue(String queueName, MessageListener listener)
+    {
+        jmsTestModule.registerTestMessageListenerForQueue(queueName, listener);
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#registerTestMessageListenerForQueue(MockQueueConnection, String, MessageListener)}
+     */
+    public void registerTestMessageListenerForQueue(MockQueueConnection connection, String queueName, MessageListener listener)
+    {
+        jmsTestModule.registerTestMessageListenerForQueue(connection, queueName,listener);
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#registerTestMessageListenerForTopic(String, MessageListener)}
+     */
+    public void registerTestMessageListenerForTopic(String topicName, MessageListener listener)
+    {
+        jmsTestModule.registerTestMessageListenerForTopic(topicName, listener);
+    }
+
+    /**
+     * Delegates to {@link JMSTestModule#registerTestMessageListenerForTopic(MockTopicConnection, String, MessageListener)}
+     */
+    public void registerTestMessageListenerForTopic(MockTopicConnection connection, String topicName, MessageListener listener)
+    {
+        jmsTestModule.registerTestMessageListenerForTopic(connection, topicName, listener);
+    }
+       
     /**
      * Delegates to {@link JMSTestModule#getDestinationManager}
      */

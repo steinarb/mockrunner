@@ -3,12 +3,23 @@ package com.mockrunner.jms;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.jms.JMSException;
+import javax.jms.MessageListener;
+import javax.jms.Queue;
+import javax.jms.QueueReceiver;
+import javax.jms.QueueSession;
+import javax.jms.Session;
+import javax.jms.Topic;
+import javax.jms.TopicSession;
+import javax.jms.TopicSubscriber;
+
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueBrowser;
 import com.mockrunner.mock.jms.MockQueueConnection;
+import com.mockrunner.mock.jms.MockQueueConnectionFactory;
 import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
 import com.mockrunner.mock.jms.MockQueueSession;
@@ -16,6 +27,7 @@ import com.mockrunner.mock.jms.MockTemporaryQueue;
 import com.mockrunner.mock.jms.MockTemporaryTopic;
 import com.mockrunner.mock.jms.MockTopic;
 import com.mockrunner.mock.jms.MockTopicConnection;
+import com.mockrunner.mock.jms.MockTopicConnectionFactory;
 import com.mockrunner.mock.jms.MockTopicPublisher;
 import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
@@ -87,6 +99,104 @@ public class JMSTestModule
             return mockFactory.getMockTopicConnectionFactory().getLatestTopicConnection();
         }
         return mockFactory.getMockTopicConnectionFactory().getTopicConnection(currentTopicConnectionIndex);
+    }
+    
+    /**
+     * Creates a new connection and uses it for creating a new session and receiver.
+     * Registers the specified listener. Starts the connection for message
+     * receiving. This method is useful for creating test listeners when
+     * testing senders. Note that the created connection is the latest created
+     * connection and automatically becomes the default connection for the
+     * test module.
+     * @param queueName the name of the queue used for message receiving
+     * @param listener the listener that should be registered
+     */
+    public void registerTestMessageListenerForQueue(String queueName, MessageListener listener)
+    {
+        try
+        {
+            MockQueueConnectionFactory factory = mockFactory.getMockQueueConnectionFactory();
+            MockQueueConnection connection = (MockQueueConnection)factory.createQueueConnection();
+            registerTestMessageListenerForQueue(connection, queueName, listener);
+        }
+        catch(JMSException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
+    /**
+     * Creates a new session and receiver using the specified connection and
+     * registers the specified listener. Starts the connection for message
+     * receiving. This method is useful for creating test listeners when
+     * testing senders.
+     * @param connection the connection used for creating the session
+     * @param queueName the name of the queue used for message receiving
+     * @param listener the listener that should be registered
+     */
+    public void registerTestMessageListenerForQueue(MockQueueConnection connection, String queueName, MessageListener listener)
+    {
+        try
+        {
+            Queue queue = getDestinationManager().getQueue(queueName);
+            QueueSession session = connection.createQueueSession(true, Session.AUTO_ACKNOWLEDGE);
+            QueueReceiver receiver = session.createReceiver(queue);
+            receiver.setMessageListener(listener);
+            connection.start();
+        }
+        catch(JMSException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
+    /**
+     * Creates a new connection and uses it for creating a new session and subscriber.
+     * Registers the specified listener. Starts the connection for message
+     * receiving. This method is useful for creating test listeners when
+     * testing publishers. Note that the created connection is the latest created
+     * connection and automatically becomes the default connection for the
+     * test module.
+     * @param topicName the name of the topic used for message receiving
+     * @param listener the listener that should be registered
+     */
+    public void registerTestMessageListenerForTopic(String topicName, MessageListener listener)
+    {
+        try
+        {
+            MockTopicConnectionFactory factory = mockFactory.getMockTopicConnectionFactory();
+            MockTopicConnection connection = (MockTopicConnection)factory.createTopicConnection();
+            registerTestMessageListenerForTopic(connection, topicName, listener);
+        }
+        catch(JMSException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+
+    /**
+     * Creates a new session and subscriber using the specified connection and
+     * registers the specified listener. Starts the connection for message
+     * receiving. This method is useful for creating test listeners when
+     * testing publishers.
+     * @param connection the connection used for creating the session
+     * @param topicName the name of the topic used for message receiving
+     * @param listener the listener that should be registered
+     */
+    public void registerTestMessageListenerForTopic(MockTopicConnection connection, String topicName, MessageListener listener)
+    {
+        try
+        {
+            Topic topic = getDestinationManager().getTopic(topicName);
+            TopicSession session = connection.createTopicSession(true, Session.AUTO_ACKNOWLEDGE);
+            TopicSubscriber subscriber = session.createSubscriber(topic);
+            subscriber.setMessageListener(listener);
+            connection.start();
+        }
+        catch(JMSException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
     }
     
     /**
