@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.mockobjects.sql.MockDatabaseMetaData;
 import com.mockrunner.jdbc.CallableStatementResultSetHandler;
 import com.mockrunner.jdbc.PreparedStatementResultSetHandler;
 import com.mockrunner.jdbc.StatementResultSetHandler;
@@ -26,6 +25,7 @@ public class MockConnection implements Connection
     private StatementResultSetHandler statementHandler;
     private PreparedStatementResultSetHandler preparedStatementHandler;
     private CallableStatementResultSetHandler callableStatementHandler;
+    private DatabaseMetaData metaData;
     private Map preparedStatementMap;
     private Map savepoints;
     private int savepointCount;
@@ -44,17 +44,31 @@ public class MockConnection implements Connection
         statementHandler = new StatementResultSetHandler();
         preparedStatementHandler = new PreparedStatementResultSetHandler();
         callableStatementHandler = new CallableStatementResultSetHandler();
+        metaData = new MockDatabaseMetaData();
+        ((MockDatabaseMetaData)metaData).setConnection(this);
         closed = false;
         autoCommit = false;
         readOnly = false;
         holdability = ResultSet.HOLD_CURSORS_OVER_COMMIT;
-        level = Connection.TRANSACTION_READ_UNCOMMITTED;
+        try
+        {  
+            level = metaData.getDefaultTransactionIsolation();
+        }
+        catch(SQLException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
         typeMap = new HashMap();
         savepoints = new HashMap();
         savepointCount = 0;
         catalog = null;
         numberCommits = 0;
         numberRollbacks = 0;
+    }
+    
+    public void setMetaData(DatabaseMetaData metaData) throws SQLException
+    {
+        this.metaData = metaData;
     }
     
     public int getNumberCommits()
@@ -202,7 +216,7 @@ public class MockConnection implements Connection
 
     public DatabaseMetaData getMetaData() throws SQLException
     {
-        return new MockDatabaseMetaData();
+        return metaData;
     }
 
     public int getTransactionIsolation() throws SQLException

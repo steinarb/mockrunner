@@ -35,12 +35,32 @@ public class MockStatement implements Statement
     
     public MockStatement(Connection connection)
     {
-        this(connection, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+        this.connection = connection;
+        this.resultSetType = ResultSet.TYPE_FORWARD_ONLY;
+        this.resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
+        try
+        {
+            this.resultSetHoldability = connection.getMetaData().getResultSetHoldability();
+        }
+        catch(SQLException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
     }
     
     public MockStatement(Connection connection, int resultSetType, int resultSetConcurrency)
     {
-        this(connection, resultSetType, resultSetConcurrency, ResultSet.HOLD_CURSORS_OVER_COMMIT);
+        this.connection = connection;
+        this.resultSetType = resultSetType;
+        this.resultSetConcurrency = resultSetConcurrency;
+        try
+        {
+            this.resultSetHoldability = connection.getMetaData().getResultSetHoldability();
+        }
+        catch(SQLException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }        
     }
     
     public MockStatement(Connection connection, int resultSetType, int resultSetConcurrency, int resultSetHoldability)
