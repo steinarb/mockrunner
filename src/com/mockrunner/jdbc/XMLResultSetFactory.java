@@ -161,7 +161,7 @@ public class XMLResultSetFactory implements ResultSetFactory
            List rows = root.getChildren("row");
            Iterator ri = rows.iterator();
            boolean firstIteration = true;
-           int colNum = 0;
+           int colNum = 0;   
            while (ri.hasNext()) 
            {
                Element cRow = (Element)ri.next();
