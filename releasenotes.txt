@@ -3,6 +3,9 @@ mockrunner-0.3.1:
 
 - adapted EJBTestModule to new MockEJB 0.6 API (check out
   migratingfrom0.3.txt for details)
+- added BillManagerSessionTest in order to demonstrate the testing
+  of entity beans
+- adapted example tests to the new MockEJB 0.6 API
 - replaced all System.out and exc.printStackTrace with commons-logging
   statements in all framework classes
 - improved version of UserTransaction
