@@ -2026,6 +2026,66 @@ public class JMSTestModuleTest extends TestCase
         }
     }
     
+    public void testVerifyNumberCommitsAndRollbacks() throws Exception
+    {
+        MockSession session1 = (MockSession)queueConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockSession session2 = (MockSession)connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockSession session3 = (MockSession)topicConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        MockSession session4 = (MockSession)topicConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
+        session1.commit();
+        session1.commit();
+        session2.rollback();
+        session3.commit();
+        session3.rollback();
+        session3.rollback();
+        session3.rollback();
+        session4.commit();
+        module.verifyQueueSessionNumberCommits(0, 2);
+        module.verifyQueueSessionNumberRollbacks(0, 0);
+        module.verifyTopicSessionNumberCommits(0, 1);
+        module.verifyTopicSessionNumberRollbacks(0, 3);
+        module.verifyTopicSessionNumberCommits(1, 1);
+        module.verifyTopicSessionNumberRollbacks(1, 0);
+        module.verifySessionNumberCommits(0, 0);
+        module.verifySessionNumberRollbacks(0, 1);
+        try
+        {
+            module.verifyQueueSessionNumberCommits(0, 1);
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifySessionNumberCommits(0, 2);
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyTopicSessionNumberRollbacks(1, 3);
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyQueueSessionNumberRollbacks(2, 0);
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    
     public void testVerifyQueueMessagesAcknowledged() throws Exception
     {
         MockQueueSession session1 = (MockQueueSession)queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);

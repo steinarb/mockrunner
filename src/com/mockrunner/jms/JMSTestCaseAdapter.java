@@ -503,7 +503,15 @@ public class JMSTestCaseAdapter extends BaseTestCase
     {
         jmsTestModule.verifyQueueSessionNotCommitted(indexOfSession);
     }
-
+    
+    /**
+     * Delegates to {@link JMSTestModule#verifyQueueSessionNumberCommits}
+     */
+    protected void verifyQueueSessionNumberCommits(int indexOfSession, int numberOfCommits)
+    {
+        jmsTestModule.verifyQueueSessionNumberCommits(indexOfSession, numberOfCommits);
+    }
+    
     /**
      * Delegates to {@link JMSTestModule#verifyQueueSessionRolledBack}
      */
@@ -519,7 +527,15 @@ public class JMSTestCaseAdapter extends BaseTestCase
     {
         jmsTestModule.verifyQueueSessionNotRolledBack(indexOfSession);
     }
-
+    
+    /**
+     * Delegates to {@link JMSTestModule#verifyQueueSessionNumberRollbacks}
+     */
+    protected void verifyQueueSessionNumberRollbacks(int indexOfSession, int numberOfRollbacks)
+    {
+        jmsTestModule.verifyQueueSessionNumberRollbacks(indexOfSession, numberOfRollbacks);
+    }
+    
     /**
      * Delegates to {@link JMSTestModule#verifyQueueSessionRecovered}
      */
@@ -559,6 +575,14 @@ public class JMSTestCaseAdapter extends BaseTestCase
     {
         jmsTestModule.verifyTopicSessionNotCommitted(indexOfSession);
     }
+    
+    /**
+     * Delegates to {@link JMSTestModule#verifyTopicSessionNumberCommits}
+     */
+    protected void verifyTopicSessionNumberCommits(int indexOfSession, int numberOfCommits)
+    {
+        jmsTestModule.verifyTopicSessionNumberCommits(indexOfSession, numberOfCommits);
+    }
 
     /**
      * Delegates to {@link JMSTestModule#verifyTopicSessionRolledBack}
@@ -575,7 +599,15 @@ public class JMSTestCaseAdapter extends BaseTestCase
     {
         jmsTestModule.verifyTopicSessionNotRolledBack(indexOfSession);
     }
-
+    
+    /**
+     * Delegates to {@link JMSTestModule#verifyTopicSessionNumberRollbacks}
+     */
+    protected void verifyTopicSessionNumberRollbacks(int indexOfSession, int numberOfRollbacks)
+    {
+        jmsTestModule.verifyTopicSessionNumberRollbacks(indexOfSession, numberOfRollbacks);
+    }
+    
     /**
      * Delegates to {@link JMSTestModule#verifyTopicSessionRecovered}
      */
@@ -615,6 +647,14 @@ public class JMSTestCaseAdapter extends BaseTestCase
     {
         jmsTestModule.verifySessionNotCommitted(indexOfSession);
     }
+    
+    /**
+     * Delegates to {@link JMSTestModule#verifySessionNumberCommits}
+     */
+    protected void verifySessionNumberCommits(int indexOfSession, int numberOfCommits)
+    {
+        jmsTestModule.verifySessionNumberCommits(indexOfSession, numberOfCommits);
+    }
 
     /**
      * Delegates to {@link JMSTestModule#verifySessionRolledBack}
@@ -630,6 +670,14 @@ public class JMSTestCaseAdapter extends BaseTestCase
     protected void verifySessionNotRolledBack(int indexOfSession)
     {
         jmsTestModule.verifySessionNotRolledBack(indexOfSession);
+    }
+    
+    /**
+     * Delegates to {@link JMSTestModule#verifySessionNumberRollbacks}
+     */
+    protected void verifySessionNumberRollbacks(int indexOfSession, int numberOfRollbacks)
+    {
+        jmsTestModule.verifySessionNumberRollbacks(indexOfSession, numberOfRollbacks);
     }
 
     /**

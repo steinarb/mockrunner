@@ -871,6 +871,21 @@ public class JMSTestModule
     }
     
     /**
+     * Verifies the number of commits of the queue session with the specified index.
+     * @param indexOfSession the index of the session
+     * @param numberOfCommits the expected number of commits
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyQueueSessionNumberCommits(int indexOfSession, int numberOfCommits)
+    {
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
+        if(numberOfCommits != session.getNumberCommits())
+        {
+            throw new VerifyFailedException("QueueSession was commited " + session.getNumberCommits() + " times, expected " + numberOfCommits + " times");
+        }
+    }
+    
+    /**
      * Verifies that the queue session with the specified index was
      * rolled back.
      * @param indexOfSession the index of the session
@@ -897,6 +912,21 @@ public class JMSTestModule
         if(session.isRolledBack())
         {
             throw new VerifyFailedException("QueueSession is rolled back.");
+        }
+    }
+    
+    /**
+     * Verifies the number of rollbacks of the queue session with the specified index.
+     * @param indexOfSession the index of the session
+     * @param numberOfRollbacks the expected number of rollbacks
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyQueueSessionNumberRollbacks(int indexOfSession, int numberOfRollbacks)
+    {
+        MockQueueSession session = checkAndGetQueueSessionByIndex(indexOfSession);
+        if(numberOfRollbacks != session.getNumberRollbacks())
+        {
+            throw new VerifyFailedException("QueueSession was rolled back " + session.getNumberRollbacks() + " times, expected " + numberOfRollbacks + " times");
         }
     }
     
@@ -974,6 +1004,21 @@ public class JMSTestModule
             throw new VerifyFailedException("TopicSession is committed.");
         }
     }
+    
+    /**
+     * Verifies the number of commits of the topic session with the specified index.
+     * @param indexOfSession the index of the session
+     * @param numberOfCommits the expected number of commits
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTopicSessionNumberCommits(int indexOfSession, int numberOfCommits)
+    {
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
+        if(numberOfCommits != session.getNumberCommits())
+        {
+            throw new VerifyFailedException("TopicSession was commited " + session.getNumberCommits() + " times, expected " + numberOfCommits + " times");
+        }
+    }
 
     /**
      * Verifies that the topic session with the specified index was
@@ -1002,6 +1047,21 @@ public class JMSTestModule
         if(session.isRolledBack())
         {
             throw new VerifyFailedException("TopicSession is rolled back.");
+        }
+    }
+    
+    /**
+     * Verifies the number of rollbacks of the topic session with the specified index.
+     * @param indexOfSession the index of the session
+     * @param numberOfCommits the expected number of rollbacks
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyTopicSessionNumberRollbacks(int indexOfSession, int numberOfRollbacks)
+    {
+        MockTopicSession session = checkAndGetTopicSessionByIndex(indexOfSession);
+        if(numberOfRollbacks != session.getNumberRollbacks())
+        {
+            throw new VerifyFailedException("TopicSession was rolled back " + session.getNumberRollbacks() + " times, expected " + numberOfRollbacks + " times");
         }
     }
 
@@ -1079,6 +1139,21 @@ public class JMSTestModule
             throw new VerifyFailedException("Session is committed.");
         }
     }
+    
+    /**
+     * Verifies the number of commits of session with the specified index.
+     * @param indexOfSession the index of the session
+     * @param numberOfCommits the expected number of commits
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySessionNumberCommits(int indexOfSession, int numberOfCommits)
+    {
+        MockSession session = checkAndGetSessionByIndex(indexOfSession);
+        if(numberOfCommits != session.getNumberCommits())
+        {
+            throw new VerifyFailedException("Session was commited " + session.getNumberCommits() + " times, expected " + numberOfCommits + " times");
+        }
+    }
 
     /**
      * Verifies that the session with the specified index was
@@ -1107,6 +1182,21 @@ public class JMSTestModule
         if(session.isRolledBack())
         {
             throw new VerifyFailedException("Session is rolled back.");
+        }
+    }
+    
+    /**
+     * Verifies the number of rollbacks of session with the specified index.
+     * @param indexOfSession the index of the session
+     * @param numberOfCommits the expected number of rollbacks
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySessionNumberRollbacks(int indexOfSession, int numberOfRollbacks)
+    {
+        MockSession session = checkAndGetSessionByIndex(indexOfSession);
+        if(numberOfRollbacks != session.getNumberRollbacks())
+        {
+            throw new VerifyFailedException("Session was rolled back " + session.getNumberRollbacks() + " times, expected " + numberOfRollbacks + " times");
         }
     }
 
