@@ -195,6 +195,22 @@ public class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setMessageAttributeKey(String)}
+     */
+    protected void setMessageAttributeKey(String messageAttributeKey)
+    {
+        actionTestModule.setMessageAttributeKey(messageAttributeKey);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setErrorAttributeKey(String)}
+     */
+    protected void setErrorAttributeKey(String errorAttributeKey)
+    {
+        actionTestModule.setErrorAttributeKey(errorAttributeKey);
+    }
+
+    /**
      * Delegates to {@link com.mockrunner.struts.ActionTestModule#addMappedPropertyRequestPrefix(String)}
      */
     protected String addMappedPropertyRequestPrefix(String property)
@@ -643,27 +659,19 @@ public class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, ActionForm)}
-     */
-    protected ActionForward actionPerform(Class action, ActionForm form)
-    {
-        return actionTestModule.actionPerform(action, form);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, Class)}
-     */
-    protected ActionForward actionPerform(Class action, Class form)
-    {
-        return actionTestModule.actionPerform(action, form);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action)}
      */
     protected ActionForward actionPerform(Action action)
     {
         return actionTestModule.actionPerform(action);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, ActionForm)}
+     */
+    protected ActionForward actionPerform(Action action, ActionForm form)
+    {
+        return actionTestModule.actionPerform(action, form);
     }
 
     /**
@@ -675,6 +683,14 @@ public class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, Class)}
+     */
+    protected ActionForward actionPerform(Class action, Class form)
+    {
+        return actionTestModule.actionPerform(action, form);
+    }
+
+    /**
      * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, Class)}
      */
     protected ActionForward actionPerform(Action action, Class form)
@@ -683,9 +699,9 @@ public class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, ActionForm)}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, ActionForm)}
      */
-    protected ActionForward actionPerform(Action action, ActionForm form)
+    protected ActionForward actionPerform(Class action, ActionForm form)
     {
         return actionTestModule.actionPerform(action, form);
     }

@@ -12,6 +12,8 @@ mockrunner-0.3.2:
   of WebMockObjectFactory) to free WebMockObjectFactory from struts
   dependencies (check out migratingfrom0.3.1.txt for details)
 - reorganized package structure of util classes
+- it's now possible to set the key under which messages and errors are
+  stored in ActionTestModule
 - added getMockConnection method to MockDataSource (patch by Gabor Liptak)
 - JMS MockConnectionFactory now implements MockQueueConnectionFactory and
   MockTopicConnectionFactory to provide one factory with one JNDI name
