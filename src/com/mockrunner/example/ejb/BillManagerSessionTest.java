@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mockejb.TransactionPolicy;
+import org.mockejb.interceptor.Aspect;
 import org.mockejb.interceptor.AspectSystem;
 import org.mockejb.interceptor.AspectSystemFactory;
-import org.mockejb.interceptor.Interceptor;
 import org.mockejb.interceptor.InvocationContext;
 import org.mockejb.interceptor.MethodPatternPointcut;
+import org.mockejb.interceptor.Pointcut;
 
 import com.mockrunner.ejb.BasicEJBTestCaseAdapter;
 import com.mockrunner.example.ejb.interfaces.BillEntity;
@@ -38,8 +39,7 @@ public class BillManagerSessionTest extends BasicEJBTestCaseAdapter
     public void testMarkAsPaid() throws Exception
     {
         AspectSystem aspectSystem =  AspectSystemFactory.getAspectSystem();
-        FindUnpaidInterceptor interceptor = new FindUnpaidInterceptor();
-        aspectSystem.add(new MethodPatternPointcut("BillEntityHome\\.findUnpaid"), interceptor);
+        aspectSystem.add(new FindUnpaidAspect());
         bean.markAsPaid();
         BillEntity entity1 = (BillEntity)findByPrimaryKey("java:comp/env/ejb/BillEntity", new Integer(1));
         BillEntity entity2 = (BillEntity)findByPrimaryKey("java:comp/env/ejb/BillEntity", new Integer(2));
@@ -47,8 +47,13 @@ public class BillManagerSessionTest extends BasicEJBTestCaseAdapter
         assertTrue(entity2.getPaid());
     }
     
-    private class FindUnpaidInterceptor implements Interceptor
+    private class FindUnpaidAspect implements Aspect
     { 
+        public Pointcut getPointcut()
+        {
+            return new MethodPatternPointcut("BillEntityHome\\.findUnpaid");
+        }
+        
         public void intercept(InvocationContext invocationContext) throws Exception
         {
             List unpaidObjects = new ArrayList();
