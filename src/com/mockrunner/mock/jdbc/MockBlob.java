@@ -1,6 +1,7 @@
 package com.mockrunner.mock.jdbc;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Blob;
@@ -40,7 +41,9 @@ public class MockBlob implements Blob
     public long position(byte[] pattern, long start) throws SQLException
     {
         byte[] data = CollectionUtil.getByteArrayFromList(blobData);
-        return CollectionUtil.contains(data, pattern, (int)(start - 1));
+        int index = CollectionUtil.contains(data, pattern, (int)(start - 1));
+        if(-1 != index) index += 1;
+        return index;
     }
 
     public long position(Blob pattern, long start) throws SQLException
@@ -64,12 +67,28 @@ public class MockBlob implements Blob
 
     public OutputStream setBinaryStream(long pos) throws SQLException
     {
-        // TODO Auto-generated method stub
-        return null;
+        return new BlobOutputStream((int)(pos - 1));
     }
 
     public void truncate(long len) throws SQLException
     {
         blobData = CollectionUtil.truncateList(blobData, (int)len);
+    }
+    
+    private class BlobOutputStream extends OutputStream
+    {  
+        private int index;
+        
+        public BlobOutputStream(int index)
+        {
+            this.index = index;
+        }
+        
+        public void write(int byteValue) throws IOException
+        {
+            byte[] bytes = new byte[] {(byte)byteValue};
+            CollectionUtil.addBytesToList(bytes, blobData, index);
+            index++;
+        }
     }
 }
