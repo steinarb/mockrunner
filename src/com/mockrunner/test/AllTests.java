@@ -5,6 +5,7 @@ import junit.framework.TestSuite;
 
 import com.mockrunner.example.servlet.LogoutServletTest;
 import com.mockrunner.example.struts.AuthenticationActionTest;
+import com.mockrunner.example.struts.OrderActionTest;
 import com.mockrunner.example.struts.StoreDataActionTest;
 import com.mockrunner.example.tag.ConstrainedNumericTextTagTest;
 
@@ -26,6 +27,7 @@ public class AllTests
         suite.addTest(new TestSuite(LogoutServletTest.class));
         suite.addTest(new TestSuite(AuthenticationActionTest.class));
         suite.addTest(new TestSuite(StoreDataActionTest.class));
+        suite.addTest(new TestSuite(OrderActionTest.class));
         //$JUnit-END$
         return suite;
     }

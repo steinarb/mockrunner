@@ -3,7 +3,7 @@ mockrunner-0.2:
 
 - reorganized package structure. ActionTestModule and
   ActionTestCaseAdapter are in com.mockrunner.struts
-  package now. The tag stuff is in the com.mockrunner.struts
+  package now. The tag stuff is in the com.mockrunner.tag
   package. Please adapt your imports
 - added some useful methods to ActionTestModule
 
