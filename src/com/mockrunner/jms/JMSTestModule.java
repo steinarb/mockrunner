@@ -2119,6 +2119,7 @@ public class JMSTestModule
      * Verifies that a message in the specified temporary queue is equal to
      * the specified message by calling the <code>equals()</code> method. 
      * All mock messages provide a suitable implementation of <code>equals()</code>.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
      * @param indexOfSourceMessage the index of the message in the queue
@@ -2145,6 +2146,7 @@ public class JMSTestModule
      * Verifies that a received message is equal to the specified message 
      * by calling the <code>equals()</code> method. 
      * All mock messages provide a suitable implementation of <code>equals()</code>.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
      * @param indexOfSourceMessage the index of the received message
@@ -2201,6 +2203,7 @@ public class JMSTestModule
     
     /**
      * Verifies the number of messages in a temporary queue.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
      * @param numberOfMessages the expected number of messages
@@ -2222,6 +2225,7 @@ public class JMSTestModule
 
     /**
      * Verifies the number of messages received by a temporary queue.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
      * @param numberOfMessages the expected number of messages
@@ -2264,6 +2268,7 @@ public class JMSTestModule
     /**
      * Verifies that all received messages of the specified temporary queue 
      * are acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
      * @throws VerifyFailedException if verification fails
@@ -2330,6 +2335,7 @@ public class JMSTestModule
     
     /**
      * Verifies that a received message is acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
      * @param indexOfMessage the index of the received message
@@ -2356,6 +2362,7 @@ public class JMSTestModule
     
     /**
      * Verifies that a received message is not acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
      * @param indexOfMessage the index of the received message
@@ -2382,8 +2389,8 @@ public class JMSTestModule
     
     /**
      * Verifies the number of messages created with
-     * {@link MockQueueSession#createMessage}. Only
-     * recognizes messages that were sent to queues.
+     * {@link MockQueueSession#createMessage}.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param number the expected number of messages
      * @throws VerifyFailedException if verification fails
@@ -2399,8 +2406,8 @@ public class JMSTestModule
     
     /**
      * Verifies the number of bytes messages created with
-     * {@link MockQueueSession#createBytesMessage}. Only
-     * recognizes messages that were sent to queues.
+     * {@link MockQueueSession#createBytesMessage}.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param number the expected number of bytes messages
      * @throws VerifyFailedException if verification fails
@@ -2416,8 +2423,8 @@ public class JMSTestModule
     
     /**
      * Verifies the number of map messages created with
-     * {@link MockQueueSession#createMapMessage}. Only
-     * recognizes messages that were sent to queues.
+     * {@link MockQueueSession#createMapMessage}.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param number the expected number of map messages
      * @throws VerifyFailedException if verification fails
@@ -2433,8 +2440,8 @@ public class JMSTestModule
     
     /**
      * Verifies the number of text messages created with
-     * {@link MockQueueSession#createTextMessage}. Only
-     * recognizes messages that were sent to queues.
+     * {@link MockQueueSession#createTextMessage}.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param number the expected number of text messages
      * @throws VerifyFailedException if verification fails
@@ -2450,8 +2457,8 @@ public class JMSTestModule
     
     /**
      * Verifies the number of stream messages created with
-     * {@link MockQueueSession#createStreamMessage}. Only
-     * recognizes messages that were sent to queues.
+     * {@link MockQueueSession#createStreamMessage}.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param number the expected number of stream messages
      * @throws VerifyFailedException if verification fails
@@ -2467,8 +2474,8 @@ public class JMSTestModule
     
     /**
      * Verifies the number of object messages created with
-     * {@link MockQueueSession#createObjectMessage}. Only
-     * recognizes messages that were sent to queues.
+     * {@link MockQueueSession#createObjectMessage}.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param number the expected number of object messages
      * @throws VerifyFailedException if verification fails
@@ -2485,6 +2492,7 @@ public class JMSTestModule
     /**
      * Verifies that a message created with {@link MockQueueSession#createMessage} 
      * is acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -2507,6 +2515,7 @@ public class JMSTestModule
     /**
      * Verifies that a message created with {@link MockQueueSession#createMessage} 
      * is not acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -2529,6 +2538,7 @@ public class JMSTestModule
     /**
      * Verifies that a bytes message created with {@link MockQueueSession#createMessage} 
      * is acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -2551,6 +2561,7 @@ public class JMSTestModule
     /**
      * Verifies that a bytes message created with {@link MockQueueSession#createMessage} 
      * is not acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -2573,6 +2584,7 @@ public class JMSTestModule
     /**
      * Verifies that a map message created with {@link MockQueueSession#createMessage} 
      * is acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -2595,6 +2607,7 @@ public class JMSTestModule
     /**
      * Verifies that a map message created with {@link MockQueueSession#createMessage} 
      * is not acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -2617,6 +2630,7 @@ public class JMSTestModule
     /**
      * Verifies that a text message created with {@link MockQueueSession#createMessage} 
      * is acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -2639,6 +2653,7 @@ public class JMSTestModule
     /**
      * Verifies that a text message created with {@link MockQueueSession#createMessage} 
      * is not acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -2661,6 +2676,7 @@ public class JMSTestModule
     /**
      * Verifies that a stream message created with {@link MockQueueSession#createMessage} 
      * is acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -2683,6 +2699,7 @@ public class JMSTestModule
     /**
      * Verifies that a stream message created with {@link MockQueueSession#createMessage} 
      * is not acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -2705,6 +2722,7 @@ public class JMSTestModule
     /**
      * Verifies that a object message created with {@link MockQueueSession#createMessage} 
      * is acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -2727,6 +2745,7 @@ public class JMSTestModule
     /**
      * Verifies that a object message created with {@link MockQueueSession#createMessage} 
      * is not acknowledged.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -2792,6 +2811,7 @@ public class JMSTestModule
      * Verifies that a message in the specified temporary topic is equal to
      * the specified message by calling the <code>equals()</code> method. 
      * All mock messages provide a suitable implementation of <code>equals()</code>.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfTopic the index of the temporary topic
      * @param indexOfSourceMessage the index of the message in the topic
@@ -2818,6 +2838,7 @@ public class JMSTestModule
      * Verifies that a received message is equal to the specified message 
      * by calling the <code>equals()</code> method. 
      * All mock messages provide a suitable implementation of <code>equals()</code>.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfTopic the index of the temporary topic
      * @param indexOfSourceMessage the index of the received message
@@ -2874,6 +2895,7 @@ public class JMSTestModule
 
     /**
      * Verifies the number of messages in a temporary topic.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfTopic the index of the temporary topic
      * @param numberOfMessages the expected number of messages
@@ -2895,6 +2917,7 @@ public class JMSTestModule
 
     /**
      * Verifies the number of messages received by a temporary topic.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfTopic the index of the temporary topic
      * @param numberOfMessages the expected number of messages
@@ -2937,6 +2960,7 @@ public class JMSTestModule
     /**
      * Verifies that all received messages of the specified temporary topic 
      * are acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfTopic the index of the temporary topic
      * @throws VerifyFailedException if verification fails
@@ -3003,6 +3027,7 @@ public class JMSTestModule
 
     /**
      * Verifies that a received message is acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfTopic the index of the temporary topic
      * @param indexOfMessage the index of the received message
@@ -3029,6 +3054,7 @@ public class JMSTestModule
 
     /**
      * Verifies that a received message is not acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfTopic the index of the temporary topic
      * @param indexOfMessage the index of the received message
@@ -3055,8 +3081,8 @@ public class JMSTestModule
 
     /**
      * Verifies the number of messages created with
-     * {@link MockTopicSession#createMessage}. Only
-     * recognizes messages that were sent to topics.
+     * {@link MockTopicSession#createMessage}.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param number the expected number of messages
      * @throws VerifyFailedException if verification fails
@@ -3072,8 +3098,8 @@ public class JMSTestModule
 
     /**
      * Verifies the number of bytes messages created with
-     * {@link MockTopicSession#createBytesMessage}. Only
-     * recognizes messages that were sent to topics.
+     * {@link MockTopicSession#createBytesMessage}.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param number the expected number of bytes messages
      * @throws VerifyFailedException if verification fails
@@ -3089,8 +3115,8 @@ public class JMSTestModule
 
     /**
      * Verifies the number of map messages created with
-     * {@link MockTopicSession#createMapMessage}. Only
-     * recognizes messages that were sent to topics.
+     * {@link MockTopicSession#createMapMessage}.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param number the expected number of map messages
      * @throws VerifyFailedException if verification fails
@@ -3106,8 +3132,8 @@ public class JMSTestModule
 
     /**
      * Verifies the number of text messages created with
-     * {@link MockTopicSession#createTextMessage}. Only
-     * recognizes messages that were sent to topics.
+     * {@link MockTopicSession#createTextMessage}.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param number the expected number of text messages
      * @throws VerifyFailedException if verification fails
@@ -3123,8 +3149,8 @@ public class JMSTestModule
 
     /**
      * Verifies the number of stream messages created with
-     * {@link MockTopicSession#createStreamMessage}. Only
-     * recognizes messages that were sent to topics.
+     * {@link MockTopicSession#createStreamMessage}.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param number the expected number of stream messages
      * @throws VerifyFailedException if verification fails
@@ -3140,8 +3166,8 @@ public class JMSTestModule
 
     /**
      * Verifies the number of object messages created with
-     * {@link MockTopicSession#createObjectMessage}. Only
-     * recognizes messages that were sent to topics.
+     * {@link MockTopicSession#createObjectMessage}.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param number the expected number of object messages
      * @throws VerifyFailedException if verification fails
@@ -3158,6 +3184,7 @@ public class JMSTestModule
     /**
      * Verifies that a message created with {@link MockTopicSession#createMessage} 
      * is acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -3180,6 +3207,7 @@ public class JMSTestModule
     /**
      * Verifies that a message created with {@link MockTopicSession#createMessage} 
      * is not acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -3202,6 +3230,7 @@ public class JMSTestModule
     /**
      * Verifies that a bytes message created with {@link MockTopicSession#createMessage} 
      * is acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -3224,6 +3253,7 @@ public class JMSTestModule
     /**
      * Verifies that a bytes message created with {@link MockTopicSession#createMessage} 
      * is not acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -3246,6 +3276,7 @@ public class JMSTestModule
     /**
      * Verifies that a map message created with {@link MockTopicSession#createMessage} 
      * is acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -3268,6 +3299,7 @@ public class JMSTestModule
     /**
      * Verifies that a map message created with {@link MockTopicSession#createMessage} 
      * is not acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -3290,6 +3322,7 @@ public class JMSTestModule
     /**
      * Verifies that a text message created with {@link MockTopicSession#createMessage} 
      * is acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -3312,6 +3345,7 @@ public class JMSTestModule
     /**
      * Verifies that a text message created with {@link MockTopicSession#createMessage} 
      * is not acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -3334,6 +3368,7 @@ public class JMSTestModule
     /**
      * Verifies that a stream message created with {@link MockTopicSession#createMessage} 
      * is acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -3356,6 +3391,7 @@ public class JMSTestModule
     /**
      * Verifies that a stream message created with {@link MockTopicSession#createMessage} 
      * is not acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -3378,6 +3414,7 @@ public class JMSTestModule
     /**
      * Verifies that a object message created with {@link MockTopicSession#createMessage} 
      * is acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -3400,6 +3437,7 @@ public class JMSTestModule
     /**
      * Verifies that a object message created with {@link MockTopicSession#createMessage} 
      * is not acknowledged.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
      * @throws VerifyFailedException if verification fails
@@ -3408,6 +3446,384 @@ public class JMSTestModule
     {
         checkAndGetTopicSessionByIndex(indexOfSession);
         List messageList = getTopicMessageManager(indexOfSession).getObjectMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " object messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+    
+    /**
+     * Verifies the number of messages created with
+     * {@link MockSession#createMessage}.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param number the expected number of messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfCreatedMessages(int indexOfSession, int number)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        if(number != getMessageManager(indexOfSession).getMessageList().size())
+        {
+            throw new VerifyFailedException("Expected " + number + " messages, received " + getMessageManager(indexOfSession).getMessageList().size() + " messages");
+        }
+    }
+
+    /**
+     * Verifies the number of bytes messages created with
+     * {@link MockSession#createBytesMessage}.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param number the expected number of bytes messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfCreatedBytesMessages(int indexOfSession, int number)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        if(number != getMessageManager(indexOfSession).getBytesMessageList().size())
+        {
+            throw new VerifyFailedException("Expected " + number + " bytes messages, received " + getMessageManager(indexOfSession).getBytesMessageList().size() + " bytes messages");
+        }
+    }
+
+    /**
+     * Verifies the number of map messages created with
+     * {@link MockSession#createMapMessage}.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param number the expected number of map messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfCreatedMapMessages(int indexOfSession, int number)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        if(number != getMessageManager(indexOfSession).getMapMessageList().size())
+        {
+            throw new VerifyFailedException("Expected " + number + " map messages, received " + getMessageManager(indexOfSession).getMapMessageList().size() + " map messages");
+        }
+    }
+
+    /**
+     * Verifies the number of text messages created with
+     * {@link MockSession#createTextMessage}.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param number the expected number of text messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfCreatedTextMessages(int indexOfSession, int number)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        if(number != getMessageManager(indexOfSession).getTextMessageList().size())
+        {
+            throw new VerifyFailedException("Expected " + number + " text messages, received " + getMessageManager(indexOfSession).getTextMessageList().size() + " text messages");
+        }
+    }
+
+    /**
+     * Verifies the number of stream messages created with
+     * {@link MockSession#createStreamMessage}.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param number the expected number of stream messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfCreatedStreamMessages(int indexOfSession, int number)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        if(number != getMessageManager(indexOfSession).getStreamMessageList().size())
+        {
+            throw new VerifyFailedException("Expected " + number + " stream messages, received " + getMessageManager(indexOfSession).getStreamMessageList().size() + " stream messages");
+        }
+    }
+
+    /**
+     * Verifies the number of object messages created with
+     * {@link MockSession#createObjectMessage}.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param number the expected number of object messages
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyNumberOfCreatedObjectMessages(int indexOfSession, int number)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        if(number != getMessageManager(indexOfSession).getObjectMessageList().size())
+        {
+            throw new VerifyFailedException("Expected " + number + " object messages, received " + getMessageManager(indexOfSession).getObjectMessageList().size() + " object messages");
+        }
+    }
+    
+    /**
+     * Verifies that a message created with {@link MockSession#createMessage} 
+     * is acknowledged.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        List messageList = getMessageManager(indexOfSession).getMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a message created with {@link MockSession#createMessage} 
+     * is not acknowledged.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        List messageList = getMessageManager(indexOfSession).getMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a bytes message created with {@link MockSession#createMessage} 
+     * is acknowledged.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedBytesMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        List messageList = getMessageManager(indexOfSession).getBytesMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " bytes messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a bytes message created with {@link MockSession#createMessage} 
+     * is not acknowledged.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedBytesMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        List messageList = getMessageManager(indexOfSession).getBytesMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " bytes messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a map message created with {@link MockSession#createMessage} 
+     * is acknowledged.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedMapMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        List messageList = getMessageManager(indexOfSession).getMapMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " map messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a map message created with {@link MockSession#createMessage} 
+     * is not acknowledged.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedMapMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        List messageList = getMessageManager(indexOfSession).getMapMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " map messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a text message created with {@link MockSession#createMessage} 
+     * is acknowledged.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedTextMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        List messageList = getMessageManager(indexOfSession).getTextMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " text messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a text message created with {@link MockSession#createMessage} 
+     * is not acknowledged.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedTextMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        List messageList = getMessageManager(indexOfSession).getTextMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " text messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a stream message created with {@link MockSession#createMessage} 
+     * is acknowledged.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedStreamMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        List messageList = getMessageManager(indexOfSession).getStreamMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " stream messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a stream message created with {@link MockSession#createMessage} 
+     * is not acknowledged.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedStreamMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        List messageList = getMessageManager(indexOfSession).getStreamMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " stream messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a object message created with {@link MockSession#createMessage} 
+     * is acknowledged.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedObjectMessageAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        List messageList = getMessageManager(indexOfSession).getObjectMessageList();
+        if(indexOfMessage >= messageList.size())
+        {
+            throw new VerifyFailedException("Only " + messageList.size() + " object messages created for session " + indexOfSession);
+        }
+        MockMessage message = (MockMessage)messageList.get(indexOfMessage);
+        if(!message.isAcknowledged())
+        {
+            throw new VerifyFailedException("Message " + indexOfMessage + " of session " + indexOfSession + " is not acknowledged");
+        }
+    }
+
+    /**
+     * Verifies that a object message created with {@link MockSession#createMessage} 
+     * is not acknowledged.
+     * The session has to be created using the current {@link MockConnection}.
+     * @param indexOfSession the index of the session
+     * @param indexOfMessage the index of the message
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyCreatedObjectMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
+    {
+        checkAndGetSessionByIndex(indexOfSession);
+        List messageList = getMessageManager(indexOfSession).getObjectMessageList();
         if(indexOfMessage >= messageList.size())
         {
             throw new VerifyFailedException("Only " + messageList.size() + " object messages created for session " + indexOfSession);
