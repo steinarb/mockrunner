@@ -60,7 +60,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     {
         int number = StringUtils.countMatches(sql, "?");
         parameterMetaData = new MockParameterMetaData();
-        parameterMetaData.setupParameterCount(number);
+        parameterMetaData.setParameterCount(number);
     }
   
     public String getSQL()
