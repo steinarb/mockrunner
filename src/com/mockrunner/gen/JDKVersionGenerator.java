@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.mockrunner.test.consistency.ConsistencyUtil;
 import com.mockrunner.util.StreamUtil;
 
 public class JDKVersionGenerator
