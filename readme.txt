@@ -26,7 +26,7 @@ SQL statements. You can use the Mockrunner API to specify the results the
 database would provide when executing different SQL statements. The
 framework is meant for testing the Java part of JDBC based applications.
 If you want to test SQL code you can use SQLUnit (http://sqlunit.sourceforge.net/)
-or dbUnit (http://dbunit.sourceforge.net) which runs against a real database.
+or dbUnit (http://dbunit.sourceforge.net/) which runs against a real database.
 
 The JMS test framework implements all JMS interfaces and can be used to test JMS 
 based code. The JMS test framework is able to send and receive messages and to keep
