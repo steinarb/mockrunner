@@ -21,6 +21,7 @@ mockrunner-0.3.1:
   and HTMLOutputTestCase. The classes provide convenience methods
   for request and session handling
 - added setJspWriter(JspWriter jspWriter) method to MockPageContext
+- column names of MockResultSet are now handled case insensitive
 - updated mockejb.jar from 0.5 to 0.6 beta2
 - replaced jakarta-oro.jar from Struts release with jakarta-oro-2.0.8.jar
   from MockEJB 0.6 beta2 release
