@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServlet;
 
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.HTMLOutputTestCase;
-import com.mockrunner.base.WebTestModule;
 
 /**
  * Delegator for {@link com.mockrunner.servlet.ServletTestModule}. You can
@@ -46,16 +45,6 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     {
         super.setUp();
         servletTestModule = createServletTestModule(getWebMockObjectFactory());
-    }
-
-    /**
-     * Returns the {@link com.mockrunner.servlet.ServletTestModule} as
-     * {@link com.mockrunner.base.WebTestModule}.
-     * @return the {@link com.mockrunner.base.WebTestModule}
-     */
-    protected WebTestModule getWebTestModule()
-    {
-        return servletTestModule;
     }
 
     /**

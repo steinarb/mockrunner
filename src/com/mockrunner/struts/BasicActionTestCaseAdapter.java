@@ -14,31 +14,35 @@ import org.apache.struts.action.DynaActionForm;
 import org.apache.struts.config.FormBeanConfig;
 import org.apache.struts.util.MessageResources;
 
+import com.mockrunner.base.BasicHTMLOutputTestCase;
 import com.mockrunner.base.HTMLOutputModule;
-import com.mockrunner.base.HTMLOutputTestCase;
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.mock.web.MockActionMapping;
 import com.mockrunner.mock.web.MockPageContext;
+import com.mockrunner.mock.web.WebMockObjectFactory;
 
 /**
  * Delegator for {@link com.mockrunner.struts.ActionTestModule}. You can
  * subclass this adapter or use {@link com.mockrunner.struts.ActionTestModule}
  * directly (so your test case can use another base class).
- * This adapter extends {@link com.mockrunner.base.BaseTestCase}.
- * It can be used if you want to use several modules in conjunction.
+ * This basic adapter can be used if you don't need any other modules. It
+ * does not extend {@link com.mockrunner.base.BaseTestCase}. If you want
+ * to use several modules in conjunction, consider subclassing
+ * {@link com.mockrunner.struts.ActionTestCaseAdapter}.
  * <b>This class is generated from the {@link com.mockrunner.struts.ActionTestModule}
  * and should not be edited directly</b>.
  */
-public class ActionTestCaseAdapter extends HTMLOutputTestCase
+public class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
 {
     private ActionTestModule actionTestModule;
+    private WebMockObjectFactory webMockObjectFactory;
 
-    public ActionTestCaseAdapter()
+    public BasicActionTestCaseAdapter()
     {
 
     }
 
-    public ActionTestCaseAdapter(String name)
+    public BasicActionTestCaseAdapter(String name)
     {
         super(name);
     }
@@ -47,6 +51,7 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     {
         super.tearDown();
         actionTestModule = null;
+        webMockObjectFactory = null;
     }
 
     /**
@@ -56,7 +61,83 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
+        webMockObjectFactory = createWebMockObjectFactory();
         actionTestModule = createActionTestModule(getWebMockObjectFactory());
+    }
+
+    /**
+     * Creates a {@link com.mockrunner.mock.web.WebMockObjectFactory}.
+     * @return the created {@link com.mockrunner.mock.web.WebMockObjectFactory}
+     */
+    protected WebMockObjectFactory createWebMockObjectFactory()
+    {
+        return new WebMockObjectFactory();
+    }
+
+    /**
+     * Same as <code>createWebMockObjectFactory(otherFactory, true)</code>.
+     */
+    protected WebMockObjectFactory createWebMockObjectFactory(WebMockObjectFactory otherFactory)
+    {
+        return new WebMockObjectFactory(otherFactory);
+    }
+
+    /**
+     * Creates a {@link com.mockrunner.mock.web.WebMockObjectFactory} based on another on.
+     * The created {@link com.mockrunner.mock.web.WebMockObjectFactory} will have its own
+     * request and response objects. If you set <i>createNewSession</i>
+     * to <code>true</code> it will also have its own session object.
+     * The two factories will share one <code>ServletContext</code>.
+     * Especially important for multithreading tests.
+     * If you set <i>createNewSession</i> to false, the two factories
+     * will share one session. This setting simulates multiple requests
+     * from the same client.
+     * @param otherFactory the other factory
+     * @param createNewSession create a new session for the new factory
+     * @return the created {@link com.mockrunner.mock.web.WebMockObjectFactory}
+     */
+    protected WebMockObjectFactory createWebMockObjectFactory(WebMockObjectFactory otherFactory, boolean createNewSession)
+    {
+        return new WebMockObjectFactory(otherFactory, createNewSession);
+    }
+
+    /**
+     * Gets the {@link com.mockrunner.mock.web.WebMockObjectFactory}.
+     * @return the {@link com.mockrunner.mock.web.WebMockObjectFactory}
+     */
+    protected WebMockObjectFactory getWebMockObjectFactory()
+    {
+        return webMockObjectFactory;
+    }
+
+    /**
+     * Sets the {@link com.mockrunner.mock.web.WebMockObjectFactory}.
+     * @param webMockObjectFactory the {@link com.mockrunner.mock.web.WebMockObjectFactory}
+     */
+    protected void setWebMockObjectFactory(WebMockObjectFactory webMockObjectFactory)
+    {
+        this.webMockObjectFactory = webMockObjectFactory;
+    }
+
+    /**
+     * Creates a {@link com.mockrunner.struts.ActionTestModule} based on the current
+     * {@link com.mockrunner.mock.web.WebMockObjectFactory}.
+     * Same as <code>createActionTestModule(getWebMockObjectFactory())</code>.
+     * @return the created {@link com.mockrunner.struts.ActionTestModule}
+     */
+    protected ActionTestModule createActionTestModule()
+    {
+        return new ActionTestModule(getWebMockObjectFactory());
+    }
+
+    /**
+     * Creates a {@link com.mockrunner.struts.ActionTestModule} with the specified
+     * {@link com.mockrunner.mock.web.WebMockObjectFactory}.
+     * @return the created {@link com.mockrunner.struts.ActionTestModule}
+     */
+    protected ActionTestModule createActionTestModule(WebMockObjectFactory mockFactory)
+    {
+        return new ActionTestModule(mockFactory);
     }
 
     /**
