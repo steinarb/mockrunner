@@ -37,6 +37,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 {
     private PreparedStatementResultSetHandler resultSetHandler;
     private Map paramObjects = new HashMap();
+    private Map paramObjectsInBatch = new HashMap();
     private String sql;
     private MockParameterMetaData parameterMetaData;
     
@@ -106,7 +107,12 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     
     public void addBatch() throws SQLException
     {
-
+        Iterator keys = paramObjects.keySet().iterator();
+        while(keys.hasNext())
+        {
+            Object nextKey = keys.next();
+            paramObjectsInBatch.put(nextKey, paramObjects.get(nextKey));
+        }
     }
 
     public void clearParameters() throws SQLException
@@ -133,7 +139,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public ResultSet executeQuery() throws SQLException
     {
-        MockResultSet result = resultSetHandler.getResultSet(getSQL(), getParameterList());
+        MockResultSet result = resultSetHandler.getResultSet(getSQL(), getParameterList(doesExecuteBatch()));
         if(null != result)
         {
             return cloneResultSet(result);
@@ -143,7 +149,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public int executeUpdate() throws SQLException
     {
-        Integer updateCount = resultSetHandler.getUpdateCount(getSQL(), getParameterList());
+        Integer updateCount = resultSetHandler.getUpdateCount(getSQL(), getParameterList(doesExecuteBatch()));
         if(null != updateCount)
         {
             return updateCount.intValue();
@@ -296,15 +302,24 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         setObject(parameterIndex, url);
     }
     
-    private List getParameterList()
-    {
+    private List getParameterList(boolean useBatchParameters)
+    { 
+        Map params;
+        if(useBatchParameters)
+        {
+            params = paramObjectsInBatch;
+        }
+        else
+        {
+            params = paramObjects;
+        }
         ArrayList resultList = new ArrayList();
-        Iterator iterator = paramObjects.keySet().iterator();
+        Iterator iterator = params.keySet().iterator();
         while(iterator.hasNext())
         {
             Integer nextIndex = (Integer)iterator.next();
             CollectionUtil.fillList(resultList, nextIndex.intValue() + 1);
-            resultList.set(nextIndex.intValue(), paramObjects.get(nextIndex));
+            resultList.set(nextIndex.intValue(), params.get(nextIndex));
         }
         return resultList;
     }
