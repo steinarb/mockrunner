@@ -19,6 +19,8 @@ import java.util.Map;
 
 public class MockCallableStatement extends MockPreparedStatement implements CallableStatement
 {
+    private AbstractOutParameterResultSetHandler resultSetHandler;
+    
     public MockCallableStatement(Connection connection, String sql)
     {
         super(connection, sql);
@@ -32,6 +34,12 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     public MockCallableStatement(Connection connection, String sql, int resultSetType, int resultSetConcurrency, int resultSetHoldability)
     {
         super(connection, sql, resultSetType, resultSetConcurrency, resultSetHoldability);
+    }
+    
+    public void setCallableStatementResultSetHandler(AbstractOutParameterResultSetHandler resultSetHandler)
+    {
+        super.setPreparedStatementResultSetHandler(resultSetHandler);
+        this.resultSetHandler = resultSetHandler;
     }
     
     public Object getParameter(String name)

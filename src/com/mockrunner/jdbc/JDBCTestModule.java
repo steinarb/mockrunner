@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -120,6 +121,22 @@ public class JDBCTestModule
     public List getStatements()
     {
         return mockFactory.getMockConnection().getStatementResultSetHandler().getStatements();
+    }
+    
+    /**
+     * Returns a <code>List</code> of all SQL statements that were executed
+     * by calling an <code>execute</code> method of a {@link com.mockrunner.mock.jdbc.MockStatement},
+     * {@link com.mockrunner.mock.jdbc.MockPreparedStatement} or
+     * {@link com.mockrunner.mock.jdbc.MockCallableStatement}.
+     * @return the <code>List</code> of <code>Statement</code> objects
+     */
+    public List getExecutedSQLStatements()
+    {
+        ArrayList list = new ArrayList();
+        list.addAll(mockFactory.getMockConnection().getStatementResultSetHandler().getExecutedStatements());
+        list.addAll(mockFactory.getMockConnection().getPreparedStatementResultSetHandler().getExecutedStatements());
+        list.addAll(mockFactory.getMockConnection().getCallableStatementResultSetHandler().getExecutedStatements());
+        return list;
     }
     
     /**
@@ -401,6 +418,30 @@ public class JDBCTestModule
             }
         }
         return null;
+    }
+    
+    /**
+     * Verifies that an SQL statement was executed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySQLStatementExecuted(String sql)
+    {
+        if(!SearchUtil.contains(getExecutedSQLStatements(), sql, caseSensitive, exactMatch))
+        {
+            throw new VerifyFailedException("Statement " + sql + " not executed.");
+        }
+    }
+    
+    /**
+     * Verifies that an SQL statement was not executed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySQLStatementNotExecuted(String sql)
+    {
+        if(SearchUtil.contains(getExecutedSQLStatements(), sql, caseSensitive, exactMatch))
+        {
+            throw new VerifyFailedException("Statement " + sql + " not executed.");
+        }
     }
     
     /**

@@ -16,7 +16,7 @@ public class SearchUtil
      * a <code>Collection</code>, all elements of the <code>Collection</code>
      * will be added.
      * @param dataMap the source <code>Map</code>
-     * @param query the query string that must match the keys in dataMap
+     * @param query the query string that must match the keys in <i>dataMap</i>
      * @param caseSensitive is comparison case sensitive
      * @param exactMatch compare exactly
      * @param queryContainsMapData only matters if <i>exactMatch</i> is <code>false</code>,
@@ -57,6 +57,25 @@ public class SearchUtil
             } 
         }
         return resultList;
+    }
+    
+    /**
+     * Compares all elements in the specified <code>Collections</code> with the
+     * specified query string using the method {@link #doesStringMatch}.
+     * @param col the <code>Collections</code>
+     * @param query the query string that must match the keys in <i>col</i>
+     * @param caseSensitive is comparison case sensitive
+     * @param exactMatch compare exactly
+     * @return <code>true</code> if <i>col</i> contains <i>query</i>, false otherwise
+     */
+    public static boolean contains(Collection col, String query, boolean caseSensitive, boolean exactMatch)
+    {
+        Iterator iterator = col.iterator();
+        while(iterator.hasNext())
+        {
+            if(doesStringMatch((String)iterator.next(), query, caseSensitive, exactMatch)) return true;
+        }
+        return false;
     }
     
     /**
