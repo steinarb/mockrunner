@@ -157,6 +157,22 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link JDBCTestModule#verifyConnectionClosed}
+     */
+    protected void verifyConnectionClosed()
+    {
+        jdbcTestModule.verifyConnectionClosed();
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyAllStatementsClosed}
+     */
+    protected void verifyAllStatementsClosed()
+    {
+        jdbcTestModule.verifyAllStatementsClosed();
+    }
+    
+    /**
      * Delegates to {@link JDBCTestModule#verifyNumberStatements}
      */
     protected void verifyNumberStatements(int number)
@@ -178,6 +194,30 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     protected void verifyNumberPreparedStatements(int number, String sql)
     {
         jdbcTestModule.verifyNumberPreparedStatements(number, sql);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyStatementClosed}
+     */
+    protected void verifyStatementClosed(int index)
+    {
+        jdbcTestModule.verifyStatementClosed(index);
+    }   
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyPreparedStatementClosed(int)}
+     */
+    protected void verifyPreparedStatementClosed(int index)
+    {
+        jdbcTestModule.verifyPreparedStatementClosed(index);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#verifyPreparedStatementClosed(String)}
+     */
+    protected void verifyPreparedStatementClosed(String sql)
+    {
+        jdbcTestModule.verifyPreparedStatementClosed(sql);
     }
     
     /**

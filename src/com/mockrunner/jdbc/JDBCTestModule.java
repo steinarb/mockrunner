@@ -1,6 +1,7 @@
 package com.mockrunner.jdbc;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -199,8 +200,53 @@ public class JDBCTestModule
     }
     
     /**
+     * Verifies that the connection is closed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyConnectionClosed()
+    {
+        try
+        {
+            if(!mockFactory.getMockConnection().isClosed())
+            {
+                throw new VerifyFailedException("Connection not closed.");
+            }
+        }
+        catch(SQLException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
+    }
+    
+    /**
+     * Verifies that all statements and all prepared statements are closed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllStatementsClosed()
+    {
+        List statements = getStatements();
+        for(int ii = 0; ii < statements.size(); ii++)
+        {
+            MockStatement statement = (MockStatement)statements.get(ii);
+            if(!statement.isClosed())
+            {
+                throw new VerifyFailedException("Statement with index " + ii + " not closed.");
+            }
+        }
+        statements = getPreparedStatements();
+        for(int ii = 0; ii < statements.size(); ii++)
+        {
+            MockPreparedStatement statement = (MockPreparedStatement)statements.get(ii);
+            if(!statement.isClosed())
+            {
+                throw new VerifyFailedException("Prepared statement with index " + ii + " (SQL " + statement.getSQL() + ") not closed.");
+            }
+        }
+    }
+    
+    /**
      * Verifies the number of statements.
-     * @param number the exepcted number
+     * @param number the expected number
      * @throws VerifyFailedException if verification fails
      */
     public void verifyNumberStatements(int number)
@@ -210,7 +256,7 @@ public class JDBCTestModule
     
     /**
      * Verifies the number of prepared statements.
-     * @param number the exepcted number
+     * @param number the expected number
      * @throws VerifyFailedException if verification fails
      */
     public void verifyNumberPreparedStatements(int number)
@@ -221,7 +267,7 @@ public class JDBCTestModule
     /**
      * Verifies the number of prepared statements with the specified
      * SQL.
-     * @param number the exepcted number
+     * @param number the expected number
      * @param sql the SQL
      * @throws VerifyFailedException if verification fails
      */
@@ -244,6 +290,60 @@ public class JDBCTestModule
     }
     
     /**
+     * Verifies that a statement is closed.
+     * @param index the index of the statement
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyStatementClosed(int index)
+    {
+        MockStatement statement = getStatement(index);
+        if(null == statement)
+        {
+            throw new VerifyFailedException("No statement with index " + index + " present.");
+        }
+        if(!statement.isClosed())
+        {
+            throw new VerifyFailedException("Statement with index " + index + " not closed.");
+        }
+    }
+    
+    /**
+     * Verifies that a prepared statement is closed.
+     * @param index the index of the prepared statement
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyPreparedStatementClosed(int index)
+    {
+        MockPreparedStatement statement = getPreparedStatement(index);
+        if(null == statement)
+        {
+            throw new VerifyFailedException("No prepared statement with index " + index + " present.");
+        }
+        if(!statement.isClosed())
+        {
+            throw new VerifyFailedException("Prepared statement with index " + index + " not closed.");
+        }
+    }
+    
+    /**
+     * Verifies that a prepared statement is closed.
+     * @param sql the SQL statement
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyPreparedStatementClosed(String sql)
+    {
+        MockPreparedStatement statement = getPreparedStatement(sql);
+        if(null == statement)
+        {
+            throw new VerifyFailedException("No prepared statement with SQL " + sql + " present.");
+        }
+        if(!statement.isClosed())
+        {
+            throw new VerifyFailedException("Prepared statement with SQL " + sql + " not closed.");
+        }
+    }
+    
+    /**
      * Verifies that a <code>PreparedStatement</code> with the specified 
      * SQL statement is present.
      * @param sql the SQL statement
@@ -251,7 +351,7 @@ public class JDBCTestModule
      */
     public void verifyPreparedStatementPresent(String sql)
     {
-        if(null == getPreparedStatement(sql) )
+        if(null == getPreparedStatement(sql))
         {
             throw new VerifyFailedException("Prepared statement with SQL " +  sql + " present.");
         }

@@ -1,3 +1,4 @@
+- add support for mulitple ResultSet returns
 - add better support of HTML fragments
 - get MultiThreadTestSuite working
 - write more tests for framework components
