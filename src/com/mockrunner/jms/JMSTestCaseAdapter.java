@@ -44,7 +44,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
 
     /**
      * Sets the <code>JMSTestModule</code>. 
-     * @param ejbTestModule the <code>JMSTestModule</code>
+     * @param jmsTestModule the <code>JMSTestModule</code>
      */
     protected void setJMSTestModule(JMSTestModule jmsTestModule)
     {

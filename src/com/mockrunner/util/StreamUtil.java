@@ -173,8 +173,8 @@ public class StreamUtil
     /**
      * Compares the content of the readers. If the readers support
      * marking, they will be reseted after the comparison.
-     * @param sourceStream the source stream
-     * @param targetStream the target stream
+     * @param sourceReader the source stream
+     * @param targetReader the target stream
      * @return <code>true</code>, if the streams are identical, <code>false</code> otherwise
      */
     public static boolean compareReaders(Reader sourceReader, Reader targetReader)

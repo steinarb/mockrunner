@@ -461,7 +461,7 @@ public class ActionTestModule
     /**
      * Returns the action message with the specified key or null
      * if such a message does not exist.
-     * @param errorKey the error key
+     * @param messageKey the message key
      * @return the action message with the specified key
      */
     public ActionMessage getActionMessageByKey(String messageKey)
@@ -518,7 +518,7 @@ public class ActionTestModule
     /**
      * Sets the specified <code>ActionErrors</code> object 
      * as the currently present errors.
-     * @param messages the ActionErrors object
+     * @param errors the ActionErrors object
      */
     public void setActionErrors(ActionErrors errors)
     {
@@ -604,7 +604,7 @@ public class ActionTestModule
      * to the <code>ActionForm</code>. To add parameters for map 
      * backed properties use the <i>value(property)</i> style.
      * @param key the request key
-     * @param key the request value
+     * @param value the request value
      */
     public void addRequestParameter(String key, String value)
     {

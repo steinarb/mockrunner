@@ -311,7 +311,7 @@ public class ArrayUtil
      * array <i>bytes</i> in the array <i>source</i>.
      * @param source the array in which to search
      * @param bytes the array to search
-     * @param the index at which to begin the search
+     * @param index the index where to begin the search
      * @return the index of the first occurence, resp.
      *         -1, if <i>source</i> does not contain <i>bytes</i>
      */

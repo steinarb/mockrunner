@@ -148,7 +148,7 @@ public class ServletTestModule extends HTMLOutputModule
     /**
      * Adds a request parameter.
      * @param key the request key
-     * @param key the request value
+     * @param value the request value
      */
     public void addRequestParameter(String key, String value)
     {

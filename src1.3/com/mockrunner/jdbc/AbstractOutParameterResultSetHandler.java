@@ -115,7 +115,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      * parameter with index 1.
      * @param sql the SQL string
      * @param outParameters the corresponding out parameter <code>Map</code>
-     * @param paramters the parameters
+     * @param parameters the parameters
      */
     public void prepareOutParameter(String sql, Map outParameters, Object[] parameters)
     {
@@ -132,7 +132,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      * parameter with index 1.
      * @param sql the SQL string
      * @param outParameters the corresponding out parameter <code>Map</code>
-     * @param paramters the parameters
+     * @param parameters the parameters
      */
     public void prepareOutParameter(String sql, Map outParameters, List parameters)
     {
@@ -153,7 +153,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      * A <code>String</code> is the name of the parameter.
      * @param sql the SQL string
      * @param outParameters the corresponding out parameter <code>Map</code>
-     * @param paramters the parameters
+     * @param parameters the parameters
      */
     public void prepareOutParameter(String sql, Map outParameters, Map parameters)
     {
