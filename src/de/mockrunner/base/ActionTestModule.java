@@ -35,7 +35,7 @@ public class ActionTestModule
     }
 
     /**
-     * Convinience method for nested properties. Creates a String
+     * Convinience method for map backed properties. Creates a String
      * <i>value(property)</i>.
      * @param property the property
      */
@@ -46,7 +46,8 @@ public class ActionTestModule
 
     /**
      * Sets the parameter by delegating to {@link MockActionMapping#setParameter}.
-     * You can test your Actions with different parameter settings.
+     * You can test your Actions with different parameter settings in the
+     * same test method.
      * @param parameter the parameter
      */
     public void setParameter(String parameter)
@@ -77,8 +78,6 @@ public class ActionTestModule
 
     /**
      * Verifies the forward path returned by the action.
-     * Delegates to {@link MockActionMapping#setValidate}.
-     * @param validate should validation be performed
      * @throws VerifyFailedException if verification fails
      */
     public void verifyForward(String path)
@@ -90,6 +89,22 @@ public class ActionTestModule
         else if (!getActionForward().verifyName(path))
         {
             throw new VerifyFailedException("expected " + path + ", received " + getActionForward().getPath());
+        }
+    }
+    
+    /**
+     * Verifies the redirect attribute.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyRedirect(boolean redirect)
+    {
+        if (null == getActionForward())
+        {
+            throw new VerifyFailedException("ActionForward == null");
+        }
+        else if(!getActionForward().verifyRedirect(redirect))
+        {
+            throw new VerifyFailedException("expected " + redirect + ", received " + getActionForward().getRedirect());
         }
     }
 
@@ -260,6 +275,13 @@ public class ActionTestModule
         }
     }
     
+    /**
+     * Verifies the values of the action error with the
+     * specified key. Regards number and order of values.
+     * @param errorKey the error key
+     * @param values the exepcted values
+     * @throws VerifyFailedException if verification fails
+     */
     public void verifyActionErrorValues(String errorKey, Object[] values)
     {
         ActionError error = getActionErrorByKey(errorKey);
@@ -267,6 +289,13 @@ public class ActionTestModule
         verifyActionMessageValues(error, values);
     }
     
+    /**
+     * Verifies the values of the action message with the
+     * specified key. Regards number and order of values.
+     * @param messageKey the message key
+     * @param values the exepcted values
+     * @throws VerifyFailedException if verification fails
+     */
     public void verifyActionMessageValues(String messageKey, Object[] values)
     {
         ActionMessage message = getActionMessageByKey(messageKey);
@@ -288,11 +317,29 @@ public class ActionTestModule
         }
     }
     
+    /**
+     * Verifies the value of the action error with the
+     * specified key. Fails if the specified value does
+     * not match the actual value or if the error has more
+     * than one value.
+     * @param errorKey the error key
+     * @param value the exepcted value
+     * @throws VerifyFailedException if verification fails
+     */
     public void verifyActionErrorValue(String errorKey, Object value)
     {
         verifyActionErrorValues(errorKey, new Object[] { value });
     }
     
+    /**
+     * Verifies the value of the action message with the
+     * specified key. Fails if the specified value does
+     * not match the actual value or if the message has more
+     * than one value.
+     * @param messageKey the message key
+     * @param value the exepcted value
+     * @throws VerifyFailedException if verification fails
+     */
     public void verifyActionMessageValue(String messageKey, Object value)
     {
         verifyActionMessageValues(messageKey, new Object[] { value });
@@ -518,7 +565,7 @@ public class ActionTestModule
         }
         else
         {
-            forward = new MockActionForward(currentForward.getName(), currentForward.getPath(), currentForward.getRedirect());
+            forward = new MockActionForward(currentForward.getName(), currentForward.getPath(), currentForward.getRedirect(), currentForward.getContextRelative());
         }
     }
 
