@@ -111,7 +111,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link JMSTestModule#registerTestMessageListenerForQueue(MockQueueConnection, String, MessageListener)}
+     * Delegates to {@link JMSTestModule#registerTestMessageListenerForQueue(MockConnection, String, MessageListener)}
      */
     protected void registerTestMessageListenerForQueue(MockQueueConnection connection, String queueName, MessageListener listener)
     {
@@ -119,7 +119,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     }
     
     /**
-     * Delegates to {@link JMSTestModule#registerTestMessageListenerForQueue(MockQueueConnection, String, boolean, int, MessageListener)}
+     * Delegates to {@link JMSTestModule#registerTestMessageListenerForQueue(MockConnection, String, boolean, int, MessageListener)}
      */
     protected void registerTestMessageListenerForQueue(MockQueueConnection connection, String queueName, boolean transacted, int acknowledgeMode, MessageListener listener)
     {
@@ -135,7 +135,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link JMSTestModule#registerTestMessageListenerForTopic(MockTopicConnection, String, MessageListener)}
+     * Delegates to {@link JMSTestModule#registerTestMessageListenerForTopic(MockConnection, String, MessageListener)}
      */
     protected void registerTestMessageListenerForTopic(MockTopicConnection connection, String topicName, MessageListener listener)
     {
@@ -143,7 +143,7 @@ public class JMSTestCaseAdapter extends BaseTestCase
     }
     
     /**
-     * Delegates to {@link JMSTestModule#registerTestMessageListenerForTopic(MockTopicConnection, String, boolean, int, MessageListener)}
+     * Delegates to {@link JMSTestModule#registerTestMessageListenerForTopic(MockConnection, String, boolean, int, MessageListener)}
      */
     protected void registerTestMessageListenerForTopic(MockTopicConnection connection, String topicName, boolean transacted, int acknowledgeMode, MessageListener listener)
     {

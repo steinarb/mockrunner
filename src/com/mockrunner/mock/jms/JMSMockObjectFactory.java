@@ -16,6 +16,7 @@ public class JMSMockObjectFactory
     private DestinationManager destinationManager;
     private MockQueueConnectionFactory queueConnectionFactory;
     private MockTopicConnectionFactory topicConnectionFactory;
+    private MockConnectionFactory connectionFactory;
     
     /**
      * Creates a new set of mock objects.
@@ -25,6 +26,7 @@ public class JMSMockObjectFactory
         destinationManager = new DestinationManager();
         queueConnectionFactory = new MockQueueConnectionFactory(destinationManager);
         topicConnectionFactory = new MockTopicConnectionFactory(destinationManager);
+        connectionFactory = new MockConnectionFactory(destinationManager);
     }
     
     /**
@@ -50,6 +52,15 @@ public class JMSMockObjectFactory
      * @return the {@link com.mockrunner.mock.jms.MockTopicConnectionFactory}
      */
     public MockTopicConnectionFactory getMockTopicConnectionFactory()
+    {
+        return topicConnectionFactory;
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.mock.jms.MockConnectionFactory}.
+     * @return the {@link com.mockrunner.mock.jms.MockConnectionFactory}
+     */
+    public MockConnectionFactory getMockConnectionFactory()
     {
         return topicConnectionFactory;
     }
