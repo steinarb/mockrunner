@@ -12,7 +12,7 @@ import javax.jms.QueueSession;
 import javax.jms.ServerSessionPool;
 import javax.jms.Session;
 
-import com.mockrunner.jms.QueueManager;
+import com.mockrunner.jms.DestinationManager;
 
 /**
  * Mock implementation of JMS <code>QueueConnection</code>.
@@ -23,22 +23,12 @@ import com.mockrunner.jms.QueueManager;
  */
 public class MockQueueConnection extends MockConnection implements QueueConnection
 {
-    private QueueManager queueManager;
     private List queueSessions;
     
-    public MockQueueConnection()
+    public MockQueueConnection(DestinationManager destinationManager)
     {
+        super(destinationManager);
         queueSessions = new ArrayList();
-        queueManager = new QueueManager(this);
-    }
-    
-    /**
-     * Returns the {@link com.mockrunner.jms.QueueManager}.
-     * @return the {@link com.mockrunner.jms.QueueManager}
-     */
-    public QueueManager getQueueManager()
-    {
-        return queueManager;
     }
     
     /**

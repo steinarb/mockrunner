@@ -32,21 +32,12 @@ public class JMSTestModule
     }
     
     /**
-     * Returns the {@link QueueManager}.
-     * @return the {@link QueueManager}
+     * Returns the {@link DestinationManager}.
+     * @return the {@link DestinationManager}
      */
-    public QueueManager getQueueManager()
+    public DestinationManager getDestinationManager()
     {
-        return mockFactory.getMockQueueConnection().getQueueManager();
-    }
-    
-    /**
-     * Returns the {@link TopicManager}.
-     * @return the {@link TopicManager}
-     */
-    public TopicManager getTopicManager()
-    {
-        return mockFactory.getMockTopicConnection().getTopicManager();
+        return mockFactory.getDestinationManager();
     }
 
     /**
@@ -153,7 +144,7 @@ public class JMSTestModule
      */
     public MockQueue getQueue(String name)
     {
-        return getQueueManager().getQueue(name);
+        return getDestinationManager().getQueue(name);
     }
     
     /**
@@ -164,7 +155,7 @@ public class JMSTestModule
      */
     public MockTopic getTopic(String name)
     {
-        return getTopicManager().getTopic(name);
+        return getDestinationManager().getTopic(name);
     }
     
     /**
@@ -2764,8 +2755,8 @@ public class JMSTestModule
     
     private void checkQueueByName(String queueName)
     {
-        QueueManager queueManager = getQueueManager();
-        if(null == queueManager.getQueue(queueName))
+        DestinationManager destinationManager = getDestinationManager();
+        if(null == destinationManager.getQueue(queueName))
         {
             throw new VerifyFailedException("Queue with name " + queueName + " is not present.");
         }
@@ -2773,8 +2764,8 @@ public class JMSTestModule
     
     private void checkTopicByName(String topicName)
     {
-        TopicManager topicManager = getTopicManager();
-        if(null == topicManager.getTopic(topicName))
+        DestinationManager destinationManager = getDestinationManager();
+        if(null == destinationManager.getTopic(topicName))
         {
             throw new VerifyFailedException("Topic with name " + topicName + " is not present.");
         }

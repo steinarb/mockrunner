@@ -12,7 +12,7 @@ import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicSession;
 
-import com.mockrunner.jms.TopicManager;
+import com.mockrunner.jms.DestinationManager;
 
 /**
  * Mock implementation of JMS <code>TopicConnection</code>.
@@ -23,22 +23,12 @@ import com.mockrunner.jms.TopicManager;
  */
 public class MockTopicConnection extends MockConnection implements TopicConnection
 {
-    private TopicManager topicManager;
     private List topicSessions;
     
-    public MockTopicConnection()
+    public MockTopicConnection(DestinationManager destinationManager)
     {
+        super(destinationManager);
         topicSessions = new ArrayList();
-        topicManager = new TopicManager(this);
-    }
-    
-    /**
-     * Returns the {@link com.mockrunner.jms.QueueManager}.
-     * @return the {@link com.mockrunner.jms.QueueManager}
-     */
-    public TopicManager getTopicManager()
-    {
-        return topicManager;
     }
     
     /**

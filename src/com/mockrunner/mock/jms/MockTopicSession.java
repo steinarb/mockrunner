@@ -69,7 +69,7 @@ public class MockTopicSession extends MockSession implements TopicSession
     public Topic createTopic(String name) throws JMSException
     {
         getConnection().throwJMSException();
-        MockTopic topic = ((MockTopicConnection)getConnection()).getTopicManager().getTopic(name);
+        MockTopic topic = ((MockTopicConnection)getConnection()).getDestinationManager().getTopic(name);
         if(null == topic)
         {
             throw new JMSException("Topic with name " + name + " not found");
@@ -81,7 +81,7 @@ public class MockTopicSession extends MockSession implements TopicSession
     public TemporaryTopic createTemporaryTopic() throws JMSException
     {
         getConnection().throwJMSException();
-        MockTemporaryTopic topic = new MockTemporaryTopic(getConnection());
+        MockTemporaryTopic topic = new MockTemporaryTopic();
         tempTopics.add(topic);
         addSessionToTopic(topic);
         return topic;

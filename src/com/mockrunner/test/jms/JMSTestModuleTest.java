@@ -22,9 +22,8 @@ import javax.jms.TopicSubscriber;
 import junit.framework.TestCase;
 
 import com.mockrunner.base.VerifyFailedException;
+import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.jms.JMSTestModule;
-import com.mockrunner.jms.QueueManager;
-import com.mockrunner.jms.TopicManager;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockBytesMessage;
 import com.mockrunner.mock.jms.MockMapMessage;
@@ -57,7 +56,7 @@ public class JMSTestModuleTest extends TestCase
     
     public void testGetQueue() throws Exception
     {
-        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         manager.createQueue("test1");
         manager.createQueue("test2");
         assertNotNull(module.getQueue("test1"));
@@ -80,7 +79,7 @@ public class JMSTestModuleTest extends TestCase
     
     public void testGetTopic() throws Exception
     {
-        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         manager.createTopic("myTopic1");
         manager.createTopic("myTopic2");
         assertNotNull(module.getTopic("myTopic1"));
@@ -226,7 +225,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyQueueSender() throws Exception
     {
         mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         manager.createQueue("queue");
         module.getQueueSession(0).createSender(manager.getQueue("queue"));
         module.verifyNumberQueueSenders(0, 1);
@@ -276,7 +275,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyTopicPublishers() throws Exception
     {
         mockFactory.getMockTopicConnection().createTopicSession(true, Session.AUTO_ACKNOWLEDGE);
-        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         manager.createTopic("topic");
         module.getTopicSession(0).createPublisher(manager.getTopic("topic"));
         module.verifyNumberTopicPublishers(0, 1);
@@ -344,7 +343,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyQueueReceiver() throws Exception
     {
         mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         Queue queue1 = manager.createQueue("queue");
         Queue queue2 = manager.createQueue("otherQueue");
         module.getQueueSession(0).createReceiver(queue1);
@@ -386,7 +385,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyTopicSubscriber() throws Exception
     {
         mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
-        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         Topic topic1 = manager.createTopic("topic1");
         Topic topic2 = manager.createTopic("topic2");
         module.getTopicSession(0).createSubscriber(topic1);
@@ -447,7 +446,7 @@ public class JMSTestModuleTest extends TestCase
         {
             //should throw exception
         }
-        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         Topic topic1 = manager.createTopic("topic1");
         Topic topic2 = manager.createTopic("topic2");
         module.verifyNumberDurableTopicSubscribers(0, "topic1", 0);
@@ -487,7 +486,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyQueueBrowser() throws Exception
     {
         mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         manager.createQueue("queue");
         module.getQueueSession(0).createBrowser(manager.getQueue("queue"));
         module.getQueueSession(0).createBrowser(manager.getQueue("queue"));
@@ -588,7 +587,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyNumberQueueMessages() throws Exception
     {
         mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         manager.createQueue("queue");
         QueueSender sender1 = module.getQueueSession(0).createSender(manager.getQueue("queue"));
         manager.createQueue("otherQueue");
@@ -657,7 +656,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyNumberTopicMessages() throws Exception
     {
         mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
-        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         manager.createTopic("topic");
         TopicPublisher publisher1 = module.getTopicSession(0).createPublisher(manager.getTopic("topic"));
         manager.createTopic("otherTopic");
@@ -726,7 +725,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyQueueMessageEquals() throws Exception
     {
         mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         manager.createQueue("queue");
         QueueSender sender = module.getQueueSession(0).createSender(manager.getQueue("queue"));
         TextMessage message1 = module.getQueueSession(0).createTextMessage();
@@ -850,7 +849,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyTopicMessageEquals() throws Exception
     {
         mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
-        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         manager.createTopic("topic");
         TopicPublisher publisher = module.getTopicSession(0).createPublisher(manager.getTopic("topic"));
         ObjectMessage message1 = module.getTopicSession(0).createObjectMessage();
@@ -984,7 +983,7 @@ public class JMSTestModuleTest extends TestCase
         MockQueueSession session1 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         MockQueueSession session2 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         MockQueueSession session3 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
-        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         Queue queue = manager.createQueue("queue");
         MockQueueSender sender1 = (MockQueueSender)session1.createSender(queue);
         MockQueueSender sender2 = (MockQueueSender)session1.createSender(queue);
@@ -1062,7 +1061,7 @@ public class JMSTestModuleTest extends TestCase
         MockTopicSession session1 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
         MockTopicSession session2 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
         MockTopicSession session3 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
-        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         Topic topic = manager.createTopic("topic");
         MockTopicPublisher publisher1 = (MockTopicPublisher)session1.createPublisher(topic);
         MockTopicPublisher publisher2 = (MockTopicPublisher)session2.createPublisher(topic);
@@ -1302,7 +1301,7 @@ public class JMSTestModuleTest extends TestCase
     {
         MockQueueSession session1 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
         MockQueueSession session2 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, Session.AUTO_ACKNOWLEDGE);
-        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         Queue queue = manager.createQueue("queue");
         MockQueueSender sender1 = (MockQueueSender)session1.createSender(queue);
         MockQueueSender sender2 = (MockQueueSender)session2.createSender(queue);
@@ -1444,7 +1443,7 @@ public class JMSTestModuleTest extends TestCase
     {
         MockTopicSession session1 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
         MockTopicSession session2 = (MockTopicSession)mockFactory.getMockTopicConnection().createTopicSession(true, Session.DUPS_OK_ACKNOWLEDGE);
-        TopicManager manager = mockFactory.getMockTopicConnection().getTopicManager();
+        DestinationManager manager = mockFactory.getDestinationManager();
         Topic topic = manager.createTopic("topic");
         MockTopicPublisher publisher1 = (MockTopicPublisher)session1.createPublisher(topic);
         MockTopicPublisher publisher2 = (MockTopicPublisher)session2.createPublisher(topic);
