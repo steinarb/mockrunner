@@ -64,6 +64,7 @@
         <property name="buildj2ee1.3" value="buildj2ee1.3" />
         <property name="buildjdk1.3j2ee1.3" value="buildjdk1.3j2ee1.3" />
         <property name="dependencies" value="dependencies" />
+        <property name="dependenciesj2ee1.3" value="dependenciesj2ee1.3" />
         <property name="src" value="src" />
         <property name="srcjdk1.3" value="srcjdk1.3" />
         <property name="srcj2ee1.3" value="srcj2ee1.3" />
@@ -103,6 +104,7 @@
         
         <patternset id="full.jar.classes">
             <include name="**/*" />
+            <exclude name="*.jar" />
             <exclude name="*.txt" />
             <exclude name="com/mockrunner/example/**" />
             <exclude name="com/mockrunner/test/**" />
@@ -184,7 +186,7 @@
             <exclude name="com/mockrunner/mock/web/MockJspFragment.*" />
             <exclude name="com/mockrunner/servlet/ActionTestCaseAdapter.*" />
         </patternset>
-
+        
     </target>
 
     <target name="compile" depends="init">
@@ -318,28 +320,28 @@
     
     <target name="jarsj2ee1.3" if="dobuild.j2ee1.3" depends="compilej2ee1.3">
         <antcall target="jar">
-            <param name="jarname" value="mockrunner-j2ee.13.jar" />
+            <param name="jarname" value="mockrunner-j2ee1.3.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildj2ee1.3}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
         <antcall target="jar">
-            <param name="jarname" value="mockrunner-servlet-j2ee.1.3.jar" />
+            <param name="jarname" value="mockrunner-servlet-j2ee1.3.jar" />
             <param name="jdkver" value="1.3 and 1.4" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildj2ee1.3}" />
             <param name="jarpattern" value="servlet.jar.classes" />
         </antcall>
         <antcall target="jar">
-            <param name="jarname" value="mockrunner-tag-j2ee.1.3.jar" />
+            <param name="jarname" value="mockrunner-tag-j2ee1.3.jar" />
             <param name="jdkver" value="1.3 and 1.4" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildj2ee1.3}" />
             <param name="jarpattern" value="tag.jar.classes" />
         </antcall>
         <antcall target="jar">
-            <param name="jarname" value="mockrunner-struts-j2ee.1.3.jar" />
+            <param name="jarname" value="mockrunner-struts-j2ee1.3.jar" />
             <param name="jdkver" value="1.3 and 1.4" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildj2ee1.3}" />
@@ -367,7 +369,7 @@
     
     <target name="jarsjdk1.3j2ee1.3" if="dobuild.j2ee1.3" depends="compilejdk1.3j2ee1.3">
         <antcall target="jar">
-            <param name="jarname" value="mockrunner-jdk1.3-j2ee.1.3.jar" />
+            <param name="jarname" value="mockrunner-jdk1.3-j2ee1.3.jar" />
             <param name="jdkver" value="1.3" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.3j2ee1.3}" />
@@ -403,7 +405,7 @@
         </jar>
     </target>
     
-    <target name="dependencies" depends="jars,jarsjdk1.3,jarsj2ee1.3,jarsjdk1.3j2ee1.3">
+    <target name="dependencies" depends="init,jars,jarsjdk1.3,jarsj2ee1.3,jarsjdk1.3j2ee1.3">
         <mkdir dir="${dependencies}" />
         <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
             <classpath>
@@ -412,10 +414,10 @@
                 <path refid="classpath.jar" />
             </classpath>
         </taskdef>
-        
         <copy todir="${dependencies}">
             <fileset dir="${lib}">
-                <patternset refid="runtime.jars"/>
+                <patternset refid="runtime.jars" />
+                <exclude name="j2ee1.3/**" />
             </fileset>
         </copy>
         
@@ -439,6 +441,53 @@
     <target name="copybuildjdk1.3" if="java1.3.home">
         <copy todir="${dependencies}">
             <fileset dir="${buildjdk1.3}" >
+                <include name="*.jar" />
+            </fileset>
+        </copy>
+    </target>
+    
+    <target name="dependenciesj2ee1.3" if="dobuild.j2ee1.3" depends="init,jarsj2ee1.3,jarsjdk1.3j2ee1.3">
+        <mkdir dir="${dependenciesj2ee1.3}" />
+        <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
+            <classpath>
+                <pathelement location="${build}" />
+                <pathelement location="${config}" />
+                <path refid="classpath.jar" />
+            </classpath>
+        </taskdef>
+        <copy todir="${dependenciesj2ee1.3}">
+            <fileset dir="${lib}">
+                <patternset refid="runtime.jars" />
+                <exclude name="j2ee1.3/**" />
+                <exclude name="servlet-api.jar" />
+                <exclude name="jsp-api.jar" />
+                <exclude name="jboss-j2ee.jar" />
+            </fileset>
+            <fileset dir="${lib}/j2ee1.3">
+                <include name="*.jar" />
+            </fileset>
+        </copy>
+        
+        <antcall target="copybuildj2ee1.3"/>
+        <antcall target="copybuildjdk1.3j2ee1.3"/>
+
+        <jaranalyzer srcdir="${dependenciesj2ee1.3}" 
+                     destfile="${dependenciesj2ee1.3}/dependenciesj2ee1.3.txt"
+                     summaryclass="com.mockrunner.gen.jar.MockrunnerTextSummary"/>
+        
+    </target>
+    
+    <target name="copybuildj2ee1.3">
+        <copy todir="${dependenciesj2ee1.3}">
+             <fileset dir="${buildj2ee1.3}">
+                 <include name="*.jar" />
+             </fileset>
+        </copy>
+    </target>
+
+    <target name="copybuildjdk1.3j2ee1.3" if="java1.3.home">
+        <copy todir="${dependenciesj2ee1.3}">
+            <fileset dir="${buildjdk1.3j2ee1.3}" >
                 <include name="*.jar" />
             </fileset>
         </copy>
@@ -478,14 +527,14 @@
 	    </java2html>
 	</target>
 
-	<target name="release" depends="clean,jars,jarsjdk1.3,jarsj2ee1.3,jarsjdk1.3j2ee1.3,javadoc,java2html,dependencies">
+	<target name="release" depends="clean,jars,jarsjdk1.3,jarsj2ee1.3,jarsjdk1.3j2ee1.3,javadoc,java2html,dependencies,dependenciesj2ee1.3">
 	    <delete dir="${releasedir}" />
 	    <delete file="${releasefile}" />
 	    <mkdir dir="${releasedir}" />
 	    <mkdir dir="${releasedir}/src" />
 	    <mkdir dir="${releasedir}/doc" />
 	    <mkdir dir="${releasedir}/lib" />
-        <mkdir dir="${releasedir}/lib/div" />   
+        <mkdir dir="${releasedir}/lib/j2ee1.3" />   
 	    <mkdir dir="${releasedir}/jar" />
         <filter token="version" value="${version}" />
         <filter token="timestamp" value="${timestamp}" />
@@ -494,41 +543,57 @@
                 <include name="*.txt" />
                 <exclude name="jarversion.txt" />
             </fileset>
-            <fileset dir="${dependencies}">
-                <include name="*.txt" />
-            </fileset>
-	    </copy>
-	    <copy todir="${releasedir}/src">
-	        <fileset dir="${src}">
-	            <include name="**/*" />
-	        </fileset>
 	    </copy>
 	    <copy todir="${releasedir}/doc">
 	        <fileset dir="${doc}">
 	            <include name="**/*" />
 	        </fileset>
 	    </copy>
-	    <copy todir="${releasedir}/lib">
-            <fileset dir="${build}">
-                <include name="mockrunner.jar" />
-            </fileset>
-        </copy>
-        <copy todir="${releasedir}/lib/div">
-            <fileset dir="${build}">
-                <include name="*.jar" />
-                <exclude name="mockrunner.jar" />
-            </fileset>
-        </copy>
 	    <copy todir="${releasedir}/jar">
 	        <fileset dir="${lib}">
-                <patternset refid="runtime.jars"/>
+                <patternset refid="runtime.jars" />
 	        </fileset>
 	    </copy>
-        <antcall target="releasejdk1.3"/>   
+        <antcall target="copyrelease" />      
+        <antcall target="copyreleasejdk1.3" />   
 	    <zip destfile="${releasefile}" basedir="${bin}" />
 	</target>
     
-    <target name="releasejdk1.3" if="java1.3.home">
+    <target name="copyrelease">
+        <mkdir dir="${releasedir}/src" />
+        <copy todir="${releasedir}/src">
+            <fileset dir="${src}">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+        <copy todir="${releasedir}/lib">
+            <fileset dir="${build}">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${dependencies}">
+                <include name="*.txt" />
+            </fileset>
+        </copy>
+        <antcall target="copyreleasej2ee1.3"/>   
+    </target>
+        
+    <target name="copyreleasej2ee1.3" if="dobuild.j2ee1.3">
+        <copy todir="${releasedir}/srcj2ee1.3">
+            <fileset dir="${srcj2ee1.3}">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+        <copy todir="${releasedir}/lib/j2ee1.3">
+            <fileset dir="${buildj2ee1.3}">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${dependenciesj2ee1.3}">
+                <include name="*.txt" />
+            </fileset>
+        </copy>
+    </target>
+    
+    <target name="copyreleasejdk1.3" if="java1.3.home">
         <mkdir dir="${releasedir}/srcjdk1.3" />
         <copy todir="${releasedir}/srcjdk1.3">
             <fileset dir="${srcjdk1.3}">
@@ -537,13 +602,16 @@
         </copy>
         <copy todir="${releasedir}/lib">
             <fileset dir="${buildjdk1.3}">
-                <include name="mockrunner-jdk1.3.jar" />
+                <include name="*.jar" />
             </fileset>
         </copy>
-        <copy todir="${releasedir}/lib/div">
-            <fileset dir="${buildjdk1.3}">
+        <antcall target="copyreleasejdk1.3j2ee1.3"/>   
+    </target>
+    
+    <target name="copyreleasejdk1.3j2ee1.3" if="dobuild.j2ee1.3">
+        <copy todir="${releasedir}/lib/j2ee1.3">
+            <fileset dir="${buildjdk1.3j2ee1.3}">
                 <include name="*.jar" />
-                <exclude name="mockrunner-jdk1.3.jar" />
             </fileset>
         </copy>
     </target>
@@ -554,8 +622,9 @@
 	    <delete dir="${build}" />
 	    <delete dir="${buildjdk1.3}" />
         <delete dir="${buildj2ee1.3}" />
-        <delete dir="${buildjdk1.3j2ee1.3}" />   
-        <delete dir="${dependencies}" />   
+        <delete dir="${buildjdk1.3j2ee1.3}" />
+        <delete dir="${dependencies}" />
+        <delete dir="${dependenciesj2ee1.3}" />
 	</target>
 
 </project>

@@ -1,8 +1,8 @@
 Mockrunner is a lightweight framework for unit testing applications in
 the J2EE environment. It supports Struts actions and forms, servlets, 
-filters and tag classes. Furthermore it includes a JDBC and a JMS test framework. 
-The JDBC test framework can be used standalone or in conjunction with MockEJB 
-(http://mockejb.sourceforge.net/) to test EJB based applications.
+filters and tag classes. Furthermore it includes a JDBC and a JMS test framework
+and can be used in conjunction with MockEJB (http://mockejb.sourceforge.net/)
+to test EJB based applications.
 
 Mockrunner extends JUnit and simulates the necessary behaviour without calling 
 the real infrastructure. It does not need a running application server or
@@ -45,7 +45,9 @@ There is a simple mechanism included in Mockrunner that makes it possible
 to write multithread tests. You can simulate multiple requests from
 the same client or from different clients and test concurrent access
 to shared ressources efficiently. Have a look at the StoreDataAction
-example to see how to do that.
+example to see how to do that. Please note that this feature is a
+bit experimental at the moment. Not all mock objects are properly 
+synchronized, so you should use this feature with care.
 
 For components that produce HTML fragments as output (e.g. servlets
 and tags) Mockrunner provides an API to test this output as pure text
@@ -55,20 +57,20 @@ It is planned to include support for other frameworks in the J2EE
 environment in future releases.
 
 Mockrunner requires at least Java 1.3 to run. If you are using Java 1.3
-you have to use mockrunner-jkd1.3.jar or mockrunner-jdbc-jkd1.3.jar.
-The files mockrunner.jar and mockrunner-jdbc.jar are for Java 1.4 only, 
-all other jar files can be used with both versions. The JDBCTestModule 
-is limited to JDBC API 2.1 if Java 1.3 is used. If you are running Java 1.4 
-you can use JDBC 3.0. 
-Mockrunner supports J2EE 1.3 at the moment. The EJB and JMS related test
-modules are already J2EE 1.4 compatible, the web based test modules are
-not J2EE 1.4 compatible currently. I.e. Mockrunner supports the Servlet API
-2.3. Servlet API 2.4 support is upcoming. Older Servlet and J2EE versions
-are not supported.
-Mockrunner supports Struts versions 1.1 and 1.2.
-It's not possible to use Mockrunner with Struts 1.0.
+you have to use the jar files with "-jdk1.3" in their name. If a jar
+file doesn't have a corresponding "-jdk1.3"-version, it can be used with
+Java 1.3 and 1.4. The JDBCTestModule  is limited to JDBC API 2.1 if Java 1.3 
+is used. If you are running Java 1.4  you can use JDBC 3.0. 
+Mockrunner supports J2EE 1.3 and J2EE 1.4. For J2EE 1.3 you have to use
+the jar files with "-j2ee1.3" in their name (these files are in lib/j2ee1.3
+directory). If a jar file doesn't have a corresponding "-j2ee1.3"-version, 
+it can be used with J2EE 1.3 and J2EE 1.4. Older J2EE version, e.g. Servlet API
+2.2, are not supported.
+Mockrunner supports Struts versions 1.1 and 1.2. It's not possible to use Mockrunner 
+with Struts 1.0.
 Each jar file contains a jarversion.txt which lists the JDK and J2EE version
-this jar supports.
+this jar supports. Please check out this file, if you are in doubt which jar
+to use.
 
 To start with Mockrunner check out the JavaDoc and the examples
 in the com.mockrunner.example packages. Most methods are self-explanatory.
@@ -94,12 +96,12 @@ adapter, you can always create a module like this:
 JDBCMockObjectFactory factory = new JDBCMockObjectFactory();
 JDBCTestModule module = new JDBCTestModule(factory);
 
-In addition to the "all-in-one"-files mockrunner.jar and mockrunner-jdk1.3.jar,
-separate jars for the different technologies are provided. These additional
-jar files contain only the classes necessary to test the corresponding technology.
+In addition to the "all-in-one"-files, separate jars for the different technologies 
+are provided. These additional jar files contain only the classes necessary to test 
+the corresponding technology.
 
-Please check out the file dependencies.txt for a detailed list of required
-third-party libraries for each mockrunner provided jar file.
+Please check out the files dependencies.txt and dependenciesj2ee1.3.txt for a detailed 
+list of required third-party libraries for each mockrunner provided jar file.
 
 The third-party libraries included in the Mockrunner release are:
 
@@ -163,9 +165,9 @@ nekohtml.jar
 
 The above libraries are necessary at runtime. If you try to build Mockrunner
 you probably recognize that some libraries are missing. The com.mockrunner.gen
-packages contain tools to generate Java 1.3 and adapter classes and to analyze
-dependencies. If you just want to make small modifications to Mockrunner, you
-probably won't need these tools. In this case, simply delete the com.mockrunner.gen
+packages contain tools to generate Java 1.3 and J2EE 1.3 versions and adapter classes 
+and to analyze dependencies. If you just want to make small modifications to Mockrunner,
+you probably won't need these tools. In this case, simply delete the com.mockrunner.gen
 packages and the corresponding tests. If you want to use these tools, you need
 the following libaries:
 
