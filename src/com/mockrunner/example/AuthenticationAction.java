@@ -18,7 +18,7 @@ import org.apache.struts.action.ActionMessages;
  * and generates the approriate <code>ActionErrors</code> and
  * <code>ActionMessages</code>. This action will be tested with
  * {@link com.mockrunner.example.test.AuthenticationActionTest} in order 
- * to demonstrate the usage of {@link com.mockrunner.base.ActionTestModule}.
+ * to demonstrate the usage of {@link com.mockrunner.struts.ActionTestModule}.
  */
 public class AuthenticationAction extends Action
 {

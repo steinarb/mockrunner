@@ -1,4 +1,4 @@
-package com.mockrunner.base;
+package com.mockrunner.struts;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -7,6 +7,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 
+import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.MockActionForward;
 import com.mockrunner.mock.MockActionMapping;
 import com.mockrunner.mock.MockPageContext;

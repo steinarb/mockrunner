@@ -1,7 +1,10 @@
-package com.mockrunner.base;
+package com.mockrunner.tag;
+
+import java.util.Map;
 
 import javax.servlet.jsp.tagext.TagSupport;
 
+import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.MockPageContext;
 
 /**
@@ -49,11 +52,43 @@ public class TagTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link TagTestModule#createTag}
+     * Delegates to {@link TagTestModule#createTag(Class)}
      */
     protected TagSupport createTag(Class tagClass)
     {
         return tagTestModule.createTag(tagClass);
+    }
+    
+    /**
+     * Delegates to {@link TagTestModule#createTag(Class, Map)}
+     */
+    protected TagSupport createTag(Class tagClass, Map attributes)
+    {
+        return tagTestModule.createTag(tagClass, attributes);
+    }
+    
+    /**
+     * Delegates to {@link TagTestModule#createNestedTag(Class)}
+     */
+    protected NestedTag createNestedTag(Class tagClass)
+    {
+        return tagTestModule.createNestedTag(tagClass);
+    }
+    
+    /**
+     * Delegates to {@link TagTestModule#createNestedTag(Class, Map)}
+     */
+    protected NestedTag createNestedTag(Class tagClass, Map attributes)
+    {
+        return tagTestModule.createNestedTag(tagClass, attributes);
+    }
+    
+    /**
+     * Delegates to {@link TagTestModule#populateAttributes}
+     */
+    protected void populateAttributes()
+    {
+        tagTestModule.populateAttributes();
     }
     
     /**
@@ -65,19 +100,19 @@ public class TagTestCaseAdapter extends BaseTestCase
     }
     
     /**
-     * Delegates to {@link TagTestModule#getBody}
-     */
-    protected String getBody()
-    {
-        return tagTestModule.getBody();
-    }
-    
-    /**
      * Delegates to {@link TagTestModule#getTag}
      */
     protected TagSupport getTag()
     {
         return tagTestModule.getTag();
+    }
+    
+    /**
+     * Delegates to {@link TagTestModule#getNestedTag}
+     */
+    protected NestedTag getNestedTag()
+    {
+        return tagTestModule.getNestedTag();
     }
     
     /**
@@ -126,6 +161,14 @@ public class TagTestCaseAdapter extends BaseTestCase
     protected void release()
     {
         tagTestModule.release();
+    }
+    
+    /**
+     * Delegates to {@link TagTestModule#processTagLifecycle}
+     */
+    protected int processTagLifecycle()
+    {
+        return tagTestModule.processTagLifecycle();
     }
 
     /**
