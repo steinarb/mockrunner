@@ -327,19 +327,19 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
     
     /**
-     * Delegates to {@link JDBCTestModule#verifyRolledback}
+     * Delegates to {@link JDBCTestModule#verifyRolledBack}
      */
-    protected void verifyRolledback()
+    protected void verifyRolledBack()
     {
-        jdbcTestModule.verifyRolledback();
+        jdbcTestModule.verifyRolledBack();
     }
     
     /**
-     * Delegates to {@link JDBCTestModule#verifyNotRolledback}
+     * Delegates to {@link JDBCTestModule#verifyNotRolledBack}
      */
-    protected void verifyNotRolledback()
+    protected void verifyNotRolledBack()
     {
-        jdbcTestModule.verifyNotRolledback();
+        jdbcTestModule.verifyNotRolledBack();
     }
     
     /**
