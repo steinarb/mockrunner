@@ -1,3 +1,18 @@
+In version 0.3.2, the mock objects for struts are created in a subclass
+of WebMockObjectFactory named ActionMockObjectFactory (WebMockObjectFactory
+is now independent from Struts). This causes some incompatibilities with
+previous versions. In your struts test cases, just replace WebMockObjectFactory
+with ActionMockObjectFactory. Also use the getActionMockObjectFactory and
+createActionMockObjectFactory methods from BaseTestCase in your struts test 
+cases. In the servlet and tag test cases, you can leave WebMockObjectFactory
+or alternatively use ActionMockObjectFactory (if these test cases also use struts).
+The created WebMockObjectFactory of BaseTestCase is actually the ActionMockObjectFactory,
+there is only one instance. The purpose of this refactoring is to provide a web mock 
+object factory that is independent from struts and can be used without having 
+struts.jar in the classpath.
+
+Older API changes:
+
 Starting with version 0.3.1, Mockrunner supports the MockEJB 0.6 API
 and the new features of MockEJB.
 

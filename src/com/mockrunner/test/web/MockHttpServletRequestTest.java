@@ -16,6 +16,7 @@ import javax.servlet.http.Cookie;
 import junit.framework.TestCase;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
+import com.mockrunner.mock.web.MockHttpSession;
 import com.mockrunner.mock.web.MockRequestDispatcher;
 
 public class MockHttpServletRequestTest extends TestCase
@@ -161,6 +162,19 @@ public class MockHttpServletRequestTest extends TestCase
         assertEquals(3, request.getRequestDispatcherMap().size());
         assertTrue(request.getRequestDispatcherMap().containsKey(rdPath3));
         assertSame(rd3, request.getRequestDispatcherMap().get(rdPath3));                          
+    }
+    
+    public void testSessionCreation() throws Exception
+    {
+        request.setSession(new MockHttpSession());
+        assertNull(request.getSession(false));
+        assertNotNull(request.getSession());
+        assertNotNull(request.getSession(false));
+        assertNotNull(request.getSession(true));
+        request = new MockHttpServletRequest();
+        request.setSession(new MockHttpSession());
+        assertNotNull(request.getSession(true));
+        assertNotNull(request.getSession(false));
     }
     
     private class TestRequestDispatcher implements RequestDispatcher

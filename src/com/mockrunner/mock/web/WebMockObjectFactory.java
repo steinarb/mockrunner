@@ -5,8 +5,6 @@ import java.lang.reflect.Constructor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.struts.Globals;
-
 import com.mockrunner.base.NestedApplicationException;
 
 /**
@@ -25,9 +23,6 @@ public class WebMockObjectFactory
     private MockServletConfig config;
     private MockServletContext context;
     private MockHttpSession session;
-    private MockActionMapping mapping;
-    private MockModuleConfig moduleConfig;
-    private MockActionServlet actionServlet;
     private MockPageContext pageContext;
     private MockFilterConfig filterConfig;
     private MockFilterChain filterChain;
@@ -97,9 +92,6 @@ public class WebMockObjectFactory
         wrappedRequest = request;
         wrappedResponse = response;
         if(createNewSession) session = new MockHttpSession();
-        mapping = new MockActionMapping();
-        moduleConfig = new MockModuleConfig("testmodule");
-        actionServlet = new MockActionServlet();
         filterChain = new MockFilterChain();
         filterConfig = new MockFilterConfig();
     }
@@ -107,14 +99,10 @@ public class WebMockObjectFactory
     private void setUpDependencies()
     {
         config.setServletContext(context);
-        actionServlet.setServletConfig(config);
-        actionServlet.setServletContext(context);
         request.setSession(session);
         session.setupServletContext(context);
         pageContext = new MockPageContext(config, request, response);
         filterConfig.setupServletContext(context);
-        request.setAttribute(Globals.MAPPING_KEY, mapping);
-        request.setAttribute(Globals.MODULE_KEY, moduleConfig);
     }
     
     /**
@@ -190,33 +178,6 @@ public class WebMockObjectFactory
     public MockHttpSession getSession()
     {
         return getMockSession();
-    }
-
-    /**
-     * Returns the {@link com.mockrunner.mock.web.MockActionMapping}.
-     * @return the {@link com.mockrunner.mock.web.MockActionMapping}
-     */
-    public MockActionMapping getMockActionMapping()
-    {
-        return mapping;
-    }
-    
-    /**
-     * Returns the {@link com.mockrunner.mock.web.MockModuleConfig}.
-     * @return the {@link com.mockrunner.mock.web.MockModuleConfig}
-     */
-    public MockModuleConfig getMockModuleConfig()
-    {
-        return moduleConfig;
-    }
-    
-    /**
-     * Returns the {@link com.mockrunner.mock.web.MockModuleConfig}.
-     * @return the {@link com.mockrunner.mock.web.MockModuleConfig}
-     */
-    public MockActionServlet getMockActionServlet()
-    {
-        return actionServlet;
     }
 
     /**

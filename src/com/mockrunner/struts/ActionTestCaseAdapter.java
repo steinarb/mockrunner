@@ -56,7 +56,7 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        actionTestModule = createActionTestModule(getWebMockObjectFactory());
+        actionTestModule = createActionTestModule(getActionMockObjectFactory());
     }
 
     /**

@@ -62,6 +62,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     private String localName;
     private int localPort;
     private int remotePort;
+    private boolean sessionCreated;
     
     public MockHttpServletRequest()
     {
@@ -85,8 +86,9 @@ public class MockHttpServletRequest implements HttpServletRequest
         localName = "localhost";
         localPort = 8080;
         remotePort = 5000;
+        sessionCreated = false;
     }
-
+    
     public String getParameter(String key)
     {
         String[] values = getParameterValues(key);
@@ -154,13 +156,15 @@ public class MockHttpServletRequest implements HttpServletRequest
         attributes.put(key, value);
     }
     
-    public HttpSession getSession() 
+    public HttpSession getSession()
     {
+        sessionCreated = true;
         return session; 
     }
     
     public HttpSession getSession(boolean create)
     {
+        if(!create && !sessionCreated) return null;
         return getSession();
     }
 

@@ -4,7 +4,11 @@ mockrunner-0.3.2:
 - reorganized package structure of util classes
 - introduced basic adapter versions (e.g. BasicJMSTestCaseAdapter)
   which do not extend BaseTestCase
-- adapters (both standard and basic) are generated now
+- adapters (both standard and basic) are generated now with the
+  help of some tools in com.mockrunner.gen packages
+- moved struts mock object creation to ActionMockObjectFactory (a subclass
+  of WebMockObjectFactory) to free WebMockObjectFactory from struts
+  dependencies (check out migratingfrom0.3.1.txt for details)
 - added getMockConnection method to MockDataSource (patch by Gabor Liptak)
 - JMS MockConnectionFactory now implements MockQueueConnectionFactory and
   MockTopicConnectionFactory to provide one factory with one JNDI name
@@ -18,6 +22,8 @@ mockrunner-0.3.2:
   (check out bug report 1077690)
 - TransmissionManagerWrapper now allows transparent access to senders and
   receivers
+- changed session creation in MockHttpServletRequest. If getSession(false)
+  is called without a previous created session, this method returns null
 - fixed bug 1077690 (JMS spec allows MessageProducers with null destination)
   reported by Peter Ryan
 - fixed bug in MockHttpServletResponse.getWriter()

@@ -1,7 +1,7 @@
 /*
- * $Header: /cvsroot/mockrunner/mockrunner/src/org/apache/struts/mock/Attic/MockPageContext.java,v 1.2 2004/05/30 12:32:37 aibba Exp $
- * $Revision: 1.2 $
- * $Date: 2004/05/30 12:32:37 $
+ * $Header: /cvsroot/mockrunner/mockrunner/src/org/apache/struts/mock/Attic/MockPageContext.java,v 1.3 2005/01/06 19:21:45 aibba Exp $
+ * $Revision: 1.3 $
+ * $Date: 2005/01/06 19:21:45 $
  *
  * ====================================================================
  *
@@ -94,7 +94,7 @@ import javax.servlet.jsp.tagext.BodyContent;
  * threaded environment, no synchronization is performed.</p>
  *
  * @author Craig R. McClanahan
- * @version $Revision: 1.2 $ $Date: 2004/05/30 12:32:37 $
+ * @version $Revision: 1.3 $ $Date: 2005/01/06 19:21:45 $
  */
 
 public abstract class MockPageContext extends PageContext {
@@ -143,7 +143,7 @@ public abstract class MockPageContext extends PageContext {
         this.request = request;
         this.response = response;
         if (request != null) {
-            session = ((HttpServletRequest) request).getSession(false);
+            session = ((HttpServletRequest) request).getSession();
         } else {
             this.session = null;
         }

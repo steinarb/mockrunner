@@ -4,7 +4,7 @@ import javax.servlet.ServletContext;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.mock.web.WebMockObjectFactory;
+import com.mockrunner.mock.web.ActionMockObjectFactory;
 import com.mockrunner.struts.ActionTestModule;
 
 /**
@@ -14,7 +14,7 @@ import com.mockrunner.struts.ActionTestModule;
  */
 public class OrderActionTest extends TestCase
 {
-    private WebMockObjectFactory mockFactory;
+    private ActionMockObjectFactory mockFactory;
     private ActionTestModule module;
     private MockOrderManager orderManager;
     private OrderForm form;
@@ -23,7 +23,7 @@ public class OrderActionTest extends TestCase
     {
         super.setUp();
         orderManager = new MockOrderManager();
-        mockFactory = new WebMockObjectFactory();
+        mockFactory = new ActionMockObjectFactory();
         module = new ActionTestModule(mockFactory);
         ServletContext context = mockFactory.getMockServletContext();
         context.setAttribute(OrderManager.class.getName(), orderManager);

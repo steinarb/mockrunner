@@ -16,7 +16,7 @@ public class AuthenticationActionTest extends ActionTestCaseAdapter
     {
         super.setUp();
         strategy = new MockAuthenticationStrategy();
-        getWebMockObjectFactory().getMockServletContext().setAttribute(AuthenticationStrategy.class.getName(), strategy);
+        getActionMockObjectFactory().getMockServletContext().setAttribute(AuthenticationStrategy.class.getName(), strategy);
         form = (AuthenticationForm)createActionForm(AuthenticationForm.class);
         setValidate(true);
     }

@@ -29,10 +29,10 @@ import org.apache.struts.validator.ValidatorPlugIn;
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
+import com.mockrunner.mock.web.ActionMockObjectFactory;
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.mock.web.MockActionMapping;
 import com.mockrunner.mock.web.MockPageContext;
-import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.util.common.StreamUtil;
 
 /**
@@ -47,7 +47,7 @@ import com.mockrunner.util.common.StreamUtil;
 public class ActionTestModule extends HTMLOutputModule
 {
     private final static Log log = LogFactory.getLog(ActionTestModule.class);
-    private WebMockObjectFactory mockFactory;
+    private ActionMockObjectFactory mockFactory;
     private MockActionForward forward;
     private ActionForm formObj;
     private Action actionObj;
@@ -55,7 +55,7 @@ public class ActionTestModule extends HTMLOutputModule
     private boolean doPopulate;
     private boolean recognizeInSession;
     
-    public ActionTestModule(WebMockObjectFactory mockFactory)
+    public ActionTestModule(ActionMockObjectFactory mockFactory)
     {
         super(mockFactory);
         this.mockFactory = mockFactory;

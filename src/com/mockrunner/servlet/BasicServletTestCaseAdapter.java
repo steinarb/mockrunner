@@ -71,7 +71,8 @@ public class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Creates a {@link com.mockrunner.mock.web.WebMockObjectFactory} based on another on.
+     * Creates a {@link com.mockrunner.mock.web.WebMockObjectFactory} based on another 
+     * {@link com.mockrunner.mock.web.WebMockObjectFactory}.
      * The created {@link com.mockrunner.mock.web.WebMockObjectFactory} will have its own
      * request and response objects. If you set <i>createNewSession</i>
      * to <code>true</code> it will also have its own session object.
