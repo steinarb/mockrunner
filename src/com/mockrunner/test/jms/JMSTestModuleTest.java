@@ -14,8 +14,8 @@ import javax.jms.TextMessage;
 import junit.framework.TestCase;
 
 import com.mockrunner.base.VerifyFailedException;
-import com.mockrunner.jms.DestinationManager;
 import com.mockrunner.jms.JMSTestModule;
+import com.mockrunner.jms.QueueManager;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockMapMessage;
 import com.mockrunner.mock.jms.MockObjectMessage;
@@ -40,7 +40,7 @@ public class JMSTestModuleTest extends TestCase
     
     public void testGetQueue() throws Exception
     {
-        DestinationManager manager = mockFactory.getMockQueueConnection().getDestinationManager();
+        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
         manager.createQueue("test1");
         manager.createQueue("test2");
         assertNotNull(module.getQueue("test1"));
@@ -114,7 +114,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyQueueSender() throws Exception
     {
         mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
-        DestinationManager manager = mockFactory.getMockQueueConnection().getDestinationManager();
+        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
         manager.createQueue("queue");
         module.getQueueSession(0).createSender(manager.getQueue("queue"));
         module.verifyNumberQueueSenders(0, 1);
@@ -153,7 +153,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyQueueReceiver() throws Exception
     {
         mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
-        DestinationManager manager = mockFactory.getMockQueueConnection().getDestinationManager();
+        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
         Queue queue1 = manager.createQueue("queue");
         Queue queue2 = manager.createQueue("otherQueue");
         module.getQueueSession(0).createReceiver(queue1);
@@ -185,7 +185,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyQueueBrowser() throws Exception
     {
         mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
-        DestinationManager manager = mockFactory.getMockQueueConnection().getDestinationManager();
+        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
         manager.createQueue("queue");
         module.getQueueSession(0).createBrowser(manager.getQueue("queue"));
         module.getQueueSession(0).createBrowser(manager.getQueue("queue"));
@@ -234,7 +234,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyNumberMessages() throws Exception
     {
         mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
-        DestinationManager manager = mockFactory.getMockQueueConnection().getDestinationManager();
+        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
         manager.createQueue("queue");
         QueueSender sender1 = module.getQueueSession(0).createSender(manager.getQueue("queue"));
         manager.createQueue("otherQueue");
@@ -303,7 +303,7 @@ public class JMSTestModuleTest extends TestCase
     public void testVerifyMessageEquals() throws Exception
     {
         mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
-        DestinationManager manager = mockFactory.getMockQueueConnection().getDestinationManager();
+        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
         manager.createQueue("queue");
         QueueSender sender = module.getQueueSession(0).createSender(manager.getQueue("queue"));
         TextMessage message1 = module.getQueueSession(0).createTextMessage();
@@ -429,7 +429,7 @@ public class JMSTestModuleTest extends TestCase
         MockQueueSession session1 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
         MockQueueSession session2 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
         MockQueueSession session3 = (MockQueueSession)mockFactory.getMockQueueConnection().createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
-        DestinationManager manager = mockFactory.getMockQueueConnection().getDestinationManager();
+        QueueManager manager = mockFactory.getMockQueueConnection().getQueueManager();
         Queue queue = manager.createQueue("queue");
         MockQueueSender sender1 = (MockQueueSender)session1.createSender(queue);
         MockQueueSender sender2 = (MockQueueSender)session1.createSender(queue);

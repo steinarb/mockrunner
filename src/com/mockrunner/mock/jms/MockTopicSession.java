@@ -20,7 +20,7 @@ public class MockTopicSession extends MockSession implements TopicSession
 {
     private List tempTopics;
     
-    public MockTopicSession(MockConnection connection)
+    public MockTopicSession(MockTopicConnection connection)
     {
         this(connection, false, Session.AUTO_ACKNOWLEDGE);
     }
@@ -56,7 +56,7 @@ public class MockTopicSession extends MockSession implements TopicSession
     public Topic createTopic(String name) throws JMSException
     {
         getConnection().throwJMSException();
-        MockTopic topic = getConnection().getDestinationManager().getTopic(name);
+        MockTopic topic = ((MockTopicConnection)getConnection()).getTopicManager().getTopic(name);
         if(null == topic)
         {
             throw new JMSException("Topic with name " + name + " not found");

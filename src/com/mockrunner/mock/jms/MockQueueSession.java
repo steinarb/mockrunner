@@ -21,7 +21,7 @@ public class MockQueueSession extends MockSession implements QueueSession
 {
     private List tempQueues;
     
-    public MockQueueSession(MockConnection connection)
+    public MockQueueSession(MockQueueConnection connection)
     {
         this(connection, false, Session.AUTO_ACKNOWLEDGE);
     }
@@ -57,7 +57,7 @@ public class MockQueueSession extends MockSession implements QueueSession
     public Queue createQueue(String name) throws JMSException
     {
         getConnection().throwJMSException();
-        MockQueue queue = getConnection().getDestinationManager().getQueue(name);
+        MockQueue queue = ((MockQueueConnection)getConnection()).getQueueManager().getQueue(name);
         if(null == queue)
         {
             throw new JMSException("Queue with name " + name + " not found");
