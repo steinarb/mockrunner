@@ -69,6 +69,9 @@ public class ArrayUtilTest extends TestCase
         data = ArrayUtil.getByteArrayFromList(list, 0, 1);
         assertTrue(data.length == 1);
         assertEquals(0, data[0]);
+        data = ArrayUtil.getByteArrayFromList(new ArrayList(), 0, 0);
+        assertNotNull(data);
+        assertTrue(data.length == 0);
     }
     
     public void testAddBytesToArrayList()

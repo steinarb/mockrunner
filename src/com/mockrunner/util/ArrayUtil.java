@@ -80,6 +80,7 @@ public class ArrayUtil
      */
     public static byte[] getByteArrayFromList(List data, int index, int len)
     {
+        if(data.size() == 0) return new byte[0];
         if(index >= data.size())
         {
             throw new IndexOutOfBoundsException("Position " + index + " invalid in List of size " + data.size());

@@ -32,6 +32,7 @@ public class MockBlobTest extends TestCase
             assertEquals((byte)nextByte, count);
             count++;
         }
+        assertTrue(new MockBlob(new byte[] {}).getBytes(1, 0).length == 0);
     }
     
     public void testPosition() throws Exception
