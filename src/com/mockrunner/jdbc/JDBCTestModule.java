@@ -1118,11 +1118,11 @@ public class JDBCTestModule
         if(null == statements || statements.size() == 0)
         {
             if(number == 0) return;
-            throw new VerifyFailedException("Expected " + number + " pstatements, received 0 prepared statements");
+            throw new VerifyFailedException("Expected " + number + " statements, received 0 statements");
         }
         if(statements.size() != number)
         {
-            throw new VerifyFailedException("Expected " + number + " statements, received " + statements.size()+ "prepared statements");
+            throw new VerifyFailedException("Expected " + number + " statements, received " + statements.size()+ " statements");
         }
     }
     
