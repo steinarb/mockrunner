@@ -53,6 +53,7 @@ public class EJBMockObjectFactory
             {
                 transaction = new MockUserTransaction();
                 context.rebind("javax.transaction.UserTransaction", transaction);
+                context.rebind("java:comp/UserTransaction", transaction);
             }
         }
         catch(Exception exc)
