@@ -36,7 +36,7 @@ import com.mockrunner.util.CollectionUtil;
  */
 public class MockPreparedStatement extends MockStatement implements PreparedStatement
 {
-    private PreparedStatementResultSetHandler resultSetHandler;
+    private AbstractParameterResultSetHandler resultSetHandler;
     private Map paramObjects = new HashMap();
     private List batchParameters = new ArrayList();
     private String sql;
@@ -63,7 +63,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         prepareParameterMetaData();
     }
     
-    public void setPreparedStatementResultSetHandler(PreparedStatementResultSetHandler resultSetHandler)
+    public void setPreparedStatementResultSetHandler(AbstractParameterResultSetHandler resultSetHandler)
     {
         super.setResultSetHandler(resultSetHandler);
         this.resultSetHandler = resultSetHandler;
