@@ -68,6 +68,12 @@ public interface NestedTag
     public TagSupport getTag();
     
     /**
+     * Returns the wrapped tag (the testee).
+     * @return the wrapped tag
+     */
+    //public JspTag getWrappedTag();
+    
+    /**
      * Removes all childs.
      */
     public void removeChilds();
@@ -93,23 +99,19 @@ public interface NestedTag
      
     /**
      * Adds a tag child simulating nested tags.
-     * Note that <i>tag</i> must be of type <code>TagSupport</code>
-     * or <code>BodyTagSupport</code>. The corresponding
-     * <code>NestedTag</code> will be created automatically
-     * wrapping the specified tag. An empty attribute <code>Map</code> 
-     * will be used for the tag.
+     * The corresponding <code>NestedTag</code> will be created 
+     * automatically wrapping the specified tag. An empty attribute 
+     * <code>Map</code> will be used for the tag.
      * @param tag the tag class
      */  
     public NestedTag addTagChild(Class tag);
      
     /**
      * Adds a tag child simulating nested tags.
-     * Note that <i>tag</i> must be of type <code>TagSupport</code>
-     * or <code>BodyTagSupport</code>. The corresponding
-     * <code>NestedTag</code> will be created automatically
-     * wrapping the specified tag. The attributes <code>Map</code> 
-     * contains the attributes of this tag (<i>propertyname</i> maps
-     * to <i>propertyvalue</i>).
+     * The corresponding <code>NestedTag</code> will be created 
+     * automatically wrapping the specified tag. The attributes 
+     * <code>Map</code>  contains the attributes of this tag 
+     * (<i>propertyname</i> maps to <i>propertyvalue</i>).
      * @param tag the tag class
      * @param attributeMap the attribute map
      */     
@@ -134,4 +136,24 @@ public interface NestedTag
      * @param attributeMap the attribute map
      */     
     public NestedTag addTagChild(TagSupport tag, Map attributeMap);
+    
+    /**
+     * Adds a tag child simulating nested tags.
+     * <code>NestedTag</code> will be created automatically
+     * wrapping the specified tag. An empty attribute <code>Map</code> 
+     * will be used for the tag.
+     * @param tag the tag
+     */  
+    //public NestedTag addTagChild(JspTag tag);
+     
+    /**
+     * Adds a tag child simulating nested tags.
+     * The corresponding <code>NestedTag</code> will be created 
+     * automatically wrapping the specified tag. The attributes 
+     * <code>Map</code>  contains the attributes of this tag 
+     * (<i>propertyname</i> maps to <i>propertyvalue</i>).
+     * @param tag the tag
+     * @param attributeMap the attribute map
+     */     
+    //public NestedTag addTagChild(JspTag tag, Map attributeMap);
 }

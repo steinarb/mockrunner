@@ -113,7 +113,7 @@ public class TagTestModule extends HTMLOutputModule
     {
         try
         {
-            this.tag = TagUtil.createNestedTagInstance(tagClass, getMockPageContext(), attributes);
+            this.tag = (TagSupport)TagUtil.createNestedTagInstance(tagClass, getMockPageContext(), attributes);
             return (NestedTag)this.tag;
         }
         catch(Exception exc)
@@ -154,7 +154,7 @@ public class TagTestModule extends HTMLOutputModule
     {
         try
         {
-            this.tag = TagUtil.createNestedTagInstance(tag, getMockPageContext(), attributes);
+            this.tag = (TagSupport)TagUtil.createNestedTagInstance(tag, getMockPageContext(), attributes);
             return (NestedTag)this.tag;
         }
         catch(Exception exc)

@@ -6,15 +6,15 @@ import java.util.Map;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
-import javax.servlet.jsp.tagext.BodyTagSupport;
+import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.Tag;
-import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mockrunner.base.NestedApplicationException;
+import com.mockrunner.util.common.MethodUtil;
 import com.mockrunner.util.common.StringUtil;
 
 /**
@@ -33,24 +33,22 @@ public class TagUtil
      * @param pageContext the corresponding <code>PageContext</code>
      * @param attributes the attribute map
      * @return the instance of {@link com.mockrunner.tag.NestedTag}
-     * @throws RuntimeException if <code>tag</code> is not an
-     *         instance of <code>TagSupport</code>
+     * @throws IllegalArgumentException if <code>tag</code> is <code>null</code>
      */
-    public static TagSupport createNestedTagInstance(Class tag, PageContext pageContext, Map attributes)
+    public static Object createNestedTagInstance(Class tag, PageContext pageContext, Map attributes)
     {
-        if(null == tag) throw new RuntimeException("tag must not be null");
-        if(!TagSupport.class.isAssignableFrom(tag)) throw new RuntimeException("tag must be an instance of javax.servlet.jsp.tagext.TagSupport");
-        TagSupport tagSupport;
+        if(null == tag) throw new IllegalArgumentException("tag must not be null");
+        Object tagObject;
         try
         {
-            tagSupport = (TagSupport)tag.newInstance();
+            tagObject = tag.newInstance();
         }
         catch(Exception exc)
         {
             log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
-        return createNestedTagInstance(tagSupport, pageContext, attributes);
+        return createNestedTagInstance(tagObject, pageContext, attributes);
     }
     
     /**
@@ -62,21 +60,24 @@ public class TagUtil
      * @param pageContext the corresponding <code>PageContext</code>
      * @param attributes the attribute map
      * @return the instance of {@link com.mockrunner.tag.NestedTag}
-     * @throws RuntimeException if <code>tag</code> is not an
-     *         instance of <code>TagSupport</code>
+     * @throws IllegalArgumentException if <code>tag</code> is <code>null</code>
      */
-    public static TagSupport createNestedTagInstance(TagSupport tag, PageContext pageContext, Map attributes)
+    public static Object createNestedTagInstance(Object tag, PageContext pageContext, Map attributes)
     {
-        if(null == tag) throw new RuntimeException("tag must not be null");
-        TagSupport nestedTag;
-        if(tag instanceof BodyTagSupport)
+        if(null == tag) throw new IllegalArgumentException("tag must not be null");
+        Object nestedTag = null;
+        if(tag instanceof BodyTag)
         {
-            nestedTag = new NestedBodyTag((BodyTagSupport)tag, pageContext, attributes);
+            nestedTag = new NestedBodyTag((BodyTag)tag, pageContext, attributes);
         }
-        else
+        else if(tag instanceof Tag)
         {
-            nestedTag = new NestedStandardTag(tag, pageContext, attributes);
+            nestedTag = new NestedStandardTag((Tag)tag, pageContext, attributes);
         }
+        /*else if(tag instanceof SimpleTag)
+        {
+            nestedTag = new NestedSimpleTag((SimpleTag)tag, pageContext, attributes);
+        }*/
         return nestedTag;
     }
     
@@ -88,9 +89,9 @@ public class TagUtil
      * @param attributes the attribute map
      * @param doRelease should release be called
      */
-    public static void populateTag(TagSupport tag, Map attributes, boolean doRelease)
+    public static void populateTag(Object tag, Map attributes, boolean doRelease)
     {
-        if(doRelease) tag.release();
+        if(doRelease) MethodUtil.invoke(tag, "release");
         if(null == attributes || attributes.isEmpty()) return;
         try
         {

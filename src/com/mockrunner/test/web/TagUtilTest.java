@@ -23,24 +23,53 @@ public class TagUtilTest extends BaseTestCase
         pageContext = getWebMockObjectFactory().getMockPageContext();
         testMap = new HashMap();
     }
+    
+    public void testCreateNestedTagInstanceInvalidParameters()
+    {
+        try
+        {
+            TagUtil.createNestedTagInstance(null, pageContext, testMap);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            TagUtil.createNestedTagInstance((Object)null, pageContext, testMap);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+    }
 
     public void testCreateNestedTagInstance()
     {
-        TagSupport tag = TagUtil.createNestedTagInstance(TestTag.class, pageContext, testMap);
+        TagSupport tag = (TagSupport)TagUtil.createNestedTagInstance(TestTag.class, pageContext, testMap);
         assertTrue(tag instanceof NestedStandardTag);
         assertTrue(((NestedTag)tag).getTag() instanceof TestTag);
-        tag = TagUtil.createNestedTagInstance(TestBodyTag.class, pageContext, testMap);
+        tag = (TagSupport)TagUtil.createNestedTagInstance(TestBodyTag.class, pageContext, testMap);
         assertTrue(tag instanceof NestedBodyTag);
         assertTrue(((NestedTag)tag).getTag() instanceof TestBodyTag);
-        
+        /*SimpleTag simpleTag = (SimpleTag)TagUtil.createNestedTagInstance(TestSimpleTag.class, pageContext, testMap);
+        assertTrue(simpleTag instanceof NestedSimpleTag);
+        assertTrue(((NestedTag)simpleTag).getWrappedTag() instanceof TestSimpleTag);
+        */
         TestTag testTag = new TestTag();
-        tag = TagUtil.createNestedTagInstance(testTag, pageContext, testMap);
+        tag = (TagSupport)TagUtil.createNestedTagInstance(testTag, pageContext, testMap);
         assertTrue(tag instanceof NestedStandardTag);
         assertSame(testTag, ((NestedTag)tag).getTag());
         TestBodyTag testBodyTag = new TestBodyTag();
-        tag = TagUtil.createNestedTagInstance(testBodyTag, pageContext, testMap);
+        tag = (TagSupport)TagUtil.createNestedTagInstance(testBodyTag, pageContext, testMap);
         assertTrue(tag instanceof NestedBodyTag);
         assertSame(testBodyTag, ((NestedTag)tag).getTag());
+        /*TestSimpleTag testSimpleTag = new TestSimpleTag();
+        simpleTag = (SimpleTag)TagUtil.createNestedTagInstance(testSimpleTag, pageContext, testMap);
+        assertTrue(simpleTag instanceof NestedSimpleTag);
+        assertSame(testSimpleTag, ((NestedTag)simpleTag).getWrappedTag());*/
     }
     
     public void testPopulateTag()
