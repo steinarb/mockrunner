@@ -275,6 +275,17 @@ public class ServletTestModule extends HTMLOutputModule
     }
     
     /**
+     * Calls the current servlets <code>doHead</code> method.
+     * If you set <i>doChain</i> to <code>true</code> (use {@link #setDoChain}),
+     * the filter chain will be called before <code>doHead</code>.
+     */          
+    public void doHead()
+    {
+        mockFactory.getMockRequest().setMethod("HEAD");
+        callService();
+    }
+    
+    /**
      * Calls the current servlets <code>service</code> method.
      * If you set <i>doChain</i> to <code>true</code> (use {@link #setDoChain}),
      * the filter chain will be called before <code>service</code>.

@@ -15,6 +15,7 @@ public class TestServlet extends HttpServlet
     private boolean doOptionsCalled = false;
     private boolean doPutCalled = false;
     private boolean doTraceCalled = false;
+    private boolean doHeadCalled = false;
     
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -46,6 +47,11 @@ public class TestServlet extends HttpServlet
         doTraceCalled = true;
     }
     
+    protected void doHead(HttpServletRequest arg0, HttpServletResponse arg1) throws ServletException, IOException
+    {
+        doHeadCalled = true;
+    }
+    
     public boolean wasDoDeleteCalled()
     {
         return doDeleteCalled;
@@ -74,5 +80,10 @@ public class TestServlet extends HttpServlet
     public boolean wasDoTraceCalled()
     {
         return doTraceCalled;
+    }
+    
+    public boolean wasDoHeadCalled()
+    {
+        return doHeadCalled;
     }
 }
