@@ -23,6 +23,7 @@ import javax.servlet.ServletContextAttributeListener;
 import javax.servlet.ServletException;
 
 import com.mockrunner.util.ArrayUtil;
+import com.mockrunner.util.StreamUtil;
 
 /**
  * Mock implementation of <code>ServletContext</code>.
@@ -208,6 +209,11 @@ public class MockServletContext implements ServletContext
         byte[] data = (byte[])resourceStreams.get(path);
         if(null == data) return null;
         return new ByteArrayInputStream(data);
+    }
+    
+    public void setResourceAsStream(String path, InputStream inputStream) 
+    { 
+        setResourceAsStream(path, StreamUtil.getStreamAsByteArray(inputStream)); 
     }
     
     public synchronized void setResourceAsStream(String path, byte[] data)

@@ -1,9 +1,11 @@
 package com.mockrunner.test.web;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
@@ -17,6 +19,7 @@ import junit.framework.TestCase;
 
 import com.mockrunner.mock.web.MockRequestDispatcher;
 import com.mockrunner.mock.web.MockServletContext;
+import com.mockrunner.util.StreamUtil;
 
 public class MockServletContextTest extends TestCase
 {
@@ -164,6 +167,18 @@ public class MockServletContextTest extends TestCase
         assertEquals(3, context.getRequestDispatcherMap().size());
         assertTrue(context.getRequestDispatcherMap().containsKey(rdPath3));
         assertSame(rd3, context.getRequestDispatcherMap().get(rdPath3));                          
+    }
+    
+    public void testSetResourceAsStream() throws Exception
+    {
+        MockServletContext context = new MockServletContext();
+        byte[] input = {1, 2, 3, 4};
+        context.setResourceAsStream("testpath1", input);
+        InputStream result = context.getResourceAsStream("testpath1");
+        assertTrue(Arrays.equals(input, StreamUtil.getStreamAsByteArray(result)));
+        context.setResourceAsStream("testpath2", new ByteArrayInputStream(input));
+        result = context.getResourceAsStream("testpath2");
+        assertTrue(StreamUtil.compareStreams(new ByteArrayInputStream(input), result));
     }
     
     private class TestAttributeListener implements ServletContextAttributeListener
