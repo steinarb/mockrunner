@@ -12,8 +12,10 @@ import com.mockrunner.base.BaseTestCase;
  * Delegator for {@link com.mockrunner.ejb.EJBTestModule}. You can
  * subclass this adapter or use {@link com.mockrunner.ejb.EJBTestModule}
  * directly (so your test case can use another base class).
- * <b>This class is generated from the EJBTestModule and should not be
- * edited directly</b>.
+ * This adapter extends {@link com.mockrunner.base.BaseTestCase}.
+ * It can be used if you want to use several modules in conjunction.
+ * <b>This class is generated from the {@link com.mockrunner.ejb.EJBTestModule}
+ * and should not be edited directly</b>.
  */
 public class EJBTestCaseAdapter extends BaseTestCase
 {

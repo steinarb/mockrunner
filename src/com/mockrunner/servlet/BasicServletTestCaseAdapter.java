@@ -14,6 +14,10 @@ import com.mockrunner.mock.web.WebMockObjectFactory;
  * Delegator for {@link com.mockrunner.servlet.ServletTestModule}. You can
  * subclass this adapter or use {@link com.mockrunner.servlet.ServletTestModule}
  * directly (so your test case can use another base class).
+ * This basic adapter can be used if you don't need any other modules. It
+ * does not extend {@link com.mockrunner.base.BaseTestCase}. If you want
+ * to use several modules in conjunction, consider subclassing
+ * {@link com.mockrunner.servlet.ServletTestCaseAdapter}.
  * <b>This class is generated from the ServletTestModule and should not be
  * edited directly</b>.
  */

@@ -25,8 +25,10 @@ import com.mockrunner.mock.web.MockPageContext;
  * Delegator for {@link com.mockrunner.struts.ActionTestModule}. You can
  * subclass this adapter or use {@link com.mockrunner.struts.ActionTestModule}
  * directly (so your test case can use another base class).
- * <b>This class is generated from the ActionTestModule and should not be
- * edited directly</b>.
+ * This adapter extends {@link com.mockrunner.base.BaseTestCase}.
+ * It can be used if you want to use several modules in conjunction.
+ * <b>This class is generated from the {@link com.mockrunner.struts.ActionTestModule}
+ * and should not be edited directly</b>.
  */
 public class ActionTestCaseAdapter extends HTMLOutputTestCase
 {
