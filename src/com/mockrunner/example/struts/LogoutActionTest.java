@@ -23,8 +23,8 @@ public class LogoutActionTest extends ActionTestCaseAdapter
 
     public void testLogout() throws Exception
     {
-        getWebMockObjectFactory().getMockRequest().setupAddParameter("logout.x", "11");
-        getWebMockObjectFactory().getMockRequest().setupAddParameter("logout.y", "11");
+        addRequestParameter("logout.x", "11");
+        addRequestParameter("logout.y", "11");
         servletModule.createFilter(ImageButtonFilter.class);
         servletModule.setDoChain(true);
         servletModule.doFilter();

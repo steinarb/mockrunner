@@ -65,8 +65,8 @@ public class StoreDataActionTest extends ActionTestCaseAdapter
 
         public void run()
         {
-            mockFactory.getMockRequest().setupAddParameter("id", "id");
-            mockFactory.getMockRequest().setupAddParameter("data", getName());
+            module.addRequestParameter("id", "id");
+            module.addRequestParameter("data", getName());
             module.actionPerform(StoreDataAction.class);
             if(module.getActionForward().getPath().equals("success"))
             {
