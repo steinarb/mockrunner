@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.servlet.ServletTestModule;
 
 public class AdapterGenerator
@@ -31,6 +32,7 @@ public class AdapterGenerator
         List servletExcluded = new ArrayList();
         servletExcluded.add("getOutput");
         units.add(new ProcessingUnit(ServletTestModule.class, new StandardAdapterProcessor(), servletExcluded));
+        units.add(new ProcessingUnit(JMSTestModule.class, new StandardAdapterProcessor(), null));
     }
     
     private void generate() throws Exception

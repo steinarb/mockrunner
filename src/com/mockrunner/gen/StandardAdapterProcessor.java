@@ -12,6 +12,7 @@ import com.mockrunner.base.HTMLOutputTestCase;
 import com.mockrunner.base.WebTestModule;
 import com.mockrunner.gen.JavaClassGenerator.ConstructorDeclaration;
 import com.mockrunner.gen.JavaClassGenerator.MethodDeclaration;
+import com.mockrunner.util.ArrayUtil;
 import com.mockrunner.util.ClassUtil;
 import com.mockrunner.util.StringUtil;
 
@@ -190,6 +191,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         {
             names[ii] = ClassUtil.getArgumentName(arguments[ii]);
         }
+        ArrayUtil.ensureUnique(names);
         return names;
     }
     
@@ -283,7 +285,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
             className = className.substring(0, moduleIndex);
         }
         className = prepareClassNameFromBaseName(className);
-        name = "com/mockrunner/servlet/" + className + ".java";
+        name = ClassUtil.getPackageName(module).replace('.', '/') + "/" + className + ".java";
         return className;
     }
     
