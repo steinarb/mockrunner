@@ -35,12 +35,12 @@ public class TagUtil
      */
     public static TagSupport createNestedTagInstance(Class tag, PageContext pageContext, Map attributes)
 	{
-		if(null == tag) throw new RuntimeException("tag must not be null");
+        if(null == tag) throw new RuntimeException("tag must not be null");
         if(!TagSupport.class.isAssignableFrom(tag)) throw new RuntimeException("tag must be an instance of javax.servlet.jsp.tagext.TagSupport");
-		TagSupport tagSupport;
+	    TagSupport tagSupport;
 		try
 		{
-			tagSupport = (TagSupport)tag.newInstance();
+		    tagSupport = (TagSupport)tag.newInstance();
 		}
 		catch(Exception exc)
 		{
