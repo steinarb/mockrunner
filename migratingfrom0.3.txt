@@ -44,7 +44,7 @@ Otherwise, please consider the following changes:
 Starting with version 0.3, Mockrunner includes and supports Struts 1.2.
 Struts 1.1 is still supported. The struts.jar library and all other libraries
 from Struts release (refer to readme.txt) were upgraded to the versions included
-in Struts 1.2.1. If you want to test applications using Struts 1.1, just replace
+in Struts 1.2. If you want to test applications using Struts 1.1, just replace
 all the jar files with the versions that ship with Struts 1.1 release.
 
 However, a few things may affect your Struts tests:
