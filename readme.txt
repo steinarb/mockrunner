@@ -80,7 +80,7 @@ Just add them to the classpath. Please note that you have to
 add struts.jar even if you only use the test modules that are
 not Struts related (e.g ServletTestModule or JDBCTestModule).
 
-Struts 1.1 (or higher):
+Struts 1.1
 http://jakarta.apache.org/struts
 struts.jar
 
@@ -89,7 +89,7 @@ http://www.junit.org
 junit.jar
 
 J2EE 1.3:
-Tomcat 4.1.29:
+Tomcat 4.1.30:
 http://jakarta.apache.org/tomcat
 servlet.jar
 JBoss 3.2.2:
@@ -108,11 +108,11 @@ MockEJB 0.5:
 http://mockejb.sourceforge.net
 mockejb.jar
 
-JDOM Beta 9 (or higher):
+JDOM Beta 9:
 http://www.jdom.org
 jdom.jar
 
-NekoHTML Parser 0.8.3:
+NekoHTML Parser 0.9:
 http://www.apache.org/~andyc/neko/doc/html/index.html
 nekohtml.jar
 
