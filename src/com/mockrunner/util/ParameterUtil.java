@@ -46,14 +46,14 @@ public class ParameterUtil
         }
         if(source instanceof Cloneable)
         {
-        	try
-			{
-				return MethodUtils.invokeExactMethod(source, "clone", null);
-			}
-			catch(Exception exc)
-			{
-				return source;
-			}
+            try
+            {
+                return MethodUtils.invokeExactMethod(source, "clone", null);
+            }
+            catch(Exception exc)
+            {
+                return source;
+            }
         }
         return source;
     }
@@ -127,7 +127,7 @@ public class ParameterUtil
             return false;
         }
     }
-
+    
     private static boolean compareBlob(Object source, Object target)
     {
         try
@@ -141,7 +141,7 @@ public class ParameterUtil
             return false;
         }
     }
-
+    
     private static boolean compareArray(Object source, Object target)
     {
         try
