@@ -140,6 +140,7 @@
 			    	<exclude name="com/mockrunner/**/*.properties"/>
 			    	<exclude name="com/mockrunner/**/*.xml"/>
 			    	<exclude name="com/mockrunner/test/**"/>
+			    	<exclude name="com/mockrunner/example/**"/>
 			    </fileset>
 
     			 <doctitle><![CDATA[<h1>Mockrunner</h1>]]></doctitle>
