@@ -1,5 +1,7 @@
 package com.mockrunner.test.jms;
 
+import java.util.Set;
+
 import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.InvalidDestinationException;
@@ -325,6 +327,74 @@ public class MockMessageProducerTest extends TestCase
         assertEquals(objectMessage, receivedTopicMessage2);
         assertEquals(receivedQueueMessage1, receivedQueueMessage2);
         assertEquals(receivedQueueMessage1, receivedTopicMessage1);
+    }
+    
+    public void testAddSessionOnSend() throws Exception
+    {
+        DestinationManager destManager = new DestinationManager();
+        ConfigurationManager confManager = new ConfigurationManager();
+        MockConnection connection = new MockConnection(destManager, confManager);
+        TestQueue testQueue = new TestQueue();
+        TestTopic testTopic = new TestTopic();
+        MockSession session1 = new MockSession(connection, true, Session.CLIENT_ACKNOWLEDGE);
+        MockSession session2 = new MockSession(connection, true, Session.CLIENT_ACKNOWLEDGE);
+        MockMessageProducer producer1 = new MockMessageProducer(connection, session1, null);
+        MockMessageProducer producer2 = new MockMessageProducer(connection, session2, null);
+        producer1.send(testQueue, new MockTextMessage());
+        producer1.send(testTopic, new MockTextMessage());
+        producer2.send(testQueue, new MockTextMessage());
+        producer2.send(testTopic, new MockTextMessage());
+        assertEquals(2, testQueue.getSessions().size());
+        assertEquals(2, testTopic.getSessions().size());
+        assertTrue(testQueue.getSessions().contains(session1));
+        assertTrue(testQueue.getSessions().contains(session2));
+    }
+    
+    private class TestQueue extends MockQueue
+    { 
+        public TestQueue()
+        {
+            super("");
+        }
+        
+        public void addMessage(Message message) throws JMSException
+        {
+
+        }
+        
+        public String getQueueName() throws JMSException
+        {
+            return null;
+        }
+        
+        public Set getSessions()
+        {
+            return super.sessionSet();
+        }
+    }
+    
+    private class TestTopic extends MockTopic
+    { 
+        public TestTopic()
+        {
+            super("");
+        }
+        
+        public void addMessage(Message message) throws JMSException
+        {
+
+        }
+       
+        public String getTopicName() throws JMSException
+        {
+            // TODO Auto-generated method stub
+            return null;
+        }
+        
+        public Set getSessions()
+        {
+            return super.sessionSet();
+        }
     }
     
     private class TestMessageListener implements MessageListener

@@ -519,6 +519,18 @@ public class MockQueueSessionTest extends TestCase
         assertFalse(session.isRolledBack());
     }
     
+    public void testTransmissionWithNullDestination() throws Exception
+    {
+        MockQueueSession session = (MockQueueSession)connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+        DestinationManager manager = connection.getDestinationManager();
+        MockQueue queue = (MockQueue)manager.createQueue("Queue");
+        QueueSender sender = session.createSender(null);
+        MockTextMessage message = new MockTextMessage("Text");
+        sender.send(queue, message);
+        assertEquals(1, queue.getReceivedMessageList().size());
+        assertEquals(1, queue.getCurrentMessageList().size());
+    }
+    
     public static class TestListMessageListener implements MessageListener
     {
         private List messages = new ArrayList();
