@@ -49,9 +49,25 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     }
     
     /**
+     * Delegates to {@link JDBCTestModule#setCaseSensitive}
+     */
+    protected void setCaseSensitive(boolean caseSensitive)
+    {
+        jdbcTestModule.setCaseSensitive(caseSensitive);
+    }
+    
+    /**
+     * Delegates to {@link JDBCTestModule#setExactMatch}
+     */
+    protected void setExactMatch(boolean exactMatch)
+    {
+        jdbcTestModule.setExactMatch(exactMatch);
+    }
+
+    /**
      * Delegates to {@link JDBCTestModule#getPreparedStatement}
      */
-    public MockPreparedStatement getPreparedStatement(String sql)
+    protected MockPreparedStatement getPreparedStatement(String sql)
     {
         return jdbcTestModule.getPreparedStatement(sql);
     }
@@ -59,7 +75,7 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     /**
      * Delegates to {@link JDBCTestModule#getPreparedStatementObject(PreparedStatement, int)}
      */
-    public Object getPreparedStatementObject(PreparedStatement statement, int index)
+    protected Object getPreparedStatementObject(PreparedStatement statement, int index)
     {
         return jdbcTestModule.getPreparedStatementObject(statement, index);
     }
@@ -67,7 +83,7 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     /**
      * Delegates to {@link JDBCTestModule#getPreparedStatementObject(String, int)}
      */
-    public Object getPreparedStatementObject(String sql, int index)
+    protected Object getPreparedStatementObject(String sql, int index)
     {
         return jdbcTestModule.getPreparedStatementObject(sql, index);
     }
@@ -75,7 +91,7 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     /**
      * Delegates to {@link JDBCTestModule#verifyPreparedStatementPresent}
      */
-    public void verifyPreparedStatementPresent(String sql)
+    protected void verifyPreparedStatementPresent(String sql)
     {
         jdbcTestModule.verifyPreparedStatementPresent(sql);
     }
@@ -83,7 +99,7 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     /**
      * Delegates to {@link JDBCTestModule#verifyPreparedStatementObjectPresent(PreparedStatement, int)}
      */
-    public void verifyPreparedStatementObjectPresent(PreparedStatement statement, int index)
+    protected void verifyPreparedStatementObjectPresent(PreparedStatement statement, int index)
     {
         jdbcTestModule.verifyPreparedStatementObjectPresent(statement, index);
     }
@@ -91,7 +107,7 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     /**
      * Delegates to {@link JDBCTestModule#verifyPreparedStatementObjectPresent(String, int)}
      */
-    public void verifyPreparedStatementObjectPresent(String sql, int index)
+    protected void verifyPreparedStatementObjectPresent(String sql, int index)
     {
         jdbcTestModule.verifyPreparedStatementObjectPresent(sql, index);
     }
@@ -99,7 +115,7 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     /**
      * Delegates to {@link JDBCTestModule#verifyPreparedStatementObject(PreparedStatement, int, Object)}
      */
-    public void verifyPreparedStatementObject(PreparedStatement statement, int index, Object object)
+    protected void verifyPreparedStatementObject(PreparedStatement statement, int index, Object object)
     {
         jdbcTestModule.verifyPreparedStatementObject(statement, index, object);
     }
@@ -107,7 +123,7 @@ public class JDBCTestCaseAdapater extends BaseTestCase
     /**
      * Delegates to {@link JDBCTestModule#verifyPreparedStatementObject(PreparedStatement, int, Object)}
      */
-    public void verifyPreparedStatementObject(String sql, int index, Object object)
+    protected void verifyPreparedStatementObject(String sql, int index, Object object)
     {
         jdbcTestModule.verifyPreparedStatementObject(sql, index, object);
     }
