@@ -2,12 +2,14 @@ package com.mockrunner.jdbc;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.base.MockObjectFactory;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
+import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
 import com.mockrunner.mock.jdbc.PreparedStatementResultSetHandler;
 import com.mockrunner.mock.jdbc.StatementResultSetHandler;
@@ -197,6 +199,57 @@ public class JDBCTestModule
     public Object getPreparedStatementParameter(int indexOfStatement, int indexOfParameter)
     {
         return getPreparedStatementParameter(getPreparedStatement(indexOfStatement), indexOfParameter);
+    }
+    
+    /**
+     * Returns a list of all <code>Savepoint</code> objects.
+     * @return the <code>List</code> of {@link com.mockrunner.mock.jdbc.MockSavepoint} objects
+     */
+    public List getSavepoints()
+    {
+        return new ArrayList(mockFactory.getMockConnection().getSavepointMap().values());
+    }
+    
+    /**
+     * Returns the <code>Savepoint</code> with the specified index.
+     * The index is the number of the created <code>Savepoint</code>
+     * starting with 0 for the first <code>Savepoint</code>.
+     * @param index the index
+     * @return the {@link com.mockrunner.mock.jdbc.MockSavepoint}
+     */
+    public MockSavepoint getSavepoint(int index)
+    {
+        List savepoints = getSavepoints();
+        for(int ii = 0; ii < savepoints.size(); ii++)
+        {
+            MockSavepoint currentSavepoint = (MockSavepoint)savepoints.get(ii);
+            if(currentSavepoint.getNumber() == index) return currentSavepoint;
+        }
+        return null;
+    }
+    
+    /**
+     * Returns the first <code>Savepoint</code> with the specified name.
+     * Unnamed <code>Savepoint</code> objects get the name <i>""</i>.
+     * @param name the name
+     * @return the {@link com.mockrunner.mock.jdbc.MockSavepoint}
+     */
+    public MockSavepoint getSavepoint(String name)
+    {
+        List savepoints = getSavepoints();
+        for(int ii = 0; ii < savepoints.size(); ii++)
+        {
+            MockSavepoint currentSavepoint = (MockSavepoint)savepoints.get(ii);
+            try
+            {
+                if(currentSavepoint.getSavepointName().equals(name)) return currentSavepoint;
+            }
+            catch(SQLException exc)
+            {
+                throw new RuntimeException(exc.getMessage());
+            }
+        }
+        return null;
     }
     
     /**
@@ -512,6 +565,151 @@ public class JDBCTestModule
         if(!actualObject.equals(object))
         {
             throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " not equal with specified object.");
+        }
+    }
+    
+    /**
+     * Verifies that a <code>Savepoint</code> with the specified index
+     * is present. The index is the number of the created <code>Savepoint</code>
+     * starting with 0 for the first <code>Savepoint</code>.
+     * @param index the index of the <code>Savepoint</code>
+     */
+    public void verifySavepointPresent(int index)
+    {
+        MockSavepoint savepoint = getSavepoint(index);
+        if(null == savepoint)
+        {
+            throw new VerifyFailedException("No savepoint with index " + index + " present.");
+        }
+    }
+    
+    /**
+     * Verifies that a <code>Savepoint</code> with the specified name
+     * is present.
+     * @param name the name of the <code>Savepoint</code>
+     */
+    public void verifySavepointPresent(String name)
+    {
+        MockSavepoint savepoint = getSavepoint(name);
+        if(null == savepoint)
+        {
+            throw new VerifyFailedException("No savepoint with name " + name + " present.");
+        }
+    }
+    
+    /**
+     * Verifies that the <code>Savepoint</code> with the specified index
+     * is released. The index is the number of the created <code>Savepoint</code>
+     * starting with 0 for the first <code>Savepoint</code>.
+     * @param index the index of the <code>Savepoint</code>
+     */
+    public void verifySavepointReleased(int index)
+    {
+        verifySavepointPresent(index);
+        if(!getSavepoint(index).isReleased())
+        {
+            throw new VerifyFailedException("Savepoint with index " + index + " not released.");
+        }
+    }
+    
+    /**
+     * Verifies that the <code>Savepoint</code> with the specified name
+     * is released.
+     * @param name the name of the <code>Savepoint</code>
+     */
+    public void verifySavepointReleased(String name)
+    {
+        verifySavepointPresent(name);
+        if(!getSavepoint(name).isReleased())
+        {
+            throw new VerifyFailedException("Savepoint with name " + name + " not released.");
+        }
+    }
+    
+    /**
+     * Verifies that the <code>Savepoint</code> with the specified index
+     * is not released. The index is the number of the created <code>Savepoint</code>
+     * starting with 0 for the first <code>Savepoint</code>.
+     * @param index the index of the <code>Savepoint</code>
+     */
+    public void verifySavepointNotReleased(int index)
+    {
+        verifySavepointPresent(index);
+        if(getSavepoint(index).isReleased())
+        {
+            throw new VerifyFailedException("Savepoint with index " + index + " is released.");
+        }
+    }
+
+    /**
+     * Verifies that the <code>Savepoint</code> with the specified name
+     * is not released.
+     * @param name the name of the <code>Savepoint</code>
+     */
+    public void verifySavepointNotReleased(String name)
+    {
+        verifySavepointPresent(name);
+        if(getSavepoint(name).isReleased())
+        {
+            throw new VerifyFailedException("Savepoint with name " + name + " is released.");
+        }
+    }
+    
+    /**
+     * Verifies that the <code>Savepoint</code> with the specified index
+     * is rollbacked. The index is the number of the created <code>Savepoint</code>
+     * starting with 0 for the first <code>Savepoint</code>.
+     * @param index the index of the <code>Savepoint</code>
+     */
+    public void verifySavepointRollbacked(int index)
+    {
+        verifySavepointPresent(index);
+        if(!getSavepoint(index).isRollbacked())
+        {
+            throw new VerifyFailedException("Savepoint with index " + index + " not rollbacked.");
+        }
+    }
+
+    /**
+     * Verifies that the <code>Savepoint</code> with the specified name
+     * is rollbacked.
+     * @param name the name of the <code>Savepoint</code>
+     */
+    public void verifySavepointRollbacked(String name)
+    {
+        verifySavepointPresent(name);
+        if(!getSavepoint(name).isRollbacked())
+        {
+            throw new VerifyFailedException("Savepoint with name " + name + " not rollbacked.");
+        }
+    }
+
+    /**
+     * Verifies that the <code>Savepoint</code> with the specified index
+     * is not rollbacked. The index is the number of the created <code>Savepoint</code>
+     * starting with 0 for the first <code>Savepoint</code>.
+     * @param index the index of the <code>Savepoint</code>
+     */
+    public void verifySavepointNotRollbacked(int index)
+    {
+        verifySavepointPresent(index);
+        if(getSavepoint(index).isRollbacked())
+        {
+            throw new VerifyFailedException("Savepoint with index " + index + " is rollbacked.");
+        }
+    }
+
+    /**
+     * Verifies that the <code>Savepoint</code> with the specified name
+     * is not rollbacked.
+     * @param name the name of the <code>Savepoint</code>
+     */
+    public void verifySavepointNotRollbacked(String name)
+    {
+        verifySavepointPresent(name);
+        if(getSavepoint(name).isRollbacked())
+        {
+            throw new VerifyFailedException("Savepoint with name " + name + " is rollbacked.");
         }
     }
 }
