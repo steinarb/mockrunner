@@ -1,232 +1,222 @@
 <?xml version="1.0"?>
 <project name="mockrunner" default="release" basedir=".">
 
-	<property file=".ant.properties"/>
-   
-	<target name="checkJDK1.3" unless="java1.3.home">
+    <property file=".ant.properties" />
+
+    <target name="checkJDK1.3" unless="java1.3.home">
         <fail>
          Property "java1.3.home" not set. Please create a file
          ".ant.properties" in this directory and set "java1.3.home"
          to your JDK1.3 installation.
         </fail>
-   	</target>
-   
-  	<target name="checkJDK1.4" unless="java1.4.home">
+    </target>
+
+    <target name="checkJDK1.4" unless="java1.4.home">
         <fail>
          Property "java1.4.home" not set. Please create a file
          ".ant.properties" in this directory and set "java1.4.home"
          to your JDK1.4 installation.
         </fail>
-   	</target>
-	
-	<target name="checkJava2HTML" unless="java2html.home">
-		<fail>
+    </target>
+
+    <target name="checkJava2HTML" unless="java2html.home">
+        <fail>
 	     Property "java2html.home" not set. Please create a file
 	     ".ant.properties" in this directory and set "java2html.home"
 	     to your Java2HTML installation (location of j2h.jar).
 		</fail>
     </target>
-   
-	<target name="checkenvironment">
-	    <antcall target="checkJDK1.3"/>
-	    <antcall target="checkJDK1.4"/>
-		<antcall target="checkJava2HTML"/>
-	</target>
-	
-	<target name="init" depends="checkenvironment">
-		
-		<tstamp/>
 
-   	    <property name="version" value="0.3"/>
-        <property name="timestamp" value="${DSTAMP}-${TSTAMP}"/>
-        
-		<property name="build" value="build"/>
-		<property name="build1.3" value="build1.3"/>
-		<property name="src" value="src"/>
-		<property name="src1.3" value="src1.3"/>
-		<property name="doc" value="doc"/>
-		<property name="bin" value="bin"/>
-		<property name="lib" value="lib"/>
-		<property name="config" value="config"/>
-		
-		<property name="releasedir" value="${bin}/mockrunner-${version}"/>
-		<property name="releasefile" value="${bin}/mockrunner-${version}.zip"/>
+    <target name="checkenvironment">
+        <antcall target="checkJDK1.3" />
+        <antcall target="checkJDK1.4" />
+        <antcall target="checkJava2HTML" />
+    </target>
 
-		<filter token="version" value="${version}"/>
-        <filter token="timestamp" value="${timestamp}"/>
-        
+    <target name="init" depends="checkenvironment">
+
+        <tstamp />
+
+        <property name="version" value="0.3" />
+        <property name="timestamp" value="${DSTAMP}-${TSTAMP}" />
+
+        <property name="build" value="build" />
+        <property name="build1.3" value="build1.3" />
+        <property name="src" value="src" />
+        <property name="src1.3" value="src1.3" />
+        <property name="doc" value="doc" />
+        <property name="bin" value="bin" />
+        <property name="lib" value="lib" />
+        <property name="config" value="config" />
+
+        <property name="releasedir" value="${bin}/mockrunner-${version}" />
+        <property name="releasefile" value="${bin}/mockrunner-${version}.zip" />
+
+        <filter token="version" value="${version}" />
+        <filter token="timestamp" value="${timestamp}" />
+
         <path id="classpath.jar">
             <fileset dir="${lib}">
-                <include name="*.jar"/>
+                <include name="*.jar" />
             </fileset>
         </path>
-       
-	</target>
-		
-	<target name="compile" depends="init">	
-		<mkdir dir="${build}"/>
-		<javac srcdir="${src}" destdir="${build}" executable="${java1.4.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
-		 	<classpath>
-                <pathelement location="${build}"/>
-	            <path refid="classpath.jar"/>
+
+    </target>
+
+    <target name="compile" depends="init">
+        <mkdir dir="${build}" />
+        <javac srcdir="${src}" destdir="${build}" executable="${java1.4.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+            <classpath>
+                <pathelement location="${build}" />
+                <path refid="classpath.jar" />
             </classpath>
-		</javac>
-	</target>
+        </javac>
+    </target>
+
+    <target name="compile1.3" depends="init">
+        <mkdir dir="${build1.3}" />
+        <javac destdir="${build1.3}" target="1.2" executable="${java1.3.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+            <classpath>
+                <pathelement location="${build1.3}" />
+                <path refid="classpath.jar" />
+            </classpath>
+            <src path="${src}/com/mockrunner/base" />
+            <src path="${src}/com/mockrunner/servlet" />
+            <src path="${src}/com/mockrunner/struts" />
+            <src path="${src}/com/mockrunner/tag" />
+            <src path="${src}/com/mockrunner/mock/web" />
+            <src path="${src}/com/mockrunner/util" />
+            <src path="${src}/com/mockrunner/ejb" />
+            <src path="${src}/com/mockrunner/mock/ejb" />
+            <src path="${src}/com/mockrunner/jms" />
+            <src path="${src}/com/mockrunner/mock/jms" />
+            <src path="${src}/org/apache" />
+            <src path="${src}/org/codehaus" />
+            <src path="${src1.3}" />
+        </javac>
+    </target>
+
+    <target name="jar" depends="compile">
+        <delete file="${build}/mockrunner.jar" />
+        <copy todir="${build}" filtering="true">
+            <fileset dir="${basedir}">
+                <include name="version.txt" />
+            </fileset>
+        </copy>
+        <jar jarfile="${build}/mockrunner.jar">
+            <fileset dir="${build}">
+                <exclude name="com/mockrunner/example/**" />
+                <exclude name="com/mockrunner/test/**" />
+            </fileset>
+            <fileset dir="${config}">
+                <include name="**" />
+            </fileset>
+            <fileset dir="${basedir}">
+                <include name="LICENSE*.txt" />
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="jar1.3" depends="compile1.3">
+        <delete file="${build1.3}/mockrunner-jdk1.3.jar" />
+        <copy todir="${build1.3}" filtering="true">
+            <fileset dir="${basedir}">
+                <include name="version.txt" />
+            </fileset>
+        </copy>
+        <jar jarfile="${build1.3}/mockrunner-jdk1.3.jar">
+            <fileset dir="${build1.3}">
+                <exclude name="com/mockrunner/example/**" />
+                <exclude name="com/mockrunner/test/**" />
+            </fileset>
+            <fileset dir="${config}">
+                <include name="**" />
+            </fileset>
+            <fileset dir="${basedir}">
+                <include name="LICENSE*.txt" />
+            </fileset>
+        </jar>
+    </target>
+
+    <target name="javadoc" depends="init">
+        <mkdir dir="${doc}/api" />
+        <javadoc destdir="${doc}/api" author="true" version="true" use="true" windowtitle="Mockrunner">
+
+            <classpath>
+                <pathelement location="${build}" />
+                <path refid="classpath.jar" />
+            </classpath>
+
+            <fileset dir="${src}" defaultexcludes="yes">
+                <include name="com/mockrunner/**" />
+                <exclude name="com/mockrunner/**/*.txt" />
+                <exclude name="com/mockrunner/**/*.properties" />
+                <exclude name="com/mockrunner/**/*.xml" />
+                <exclude name="com/mockrunner/test/**" />
+                <exclude name="com/mockrunner/example/**" />
+            </fileset>
+
+            <doctitle><![CDATA[<h1>Mockrunner</h1>]]></doctitle>
+        </javadoc>
+    </target>
+
+	<target name="java2html" depends="javadoc">
+	    <mkdir dir="${doc}/examples" />
+	    <taskdef name="java2html" classname="com.java2html.Java2HTMLTask" classpath="${java2html.home}/j2h.jar" />
 	
-	<target name="compile1.3" depends="init">	
-		<mkdir dir="${build1.3}"/>
-		<javac destdir="${build1.3}" target="1.2" executable="${java1.3.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
-		 	<classpath>
-                <pathelement location="${build1.3}"/>
-	            <path refid="classpath.jar"/>
-            </classpath>
-            <src path="${src}/com/mockrunner/base"/>
-            <src path="${src}/com/mockrunner/servlet"/>
-            <src path="${src}/com/mockrunner/struts"/>
-            <src path="${src}/com/mockrunner/tag"/>
-            <src path="${src}/com/mockrunner/mock/web"/>
-            <src path="${src}/com/mockrunner/util"/>
-            <src path="${src}/com/mockrunner/ejb"/>
-            <src path="${src}/com/mockrunner/mock/ejb"/>
-            <src path="${src}/com/mockrunner/jms"/>
-            <src path="${src}/com/mockrunner/mock/jms"/>
-            <src path="${src}/org/apache"/>
-            <src path="${src}/org/codehaus"/>
-            <src path="${src1.3}"/>
-		</javac>	
+	    <java2html title="Mockrunner" simple="no" tabsize="4" marginsize="0" header="true" footer="false" destination="${doc}/examples">
+	        <fileset dir="${src}">
+	            <include name="com/mockrunner/example/**/*.java" />
+	        </fileset>
+	    </java2html>
 	</target>
 
-	<target name="jar" depends="compile">
-		<delete file="${build}/mockrunner.jar"/>
-		<copy todir="${build}" filtering="true">
-    		<fileset dir="${basedir}">
-				<include name="version.txt"/>
-			</fileset>	
-  		</copy>
-		<jar jarfile="${build}/mockrunner.jar">
-			<fileset dir="${build}">
-				<exclude name="com/mockrunner/example/**"/>
-				<exclude name="com/mockrunner/test/**"/>
-			</fileset>
-			<fileset dir="${config}">
-				<include name="**"/>
-			</fileset>
-			<fileset dir="${basedir}">
-				<include name="LICENSE*.txt"/>
-			</fileset>
-		</jar>
-	</target>
-	
-	<target name="jar1.3" depends="compile1.3">
-		<delete file="${build1.3}/mockrunner-jdk1.3.jar"/>
-  		<copy todir="${build1.3}" filtering="true">
-    		<fileset dir="${basedir}">
-				<include name="version.txt"/>
-			</fileset>	
-  		</copy>
-		<jar jarfile="${build1.3}/mockrunner-jdk1.3.jar">
-			<fileset dir="${build1.3}">
-				<exclude name="com/mockrunner/example/**"/>
-				<exclude name="com/mockrunner/test/**"/>
-			</fileset>
-			<fileset dir="${config}">
-				<include name="**"/>
-			</fileset>
-			<fileset dir="${basedir}">
-				<include name="LICENSE*.txt"/>
-			</fileset>
-		</jar>
-	</target>
-	
-	<target name="javadoc" depends="init">
-		<mkdir dir="${doc}/api"/>
-        <javadoc destdir="${doc}/api"
-           		 author="true"
-           		 version="true"
-           		 use="true"
-           		 windowtitle="Mockrunner">
-				
-				<classpath>
-	                <pathelement location="${build}"/>
-		            <path refid="classpath.jar"/>
-            	</classpath>
-            	
-			    <fileset dir="${src}" defaultexcludes="yes">
-			    	<include name="com/mockrunner/**"/>
-			    	<exclude name="com/mockrunner/**/*.txt"/>
-			    	<exclude name="com/mockrunner/**/*.properties"/>
-			    	<exclude name="com/mockrunner/**/*.xml"/>
-			    	<exclude name="com/mockrunner/test/**"/>
-			    	<exclude name="com/mockrunner/example/**"/>
-			    </fileset>
-
-    			 <doctitle><![CDATA[<h1>Mockrunner</h1>]]></doctitle>
-  		</javadoc>
-    </target>
-	
-    <target name="java2html" depends="javadoc">
-    	<mkdir dir="${doc}/examples"/>
-    	<taskdef name="java2html" classname="com.java2html.Java2HTMLTask" classpath="${java2html.home}/j2h.jar"/>
-    	               
-    	<java2html title="Mockrunner" 
-    			   simple="no"
-    	           tabsize="4"
-    			   marginsize="0"
-    			   header="true"
-    			   footer="false"
-    			   destination="${doc}/examples">
-    			   <fileset dir="${src}">
-    			   		<include name="com/mockrunner/example/**/*.java"/>
-    			   </fileset>
-    	</java2html>
-    </target>
-	
 	<target name="release" depends="clean,jar,jar1.3,javadoc,java2html">
-		<delete dir="${releasedir}"/>
-		<delete file="${releasefile}"/>
-		<mkdir dir="${releasedir}"/>
-		<mkdir dir="${releasedir}/src"/>
-		<mkdir dir="${releasedir}/src1.3"/>
-		<mkdir dir="${releasedir}/doc"/>
-		<mkdir dir="${releasedir}/lib"/>
-		<mkdir dir="${releasedir}/jar"/>
-		<copy todir="${releasedir}" filtering="true">
-    		<fileset dir="${basedir}">
-				<include name="*.txt"/>
-			</fileset>	
-  		</copy>
-  		<copy todir="${releasedir}/src">
-  			<fileset dir="${src}">
-				<include name="**/*"/>
-			</fileset>
-  		</copy>
-  		<copy todir="${releasedir}/src1.3">
-  			<fileset dir="${src1.3}">
-				<include name="**/*"/>
-			</fileset>
-  		</copy>
-  		<copy todir="${releasedir}/doc">
-  			<fileset dir="${doc}">
-				<include name="**/*"/>
-			</fileset>
-  		</copy>
-  		<copy todir="${releasedir}/lib" file="${build}/mockrunner.jar"/>
-  		<copy todir="${releasedir}/lib" file="${build1.3}/mockrunner-jdk1.3.jar"/>
-  		<copy todir="${releasedir}/jar">
-  			<fileset dir="${lib}">
-				<include name="**/*"/>
-				<exclude name="xercesImpl.jar" />
-				<exclude name="xml-apis.jar" />
-			</fileset>
-  		</copy>
-  		<zip destfile="${releasefile}" basedir="${bin}"/>
+	    <delete dir="${releasedir}" />
+	    <delete file="${releasefile}" />
+	    <mkdir dir="${releasedir}" />
+	    <mkdir dir="${releasedir}/src" />
+	    <mkdir dir="${releasedir}/src1.3" />
+	    <mkdir dir="${releasedir}/doc" />
+	    <mkdir dir="${releasedir}/lib" />
+	    <mkdir dir="${releasedir}/jar" />
+	    <copy todir="${releasedir}" filtering="true">
+	        <fileset dir="${basedir}">
+	            <include name="*.txt" />
+	        </fileset>
+	    </copy>
+	    <copy todir="${releasedir}/src">
+	        <fileset dir="${src}">
+	            <include name="**/*" />
+	        </fileset>
+	    </copy>
+	    <copy todir="${releasedir}/src1.3">
+	        <fileset dir="${src1.3}">
+	            <include name="**/*" />
+	        </fileset>
+	    </copy>
+	    <copy todir="${releasedir}/doc">
+	        <fileset dir="${doc}">
+	            <include name="**/*" />
+	        </fileset>
+	    </copy>
+	    <copy todir="${releasedir}/lib" file="${build}/mockrunner.jar" />
+	    <copy todir="${releasedir}/lib" file="${build1.3}/mockrunner-jdk1.3.jar" />
+	    <copy todir="${releasedir}/jar">
+	        <fileset dir="${lib}">
+	            <include name="**/*" />
+	            <exclude name="xercesImpl.jar" />
+	            <exclude name="xml-apis.jar" />
+	        </fileset>
+	    </copy>
+	    <zip destfile="${releasefile}" basedir="${bin}" />
 	</target>
 	
 	<target name="clean" depends="init">
-		<delete dir="${bin}"/>
-		<delete dir="${doc}"/>
-        <delete dir="${build}"/>
-        <delete dir="${build1.3}"/>
+	    <delete dir="${bin}" />
+	    <delete dir="${doc}" />
+	    <delete dir="${build}" />
+	    <delete dir="${build1.3}" />
 	</target>
 
 </project>
