@@ -14,6 +14,9 @@ mockrunner-0.3.1:
 - added setResourceAsStream(String path, InputStream inputStream) method 
   to MockServletContext
 - ActionTestModule now extends HTMLOutputModule
+- added WebTestModule and WebTestCase as superclasses of HTMLOutputModule
+  and HTMLOutputTestCase. The classes provide convenience methods
+  for request and session handling
 - added setJspWriter(JspWriter jspWriter) method to MockPageContext
 - updated mockejb.jar from 0.5 to 0.6 beta2
 - replaced jakarta-oro.jar from Struts release with jakarta-oro-2.0.8.jar
