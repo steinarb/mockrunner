@@ -367,9 +367,10 @@ public class ActionTestModuleTest extends TestCase
         TestForm form = (TestForm)module.createActionForm(TestForm.class);
         form.setValidationOk(false);
         module.setValidate(true);
+        module.setInput("input");
         module.actionPerform(TestAction.class, form);
+        module.verifyForward("input");
         assertTrue(form.wasResetCalled());
-        assertNull(module.getActionForward());
         assertEquals("value", form.getProperty());
         module.verifyHasActionErrors();
         module.verifyActionErrorPresent("testkey");

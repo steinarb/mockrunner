@@ -250,7 +250,7 @@ public class MockActionMapping extends ActionMapping
 
     public ActionForward findForward(String name)
     {
-        return new MockActionForward(name);
+        return new MockActionForward(name, name, false);
     }
 
     public String[] findForwards()
@@ -260,7 +260,7 @@ public class MockActionMapping extends ActionMapping
 
     public ActionForward getInputForward()
     {
-        return new MockActionForward(input);
+        return new MockActionForward(input, input, false);
     }
 
     public void removeForward(ActionForward forward)

@@ -19,57 +19,93 @@ import de.mockrunner.mock.MockActionMapping;
 import de.mockrunner.mock.MockPageContext;
 
 /**
- * Can be used to test struts actions.
- * Have a look at the examples to see 
- * how to use it.
+ * Module for Struts action tests. Simulates the Struts container
+ * without reading the <i>struts-config.xml</i> file
  */
 public class ActionTestModule
 {
     private MockObjectFactory mockFactory;
-    private boolean validate;
-    private String parameter;
     private MockActionForward forward;
     private ActionForm formObj;
     private Action actionObj;
-
+    
     public ActionTestModule(MockObjectFactory mockFactory)
     {
         this.mockFactory = mockFactory;
     }
 
-    public String addMappedPropertyRequestPrefix(String str)
+    /**
+     * Convinience method for nested properties. Creates a String
+     * <i>value(property)</i>.
+     * @param property the property
+     */
+    public String addMappedPropertyRequestPrefix(String property)
     {
-        return "value(" + str + ")";
+        return "value(" + property + ")";
     }
 
+    /**
+     * Sets the parameter by delegating to {@link MockActionMapping#setParameter}.
+     * You can test your Actions with different parameter settings.
+     * @param parameter the parameter
+     */
     public void setParameter(String parameter)
     {
-        this.parameter = parameter;
         getMockActionMapping().setParameter(parameter);
     }
 
+    /**
+     * Sets if Form validation should be performed before calling the Action.
+     * Delegates to {@link MockActionMapping#setValidate}.
+     * @param validate should validation be performed
+     */
     public void setValidate(boolean validate)
     {
-        this.validate = validate;
+        getMockActionMapping().setValidate(validate);
+    }
+    
+    /**
+     * Sets the input attribute. If Form validation fails, the
+     * input attribute can be verified with {@link #verifyForward}.
+     * Delegates to {@link MockActionMapping#setInput}.
+     * @param input the input attribute
+     */
+    public void setInput(String input)
+    {
+        getMockActionMapping().setInput(input);
     }
 
+    /**
+     * Verifies the forward path returned by the action.
+     * Delegates to {@link MockActionMapping#setValidate}.
+     * @param validate should validation be performed
+     * @throws VerifyFailedException if verification fails
+     */
     public void verifyForward(String path)
     {
         if (null == getActionForward())
         {
             throw new VerifyFailedException("ActionForward == null");
         }
-        else if (!getActionForward().verifyPath(path))
+        else if (!getActionForward().verifyName(path))
         {
             throw new VerifyFailedException("expected " + path + ", received " + getActionForward().getPath());
         }
     }
 
+    /**
+     * Verifies that there are no action errors present.
+     * @throws VerifyFailedException if verification fails
+     */
     public void verifyNoActionErrors()
     {
         verifyNoActionMessages(getActionErrors());   
     }
     
+    /**
+     * Verifies that there are no action messages present.
+     * @throws VerifyFailedException if verification fails
+     */
     public void verifyNoActionMessages()
     {
         verifyNoActionMessages(getActionMessages());   
@@ -91,6 +127,10 @@ public class ActionTestModule
         }
     }
 
+    /**
+     * Verifies that there are action errors present.
+     * @throws VerifyFailedException if verification fails
+     */
     public void verifyHasActionErrors()
     {
         if (!containsMessages(getActionErrors()))
@@ -99,6 +139,10 @@ public class ActionTestModule
         }
     }
     
+    /**
+     * Verifies that there are action messages present.
+     * @throws VerifyFailedException if verification fails
+     */
     public void verifyHasActionMessages()
     {
         if (!containsMessages(getActionMessages()))
@@ -107,75 +151,111 @@ public class ActionTestModule
         }
     }
 
-    public void verifyActionErrorPresent(String errorName)
+    /**
+     * Verifies that an action error with the specified key
+     * is present.
+     * @param errorKey the error key
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyActionErrorPresent(String errorKey)
     {
-        verifyActionMessagePresent(errorName, getActionErrors());
+        verifyActionMessagePresent(errorKey, getActionErrors());
     }
     
-    public void verifyActionMessagePresent(String messageName)
+    /**
+     * Verifies that an action message with the specified key
+     * is present.
+     * @param messageKey the message key
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyActionMessagePresent(String messageKey)
     {
-        verifyActionMessagePresent(messageName, getActionMessages());
+        verifyActionMessagePresent(messageKey, getActionMessages());
     }
     
-    private void verifyActionMessagePresent(String messageName, ActionMessages messages)
+    private void verifyActionMessagePresent(String messageKey, ActionMessages messages)
     {
         if (!containsMessages(messages)) throw new VerifyFailedException("no action messages/errors");
         Iterator iterator = messages.get();
         while (iterator.hasNext())
         {
             ActionMessage message = (ActionMessage) iterator.next();
-            if (message.getKey().equals(messageName))
+            if (message.getKey().equals(messageKey))
             {
                 return;
             }
         }
-        throw new VerifyFailedException("message/error " + messageName + " not present");
+        throw new VerifyFailedException("message/error " + messageKey + " not present");
     }
     
-    public void verifyActionErrorNotPresent(String errorName)
+    /**
+     * Verifies that an action error with the specified key
+     * is not present.
+     * @param errorKey the error key
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyActionErrorNotPresent(String errorKey)
     {
-        verifyActionMessageNotPresent(errorName, getActionErrors());
+        verifyActionMessageNotPresent(errorKey, getActionErrors());
     }
     
-    public void verifyActionMessageNotPresent(String messageName)
+    /**
+     * Verifies that an action message with the specified key
+     * is not present.
+     * @param messageKey the message key
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyActionMessageNotPresent(String messageKey)
     {
-        verifyActionMessageNotPresent(messageName, getActionMessages());
+        verifyActionMessageNotPresent(messageKey, getActionMessages());
     }
     
-    private void verifyActionMessageNotPresent(String messageName, ActionMessages messages)
+    private void verifyActionMessageNotPresent(String messageKey, ActionMessages messages)
     {
         Iterator iterator = messages.get();
         while (iterator.hasNext())
         {
             ActionMessage message = (ActionMessage) iterator.next();
-            if (message.getKey().equals(messageName))
+            if (message.getKey().equals(messageKey))
             {
-                throw new VerifyFailedException("message/error " + messageName + " present");
+                throw new VerifyFailedException("message/error " + messageKey + " present");
             }
         }
     }
 
-    public void verifyActionErrors(String errorNames[])
+    /**
+     * Verifies that the specified action errors are present.
+     * Regards number and order of action errors.
+     * @param errorKeys the array of error keys
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyActionErrors(String errorKeys[])
     {
-        verifyActionMessages(errorNames, getActionErrors());  
+        verifyActionMessages(errorKeys, getActionErrors());  
     }
     
-    public void verifyActionMessages(String errorMessages[])
+    /**
+     * Verifies that the specified action messages are present.
+     * Regards number and order of action messages.
+     * @param messageKeys the array of message keys
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyActionMessages(String messageKeys[])
     {
-        verifyActionMessages(errorMessages, getActionMessages());  
+        verifyActionMessages(messageKeys, getActionMessages());  
     }
     
-    private void verifyActionMessages(String messageNames[], ActionMessages messages)
+    private void verifyActionMessages(String messageKeys[], ActionMessages messages)
     {
         if (!containsMessages(messages)) throw new VerifyFailedException("no action messages/errors");
-        if(messages.size() != messageNames.length) throw new VerifyFailedException("expected " + messageNames.length + " messages/errors, received " + messages.size() + " messages/errors");
+        if(messages.size() != messageKeys.length) throw new VerifyFailedException("expected " + messageKeys.length + " messages/errors, received " + messages.size() + " messages/errors");
         Iterator iterator = messages.get();
-        for (int ii = 0; ii < messageNames.length; ii++)
+        for (int ii = 0; ii < messageKeys.length; ii++)
         {
             ActionMessage message = (ActionMessage) iterator.next();
-            if (!message.getKey().equals(messageNames[ii]))
+            if (!message.getKey().equals(messageKeys[ii]))
             {
-                throw new VerifyFailedException("mismatch at position " + ii + ", actual: " + message.getKey() + ", expected: " + messageNames[ii]);
+                throw new VerifyFailedException("mismatch at position " + ii + ", actual: " + message.getKey() + ", expected: " + messageKeys[ii]);
             }
         }
     }
@@ -418,6 +498,10 @@ public class ActionTestModule
                 ActionForward currentForward = (ActionForward) actionObj.execute(getMockActionMapping(), formObj, mockFactory.getMockRequest(), mockFactory.getMockResponse());
                 setResult(currentForward);
             }
+            else
+            {
+                setResult(getMockActionMapping().getInputForward());
+            }
         }
         catch (Exception exc)
         {
@@ -434,7 +518,7 @@ public class ActionTestModule
         }
         else
         {
-            forward = new MockActionForward(currentForward.getPath());
+            forward = new MockActionForward(currentForward.getName(), currentForward.getPath(), currentForward.getRedirect());
         }
     }
 
@@ -442,7 +526,7 @@ public class ActionTestModule
     {
         getActionForm().reset(getMockActionMapping(), mockFactory.getMockRequest());
         populateMockRequest();
-        if (validate)
+        if (getMockActionMapping().getValidate())
         {
             ActionErrors errors = formObj.validate(getMockActionMapping(), mockFactory.getMockRequest());
             if (containsMessages(errors))
