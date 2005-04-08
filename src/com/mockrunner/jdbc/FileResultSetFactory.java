@@ -13,9 +13,11 @@ import com.mockrunner.util.common.StringUtil;
  * of the columns (default is <i>";"</i>). Furthermore you can specify if the first line
  * contains the column names (default is <code>false</code>) and if
  * the column entries should be trimmed (default is <code>true</code>).
- * If a <code>File</code> is specified, this file is used. If a file name
- * is specified, this class tries to find the file in the local
- * file system and (if not found) to load it with <code>getResource</code>.
+ * The file can be specified directly or by its name. The class
+ * tries to find the file in the absolut or relative path and
+ * (if not found) by calling <code>getResource</code>. Note that the
+ * file must exist in the local file system and cannot be loaded from
+ * inside a jar archive.
  */
 public class FileResultSetFactory implements ResultSetFactory
 {
