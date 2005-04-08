@@ -47,7 +47,7 @@ public class FileUtil
     }
     
     /**
-     * Tries to open the file from the file system. If the file
+     * Tries to open the file from its absolute or relative path. If the file
      * doesn't exist, tries to load the file with <code>getResource</code>.
      * Returns <code>null</code> if the file cannot be found.
      * @param fileName the file name
