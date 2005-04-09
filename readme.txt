@@ -64,7 +64,7 @@ is used. If you are running Java 1.4  you can use JDBC 3.0.
 Mockrunner supports J2EE 1.3 and J2EE 1.4. For J2EE 1.3 you have to use
 the jar files with "-j2ee1.3" in their name (these files are in lib/j2ee1.3
 directory). If a jar file doesn't have a corresponding "-j2ee1.3"-version, 
-it can be used with J2EE 1.3 and J2EE 1.4. Older J2EE version, e.g. Servlet API
+it can be used with J2EE 1.3 and J2EE 1.4. Older J2EE versions, e.g. Servlet API
 2.2, are not supported.
 Mockrunner supports Struts versions 1.1 and 1.2. It's not possible to use Mockrunner 
 with Struts 1.0.
