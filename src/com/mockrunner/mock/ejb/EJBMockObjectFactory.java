@@ -22,7 +22,7 @@ import com.mockrunner.ejb.Configuration;
  * bound to the mock context, the factory will create and bind a
  * {@link com.mockrunner.mock.ejb.MockUserTransaction}.
  * If the bound transaction is no
- * {@link com.mockrunner.mock.ejb.MockUserTransaction}
+ * {@link com.mockrunner.mock.ejb.MockUserTransaction},
  * the method {@link #getMockUserTransaction} returns <code>null</code>.
  * Use {@link #getUserTransaction} instead in this case.
  * You can configure the JNDI name of the <code>UserTransaction</code>
@@ -87,6 +87,8 @@ public class EJBMockObjectFactory
     
     /**
      * Returns the {@link com.mockrunner.mock.ejb.MockUserTransaction}.
+     * If the bound transaction is no {@link com.mockrunner.mock.ejb.MockUserTransaction},
+     * this method returns <code>null</code>.
      * @return the {@link com.mockrunner.mock.ejb.MockUserTransaction}
      */
     public MockUserTransaction getMockUserTransaction()
