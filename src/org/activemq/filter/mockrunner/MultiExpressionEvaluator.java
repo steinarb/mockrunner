@@ -15,7 +15,7 @@
  * limitations under the License. 
  * 
  **/
-package org.codehaus.activemq.filter.mockrunner;
+package org.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -71,7 +71,7 @@ import java.util.Iterator;
  * When a CacheExpressionnotices it's last cached value was generated in an old 'view',
  * it invalidates its cached value.
  *
- * @version $Revision: 1.4 $ $Date: 2005/02/25 17:43:00 $
+ * @version $Revision: 1.1 $ $Date: 2005/04/13 16:42:08 $
  */
 public class MultiExpressionEvaluator {
 
@@ -97,7 +97,7 @@ public class MultiExpressionEvaluator {
         }
 
         /**
-         * @see org.codehaus.activemq.filter.Expression#evaluate(javax.jms.Message)
+         * @see org.activemq.filter.Expression#evaluate(javax.jms.Message)
          */
         public Object evaluate(Message message) throws JMSException {
             if (view == cview) {

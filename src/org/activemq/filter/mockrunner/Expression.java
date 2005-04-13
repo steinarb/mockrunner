@@ -16,7 +16,7 @@
  * 
  **/
 
-package org.codehaus.activemq.filter.mockrunner;
+package org.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -25,24 +25,15 @@ import javax.jms.Message;
 /**
  * Alwin Ibba: Changed package
  * 
- * Represents a logical not operation on another filter
- *
- * @version $Revision: 1.4 $
+ * Represents an expression
+ * 
+ * @version $Revision: 1.1 $
  */
-public class NotFilter implements Filter {
+public interface Expression {
 
-    private Filter filter;
-
-    public NotFilter(Filter filter) {
-        this.filter = filter;
-    }
-
-    public boolean matches(Message message) throws JMSException {
-        return !filter.matches(message);
-    }
-
-    public boolean isWildcard() {
-        return false;
-    }
+    /**
+     * @return the value of this expression
+     */
+    public Object evaluate(Message message) throws JMSException;
 
 }

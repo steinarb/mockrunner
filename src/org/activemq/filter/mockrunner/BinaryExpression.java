@@ -15,7 +15,7 @@
  * limitations under the License. 
  * 
  **/
-package org.codehaus.activemq.filter.mockrunner;
+package org.activemq.filter.mockrunner;
 
 
 /**
@@ -23,7 +23,7 @@ package org.codehaus.activemq.filter.mockrunner;
  * 
  * An expression which performs an operation on two expression values.
  * 
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  */
 abstract public class BinaryExpression implements Expression {
     protected Expression left;

@@ -11,7 +11,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
 
-import org.codehaus.activemq.filter.mockrunner.Filter;
+import org.activemq.filter.mockrunner.Filter;
 
 import com.mockrunner.base.NestedApplicationException;
 

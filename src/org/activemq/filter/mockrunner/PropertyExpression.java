@@ -16,7 +16,7 @@
  * 
  **/
 
-package org.codehaus.activemq.filter.mockrunner;
+package org.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -26,7 +26,7 @@ import javax.jms.Message;
  * 
  * Represents a property  expression
  * 
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  */
 public class PropertyExpression implements Expression {
 
