@@ -16,7 +16,7 @@
  * 
  **/
 
-package org.codehaus.activemq.filter.mockrunner;
+package org.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -25,41 +25,38 @@ import javax.jms.Message;
 /**
  * Alwin Ibba: Changed package
  * 
- * Represents a filter using an expression
+ * Represents a logical OR operation on two filters
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  */
-public class ExpressionFilter implements Filter {
+public class OrFilter implements Filter {
 
-    private Expression expression;
+    private Filter left;
+    private Filter right;
 
-    public ExpressionFilter(Expression expression) {
-        this.expression = expression;
+    public OrFilter(Filter left, Filter right) {
+        this.left = left;
+        this.right = right;
     }
 
     public boolean matches(Message message) throws JMSException {
-        Object value = expression.evaluate(message);
-        if (value != null && value instanceof Boolean) {
-            return ((Boolean) value).booleanValue();
+        if (left.matches(message)) {
+            return true;
         }
-        return false;
+        else {
+            return right.matches(message);
+        }
     }
 
     public boolean isWildcard() {
-        return false;
+        return left.isWildcard() || right.isWildcard();
     }
 
-    /**
-     * @return Returns the expression.
-     */
-    public Expression getExpression() {
-        return expression;
+    public Filter getLeft() {
+        return left;
     }
-    
-    /* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	public String toString() {
-		return "Filter: "+expression;
-	}
+
+    public Filter getRight() {
+        return right;
+    }
 }

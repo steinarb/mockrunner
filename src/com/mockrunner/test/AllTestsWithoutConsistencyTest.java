@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.codehaus.activemq.mockrunner.test.AllActiveMQMockrunnerTests;
+import org.activemq.mockrunner.test.AllActiveMQMockrunnerTests;
 
 import com.mockrunner.test.ejb.AllEJBTests;
 import com.mockrunner.test.gen.AllGenTests;

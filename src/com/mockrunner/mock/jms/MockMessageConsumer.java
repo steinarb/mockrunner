@@ -6,8 +6,8 @@ import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.MessageListener;
 
-import org.codehaus.activemq.filter.mockrunner.Filter;
-import org.codehaus.activemq.selector.mockrunner.SelectorParser;
+import org.activemq.filter.mockrunner.Filter;
+import org.activemq.selector.mockrunner.SelectorParser;
 
 /**
  * Mock implementation of JMS <code>MessageConsumer</code>.

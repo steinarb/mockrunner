@@ -15,7 +15,7 @@
  * limitations under the License. 
  * 
  **/
-package org.codehaus.activemq.filter.mockrunner;
+package org.activemq.filter.mockrunner;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -28,10 +28,11 @@ import javax.jms.Message;
 
 /**
  * Alwin Ibba: Changed package
+ * Alwin Ibba: Modification to be Java 1.3 compatible
  * 
  * An expression which performs an operation on two expression values
  * 
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  */
 public abstract class UnaryExpression implements Expression {
 

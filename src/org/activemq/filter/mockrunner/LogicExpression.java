@@ -15,7 +15,7 @@
  * limitations under the License. 
  * 
  **/
-package org.codehaus.activemq.filter.mockrunner;
+package org.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -25,7 +25,7 @@ import javax.jms.Message;
  * 
  * A filter performing a comparison of two objects
  * 
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  */
 public abstract class LogicExpression extends BinaryExpression implements BooleanExpression {
 

@@ -1,4 +1,4 @@
-package org.codehaus.activemq.mockrunner.test;
+package org.activemq.mockrunner.test;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

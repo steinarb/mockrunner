@@ -16,7 +16,7 @@
  * 
  **/
 
-package org.codehaus.activemq.filter.mockrunner;
+package org.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -25,26 +25,26 @@ import javax.jms.Message;
 /**
  * Alwin Ibba: Changed package
  * 
- * Represents a logical OR operation on two filters
+ * Represents a logical AND operation on two filters
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  */
-public class OrFilter implements Filter {
+public class AndFilter implements Filter {
 
     private Filter left;
     private Filter right;
 
-    public OrFilter(Filter left, Filter right) {
+    public AndFilter(Filter left, Filter right) {
         this.left = left;
         this.right = right;
     }
 
     public boolean matches(Message message) throws JMSException {
         if (left.matches(message)) {
-            return true;
+            return right.matches(message);
         }
         else {
-            return right.matches(message);
+            return false;
         }
     }
 

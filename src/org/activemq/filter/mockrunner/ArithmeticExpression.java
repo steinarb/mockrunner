@@ -16,7 +16,7 @@
  * limitations under the License. 
  * 
  **/
-package org.codehaus.activemq.filter.mockrunner;
+package org.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -26,7 +26,7 @@ import javax.jms.Message;
  * 
  * An expression which performs an operation on two expression values
  * 
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  */
 public abstract class ArithmeticExpression extends BinaryExpression {
 

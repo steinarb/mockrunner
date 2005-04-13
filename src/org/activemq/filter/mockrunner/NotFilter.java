@@ -16,7 +16,7 @@
  * 
  **/
 
-package org.codehaus.activemq.filter.mockrunner;
+package org.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -25,38 +25,24 @@ import javax.jms.Message;
 /**
  * Alwin Ibba: Changed package
  * 
- * Represents a logical AND operation on two filters
+ * Represents a logical not operation on another filter
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  */
-public class AndFilter implements Filter {
+public class NotFilter implements Filter {
 
-    private Filter left;
-    private Filter right;
+    private Filter filter;
 
-    public AndFilter(Filter left, Filter right) {
-        this.left = left;
-        this.right = right;
+    public NotFilter(Filter filter) {
+        this.filter = filter;
     }
 
     public boolean matches(Message message) throws JMSException {
-        if (left.matches(message)) {
-            return right.matches(message);
-        }
-        else {
-            return false;
-        }
+        return !filter.matches(message);
     }
 
     public boolean isWildcard() {
-        return left.isWildcard() || right.isWildcard();
+        return false;
     }
 
-    public Filter getLeft() {
-        return left;
-    }
-
-    public Filter getRight() {
-        return right;
-    }
 }

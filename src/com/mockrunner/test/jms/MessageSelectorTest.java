@@ -1,7 +1,7 @@
 package com.mockrunner.test.jms;
 
-import org.codehaus.activemq.filter.mockrunner.Filter;
-import org.codehaus.activemq.selector.mockrunner.SelectorParser;
+import org.activemq.filter.mockrunner.Filter;
+import org.activemq.selector.mockrunner.SelectorParser;
 
 import com.mockrunner.mock.jms.MockTextMessage;
 

@@ -1,6 +1,6 @@
 /** 
  * 
- * Copyright 2004 Hiram Chirino
+ * Copyright 2004 Protique Ltd
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); 
  * you may not use this file except in compliance with the License. 
@@ -15,16 +15,31 @@
  * limitations under the License. 
  * 
  **/
-package org.codehaus.activemq.filter.mockrunner;
+
+package org.activemq.filter.mockrunner;
+
+import javax.jms.JMSException;
+import javax.jms.Message;
 
 
 /**
  * Alwin Ibba: Changed package
  * 
- * A BooleanExpression is an expression that always
- * produces a Boolean result.
+ * Represents a subscription filter
  *
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  */
-public interface BooleanExpression extends Expression {
+public interface Filter {
+
+    /**
+     * @return true if this filter matches the given JMS message
+     */
+    public boolean matches(Message message) throws JMSException;
+
+    /**
+     * @return return true if this filter is a wildcard filter
+     *         and so can match multiple destinations
+     */
+    public boolean isWildcard();
+
 }

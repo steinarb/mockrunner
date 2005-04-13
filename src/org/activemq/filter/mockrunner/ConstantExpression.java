@@ -16,7 +16,7 @@
  * limitations under the License. 
  * 
  **/
-package org.codehaus.activemq.filter.mockrunner;
+package org.activemq.filter.mockrunner;
 
 import java.math.BigDecimal;
 
@@ -28,7 +28,7 @@ import javax.jms.Message;
  * 
  * Represents a constant expression
  * 
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  */
 public class ConstantExpression implements Expression {
 

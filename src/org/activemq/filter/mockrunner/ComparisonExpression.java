@@ -16,7 +16,7 @@
  * limitations under the License. 
  * 
  **/
-package org.codehaus.activemq.filter.mockrunner;
+package org.activemq.filter.mockrunner;
 
 import java.util.HashSet;
 import java.util.List;
@@ -35,7 +35,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * 
  * A filter performing a comparison of two objects
  * 
- * @version $Revision: 1.4 $
+ * @version $Revision: 1.1 $
  */
 public abstract class ComparisonExpression extends BinaryExpression implements BooleanExpression {
 
@@ -125,14 +125,14 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         }
 
         /**
-         * @see org.codehaus.activemq.filter.UnaryExpression#getExpressionSymbol()
+         * @see org.activemq.filter.UnaryExpression#getExpressionSymbol()
          */
         public String getExpressionSymbol() {
             return "LIKE";
         }
 
         /**
-         * @see org.codehaus.activemq.filter.Expression#evaluate(javax.jms.Message)
+         * @see org.activemq.filter.Expression#evaluate(javax.jms.Message)
          */
         public Object evaluate(Message message) throws JMSException {
 
@@ -148,6 +148,7 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
             }
 
             return (new Perl5Matcher().matches((String)rv, likePattern)) ? Boolean.TRUE : Boolean.FALSE;
+
         }
 
     }

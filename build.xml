@@ -121,7 +121,7 @@
             <include name="com/mockrunner/jms/**" />
             <include name="com/mockrunner/mock/jms/**" />
             <include name="com/mockrunner/util/common/**" />
-            <include name="org/codehaus/**" />
+            <include name="org/activemq/**" />
             <exclude name="com/mockrunner/jms/JMSTestCaseAdapter.*" />
         </patternset>
         
@@ -216,7 +216,7 @@
             <src path="${src}/com/mockrunner/mock/jdbc" />
             <src path="${src}/com/mockrunner/util/common" />
             <src path="${src}/com/mockrunner/util/web" />
-            <src path="${src}/org/codehaus" />
+            <src path="${src}/org/activemq" />
             <src path="${srcj2ee1.3}" />
         </javac>
     </target>
@@ -238,7 +238,7 @@
             <src path="${src}/com/mockrunner/mock/jms" />
             <src path="${src}/com/mockrunner/util/common" />
             <src path="${src}/com/mockrunner/util/web" />
-            <src path="${src}/org/codehaus" />
+            <src path="${src}/org/activemq" />
             <src path="${srcjdk1.3}" />
         </javac>
         <antcall target="compilejdk1.3j2ee1.3" />
@@ -259,7 +259,7 @@
             <src path="${src}/com/mockrunner/mock/jms" />
             <src path="${src}/com/mockrunner/util/common" />
             <src path="${src}/com/mockrunner/util/web" />
-            <src path="${src}/org/codehaus" />
+            <src path="${src}/org/activemq" />
             <src path="${srcjdk1.3}" />
             <src path="${srcj2ee1.3}" />
         </javac>
