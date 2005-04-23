@@ -50,8 +50,8 @@ public class ActionTestModuleTest extends BaseTestCase
         ActionMessage error2 = new ActionMessage("key2", new String[]{"value1" , "value2"});
         ActionMessage error3 = new ActionMessage("key3", "value");
         errors.add(ActionErrors.GLOBAL_ERROR, error1);
-        errors.add(ActionErrors.GLOBAL_ERROR, error2);
-        errors.add(ActionErrors.GLOBAL_ERROR, error3);
+        errors.add(ActionMessages.GLOBAL_MESSAGE, error2);
+        errors.add(ActionMessages.GLOBAL_MESSAGE, error3);
         return errors;
     }
     
