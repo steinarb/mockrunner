@@ -152,7 +152,7 @@ public class JDBCTestModule
     }
     
     /**
-     * Returns all {@link com.mockrunner.mock.jdbc.MockStatement}.
+     * Returns all {@link com.mockrunner.mock.jdbc.MockStatement} objects.
      * @return the <code>List</code> of <code>Statement</code> objects
      */
     public List getStatements()
@@ -177,13 +177,12 @@ public class JDBCTestModule
     }
     
 	/**
-	 * Returns a <code>Map</code> of all SQL statements that were executed
-	 * by calling an <code>execute</code> method of a
-     * {@link com.mockrunner.mock.jdbc.MockPreparedStatement} or
+	 * Returns a <code>Map</code> of all parameters that were used when
+     * executing a {@link com.mockrunner.mock.jdbc.MockPreparedStatement} or
      * {@link com.mockrunner.mock.jdbc.MockCallableStatement}.
-	 * Each SQL string maps to the corresponding <code>ParameterSets</code>
-	 * object.
-	 * @return the <code>List</code> of SQL statements
+	 * The keys are the corresponding SQL statements. The values are the 
+     * {@link ParameterSets} objects.
+	 * @return the <code>Map</code> of parameters
 	 */
 	public Map getExecutedSQLStatementParameter()
 	{
@@ -312,7 +311,7 @@ public class JDBCTestModule
     }
     
     /**
-     * Returns all {@link com.mockrunner.mock.jdbc.MockPreparedStatement}.
+     * Returns all {@link com.mockrunner.mock.jdbc.MockPreparedStatement} objects.
      * @return the <code>List</code> of <code>PreparedStatement</code> objects
      */
     public List getPreparedStatements()
@@ -321,7 +320,7 @@ public class JDBCTestModule
     }
     
     /**
-     * Returns all {@link com.mockrunner.mock.jdbc.MockPreparedStatement} with
+     * Returns all {@link com.mockrunner.mock.jdbc.MockPreparedStatement} objects with
      * the specified SQL statement as a <code>List</code>. If there are no matches, an empty
      * <code>List</code> will be returned.
      * Please note that you can modify the search parameters with 
@@ -371,7 +370,7 @@ public class JDBCTestModule
     }
     
     /**
-     * Returns all {@link com.mockrunner.mock.jdbc.MockCallableStatement}.
+     * Returns all {@link com.mockrunner.mock.jdbc.MockCallableStatement} objects.
      * @return the <code>List</code> of <code>CallableStatement</code> objects
      */
     public List getCallableStatements()
@@ -380,7 +379,7 @@ public class JDBCTestModule
     }
     
     /**
-     * Returns all {@link com.mockrunner.mock.jdbc.MockCallableStatement} with
+     * Returns all {@link com.mockrunner.mock.jdbc.MockCallableStatement} objects with
      * the specified SQL statement as a <code>List</code>. 
      * If there are no matches, an empty <code>List</code> will be returned. 
      * Please note that you can modify the search parameters with 
