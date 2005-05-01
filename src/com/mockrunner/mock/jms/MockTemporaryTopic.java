@@ -3,6 +3,9 @@ package com.mockrunner.mock.jms;
 import javax.jms.JMSException;
 import javax.jms.TemporaryTopic;
 
+/**
+ * Mock implementation of JMS <code>TemporaryTopic</code>.
+ */
 public class MockTemporaryTopic extends MockTopic implements TemporaryTopic
 {
     private boolean deleted;
