@@ -1,4 +1,6 @@
 
+mockrunner-0.3.6:
+
 mockrunner-0.3.5:
 
 - lazy initializing mock object factories in BaseTestCase as
