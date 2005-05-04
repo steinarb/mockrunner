@@ -26,7 +26,6 @@ import javax.rmi.PortableRemoteObject;
 import junit.framework.TestCase;
 
 import org.mockejb.TransactionPolicy;
-import org.mockejb.jndi.MockContextFactory;
 
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
@@ -60,7 +59,7 @@ public class EJBTestModuleTest extends TestCase
 	protected void tearDown() throws Exception
 	{
 		super.tearDown();
-		MockContextFactory.revertSetAsInitial();
+		ejbMockFactory.resetMockContextFactory();
 	}
     
     public void testCreateSessionBean() throws Exception

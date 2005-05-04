@@ -21,11 +21,10 @@ public class BasicAdapterProcessor extends StandardAdapterProcessor
     
     protected String[] getSetUpMethodCodeLines(MemberInfo memberInfo)
     {
-        String[] codeLines = new String[3];
+        String[] codeLines = new String[2];
         codeLines[0] = "super.setUp();";
-        codeLines[1] = memberInfo.getFactoryMember() + " = create" + ClassUtil.getClassName(memberInfo.getFactory()) + "();";
         String getFactoryCall = "get" + ClassUtil.getClassName(memberInfo.getFactory());
-        codeLines[2] = memberInfo.getModuleMember() + " = create" + ClassUtil.getClassName(memberInfo.getModule()) + "(" + getFactoryCall +"());";
+        codeLines[1] = memberInfo.getModuleMember() + " = create" + ClassUtil.getClassName(memberInfo.getModule()) + "(" + getFactoryCall +"());";
         return codeLines;
     }
     
@@ -41,9 +40,24 @@ public class BasicAdapterProcessor extends StandardAdapterProcessor
     protected void addAdditionalControlMethods(JavaClassGenerator classGenerator, MemberInfo memberInfo)
     {
         addCreateFactoryMethods(classGenerator, memberInfo);
-        addGetAndSetMethodPair(classGenerator, memberInfo.getFactory(), memberInfo.getFactoryMember());
+        addGetFactoryLazyMethod(classGenerator, memberInfo);
+        addSetMethod(classGenerator, memberInfo.getFactory(), memberInfo.getFactoryMember());
         addCreateModuleMethods(classGenerator, memberInfo);
         super.addAdditionalControlMethods(classGenerator, memberInfo);
+    }
+    
+    private void addGetFactoryLazyMethod(JavaClassGenerator classGenerator, MemberInfo memberInfo)
+    {
+        String[] codeLines = new String[8];
+        codeLines[0] = "synchronized(" + ClassUtil.getClassName(memberInfo.getFactory()) + ".class)";
+        codeLines[1] = "{";
+        codeLines[2] = "    if(" + memberInfo.getFactoryMember() + " == null)";
+        codeLines[3] = "    {";
+        codeLines[4] = "        " + memberInfo.getFactoryMember() + " = create" + ClassUtil.getClassName(memberInfo.getFactory()) + "();";
+        codeLines[5] = "    }";
+        codeLines[6] = "}";
+        codeLines[7] = "return " + memberInfo.getFactoryMember() + ";";
+        addGetMethod(classGenerator, memberInfo.getFactory(), codeLines);
     }
     
     protected String[] getClassComment(Class module)

@@ -33,6 +33,9 @@ public class AllWebTests
         suite.addTest(new TestSuite(MockFilterChainTest.class));
         suite.addTest(new TestSuite(WebTestModuleTest.class));
         suite.addTest(new TestSuite(ActionMockObjectFactoryTest.class));
+        suite.addTest(new TestSuite(BasicActionTestCaseAdapterTest.class));
+        suite.addTest(new TestSuite(BasicServletTestCaseAdapterTest.class));
+        suite.addTest(new TestSuite(BasicTagTestCaseAdapterTest.class));
         //$JUnit-END$
         return suite;
     }

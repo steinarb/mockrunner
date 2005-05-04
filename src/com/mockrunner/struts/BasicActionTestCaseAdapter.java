@@ -62,7 +62,6 @@ public class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        actionMockObjectFactory = createActionMockObjectFactory();
         actionTestModule = createActionTestModule(getActionMockObjectFactory());
     }
 
@@ -109,6 +108,13 @@ public class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
      */
     protected ActionMockObjectFactory getActionMockObjectFactory()
     {
+        synchronized(ActionMockObjectFactory.class)
+        {
+            if(actionMockObjectFactory == null)
+            {
+                actionMockObjectFactory = createActionMockObjectFactory();
+            }
+        }
         return actionMockObjectFactory;
     }
 

@@ -49,7 +49,6 @@ public class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        webMockObjectFactory = createWebMockObjectFactory();
         servletTestModule = createServletTestModule(getWebMockObjectFactory());
     }
 
@@ -96,6 +95,13 @@ public class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
      */
     protected WebMockObjectFactory getWebMockObjectFactory()
     {
+        synchronized(WebMockObjectFactory.class)
+        {
+            if(webMockObjectFactory == null)
+            {
+                webMockObjectFactory = createWebMockObjectFactory();
+            }
+        }
         return webMockObjectFactory;
     }
 

@@ -1,6 +1,10 @@
 
 mockrunner-0.3.6:
 
+- refactored EJBMockObjectFactory, MockContextFactory.setAsInitial is only called
+  if necessary, preventing mock settings of being saved and restored later
+- fixed bug 1195461 (restore JDBC drivers and JNDI settings in basic adapters tearDown)
+
 mockrunner-0.3.5:
 
 - lazy initializing mock object factories in BaseTestCase as

@@ -1,5 +1,8 @@
 package com.mockrunner.test.ejb;
 
+import java.util.Properties;
+
+import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
@@ -14,9 +17,12 @@ import junit.framework.TestCase;
 
 public class EJBMockObjectFactoryTest extends TestCase
 {
+    private Properties savedProperties;
+    
     protected void setUp() throws Exception
     {
         super.setUp();
+        saveProperties();
         MockContextFactory.setAsInitial();
         unbind();
     }
@@ -26,8 +32,75 @@ public class EJBMockObjectFactoryTest extends TestCase
         super.tearDown();
         unbind();
         MockContextFactory.revertSetAsInitial();
+        restoreProperties();
     }
     
+    private void saveProperties()
+    {
+        savedProperties = new Properties();
+        String factory = System.getProperty(Context.INITIAL_CONTEXT_FACTORY);
+        if(null != factory && !factory.equals(MockContextFactory.class.getName()))
+        {
+            savedProperties.setProperty(Context.INITIAL_CONTEXT_FACTORY, factory);
+        }
+        String urlPrefix = System.getProperty(Context.URL_PKG_PREFIXES);
+        if(null != urlPrefix && !urlPrefix.equals("org.mockejb.jndi"))
+        {
+            savedProperties.setProperty(Context.URL_PKG_PREFIXES, factory);
+        }
+    }
+    
+    private void restoreProperties()
+    {
+        if(null != savedProperties.getProperty(Context.INITIAL_CONTEXT_FACTORY))
+        {
+            System.setProperty(Context.INITIAL_CONTEXT_FACTORY, savedProperties.getProperty(Context.INITIAL_CONTEXT_FACTORY));
+        }
+        else
+        {
+            System.getProperties().remove(Context.INITIAL_CONTEXT_FACTORY);
+        }
+        if(null != savedProperties.getProperty(Context.URL_PKG_PREFIXES))
+        {
+            System.setProperty(Context.URL_PKG_PREFIXES, savedProperties.getProperty(Context.URL_PKG_PREFIXES));
+        }
+        else
+        {
+            System.getProperties().remove(Context.URL_PKG_PREFIXES);
+        }
+    }
+    
+    public void testInitMockContextFactory() throws Exception
+    {
+        EJBMockObjectFactory factory = new EJBMockObjectFactory();
+        System.getProperties().remove(Context.INITIAL_CONTEXT_FACTORY);
+        factory.initMockContextFactory();
+        assertEquals(MockContextFactory.class.getName(), System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
+        assertEquals("org.mockejb.jndi", System.getProperty(Context.URL_PKG_PREFIXES));
+        System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "test");
+        factory.initMockContextFactory();
+        assertEquals(MockContextFactory.class.getName(), System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
+        assertEquals("org.mockejb.jndi", System.getProperty(Context.URL_PKG_PREFIXES));
+        System.setProperty(Context.URL_PKG_PREFIXES, "test");
+        factory.initMockContextFactory();
+        assertEquals(MockContextFactory.class.getName(), System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
+        assertEquals("test", System.getProperty(Context.URL_PKG_PREFIXES));
+    }
+    
+    public void testResetMockContextFactory() throws Exception
+    {
+        EJBMockObjectFactory factory = new EJBMockObjectFactory();
+        System.getProperties().remove(Context.INITIAL_CONTEXT_FACTORY);
+        factory.resetMockContextFactory();
+        assertNull(System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
+        System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "test");
+        factory.resetMockContextFactory();
+        assertEquals("test", System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
+        System.setProperty(Context.INITIAL_CONTEXT_FACTORY, MockContextFactory.class.getName());
+        factory.resetMockContextFactory();
+        assertNull(System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
+    }
+
     public void testIntialize() throws Exception
     {
         InitialContext context = new InitialContext();

@@ -1,4 +1,4 @@
-In version 0.3.5, the mock objects for struts are created in a subclass
+Beginning with version 0.3.5, the mock objects for struts are created in a subclass
 of WebMockObjectFactory named ActionMockObjectFactory (WebMockObjectFactory
 is now independent from Struts). This causes some incompatibilities with
 previous versions. In your struts test cases, just replace WebMockObjectFactory

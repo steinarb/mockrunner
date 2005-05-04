@@ -39,6 +39,10 @@ public class BasicEJBTestCaseAdapter extends TestCase
     protected void tearDown() throws Exception
     {
         super.tearDown();
+        if(null != ejbMockObjectFactory)
+        {
+            ejbMockObjectFactory.resetMockContextFactory();
+        }
         ejbTestModule = null;
         ejbMockObjectFactory = null;
     }
@@ -50,7 +54,6 @@ public class BasicEJBTestCaseAdapter extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        ejbMockObjectFactory = createEJBMockObjectFactory();
         ejbTestModule = createEJBTestModule(getEJBMockObjectFactory());
     }
 
@@ -69,6 +72,13 @@ public class BasicEJBTestCaseAdapter extends TestCase
      */
     protected EJBMockObjectFactory getEJBMockObjectFactory()
     {
+        synchronized(EJBMockObjectFactory.class)
+        {
+            if(ejbMockObjectFactory == null)
+            {
+                ejbMockObjectFactory = createEJBMockObjectFactory();
+            }
+        }
         return ejbMockObjectFactory;
     }
 
