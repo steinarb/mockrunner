@@ -43,6 +43,10 @@ public class BasicJDBCTestCaseAdapter extends TestCase
     protected void tearDown() throws Exception
     {
         super.tearDown();
+        if(null != jdbcMockObjectFactory)
+        {
+            jdbcMockObjectFactory.restoreDrivers();
+        }
         jdbcTestModule = null;
         jdbcMockObjectFactory = null;
     }
@@ -54,7 +58,6 @@ public class BasicJDBCTestCaseAdapter extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        jdbcMockObjectFactory = createJDBCMockObjectFactory();
         jdbcTestModule = createJDBCTestModule(getJDBCMockObjectFactory());
     }
 
@@ -73,6 +76,13 @@ public class BasicJDBCTestCaseAdapter extends TestCase
      */
     protected JDBCMockObjectFactory getJDBCMockObjectFactory()
     {
+        synchronized(JDBCMockObjectFactory.class)
+        {
+            if(jdbcMockObjectFactory == null)
+            {
+                jdbcMockObjectFactory = createJDBCMockObjectFactory();
+            }
+        }
         return jdbcMockObjectFactory;
     }
 

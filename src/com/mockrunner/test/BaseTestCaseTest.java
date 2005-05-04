@@ -8,6 +8,10 @@ import java.sql.SQLException;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import javax.naming.Context;
+
+import org.mockejb.jndi.MockContextFactory;
+
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
@@ -31,6 +35,14 @@ public class BaseTestCaseTest extends BaseTestCase
         assertTrue(drivers.hasMoreElements());
         drivers.nextElement();
         assertTrue(drivers.hasMoreElements());
+    }
+    
+    public void testTearDownRevertSetAsInitialCalled() throws Exception
+    {
+        getEJBMockObjectFactory();
+        assertEquals(MockContextFactory.class.getName(), System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
+        super.tearDown();
+        assertNull(System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
     }
     
     public void testLazyFactoriesInstance()

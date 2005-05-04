@@ -59,7 +59,6 @@ public class BasicJMSTestCaseAdapter extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        jmsMockObjectFactory = createJMSMockObjectFactory();
         jmsTestModule = createJMSTestModule(getJMSMockObjectFactory());
     }
 
@@ -78,6 +77,13 @@ public class BasicJMSTestCaseAdapter extends TestCase
      */
     protected JMSMockObjectFactory getJMSMockObjectFactory()
     {
+        synchronized(JMSMockObjectFactory.class)
+        {
+            if(jmsMockObjectFactory == null)
+            {
+                jmsMockObjectFactory = createJMSMockObjectFactory();
+            }
+        }
         return jmsMockObjectFactory;
     }
 

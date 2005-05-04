@@ -14,6 +14,8 @@ import java.util.List;
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.gen.proc.AdapterProcessor;
 import com.mockrunner.gen.proc.BasicAdapterProcessor;
+import com.mockrunner.gen.proc.EJBBasicAdapterProcessor;
+import com.mockrunner.gen.proc.JDBCBasicAdapterProcessor;
 import com.mockrunner.gen.proc.StandardAdapterProcessor;
 import com.mockrunner.jdbc.JDBCTestModule;
 import com.mockrunner.jms.JMSTestModule;
@@ -49,9 +51,9 @@ public class AdapterGenerator
         units.add(new ProcessingUnit(TagTestModule.class, new StandardAdapterProcessor(), tagExcluded));
         units.add(new ProcessingUnit(TagTestModule.class, new BasicAdapterProcessor(), tagExcluded));
         units.add(new ProcessingUnit(EJBTestModule.class, new StandardAdapterProcessor(), null));
-        units.add(new ProcessingUnit(EJBTestModule.class, new BasicAdapterProcessor(), null));
+        units.add(new ProcessingUnit(EJBTestModule.class, new EJBBasicAdapterProcessor(), null));
         units.add(new ProcessingUnit(JDBCTestModule.class, new StandardAdapterProcessor(), null));
-        units.add(new ProcessingUnit(JDBCTestModule.class, new BasicAdapterProcessor(), null));
+        units.add(new ProcessingUnit(JDBCTestModule.class, new JDBCBasicAdapterProcessor(), null));
         units.add(new ProcessingUnit(JMSTestModule.class, new StandardAdapterProcessor(), null));
         units.add(new ProcessingUnit(JMSTestModule.class, new BasicAdapterProcessor(), null));
     }

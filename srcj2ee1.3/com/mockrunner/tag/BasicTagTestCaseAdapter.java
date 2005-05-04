@@ -50,7 +50,6 @@ public class BasicTagTestCaseAdapter extends BasicHTMLOutputTestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        webMockObjectFactory = createWebMockObjectFactory();
         tagTestModule = createTagTestModule(getWebMockObjectFactory());
     }
 
@@ -97,6 +96,13 @@ public class BasicTagTestCaseAdapter extends BasicHTMLOutputTestCase
      */
     protected WebMockObjectFactory getWebMockObjectFactory()
     {
+        synchronized(WebMockObjectFactory.class)
+        {
+            if(webMockObjectFactory == null)
+            {
+                webMockObjectFactory = createWebMockObjectFactory();
+            }
+        }
         return webMockObjectFactory;
     }
 

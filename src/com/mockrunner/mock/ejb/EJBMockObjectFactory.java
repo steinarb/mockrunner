@@ -1,7 +1,9 @@
 package com.mockrunner.mock.ejb;
 
+import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
+import javax.naming.NamingException;
 import javax.transaction.UserTransaction;
 
 import org.apache.commons.logging.Log;
@@ -56,7 +58,7 @@ public class EJBMockObjectFactory
     {
         try
         {
-            MockContextFactory.setAsInitial();
+            initMockContextFactory();
             InitialContext context = new InitialContext();
             container = new MockContainer(context);
             try
@@ -82,6 +84,33 @@ public class EJBMockObjectFactory
         if(transaction instanceof MockUserTransaction)
         {
             ((MockUserTransaction)transaction).reset();
+        }
+    }
+    
+    /**
+     * Calls <code>MockContextFactory.setAsInitial()</code>, if 
+     * <code>MockContextFactory</code> is not already the current
+     * context factory.
+     */
+    public void initMockContextFactory() throws NamingException
+    {
+        String factory = System.getProperty(Context.INITIAL_CONTEXT_FACTORY);
+        if(null == factory || !factory.equals(MockContextFactory.class.getName()))
+        {
+            MockContextFactory.setAsInitial();
+        }
+    }
+    
+    /**
+     * Calls <code>MockContextFactory.revertSetAsInitial()</code>, if 
+     * <code>MockContextFactory</code> is the current context factory.
+     */
+    public void resetMockContextFactory()
+    {
+        String factory = System.getProperty(Context.INITIAL_CONTEXT_FACTORY);
+        if(null != factory && factory.equals(MockContextFactory.class.getName()))
+        {
+            MockContextFactory.revertSetAsInitial();
         }
     }
     

@@ -243,6 +243,11 @@ public class StandardAdapterProcessor implements AdapterProcessor
         return buffer.toString();
     }
     
+    protected Class[] getAdditionalImports()
+    {
+        return new Class[0];
+    }
+    
     protected String getBaseName(Class module)
     {
         String name = ClassUtil.getClassName(module);
@@ -256,6 +261,17 @@ public class StandardAdapterProcessor implements AdapterProcessor
     
     protected void addGetAndSetMethodPair(JavaClassGenerator classGenerator, Class clazz, String memberName)
     {
+        addGetMethod(classGenerator, clazz, memberName);
+        addSetMethod(classGenerator, clazz, memberName);
+    }
+    
+    protected void addGetMethod(JavaClassGenerator classGenerator, Class clazz, String memberName)
+    {
+        addGetMethod(classGenerator, clazz, new String[] {"return " + memberName + ";"});
+    }
+    
+    protected void addGetMethod(JavaClassGenerator classGenerator, Class clazz, String[] codeLines)
+    {
         MethodDeclaration getMethod = createProtectedMethod();
         getMethod.setName("get" + ClassUtil.getClassName(clazz));
         getMethod.setReturnType(clazz);
@@ -263,8 +279,13 @@ public class StandardAdapterProcessor implements AdapterProcessor
         comment[0] = "Gets the " + getJavaDocLink(clazz) + ".";
         comment[1] = "@return the " + getJavaDocLink(clazz);
         getMethod.setCommentLines(comment);
-        getMethod.setCodeLines(new String[] {"return " + memberName + ";"});
+        getMethod.setCodeLines(codeLines);
         classGenerator.addMethodDeclaration(getMethod);
+    }
+
+    protected void addSetMethod(JavaClassGenerator classGenerator, Class clazz, String memberName)
+    {
+        String[] comment;
         MethodDeclaration setMethod = createProtectedMethod();
         setMethod.setName("set" + ClassUtil.getClassName(clazz));
         comment = new String[2];
@@ -276,7 +297,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         setMethod.setCodeLines(new String[] {"this." + memberName + " = " + memberName + ";"});
         classGenerator.addMethodDeclaration(setMethod);
     }
-    
+
     protected String getJavaDocLink(Class clazz)
     {
         return "{@link " + clazz.getName() + "}";
