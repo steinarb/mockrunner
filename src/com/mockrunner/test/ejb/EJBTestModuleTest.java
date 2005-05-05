@@ -22,6 +22,7 @@ import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
+import javax.transaction.SystemException;
 
 import junit.framework.TestCase;
 
@@ -438,6 +439,24 @@ public class EJBTestModuleTest extends TestCase
 		ejbModule.verifyNotRolledBack();
     }
     
+    public void testNoTransactionPolicy() throws Exception
+    {
+        ejbModule.deploySessionBean("mybean", new TestSessionBean(), null);
+        TestSession testBean = (TestSession)ejbModule.createBean("mybean");
+        testBean.test(false);
+        ejbModule.verifyNotCommitted();
+        ejbModule.verifyNotMarkedForRollback();
+        ejbModule.verifyNotRolledBack();
+        testBean.testBMT(false);
+        ejbModule.verifyNotCommitted();
+        ejbModule.verifyNotMarkedForRollback();
+        ejbModule.verifyNotRolledBack();
+        testBean.testBMT(true);
+        ejbModule.verifyNotCommitted();
+        ejbModule.verifyNotMarkedForRollback();
+        ejbModule.verifyRolledBack();
+    }
+    
 	public void testTransactionMessageBean() throws Exception
 	{
 		MockTopicConnectionFactory topicFactory = jmsMockFactory.getMockTopicConnectionFactory();
@@ -463,9 +482,21 @@ public class EJBTestModuleTest extends TestCase
     {
         private SessionContext sessionContext;
         
-        public void test(boolean rollback)
+        public void test(boolean setRollbackOnly)
         {
-            if(rollback) sessionContext.setRollbackOnly();
+            if(setRollbackOnly) sessionContext.setRollbackOnly();
+        }
+        
+        public void testBMT(boolean rollback)
+        {
+            try
+            {
+                if(rollback) sessionContext.getUserTransaction().rollback();
+            } 
+            catch(SystemException exc)
+            {
+                throw new RuntimeException(exc);
+            }
         }
         
         public void ejbCreate() throws CreateException
@@ -511,7 +542,9 @@ public class EJBTestModuleTest extends TestCase
     
     public static interface TestSession extends javax.ejb.EJBObject
     {
-        public void test(boolean rollback) throws RemoteException;
+        public void test(boolean setRollbackOnly) throws RemoteException;
+        
+        public void testBMT(boolean rollback) throws RemoteException;
     }
     
     public static interface TestSessionHome extends javax.ejb.EJBHome

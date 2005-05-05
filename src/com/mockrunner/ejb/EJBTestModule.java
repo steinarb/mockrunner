@@ -128,9 +128,14 @@ public class EJBTestModule
     
     /**
      * Deploys a bean to the mock container using the specified
-     * descriptor. The specified transaction policy will be automatically set.
-     * Determines the type of bean (session, entity, message driven)
+     * descriptor. Determines the type of bean (session, entity, message driven)
      * using the descriptor.
+     * The specified transaction policy will be automatically set. If the
+     * specified transaction policy is <code>null</code>, no transaction policy
+     * will be set. This makes sense for BMT EJBs. Please note that the
+     * <code>deploy</code> methods of this class without a transaction policy
+     * argument automatically set the <i>SUPPORTS</i> policy, which also
+     * works fine for BMT EJBs.
      * @param descriptor the descriptor
      * @param policy the transaction policy
      */
@@ -150,7 +155,10 @@ public class EJBTestModule
 			{
 				mockFactory.getMockContainer().deploy((MDBDescriptor)descriptor);
 			}
-			AspectSystemFactory.getAspectSystem().add(new ClassPointcut(descriptor.getIfaceClass(), false), new TransactionManager(policy));
+            if(null != policy)
+            {
+                AspectSystemFactory.getAspectSystem().add(new ClassPointcut(descriptor.getIfaceClass(), false), new TransactionManager(policy));
+            }
         }
         catch(Exception exc)
         {
