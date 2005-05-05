@@ -22,7 +22,6 @@ import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
-import javax.transaction.SystemException;
 
 import junit.framework.TestCase;
 
@@ -30,6 +29,7 @@ import org.mockejb.TransactionPolicy;
 
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
+import com.mockrunner.mock.ejb.MockUserTransaction;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueConnection;
@@ -444,14 +444,20 @@ public class EJBTestModuleTest extends TestCase
         ejbModule.deploySessionBean("mybean", new TestSessionBean(), null);
         TestSession testBean = (TestSession)ejbModule.createBean("mybean");
         testBean.test(false);
+        MockUserTransaction transaction = ejbMockFactory.getMockUserTransaction();
+        assertFalse(transaction.wasBeginCalled());
         ejbModule.verifyNotCommitted();
         ejbModule.verifyNotMarkedForRollback();
         ejbModule.verifyNotRolledBack();
+        ejbModule.resetUserTransaction();
         testBean.testBMT(false);
-        ejbModule.verifyNotCommitted();
+        assertTrue(transaction.wasBeginCalled());
+        ejbModule.verifyCommitted();
         ejbModule.verifyNotMarkedForRollback();
         ejbModule.verifyNotRolledBack();
+        ejbModule.resetUserTransaction();
         testBean.testBMT(true);
+        assertTrue(transaction.wasBeginCalled());
         ejbModule.verifyNotCommitted();
         ejbModule.verifyNotMarkedForRollback();
         ejbModule.verifyRolledBack();
@@ -491,9 +497,17 @@ public class EJBTestModuleTest extends TestCase
         {
             try
             {
-                if(rollback) sessionContext.getUserTransaction().rollback();
+                sessionContext.getUserTransaction().begin();
+                if(rollback)
+                {
+                    sessionContext.getUserTransaction().rollback();
+                }
+                else
+                {
+                    sessionContext.getUserTransaction().commit();
+                }
             } 
-            catch(SystemException exc)
+            catch(Exception exc)
             {
                 throw new RuntimeException(exc);
             }
