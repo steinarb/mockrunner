@@ -15,7 +15,7 @@ import com.mockrunner.util.common.StreamUtil;
 
 public abstract class AbstractVersionGenerator
 {
-    public void doSynchronize() throws Exception
+    protected void doSynchronize() throws Exception
     {
         System.out.println("Start processing for " + getGeneratorName());
         Map procMap = prepareProcessorMap();
