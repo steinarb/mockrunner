@@ -18,7 +18,7 @@ public class TestConfigurationClassLoader extends URLClassLoader
         {
             clazz = findClass(name);
         }
-        catch (ClassNotFoundException exc)
+        catch(ClassNotFoundException exc)
         {
             clazz = getParent().loadClass(name);
 
