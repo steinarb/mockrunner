@@ -48,10 +48,10 @@ public class AdapterConsistencyTest extends TestCase
         failureList = new ArrayList();
         adapterMap = new HashMap();
         exceptionMap = new HashMap();
-        initializeModules();
+        initializeTestModules();
     }
 
-    private void initializeModules()
+    protected void initializeTestModules()
     {
         addAdapter(ServletTestModule.class, ServletTestCaseAdapter.class);
         addAdapter(ServletTestModule.class, BasicServletTestCaseAdapter.class);
@@ -81,7 +81,7 @@ public class AdapterConsistencyTest extends TestCase
         addAdapter(WebTestModule.class, BasicWebTestCase.class);
     }
     
-    private void addAdapter(Class module, Class adapter)
+    protected void addAdapter(Class module, Class adapter)
     {
         List adapterList = (List)adapterMap.get(module);
         if(null == adapterList)
@@ -93,7 +93,7 @@ public class AdapterConsistencyTest extends TestCase
         adapterList.add(adapter);
     }
     
-    private void addExceptionMethod(Class module, String method)
+    protected void addExceptionMethod(Class module, String method)
     {
         List exceptionList = (List)exceptionMap.get(module);
         if(null == exceptionList)
