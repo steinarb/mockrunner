@@ -17,16 +17,22 @@ import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.HTMLOutputTestCase;
 import com.mockrunner.base.WebTestCase;
 import com.mockrunner.base.WebTestModule;
+import com.mockrunner.ejb.BasicEJBTestCaseAdapter;
 import com.mockrunner.ejb.EJBTestCaseAdapter;
 import com.mockrunner.ejb.EJBTestModule;
+import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.JDBCTestCaseAdapter;
 import com.mockrunner.jdbc.JDBCTestModule;
+import com.mockrunner.jms.BasicJMSTestCaseAdapter;
 import com.mockrunner.jms.JMSTestCaseAdapter;
 import com.mockrunner.jms.JMSTestModule;
+import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 import com.mockrunner.servlet.ServletTestCaseAdapter;
 import com.mockrunner.servlet.ServletTestModule;
 import com.mockrunner.struts.ActionTestCaseAdapter;
 import com.mockrunner.struts.ActionTestModule;
+import com.mockrunner.struts.BasicActionTestCaseAdapter;
+import com.mockrunner.tag.BasicTagTestCaseAdapter;
 import com.mockrunner.tag.TagTestCaseAdapter;
 import com.mockrunner.tag.TagTestModule;
 
@@ -48,19 +54,25 @@ public class AdapterConsistencyTest extends TestCase
     private void initializeModules()
     {
         addAdapter(ServletTestModule.class, ServletTestCaseAdapter.class);
+        addAdapter(ServletTestModule.class, BasicServletTestCaseAdapter.class);
         addExceptionMethod(ServletTestModule.class, "getOutput");
         
         addAdapter(TagTestModule.class, TagTestCaseAdapter.class);
+        addAdapter(TagTestModule.class, BasicTagTestCaseAdapter.class);
         addExceptionMethod(TagTestModule.class, "getOutput");
         
         addAdapter(ActionTestModule.class, ActionTestCaseAdapter.class);
+        addAdapter(ActionTestModule.class, BasicActionTestCaseAdapter.class);
         addExceptionMethod(ActionTestModule.class, "getOutput");
         
         addAdapter(EJBTestModule.class, EJBTestCaseAdapter.class);
+        addAdapter(EJBTestModule.class, BasicEJBTestCaseAdapter.class);
         
         addAdapter(JDBCTestModule.class, JDBCTestCaseAdapter.class);
+        addAdapter(JDBCTestModule.class, BasicJDBCTestCaseAdapter.class);
         
         addAdapter(JMSTestModule.class, JMSTestCaseAdapter.class);
+        addAdapter(JMSTestModule.class, BasicJMSTestCaseAdapter.class);
         
         addAdapter(HTMLOutputModule.class, HTMLOutputTestCase.class);
         addAdapter(HTMLOutputModule.class, BasicHTMLOutputTestCase.class);
