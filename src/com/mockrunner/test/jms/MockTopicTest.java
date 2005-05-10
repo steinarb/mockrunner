@@ -55,6 +55,16 @@ public class MockTopicTest extends TestCase
         assertEquals(3, topic.getReceivedMessageList().size());
         assertNull(topic.getMessage());
     }
+    
+    public void testLoadMessage() throws Exception
+    {
+        MockTopicSession session = new MockTopicSession(connection, false, Session.CLIENT_ACKNOWLEDGE);
+        topic.addSession(session);
+        topic.loadMessage(new MockTextMessage("test"));
+        assertEquals(1, topic.getCurrentMessageList().size());
+        assertEquals(0, topic.getReceivedMessageList().size());
+        assertEquals(new MockTextMessage("test"), topic.getCurrentMessageList().get(0));
+    }
 
     public void testAddMessage() throws Exception
     {
