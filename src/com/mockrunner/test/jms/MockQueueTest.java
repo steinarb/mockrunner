@@ -56,6 +56,18 @@ public class MockQueueTest extends TestCase
         assertNull(queue.getMessage());
     }
     
+    public void testLoadMessage() throws Exception
+    {
+        MockQueueSession session = new MockQueueSession(connection, false, Session.CLIENT_ACKNOWLEDGE);
+        queue.addSession(session);
+        queue.loadMessage(new MockTextMessage("test1"));
+        queue.loadMessage(new MockTextMessage("test2"));
+        assertEquals(2, queue.getCurrentMessageList().size());
+        assertEquals(0, queue.getReceivedMessageList().size());
+        assertEquals(new MockTextMessage("test1"), queue.getCurrentMessageList().get(0));
+        assertEquals(new MockTextMessage("test2"), queue.getCurrentMessageList().get(1));
+    }
+    
     public void testAddMessage() throws Exception
     {
         MockQueueSession session = new MockQueueSession(connection, false, Session.CLIENT_ACKNOWLEDGE);

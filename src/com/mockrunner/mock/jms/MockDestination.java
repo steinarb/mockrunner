@@ -32,11 +32,24 @@ public abstract class MockDestination implements Destination
     }
     
     /**
-     * Adds a message. Implemented by {@link MockQueue}
-     * and {@link MockTopic}.
+     * Adds a message and delivers it to the corresponding consumers. 
+     * Implemented by {@link MockQueue} and {@link MockTopic}.
+     * @param message the message
      */
     public abstract void addMessage(Message message) throws JMSException;
  
+    /**
+     * Adds a message to the list of current messages in this
+     * destination. The message is not delivered to registered
+     * consumers. Can be used to preload destinations with
+     * test messages.
+     * @param message the message
+     */
+    public void loadMessage(Message message)
+    {
+        currentMessages.add(message);
+    }
+    
     /**
      * Returns if this destination contains messages.
      * @return <code>false</code> if there's at least one message,
