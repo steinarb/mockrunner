@@ -102,19 +102,23 @@ public class MockStatementTest extends BaseTestCase
         statement.setCursorName("cursor");
         statement.executeUpdate("inser", new int[1]);
         assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
+        assertSame(statement, ((MockResultSet)statement.getGeneratedKeys()).getStatement());
         statement.execute("insert into", Statement.NO_GENERATED_KEYS);
         assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
         statement.executeUpdate("insert into table xyz", new String[0]);
-        assertSame(resultSet3, statement.getGeneratedKeys());
+        assertTrue(isResultSet3((MockResultSet)statement.getGeneratedKeys()));
+        assertSame(statement, ((MockResultSet)statement.getGeneratedKeys()).getStatement());
         statementHandler.setUseRegularExpressions(true);
         statement.executeUpdate("insert into table xyz", new String[0]);
         assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
         statementHandler.prepareGlobalGeneratedKeys(resultSet1);
         statement.execute("insert into table xyz", Statement.RETURN_GENERATED_KEYS);
-        assertSame(resultSet1, statement.getGeneratedKeys());
+        assertTrue(isResultSet1((MockResultSet)statement.getGeneratedKeys()));
+        assertSame(statement, ((MockResultSet)statement.getGeneratedKeys()).getStatement());
         statementHandler.setExactMatch(true);
         statement.executeUpdate("insert into othertable", Statement.RETURN_GENERATED_KEYS);
-        assertSame(resultSet2, statement.getGeneratedKeys());
+        assertTrue(isResultSet2((MockResultSet)statement.getGeneratedKeys()));
+        assertSame(statement, ((MockResultSet)statement.getGeneratedKeys()).getStatement());
         statement.executeUpdate("insert into othertable", Statement.NO_GENERATED_KEYS);
         assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
         statementHandler.clearGlobalGeneratedKeys();
@@ -722,5 +726,12 @@ public class MockStatementTest extends BaseTestCase
         {
             //should throw exception
         }
+        preparedStatement.executeUpdate("insert", Statement.RETURN_GENERATED_KEYS);
+        MockResultSet keys = (MockResultSet)preparedStatement.getGeneratedKeys();
+        assertSame(preparedStatement, keys.getStatement());
+        preparedStatementHandler.prepareGlobalGeneratedKeys(resultSet2);
+        preparedStatement.executeUpdate("insert", new int[0]);
+        keys = (MockResultSet)preparedStatement.getGeneratedKeys();
+        assertTrue(isResultSet2(keys));
     }
 }
