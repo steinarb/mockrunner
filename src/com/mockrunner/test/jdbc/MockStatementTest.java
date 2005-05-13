@@ -2,6 +2,7 @@ package com.mockrunner.test.jdbc;
 
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -91,6 +92,37 @@ public class MockStatementTest extends BaseTestCase
         assertFalse(statement.execute("select test from"));
         assertNull(statement.getResultSet());
         assertEquals(0, statement.getUpdateCount());
+    }
+    
+    public void testPrepareGeneratedKeys() throws Exception
+    {
+        statementHandler.prepareGeneratedKeys("insert into othertable", resultSet2);
+        statementHandler.prepareGeneratedKeys("insert into table", resultSet3);
+        MockStatement statement = (MockStatement)connection.createStatement();
+        statement.setCursorName("cursor");
+        statement.executeUpdate("inser", new int[1]);
+        assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
+        statement.execute("insert into", Statement.NO_GENERATED_KEYS);
+        assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
+        statement.executeUpdate("insert into table xyz", new String[0]);
+        assertSame(resultSet3, statement.getGeneratedKeys());
+        statementHandler.setUseRegularExpressions(true);
+        statement.executeUpdate("insert into table xyz", new String[0]);
+        assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
+        statementHandler.prepareGlobalGeneratedKeys(resultSet1);
+        statement.execute("insert into table xyz", Statement.RETURN_GENERATED_KEYS);
+        assertSame(resultSet1, statement.getGeneratedKeys());
+        statementHandler.setExactMatch(true);
+        statement.executeUpdate("insert into othertable", Statement.RETURN_GENERATED_KEYS);
+        assertSame(resultSet2, statement.getGeneratedKeys());
+        statement.executeUpdate("insert into othertable", Statement.NO_GENERATED_KEYS);
+        assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
+        statementHandler.clearGlobalGeneratedKeys();
+        statement.executeUpdate("abc", Statement.RETURN_GENERATED_KEYS);
+        assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
+        statementHandler.clearGeneratedKeys();
+        statement.execute("insert into othertable", Statement.RETURN_GENERATED_KEYS);
+        assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
     }
     
     public void testPrepareUpdateCount() throws Exception
@@ -667,5 +699,28 @@ public class MockStatementTest extends BaseTestCase
         callableStatement.executeUpdate();
         assertEquals(3, callableStatement.getUpdateCount());
         assertEquals(-1, callableStatement.getUpdateCount());
+    }
+    
+    public void testGetGeneratedKeysFailure() throws Exception
+    {
+        MockPreparedStatement preparedStatement = (MockPreparedStatement)connection.prepareStatement("insert");
+        try
+        {
+            preparedStatement.execute("insert", 50000);
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            preparedStatement.executeUpdate("insert", 50000);
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw exception
+        }
     }
 }
