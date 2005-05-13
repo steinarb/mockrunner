@@ -1,5 +1,8 @@
 package com.mockrunner.base;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 /**
  * If Mockrunner catches an exception inside application code,
  * it rethrows it as an instance of this class.
@@ -39,5 +42,28 @@ public class NestedApplicationException extends RuntimeException
         if(nested == null) return null;
         if(!(nested instanceof NestedApplicationException)) return nested;
         return ((NestedApplicationException)nested).getRootCause();
+    }
+    
+    public String getMessage()
+    {
+        StringWriter writer = new StringWriter();
+        PrintWriter printWriter = new PrintWriter(writer);
+        String message = super.getMessage();
+        if(null != message)
+        {
+            printWriter.println(super.getMessage());
+        }
+        else
+        {
+            printWriter.println();
+        }
+        Throwable cause = getRootCause();
+        if(null != cause)
+        {
+            printWriter.print("Cause: ");
+            cause.printStackTrace(printWriter);
+        }
+        writer.flush();
+        return writer.toString();
     }
 }
