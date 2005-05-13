@@ -358,9 +358,11 @@ public class MockStatement implements Statement
     {
         if(null == lastGeneratedKeys)
         {
-            return new MockResultSet("Last statement did not generate any keys");
+            MockResultSet resultSet = new MockResultSet("Last statement did not generate any keys");
+            resultSet.setStatement(this);
+            return resultSet;
         }
-        return lastGeneratedKeys;
+        return cloneResultSet(lastGeneratedKeys);
     }
     
     public int getResultSetType() throws SQLException
