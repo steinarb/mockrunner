@@ -30,6 +30,21 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
 	    statementHandler.setCaseSensitive(true);
 	    assertNull(statementHandler.getResultSet("SELECT xyz from table"));
 	}
+    
+    public void testGetGeneratedKeys()
+    {
+        MockResultSet result = new MockResultSet("id");
+        statementHandler.prepareGeneratedKeys("insert into table", result);
+        statementHandler.prepareGeneratedKeys("insert .*", result);
+        assertSame(result, statementHandler.getGeneratedKeys("insert into table abc"));
+        assertSame(result, statementHandler.getGeneratedKeys("insert .*"));
+        assertNull(statementHandler.getGeneratedKeys("insert into othertable"));
+        statementHandler.setUseRegularExpressions(true);
+        assertSame(result, statementHandler.getGeneratedKeys("insert into table"));
+        assertSame(result, statementHandler.getGeneratedKeys("INSERt regular"));
+        statementHandler.setCaseSensitive(true);
+        assertNull(statementHandler.getGeneratedKeys("INSERt regular"));
+    }
 	
 	public void testGetUpdateCount()
 	{

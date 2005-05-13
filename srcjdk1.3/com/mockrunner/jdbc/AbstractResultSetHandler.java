@@ -32,6 +32,8 @@ public abstract class AbstractResultSetHandler
     private Map resultSetsForStatement = new HashMap();
     private int globalUpdateCount = 0;
     private Map updateCountForStatement = new HashMap();
+    private MockResultSet globalGeneratedKeys;
+    private Map generatedKeysForStatement = new HashMap();
     private Map returnsResultSetMap = new HashMap();
     private List throwsSQLException = new ArrayList();
     private List executedStatements = new ArrayList();
@@ -217,6 +219,38 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
+     * Clears the list of statements that return generated keys.
+     */
+    public void clearGeneratedKeys()
+    {
+        generatedKeysForStatement.clear();
+    }
+    
+    /**
+     * Clears the global <code>ResultSet</code>.
+     */
+    public void clearGlobalResultSet()
+    {
+        this.globalResultSet = null;
+    }
+    
+    /**
+     * Clears the global generated keys <code>ResultSet</code>.
+     */
+    public void clearGlobalGeneratedKeys()
+    {
+        this.globalGeneratedKeys = null;
+    }
+    
+    /**
+     * Clears the global update count.
+     */
+    public void clearGlobalUpdateCount()
+    {
+        this.globalUpdateCount = 0;
+    }
+    
+    /**
      * Returns the <code>Map</code> of all <code>ResultSet</code>
      * objects, that were added with {@link #prepareResultSet(String, MockResultSet)}.
      * The SQL strings map to the corresponding <code>ResultSet</code>.
@@ -240,6 +274,17 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
+     * Returns the <code>Map</code> of all generated keys <code>ResultSet</code>
+     * objects, that were added with {@link #prepareGeneratedKeys(String, MockResultSet)}.
+     * The SQL strings map to the corresponding generated keys <code>ResultSet</code>.
+     * @return the <code>Map</code> of generated keys <code>ResultSet</code> objects
+     */
+    public Map getGeneratedKeysMap()
+    {
+        return Collections.unmodifiableMap(generatedKeysForStatement);
+    }
+    
+    /**
      * Returns the first <code>ResultSet</code> that matches the
      * specified SQL string. Please note that you can modify
      * the match parameters with {@link #setCaseSensitive},
@@ -260,9 +305,6 @@ public abstract class AbstractResultSetHandler
     
     /**
      * Returns the global <code>ResultSet</code>.
-     * The statement returns the global <code>ResultSet</code>
-     * if no <code>ResultSet</code> can be found for the current
-     * SQL string.
      * @return the global {@link MockResultSet}
      */
     public MockResultSet getGlobalResultSet()
@@ -290,16 +332,40 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Returns the global update count for <code>executeUpdate</code>
-     * calls.
-     * The statement returns the global update count
-     * if no update count can be found for the current
-     * SQL string.
+     * Returns the global update count for <code>executeUpdate</code> calls.
      * @return the global update count
      */
     public int getGlobalUpdateCount()
     {
         return globalUpdateCount;
+    }
+    
+    /**
+     * Returns the first generated keys <code>ResultSet</code> that 
+     * matches the specified SQL string. Please note that you can modify
+     * the match parameters with {@link #setCaseSensitive},
+     * {@link #setExactMatch} and {@link #setUseRegularExpressions}.
+     * @param sql the SQL string
+     * @return the corresponding generated keys {@link MockResultSet}
+     */
+    public MockResultSet getGeneratedKeys(String sql)
+    {
+        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
+        List list = matcher.getMatchingObjects(generatedKeysForStatement, sql, true, true);
+        if(null != list && list.size() > 0)
+        {
+            return (MockResultSet)list.get(0);
+        }
+        return null;
+    }
+    
+    /**
+     * Returns the global generated keys <code>ResultSet</code>.
+     * @return the global generated keys {@link MockResultSet}
+     */
+    public MockResultSet getGlobalGeneratedKeys()
+    {
+        return globalGeneratedKeys;
     }
     
     /**
@@ -357,9 +423,6 @@ public abstract class AbstractResultSetHandler
 
     /**
      * Prepare the global <code>ResultSet</code>.
-     * The statement returns the global <code>ResultSet</code>
-     * if no <code>ResultSet</code> can be found for the current
-     * SQL string.
      * @param resultSet the {@link MockResultSet}
      */
     public void prepareGlobalResultSet(MockResultSet resultSet)
@@ -382,14 +445,33 @@ public abstract class AbstractResultSetHandler
     
     /**
      * Prepare the global update count for <code>executeUpdate</code> calls.
-     * The statement returns the global update count
-     * if no update count can be found for the current
-     * SQL string.
      * @param updateCount the update count
      */
     public void prepareGlobalUpdateCount(int updateCount)
     {
         this.globalUpdateCount = updateCount;
+    }
+    
+    /**
+     * Prepare the generated keys <code>ResultSet</code> 
+     * for a specified SQL string. Please note that you can modify
+     * the match parameters with {@link #setCaseSensitive},
+     * {@link #setExactMatch} and {@link #setUseRegularExpressions}.
+     * @param sql the SQL string
+     * @param generatedKeysResult the generated keys {@link MockResultSet}
+     */
+    public void prepareGeneratedKeys(String sql, MockResultSet generatedKeysResult)
+    {
+        generatedKeysForStatement.put(sql, generatedKeysResult);
+    }
+    
+    /**
+     * Prepare the global generated keys <code>ResultSet</code>.
+     * @param generatedKeysResult the generated keys {@link MockResultSet}
+     */
+    public void prepareGlobalGeneratedKeys(MockResultSet generatedKeysResult)
+    {
+        this.globalGeneratedKeys = generatedKeysResult;
     }
     
     /**
@@ -419,14 +501,6 @@ public abstract class AbstractResultSetHandler
     public void prepareThrowsSQLException(String sql)
     {
         throwsSQLException.add(sql);
-    }
-    
-    /**
-     * Clears the global <code>ResultSet</code>.
-     */
-    public void clearGlobalResultSet()
-    {
-        this.globalResultSet = null;
     }
     
     /**

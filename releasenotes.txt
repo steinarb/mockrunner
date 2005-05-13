@@ -1,6 +1,7 @@
 
 mockrunner-0.3.6:
 
+- JDBC test framework now supports generated keys using getGeneratedKeys()
 - add loadMessage() method to MockDestination to preload test messages
 - ít's now possible to set a null transaction policy in EJBTestModule
 - refactored EJBMockObjectFactory, MockContextFactory.setAsInitial is only called
