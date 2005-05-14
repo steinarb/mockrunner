@@ -24,6 +24,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -38,9 +39,10 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
 {
     private AbstractOutParameterResultSetHandler resultSetHandler;
     private Map paramObjects = new HashMap();
-    private Set outParameterSetIndexed = new HashSet();
-    private Set outParameterSetNamed = new HashSet();
+    private Set registeredOutParameterSetIndexed = new HashSet();
+    private Set registeredOutParameterSetNamed = new HashSet();
     private List batchParameters = new ArrayList();
+    private Map lastOutParameters = null;
     private boolean wasNull = false;
     
     public MockCallableStatement(Connection connection, String sql)
@@ -83,31 +85,39 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     
     public Set getNamedRegisteredOutParameterSet()
     {
-        return Collections.unmodifiableSet(outParameterSetNamed);
+        return Collections.unmodifiableSet(registeredOutParameterSetNamed);
     }
     
     public boolean isOutParameterRegistered(int index)
     {
-        return outParameterSetIndexed.contains(new Integer(index));
+        return registeredOutParameterSetIndexed.contains(new Integer(index));
     }
     
     public Set getIndexedRegisteredOutParameterSet()
     {
-        return Collections.unmodifiableSet(outParameterSetIndexed);
+        return Collections.unmodifiableSet(registeredOutParameterSetIndexed);
     }
     
     public boolean isOutParameterRegistered(String parameterName)
     {
-        return outParameterSetNamed.contains(parameterName);
+        return registeredOutParameterSetNamed.contains(parameterName);
+    }
+    
+    public void clearRegisteredOutParameter()
+    {
+        registeredOutParameterSetIndexed.clear();
+        registeredOutParameterSetNamed.clear();
     }
     
     public ResultSet executeQuery() throws SQLException
     {
+        lastOutParameters = getOutParameterMap();
         return executeQuery(getParameterMap());
     }
     
     public int executeUpdate() throws SQLException
     {
+        lastOutParameters = getOutParameterMap();
         return executeUpdate(getParameterMap());
     }
     
@@ -133,7 +143,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     
     public void registerOutParameter(int parameterIndex, int sqlType) throws SQLException
     {
-        outParameterSetIndexed.add(new Integer(parameterIndex));
+        registeredOutParameterSetIndexed.add(new Integer(parameterIndex));
     }
 
     public void registerOutParameter(int parameterIndex, int sqlType, int scale) throws SQLException
@@ -148,7 +158,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     
     public void registerOutParameter(String parameterName, int sqlType) throws SQLException
     {
-        outParameterSetNamed.add(parameterName);
+        registeredOutParameterSetNamed.add(parameterName);
     }
     
     public void registerOutParameter(String parameterName, int sqlType, int scale) throws SQLException
@@ -257,11 +267,10 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     public Object getObject(int parameterIndex) throws SQLException
     {
         wasNull = false;
-        Map outParameter = getOutParameterMap();
         Object returnValue = null;
-        if(null != outParameter)
+        if(null != lastOutParameters)
         {
-            returnValue = outParameter.get(new Integer(parameterIndex));
+            returnValue = lastOutParameters.get(new Integer(parameterIndex));
         }
         if(null == returnValue) wasNull = true;
         return returnValue;
@@ -538,11 +547,10 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     public Object getObject(String parameterName) throws SQLException
     {
         wasNull = false;
-        Map outParameter = getOutParameterMap();
         Object returnValue = null;
-        if(null != outParameter)
+        if(null != lastOutParameters)
         {
-            returnValue = outParameter.get(parameterName);
+            returnValue = lastOutParameters.get(parameterName);
         }
         if(null == returnValue) wasNull = true;
         return returnValue;
@@ -777,6 +785,25 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         {
             outParameter = resultSetHandler.getGlobalOutParameter();
         }
+        if(resultSetHandler.getMustOutParameterBeRegistered())
+        {
+            return filterNotRegisteredParameters(outParameter);
+        }
         return outParameter;
+    }
+    
+    private Map filterNotRegisteredParameters(Map outParameter)
+    {
+        Map filteredMap = new HashMap();
+        Iterator keys = outParameter.keySet().iterator();
+        while(keys.hasNext())
+        {
+            Object nextKey = keys.next();
+            if(registeredOutParameterSetIndexed.contains(nextKey) || registeredOutParameterSetNamed.contains(nextKey))
+            {
+                filteredMap.put(nextKey, outParameter.get(nextKey));
+            }
+        }
+        return Collections.unmodifiableMap(filteredMap);
     }
 }
