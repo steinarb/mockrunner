@@ -60,10 +60,8 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Returns a new <code>ResultSet</code> created by
-     * the specified factory. Currently there's only
-     * the {@link FileResultSetFactory} to create <code>ResultSet</code>
-     * objects based on CSV files but you can implement your own factories.
+     * Returns a new <code>ResultSet</code> created by the specified factory.
+     * Creates a random id.
      * @param factory the {@link ResultSetFactory}
      * @return the new <code>ResultSet</code>
      */
@@ -73,11 +71,7 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Returns a new <code>ResultSet</code> created by
-     * the specified factory. Currently there's only
-     * the {@link FileResultSetFactory} to create <code>ResultSet</code>
-     * objects based on CSV files but you can implement your own factories.
-     * Uses a random id.
+     * Returns a new <code>ResultSet</code> created by the specified factory.
      * @param id the id
      * @param factory the {@link ResultSetFactory}
      * @return the new <code>ResultSet</code>
