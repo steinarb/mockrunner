@@ -113,6 +113,8 @@ public abstract class AbstractResultSetHandler
      * Usually <code>false</code> is the best choice, so
      * prepared <code>ResultSet</code> objects do not have
      * to match exactly the current statements SQL string.
+     * The current SQL string just has to contain the SQL string
+     * for the prepared prepared <code>ResultSet</code>.
      * Please note that this method controls SQL statement
      * matching for prepared results and update counts, i.e. what
      * statements the tested application has to execute to receive

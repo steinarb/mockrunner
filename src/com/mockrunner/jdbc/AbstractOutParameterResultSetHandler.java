@@ -13,9 +13,33 @@ import com.mockrunner.util.common.ArrayUtil;
  */
 public abstract class AbstractOutParameterResultSetHandler extends AbstractParameterResultSetHandler
 {
-    private Map globalOutParameter;
+    private boolean mustOutParameterBeRegistered = false;
+    private Map globalOutParameter = null;
     private Map outParameterForStatement = new HashMap();
     private Map outParameterForStatementParameters = new HashMap();
+    
+    /**
+     * Set if out parameter must be registered to be returned.
+     * The default is <code>false</code>, i.e. if there are matching
+     * out parameter prepared, they are returned even if the
+     * <code>registerOutParameter</code> methods of <code>CallableStatement</code>
+     * have not been called. If set to <code>true</code>, <code>registerOutParameter</code>
+     * must be called.
+     * @param mustOutParameterBeRegistered must out parameter be registered
+     */
+    public void setMustOutParameterBeRegistered(boolean mustOutParameterBeRegistered)
+    {
+        this.mustOutParameterBeRegistered = mustOutParameterBeRegistered;
+    }
+    
+    /**
+     * Get if out parameter must be registered to be returned.
+     * @return must out parameter be registered
+     */
+    public boolean getMustOutParameterBeRegistered()
+    {
+        return mustOutParameterBeRegistered;
+    }
     
     /**
      * Returns the first out parameter <code>Map</code> that matches 
