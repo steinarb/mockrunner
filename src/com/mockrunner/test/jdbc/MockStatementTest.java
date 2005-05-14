@@ -184,15 +184,18 @@ public class MockStatementTest extends BaseTestCase
     {
         statementHandler.prepareThrowsSQLException("insert into test");
         MockStatement statement = (MockStatement)connection.createStatement();
-        statement.executeUpdate("update xy");
+        statementHandler.prepareGlobalGeneratedKeys(resultSet1);
+        statement.executeUpdate("update xy", Statement.RETURN_GENERATED_KEYS);
+        assertTrue(isResultSet1((MockResultSet)statement.getGeneratedKeys()));
+        statementHandler.prepareGlobalGeneratedKeys(resultSet2);
         try
         {
-            statement.executeUpdate("insert into test values");
+            statement.executeUpdate("insert into test values", Statement.RETURN_GENERATED_KEYS);
             fail();
         }
         catch(SQLException exc)
         {
-            //should throw Exception
+            assertTrue(isResultSet1((MockResultSet)statement.getGeneratedKeys()));
         }
         statementHandler.setExactMatch(true);
         statement.executeUpdate("insert into test values");
@@ -570,6 +573,10 @@ public class MockStatementTest extends BaseTestCase
         statement.setString("1", "Test");
         statement.executeQuery();
         statement.setBytes("3", new byte[] {1, 2, 3});
+        Map outParams = new HashMap();
+        outParams.put("name", "value");
+        callableStatementHandler.prepareOutParameter("doTEST", outParams);
+        callableStatementHandler.prepareOutParameter("{call doValues(?, ?, ?)}", outParams);
         try
         {
             statement.executeUpdate();
@@ -577,7 +584,7 @@ public class MockStatementTest extends BaseTestCase
         }
         catch(SQLException exc)
         {
-            //should throw Exception
+            assertNull(statement.getString("name"));
         }
         callableStatementHandler.setExactMatchParameter(true);
         try
@@ -587,10 +594,11 @@ public class MockStatementTest extends BaseTestCase
         }
         catch(SQLException exc)
         {
-            //should throw Exception
+            assertNull(statement.getString("name"));
         }
         callableStatementHandler.setCaseSensitive(true);
         statement.execute();
+        assertEquals("value", statement.getString("name"));
         statement = (MockCallableStatement)connection.prepareCall("{call doValues(?, ?, ?)}");
         try
         {
@@ -599,10 +607,11 @@ public class MockStatementTest extends BaseTestCase
         }
         catch(SQLException exc)
         {
-            //should throw Exception
+            assertNull(statement.getString("name"));
         }
         callableStatementHandler.setExactMatch(true);
         statement.executeQuery();
+        assertEquals("value", statement.getString("name"));
     }
     
     public void testPrepareOutParameterCallableStatement() throws Exception
@@ -656,7 +665,7 @@ public class MockStatementTest extends BaseTestCase
         assertEquals("xyz", statement.getString("TestParam"));
     }
     
-    public void testMustOutParameterBeRegistered() throws Exception
+    public void testMustRegisterOutParameters() throws Exception
     {
         Map outParams = new HashMap();
         outParams.put("1", "test");
@@ -666,7 +675,7 @@ public class MockStatementTest extends BaseTestCase
         outParams.put(new Integer(1), new Integer(2));
         outParams.put(new Integer(3), new byte[] {1, 2, 3});
         callableStatementHandler.prepareOutParameter("doGetParam", outParams);
-        callableStatementHandler.setMustOutParameterBeRegistered(true);
+        callableStatementHandler.setMustRegisterOutParameters(true);
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doGetParam()}");
         statement.execute();
         assertNull(statement.getString("TestParam"));
@@ -690,7 +699,7 @@ public class MockStatementTest extends BaseTestCase
         statement.clearRegisteredOutParameter();
         statement.execute();
         assertNull(statement.getString("1"));
-        callableStatementHandler.setMustOutParameterBeRegistered(false);
+        callableStatementHandler.setMustRegisterOutParameters(false);
         statement.execute();
         assertEquals("test", statement.getString("1"));
     }

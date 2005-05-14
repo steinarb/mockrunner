@@ -13,32 +13,32 @@ import com.mockrunner.util.common.ArrayUtil;
  */
 public abstract class AbstractOutParameterResultSetHandler extends AbstractParameterResultSetHandler
 {
-    private boolean mustOutParameterBeRegistered = false;
+    private boolean mustRegisterOutParameters = false;
     private Map globalOutParameter = null;
     private Map outParameterForStatement = new HashMap();
     private Map outParameterForStatementParameters = new HashMap();
     
     /**
-     * Set if out parameter must be registered to be returned.
+     * Set if out parameters must be registered to be returned.
      * The default is <code>false</code>, i.e. if there are matching
-     * out parameter prepared, they are returned even if the
+     * out parameters prepared, they are returned even if the
      * <code>registerOutParameter</code> methods of <code>CallableStatement</code>
      * have not been called. If set to <code>true</code>, <code>registerOutParameter</code>
      * must be called.
      * @param mustOutParameterBeRegistered must out parameter be registered
      */
-    public void setMustOutParameterBeRegistered(boolean mustOutParameterBeRegistered)
+    public void setMustRegisterOutParameters(boolean mustOutParameterBeRegistered)
     {
-        this.mustOutParameterBeRegistered = mustOutParameterBeRegistered;
+        this.mustRegisterOutParameters = mustOutParameterBeRegistered;
     }
     
     /**
      * Get if out parameter must be registered to be returned.
      * @return must out parameter be registered
      */
-    public boolean getMustOutParameterBeRegistered()
+    public boolean getMustRegisterOutParameters()
     {
-        return mustOutParameterBeRegistered;
+        return mustRegisterOutParameters;
     }
     
     /**
@@ -64,7 +64,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     /**
      * Returns the first out parameter <code>Map</code> that matches 
      * the specified SQL string and the specified parameters. 
-     * PPlease note that you can modify the match parameters with 
+     * Please note that you can modify the match parameters with 
      * {@link #setCaseSensitive}, {@link #setExactMatch} and 
      * {@link #setUseRegularExpressions} and the match parameters for the 
      * specified parameter list with {@link #setExactMatchParameter}.
@@ -98,9 +98,6 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     
     /**
      * Returns the global out parameter <code>Map</code>.
-     * The statement takes the global global out parameter 
-     * <code>Map</code> if no out parameter <code>Map</code> 
-     * can be found for the current SQL string.
      * @return the global out parameter <code>Map</code>
      */
     public Map getGlobalOutParameter()
@@ -110,9 +107,6 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     
     /**
      * Prepares the global out parameter <code>Map</code>.
-     * The statement takes the global global out parameter 
-     * <code>Map</code> if no out parameter <code>Map</code> 
-     * can be found for the current SQL string.
      * @param outParameters the global out parameter <code>Map</code>
      */
     public void prepareGlobalOutParameter(Map outParameters)

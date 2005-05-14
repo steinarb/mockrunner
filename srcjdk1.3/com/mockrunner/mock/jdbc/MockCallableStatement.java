@@ -111,14 +111,16 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     
     public ResultSet executeQuery() throws SQLException
     {
+        ResultSet resultSet = executeQuery(getParameterMap());
         lastOutParameters = getOutParameterMap();
-        return executeQuery(getParameterMap());
+        return resultSet;
     }
     
     public int executeUpdate() throws SQLException
     {
+        int updateCount = executeUpdate(getParameterMap());
         lastOutParameters = getOutParameterMap();
-        return executeUpdate(getParameterMap());
+        return updateCount;
     }
     
     public void addBatch() throws SQLException
@@ -785,7 +787,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         {
             outParameter = resultSetHandler.getGlobalOutParameter();
         }
-        if(resultSetHandler.getMustOutParameterBeRegistered())
+        if(resultSetHandler.getMustRegisterOutParameters())
         {
             return filterNotRegisteredParameters(outParameter);
         }
