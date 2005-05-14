@@ -399,7 +399,7 @@ public class TagTestModule extends HTMLOutputModule
         catch(Exception exc)
         {
             log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }*/
     
@@ -426,7 +426,7 @@ public class TagTestModule extends HTMLOutputModule
         catch(JspException exc)
         {
             log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -453,7 +453,7 @@ public class TagTestModule extends HTMLOutputModule
         catch(JspException exc)
         {
             log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -481,7 +481,7 @@ public class TagTestModule extends HTMLOutputModule
         catch(JspException exc)
         {
             log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
 
@@ -508,7 +508,7 @@ public class TagTestModule extends HTMLOutputModule
         catch(JspException exc)
         {
             log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
 
@@ -548,7 +548,7 @@ public class TagTestModule extends HTMLOutputModule
         catch(JspException exc)
         {
             log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     
@@ -565,7 +565,7 @@ public class TagTestModule extends HTMLOutputModule
         catch(IOException exc)
         {
             log.error(exc.getMessage(), exc);
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
     

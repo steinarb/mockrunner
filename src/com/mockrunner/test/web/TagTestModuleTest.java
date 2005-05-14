@@ -5,9 +5,12 @@ import java.util.HashMap;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.BodyContent;
+import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.Tag;
 
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockJspFragment;
 import com.mockrunner.tag.DynamicAttribute;
@@ -448,6 +451,56 @@ public class TagTestModuleTest extends BaseTestCase
         module.doEndTag();
     }
     
+    public void testDoTagThrowsException()
+    {
+        module.createWrappedTag(ErrorTag.class);
+        try
+        {
+            module.doStartTag();
+            fail();
+        } 
+        catch(NestedApplicationException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.doEndTag();
+            fail();
+        } 
+        catch(NestedApplicationException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.doInitBody();
+            fail();
+        } 
+        catch(NestedApplicationException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.doAfterBody();
+            fail();
+        } 
+        catch(NestedApplicationException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.processTagLifecycle();
+            fail();
+        } 
+        catch(NestedApplicationException exc)
+        {
+            //should throw exception
+        }
+    }
+    
     public static class AnotherTag implements Tag
     {
         public int doEndTag() throws JspException
@@ -476,6 +529,54 @@ public class TagTestModuleTest extends BaseTestCase
         }
         
         public void setParent(Tag parent)
+        {
+
+        }
+    }
+    
+    public static class ErrorTag implements BodyTag
+    {
+        public void doInitBody() throws JspException
+        {
+            throw new JspException("ErrorTag doInitBody");
+        }
+        
+        public void setBodyContent(BodyContent arg0)
+        {
+            
+        }
+        
+        public int doAfterBody() throws JspException
+        {
+            throw new JspException("ErrorTag doAfterBody");
+        }
+        
+        public int doEndTag() throws JspException
+        {
+            throw new JspException("ErrorTag doEndTag");
+        }
+        
+        public int doStartTag() throws JspException
+        {
+            throw new JspException("ErrorTag doStartTag");
+        }
+        
+        public Tag getParent()
+        {
+            return null;
+        }
+        
+        public void release()
+        {
+
+        }
+        
+        public void setPageContext(PageContext pageContext)
+        {
+
+        }
+        
+        public void setParent(Tag tag)
         {
 
         }
