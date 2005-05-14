@@ -12,7 +12,7 @@ public class NestedApplicationExceptionTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        exception = new Exception();
+        exception = new Exception("TestException");
         nested = new NestedApplicationException(new NestedApplicationException(exception));
     }
     
@@ -25,5 +25,10 @@ public class NestedApplicationExceptionTest extends TestCase
     public void testGetRootCause()
     {
         assertSame(exception, nested.getRootCause());
+    }
+    
+    public void testGetMessage()
+    {
+        assertTrue(nested.getMessage().indexOf("TestException") != -1);
     }
 }

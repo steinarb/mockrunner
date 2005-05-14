@@ -989,14 +989,7 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public ActionForward actionPerform(Class action)
     {
-        try
-        {
-            return actionPerform(action, (ActionForm) null);
-        }
-        catch(Exception exc)
-        {
-            throw new NestedApplicationException(exc);
-        }
+        return actionPerform(action, (ActionForm) null);
     }
     
     /**
@@ -1007,14 +1000,7 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public ActionForward actionPerform(Action action)
     {
-        try
-        {
-            return actionPerform(action, (ActionForm) null);
-        }
-        catch(Exception exc)
-        {
-            throw new NestedApplicationException(exc);
-        }
+        return actionPerform(action, (ActionForm) null);
     }
 
     /**
@@ -1033,15 +1019,8 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public ActionForward actionPerform(Class action, Class form)
     {
-        try
-        {
-            createActionForm(form);
-            return actionPerform(action, formObj);
-        }
-        catch(Exception exc)
-        {
-            throw new NestedApplicationException(exc);
-        }
+        createActionForm(form);
+        return actionPerform(action, formObj);
     }
     
     /**
@@ -1060,15 +1039,8 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public ActionForward actionPerform(Action action, Class form)
     {
-        try
-        {
-            createActionForm(form);
-            return actionPerform(action, formObj);
-        }
-        catch(Exception exc)
-        {
-            throw new NestedApplicationException(exc);
-        }
+        createActionForm(form);
+        return actionPerform(action, formObj);
     }
 
     /**
@@ -1089,14 +1061,16 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public ActionForward actionPerform(Class action, ActionForm form)
     {
+        Action actionToCall = null;
         try
         {
-            return actionPerform((Action)action.newInstance(), form);
+            actionToCall = (Action)action.newInstance();
         }
         catch(Exception exc)
         {
             throw new NestedApplicationException(exc);
         }
+        return actionPerform(actionToCall, form);
     }
     
     /**
