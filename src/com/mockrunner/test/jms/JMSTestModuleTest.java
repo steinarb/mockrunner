@@ -2591,6 +2591,24 @@ public class JMSTestModuleTest extends TestCase
         assertTrue(wrapper.getTopicPublisherList().contains(publisher5));
     }
     
+    public void testSessionsClosedNoConnection() throws Exception
+    {
+        JMSMockObjectFactory mockFactory = new JMSMockObjectFactory();
+        JMSTestModule module = new JMSTestModule(mockFactory);
+        module.verifyAllQueueSessionsClosed();
+        module.verifyAllQueueSessionsCommitted();
+        module.verifyAllQueueSessionsRecovered();
+        module.verifyAllQueueSessionsRolledBack();
+        module.verifyAllTopicSessionsClosed();
+        module.verifyAllTopicSessionsCommitted();
+        module.verifyAllTopicSessionsRecovered();
+        module.verifyAllTopicSessionsRolledBack();
+        module.verifyAllSessionsClosed();
+        module.verifyAllSessionsCommitted();
+        module.verifyAllSessionsRecovered();
+        module.verifyAllSessionsRolledBack();
+    }
+    
     public static class TestMessageListener implements MessageListener
     {
         private Message message;

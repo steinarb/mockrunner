@@ -36,20 +36,27 @@ import com.mockrunner.mock.jms.MockTopicSubscriber;
 
 /**
  * Module for JMS tests.
- * Note that all indices are zero based.
+ * Note that all indices are zero based.<br>
  * Note for JMS 1.1:
  * If you use {@link MockQueueConnectionFactory} for creating your
- * connections and session, you have to use the <code>Queue</code>
- * methods. Same with {@link MockTopicConnectionFactory}.
+ * connections and sessions, you have to use the methods with <code>Queue</code>
+ * in their name. Same with {@link MockTopicConnectionFactory}.
  * The methods without <code>Queue</code> and <code>Topic</code>
  * in the method name are for connections and sessions that were
  * created using the {@link com.mockrunner.mock.jms.MockConnectionFactory}.
  * {@link com.mockrunner.mock.jms.MockConnectionFactory}
  * also implements <code>QueueConnectionFactory</code> and
- * <code>TopicConnectionFactory</code> and can be used to create queue and
- * topic connections as well as generic JMS 1.1 connections. However, the 
- * <code>Queue</code> methods (e.g. {@link #verifyAllQueueReceiversClosed})
- * only work, if you use {@link MockQueueConnectionFactory}.
+ * <code>TopicConnectionFactory</code> interfaces and can be used to create 
+ * queue and topic connections as well as generic JMS 1.1 connections. 
+ * It is recommended to use {@link com.mockrunner.mock.jms.MockQueueConnectionFactory}
+ * if you only use queues and  {@link com.mockrunner.mock.jms.MockTopicConnectionFactory}
+ * if you only use topics and are not interested in having one factory for both.
+ * It is possible to create a {@link MockQueueConnection} resp. a {@link MockTopicConnection}
+ * using the {@link com.mockrunner.mock.jms.MockConnectionFactory}.
+ * However, the <code>Queue</code> methods (e.g. {@link #verifyAllQueueReceiversClosed})
+ * only work, if you use {@link MockQueueConnectionFactory} and the 
+ * <code>Topic</code> methods (e.g. {@link #verifyCreatedTopicMapMessageNotAcknowledged})
+ * only work, if you use {@link MockTopicConnectionFactory}.
  */
 public class JMSTestModule
 {
@@ -67,7 +74,7 @@ public class JMSTestModule
     }
     
     /**
-     * Sets the index of the queue connection that should be used
+     * Sets the index of the {@link MockQueueConnection} that should be used
      * for the current test. Per default the latest created connection
      * is used.
      * @param connectionIndex the index of the connection
@@ -78,9 +85,10 @@ public class JMSTestModule
     }
     
     /**
-     * Returns the current queue connection based on its
+     * Returns the current {@link MockQueueConnection} based on its
      * index resp. <code>null</code> if no queue connection
-     * was created.
+     * was created. The connection has to be created using the
+     * {@link MockQueueConnectionFactory}.
      * @return the queue connection
      */
     public MockQueueConnection getCurrentQueueConnection()
@@ -93,9 +101,9 @@ public class JMSTestModule
     }
     
     /**
-     * Sets the index of the topic connection that should be used
+     * Sets the index of the {@link MockTopicConnection} that should be used
      * for the current test. Per default the latest created connection
-     * is used.
+     * is used. 
      * @param connectionIndex the index of the connection
      */
     public void setCurrentTopicConnectionIndex(int connectionIndex)
@@ -104,9 +112,10 @@ public class JMSTestModule
     }
 
     /**
-     * Returns the current topic connection based on its
+     * Returns the current {@link MockTopicConnection} based on its
      * index resp. <code>null</code> if no topic connection
-     * was created.
+     * was created. The connection has to be created using the
+     * {@link MockTopicConnectionFactory}.
      * @return the topic connection
      */
     public MockTopicConnection getCurrentTopicConnection()
@@ -119,7 +128,7 @@ public class JMSTestModule
     }
     
     /**
-     * Sets the index of the connection that should be used
+     * Sets the index of the {@link MockConnection} that should be used
      * for the current test. Per default the latest created connection
      * is used.
      * @param connectionIndex the index of the connection
@@ -130,9 +139,10 @@ public class JMSTestModule
     }
 
     /**
-     * Returns the current connection based on its
+     * Returns the current {@link MockConnection} based on its
      * index resp. <code>null</code> if no connection
-     * was created.
+     * was created. The connection has to be created using the
+     * {@link com.mockrunner.mock.jms.MockConnectionFactory}.
      * @return the topic connection
      */
     public MockConnection getCurrentConnection()
@@ -343,6 +353,7 @@ public class JMSTestModule
      * or <code>null</code> if the session does not exist. The returned
      * {@link MessageManager} is used to keep track of messages sent
      * to queues.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @return the {@link MessageManager}
      */
@@ -358,6 +369,7 @@ public class JMSTestModule
      * or <code>null</code> if the session does not exist. The returned
      * {@link MessageManager} is used to keep track of messages sent
      * to topics.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @return the {@link MessageManager}
      */
@@ -373,6 +385,7 @@ public class JMSTestModule
      * or <code>null</code> if the session does not exist. The returned
      * {@link MessageManager} is used to keep track of messages sent
      * to topics.
+     * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @return the {@link MessageManager}
      */
@@ -463,6 +476,7 @@ public class JMSTestModule
     
     /**
      * Returns the list of {@link MockQueueSession} objects.
+     * The sessions have been created using the current {@link MockQueueConnection}.
      * @return the {@link MockQueueSession} list
      */
     public List getQueueSessionList()
@@ -473,6 +487,7 @@ public class JMSTestModule
     
     /**
      * Returns the list of {@link MockTopicSession} objects.
+     * The sessions have been created using the current {@link MockTopicConnection}.
      * @return the {@link MockTopicSession} list
      */
     public List getTopicSessionList()
@@ -483,6 +498,7 @@ public class JMSTestModule
     
     /**
      * Returns the list of {@link MockSession} objects.
+     * The sessions have been created using the current {@link MockConnection}.
      * @return the {@link MockSession} list
      */
     public List getSessionList()
@@ -725,7 +741,8 @@ public class JMSTestModule
     }
     
     /**
-     * Verifies that the queue connection is closed.
+     * Verifies that the current {@link MockQueueConnection} is closed.
+     * The connection has to be created using the current {@link MockQueueConnectionFactory}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyQueueConnectionClosed()
@@ -741,7 +758,8 @@ public class JMSTestModule
     }
     
     /**
-     * Verifies that the queue connection is started.
+     * Verifies that the current {@link MockQueueConnection} is started.
+     * The connection has to be created using the current {@link MockQueueConnectionFactory}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyQueueConnectionStarted()
@@ -757,7 +775,8 @@ public class JMSTestModule
     }
     
     /**
-     * Verifies that the queue connection is stopped.
+     * Verifies that the current {@link MockQueueConnection} is stopped.
+     * The connection has to be created using the current {@link MockQueueConnectionFactory}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyQueueConnectionStopped()
@@ -773,7 +792,8 @@ public class JMSTestModule
     }
     
     /**
-     * Verifies that the topic connection is closed.
+     * Verifies that the current {@link MockTopicConnection} is closed.
+     * The connection has to be created using the current {@link MockTopicConnectionFactory}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyTopicConnectionClosed()
@@ -789,7 +809,8 @@ public class JMSTestModule
     }
 
     /**
-     * Verifies that the topic connection is started.
+     * Verifies that the current {@link MockTopicConnection} is started.
+     * The connection has to be created using the current {@link MockTopicConnectionFactory}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyTopicConnectionStarted()
@@ -805,7 +826,8 @@ public class JMSTestModule
     }
 
     /**
-     * Verifies that the topic connection is stopped.
+     * Verifies that the current {@link MockTopicConnection} is stopped.
+     * The connection has to be created using the current {@link MockTopicConnectionFactory}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyTopicConnectionStopped()
@@ -821,7 +843,8 @@ public class JMSTestModule
     }
     
     /**
-     * Verifies that the current connection is closed.
+     * Verifies that the current {@link MockConnection} is closed.
+     * The connection has to be created using the current {@link com.mockrunner.mock.jms.MockConnectionFactory}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyConnectionClosed()
@@ -837,7 +860,8 @@ public class JMSTestModule
     }
 
     /**
-     * Verifies that the current connection is started.
+     * Verifies that the current {@link MockConnection} is started.
+     * The connection has to be created using the current {@link com.mockrunner.mock.jms.MockConnectionFactory}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyConnectionStarted()
@@ -853,7 +877,8 @@ public class JMSTestModule
     }
 
     /**
-     * Verifies that the current connection is stopped.
+     * Verifies that the current {@link MockConnection} is stopped.
+     * The connection has to be created using the current {@link com.mockrunner.mock.jms.MockConnectionFactory}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyConnectionStopped()
@@ -871,6 +896,7 @@ public class JMSTestModule
     /**
      * Verifies that the queue session with the specified index is
      * closed.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -886,6 +912,7 @@ public class JMSTestModule
     /**
      * Verifies that the queue session with the specified index was
      * committed.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -901,6 +928,7 @@ public class JMSTestModule
     /**
      * Verifies that the queue session with the specified index was
      * not committed.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -915,6 +943,7 @@ public class JMSTestModule
     
     /**
      * Verifies the number of commits of the queue session with the specified index.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param numberOfCommits the expected number of commits
      * @throws VerifyFailedException if verification fails
@@ -931,6 +960,7 @@ public class JMSTestModule
     /**
      * Verifies that the queue session with the specified index was
      * rolled back.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -946,6 +976,7 @@ public class JMSTestModule
     /**
      * Verifies that the queue session with the specified index was
      * not rolled back.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -960,6 +991,7 @@ public class JMSTestModule
     
     /**
      * Verifies the number of rollbacks of the queue session with the specified index.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param numberOfRollbacks the expected number of rollbacks
      * @throws VerifyFailedException if verification fails
@@ -976,6 +1008,7 @@ public class JMSTestModule
     /**
      * Verifies that the queue session with the specified index was
      * recovered.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -991,6 +1024,7 @@ public class JMSTestModule
     /**
      * Verifies that the queue session with the specified index was
      * not recovered.
+     * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1006,6 +1040,7 @@ public class JMSTestModule
     /**
      * Verifies that the topic session with the specified index is
      * closed.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1021,6 +1056,7 @@ public class JMSTestModule
     /**
      * Verifies that the topic session with the specified index was
      * committed.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1036,6 +1072,7 @@ public class JMSTestModule
     /**
      * Verifies that the topic session with the specified index was
      * not committed.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1050,6 +1087,7 @@ public class JMSTestModule
     
     /**
      * Verifies the number of commits of the topic session with the specified index.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param numberOfCommits the expected number of commits
      * @throws VerifyFailedException if verification fails
@@ -1066,6 +1104,7 @@ public class JMSTestModule
     /**
      * Verifies that the topic session with the specified index was
      * rolled back.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1081,6 +1120,7 @@ public class JMSTestModule
     /**
      * Verifies that the topic session with the specified index was
      * not rolled back.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1095,6 +1135,7 @@ public class JMSTestModule
     
     /**
      * Verifies the number of rollbacks of the topic session with the specified index.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param numberOfRollbacks the expected number of rollbacks
      * @throws VerifyFailedException if verification fails
@@ -1111,6 +1152,7 @@ public class JMSTestModule
     /**
      * Verifies that the topic session with the specified index was
      * recovered.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1126,6 +1168,7 @@ public class JMSTestModule
     /**
      * Verifies that the topic session with the specified index was
      * not recovered.
+     * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1141,6 +1184,7 @@ public class JMSTestModule
     /**
      * Verifies that the session with the specified index is
      * closed.
+     * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1156,6 +1200,7 @@ public class JMSTestModule
     /**
      * Verifies that the session with the specified index was
      * committed.
+     * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1171,6 +1216,7 @@ public class JMSTestModule
     /**
      * Verifies that the session with the specified index was
      * not committed.
+     * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1185,6 +1231,7 @@ public class JMSTestModule
     
     /**
      * Verifies the number of commits of session with the specified index.
+     * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @param numberOfCommits the expected number of commits
      * @throws VerifyFailedException if verification fails
@@ -1201,6 +1248,7 @@ public class JMSTestModule
     /**
      * Verifies that the session with the specified index was
      * rolled back.
+     * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1216,6 +1264,7 @@ public class JMSTestModule
     /**
      * Verifies that the session with the specified index was
      * not rolled back.
+     * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1230,6 +1279,7 @@ public class JMSTestModule
     
     /**
      * Verifies the number of rollbacks of session with the specified index.
+     * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @param numberOfRollbacks the expected number of rollbacks
      * @throws VerifyFailedException if verification fails
@@ -1246,6 +1296,7 @@ public class JMSTestModule
     /**
      * Verifies that the session with the specified index was
      * recovered.
+     * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1261,6 +1312,7 @@ public class JMSTestModule
     /**
      * Verifies that the session with the specified index was
      * not recovered.
+     * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @throws VerifyFailedException if verification fails
      */
@@ -1275,11 +1327,13 @@ public class JMSTestModule
     
     /**
      * Verifies that all queue sessions are closed.
+     * The sessions have to be created using the current {@link MockQueueConnection}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyAllQueueSessionsClosed()
     {
         List queueSessions = getQueueSessionList();
+        if(null == queueSessions) return;
         for(int ii = 0; ii < queueSessions.size(); ii++)
         {
             MockQueueSession currentSession = (MockQueueSession)queueSessions.get(ii);
@@ -1292,11 +1346,13 @@ public class JMSTestModule
     
     /**
      * Verifies that all queue sessions are recovered.
+     * The sessions have to be created using the current {@link MockQueueConnection}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyAllQueueSessionsRecovered()
     {
         List queueSessions = getQueueSessionList();
+        if(null == queueSessions) return;
         for(int ii = 0; ii < queueSessions.size(); ii++)
         {
             MockQueueSession currentSession = (MockQueueSession)queueSessions.get(ii);
@@ -1309,11 +1365,13 @@ public class JMSTestModule
 
     /**
      * Verifies that all queue sessions were commited.
+     * The sessions have to be created using the current {@link MockQueueConnection}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyAllQueueSessionsCommitted()
     {
         List queueSessions = getQueueSessionList();
+        if(null == queueSessions) return;
         for(int ii = 0; ii < queueSessions.size(); ii++)
         {
             MockQueueSession currentSession = (MockQueueSession)queueSessions.get(ii);
@@ -1326,11 +1384,13 @@ public class JMSTestModule
 
     /**
      * Verifies that all queue sessions were rolled back.
+     * The sessions have to be created using the current {@link MockQueueConnection}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyAllQueueSessionsRolledBack()
     {
         List queueSessions = getQueueSessionList();
+        if(null == queueSessions) return;
         for(int ii = 0; ii < queueSessions.size(); ii++)
         {
             MockQueueSession currentSession = (MockQueueSession)queueSessions.get(ii);
@@ -1343,11 +1403,13 @@ public class JMSTestModule
     
     /**
      * Verifies that all topic sessions are closed.
+     * The sessions have to be created using the current {@link MockTopicConnection}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyAllTopicSessionsClosed()
     {
         List topicSessions = getTopicSessionList();
+        if(null == topicSessions) return;
         for(int ii = 0; ii < topicSessions.size(); ii++)
         {
             MockTopicSession currentSession = (MockTopicSession)topicSessions.get(ii);
@@ -1360,11 +1422,13 @@ public class JMSTestModule
 
     /**
      * Verifies that all topic sessions are recovered.
+     * The sessions have to be created using the current {@link MockTopicConnection}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyAllTopicSessionsRecovered()
     {
         List topicSessions = getTopicSessionList();
+        if(null == topicSessions) return;
         for(int ii = 0; ii < topicSessions.size(); ii++)
         {
             MockTopicSession currentSession = (MockTopicSession)topicSessions.get(ii);
@@ -1377,11 +1441,13 @@ public class JMSTestModule
 
     /**
      * Verifies that all topic sessions were commited.
+     * The sessions have to be created using the current {@link MockTopicConnection}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyAllTopicSessionsCommitted()
     {
         List topicSessions = getTopicSessionList();
+        if(null == topicSessions) return;
         for(int ii = 0; ii < topicSessions.size(); ii++)
         {
             MockTopicSession currentSession = (MockTopicSession)topicSessions.get(ii);
@@ -1394,11 +1460,13 @@ public class JMSTestModule
 
     /**
      * Verifies that all topic sessions were rolled back.
+     * The sessions have to be created using the current {@link MockTopicConnection}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyAllTopicSessionsRolledBack()
     {
         List topicSessions = getTopicSessionList();
+        if(null == topicSessions) return;
         for(int ii = 0; ii < topicSessions.size(); ii++)
         {
             MockTopicSession currentSession = (MockTopicSession)topicSessions.get(ii);
@@ -1411,11 +1479,13 @@ public class JMSTestModule
     
     /**
      * Verifies that all sessions are closed.
+     * The sessions have to be created using the current {@link MockConnection}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyAllSessionsClosed()
     {
         List sessions = getSessionList();
+        if(null == sessions) return;
         for(int ii = 0; ii < sessions.size(); ii++)
         {
             MockSession currentSession = (MockSession)sessions.get(ii);
@@ -1428,11 +1498,13 @@ public class JMSTestModule
 
     /**
      * Verifies that all sessions are recovered.
+     * The sessions have to be created using the current {@link MockConnection}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyAllSessionsRecovered()
     {
         List sessions = getSessionList();
+        if(null == sessions) return;
         for(int ii = 0; ii < sessions.size(); ii++)
         {
             MockSession currentSession = (MockSession)sessions.get(ii);
@@ -1445,11 +1517,13 @@ public class JMSTestModule
 
     /**
      * Verifies that all sessions were commited.
+     * The sessions have to be created using the current {@link MockConnection}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyAllSessionsCommitted()
     {
         List sessions = getSessionList();
+        if(null == sessions) return;
         for(int ii = 0; ii < sessions.size(); ii++)
         {
             MockSession currentSession = (MockSession)sessions.get(ii);
@@ -1462,11 +1536,13 @@ public class JMSTestModule
 
     /**
      * Verifies that all topic sessions were rolled back.
+     * The sessions have to be created using the current {@link MockConnection}.
      * @throws VerifyFailedException if verification fails
      */
     public void verifyAllSessionsRolledBack()
     {
         List sessions = getSessionList();
+        if(null == sessions) return;
         for(int ii = 0; ii < sessions.size(); ii++)
         {
             MockSession currentSession = (MockSession)sessions.get(ii);
@@ -2317,7 +2393,7 @@ public class JMSTestModule
     }
 
     /**
-     * Verifies that a received message is equal to the specified message 
+     * Verifies that a message received by a temporary queue is equal to the specified message 
      * by calling the <code>equals()</code> method. 
      * All mock messages provide a suitable implementation of <code>equals()</code>.
      * The session has to be created using the current {@link MockQueueConnection}.
@@ -2508,7 +2584,7 @@ public class JMSTestModule
     }
     
     /**
-     * Verifies that a received message is acknowledged.
+     * Verifies that message received by a temporary queue is acknowledged.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
@@ -2535,7 +2611,7 @@ public class JMSTestModule
     }
     
     /**
-     * Verifies that a received message is not acknowledged.
+     * Verifies that a received by a temporary queue is not acknowledged.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
@@ -3009,7 +3085,7 @@ public class JMSTestModule
     }
 
     /**
-     * Verifies that a received message is equal to the specified message 
+     * Verifies that a message received by a temporary topic is equal to the specified message 
      * by calling the <code>equals()</code> method. 
      * All mock messages provide a suitable implementation of <code>equals()</code>.
      * The session has to be created using the current {@link MockTopicConnection}.
@@ -3200,7 +3276,7 @@ public class JMSTestModule
     }
 
     /**
-     * Verifies that a received message is acknowledged.
+     * Verifies that a message received by a temporary topic is acknowledged.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfTopic the index of the temporary topic
@@ -3227,7 +3303,7 @@ public class JMSTestModule
     }
 
     /**
-     * Verifies that a received message is not acknowledged.
+     * Verifies that a message received by a temporary topic is not acknowledged.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfTopic the index of the temporary topic
@@ -3254,7 +3330,7 @@ public class JMSTestModule
     }
 
     /**
-     * Verifies the number of messages created with
+     * Verifies the number of messages created with 
      * {@link MockTopicSession#createMessage}.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
