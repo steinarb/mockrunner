@@ -79,7 +79,6 @@ public class MockrunnerJars
         
         mockEJBJars = new HashSet();
         mockEJBJars.add("mockejb.jar");
-        mockEJBJars.add("cglib-full-2.0-RC2.jar");
         
         xmlJars = new HashSet();
         xmlJars.add("xercesImpl.jar");

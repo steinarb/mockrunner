@@ -1,6 +1,7 @@
 package com.mockrunner.util.common;
 
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import com.mockrunner.base.NestedApplicationException;
 
@@ -50,5 +51,23 @@ public class MethodUtil
         {
             throw new NestedApplicationException(exc);
         }
+    }
+    
+    /**
+     * Returns if the two specified methods are equal as
+     * defined by <code>Method.equals()</code> except that
+     * the methods can be defined by different classes.
+     * @param method1 the first method to compare
+     * @param method2 the second method to compare
+     * @return <code>true</code> if the methods are equals, <code>false</code>
+     *         otherwise
+     * @throws NullPointerException if one of the methods is <code>null</code>
+     */
+    public static boolean areMethodsEqual(Method method1, Method method2)
+    {
+        if(method1.equals(method2)) return true;
+        if(!method2.getName().equals(method1.getName())) return false;
+        if(!method1.getReturnType().equals(method2.getReturnType())) return false;
+        return Arrays.equals(method1.getParameterTypes(), method2.getParameterTypes());
     }
 }
