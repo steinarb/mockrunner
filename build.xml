@@ -8,7 +8,7 @@
          Property "java1.3.home" not set. Please create a file
          ".ant.properties" in this directory and set "java1.3.home"
          to your JDK1.3 installation if you would like to build the
-         JDK1.3 version.    
+         JDK1.3 version.
         </echo>
     </target>
 
@@ -156,6 +156,7 @@
             <exclude name="com/mockrunner/mock/web/MockActionServlet.*" />
             <exclude name="com/mockrunner/mock/web/MockForwardConfig.*" />
             <exclude name="com/mockrunner/mock/web/MockModuleConfig.*" />
+            <exclude name="com/mockrunner/mock/web/ActionMappingProxy.*" />
         </patternset>
         
         <patternset id="servlet.jar.classes">

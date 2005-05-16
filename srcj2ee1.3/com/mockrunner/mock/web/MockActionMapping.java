@@ -10,7 +10,7 @@ import org.apache.struts.action.ActionMapping;
 /**
  * Mock implementation of <code>ActionMapping</code>.
  */
-public class MockActionMapping extends ActionMapping
+public class MockActionMapping extends ActionMapping implements ActionMappingProxy
 {
     private Map forwards;
 

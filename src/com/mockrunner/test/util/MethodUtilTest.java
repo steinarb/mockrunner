@@ -1,5 +1,7 @@
 package com.mockrunner.test.util;
 
+import java.lang.reflect.Method;
+
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.util.common.MethodUtil;
 
@@ -64,6 +66,41 @@ public class MethodUtilTest extends TestCase
         assertTrue(testObject.wasMethod5Called());
     }
     
+    public void testAreMethodEqual() throws Exception
+    {
+        Method method1 = TestObject.class.getMethod("testMethod1", null);
+        Method method2 = TestObject.class.getMethod("testMethod2", null);
+        Method method4 = TestObject.class.getMethod("testMethod4", new Class[] {String.class});
+        Method method5 = TestObject.class.getMethod("testMethod5", new Class[] {Integer.class});
+        Method anotherMethod2 = AnotherTestObject.class.getMethod("testMethod2", null);
+        Method anotherMethod4 = AnotherTestObject.class.getMethod("testMethod4", new Class[] {Integer.class});
+        Method anotherMethod5 = AnotherTestObject.class.getMethod("testMethod5", new Class[] {Integer.class});
+        try
+        {
+            MethodUtil.areMethodsEqual(null, method1);
+            fail();
+        } 
+        catch(NullPointerException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            MethodUtil.areMethodsEqual(method2, null);
+            fail();
+        } 
+        catch(NullPointerException exc)
+        {
+            //should throw exception
+        }
+        assertTrue(MethodUtil.areMethodsEqual(method1, method1));
+        assertFalse(MethodUtil.areMethodsEqual(method1, method2));
+        assertFalse(MethodUtil.areMethodsEqual(method2, anotherMethod2));
+        assertFalse(MethodUtil.areMethodsEqual(method2, anotherMethod4));
+        assertFalse(MethodUtil.areMethodsEqual(method4, anotherMethod4));
+        assertTrue(MethodUtil.areMethodsEqual(method5, anotherMethod5));
+    }
+    
     public class TestObject
     {
         private boolean method1Called = false;
@@ -122,6 +159,24 @@ public class MethodUtilTest extends TestCase
         public boolean wasMethod5Called()
         {
             return method5Called;
+        }
+    }
+    
+    public class AnotherTestObject
+    {
+        public int testMethod2()
+        {
+            return 0;
+        }
+        
+        public void testMethod4(Integer arg)
+        {
+            
+        }
+        
+        public int testMethod5(Integer arg)
+        {
+            return 0;
         }
     }
 }
