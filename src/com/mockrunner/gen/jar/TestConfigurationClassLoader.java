@@ -33,7 +33,7 @@ public class TestConfigurationClassLoader extends URLClassLoader
              */
             if(name.indexOf("ByCGLIB$") != -1)
             {
-                throw exc;
+                throw new ClassNotFoundException();
             }
             clazz = getParent().loadClass(name);
         }
