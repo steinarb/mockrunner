@@ -752,9 +752,44 @@ public class JDBCTestModuleTest extends TestCase
 		assertNull(module.getExecutedSQLStatementParameterSets("{call xyz"));
     }
     
+    public void testSQLStatementParameterNoParameterSets() throws Exception
+    {
+        prepareStatements();
+        module.getStatement(0).execute("test");
+        try
+        {
+            module.verifySQLStatementParameterNumber("test", 0, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        preparePreparedStatements();
+        module.getPreparedStatement(0).execute();
+        try
+        {
+            module.verifySQLStatementParameterNumber("INSERT INTO TEST (COL1, COL2) VALUES(?,", 1, 0);
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifySQLStatementParameter("INSERT INTO TEST (COL1, COL2) VALUES(?,", 1, new HashMap());
+            fail();
+        }
+        catch (VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
+    
 	public void testSQLStatementParameterNumber() throws Exception
 	{
-		preparePreparedStatements();
+        preparePreparedStatements();
 		prepareCallableStatements();
 		module.getPreparedStatement(0).setString(1, "test");
 		module.getPreparedStatement(0).setString(2, "test");
@@ -768,7 +803,7 @@ public class JDBCTestModuleTest extends TestCase
 		module.verifySQLStatementParameterNumber("INSERT INTO TEST (COL1, COL2) VALUES(?,", 0, 2);
 		module.verifySQLStatementParameterNumber("insert into test (col1, col2, col3) values(?, ?, ?)", 0, 0);
 		module.verifySQLStatementParameterNumber("update mytable set test = test + ? where id = ?", 0, 0);
-		module.verifySQLStatementParameterNumber("{call getData(?, ?, ?, ?)}", 0, 01);
+		module.verifySQLStatementParameterNumber("{call getData(?, ?, ?, ?)}", 0, 1);
 		module.verifySQLStatementParameterNumber("{call setData(?, ", 0, 1);
 		try
 		{
@@ -777,7 +812,7 @@ public class JDBCTestModuleTest extends TestCase
 		}
 		catch (VerifyFailedException exc)
 		{
-			//should throw exception
+            //should throw exception
 		}
 		try
 		{
@@ -832,15 +867,25 @@ public class JDBCTestModuleTest extends TestCase
 		module.verifySQLStatementParameter("update mytable set test = test.*", 0, emptyMap);
 		module.setUseRegularExpressions(false);
 		module.verifySQLStatementParameter("insert into test (col1, col2, col3)", 0, okTestMap);
+        module.verifySQLStatementParameter("insert into test (col1, col2, col3)", 0, 2, new Integer(3));
 		try
 		{
-			module.verifySQLStatementParameter("insert into test (col1, col2, col3) values(?, ?, ?)", 0, 0, failureTestMap1);
+			module.verifySQLStatementParameter("insert into test (col1, col2, col3) values(?, ?, ?)", 0, failureTestMap1);
 			fail();
 		}
 		catch(VerifyFailedException exc)
 		{
 			//should throw exception
 		}
+        try
+        {
+            module.verifySQLStatementParameter("insert into test (col1, col2, col3) values(?, ?, ?)", 0, 1, "test2");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
 		try
 		{
 			module.verifySQLStatementParameter("insert into test (col1, col2, col3) values(?, ?, ?)", 0, failureTestMap2);

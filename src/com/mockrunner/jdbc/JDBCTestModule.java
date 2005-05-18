@@ -197,7 +197,8 @@ public class JDBCTestModule
 	 * If more than one {@link ParameterSets} object is found, the first one
 	 * will be returned.
 	 * @param sql the the SQL statement
-	 * @return the {@link ParameterSets} object
+	 * @return the {@link ParameterSets} object resp. <code>null</code> if no
+     *         matching object is found
 	 */
 	public ParameterSets getExecutedSQLStatementParameterSets(String sql)
 	{
@@ -596,10 +597,13 @@ public class JDBCTestModule
 	/**
 	 * Verifies the number of parameters for the specified SQL statement.
 	 * If more than one SQL statement is found, this method uses the
-	 * first one. You can specify the number of the parameter set, i.e.
-	 * if a <code>PreparedStatement</code> is reused several times, the
-	 * number of the parameter sets corresponds to the actual parameters
-	 * at a specific <code>execute</code> call.
+	 * first one. You can specify the index of the parameter set. If
+	 * if a <code>PreparedStatement</code> or <code>CallableStatement</code> 
+     * is executed N times, it has N parameter sets. Each parameter set
+     * can contain any number of parameters (possibly 0 parameters).
+     * Ordinary statements do not have parameter sets, of course. If
+     * the specified SQL has been executed by an ordinary statements,
+     * a <code>VerifyFailedException</code> is thrown stating the reason.
 	 * @param sql the SQL string
 	 * @param indexOfParameterSet the number of the parameter set
 	 * @param number the expected number of parameters
@@ -620,10 +624,13 @@ public class JDBCTestModule
 	 * first one. The parameter map must match in size and the
 	 * parameters must be equal (by comparing them with
 	 * {de.lv1871.util.ParameterUtil#compareParameter}).
-	 * You can specify the number of the parameter set, i.e.
-	 * if a <code>PreparedStatement</code> is reused several times, the
-	 * number of the parameter sets corresponds to the actual parameters
-	 * at a specific <code>execute</code> call.
+	 * You can specify the index of the parameter set. If
+     * if a <code>PreparedStatement</code> or <code>CallableStatement</code> 
+     * is executed N times, it has N parameter sets. Each parameter set
+     * can contain any number of parameters (possibly 0 parameters).
+     * Ordinary statements do not have parameter sets, of course. If
+     * the specified SQL has been executed by an ordinary statements,
+     * a <code>VerifyFailedException</code> is thrown stating the reason.
 	 * @param sql the SQL string
 	 * @param indexOfParameterSet the number of the parameter set
 	 * @param parameterMap the map of expected parameters
@@ -654,10 +661,13 @@ public class JDBCTestModule
 	 * Verifies the parameter for the specified SQL statement.
 	 * If more than one SQL statement is found, this method uses the
 	 * first one.
-	 * You can specify the number of the parameter set, i.e.
-	 * if a <code>PreparedStatement</code> is reused several times, the
-	 * number of the parameter sets corresponds to the actual parameters
-	 * at a specific <code>execute</code> call.
+	 * You can specify the index of the parameter set. If
+     * if a <code>PreparedStatement</code> or <code>CallableStatement</code> 
+     * is executed N times, it has N parameter sets. Each parameter set
+     * can contain any number of parameters (possibly 0 parameters).
+     * Ordinary statements do not have parameter sets, of course. If
+     * the specified SQL has been executed by an ordinary statements,
+     * a <code>VerifyFailedException</code> is thrown stating the reason.
 	 * @param sql the SQL string
 	 * @param indexOfParameterSet the number of the parameter set
 	 * @param indexOfParameter the index of the parameter
@@ -678,10 +688,13 @@ public class JDBCTestModule
 	 * Verifies the parameter for the specified SQL statement.
 	 * If more than one SQL statement is found, this method uses the
 	 * first one.
-	 * You can specify the number of the parameter set, i.e.
-	 * if a <code>PreparedStatement</code> is reused several times, the
-	 * number of the parameter sets corresponds to the actual parameters
-	 * at a specific <code>execute</code> call.
+	 * You can specify the index of the parameter set. If
+     * if a <code>PreparedStatement</code> or <code>CallableStatement</code> 
+     * is executed N times, it has N parameter sets. Each parameter set
+     * can contain any number of parameters (possibly 0 parameters).
+     * Ordinary statements do not have parameter sets, of course. If
+     * the specified SQL has been executed by an ordinary statements,
+     * a <code>VerifyFailedException</code> is thrown stating the reason.
 	 * @param sql the SQL string
 	 * @param indexOfParameterSet the number of the parameter set
 	 * @param nameOfParameter the name of the parameter
@@ -705,14 +718,16 @@ public class JDBCTestModule
 		List matchingParameterList = matcher.getMatchingObjects(getExecutedSQLStatementParameter(), sql, true, false);
 		if(null == matchingParameterList || matchingParameterList.size() == 0)
 		{
-			throw new VerifyFailedException("No parameters for SQL " + sql + " found.");
+			throw new VerifyFailedException("No parameter sets for SQL " + sql + " found. Maybe the SQL has been executed by a regular " +
+                                            "statement instead of a prepared statement or callable statement.");
 		}
 		ParameterSets actualParameterSets = (ParameterSets)matchingParameterList.get(0);
 		if(null == actualParameterSets || indexOfParameterSet >= actualParameterSets.getNumberParameterSets())
 		{
-			throw new VerifyFailedException("Statement " + sql + " has no parameter set with index " + indexOfParameterSet);
+			throw new VerifyFailedException("Statement " + sql + " has no parameter set with index " + indexOfParameterSet +
+                                            ". Maybe it has been executed less than " + (indexOfParameterSet + 1) + " times.");
 		}
-		return (Map)actualParameterSets.getParameterSet(indexOfParameterSet);
+		return actualParameterSets.getParameterSet(indexOfParameterSet);
 	}
     
     /**
