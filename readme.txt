@@ -123,7 +123,7 @@ Tomcat 5.0.28:
 http://jakarta.apache.org/tomcat
 servlet-api.jar
 jsp-api.jar
-JBoss 4.0.1sp1:
+JBoss 4.0.2:
 http://www.jboss.org
 jboss-j2ee.jar
 
@@ -151,9 +151,9 @@ ORO:
 http://jakarta.apache.org/oro
 jakarta-oro-2.0.8.jar (from MockEJB 0.6 beta2 release)
 
-cglib:
+cglib 2.0.2:
 http://cglib.sourceforge.net
-cglib-full-2.0-RC2.jar (from MockEJB 0.6 beta2 release)
+cglib-full-2.0.2.jar
 
 JDOM 1.0:
 http://www.jdom.org
