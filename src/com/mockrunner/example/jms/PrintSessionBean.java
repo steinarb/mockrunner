@@ -17,7 +17,7 @@ import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 
 /*
- * @ejb.bean name="PrintSession"
+ * @ejb:bean name="PrintSession"
  *           display-name="PrintSessionBean"
  *           type="Stateless"
  *           transaction-type="Container"
@@ -32,8 +32,8 @@ public class PrintSessionBean implements SessionBean
     private SessionContext sessionContext;
     
     /*
-     * @ejb.interface-method
-     * @ejb.transaction type="Required"
+     * @ejb:interface-method
+     * @ejb:transaction type="Required"
      */
     public void sendMessage(String customerId)
     {
@@ -71,7 +71,7 @@ public class PrintSessionBean implements SessionBean
     }
     
     /*
-     * @ejb.create-method
+     * @ejb:create-method
      */
     public void ejbCreate() throws CreateException
     {

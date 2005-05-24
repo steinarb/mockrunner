@@ -22,21 +22,21 @@ import javax.naming.InitialContext;
 import javax.sql.DataSource;
 
 /*
- * @ejb.bean name="UserEntity"
+ * @ejb:bean name="UserEntity"
  *           display-name="UserEntity"
  *           type="BMP"
  *           jndi-name="de/test/UserEntity"
  *
- * @ejb.pk class="java.lang.String"
+ * @ejb:pk class="java.lang.String"
  *
- * @ejb.transaction type="Required"
+ * @ejb:transaction type="Required"
  * 
- * @ejb.resource-ref res-ref-name="jdbc/MySQLDB"
+ * @ejb:resource-ref res-ref-name="jdbc/MySQLDB"
  *                   res-type="javax.sql.DataSource"
  *                   res-auth="Container"
  *                   res-sharing-scope="Shareable"
  * 
- * @jboss.resource-manager res-man-name="jdbc/MySQLDB" res-man-jndi-name="java:/MySQLDB"
+ * @jboss:resource-manager res-man-name="jdbc/MySQLDB" res-man-jndi-name="java:/MySQLDB"
  **/
 /**
  * Implementation of a BMP entity bean representing
@@ -51,7 +51,7 @@ public class UserEntityBean implements EntityBean
     private String password;
 
     /*
-     * @ejb.interface-method
+     * @ejb:interface-method
      **/
     public String getPassword()
     {
@@ -59,7 +59,7 @@ public class UserEntityBean implements EntityBean
     }
     
     /*
-     * @ejb.interface-method
+     * @ejb:interface-method
      **/
     public void setPassword(String password)
     {
@@ -67,7 +67,7 @@ public class UserEntityBean implements EntityBean
     }
     
     /*
-     * @ejb.interface-method
+     * @ejb:interface-method
      **/
     public String getUsername()
     {
@@ -80,7 +80,7 @@ public class UserEntityBean implements EntityBean
     }
     
     /*
-     * @ejb.create-method
+     * @ejb:create-method
      **/
     public String ejbCreate(String username, String password) throws CreateException
     {
