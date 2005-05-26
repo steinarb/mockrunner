@@ -5,11 +5,13 @@ mockrunner-0.3.6:
 - CallableStatement out parameters are now returned only if the statement
   has been executed
 - it's now possible to specify that only registered out parameters are returned
+  for a CallableStatement
 - added loadMessage() method to MockDestination to preload test messages
 - improved version of NestedApplicationException, now displays root stacktrace
 - ít's now possible to set a null transaction policy in EJBTestModule
 - refactored EJBMockObjectFactory, MockContextFactory.setAsInitial is only called
   if necessary, preventing mock settings of being saved and restored later
+- added getHeaderNames() method to MockHttpServletResponse
 - updated to CGLib 2.0.2, replaced cglib-full-2.0-RC2.jar with cglib-full-2.0.2.jar
 - updated J2EE 1.4 jboss-j2ee.jar from 4.0.1sp1 to 4.0.2
 - fixed bug 1195461 (restore JDBC drivers and JNDI settings in basic adapters tearDown)
