@@ -8,10 +8,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -240,6 +242,11 @@ public class MockHttpServletResponse implements HttpServletResponse
     public void setContentType(String type)
     {
         setHeader("Content-Type", type);
+    }
+    
+    public Enumeration getHeaderNames()
+    {
+        return new Vector(headers.keySet()).elements();
     }
     
     public List getHeaderList(String key)
