@@ -32,10 +32,10 @@ import java.util.Set;
  * <code>entrySet</code>), you'll get the first added version of the key,
  * in the above case, you'll get <code>"test"</code>.
  * It is allowed to use non-strings as keys. In this case the <code>Map</code>
- * behaves like a usual <code>HashMap</code>.
+ * behaves like a usual <code>HashMap</code>.<br>
  * Note: This class is similar to a <code>TreeMap(String.CASE_INSENSITIVE_ORDER)</code>
  *       except that non-strings do not throw a <code>ClassCastException</code>
- *       and the keys are not sorted.
+ *       and that keys are not sorted.
  */
 public class CaseAwareMap implements Map
 {
