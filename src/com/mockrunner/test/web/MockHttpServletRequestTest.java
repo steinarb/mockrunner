@@ -159,6 +159,33 @@ public class MockHttpServletRequestTest extends TestCase
         }
     }
     
+    public void testHeadersCaseInsensitive()
+    {
+        request.addHeader("testHeader", "xyz");
+        request.addHeader("TESTHeader", "abc");
+        Enumeration headers = request.getHeaders("testHeader");
+        List list = new ArrayList();
+        list.add(headers.nextElement());
+        list.add(headers.nextElement());
+        assertFalse(headers.hasMoreElements());
+        assertTrue(list.contains("xyz"));
+        assertTrue(list.contains("abc"));
+        request.addHeader("MYHEADER1", "xyz");
+        request.addHeader("myHeader2", "abc");
+        assertEquals("xyz", request.getHeader("myheader1"));
+        assertEquals("abc", request.getHeader("MYHEADER2"));
+        headers = request.getHeaderNames();
+        List headerNames = new ArrayList();
+        while(headers.hasMoreElements())
+        {
+            headerNames.add(headers.nextElement());
+        }
+        assertEquals(3, headerNames.size());
+        assertTrue(headerNames.contains("testHeader"));
+        assertTrue(headerNames.contains("MYHEADER1"));
+        assertTrue(headerNames.contains("myHeader2"));
+    }
+    
     public void testCookies()
     {
         request.addCookie(new Cookie("name1", "value1"));

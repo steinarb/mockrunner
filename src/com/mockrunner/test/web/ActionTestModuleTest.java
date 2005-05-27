@@ -28,7 +28,6 @@ import org.apache.struts.validator.ValidatorForm;
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
-import com.mockrunner.mock.web.ActionMockObjectFactory;
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.struts.ActionTestModule;
 import com.mockrunner.struts.MapMessageResources;
@@ -837,6 +836,7 @@ public class ActionTestModuleTest extends BaseTestCase
         files[0] = "src/com/mockrunner/test/web/validator-rules.xml";
         files[1] = "src/com/mockrunner/test/web/validation.xml";
         module.createValidatorResources(files);
+        module.setResources(new MapMessageResources());
         TestValidatorForm form = new TestValidatorForm();
         form.setServlet(getActionMockObjectFactory().getMockActionServlet());
         getActionMockObjectFactory().getMockActionMapping().setName("testForm");
@@ -847,6 +847,7 @@ public class ActionTestModuleTest extends BaseTestCase
         form.setFirstName("ABCD");
         form.setLastName("12345678901");
         errors = form.validate(getActionMockObjectFactory().getMockActionMapping(), getActionMockObjectFactory().getMockRequest());
+        System.out.println(errors.size());
         assertTrue(errors.size() == 2);
         form.setLastName("ABCDEF");
         errors = form.validate(getActionMockObjectFactory().getMockActionMapping(), getActionMockObjectFactory().getMockRequest());
