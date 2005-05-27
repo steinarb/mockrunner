@@ -9,7 +9,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -20,6 +19,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 import com.mockrunner.base.NestedApplicationException;
+import com.mockrunner.util.common.CaseAwareMap;
 
 /**
  * Mock implementation of <code>HttpServletResponse</code>.
@@ -40,7 +40,7 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public MockHttpServletResponse()
     {
-        headers = new HashMap();
+        headers = new CaseAwareMap();
         characterEncoding = "ISO-8859-1";
         bufferSize = 8192;
         wasErrorSent = false;

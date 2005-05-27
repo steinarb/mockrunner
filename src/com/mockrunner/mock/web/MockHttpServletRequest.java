@@ -26,6 +26,8 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.mockrunner.util.common.CaseAwareMap;
+
 /**
  * Mock implementation of <code>HttpServletRequest</code>.
  */
@@ -75,7 +77,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         locales = new Vector();
         requestDispatchers = new HashMap();
         method = "GET";
-        headers = new HashMap();
+        headers = new CaseAwareMap();
         requestedSessionIdIsFromCookie = true;
         protocol = "HTTP/1.1";
         serverName = "localhost";

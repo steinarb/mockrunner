@@ -110,7 +110,7 @@ http://xml.apache.org/xerces2-j/index.html
 xml-apis.jar
 xercesImpl.jar
 
-Struts 1.2.4:
+Struts 1.2.7:
 http://struts.apache.org
 struts.jar
 
@@ -137,11 +137,10 @@ jboss-j2ee.jar
 
 Commons:
 http://jakarta.apache.org/commons       
-commons-logging.jar (from Struts 1.2.4 release)
-commons-collections.jar (from Struts 1.2.4 release)
-commons-beanutils.jar (from Struts 1.2.4 release)
-commons-digester.jar (from Struts 1.2.4 release)
-commons-validator.jar (from Struts 1.2.4 release)
+commons-logging.jar (from Struts 1.2.7 release)
+commons-beanutils.jar (from Struts 1.2.7 release)
+commons-digester.jar (from Struts 1.2.7 release)
+commons-validator.jar (from Struts 1.2.7 release)
 
 MockEJB 0.6 beta2:
 http://mockejb.sourceforge.net

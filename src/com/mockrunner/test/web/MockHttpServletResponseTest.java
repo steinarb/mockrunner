@@ -61,6 +61,26 @@ public class MockHttpServletResponseTest extends TestCase
         assertTrue(headerNames.contains("testHeader3"));
     }
     
+    public void testHeadersCaseInsensitive()
+    {
+        response.addHeader("testHeader", "xyz");
+        response.addHeader("TESTHeader", "abc");
+        response.addHeader("MYHEADER1", "xyz");
+        response.addHeader("myHeader2", "abc");
+        assertEquals("xyz", response.getHeader("myheader1"));
+        assertEquals("abc", response.getHeader("MYHEADER2"));
+        Enumeration headers = response.getHeaderNames();
+        List headerNames = new ArrayList();
+        while(headers.hasMoreElements())
+        {
+            headerNames.add(headers.nextElement());
+        }
+        assertEquals(3, headerNames.size());
+        assertTrue(headerNames.contains("testHeader"));
+        assertTrue(headerNames.contains("MYHEADER1"));
+        assertTrue(headerNames.contains("myHeader2"));
+    }
+    
     public void testOutputStreams() throws IOException
     {
         response.getOutputStream().print("test");
