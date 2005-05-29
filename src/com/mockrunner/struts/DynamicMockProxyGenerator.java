@@ -12,6 +12,9 @@ import net.sf.cglib.proxy.MethodProxy;
 
 import com.mockrunner.util.common.MethodUtil;
 
+/**
+ * Helper class to generate CGLib proxies. Not meant for application use.
+ */
 public class DynamicMockProxyGenerator
 {
     private Class proxiedClass;
