@@ -37,6 +37,7 @@ public class AllWebTests
         suite.addTest(new TestSuite(BasicServletTestCaseAdapterTest.class));
         suite.addTest(new TestSuite(BasicTagTestCaseAdapterTest.class));
         suite.addTest(new TestSuite(DynamicMockProxyGeneratorTest.class));
+        suite.addTest(new TestSuite(ActionMappingProxyGeneratorTest.class));
         //$JUnit-END$
         return suite;
     }
