@@ -142,7 +142,8 @@ public class ActionTestModuleTest extends BaseTestCase
         assertTrue(module.hasActionMessages());
         assertSame(theMessages2, module.getActionMessages());
         module.setRecognizeMessagesInSession(true);
-        assertSame(theMessages2, module.getActionMessages());
+        ActionMessages messages =  module.getActionMessages();
+        assertEquals(4, messages.size());
         module.setActionMessages(null);
         assertSame(theMessages1, module.getActionMessages());
     }
@@ -160,9 +161,64 @@ public class ActionTestModuleTest extends BaseTestCase
         assertTrue(module.hasActionErrors());
         assertSame(theErrors2, module.getActionErrors());
         module.setRecognizeMessagesInSession(true);
-        assertSame(theErrors2, module.getActionErrors());
+        ActionMessages errors =  module.getActionErrors();
+        assertEquals(6, errors.size());
         module.setActionErrors(null);
         assertSame(theErrors1, module.getActionErrors());
+    }
+    
+    public void testGetActionMessagesInRequestAndSession()
+    {
+        ActionMessages theMessages1 = createTestActionMessages();
+        ActionMessages theMessages2 = new ActionMessages();
+        ActionMessage message1 = new ActionMessage("key3");
+        ActionMessage message2 = new ActionMessage("key4", new String[]{"value1" , "value2"});
+        theMessages2.add("abc", message1);
+        theMessages2.add(ActionMessages.GLOBAL_MESSAGE, message2);
+        module.setActionMessages(theMessages1);
+        module.setActionMessagesToSession(theMessages2);
+        module.verifyNumberActionMessages(4);
+        module.verifyActionMessagePresent("key1");
+        module.verifyActionMessagePresent("key2");
+        module.verifyActionMessagePresent("key3");
+        module.verifyActionMessagePresent("key4");
+        module.verifyActionMessageNotPresent("key5");
+        module.verifyActionMessageValues("key2", new String[]{"value1" , "value2"});
+        module.verifyActionMessageValues("key4", new String[]{"value1" , "value2"});
+        module.verifyActionMessageProperty("key3", "abc");
+        module.setRecognizeMessagesInSession(false);
+        module.verifyNumberActionMessages(2);
+        module.verifyActionMessagePresent("key1");
+        module.verifyActionMessagePresent("key2");
+        module.verifyActionMessageNotPresent("key3");
+    }
+    
+    public void testGetActionErrosInRequestAndSession()
+    {
+        ActionErrors theErrors1 = createTestActionErrors();
+        ActionErrors theErrors2 = new ActionErrors();
+        ActionError error1 = new ActionError("key4");
+        ActionMessage error2 = new ActionMessage("key5", new String[]{"value1" , "value2"});
+        theErrors2.add(ActionErrors.GLOBAL_ERROR, error1);
+        theErrors2.add("abc", error2);
+        module.setActionErrors(theErrors1);
+        module.setActionErrorsToSession(theErrors2);
+        module.verifyNumberActionErrors(5);
+        module.verifyActionErrorPresent("key1");
+        module.verifyActionErrorPresent("key2");
+        module.verifyActionErrorPresent("key3");
+        module.verifyActionErrorPresent("key4");
+        module.verifyActionErrorPresent("key5");
+        module.verifyActionErrorNotPresent("key6");
+        module.verifyActionErrorValues("key2", new String[]{"value1" , "value2"});
+        module.verifyActionErrorValues("key5", new String[]{"value1" , "value2"});
+        module.verifyActionErrorProperty("key5", "abc");
+        module.setRecognizeMessagesInSession(false);
+        module.verifyNumberActionErrors(3);
+        module.verifyActionErrorPresent("key1");
+        module.verifyActionErrorPresent("key2");
+        module.verifyActionErrorPresent("key3");
+        module.verifyActionErrorNotPresent("key4");
     }
     
     public void testSetMessageAttributeKey()
@@ -178,7 +234,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertSame(otherMessages, getActionMockObjectFactory().getMockRequest().getAttribute("mymessages"));
         module.setActionMessagesToSession(otherMessages);
         assertSame(otherMessages, getActionMockObjectFactory().getMockSession().getAttribute("mymessages"));
-        assertSame(otherMessages, module.getActionMessages());
+        assertEquals(4, module.getActionMessages().size());
         module.verifyActionMessagePresent("key1");
         module.verifyActionMessageNotPresent("key3");
         module.setMessageAttributeKey("test");
@@ -195,8 +251,8 @@ public class ActionTestModuleTest extends BaseTestCase
         }
         module.setMessageAttributeKey("mymessages");
         module.verifyHasActionMessages();
-        module.verifyActionMessages(new String[]{"key1", "key2"});
-        module.verifyNumberActionMessages(2);
+        module.verifyActionMessages(new String[]{"key1", "key2", "key1", "key2"});
+        module.verifyNumberActionMessages(4);
         module.verifyActionMessageValues("key2", new String[]{"value1", "value2"});
     }
     
@@ -213,7 +269,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertSame(otherErrors, getActionMockObjectFactory().getMockRequest().getAttribute("othereerrors"));
         module.setActionErrorsToSession(otherErrors);
         assertSame(otherErrors, getActionMockObjectFactory().getMockSession().getAttribute("othereerrors"));
-        assertSame(otherErrors, module.getActionErrors());
+        assertEquals(6, module.getActionErrors().size());
         module.verifyActionErrorPresent("key2");
         module.verifyActionErrorNotPresent("key4");
         module.setErrorAttributeKey("test");
@@ -230,8 +286,10 @@ public class ActionTestModuleTest extends BaseTestCase
         }
         module.setErrorAttributeKey("othereerrors");
         module.verifyHasActionErrors();
-        module.verifyActionErrors(new String[]{"key1", "key2", "key3"});
-        module.verifyNumberActionErrors(3);
+        module.verifyActionErrorPresent("key1");
+        module.verifyActionErrorPresent("key2");
+        module.verifyActionErrorPresent("key3");
+        module.verifyNumberActionErrors(6);
         module.verifyActionErrorValues("key3", new String[]{"value"});
     }
     
@@ -593,7 +651,7 @@ public class ActionTestModuleTest extends BaseTestCase
     {
         ActionMessages messages = new ActionMessages();
         ActionMessage message1 = new ActionMessage("message1");
-        ActionMessage message2 = new ActionMessage("message2"); 
+        ActionMessage message2 = new ActionMessage("message2");
         messages.add("property", message1);
         messages.add("property", message2);
         module.setActionMessages(messages);

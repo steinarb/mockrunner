@@ -728,20 +728,24 @@ public class ActionTestModule extends HTMLOutputModule
     /**
      * Get the currently present action messages. Can be called
      * after {@link #actionPerform} to get the messages the action
-     * has set. This method checks the request first. If there are 
-     * no messages in the request and messages in the session should 
-     * be recognized (use {@link #setRecognizeMessagesInSession}), it checks
-     * the session next.
+     * has set. If messages in the session are recognized 
+     * (use {@link #setRecognizeMessagesInSession}), this method
+     * returns the union of request and session messages. Otherwise,
+     * it only returns request messages.
      * @return the action messages
      */
     public ActionMessages getActionMessages()
     {
-        ActionMessages messages = getActionMessagesFromRequest();
-        if(null == messages && recognizeInSession)
+        ActionMessages requestMessages = getActionMessagesFromRequest();
+        ActionMessages sessionMessages = getActionMessagesFromSession();
+        if(recognizeInSession)
         {
-            messages = getActionMessagesFromSession();
+            if(null == requestMessages) return sessionMessages;
+            if(null == sessionMessages) return requestMessages;
+            requestMessages = new ActionMessages(requestMessages);
+            requestMessages.add(sessionMessages);
         }
-        return messages;
+        return requestMessages;
     }
     
     /**
@@ -795,20 +799,24 @@ public class ActionTestModule extends HTMLOutputModule
     /**
      * Get the currently present action errors. Can be called
      * after {@link #actionPerform} to get the errors the action
-     * has set. This method checks the request first. If there are 
-     * no errors in the request and messages in the session should 
-     * be recognized (use {@link #setRecognizeMessagesInSession}), it checks
-     * the session next.
+     * has set. If messages in the session are recognized 
+     * (use {@link #setRecognizeMessagesInSession}), this method
+     * returns the union of request and session errors. Otherwise,
+     * it only returns request errors.
      * @return the action errors
      */
     public ActionMessages getActionErrors()
     {
-        ActionMessages errors = getActionErrorsFromRequest();
-        if(null == errors && recognizeInSession)
+        ActionMessages requestErrors = getActionErrorsFromRequest();
+        ActionMessages sessionErrors = getActionErrorsFromSession();
+        if(recognizeInSession)
         {
-            errors = getActionErrorsFromSession();
+            if(null == requestErrors) return sessionErrors;
+            if(null == sessionErrors) return requestErrors;
+            requestErrors = new ActionMessages(requestErrors);
+            requestErrors.add(sessionErrors);
         }
-        return errors;
+        return requestErrors;
     }
     
     /**
