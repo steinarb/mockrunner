@@ -731,7 +731,7 @@ public class ActionTestModule extends HTMLOutputModule
      * has set. If messages in the session are recognized 
      * (use {@link #setRecognizeMessagesInSession}), this method
      * returns the union of request and session messages. Otherwise,
-     * it only returns request messages.
+     * it only returns the request messages.
      * @return the action messages
      */
     public ActionMessages getActionMessages()
@@ -802,7 +802,7 @@ public class ActionTestModule extends HTMLOutputModule
      * has set. If messages in the session are recognized 
      * (use {@link #setRecognizeMessagesInSession}), this method
      * returns the union of request and session errors. Otherwise,
-     * it only returns request errors.
+     * it only returns the request errors.
      * @return the action errors
      */
     public ActionMessages getActionErrors()
