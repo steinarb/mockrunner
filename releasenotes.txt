@@ -1,6 +1,8 @@
 
 mockrunner-0.3.6:
 
+- changed ActionTestModule.getActionMessages() and ActionTestModule.getActionErrors
+  to return the union of request and session messages. Check out migratingfrom0.3.5.txt
 - JDBC test framework now supports generated keys using getGeneratedKeys()
 - CallableStatement out parameters are now returned only if the statement
   has been executed

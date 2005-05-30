@@ -1,3 +1,9 @@
+As of version 0.3.6 the semantics of the methods getActionErrors and getActionMessages
+in ActionTestModule have been changed to return the union of request and session errors.
+In older versions, these methods only returned request messages or session messages, which
+caused many of the verify methods to behave strange if both, messages in request and
+session, were used.
+
 Beginning with version 0.3.5, the mock objects for struts are created in a subclass
 of WebMockObjectFactory named ActionMockObjectFactory (WebMockObjectFactory
 is now independent from Struts). This causes some incompatibilities with
