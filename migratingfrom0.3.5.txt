@@ -1,8 +1,7 @@
 As of version 0.3.6 and the upgrade to Struts 1.2.7 the semantics of the methods 
 getActionErrors and getActionMessages in ActionTestModule have been changed to 
 return the union of request and session errors. In older versions, these methods 
-only returned request messages or session messages, which caused many of the verify 
-methods to behave strange if both, messages in request and session, were used.
+only returned request messages or session messages.
 Please note that you are unaffected of this change if you do not store messages in
 the session or use Struts 1.1, which only stores messages in the request.
 
