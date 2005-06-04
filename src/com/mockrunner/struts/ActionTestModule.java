@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.ValidatorResources;
 import org.apache.struts.Globals;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMessage;
@@ -740,8 +741,8 @@ public class ActionTestModule extends HTMLOutputModule
         ActionMessages sessionMessages = getActionMessagesFromSession();
         if(recognizeInSession)
         {
-            if(null == requestMessages) return sessionMessages;
-            if(null == sessionMessages) return requestMessages;
+            if(null == requestMessages || requestMessages.isEmpty()) return sessionMessages;
+            if(null == sessionMessages || sessionMessages.isEmpty()) return requestMessages;
             requestMessages = new ActionMessages(requestMessages);
             requestMessages.add(sessionMessages);
         }
@@ -811,9 +812,18 @@ public class ActionTestModule extends HTMLOutputModule
         ActionMessages sessionErrors = getActionErrorsFromSession();
         if(recognizeInSession)
         {
-            if(null == requestErrors) return sessionErrors;
-            if(null == sessionErrors) return requestErrors;
-            requestErrors = new ActionMessages(requestErrors);
+            if(null == requestErrors || requestErrors.isEmpty()) return sessionErrors;
+            if(null == sessionErrors || sessionErrors.isEmpty()) return requestErrors;
+            if((requestErrors instanceof ActionErrors) || (sessionErrors instanceof ActionErrors))
+            {
+                ActionErrors tempErrors = new ActionErrors();
+                tempErrors.add(requestErrors);
+                requestErrors = tempErrors;
+            }
+            else
+            {
+                requestErrors = new ActionMessages(requestErrors);
+            }
             requestErrors.add(sessionErrors);
         }
         return requestErrors;

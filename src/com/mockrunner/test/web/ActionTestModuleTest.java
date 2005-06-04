@@ -129,7 +129,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertEquals("value2", message.getValues()[1]);
     }
     
-    public void testGetActionMessagesInSession()
+    public void testGetActionMessages()
     {
         assertFalse(module.hasActionMessages());
         ActionMessages theMessages1 = createTestActionMessages();
@@ -146,9 +146,14 @@ public class ActionTestModuleTest extends BaseTestCase
         assertEquals(4, messages.size());
         module.setActionMessages(null);
         assertSame(theMessages1, module.getActionMessages());
+        module.setActionMessages(new ActionMessages());
+        assertSame(theMessages1, module.getActionMessages());
+        module.setActionMessagesToSession(new ActionMessages());
+        module.setActionMessages(theMessages1);
+        assertSame(theMessages1, module.getActionMessages());
     }
     
-    public void testGetActionErrorsInSession()
+    public void testGetActionErrors()
     {
         assertFalse(module.hasActionErrors());
         ActionErrors theErrors1 = createTestActionErrors();
@@ -165,9 +170,14 @@ public class ActionTestModuleTest extends BaseTestCase
         assertEquals(6, errors.size());
         module.setActionErrors(null);
         assertSame(theErrors1, module.getActionErrors());
+        module.setActionErrors(new ActionErrors());
+        assertSame(theErrors1, module.getActionErrors());
+        module.setActionErrorsToSession(new ActionMessages());
+        module.setActionErrors(theErrors1);
+        assertSame(theErrors1, module.getActionErrors());
     }
     
-    public void testGetActionMessagesInRequestAndSession()
+    public void testActionMessagesInRequestAndSession()
     {
         ActionMessages theMessages1 = createTestActionMessages();
         ActionMessages theMessages2 = new ActionMessages();
@@ -193,7 +203,7 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyActionMessageNotPresent("key3");
     }
     
-    public void testGetActionErrosInRequestAndSession()
+    public void testActionErrorsInRequestAndSession()
     {
         ActionErrors theErrors1 = createTestActionErrors();
         ActionErrors theErrors2 = new ActionErrors();
@@ -219,6 +229,19 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyActionErrorPresent("key2");
         module.verifyActionErrorPresent("key3");
         module.verifyActionErrorNotPresent("key4");
+    }
+    
+    public void testActionErrorsInRequestAndSessionInstance()
+    {
+        module.setActionErrors(createTestActionMessages());
+        module.setActionErrorsToSession(createTestActionMessages());
+        assertTrue(module.getActionErrors() instanceof ActionMessages);
+        module.setActionErrors(createTestActionErrors());
+        assertTrue(module.getActionErrors() instanceof ActionErrors);
+        module.setActionErrorsToSession(createTestActionErrors());
+        assertTrue(module.getActionErrors() instanceof ActionErrors);
+        module.setActionErrors(createTestActionMessages());
+        assertTrue(module.getActionErrors() instanceof ActionErrors);
     }
     
     public void testSetMessageAttributeKey()
