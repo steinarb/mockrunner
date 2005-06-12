@@ -186,6 +186,10 @@ Ant 1.6.2:
 http://ant.apache.org
 ant.jar
 
+You can also get Mockrunner from CVS to have everything in place including
+a build script:
+:pserver:anonymous@cvs.sourceforge.net:/cvsroot/mockrunner
+
 IMPORTANT NOTE: In order to fix problems with JUnits TestCaseClassLoader, all
 Mockrunner jar files contain an excluded.properties file including all org.apache,
 com.mockrunner and org.mockejb classes. If you are facing classloading problems,
