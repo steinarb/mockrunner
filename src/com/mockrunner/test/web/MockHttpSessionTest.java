@@ -4,12 +4,22 @@ import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
-import com.mockrunner.mock.web.MockHttpSession;
-
 import junit.framework.TestCase;
+
+import com.mockrunner.mock.web.MockHttpSession;
 
 public class MockHttpSessionTest extends TestCase
 {
+    public void testResetAll() throws Exception
+    {
+        MockHttpSession session = new MockHttpSession();
+        session.setAttribute("key", "value");
+        session.setMaxInactiveInterval(3);
+        session.resetAll();
+        assertNull(session.getAttribute("key"));
+        assertEquals(-1, session.getMaxInactiveInterval());
+    }
+    
     public void testBindingListenerInvalidate()
     {
         MockHttpSession session = new MockHttpSession();

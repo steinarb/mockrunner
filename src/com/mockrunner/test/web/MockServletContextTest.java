@@ -23,6 +23,18 @@ import com.mockrunner.util.common.StreamUtil;
 
 public class MockServletContextTest extends TestCase
 {
+    public void testResetAll() throws Exception
+    {
+        MockServletContext context = new MockServletContext();
+        context.setAttribute("key", "value");
+        context.addResourcePaths("path", new ArrayList());
+        context.setResource("path", new URL("file://test"));
+        context.resetAll();
+        assertNull(context.getAttribute("key"));
+        assertNull(context.getResourcePaths("path"));
+        assertNull(context.getResource("path"));
+    }
+    
     public void testResources() throws Exception
     {
         MockServletContext context = new MockServletContext();
@@ -166,7 +178,10 @@ public class MockServletContextTest extends TestCase
         
         assertEquals(3, context.getRequestDispatcherMap().size());
         assertTrue(context.getRequestDispatcherMap().containsKey(rdPath3));
-        assertSame(rd3, context.getRequestDispatcherMap().get(rdPath3));                          
+        assertSame(rd3, context.getRequestDispatcherMap().get(rdPath3));
+        
+        context.clearRequestDispatcherMap();
+        assertEquals(0, context.getRequestDispatcherMap().size());
     }
     
     public void testSetResourceAsStream() throws Exception

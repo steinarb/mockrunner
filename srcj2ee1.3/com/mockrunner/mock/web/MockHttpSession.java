@@ -31,6 +31,14 @@ public class MockHttpSession implements HttpSession
 
     public MockHttpSession()
     {
+        resetAll();
+    }
+    
+    /**
+     * Resets the state of this object to the default values
+     */
+    public synchronized void resetAll()
+    {
         attributes = new HashMap();
         isValid = true;
         creationTime = System.currentTimeMillis();
@@ -38,7 +46,7 @@ public class MockHttpSession implements HttpSession
         maxInactiveInterval = -1;
         attributeListener = new ArrayList();
     }
-    
+
     public synchronized void addAttributeListener(HttpSessionAttributeListener listener)
     {
         attributeListener.add(listener);

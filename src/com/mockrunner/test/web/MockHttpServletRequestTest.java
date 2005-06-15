@@ -31,6 +31,17 @@ public class MockHttpServletRequestTest extends TestCase
         request = new MockHttpServletRequest();
     }
     
+    public void testResetAll() throws Exception
+    {
+        request.setAttribute("key", "value");
+        request.addHeader("header", "headervalue");
+        request.setContentLength(5);
+        request.resetAll();
+        assertNull(request.getAttribute("key"));
+        assertNull(request.getHeader("header"));
+        assertEquals(-1, request.getContentLength());
+    }
+    
     public void testAttributeListenerCalled()
     {
         TestAttributeListener listener1 = new TestAttributeListener();
@@ -157,6 +168,9 @@ public class MockHttpServletRequestTest extends TestCase
         {
             //should throw exception
         }
+        request.clearHeaders();
+        headers = request.getHeaderNames();
+        assertFalse(headers.hasMoreElements());
     }
     
     public void testHeadersCaseInsensitive()
@@ -255,7 +269,10 @@ public class MockHttpServletRequestTest extends TestCase
         
         assertEquals(3, request.getRequestDispatcherMap().size());
         assertTrue(request.getRequestDispatcherMap().containsKey(rdPath3));
-        assertSame(rd3, request.getRequestDispatcherMap().get(rdPath3));                          
+        assertSame(rd3, request.getRequestDispatcherMap().get(rdPath3));
+        
+        request.clearRequestDispatcherMap();
+        assertEquals(0, request.getRequestDispatcherMap().size());
     }
     
     public void testSessionCreation() throws Exception

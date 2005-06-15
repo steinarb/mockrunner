@@ -41,6 +41,11 @@ public class MockServletConfig implements ServletConfig
     {
         this.servletContext = servletContext;
     }
+    
+    public synchronized void clearInitParameters()
+    {
+        initParameters.clear();
+    }
 
     public synchronized String getInitParameter(String name)
     {
