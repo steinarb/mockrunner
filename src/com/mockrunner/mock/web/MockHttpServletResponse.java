@@ -40,6 +40,14 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public MockHttpServletResponse()
     {
+        resetAll();
+    }
+
+    /**
+     * Resets the state of this object to the default values
+     */
+    public void resetAll()
+    {
         headers = new CaseAwareMap();
         characterEncoding = "ISO-8859-1";
         bufferSize = 8192;
@@ -212,16 +220,23 @@ public class MockHttpServletResponse implements HttpServletResponse
     {
         return false;
     }
-
+    
     public void reset()
     {
-        headers.clear();
+        errorCode = SC_OK;
+        statusCode = SC_OK;
+        clearHeaders();
         resetBuffer();
     }
 
     public void resetBuffer()
     {
         outputStream.clearContent();
+    }
+    
+    public void clearHeaders()
+    {
+        headers.clear();
     }
 
     public void setBufferSize(int size)

@@ -72,6 +72,14 @@ public class MockHttpServletRequest implements HttpServletRequest
     
     public MockHttpServletRequest()
     {
+        resetAll();
+    }
+
+    /**
+     * Resets the state of this object to the default values
+     */
+    public void resetAll()
+    {
         attributes = new HashMap();
         parameters = new HashMap();
         locales = new Vector();
@@ -95,7 +103,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         sessionCreated = false;
         //attributeListener = new ArrayList();
     }
-    
+
     /*public void addAttributeListener(ServletRequestAttributeListener listener)
     {
         attributeListener.add(listener);
@@ -214,6 +222,14 @@ public class MockHttpServletRequest implements HttpServletRequest
     }
     
     /**
+     * Clears the map of <code>RequestDispatcher</code> objects. 
+     */
+    public void clearRequestDispatcherMap()
+    {
+        requestDispatchers.clear();
+    }
+    
+    /**
      * Sets a <code>RequestDispatcher</code> that will be returned when calling
      * {@link #getRequestDispatcher} with the specified path. If no <code>RequestDispatcher</code>
      * is set for the specified path, {@link #getRequestDispatcher} automatically creates a
@@ -328,6 +344,11 @@ public class MockHttpServletRequest implements HttpServletRequest
         List valueList = new ArrayList();
         headers.put(key, valueList);
         valueList.add(value);
+    }
+    
+    public void clearHeaders()
+    {
+        headers.clear();
     }
     
     public String getContextPath()

@@ -44,6 +44,14 @@ public class MockServletContext implements ServletContext
     
     public MockServletContext()
     {
+        resetAll();
+    }
+    
+    /**
+     * Resets the state of this object to the default values
+     */
+    public synchronized void resetAll()
+    {
         attributes = new HashMap();
         requestDispatchers = new HashMap();
         subContexts = new HashMap();
@@ -55,7 +63,7 @@ public class MockServletContext implements ServletContext
         resourceStreams = new HashMap();
         attributeListener = new ArrayList();
     }
-    
+
     public synchronized void addAttributeListener(ServletContextAttributeListener listener)
     {
         attributeListener.add(listener);
@@ -121,6 +129,14 @@ public class MockServletContext implements ServletContext
     }
     
     /**
+     * Clears the map of <code>RequestDispatcher</code> objects. 
+     */
+    public synchronized void clearRequestDispatcherMap()
+    {
+        requestDispatchers.clear();
+    }
+    
+    /**
      * Sets a <code>RequestDispatcher</code> that will be returned when calling
      * {@link #getRequestDispatcher} or {@link #getNamedDispatcher}
      * with the specified path or name.
@@ -147,6 +163,11 @@ public class MockServletContext implements ServletContext
     public synchronized void setContext(String url, ServletContext context)
     {
         subContexts.put(url, context);
+    }
+    
+    public synchronized void clearInitParameters()
+    {
+        initParameters.clear();
     }
 
     public synchronized String getInitParameter(String name)

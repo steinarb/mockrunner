@@ -8,6 +8,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.mockrunner.mock.web.MockHttpServletResponse;
 import com.mockrunner.mock.web.MockServletOutputStream;
 import com.mockrunner.mock.web.WebConstants;
@@ -22,6 +24,17 @@ public class MockHttpServletResponseTest extends TestCase
     {
         super.setUp();
         response = new MockHttpServletResponse();
+    }
+    
+    public void testResetAll() throws Exception
+    {
+        response.addHeader("header", "headervalue");
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+        response.setBufferSize(10);
+        response.resetAll();
+        assertNull(response.getHeader("header"));
+        assertEquals(8192, response.getBufferSize());
+        assertFalse(response.wasErrorSent());
     }
     
     public void testHeaders()
@@ -41,6 +54,9 @@ public class MockHttpServletResponseTest extends TestCase
         assertEquals(expectedDateString, response.getHeader("dateHeader"));
         response.addIntHeader("intHeader", 0);
         assertEquals("0", response.getHeader("intHeader"));
+        response.clearHeaders();
+        Enumeration headers = response.getHeaderNames();
+        assertFalse(headers.hasMoreElements());
     }
     
     public void testGetHeaderNames()
