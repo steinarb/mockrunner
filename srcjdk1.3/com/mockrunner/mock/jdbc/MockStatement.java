@@ -85,11 +85,13 @@ public class MockStatement implements Statement
     
     protected void setNextResultSet(ResultSet resultSet)
     {
+        this.nextUpdateCount = -1;
         this.nextResultSet = resultSet;
     }
     
     protected void setNextUpdateCount(int updateCount)
     {
+        this.nextResultSet = null;
         this.nextUpdateCount = updateCount;
     }
     
@@ -298,21 +300,22 @@ public class MockStatement implements Statement
 
     public ResultSet getResultSet() throws SQLException
     {
-        ResultSet tempResultSet = nextResultSet;
-        nextResultSet = null;
-        return tempResultSet;
+        return nextResultSet;
     }
 
     public int getUpdateCount() throws SQLException
     {
-        int tempUpdateCount = nextUpdateCount;
-        nextUpdateCount = -1;
-        return tempUpdateCount;
+        return nextUpdateCount;
     }
 
     public boolean getMoreResults() throws SQLException
     {
-        if(null != nextResultSet) return true;
+        if(null != nextResultSet)
+        {
+            nextResultSet.close();
+        }
+        nextResultSet = null;
+        nextUpdateCount = -1;
         return false;
     }
 
