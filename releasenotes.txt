@@ -5,6 +5,9 @@ mockrunner-0.3.6:
   to return the union of request and session messages. Check out migratingfrom0.3.5.txt
 - added resetAll() methods to web mock objects
 - JDBC test framework now supports generated keys using getGeneratedKeys()
+- fixed bug regarding statement methods getMoreResults, getResultSet and getUpdateCount,
+  getMoreResults now returns false since Mockrunner does not support multiple
+  result sets and resets the current result set and update count
 - CallableStatement out parameters are now returned only if the statement
   has been executed
 - it's now possible to specify that only registered out parameters are returned

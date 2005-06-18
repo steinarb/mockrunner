@@ -713,17 +713,24 @@ public class MockStatementTest extends BaseTestCase
         assertNull(statement.getResultSet());
         assertEquals(-1, statement.getUpdateCount());
         statement.execute("select");
-        statement.executeUpdate("insert");
-        assertTrue(statement.getMoreResults());
-        assertEquals(resultSet1.getId(), ((MockResultSet)statement.getResultSet()).getId());
+        MockResultSet currentResult = (MockResultSet)statement.getResultSet();
+        assertEquals(resultSet1.getId(), currentResult.getId());
+        assertEquals(resultSet1.getId(), currentResult.getId());
+        assertEquals(-1, statement.getUpdateCount());
         assertFalse(statement.getMoreResults());
-        assertEquals(2, statement.getUpdateCount());
+        assertTrue(currentResult.isClosed());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
         assertEquals(-1, statement.getUpdateCount());
         statementHandler.prepareResultSet("select", resultSet2);
         statement.executeQuery("select");
-        assertTrue(statement.getMoreResults());
         assertNotNull(statement.getResultSet());
+        statement.executeUpdate("insert");
+        assertNull(statement.getResultSet());
+        assertEquals(2, statement.getUpdateCount());
+        assertEquals(2, statement.getUpdateCount());
         assertFalse(statement.getMoreResults());
+        assertEquals(-1, statement.getUpdateCount());
     }
     
     public void testGetMoreResultsPreparedStatement() throws Exception
@@ -733,17 +740,27 @@ public class MockStatementTest extends BaseTestCase
         MockPreparedStatement preparedStatement = (MockPreparedStatement)connection.prepareStatement("select");
         assertFalse(preparedStatement.getMoreResults());
         preparedStatement.execute();
-        assertTrue(preparedStatement.getMoreResults());
-        assertNotNull(preparedStatement.getResultSet());
+        MockResultSet currentResult = (MockResultSet)preparedStatement.getResultSet();
+        assertNotNull(currentResult);
+        assertFalse(preparedStatement.getMoreResults());
+        assertTrue(currentResult.isClosed());
+        assertNull(preparedStatement.getResultSet());
         assertFalse(preparedStatement.getMoreResults());
         preparedStatement = (MockPreparedStatement)connection.prepareStatement("insert");
         assertEquals(-1, preparedStatement.getUpdateCount());
         preparedStatement.executeUpdate();
         assertEquals(3, preparedStatement.getUpdateCount());
-        assertEquals(-1, preparedStatement.getUpdateCount());
-        preparedStatement.execute();
         assertEquals(3, preparedStatement.getUpdateCount());
+        assertFalse(preparedStatement.getMoreResults());
         assertEquals(-1, preparedStatement.getUpdateCount());
+        preparedStatementHandler.prepareResultSet("selectother", resultSet1);
+        preparedStatement.execute();
+        preparedStatement.execute("selectother");
+        assertEquals(-1, preparedStatement.getUpdateCount());
+        assertNotNull(preparedStatement.getResultSet());
+        assertFalse(preparedStatement.getMoreResults());
+        assertEquals(-1, preparedStatement.getUpdateCount());
+        assertNull(preparedStatement.getResultSet());
     }
     
     public void testGetMoreResultsCallableStatement() throws Exception
@@ -751,15 +768,31 @@ public class MockStatementTest extends BaseTestCase
         callableStatementHandler.prepareResultSet("select", resultSet1);
         callableStatementHandler.prepareUpdateCount("insert", 3);
         MockCallableStatement callableStatement = (MockCallableStatement)connection.prepareCall("select");
+        callableStatement.executeQuery();
+        MockResultSet currentResult = (MockResultSet)callableStatement.getResultSet();
+        assertNotNull(currentResult);
         assertFalse(callableStatement.getMoreResults(1));
+        assertTrue(currentResult.isClosed());
+        assertNull(callableStatement.getResultSet());
         callableStatement.execute("select");
-        assertTrue(callableStatement.getMoreResults(2));
         assertEquals(resultSet1.getId(), ((MockResultSet)callableStatement.getResultSet()).getId());
+        assertEquals(resultSet1.getId(), ((MockResultSet)callableStatement.getResultSet()).getId());
+        assertFalse(callableStatement.getMoreResults(1));
+        assertNull(callableStatement.getResultSet());
         assertFalse(callableStatement.getMoreResults(3));
         callableStatement = (MockCallableStatement)connection.prepareCall("insert");
         assertEquals(-1, callableStatement.getUpdateCount());
         callableStatement.executeUpdate();
         assertEquals(3, callableStatement.getUpdateCount());
+        assertEquals(3, callableStatement.getUpdateCount());
+        callableStatement.execute("select");
+        assertEquals(-1, callableStatement.getUpdateCount());
+        assertNotNull(callableStatement.getResultSet());
+        callableStatement.executeUpdate();
+        assertNull(callableStatement.getResultSet());
+        assertEquals(3, callableStatement.getUpdateCount());
+        assertFalse(callableStatement.getMoreResults());
+        assertNull(callableStatement.getResultSet());
         assertEquals(-1, callableStatement.getUpdateCount());
     }
     
