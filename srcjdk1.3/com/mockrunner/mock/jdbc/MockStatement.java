@@ -19,8 +19,8 @@ import com.mockrunner.jdbc.SQLUtil;
 public class MockStatement implements Statement
 {
     private AbstractResultSetHandler resultSetHandler;
-    private ResultSet nextResultSet = null;
-    private int nextUpdateCount = -1;
+    private ResultSet currentResultSet = null;
+    private int currentUpdateCount = -1;
     private List batches = new ArrayList();
     private String cursorName = "";
     private int querySeconds = 0;
@@ -83,16 +83,16 @@ public class MockStatement implements Statement
         this.resultSetHandler = resultSetHandler;
     }
     
-    protected void setNextResultSet(ResultSet resultSet)
+    protected void setResultSet(ResultSet resultSet)
     {
-        this.nextUpdateCount = -1;
-        this.nextResultSet = resultSet;
+        this.currentUpdateCount = -1;
+        this.currentResultSet = resultSet;
     }
     
-    protected void setNextUpdateCount(int updateCount)
+    protected void setUpdateCount(int updateCount)
     {
-        this.nextResultSet = null;
-        this.nextUpdateCount = updateCount;
+        this.currentResultSet = null;
+        this.currentUpdateCount = updateCount;
     }
     
     public String getCursorName()
@@ -112,12 +112,12 @@ public class MockStatement implements Statement
         {
             result = cloneResultSet(result);
             resultSetHandler.addReturnedResultSet(result);
-            setNextResultSet(result);
+            setResultSet(result);
             return result;
         }
         result = cloneResultSet(resultSetHandler.getGlobalResultSet());
         resultSetHandler.addReturnedResultSet(result);
-        setNextResultSet(result);
+        setResultSet(result);
         return result;
     }
 
@@ -132,11 +132,11 @@ public class MockStatement implements Statement
         if(null != returnValue)
         {
             int updateCount = returnValue.intValue();
-            setNextUpdateCount(updateCount);
+            setUpdateCount(updateCount);
             return updateCount;
         }
         int updateCount = resultSetHandler.getGlobalUpdateCount();
-        setNextUpdateCount(updateCount);
+        setUpdateCount(updateCount);
         return updateCount;
     }
     
@@ -300,22 +300,22 @@ public class MockStatement implements Statement
 
     public ResultSet getResultSet() throws SQLException
     {
-        return nextResultSet;
+        return currentResultSet;
     }
 
     public int getUpdateCount() throws SQLException
     {
-        return nextUpdateCount;
+        return currentUpdateCount;
     }
 
     public boolean getMoreResults() throws SQLException
     {
-        if(null != nextResultSet)
+        if(null != currentResultSet)
         {
-            nextResultSet.close();
+            currentResultSet.close();
         }
-        nextResultSet = null;
-        nextUpdateCount = -1;
+        currentResultSet = null;
+        currentUpdateCount = -1;
         return false;
     }
 

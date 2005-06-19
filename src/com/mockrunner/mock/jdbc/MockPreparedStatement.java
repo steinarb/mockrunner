@@ -156,7 +156,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             resultSetHandler.addExecutedStatement(getSQL());
             result = cloneResultSet(result);
             resultSetHandler.addReturnedResultSet(result);
-            setNextResultSet(result);
+            setResultSet(result);
             return result;
         }
         return super.executeQuery(getSQL());
@@ -183,7 +183,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         {
             resultSetHandler.addExecutedStatement(getSQL());
             int updateCountInt = updateCount.intValue();
-            setNextUpdateCount(updateCountInt);
+            setUpdateCount(updateCountInt);
             return updateCountInt;
         }
         return super.executeUpdate(getSQL());
