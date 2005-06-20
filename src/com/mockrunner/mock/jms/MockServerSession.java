@@ -8,8 +8,7 @@ import javax.jms.Session;
 /**
  * Mock implementation of JMS <code>ServerSession</code>.
  * The <code>ServerSession</code> is not meant for application
- * use. This simple implementation only returns a
- * {@link MockSession} when calling {@link #getSession}.
+ * use.
  */
 public class MockServerSession implements ServerSession
 {
