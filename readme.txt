@@ -59,8 +59,8 @@ environment in future releases.
 Mockrunner requires at least Java 1.3 to run. If you are using Java 1.3
 you have to use the jar files with "-jdk1.3" in their name. If a jar
 file doesn't have a corresponding "-jdk1.3"-version, it can be used with
-Java 1.3 and 1.4. The JDBCTestModule  is limited to JDBC API 2.1 if Java 1.3 
-is used. If you are running Java 1.4  you can use JDBC 3.0. 
+Java 1.3, 1.4 and 1.5. The JDBCTestModule  is limited to JDBC API 2.1 if Java 1.3 
+is used. If you are running Java 1.4 or 1.5 you can use JDBC 3.0. 
 Mockrunner supports J2EE 1.3 and J2EE 1.4. For J2EE 1.3 you have to use
 the jar files with "-j2ee1.3" in their name (these files are in lib/j2ee1.3
 directory). If a jar file doesn't have a corresponding "-j2ee1.3"-version, 
@@ -158,7 +158,7 @@ JDOM 1.0:
 http://www.jdom.org
 jdom.jar
 
-NekoHTML Parser 0.9.4:
+NekoHTML Parser 0.9.5:
 http://www.apache.org/~andyc/neko/doc/html/index.html
 nekohtml.jar
 
@@ -182,7 +182,7 @@ regexp 1.3:
 http://jakarta.apache.org/regexp
 jakarta-regexp-1.3.jar (from JarAnalyzer 0.9.3 release)
 
-Ant 1.6.2:
+Ant 1.6.4:
 http://ant.apache.org
 ant.jar
 
