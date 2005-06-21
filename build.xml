@@ -12,11 +12,11 @@
         </echo>
     </target>
 
-    <target name="checkJDK1.4" unless="java1.4.home">
+    <target name="checkJDK1.5" unless="java1.5.home">
         <fail>
-         Property "java1.4.home" not set. Please create a file
-         ".ant.properties" in this directory and set "java1.4.home"
-         to your JDK1.4 installation.
+         Property "java1.5.home" not set. Please create a file
+         ".ant.properties" in this directory and set "java1.5.home"
+         to your JDK1.5 installation.
         </fail>
     </target>
     
@@ -46,7 +46,7 @@
             </and>
         </condition>
         <antcall target="checkJDK1.3" />
-        <antcall target="checkJDK1.4" />
+        <antcall target="checkJDK1.5" />
         <antcall target="checkBuildJ2EE1.3" />
         <antcall target="checkJava2HTML" />
     </target>
@@ -192,7 +192,7 @@
 
     <target name="compile" depends="init">
         <mkdir dir="${build}" />
-        <javac srcdir="${src}" destdir="${build}" executable="${java1.4.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+        <javac srcdir="${src}" destdir="${build}" source="1.3" target="1.2" executable="${java1.5.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
                 <path refid="classpath.jar" />
             </classpath>
@@ -202,7 +202,7 @@
     
     <target name="compilej2ee1.3">
         <mkdir dir="${buildj2ee1.3}" />
-        <javac destdir="${buildj2ee1.3}" executable="${java1.4.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+        <javac destdir="${buildj2ee1.3}" source="1.3" target="1.2" executable="${java1.5.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
                 <path refid="classpathj2ee1.3.jar" />
             </classpath>
@@ -224,7 +224,7 @@
 
     <target name="compilejdk1.3" if="java1.3.home" depends="init">
         <mkdir dir="${buildjdk1.3}" />
-        <javac destdir="${buildjdk1.3}" target="1.2" executable="${java1.3.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+        <javac destdir="${buildjdk1.3}" compiler="javac1.3" target="1.2" executable="${java1.3.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
                 <path refid="classpath.jar" />
             </classpath>
@@ -247,7 +247,7 @@
     
     <target name="compilejdk1.3j2ee1.3" if="dobuild.j2ee1.3">
         <mkdir dir="${buildjdk1.3j2ee1.3}" />
-        <javac destdir="${buildjdk1.3j2ee1.3}" target="1.2" executable="${java1.3.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+        <javac destdir="${buildjdk1.3j2ee1.3}" compiler="javac1.3" target="1.2" executable="${java1.3.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
                 <path refid="classpathj2ee1.3.jar" />
             </classpath>
@@ -269,49 +269,49 @@
     <target name="jars" depends="compile">
         <antcall target="jar">
             <param name="jarname" value="mockrunner.jar" />
-            <param name="jdkver" value="1.4" />
+            <param name="jdkver" value="1.4, 1.5" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-jms.jar" />
-            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="jdkver" value="1.3, 1.4, 1.5" />
             <param name="j2eever" value="1.3 and 1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="jms.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-ejb.jar" />
-            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="jdkver" value="1.3, 1.4, 1.5" />
             <param name="j2eever" value="1.3 and 1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="ejb.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-jdbc.jar" />
-            <param name="jdkver" value="1.4" />
+            <param name="jdkver" value="1.4, 1.5" />
             <param name="j2eever" value="1.3 and 1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="jdbc.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-servlet.jar" />
-            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="jdkver" value="1.3, 1.4, 1.5" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="servlet.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-tag.jar" />
-            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="jdkver" value="1.3, 1.4, 1.5" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="tag.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-struts.jar" />
-            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="jdkver" value="1.3, 1.4, 1.5" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="struts.jar.classes" />
@@ -322,28 +322,28 @@
     <target name="jarsj2ee1.3" if="dobuild.j2ee1.3">
         <antcall target="jar">
             <param name="jarname" value="mockrunner-j2ee1.3.jar" />
-            <param name="jdkver" value="1.4" />
+            <param name="jdkver" value="1.4, 1.5" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildj2ee1.3}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-servlet-j2ee1.3.jar" />
-            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="jdkver" value="1.3, 1.4, 1.5" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildj2ee1.3}" />
             <param name="jarpattern" value="servlet.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-tag-j2ee1.3.jar" />
-            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="jdkver" value="1.3, 1.4, 1.5" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildj2ee1.3}" />
             <param name="jarpattern" value="tag.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-struts-j2ee1.3.jar" />
-            <param name="jdkver" value="1.3 and 1.4" />
+            <param name="jdkver" value="1.3, 1.4, 1.5" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildj2ee1.3}" />
             <param name="jarpattern" value="struts.jar.classes" />
@@ -497,7 +497,13 @@
 
     <target name="javadoc" depends="init">
         <mkdir dir="${doc}/api" />
-        <javadoc destdir="${doc}/api" author="true" version="true" use="true" windowtitle="Mockrunner">
+        <javadoc destdir="${doc}/api" 
+                 source="1.3" 
+                 linksource="true" 
+                 author="true" 
+                 version="true" 
+                 use="true" 
+                 windowtitle="Mockrunner">
 
             <classpath>
                 <pathelement location="${build}" />
