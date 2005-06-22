@@ -127,8 +127,7 @@ public abstract class AbstractResultSetHandler
      * SQL statements. Irrelevant if <code>exactMatch</code> is
      * <code>true</code>. Default is <code>false</code>, i.e. you
      * cannot use regular expressions and matching is based
-     * on string comparison (which is much faster). Enable
-     * this feature only if necessary.
+     * on string comparison.
      * Please note that this method controls SQL statement
      * matching for prepared results and update counts, i.e. what
      * statements the tested application has to execute to receive

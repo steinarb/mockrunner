@@ -46,8 +46,7 @@ public class ConfigurationManager
     }
     
     /**
-     * Get if message selectors should be used or simply
-     * ignored while testing.
+     * Get if message selectors should be used.
      * @return <code>true</code> use message selectors,
      *         <code>false</code> ignore message selectors
      */
