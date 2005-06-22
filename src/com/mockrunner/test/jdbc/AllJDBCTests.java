@@ -28,6 +28,7 @@ public class AllJDBCTests
         suite.addTest(new TestSuite(ParameterUtilTest.class));
         suite.addTest(new TestSuite(XMLResultSetFactoryTest.class));
         suite.addTest(new TestSuite(BasicJDBCTestCaseAdapterTest.class));
+        suite.addTest(new TestSuite(PolyResultSetTest.class));
         //$JUnit-END$
         return suite;
     }
