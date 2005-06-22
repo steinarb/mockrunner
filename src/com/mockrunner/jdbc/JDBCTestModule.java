@@ -80,10 +80,9 @@ public class JDBCTestModule
      * SQL statements. Irrelevant if <code>exactMatch</code> is
      * <code>true</code>. Default is <code>false</code>, i.e. you
      * cannot use regular expressions and matching is based
-     * on string comparison (which is much faster). Enable
-     * this feature only if necessary.
+     * on string comparison.
      * Please note that this method controls SQL statement
-     * matching for this class, e.g. what statements the method
+     * matching for the methods of this class, e.g. what statements the method
      * {@link #getPreparedStatements(String)} returns or what statements
      * are taken into account by the method {@link #verifySQLStatementExecuted(String)}.
      * In contrast to {@link AbstractResultSetHandler#setUseRegularExpressions(boolean)} it does 
