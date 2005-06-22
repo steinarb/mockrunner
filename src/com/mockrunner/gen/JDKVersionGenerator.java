@@ -125,6 +125,19 @@ public class JDKVersionGenerator extends AbstractVersionGenerator
         jdbcTestModuleProc.addBlock("public void verifySavepointNotRolledBack(String name)");
         jdbcFiles.put("com.mockrunner.jdbc.JDBCTestModule", jdbcTestModuleProc);
         
+        JavaLineProcessor polyResultSetProc = new JavaLineProcessor();
+        polyResultSetProc.addBlock("public URL getURL(int columnIndex) throws SQLException");
+        polyResultSetProc.addBlock("public URL getURL(String columnName) throws SQLException");
+        polyResultSetProc.addBlock("public void updateRef(int columnIndex, Ref x) throws SQLException");
+        polyResultSetProc.addBlock("public void updateRef(String columnName, Ref x) throws SQLException");
+        polyResultSetProc.addBlock("public void updateBlob(int columnIndex, Blob x) throws SQLException");
+        polyResultSetProc.addBlock("public void updateBlob(String columnName, Blob x) throws SQLException");
+        polyResultSetProc.addBlock("public void updateClob(int columnIndex, Clob x) throws SQLException");
+        polyResultSetProc.addBlock("public void updateClob(String columnName, Clob x) throws SQLException");
+        polyResultSetProc.addBlock("public void updateArray(int columnIndex, Array x) throws SQLException");
+        polyResultSetProc.addBlock("public void updateArray(String columnName, Array x) throws SQLException");
+        jdbcFiles.put("com.mockrunner.mock.jdbc.PolyResultSet", polyResultSetProc);
+        
         jdbcFiles.put("com.mockrunner.mock.jdbc.MockSavepoint", new Boolean(false));
         jdbcFiles.put("com.mockrunner.mock.jdbc.MockParameterMetaData", new Boolean(false));
         

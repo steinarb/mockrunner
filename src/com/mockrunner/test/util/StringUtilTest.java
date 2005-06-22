@@ -9,6 +9,66 @@ import com.mockrunner.util.common.StringUtil;
 
 public class StringUtilTest extends TestCase
 {
+    public void testReplaceAll()
+    {
+        try
+        {
+            StringUtil.replaceAll(null, "test", "test");
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            StringUtil.replaceAll("test", null, "test");
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            StringUtil.replaceAll("test", "test", null);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            StringUtil.replaceAll("test", "", "test");
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        assertEquals("test", StringUtil.replaceAll("test", "test", "test"));
+        assertEquals("", StringUtil.replaceAll("", "test", "test"));
+        assertEquals("abcd", StringUtil.replaceAll("abcd", "test", "test"));
+        assertEquals("test", StringUtil.replaceAll("abcd", "abcd", "test"));
+        assertEquals("test", StringUtil.replaceAll("test", "testabc", "1"));
+        assertEquals("tfst", StringUtil.replaceAll("test", "e", "f"));
+        assertEquals("tft", StringUtil.replaceAll("test", "es", "f"));
+        assertEquals("", StringUtil.replaceAll("test", "test", ""));
+        assertEquals("hello world", StringUtil.replaceAll("test", "test", "hello world"));
+        assertEquals("hello worldhello world", StringUtil.replaceAll("testtest", "test", "hello world"));
+        assertEquals("ab123abkkjuuababab", StringUtil.replaceAll("a123akkjuuaaa", "a", "ab"));
+        assertEquals("aaaa", StringUtil.replaceAll("aaaaaaa", "aa", "a"));
+        assertEquals("this is a test", StringUtil.replaceAll("this is a xxxx", "xxxx", "test"));
+        assertEquals("aaaaa", StringUtil.replaceAll("aaaaa", "a", "a"));
+        assertEquals("bbbbb", StringUtil.replaceAll("aaaaa", "a", "b"));
+        assertEquals("bbbb", StringUtil.replaceAll("aabbaa", "aa", "b"));
+        assertEquals("Hella warld", StringUtil.replaceAll("Hello world", "o", "a"));
+        assertEquals("Hello world", StringUtil.replaceAll("a", "a", "Hello world"));
+        assertEquals("Hello world ", StringUtil.replaceAll("   ", "  ", "Hello world"));
+        assertEquals("aabc", StringUtil.replaceAll("abcdabc", "abcd", "a"));
+    }
+    
     public void testCompare()
     {
         assertEquals(-1, StringUtil.compare("", ""));

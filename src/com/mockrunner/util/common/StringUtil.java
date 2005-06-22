@@ -20,6 +20,39 @@ public class StringUtil
     private final static Log log = LogFactory.getLog(StringUtil.class);
     
     /**
+     * Replaces all occurrences of <code>match</code> in
+     * <code>source</code> with <code>replacement</code>.
+     * @param source the source string
+     * @param match the string that is searched
+     * @param replacement the replacement string
+     * @return the modified string
+     * @throws IllegalArgumentException if any argument is <code>null</code> or
+     *         if <code>match</code> is the empty string
+     */
+    public static String replaceAll(String source, String match, String replacement)
+    {
+        if(null == source || null == match || null == replacement)
+        {
+            throw new IllegalArgumentException("null strings not allowed");
+        }
+        if(match.length() <= 0)
+        {
+            throw new IllegalArgumentException("match must not be empty");
+        }
+        StringBuffer buffer = new StringBuffer(source.length() + 10);
+        int index = 0;
+        int newIndex = 0;
+        while((newIndex = source.indexOf(match, index)) >= 0)
+        {
+            buffer.append(source.substring(index, newIndex));
+            buffer.append(replacement);
+            index = newIndex + match.length();
+        }
+        buffer.append(source.substring(index));
+        return buffer.toString();
+    }
+    
+    /**
      * Compares two strings and returns the last
      * index where the two string are equal. If
      * the first characters of the two string do

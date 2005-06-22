@@ -4,16 +4,21 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+
+import com.mockrunner.util.common.StringUtil;
 
 /**
  * Mock implementation of <code>DatabaseMetaData</code>.
  */
 public class MockDatabaseMetaData implements DatabaseMetaData
 {
+    private boolean caseSensitive = false;
     private int databaseMajorVersion = 1;
     private int databaseMinorVersion = 0;
     private int defaultTransactionLevel = Connection.TRANSACTION_READ_COMMITTED;
@@ -179,6 +184,16 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     private Map tablesMap = new HashMap();
     private Map crossReferenceMap = new HashMap();
     
+    /**
+     * Set if matching of catalogs, schemas, tables and columns
+     * is case sensitive. Defaults to <code>false</code>.
+     * @param caseSensitive is matching case sensitive
+     */
+    public void setCaseSensitive(boolean caseSensitive)
+    {
+        this.caseSensitive = caseSensitive;
+    }
+
     public int getDatabaseMajorVersion() throws SQLException
     {
         return databaseMajorVersion;
@@ -1719,7 +1734,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     
     public ResultSet getProcedures(String catalog, String schemaPattern, String procedureNamePattern) throws SQLException
     {
-        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, procedureNamePattern);
+        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, procedureNamePattern, true, true);
         return findMatchingDatabaseIdentifier(expected, proceduresMap);
     }
     
@@ -1740,7 +1755,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     
     public ResultSet getSuperTables(String catalog, String schemaPattern, String tableNamePattern) throws SQLException
     {
-        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern);
+        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern, true, true);
         return findMatchingDatabaseIdentifier(expected, superTablesMap);
     }
     
@@ -1761,7 +1776,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     
     public ResultSet getSuperTypes(String catalog, String schemaPattern, String typeNamePattern) throws SQLException
     {
-        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, typeNamePattern);
+        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, typeNamePattern, true, true);
         return findMatchingDatabaseIdentifier(expected, superTypesMap);
     }
     
@@ -1782,7 +1797,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     
     public ResultSet getTablePrivileges(String catalog, String schemaPattern, String tableNamePattern) throws SQLException
     {
-        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern);
+        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern, true, true);
         return findMatchingDatabaseIdentifier(expected, tablePrivilegesMap);
     }
     
@@ -1866,7 +1881,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     
     public ResultSet getUDTs(String catalog, String schemaPattern, String typeNamePattern, int[] types) throws SQLException
     {
-        DatabaseIdentifier expected = new UDTDatabaseIdentifierImpl(catalog, schemaPattern, typeNamePattern, types);
+        DatabaseIdentifier expected = new UDTDatabaseIdentifierImpl(catalog, schemaPattern, typeNamePattern, true, true, types);
         return findMatchingDatabaseIdentifier(expected, udtsMap);
     }
     
@@ -1887,7 +1902,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     
     public ResultSet getAttributes(String catalog, String schemaPattern, String typeNamePattern, String attributeNamePattern) throws SQLException
     {
-        DatabaseIdentifier expected = new AttributesDatabaseIdentifierImpl(catalog, schemaPattern, typeNamePattern, attributeNamePattern);
+        DatabaseIdentifier expected = new AttributesDatabaseIdentifierImpl(catalog, schemaPattern, typeNamePattern, true, true, attributeNamePattern);
         return findMatchingDatabaseIdentifier(expected, attributesMap);
     }
     
@@ -1929,7 +1944,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     
     public ResultSet getColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) throws SQLException
     {
-        DatabaseIdentifier expected = new ColumnDatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern, columnNamePattern);
+        DatabaseIdentifier expected = new ColumnDatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern, true, true, columnNamePattern);
         return findMatchingDatabaseIdentifier(expected, columnsMap);
     }
     
@@ -1950,7 +1965,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     
     public ResultSet getProcedureColumns(String catalog, String schemaPattern, String procedureNamePattern, String columnNamePattern) throws SQLException
     {
-        DatabaseIdentifier expected = new ColumnDatabaseIdentifierImpl(catalog, schemaPattern, procedureNamePattern, columnNamePattern);
+        DatabaseIdentifier expected = new ColumnDatabaseIdentifierImpl(catalog, schemaPattern, procedureNamePattern, true, true, columnNamePattern);
         return findMatchingDatabaseIdentifier(expected, procedureColumnsMap);
     }
     
@@ -1971,7 +1986,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     
     public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) throws SQLException
     {
-        DatabaseIdentifier expected = new TableDatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern, types);
+        DatabaseIdentifier expected = new TableDatabaseIdentifierImpl(catalog, schemaPattern, true, true, tableNamePattern, types);
         return findMatchingDatabaseIdentifier(expected, tablesMap);
     }
     
@@ -2017,20 +2032,33 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         crossReferenceMap.clear();
     }
     
+    /*
+     * If there is only one matching DatabaseIdentifier, then return its
+     * ResultSet otherwise return a PolyResultSet with the ResultSet of each
+     * matching DatabaseIdentifier.
+     */
     private ResultSet findMatchingDatabaseIdentifier(DatabaseIdentifier expected, Map theMap)
     {
-        Iterator keys = theMap.keySet().iterator();
-        while(keys.hasNext())
+        List list = new ArrayList();
+        for(Iterator it = theMap.entrySet().iterator(); it.hasNext(); )
         {
-            DatabaseIdentifier next = (DatabaseIdentifier)keys.next();
-            if(next.isGlobal() || expected.equals(next)) return (ResultSet)theMap.get(next);
+            Map.Entry entry = (Map.Entry)it.next();
+            DatabaseIdentifier next = (DatabaseIdentifier)entry.getKey();
+            if(next.isGlobal() || expected.matches(next)) 
+            {
+                list.add(entry.getValue());
+            }
         }
-        return null;
+        if(list.isEmpty()) return null;
+        if(list.size() == 1) return (ResultSet)list.get(0);
+        return new PolyResultSet(list);
     }
     
     private interface DatabaseIdentifier
     {
         public boolean isGlobal();
+        
+        public boolean matches(DatabaseIdentifier other);
     }
     
     private class DatabaseIdentifierImpl implements DatabaseIdentifier
@@ -2039,6 +2067,8 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         private String catalog;
         private String schema;
         private String table;
+        private boolean useSchemaPattern;
+        private boolean useTablePattern;
         
         public DatabaseIdentifierImpl()
         {
@@ -2047,10 +2077,17 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         
         public DatabaseIdentifierImpl(String catalog, String schema, String table)
         {
+            this(catalog, schema, table, false, false);
+        }
+        
+        public DatabaseIdentifierImpl(String catalog, String schema, String table, boolean useSchemaPattern, boolean useTablePattern)
+        {
             isGlobal = false;
             this.catalog = catalog;
             this.schema = schema;
             this.table = table;
+            this.useSchemaPattern = useSchemaPattern;
+            this.useTablePattern = useTablePattern;
         }
         
         public String getCatalog()
@@ -2073,6 +2110,79 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return table;
         }
         
+        protected String convert(String name) 
+        {
+            if(name.indexOf('%') != -1) 
+            {
+                name = StringUtil.replaceAll(name, "%", ".*");
+            }
+            if(name.indexOf('_') != -1) 
+            {
+                name = StringUtil.replaceAll(name, "_", ".");
+            }
+            return name;
+        }
+        
+        public boolean matches(DatabaseIdentifier object) 
+        {
+            if(null == object) return false;
+            if(!(object instanceof DatabaseIdentifierImpl)) return false;
+            DatabaseIdentifierImpl other = (DatabaseIdentifierImpl)object;
+            if(isGlobal != other.isGlobal()) return false;
+            if(!matchesCatalog(other)) return false;
+            if(!matchesSchema(other)) return false;
+            return matchesTable(other);
+        }
+        
+        private boolean matchesCatalog(DatabaseIdentifierImpl other)
+        {
+            if(null == getCatalog()) return true;
+            if(catalog.length() == 0) 
+            {
+                return (other.getCatalog() == null) || (other.getCatalog().length() == 0);
+            } 
+            else 
+            {
+                if(other.getCatalog() == null) return false;
+                return StringUtil.matchesExact(other.getCatalog(), catalog, caseSensitive);
+            }
+        }
+        
+        private boolean matchesSchema(DatabaseIdentifierImpl other)
+        {
+            if(null == getSchema()) return true;
+            if(schema.length() == 0) 
+            {
+                return (other.getSchema() == null) || (other.getSchema().length() == 0);
+            } 
+            else 
+            {
+                if(other.getSchema() == null) return false;
+                if(!useSchemaPattern)
+                {
+                    return StringUtil.matchesExact(other.getSchema(), schema, caseSensitive);
+                }
+                else
+                {
+                    return StringUtil.matchesPerl5(other.getSchema(), convert(schema), caseSensitive);
+                }
+            }
+        }
+        
+        private boolean matchesTable(DatabaseIdentifierImpl other)
+        {
+            if(null == table) return false;
+            if(null == other.getTable()) return false;
+            if(!useTablePattern)
+            {
+                return StringUtil.matchesExact(other.getTable(), table, caseSensitive);
+            }
+            else
+            {
+                return StringUtil.matchesPerl5(other.getTable(), convert(table), caseSensitive);
+            }
+        }
+        
         public boolean equals(Object object)
         {
             if(null == object) return false;
@@ -2091,9 +2201,9 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public int hashCode()
         {
             int hashCode = 0;
-            if(null != catalog) hashCode += catalog.hashCode();
-            if(null != schema) hashCode += schema.hashCode();
-            if(null != table) hashCode += table.hashCode();
+            if(null != catalog) hashCode += 31 * catalog.hashCode();
+            if(null != schema) hashCode += 31 * schema.hashCode();
+            if(null != table) hashCode += 31 * table.hashCode();
             return hashCode;
         }
     }
@@ -2113,9 +2223,25 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             this.attributeNamePattern = attributeNamePattern;
         }
         
+        public AttributesDatabaseIdentifierImpl(String catalog, String schema, String table, boolean useSchemaPattern, boolean useTablePattern, String attributeNamePattern)
+        {
+            super(catalog, schema, table, useSchemaPattern, useTablePattern);
+            this.attributeNamePattern = attributeNamePattern;
+        }
+        
         public String getAttributeNamePattern()
         {
             return attributeNamePattern;
+        }
+        
+        public boolean matches(DatabaseIdentifier object) 
+        {
+            if(!super.matches(object)) return false;
+            if(!(object instanceof AttributesDatabaseIdentifierImpl)) return false;
+            AttributesDatabaseIdentifierImpl other = (AttributesDatabaseIdentifierImpl)object;
+            if(null == attributeNamePattern) return false;
+            if(null == other.getAttributeNamePattern()) return false;
+            return StringUtil.matchesPerl5(other.getAttributeNamePattern(), convert(attributeNamePattern), caseSensitive);
         }
         
         public boolean equals(Object object)
@@ -2131,7 +2257,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public int hashCode()
         {
             int hashCode = super.hashCode();
-            if(null != attributeNamePattern) hashCode += attributeNamePattern.hashCode();
+            if(null != attributeNamePattern) hashCode += 31 * attributeNamePattern.hashCode();
             return hashCode;
         }
     }
@@ -2151,9 +2277,25 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             this.columnNamePattern = columnNamePattern;
         }
         
+        public ColumnDatabaseIdentifierImpl(String catalog, String schema, String table, boolean useSchemaPattern, boolean useTablePattern, String columnNamePattern)
+        {
+            super(catalog, schema, table, useSchemaPattern, useTablePattern);
+            this.columnNamePattern = columnNamePattern;
+        }
+        
         public String getColumnNamePattern()
         {
             return columnNamePattern;
+        }
+        
+        public boolean matches(DatabaseIdentifier object) 
+        {
+            if(!super.matches(object)) return false;
+            if(!(object instanceof ColumnDatabaseIdentifierImpl)) return false;
+            ColumnDatabaseIdentifierImpl other = (ColumnDatabaseIdentifierImpl)object;
+            if(null == columnNamePattern) return false;
+            if(null == other.getColumnNamePattern()) return false;
+            return StringUtil.matchesPerl5(other.getColumnNamePattern(), convert(columnNamePattern), caseSensitive);
         }
         
         public boolean equals(Object object)
@@ -2169,7 +2311,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public int hashCode()
         {
             int hashCode = super.hashCode();
-            if(null != columnNamePattern) hashCode += columnNamePattern.hashCode();
+            if(null != columnNamePattern) hashCode += 31 * columnNamePattern.hashCode();
             return hashCode;
         }
     }
@@ -2201,9 +2343,20 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return scope;
         }
         
+        public boolean matches(DatabaseIdentifier object)
+        {
+            if(!super.matches(object)) return false;
+            return isEqual(object);
+        }
+
         public boolean equals(Object object)
         {
             if(!super.equals(object)) return false;
+            return isEqual(object);
+        }
+
+        private boolean isEqual(Object object)
+        {
             if(!(object instanceof RowIdentifierDatabaseIdentifierImpl)) return false;
             RowIdentifierDatabaseIdentifierImpl other = (RowIdentifierDatabaseIdentifierImpl)object;
             if(scope != other.getScope()) return false;
@@ -2214,7 +2367,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public int hashCode()
         {
             int hashCode = super.hashCode() + scope;
-            hashCode += nullable ? 1 : 2;
+            hashCode += nullable ? 31 : 62;
             return hashCode;
         }
     }
@@ -2246,9 +2399,20 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return unique;
         }
         
+        public boolean matches(DatabaseIdentifier object)
+        {
+            if(!super.matches(object)) return false;
+            return isEqual(object);
+        }
+        
         public boolean equals(Object object)
         {
             if(!super.equals(object)) return false;
+            return isEqual(object);
+        }
+
+        private boolean isEqual(Object object)
+        {
             if(!(object instanceof IndexInfoDatabaseIdentifierImpl)) return false;
             IndexInfoDatabaseIdentifierImpl other = (IndexInfoDatabaseIdentifierImpl)object;
             if(unique != other.isUnique()) return false;
@@ -2259,8 +2423,8 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public int hashCode()
         {
             int hashCode = super.hashCode();
-            hashCode += unique ? 1 : 2;
-            hashCode += approximate ? 3 : 4;
+            hashCode += unique ? 31 : 62;
+            hashCode += approximate ? (3 * 31) : (4 * 31);
             return hashCode;
         }
     }
@@ -2280,9 +2444,25 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             this.types = types;
         }
         
+        public TableDatabaseIdentifierImpl(String catalog, String schema, boolean useSchemaPattern, boolean useTablePattern, String table, String[] types)
+        {
+            super(catalog, schema, table, useSchemaPattern, useTablePattern);
+            this.types = types;
+        }
+        
         public String[] getTypes()
         {
             return types;
+        }
+        
+        public boolean matches(DatabaseIdentifier object) 
+        {
+            if(!super.matches(object)) return false;
+            if(!(object instanceof TableDatabaseIdentifierImpl)) return false;
+            TableDatabaseIdentifierImpl other = (TableDatabaseIdentifierImpl)object;
+            if(null == types) return true;
+            if(null == other.getTypes()) return false;
+            return Arrays.equals(types, other.getTypes());
         }
         
         public boolean equals(Object object)
@@ -2305,7 +2485,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
                 {
                     if(null != types[ii])
                     {
-                        hashCode += types[ii].hashCode();
+                        hashCode += 31 * types[ii].hashCode();
                     }
                 }
             }
@@ -2328,9 +2508,25 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             this.types = types;
         }
         
+        public UDTDatabaseIdentifierImpl(String catalog, String schema, String table, boolean useSchemaPattern, boolean useTablePattern, int[] types)
+        {
+            super(catalog, schema, table, useSchemaPattern, useTablePattern);
+            this.types = types;
+        }
+        
         public int[] getTypes()
         {
             return types;
+        }
+        
+        public boolean matches(DatabaseIdentifier object) 
+        {
+            if(!super.matches(object)) return false;
+            if(!(object instanceof UDTDatabaseIdentifierImpl)) return false;
+            UDTDatabaseIdentifierImpl other = (UDTDatabaseIdentifierImpl)object;
+            if(null == types) return true;
+            if(null == other.getTypes()) return false;
+            return Arrays.equals(types, other.getTypes());
         }
         
         public boolean equals(Object object)
@@ -2351,7 +2547,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             {
                 for(int ii = 0; ii < types.length; ii++)
                 {
-                    hashCode += types[ii];
+                    hashCode += 31 * types[ii];
                 }
             }
             return hashCode;
@@ -2386,6 +2582,16 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return (identifier1.isGlobal() && identifier1.isGlobal());
         }
         
+        public boolean matches(DatabaseIdentifier object)
+        {
+            if(null == object) return false;
+            if(!(object instanceof DatabaseIdentifierImplWrapper)) return false;
+            DatabaseIdentifierImplWrapper other = (DatabaseIdentifierImplWrapper)object;
+            if(null != identifier1 && !identifier1.matches(other.getIdentifier1())) return false; 
+            if(null != identifier2 && !identifier2.matches(other.getIdentifier2())) return false;
+            return true;
+        }
+        
         public boolean equals(Object object)
         {
             if(null == object) return false;
@@ -2401,9 +2607,10 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public int hashCode()
         {
             int hashCode = 0;
-            if(null != identifier1) hashCode += identifier1.hashCode();
-            if(null != identifier2) hashCode += identifier2.hashCode();
+            if(null != identifier1) hashCode += 31 * identifier1.hashCode();
+            if(null != identifier2) hashCode += 31 * identifier2.hashCode();
             return hashCode;
         }
     }
 }
+
