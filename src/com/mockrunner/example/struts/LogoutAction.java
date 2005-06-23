@@ -16,6 +16,8 @@ import org.apache.struts.action.ActionMapping;
  * does not provide any filter methods. Please note that usually it's not
  * necessary to test actions in conjunction with filters. You can
  * add the filtered values directly to the request.
+ * This action uses the custom action mapping {@link LogoutActionMapping}
+ * to get the request parameter name.
  */
 public class LogoutAction extends Action
 {
@@ -24,7 +26,8 @@ public class LogoutAction extends Action
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception
     {
-        String logout = request.getParameter("logout");
+        LogoutActionMapping logoutMapping = (LogoutActionMapping)mapping;
+        String logout = request.getParameter(logoutMapping.getRequestParameterName());
         if(null != logout)
         {
             request.getSession().invalidate();
