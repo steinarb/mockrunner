@@ -949,6 +949,31 @@ public class ActionTestModuleTest extends BaseTestCase
         assertSame(responseWrapper, action.getResponse());
     }
     
+    public void testCustomActionMapping()
+    {
+        TestMapping mapping = (TestMapping)getActionMockObjectFactory().prepareActionMapping(TestMapping.class);
+        TestMappingAction action = new TestMappingAction();
+        TestMappingForm form = new TestMappingForm();
+        module.actionPerform(action, form);
+        assertSame(mapping, action.getActionMapping());
+        assertSame(mapping, form.getResetActionMapping());
+        assertSame(mapping, form.getValidateActionMapping());
+    }
+    
+    public void testCustomActionMappingDelegation()
+    {
+        TestMapping mapping = (TestMapping)getActionMockObjectFactory().prepareActionMapping(TestMapping.class);
+        module.setValidate(true);
+        module.setParameter("testParameter");
+        module.setInput("testInput");
+        assertTrue(mapping.getValidate());
+        assertEquals("testParameter", mapping.getParameter());
+        assertEquals("testInput", mapping.getInput());
+        assertTrue(getActionMockObjectFactory().getMockActionMapping().getValidate());
+        assertEquals("testParameter", getActionMockObjectFactory().getMockActionMapping().getParameter());
+        assertEquals("testInput", getActionMockObjectFactory().getMockActionMapping().getInput());
+    }
+    
     public void testNestedException()
     {
         try
@@ -959,6 +984,25 @@ public class ActionTestModuleTest extends BaseTestCase
         catch(NestedApplicationException exc)
         {
             assertEquals("Expected", exc.getRootCause().getMessage());
+        }
+    }
+    
+    public static class TestMappingAction extends Action
+    {
+        private ActionMapping mapping;
+        
+        public ActionMapping getActionMapping()
+        {
+            return mapping;
+        }
+
+        public ActionForward execute(ActionMapping mapping,
+                                     ActionForm form,
+                                     HttpServletRequest request,
+                                     HttpServletResponse response) throws Exception
+        {
+            this.mapping = mapping;
+            return mapping.findForward("success");
         }
     }
     
@@ -1037,6 +1081,33 @@ public class ActionTestModuleTest extends BaseTestCase
         public void setActionForward(ActionForward forward)
         {
             this.forward = forward;
+        }
+    }
+    
+    public static class TestMappingForm extends ActionForm
+    {
+        private ActionMapping resetMapping;
+        private ActionMapping validateMapping;
+        
+        public ActionMapping getResetActionMapping()
+        {
+            return resetMapping;
+        }
+
+        public ActionMapping getValidateActionMapping()
+        {
+            return validateMapping;
+        }
+
+        public void reset(ActionMapping mapping, HttpServletRequest request)
+        {
+            resetMapping = mapping;
+        }
+    
+        public ActionErrors validate(ActionMapping mapping, HttpServletRequest request)
+        {
+            validateMapping = mapping;
+            return null;
         }
     }
     
@@ -1165,5 +1236,10 @@ public class ActionTestModuleTest extends BaseTestCase
         {
             property = string;
         }
+    }
+    
+    public static class TestMapping extends ActionMapping
+    {
+        
     }
 }

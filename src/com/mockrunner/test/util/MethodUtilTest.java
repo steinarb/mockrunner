@@ -1,11 +1,13 @@
 package com.mockrunner.test.util;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
+
+import junit.framework.TestCase;
 
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.util.common.MethodUtil;
-
-import junit.framework.TestCase;
 
 public class MethodUtilTest extends TestCase
 {
@@ -101,7 +103,45 @@ public class MethodUtilTest extends TestCase
         assertTrue(MethodUtil.areMethodsEqual(method5, anotherMethod5));
     }
     
-    public class TestObject
+    public void testGetMatchingDeclaredMethods() throws Exception
+    {
+        Method[] methods = MethodUtil.getMatchingDeclaredMethods(TestObject.class, "test.*");
+        assertEquals(5, methods.length);
+        List methodNames = new ArrayList();
+        for(int ii = 0; ii < methods.length; ii++)
+        {
+            methodNames.add(methods[ii].getName());
+        }
+        assertTrue(methodNames.contains("testMethod1"));
+        assertTrue(methodNames.contains("testMethod2"));
+        assertTrue(methodNames.contains("testMethod3"));
+        assertTrue(methodNames.contains("testMethod4"));
+        assertTrue(methodNames.contains("testMethod5"));
+        methods = MethodUtil.getMatchingDeclaredMethods(TestObject.class, "wasMethod.Called");
+        assertEquals(5, methods.length);
+        methodNames = new ArrayList();
+        for(int ii = 0; ii < methods.length; ii++)
+        {
+            methodNames.add(methods[ii].getName());
+        }
+        assertTrue(methodNames.contains("wasMethod1Called"));
+        assertTrue(methodNames.contains("wasMethod2Called"));
+        assertTrue(methodNames.contains("wasMethod3Called"));
+        assertTrue(methodNames.contains("wasMethod4Called"));
+        assertTrue(methodNames.contains("wasMethod5Called"));
+        methods = MethodUtil.getMatchingDeclaredMethods(TestObject.class, "wasMethod5Called");
+        assertEquals(1, methods.length);
+    }
+    
+    public class Super
+    {
+        public void testSuperMethod()
+        {
+            
+        }
+    }
+    
+    public class TestObject extends Super
     {
         private boolean method1Called = false;
         private boolean method2Called = false;

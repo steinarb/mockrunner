@@ -8,6 +8,7 @@ import org.apache.commons.validator.ValidatorResources;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.DynaActionForm;
@@ -225,19 +226,11 @@ public class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setParameter(String)}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getActionMapping}
      */
-    protected void setParameter(String parameter)
+    protected ActionMapping getActionMapping()
     {
-        actionTestModule.setParameter(parameter);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getMockActionMapping}
-     */
-    protected MockActionMapping getMockActionMapping()
-    {
-        return actionTestModule.getMockActionMapping();
+        return actionTestModule.getActionMapping();
     }
 
     /**
@@ -246,14 +239,6 @@ public class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
     protected void setValidate(boolean validate)
     {
         actionTestModule.setValidate(validate);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setInput(String)}
-     */
-    protected void setInput(String input)
-    {
-        actionTestModule.setInput(input);
     }
 
     /**
@@ -286,14 +271,6 @@ public class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
     protected void setDataSource(DataSource dataSource)
     {
         actionTestModule.setDataSource(dataSource);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setLocale(Locale)}
-     */
-    protected void setLocale(Locale locale)
-    {
-        actionTestModule.setLocale(locale);
     }
 
     /**
@@ -601,6 +578,14 @@ public class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#getMockActionMapping}
+     */
+    protected MockActionMapping getMockActionMapping()
+    {
+        return actionTestModule.getMockActionMapping();
+    }
+
+    /**
      * Delegates to {@link com.mockrunner.struts.ActionTestModule#getMockPageContext}
      */
     protected MockPageContext getMockPageContext()
@@ -665,30 +650,6 @@ public class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action)}
-     */
-    protected ActionForward actionPerform(Action action)
-    {
-        return actionTestModule.actionPerform(action);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, ActionForm)}
-     */
-    protected ActionForward actionPerform(Action action, ActionForm form)
-    {
-        return actionTestModule.actionPerform(action, form);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class)}
-     */
-    protected ActionForward actionPerform(Class action)
-    {
-        return actionTestModule.actionPerform(action);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, Class)}
      */
     protected ActionForward actionPerform(Class action, Class form)
@@ -710,5 +671,53 @@ public class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
     protected ActionForward actionPerform(Class action, ActionForm form)
     {
         return actionTestModule.actionPerform(action, form);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class)}
+     */
+    protected ActionForward actionPerform(Class action)
+    {
+        return actionTestModule.actionPerform(action);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action)}
+     */
+    protected ActionForward actionPerform(Action action)
+    {
+        return actionTestModule.actionPerform(action);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, ActionForm)}
+     */
+    protected ActionForward actionPerform(Action action, ActionForm form)
+    {
+        return actionTestModule.actionPerform(action, form);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setInput(String)}
+     */
+    protected void setInput(String input)
+    {
+        actionTestModule.setInput(input);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setLocale(Locale)}
+     */
+    protected void setLocale(Locale locale)
+    {
+        actionTestModule.setLocale(locale);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setParameter(String)}
+     */
+    protected void setParameter(String parameter)
+    {
+        actionTestModule.setParameter(parameter);
     }
 }

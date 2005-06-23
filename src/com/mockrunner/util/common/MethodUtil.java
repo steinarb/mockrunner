@@ -1,7 +1,9 @@
 package com.mockrunner.util.common;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import com.mockrunner.base.NestedApplicationException;
 
@@ -69,5 +71,26 @@ public class MethodUtil
         if(!method2.getName().equals(method1.getName())) return false;
         if(!method1.getReturnType().equals(method2.getReturnType())) return false;
         return Arrays.equals(method1.getParameterTypes(), method2.getParameterTypes());
+    }
+    
+    /**
+     * Returns the declared methods of the specified class whose names are matching
+     * the specified regular expression.
+     * @param theClass the class whose methods are examined
+     * @param expr the regular expression
+     * @return the matching methods
+     */
+    public static Method[] getMatchingDeclaredMethods(Class theClass, String expr)
+    {
+        Method[] methods = theClass.getDeclaredMethods();
+        List resultList = new ArrayList();
+        for(int ii = 0; ii < methods.length; ii++)
+        {
+            if(StringUtil.matchesPerl5(methods[ii].getName(), expr, true))
+            {
+                resultList.add(methods[ii]);
+            }
+        }
+        return (Method[])resultList.toArray(new Method[resultList.size()]);
     }
 }

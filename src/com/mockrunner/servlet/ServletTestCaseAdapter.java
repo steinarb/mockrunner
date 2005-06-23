@@ -76,14 +76,6 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#init}
-     */
-    protected void init()
-    {
-        servletTestModule.init();
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.servlet.ServletTestModule#setServlet(HttpServlet, boolean)}
      */
     protected void setServlet(HttpServlet servlet, boolean doInit)
@@ -156,14 +148,6 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#service}
-     */
-    protected void service()
-    {
-        servletTestModule.service();
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.servlet.ServletTestModule#getServlet}
      */
     protected HttpServlet getServlet()
@@ -188,19 +172,19 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#addFilter(Filter)}
-     */
-    protected void addFilter(Filter filter)
-    {
-        servletTestModule.addFilter(filter);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.servlet.ServletTestModule#addFilter(Filter, boolean)}
      */
     protected void addFilter(Filter filter, boolean doInit)
     {
         servletTestModule.addFilter(filter, doInit);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#addFilter(Filter)}
+     */
+    protected void addFilter(Filter filter)
+    {
+        servletTestModule.addFilter(filter);
     }
 
     /**
@@ -249,5 +233,21 @@ public class ServletTestCaseAdapter extends HTMLOutputTestCase
     protected void clearOutput()
     {
         servletTestModule.clearOutput();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#init}
+     */
+    protected void init()
+    {
+        servletTestModule.init();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#service}
+     */
+    protected void service()
+    {
+        servletTestModule.service();
     }
 }
