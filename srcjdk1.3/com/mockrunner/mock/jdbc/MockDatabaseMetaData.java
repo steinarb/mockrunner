@@ -2462,7 +2462,21 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             TableDatabaseIdentifierImpl other = (TableDatabaseIdentifierImpl)object;
             if(null == types) return true;
             if(null == other.getTypes()) return false;
-            return Arrays.equals(types, other.getTypes());
+            return matchesTypes(other);
+        }
+        
+        private boolean matchesTypes(TableDatabaseIdentifierImpl other)
+        {
+            String[] otherTypes = other.getTypes();
+            for(int ii = 0; ii < types.length; ii++) 
+            {
+                String type = types[ii];
+                for(int jj = 0; jj < otherTypes.length; jj++) 
+                {
+                    if(type.equals(otherTypes[jj])) return true;
+                }
+            }
+            return false;
         }
         
         public boolean equals(Object object)
@@ -2526,7 +2540,21 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             UDTDatabaseIdentifierImpl other = (UDTDatabaseIdentifierImpl)object;
             if(null == types) return true;
             if(null == other.getTypes()) return false;
-            return Arrays.equals(types, other.getTypes());
+            return matchesTypes(other);
+        }
+        
+        private boolean matchesTypes(UDTDatabaseIdentifierImpl other)
+        {
+            int[] otherTypes = other.getTypes();
+            for(int ii = 0; ii < types.length; ii++) 
+            {
+                int type = types[ii];
+                for(int jj = 0; jj < otherTypes.length; jj++) 
+                {
+                    if (type == otherTypes[jj]) return true;
+                }
+            }
+            return false;
         }
         
         public boolean equals(Object object)

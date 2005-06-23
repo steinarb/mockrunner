@@ -787,7 +787,7 @@ public class MockDatabaseMetaDataTest extends TestCase
     public void testUDTs() throws SQLException
     {
         assertNull(metaData.getUDTs(null, null, null, null));
-        assertNull(metaData.getUDTs("abc1", "abc2", "abc3", new int[] {1, 2, 3}));
+        assertNull(metaData.getUDTs("abc1", "abc2", "abc3", new int[] {1}));
         ResultSet testResult = new MockResultSet("id");
         metaData.setUDTs(testResult);
         assertSame(testResult, metaData.getUDTs(null, null, null, null));
@@ -799,7 +799,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         ResultSet testResult3 = new MockResultSet("id3");
         ResultSet testResult4 = new MockResultSet("id4");
         metaData.setUDTs("", "test1", "xyz", null, testResult);
-        metaData.setUDTs("abc", "test", "xyz", new int[] {1, 2, 3}, testResult2);
+        metaData.setUDTs("abc", "test", "xyz", new int[] {1}, testResult2);
         metaData.setUDTs(null, "test", "xyz", new int[] {1, 2, 3}, testResult3);
         assertSame(testResult2, metaData.getUDTs("abc", "test", "xyz", new int[] {1, 2, 3}));
         PolyResultSet polyResult = (PolyResultSet)metaData.getUDTs(null, "test", "xyz", new int[] {1, 2, 3});
@@ -823,12 +823,12 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.clearUDTs();
         metaData.setUDTs("1", "2", "3", null, testResult);
         metaData.setUDTs("1", "2", "3", new int[] {1, 2, 3}, testResult2);
-        metaData.setUDTs("1", "2", "3", new int[] {}, testResult3);
+        metaData.setUDTs("1", "2", "3", new int[] {4}, testResult3);
         metaData.setUDTs("1", "2", "3", new int[] {1}, testResult4);
         polyResult = (PolyResultSet)metaData.getUDTs("1", "2", "3", null);
         resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(4, resultSets.size());
-        assertSame(testResult3, metaData.getUDTs("1", "2", "3", new int[] {}));
+        assertSame(testResult3, metaData.getUDTs("1", "2", "3", new int[] {4}));
     }
     
     public void testUDTsWithWildcards() throws SQLException
@@ -866,6 +866,23 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
+    }
+    
+    public void testUDTsWithTypes() throws SQLException
+    {
+        ResultSet testResult = new MockResultSet("id");
+        metaData.setUDTs("abc", "test", "xyz", new int[] {1}, testResult);
+        assertNull(metaData.getUDTs("abc", "test", "xyz", new int[] {2}));
+        assertEquals(testResult, metaData.getUDTs("abc", "test", "xyz", null));
+        assertEquals(testResult, metaData.getUDTs("abc", "test", "xyz", new int[] {1, 2}));
+        ResultSet testResult2 = new MockResultSet("id2");
+        metaData.setUDTs("abc", "test", "xyz", new int[] {2, 4}, testResult2);
+        assertEquals(testResult2, metaData.getUDTs("abc", "test", "xyz", new int[] {2}));
+        PolyResultSet polyResult = (PolyResultSet)metaData.getUDTs("abc", "%", "%", new int[] {1, 2, 3});
+        List resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(2, resultSets.size());
+        assertTrue(resultSets.contains(testResult));
+        assertTrue(resultSets.contains(testResult2));
     }
     
     public void testUDTsCaseSensitive() throws SQLException
@@ -1297,8 +1314,8 @@ public class MockDatabaseMetaDataTest extends TestCase
         ResultSet testResult3 = new MockResultSet("id3");
         ResultSet testResult4 = new MockResultSet("id4");
         metaData.setTables("", "test1", "xyz", null, testResult);
-        metaData.setTables("abc", "test", "xyz", new String[] {"1", "2", "3"}, testResult2);
-        metaData.setTables(null, "test", "xyz", new String[] {"1", "2", "3"}, testResult3);
+        metaData.setTables("abc", "test", "xyz", new String[] {"1"}, testResult2);
+        metaData.setTables(null, "test", "xyz", new String[] {"2", "3"}, testResult3);
         assertSame(testResult2, metaData.getTables("abc", "test", "xyz", new String[] {"1", "2", "3"}));
         PolyResultSet polyResult = (PolyResultSet)metaData.getTables(null, "test", "xyz", new String[] {"1", "2", "3"});
         List resultSets = polyResult.getUnderlyingResultSetList();
@@ -1321,12 +1338,12 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.clearTables();
         metaData.setTables("1", "2", "3", null, testResult);
         metaData.setTables("1", "2", "3", new String[] {"1", "2", "3"}, testResult2);
-        metaData.setTables("1", "2", "3", new String[] {}, testResult3);
+        metaData.setTables("1", "2", "3", new String[] {"5"}, testResult3);
         metaData.setTables("1", "2", "3", new String[] {"1"}, testResult4);
         polyResult = (PolyResultSet)metaData.getTables("1", "2", "3", null);
         resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(4, resultSets.size());
-        assertSame(testResult3, metaData.getTables("1", "2", "3", new String[] {}));
+        assertSame(testResult3, metaData.getTables("1", "2", "3", new String[] {"5", "6"}));
     }
     
     public void testTablesWithWildcards() throws SQLException
@@ -1364,6 +1381,23 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
+    }
+    
+    public void testTablesWithTypes() throws SQLException
+    {
+        ResultSet testResult = new MockResultSet("id");
+        metaData.setTables("abc", "test", "xyz", new String[] {"1"}, testResult);
+        assertNull(metaData.getTables("abc", "test", "xyz", new String[] {"2"}));
+        assertEquals(testResult, metaData.getTables("abc", "test", "xyz", null));
+        assertEquals(testResult, metaData.getTables("abc", "test", "xyz", new String[] {"1", "2"}));
+        ResultSet testResult2 = new MockResultSet("id2");
+        metaData.setTables("abc", "test", "xyz", new String[] {"2", "4"}, testResult2);
+        assertEquals(testResult2, metaData.getTables("abc", "test", "xyz", new String[] {"2"}));
+        PolyResultSet polyResult = (PolyResultSet)metaData.getTables("abc", "%", "%", new String[] {"1", "2", "3"});
+        List resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(2, resultSets.size());
+        assertTrue(resultSets.contains(testResult));
+        assertTrue(resultSets.contains(testResult2));
     }
     
     public void testTablesCaseSensitive() throws SQLException
