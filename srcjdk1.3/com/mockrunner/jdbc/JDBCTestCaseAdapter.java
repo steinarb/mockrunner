@@ -230,19 +230,19 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getPreparedStatements(String)}
-     */
-    protected List getPreparedStatements(String sql)
-    {
-        return jdbcTestModule.getPreparedStatements(sql);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getPreparedStatements}
      */
     protected List getPreparedStatements()
     {
         return jdbcTestModule.getPreparedStatements();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getPreparedStatements(String)}
+     */
+    protected List getPreparedStatements(String sql)
+    {
+        return jdbcTestModule.getPreparedStatements(sql);
     }
 
     /**
@@ -286,6 +286,14 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getPreparedStatementParameter(int, int)}
+     */
+    protected Object getPreparedStatementParameter(int indexOfStatement, int indexOfParameter)
+    {
+        return jdbcTestModule.getPreparedStatementParameter(indexOfStatement, indexOfParameter);
+    }
+
+    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getPreparedStatementParameter(String, int)}
      */
     protected Object getPreparedStatementParameter(String sql, int indexOfParameter)
@@ -294,11 +302,11 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getPreparedStatementParameter(int, int)}
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getCallableStatementParameter(String, String)}
      */
-    protected Object getPreparedStatementParameter(int indexOfStatement, int indexOfParameter)
+    protected Object getCallableStatementParameter(String sql, String nameOfParameter)
     {
-        return jdbcTestModule.getPreparedStatementParameter(indexOfStatement, indexOfParameter);
+        return jdbcTestModule.getCallableStatementParameter(sql, nameOfParameter);
     }
 
     /**
@@ -310,11 +318,11 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getCallableStatementParameter(CallableStatement, String)}
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getCallableStatementParameter(CallableStatement, int)}
      */
-    protected Object getCallableStatementParameter(CallableStatement statement, String nameOfParameter)
+    protected Object getCallableStatementParameter(CallableStatement statement, int indexOfParameter)
     {
-        return jdbcTestModule.getCallableStatementParameter(statement, nameOfParameter);
+        return jdbcTestModule.getCallableStatementParameter(statement, indexOfParameter);
     }
 
     /**
@@ -326,14 +334,6 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getCallableStatementParameter(CallableStatement, int)}
-     */
-    protected Object getCallableStatementParameter(CallableStatement statement, int indexOfParameter)
-    {
-        return jdbcTestModule.getCallableStatementParameter(statement, indexOfParameter);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getCallableStatementParameter(int, int)}
      */
     protected Object getCallableStatementParameter(int indexOfStatement, int indexOfParameter)
@@ -342,11 +342,11 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getCallableStatementParameter(String, String)}
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getCallableStatementParameter(CallableStatement, String)}
      */
-    protected Object getCallableStatementParameter(String sql, String nameOfParameter)
+    protected Object getCallableStatementParameter(CallableStatement statement, String nameOfParameter)
     {
-        return jdbcTestModule.getCallableStatementParameter(sql, nameOfParameter);
+        return jdbcTestModule.getCallableStatementParameter(statement, nameOfParameter);
     }
 
     /**
@@ -406,19 +406,19 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySQLStatementParameter(String, int, int, Object)}
-     */
-    protected void verifySQLStatementParameter(String sql, int indexOfParameterSet, int indexOfParameter, Object expectedParameter)
-    {
-        jdbcTestModule.verifySQLStatementParameter(sql, indexOfParameterSet, indexOfParameter, expectedParameter);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySQLStatementParameter(String, int, Map)}
      */
     protected void verifySQLStatementParameter(String sql, int indexOfParameterSet, Map parameterMap)
     {
         jdbcTestModule.verifySQLStatementParameter(sql, indexOfParameterSet, parameterMap);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySQLStatementParameter(String, int, int, Object)}
+     */
+    protected void verifySQLStatementParameter(String sql, int indexOfParameterSet, int indexOfParameter, Object expectedParameter)
+    {
+        jdbcTestModule.verifySQLStatementParameter(sql, indexOfParameterSet, indexOfParameter, expectedParameter);
     }
 
     /**
@@ -446,19 +446,19 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetRowInserted(MockResultSet, int)}
-     */
-    protected void verifyResultSetRowInserted(MockResultSet resultSet, int number)
-    {
-        jdbcTestModule.verifyResultSetRowInserted(resultSet, number);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetRowInserted(String, int)}
      */
     protected void verifyResultSetRowInserted(String id, int number)
     {
         jdbcTestModule.verifyResultSetRowInserted(id, number);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetRowInserted(MockResultSet, int)}
+     */
+    protected void verifyResultSetRowInserted(MockResultSet resultSet, int number)
+    {
+        jdbcTestModule.verifyResultSetRowInserted(resultSet, number);
     }
 
     /**
@@ -510,19 +510,19 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetRowDeleted(MockResultSet, int)}
-     */
-    protected void verifyResultSetRowDeleted(MockResultSet resultSet, int number)
-    {
-        jdbcTestModule.verifyResultSetRowDeleted(resultSet, number);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetRowDeleted(String, int)}
      */
     protected void verifyResultSetRowDeleted(String id, int number)
     {
         jdbcTestModule.verifyResultSetRowDeleted(id, number);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetRowDeleted(MockResultSet, int)}
+     */
+    protected void verifyResultSetRowDeleted(MockResultSet resultSet, int number)
+    {
+        jdbcTestModule.verifyResultSetRowDeleted(resultSet, number);
     }
 
     /**
@@ -590,19 +590,19 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyNumberCallableStatements(int)}
-     */
-    protected void verifyNumberCallableStatements(int number)
-    {
-        jdbcTestModule.verifyNumberCallableStatements(number);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyNumberCallableStatements(int, String)}
      */
     protected void verifyNumberCallableStatements(int number, String sql)
     {
         jdbcTestModule.verifyNumberCallableStatements(number, sql);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyNumberCallableStatements(int)}
+     */
+    protected void verifyNumberCallableStatements(int number)
+    {
+        jdbcTestModule.verifyNumberCallableStatements(number);
     }
 
     /**
@@ -614,6 +614,14 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyPreparedStatementClosed(int)}
+     */
+    protected void verifyPreparedStatementClosed(int index)
+    {
+        jdbcTestModule.verifyPreparedStatementClosed(index);
+    }
+
+    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyPreparedStatementClosed(String)}
      */
     protected void verifyPreparedStatementClosed(String sql)
@@ -622,11 +630,11 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyPreparedStatementClosed(int)}
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementClosed(int)}
      */
-    protected void verifyPreparedStatementClosed(int index)
+    protected void verifyCallableStatementClosed(int index)
     {
-        jdbcTestModule.verifyPreparedStatementClosed(index);
+        jdbcTestModule.verifyCallableStatementClosed(index);
     }
 
     /**
@@ -638,11 +646,11 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementClosed(int)}
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetRow(MockResultSet, int, List)}
      */
-    protected void verifyCallableStatementClosed(int index)
+    protected void verifyResultSetRow(MockResultSet resultSet, int number, List rowData)
     {
-        jdbcTestModule.verifyCallableStatementClosed(index);
+        jdbcTestModule.verifyResultSetRow(resultSet, number, rowData);
     }
 
     /**
@@ -662,19 +670,27 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetRow(MockResultSet, int, List)}
-     */
-    protected void verifyResultSetRow(MockResultSet resultSet, int number, List rowData)
-    {
-        jdbcTestModule.verifyResultSetRow(resultSet, number, rowData);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetRow(String, int, Object[])}
      */
     protected void verifyResultSetRow(String id, int number, Object[] rowData)
     {
         jdbcTestModule.verifyResultSetRow(id, number, rowData);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetColumn(MockResultSet, String, Object[])}
+     */
+    protected void verifyResultSetColumn(MockResultSet resultSet, String name, Object[] columnData)
+    {
+        jdbcTestModule.verifyResultSetColumn(resultSet, name, columnData);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetColumn(MockResultSet, int, List)}
+     */
+    protected void verifyResultSetColumn(MockResultSet resultSet, int number, List columnData)
+    {
+        jdbcTestModule.verifyResultSetColumn(resultSet, number, columnData);
     }
 
     /**
@@ -710,27 +726,11 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetColumn(MockResultSet, String, Object[])}
-     */
-    protected void verifyResultSetColumn(MockResultSet resultSet, String name, Object[] columnData)
-    {
-        jdbcTestModule.verifyResultSetColumn(resultSet, name, columnData);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetColumn(String, String, List)}
      */
     protected void verifyResultSetColumn(String id, String name, List columnData)
     {
         jdbcTestModule.verifyResultSetColumn(id, name, columnData);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetColumn(MockResultSet, int, List)}
-     */
-    protected void verifyResultSetColumn(MockResultSet resultSet, int number, List columnData)
-    {
-        jdbcTestModule.verifyResultSetColumn(resultSet, number, columnData);
     }
 
     /**
@@ -742,19 +742,19 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetEquals(String, MockResultSet)}
-     */
-    protected void verifyResultSetEquals(String id, MockResultSet target)
-    {
-        jdbcTestModule.verifyResultSetEquals(id, target);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetEquals(MockResultSet, MockResultSet)}
      */
     protected void verifyResultSetEquals(MockResultSet source, MockResultSet target)
     {
         jdbcTestModule.verifyResultSetEquals(source, target);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetEquals(String, MockResultSet)}
+     */
+    protected void verifyResultSetEquals(String id, MockResultSet target)
+    {
+        jdbcTestModule.verifyResultSetEquals(id, target);
     }
 
     /**
@@ -814,6 +814,14 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyPreparedStatementParameterNotPresent(PreparedStatement, int)}
+     */
+    protected void verifyPreparedStatementParameterNotPresent(PreparedStatement statement, int indexOfParameter)
+    {
+        jdbcTestModule.verifyPreparedStatementParameterNotPresent(statement, indexOfParameter);
+    }
+
+    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyPreparedStatementParameterNotPresent(String, int)}
      */
     protected void verifyPreparedStatementParameterNotPresent(String sql, int indexOfParameter)
@@ -830,11 +838,19 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyPreparedStatementParameterNotPresent(PreparedStatement, int)}
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameterPresent(CallableStatement, String)}
      */
-    protected void verifyPreparedStatementParameterNotPresent(PreparedStatement statement, int indexOfParameter)
+    protected void verifyCallableStatementParameterPresent(CallableStatement statement, String nameOfParameter)
     {
-        jdbcTestModule.verifyPreparedStatementParameterNotPresent(statement, indexOfParameter);
+        jdbcTestModule.verifyCallableStatementParameterPresent(statement, nameOfParameter);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameterPresent(CallableStatement, int)}
+     */
+    protected void verifyCallableStatementParameterPresent(CallableStatement statement, int indexOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterPresent(statement, indexOfParameter);
     }
 
     /**
@@ -854,19 +870,11 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameterPresent(CallableStatement, int)}
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameterPresent(String, String)}
      */
-    protected void verifyCallableStatementParameterPresent(CallableStatement statement, int indexOfParameter)
+    protected void verifyCallableStatementParameterPresent(String sql, String nameOfParameter)
     {
-        jdbcTestModule.verifyCallableStatementParameterPresent(statement, indexOfParameter);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameterPresent(CallableStatement, String)}
-     */
-    protected void verifyCallableStatementParameterPresent(CallableStatement statement, String nameOfParameter)
-    {
-        jdbcTestModule.verifyCallableStatementParameterPresent(statement, nameOfParameter);
+        jdbcTestModule.verifyCallableStatementParameterPresent(sql, nameOfParameter);
     }
 
     /**
@@ -878,14 +886,6 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameterPresent(String, String)}
-     */
-    protected void verifyCallableStatementParameterPresent(String sql, String nameOfParameter)
-    {
-        jdbcTestModule.verifyCallableStatementParameterPresent(sql, nameOfParameter);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameterNotPresent(CallableStatement, int)}
      */
     protected void verifyCallableStatementParameterNotPresent(CallableStatement statement, int indexOfParameter)
@@ -894,11 +894,27 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameterNotPresent(int, int)}
+     */
+    protected void verifyCallableStatementParameterNotPresent(int indexOfStatement, int indexOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterNotPresent(indexOfStatement, indexOfParameter);
+    }
+
+    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameterNotPresent(String, int)}
      */
     protected void verifyCallableStatementParameterNotPresent(String sql, int indexOfParameter)
     {
         jdbcTestModule.verifyCallableStatementParameterNotPresent(sql, indexOfParameter);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameterNotPresent(int, String)}
+     */
+    protected void verifyCallableStatementParameterNotPresent(int indexOfStatement, String nameOfParameter)
+    {
+        jdbcTestModule.verifyCallableStatementParameterNotPresent(indexOfStatement, nameOfParameter);
     }
 
     /**
@@ -915,22 +931,6 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     protected void verifyCallableStatementParameterNotPresent(String sql, String nameOfParameter)
     {
         jdbcTestModule.verifyCallableStatementParameterNotPresent(sql, nameOfParameter);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameterNotPresent(int, String)}
-     */
-    protected void verifyCallableStatementParameterNotPresent(int indexOfStatement, String nameOfParameter)
-    {
-        jdbcTestModule.verifyCallableStatementParameterNotPresent(indexOfStatement, nameOfParameter);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameterNotPresent(int, int)}
-     */
-    protected void verifyCallableStatementParameterNotPresent(int indexOfStatement, int indexOfParameter)
-    {
-        jdbcTestModule.verifyCallableStatementParameterNotPresent(indexOfStatement, indexOfParameter);
     }
 
     /**
@@ -955,6 +955,22 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     protected void verifyPreparedStatementParameter(int indexOfStatement, int indexOfParameter, Object object)
     {
         jdbcTestModule.verifyPreparedStatementParameter(indexOfStatement, indexOfParameter, object);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameter(CallableStatement, int, Object)}
+     */
+    protected void verifyCallableStatementParameter(CallableStatement statement, int indexOfParameter, Object object)
+    {
+        jdbcTestModule.verifyCallableStatementParameter(statement, indexOfParameter, object);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameter(int, String, Object)}
+     */
+    protected void verifyCallableStatementParameter(int indexOfStatement, String nameOfParameter, Object object)
+    {
+        jdbcTestModule.verifyCallableStatementParameter(indexOfStatement, nameOfParameter, object);
     }
 
     /**
@@ -990,19 +1006,11 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameter(int, String, Object)}
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementOutParameterRegistered(String, int)}
      */
-    protected void verifyCallableStatementParameter(int indexOfStatement, String nameOfParameter, Object object)
+    protected void verifyCallableStatementOutParameterRegistered(String sql, int indexOfParameter)
     {
-        jdbcTestModule.verifyCallableStatementParameter(indexOfStatement, nameOfParameter, object);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementParameter(CallableStatement, int, Object)}
-     */
-    protected void verifyCallableStatementParameter(CallableStatement statement, int indexOfParameter, Object object)
-    {
-        jdbcTestModule.verifyCallableStatementParameter(statement, indexOfParameter, object);
+        jdbcTestModule.verifyCallableStatementOutParameterRegistered(sql, indexOfParameter);
     }
 
     /**
@@ -1011,14 +1019,6 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     protected void verifyCallableStatementOutParameterRegistered(CallableStatement statement, int indexOfParameter)
     {
         jdbcTestModule.verifyCallableStatementOutParameterRegistered(statement, indexOfParameter);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyCallableStatementOutParameterRegistered(String, int)}
-     */
-    protected void verifyCallableStatementOutParameterRegistered(String sql, int indexOfParameter)
-    {
-        jdbcTestModule.verifyCallableStatementOutParameterRegistered(sql, indexOfParameter);
     }
 
     /**
@@ -1054,14 +1054,6 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointPresent(String)}
-     */
-    /*protected void verifySavepointPresent(String name)
-    {
-        jdbcTestModule.verifySavepointPresent(name);
-    }*/
-
-    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointPresent(int)}
      */
     /*protected void verifySavepointPresent(int index)
@@ -1070,11 +1062,11 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }*/
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointReleased(String)}
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointPresent(String)}
      */
-    /*protected void verifySavepointReleased(String name)
+    /*protected void verifySavepointPresent(String name)
     {
-        jdbcTestModule.verifySavepointReleased(name);
+        jdbcTestModule.verifySavepointPresent(name);
     }*/
 
     /**
@@ -1086,11 +1078,11 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }*/
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointNotReleased(String)}
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointReleased(String)}
      */
-    /*protected void verifySavepointNotReleased(String name)
+    /*protected void verifySavepointReleased(String name)
     {
-        jdbcTestModule.verifySavepointNotReleased(name);
+        jdbcTestModule.verifySavepointReleased(name);
     }*/
 
     /**
@@ -1099,6 +1091,14 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     /*protected void verifySavepointNotReleased(int index)
     {
         jdbcTestModule.verifySavepointNotReleased(index);
+    }*/
+
+    /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointNotReleased(String)}
+     */
+    /*protected void verifySavepointNotReleased(String name)
+    {
+        jdbcTestModule.verifySavepointNotReleased(name);
     }*/
 
     /**
@@ -1134,15 +1134,6 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }*/
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointRollbacked(String)}
-     * @deprecated
-     */
-    /*protected void verifySavepointRollbacked(String name)
-    {
-        jdbcTestModule.verifySavepointRollbacked(name);
-    }*/
-
-    /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointRollbacked(int)}
      * @deprecated
      */
@@ -1152,12 +1143,12 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     }*/
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointNotRollbacked(String)}
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointRollbacked(String)}
      * @deprecated
      */
-    /*protected void verifySavepointNotRollbacked(String name)
+    /*protected void verifySavepointRollbacked(String name)
     {
-        jdbcTestModule.verifySavepointNotRollbacked(name);
+        jdbcTestModule.verifySavepointRollbacked(name);
     }*/
 
     /**
@@ -1167,5 +1158,14 @@ public class JDBCTestCaseAdapter extends BaseTestCase
     /*protected void verifySavepointNotRollbacked(int index)
     {
         jdbcTestModule.verifySavepointNotRollbacked(index);
+    }*/
+
+    /**
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointNotRollbacked(String)}
+     * @deprecated
+     */
+    /*protected void verifySavepointNotRollbacked(String name)
+    {
+        jdbcTestModule.verifySavepointNotRollbacked(name);
     }*/
 }

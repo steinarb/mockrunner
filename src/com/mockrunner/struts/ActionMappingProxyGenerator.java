@@ -3,9 +3,11 @@ package com.mockrunner.struts;
 import java.lang.reflect.Method;
 
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.config.ActionConfig;
 
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.mock.web.MockActionMapping;
+import com.mockrunner.util.common.MethodUtil;
 
 /**
  * Helper class to generate CGLib proxies for <code>ActionMapping</code>. Not meant for application use.
@@ -13,6 +15,7 @@ import com.mockrunner.mock.web.MockActionMapping;
 public class ActionMappingProxyGenerator
 {
     private final static Method[] delegateMethods;
+    private final static Method[] duplicateMethods;
     static
     {
         delegateMethods = new Method[3];
@@ -21,6 +24,7 @@ public class ActionMappingProxyGenerator
             delegateMethods[0] = MockActionMapping.class.getDeclaredMethod("findForward", new Class[] {String.class});
             delegateMethods[1] = MockActionMapping.class.getDeclaredMethod("findForwards", null);
             delegateMethods[2] = MockActionMapping.class.getDeclaredMethod("getInputForward", null);
+            duplicateMethods = MethodUtil.getMatchingDeclaredMethods(ActionConfig.class, "(set.*)|(remove.*)|(add.*)");
         } 
         catch(Exception exc)
         {
@@ -43,7 +47,7 @@ public class ActionMappingProxyGenerator
         {
             throw new ClassCastException(mappingClass.getClass().getName() + " must be an instance of " + ActionMapping.class.getName());
         }
-        DynamicMockProxyGenerator generator = new DynamicMockProxyGenerator(mappingClass, delegateMapping, delegateMethods);
+        DynamicMockProxyGenerator generator = new DynamicMockProxyGenerator(mappingClass, delegateMapping, delegateMethods, duplicateMethods);
         return (ActionMapping)generator.createProxy();
     }
 }

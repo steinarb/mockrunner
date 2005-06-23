@@ -1,6 +1,7 @@
 package com.mockrunner.test.web;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 
 import com.mockrunner.struts.DynamicMockProxyGenerator;
 
@@ -23,15 +24,15 @@ public class DynamicMockProxyGeneratorTest extends TestCase
     
     public void testProperInstance()
     {
-        DynamicMockProxyGenerator generator = new DynamicMockProxyGenerator(DynamicMockProxyGeneratorTest.class, delegator, Delegator.class.getDeclaredMethods(), Serializable.class);
+        DynamicMockProxyGenerator generator = new DynamicMockProxyGenerator(DynamicMockProxyGeneratorTest.class, delegator, Delegator.class.getDeclaredMethods(), new Method[0], Serializable.class);
         Object proxy = generator.createProxy();
         assertTrue(proxy instanceof Serializable);
         assertTrue(proxy instanceof DynamicMockProxyGeneratorTest);
     }
     
-    public void testDelegation()
+    public void testDelegationAndDuplication()
     {
-        DynamicMockProxyGenerator generator = new DynamicMockProxyGenerator(DynamicMockProxyGeneratorTest.class, delegator, Delegator.class.getDeclaredMethods());
+        DynamicMockProxyGenerator generator = new DynamicMockProxyGenerator(DynamicMockProxyGeneratorTest.class, delegator, Delegator.class.getDeclaredMethods(), Super.class.getDeclaredMethods());
         DynamicMockProxyGeneratorTest proxy = (DynamicMockProxyGeneratorTest)generator.createProxy();
         proxy.method1("method1");
         assertEquals(3, proxy.method2("method2", (short)5));
@@ -41,6 +42,9 @@ public class DynamicMockProxyGeneratorTest extends TestCase
         assertEquals("method1", delegator.getMethod1Param());
         assertEquals("method2", delegator.getMethod2Param1());
         assertEquals(5, delegator.getMethod2Param2());
+        assertEquals("DynamicMockProxyGeneratorTest", proxy.superMethod(5));
+        assertTrue(delegator.wasSuperMethodCalled());
+        assertEquals(5, delegator.getSuperMethodParam());
     }
     
     public void method1(String name)
@@ -58,7 +62,35 @@ public class DynamicMockProxyGeneratorTest extends TestCase
         return "test";
     }
     
-    public static class Delegator
+    public String superMethod(int value)
+    {
+        return "DynamicMockProxyGeneratorTest";
+    }
+    
+    public static class Super
+    {
+        private boolean wasSuperMethodCalled = false;
+        private int superMethodParam = 0;
+        
+        public String superMethod(int value)
+        {
+            wasSuperMethodCalled = true;
+            superMethodParam = value;
+            return "Super";
+        }
+        
+        public boolean wasSuperMethodCalled()
+        {
+            return wasSuperMethodCalled;
+        }
+
+        public int getSuperMethodParam()
+        {
+            return superMethodParam;
+        }
+    }
+    
+    public static class Delegator extends Super
     {
         private boolean wasMethod1Called = false;
         private boolean wasMethod2Called = false;

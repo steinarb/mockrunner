@@ -131,14 +131,6 @@ public class BasicEJBTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#lookup(String)}
-     */
-    protected Object lookup(String name)
-    {
-        return ejbTestModule.lookup(name);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.ejb.EJBTestModule#setImplementationSuffix(String)}
      */
     protected void setImplementationSuffix(String impSuffix)
@@ -187,14 +179,6 @@ public class BasicEJBTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deploy(BasicEjbDescriptor)}
-     */
-    protected void deploy(BasicEjbDescriptor descriptor)
-    {
-        ejbTestModule.deploy(descriptor);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deploy(BasicEjbDescriptor, TransactionPolicy)}
      */
     protected void deploy(BasicEjbDescriptor descriptor, TransactionPolicy policy)
@@ -203,35 +187,19 @@ public class BasicEJBTestCaseAdapter extends TestCase
     }
 
     /**
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deploy(BasicEjbDescriptor)}
+     */
+    protected void deploy(BasicEjbDescriptor descriptor)
+    {
+        ejbTestModule.deploy(descriptor);
+    }
+
+    /**
      * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deploySessionBean(String, Class, boolean, TransactionPolicy)}
      */
     protected void deploySessionBean(String jndiName, Class beanClass, boolean stateful, TransactionPolicy policy)
     {
         ejbTestModule.deploySessionBean(jndiName, beanClass, stateful, policy);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deploySessionBean(String, Object)}
-     */
-    protected void deploySessionBean(String jndiName, Object bean)
-    {
-        ejbTestModule.deploySessionBean(jndiName, bean);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deploySessionBean(String, Object, boolean)}
-     */
-    protected void deploySessionBean(String jndiName, Object bean, boolean stateful)
-    {
-        ejbTestModule.deploySessionBean(jndiName, bean, stateful);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deploySessionBean(String, Class, boolean)}
-     */
-    protected void deploySessionBean(String jndiName, Class beanClass, boolean stateful)
-    {
-        ejbTestModule.deploySessionBean(jndiName, beanClass, stateful);
     }
 
     /**
@@ -251,11 +219,35 @@ public class BasicEJBTestCaseAdapter extends TestCase
     }
 
     /**
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deploySessionBean(String, Class, boolean)}
+     */
+    protected void deploySessionBean(String jndiName, Class beanClass, boolean stateful)
+    {
+        ejbTestModule.deploySessionBean(jndiName, beanClass, stateful);
+    }
+
+    /**
      * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deploySessionBean(String, Class, TransactionPolicy)}
      */
     protected void deploySessionBean(String jndiName, Class beanClass, TransactionPolicy policy)
     {
         ejbTestModule.deploySessionBean(jndiName, beanClass, policy);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deploySessionBean(String, Object)}
+     */
+    protected void deploySessionBean(String jndiName, Object bean)
+    {
+        ejbTestModule.deploySessionBean(jndiName, bean);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deploySessionBean(String, Object, boolean)}
+     */
+    protected void deploySessionBean(String jndiName, Object bean, boolean stateful)
+    {
+        ejbTestModule.deploySessionBean(jndiName, bean, stateful);
     }
 
     /**
@@ -267,14 +259,6 @@ public class BasicEJBTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deployEntityBean(String, Class, TransactionPolicy)}
-     */
-    protected void deployEntityBean(String jndiName, Class beanClass, TransactionPolicy policy)
-    {
-        ejbTestModule.deployEntityBean(jndiName, beanClass, policy);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deployEntityBean(String, Class)}
      */
     protected void deployEntityBean(String jndiName, Class beanClass)
@@ -283,11 +267,11 @@ public class BasicEJBTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deployMessageBean(String, String, ConnectionFactory, Destination, Object)}
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deployEntityBean(String, Class, TransactionPolicy)}
      */
-    protected void deployMessageBean(String connectionFactoryJndiName, String destinationJndiName, ConnectionFactory connectionFactory, Destination destination, Object bean)
+    protected void deployEntityBean(String jndiName, Class beanClass, TransactionPolicy policy)
     {
-        ejbTestModule.deployMessageBean(connectionFactoryJndiName, destinationJndiName, connectionFactory, destination, bean);
+        ejbTestModule.deployEntityBean(jndiName, beanClass, policy);
     }
 
     /**
@@ -296,6 +280,14 @@ public class BasicEJBTestCaseAdapter extends TestCase
     protected void deployMessageBean(String connectionFactoryJndiName, String destinationJndiName, ConnectionFactory connectionFactory, Destination destination, Object bean, TransactionPolicy policy)
     {
         ejbTestModule.deployMessageBean(connectionFactoryJndiName, destinationJndiName, connectionFactory, destination, bean, policy);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#deployMessageBean(String, String, ConnectionFactory, Destination, Object)}
+     */
+    protected void deployMessageBean(String connectionFactoryJndiName, String destinationJndiName, ConnectionFactory connectionFactory, Destination destination, Object bean)
+    {
+        ejbTestModule.deployMessageBean(connectionFactoryJndiName, destinationJndiName, connectionFactory, destination, bean);
     }
 
     /**
@@ -334,11 +326,11 @@ public class BasicEJBTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#createBean(String, String, Object[])}
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#createBean(String)}
      */
-    protected Object createBean(String name, String createMethod, Object[] parameters)
+    protected Object createBean(String name)
     {
-        return ejbTestModule.createBean(name, createMethod, parameters);
+        return ejbTestModule.createBean(name);
     }
 
     /**
@@ -350,6 +342,14 @@ public class BasicEJBTestCaseAdapter extends TestCase
     }
 
     /**
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#createBean(String, String, Object[])}
+     */
+    protected Object createBean(String name, String createMethod, Object[] parameters)
+    {
+        return ejbTestModule.createBean(name, createMethod, parameters);
+    }
+
+    /**
      * Delegates to {@link com.mockrunner.ejb.EJBTestModule#createBean(String, String, Object[], Class[])}
      */
     protected Object createBean(String name, String createMethod, Object[] parameters, Class[] parameterTypes)
@@ -358,19 +358,19 @@ public class BasicEJBTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#createBean(String)}
-     */
-    protected Object createBean(String name)
-    {
-        return ejbTestModule.createBean(name);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.ejb.EJBTestModule#createEntityBean(String, Object[], Object)}
      */
     protected Object createEntityBean(String name, Object[] parameters, Object primaryKey)
     {
         return ejbTestModule.createEntityBean(name, parameters, primaryKey);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#createEntityBean(String, String, Object[], Class[], Object)}
+     */
+    protected Object createEntityBean(String name, String createMethod, Object[] parameters, Class[] parameterTypes, Object primaryKey)
+    {
+        return ejbTestModule.createEntityBean(name, createMethod, parameters, parameterTypes, primaryKey);
     }
 
     /**
@@ -387,14 +387,6 @@ public class BasicEJBTestCaseAdapter extends TestCase
     protected Object createEntityBean(String name, String createMethod, Object[] parameters, Object primaryKey)
     {
         return ejbTestModule.createEntityBean(name, createMethod, parameters, primaryKey);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#createEntityBean(String, String, Object[], Class[], Object)}
-     */
-    protected Object createEntityBean(String name, String createMethod, Object[] parameters, Class[] parameterTypes, Object primaryKey)
-    {
-        return ejbTestModule.createEntityBean(name, createMethod, parameters, parameterTypes, primaryKey);
     }
 
     /**
@@ -459,5 +451,13 @@ public class BasicEJBTestCaseAdapter extends TestCase
     protected void verifyNotMarkedForRollback()
     {
         ejbTestModule.verifyNotMarkedForRollback();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#lookup(String)}
+     */
+    protected Object lookup(String name)
+    {
+        return ejbTestModule.lookup(name);
     }
 }

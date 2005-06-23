@@ -17,6 +17,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.DynaActionForm;
@@ -125,7 +126,7 @@ public class ActionTestModule extends HTMLOutputModule
     }
 
     /**
-     * Convinience method for map backed properties. Creates a String
+     * Convenience method for map backed properties. Creates a String
      * <i>value(property)</i>.
      * @param property the property
      * @return the String in map backed propery style
@@ -136,35 +137,38 @@ public class ActionTestModule extends HTMLOutputModule
     }
 
     /**
-     * Sets the parameter by delegating to {@link MockActionMapping#setParameter}.
+     * Sets the parameter by calling <code>ActionMapping.setParameter</code>
+     * on the action mapping returned by {@link #getActionMapping}.
      * You can test your Actions with different parameter settings in the
      * same test method.
      * @param parameter the parameter
      */
     public void setParameter(String parameter)
     {
-        getMockActionMapping().setParameter(parameter);
+        getActionMapping().setParameter(parameter);
     }
 
     /**
-     * Sets if Form validation should be performed before calling the action.
-     * Delegates to {@link MockActionMapping#setValidate}. Default is false.
+     * Sets if form validation should be performed before calling the action.
+     * Calls <code>ActionMapping.setValidate</code> on the action mapping returned 
+     * by {@link #getActionMapping}. Default is <code>false</code>.
      * @param validate should validation be performed
      */
     public void setValidate(boolean validate)
     {
-        getMockActionMapping().setValidate(validate);
+        getActionMapping().setValidate(validate);
     }
     
     /**
      * Sets the input attribute. If form validation fails, the
      * input attribute can be verified with {@link #verifyForward}.
-     * Delegates to {@link MockActionMapping#setInput}.
+     * Calls <code>ActionMapping.setInput</code> on the action mapping returned 
+     * by {@link #getActionMapping}.
      * @param input the input attribute
      */
     public void setInput(String input)
     {
-        getMockActionMapping().setInput(input);
+        getActionMapping().setInput(input);
     }
     
     /**
@@ -858,15 +862,21 @@ public class ActionTestModule extends HTMLOutputModule
     }
 
     /**
-     * Returns the <code>MockActionMapping</code> passed to 
-     * the action. Can be manipulated before and after 
-     * {@link #actionPerform}.
      * Delegates to {@link com.mockrunner.mock.web.ActionMockObjectFactory#getMockActionMapping}.
      * @return the MockActionMapping
      */
     public MockActionMapping getMockActionMapping()
     {
         return mockFactory.getMockActionMapping();
+    }
+    
+    /**
+     * Delegates to {@link com.mockrunner.mock.web.ActionMockObjectFactory#getActionMapping}.
+     * @return the MockActionMapping
+     */
+    public ActionMapping getActionMapping()
+    {
+        return mockFactory.getActionMapping();
     }
 
     /**
@@ -1115,19 +1125,19 @@ public class ActionTestModule extends HTMLOutputModule
             actionObj.setServlet(mockFactory.getMockActionServlet());
             formObj = form;
             setActionErrors(null);
-            getMockActionMapping().setType(action.getClass().getName());
+            getActionMapping().setType(action.getClass().getName());
             if(null != formObj)
             {
                 handleActionForm();
             }
             if(!hasActionErrors())
             {
-                ActionForward currentForward = (ActionForward) actionObj.execute(getMockActionMapping(), formObj, mockFactory.getWrappedRequest(), mockFactory.getWrappedResponse());
+                ActionForward currentForward = (ActionForward) actionObj.execute(getActionMapping(), formObj, mockFactory.getWrappedRequest(), mockFactory.getWrappedResponse());
                 setResult(currentForward);
             }
             else
             {
-                setResult(getMockActionMapping().getInputForward());
+                setResult(getActionMapping().getInputForward());
             }
         }
         catch(Exception exc)
@@ -1169,12 +1179,12 @@ public class ActionTestModule extends HTMLOutputModule
 
     private void handleActionForm() throws Exception
     {
-        if(reset) getActionForm().reset(getMockActionMapping(), mockFactory.getWrappedRequest());
+        if(reset) getActionForm().reset(getActionMapping(), mockFactory.getWrappedRequest());
         if(doPopulate) populateMockRequest();
         formObj.setServlet(mockFactory.getMockActionServlet());
-        if(getMockActionMapping().getValidate())
+        if(getActionMapping().getValidate())
         {
-            ActionMessages errors = formObj.validate(getMockActionMapping(), mockFactory.getWrappedRequest());
+            ActionMessages errors = formObj.validate(getActionMapping(), mockFactory.getWrappedRequest());
             if (containsMessages(errors))
             {
                 mockFactory.getWrappedRequest().setAttribute(errorAttributeKey, errors);

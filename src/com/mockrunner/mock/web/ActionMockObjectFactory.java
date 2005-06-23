@@ -1,6 +1,9 @@
 package com.mockrunner.mock.web;
 
 import org.apache.struts.Globals;
+import org.apache.struts.action.ActionMapping;
+
+import com.mockrunner.struts.ActionMappingProxyGenerator;
 
 /**
  * Used to create all types of struts mock objects. Maintains
@@ -11,9 +14,10 @@ import org.apache.struts.Globals;
  */
 public class ActionMockObjectFactory extends WebMockObjectFactory
 {
-    private MockActionMapping mapping;
-    private MockActionServlet actionServlet;
-    private MockModuleConfig moduleConfig;
+    private MockActionMapping mockMapping;
+    private ActionMapping mapping;
+    private MockActionServlet mockActionServlet;
+    private MockModuleConfig mockModuleConfig;
     
     /**
      * Creates a new set of mock objects.
@@ -55,11 +59,12 @@ public class ActionMockObjectFactory extends WebMockObjectFactory
     
     private void createMockObjects()
     {
-        mapping = new MockActionMapping();
-        moduleConfig = new MockModuleConfig("testmodule");
-        actionServlet = new MockActionServlet();
-        actionServlet.setServletConfig(getMockServletConfig());
-        actionServlet.setServletContext(getMockServletContext());
+        mockMapping = new MockActionMapping();
+        mapping = mockMapping;
+        mockModuleConfig = new MockModuleConfig("testmodule");
+        mockActionServlet = new MockActionServlet();
+        mockActionServlet.setServletConfig(getMockServletConfig());
+        mockActionServlet.setServletContext(getMockServletContext());
         refresh();
     }
     
@@ -71,7 +76,56 @@ public class ActionMockObjectFactory extends WebMockObjectFactory
     {
         super.refresh();
         getWrappedRequest().setAttribute(Globals.MAPPING_KEY, mapping);
-        getWrappedRequest().setAttribute(Globals.MODULE_KEY, moduleConfig);
+        getWrappedRequest().setAttribute(Globals.MODULE_KEY, mockModuleConfig);
+    }
+    
+    /**
+     * Prepares an <code>ActionMapping</code>. If your actions rely
+     * on a custom subclass of <code>ActionMapping</code>, use this
+     * method to prepare it. Since {@link com.mockrunner.struts.ActionTestModule}
+     * relies on the behaviour of {@link com.mockrunner.mock.web.MockActionMapping},
+     * this method creates a subclass CGLib proxy of the specified mapping class.
+     * You can cast the returned <code>ActionMapping</code> to your custom
+     * mapping class and the subclass proxy will redirect the necessary
+     * methods to the {@link com.mockrunner.mock.web.MockActionMapping}.
+     * Redirected are methods for retrieving forwards. If an <code>ActionMapping</code>
+     * is prepared, {@link #getActionMapping} returns the prepared mapping while
+     * {@link #getMockActionMapping} returns the the underlying {@link com.mockrunner.mock.web.MockActionMapping}.
+     * This method relies on CGLib. CGLib is not required by the Struts test framework
+     * if this method is not used.
+     * @param mappingClass the class of the custom action mapping
+     * @return an instance of the custom action mapping class
+     */
+    public ActionMapping prepareActionMapping(Class mappingClass)
+    {
+        ActionMappingProxyGenerator generator = new ActionMappingProxyGenerator(mockMapping);
+        mapping = generator.createActionMappingProxy(mappingClass);
+        refresh();
+        return mapping;
+    }
+    
+    /**
+     * Resets <code>ActionMapping</code> configuration, i.e. sets
+     * the current <code>ActionMapping</code> returned by {@link #getActionMapping}
+     * to the mock action mapping returned by {@link #getMockActionMapping}.
+     */
+    public void resetActionMapping()
+    {
+        mapping = mockMapping;
+    }
+    
+    /**
+     * Returns the <code>ActionMapping</code>. Unless you prepare an
+     * <code>ActionMapping</code> using {@link #prepareActionMapping},
+     * this method returns the same object as {@link #getMockActionMapping}.
+     * If an <code>ActionMapping</code> is prepared, this method returns
+     * the prepared <code>ActionMapping</code> while {@link #getMockActionMapping}
+     * returns the underlying {@link com.mockrunner.mock.web.MockActionMapping}.
+     * @return the <code>ActionMapping</code>
+     */
+    public ActionMapping getActionMapping()
+    {
+        return mapping;
     }
     
     /**
@@ -80,7 +134,7 @@ public class ActionMockObjectFactory extends WebMockObjectFactory
      */
     public MockActionMapping getMockActionMapping()
     {
-        return mapping;
+        return mockMapping;
     }
     
     /**
@@ -89,15 +143,15 @@ public class ActionMockObjectFactory extends WebMockObjectFactory
      */
     public MockModuleConfig getMockModuleConfig()
     {
-        return moduleConfig;
+        return mockModuleConfig;
     }
     
     /**
-     * Returns the {@link com.mockrunner.mock.web.MockModuleConfig}.
-     * @return the {@link com.mockrunner.mock.web.MockModuleConfig}
+     * Returns the {@link com.mockrunner.mock.web.MockActionServlet}.
+     * @return the {@link com.mockrunner.mock.web.MockActionServlet}
      */
     public MockActionServlet getMockActionServlet()
     {
-        return actionServlet;
+        return mockActionServlet;
     }
 }

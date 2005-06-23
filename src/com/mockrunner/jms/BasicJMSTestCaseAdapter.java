@@ -200,6 +200,14 @@ public class BasicJMSTestCaseAdapter extends TestCase
     }
 
     /**
+     * Delegates to {@link com.mockrunner.jms.JMSTestModule#registerTestMessageListenerForQueue(MockConnection, String, MessageListener)}
+     */
+    protected void registerTestMessageListenerForQueue(MockConnection connection, String queueName, MessageListener listener)
+    {
+        jmsTestModule.registerTestMessageListenerForQueue(connection, queueName, listener);
+    }
+
+    /**
      * Delegates to {@link com.mockrunner.jms.JMSTestModule#registerTestMessageListenerForQueue(MockConnection, String, boolean, int, String, MessageListener)}
      */
     protected void registerTestMessageListenerForQueue(MockConnection connection, String queueName, boolean transacted, int acknowledgeMode, String messageSelector, MessageListener listener)
@@ -216,14 +224,6 @@ public class BasicJMSTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jms.JMSTestModule#registerTestMessageListenerForQueue(MockConnection, String, MessageListener)}
-     */
-    protected void registerTestMessageListenerForQueue(MockConnection connection, String queueName, MessageListener listener)
-    {
-        jmsTestModule.registerTestMessageListenerForQueue(connection, queueName, listener);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.jms.JMSTestModule#registerTestMessageListenerForQueue(MockConnection, String, boolean, int, MessageListener)}
      */
     protected void registerTestMessageListenerForQueue(MockConnection connection, String queueName, boolean transacted, int acknowledgeMode, MessageListener listener)
@@ -237,22 +237,6 @@ public class BasicJMSTestCaseAdapter extends TestCase
     protected DestinationManager getDestinationManager()
     {
         return jmsTestModule.getDestinationManager();
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.jms.JMSTestModule#getQueue(String)}
-     */
-    protected MockQueue getQueue(String name)
-    {
-        return jmsTestModule.getQueue(name);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.jms.JMSTestModule#registerTestMessageListenerForTopic(MockConnection, String, MessageListener)}
-     */
-    protected void registerTestMessageListenerForTopic(MockConnection connection, String topicName, MessageListener listener)
-    {
-        jmsTestModule.registerTestMessageListenerForTopic(connection, topicName, listener);
     }
 
     /**
@@ -277,6 +261,14 @@ public class BasicJMSTestCaseAdapter extends TestCase
     protected void registerTestMessageListenerForTopic(String topicName, MessageListener listener)
     {
         jmsTestModule.registerTestMessageListenerForTopic(topicName, listener);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jms.JMSTestModule#registerTestMessageListenerForTopic(MockConnection, String, MessageListener)}
+     */
+    protected void registerTestMessageListenerForTopic(MockConnection connection, String topicName, MessageListener listener)
+    {
+        jmsTestModule.registerTestMessageListenerForTopic(connection, topicName, listener);
     }
 
     /**
@@ -1081,19 +1073,19 @@ public class BasicJMSTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyNumberDurableTopicSubscribers(int, int)}
-     */
-    protected void verifyNumberDurableTopicSubscribers(int indexOfSession, int numberOfSubscribers)
-    {
-        jmsTestModule.verifyNumberDurableTopicSubscribers(indexOfSession, numberOfSubscribers);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyNumberDurableTopicSubscribers(int, String, int)}
      */
     protected void verifyNumberDurableTopicSubscribers(int indexOfSession, String topicName, int numberOfSubscribers)
     {
         jmsTestModule.verifyNumberDurableTopicSubscribers(indexOfSession, topicName, numberOfSubscribers);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyNumberDurableTopicSubscribers(int, int)}
+     */
+    protected void verifyNumberDurableTopicSubscribers(int indexOfSession, int numberOfSubscribers)
+    {
+        jmsTestModule.verifyNumberDurableTopicSubscribers(indexOfSession, numberOfSubscribers);
     }
 
     /**
@@ -1225,14 +1217,6 @@ public class BasicJMSTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyNumberOfCurrentQueueMessages(int, int, int)}
-     */
-    protected void verifyNumberOfCurrentQueueMessages(int indexOfSession, int indexOfQueue, int numberOfMessages)
-    {
-        jmsTestModule.verifyNumberOfCurrentQueueMessages(indexOfSession, indexOfQueue, numberOfMessages);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyNumberOfCurrentQueueMessages(String, int)}
      */
     protected void verifyNumberOfCurrentQueueMessages(String nameOfQueue, int numberOfMessages)
@@ -1241,11 +1225,11 @@ public class BasicJMSTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyNumberOfReceivedQueueMessages(String, int)}
+     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyNumberOfCurrentQueueMessages(int, int, int)}
      */
-    protected void verifyNumberOfReceivedQueueMessages(String nameOfQueue, int numberOfMessages)
+    protected void verifyNumberOfCurrentQueueMessages(int indexOfSession, int indexOfQueue, int numberOfMessages)
     {
-        jmsTestModule.verifyNumberOfReceivedQueueMessages(nameOfQueue, numberOfMessages);
+        jmsTestModule.verifyNumberOfCurrentQueueMessages(indexOfSession, indexOfQueue, numberOfMessages);
     }
 
     /**
@@ -1257,11 +1241,11 @@ public class BasicJMSTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyAllReceivedQueueMessagesAcknowledged(int, int)}
+     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyNumberOfReceivedQueueMessages(String, int)}
      */
-    protected void verifyAllReceivedQueueMessagesAcknowledged(int indexOfSession, int indexOfQueue)
+    protected void verifyNumberOfReceivedQueueMessages(String nameOfQueue, int numberOfMessages)
     {
-        jmsTestModule.verifyAllReceivedQueueMessagesAcknowledged(indexOfSession, indexOfQueue);
+        jmsTestModule.verifyNumberOfReceivedQueueMessages(nameOfQueue, numberOfMessages);
     }
 
     /**
@@ -1273,11 +1257,11 @@ public class BasicJMSTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyReceivedQueueMessageAcknowledged(String, int)}
+     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyAllReceivedQueueMessagesAcknowledged(int, int)}
      */
-    protected void verifyReceivedQueueMessageAcknowledged(String nameOfQueue, int indexOfMessage)
+    protected void verifyAllReceivedQueueMessagesAcknowledged(int indexOfSession, int indexOfQueue)
     {
-        jmsTestModule.verifyReceivedQueueMessageAcknowledged(nameOfQueue, indexOfMessage);
+        jmsTestModule.verifyAllReceivedQueueMessagesAcknowledged(indexOfSession, indexOfQueue);
     }
 
     /**
@@ -1289,11 +1273,11 @@ public class BasicJMSTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyReceivedQueueMessageNotAcknowledged(String, int)}
+     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyReceivedQueueMessageAcknowledged(String, int)}
      */
-    protected void verifyReceivedQueueMessageNotAcknowledged(String nameOfQueue, int indexOfMessage)
+    protected void verifyReceivedQueueMessageAcknowledged(String nameOfQueue, int indexOfMessage)
     {
-        jmsTestModule.verifyReceivedQueueMessageNotAcknowledged(nameOfQueue, indexOfMessage);
+        jmsTestModule.verifyReceivedQueueMessageAcknowledged(nameOfQueue, indexOfMessage);
     }
 
     /**
@@ -1302,6 +1286,14 @@ public class BasicJMSTestCaseAdapter extends TestCase
     protected void verifyReceivedQueueMessageNotAcknowledged(int indexOfSession, int indexOfQueue, int indexOfMessage)
     {
         jmsTestModule.verifyReceivedQueueMessageNotAcknowledged(indexOfSession, indexOfQueue, indexOfMessage);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyReceivedQueueMessageNotAcknowledged(String, int)}
+     */
+    protected void verifyReceivedQueueMessageNotAcknowledged(String nameOfQueue, int indexOfMessage)
+    {
+        jmsTestModule.verifyReceivedQueueMessageNotAcknowledged(nameOfQueue, indexOfMessage);
     }
 
     /**
@@ -1497,14 +1489,6 @@ public class BasicJMSTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyNumberOfReceivedTopicMessages(String, int)}
-     */
-    protected void verifyNumberOfReceivedTopicMessages(String nameOfTopic, int numberOfMessages)
-    {
-        jmsTestModule.verifyNumberOfReceivedTopicMessages(nameOfTopic, numberOfMessages);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyNumberOfReceivedTopicMessages(int, int, int)}
      */
     protected void verifyNumberOfReceivedTopicMessages(int indexOfSession, int indexOfTopic, int numberOfMessages)
@@ -1513,11 +1497,11 @@ public class BasicJMSTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyAllReceivedTopicMessagesAcknowledged(int, int)}
+     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyNumberOfReceivedTopicMessages(String, int)}
      */
-    protected void verifyAllReceivedTopicMessagesAcknowledged(int indexOfSession, int indexOfTopic)
+    protected void verifyNumberOfReceivedTopicMessages(String nameOfTopic, int numberOfMessages)
     {
-        jmsTestModule.verifyAllReceivedTopicMessagesAcknowledged(indexOfSession, indexOfTopic);
+        jmsTestModule.verifyNumberOfReceivedTopicMessages(nameOfTopic, numberOfMessages);
     }
 
     /**
@@ -1529,11 +1513,11 @@ public class BasicJMSTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyReceivedTopicMessageAcknowledged(String, int)}
+     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyAllReceivedTopicMessagesAcknowledged(int, int)}
      */
-    protected void verifyReceivedTopicMessageAcknowledged(String nameOfTopic, int indexOfMessage)
+    protected void verifyAllReceivedTopicMessagesAcknowledged(int indexOfSession, int indexOfTopic)
     {
-        jmsTestModule.verifyReceivedTopicMessageAcknowledged(nameOfTopic, indexOfMessage);
+        jmsTestModule.verifyAllReceivedTopicMessagesAcknowledged(indexOfSession, indexOfTopic);
     }
 
     /**
@@ -1542,6 +1526,14 @@ public class BasicJMSTestCaseAdapter extends TestCase
     protected void verifyReceivedTopicMessageAcknowledged(int indexOfSession, int indexOfTopic, int indexOfMessage)
     {
         jmsTestModule.verifyReceivedTopicMessageAcknowledged(indexOfSession, indexOfTopic, indexOfMessage);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyReceivedTopicMessageAcknowledged(String, int)}
+     */
+    protected void verifyReceivedTopicMessageAcknowledged(String nameOfTopic, int indexOfMessage)
+    {
+        jmsTestModule.verifyReceivedTopicMessageAcknowledged(nameOfTopic, indexOfMessage);
     }
 
     /**
@@ -1846,5 +1838,13 @@ public class BasicJMSTestCaseAdapter extends TestCase
     protected void verifyCreatedObjectMessageNotAcknowledged(int indexOfSession, int indexOfMessage)
     {
         jmsTestModule.verifyCreatedObjectMessageNotAcknowledged(indexOfSession, indexOfMessage);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.jms.JMSTestModule#getQueue(String)}
+     */
+    protected MockQueue getQueue(String name)
+    {
+        return jmsTestModule.getQueue(name);
     }
 }
