@@ -825,4 +825,66 @@ public class MockStatementTest extends BaseTestCase
         keys = (MockResultSet)preparedStatement.getGeneratedKeys();
         assertTrue(isResultSet2(keys));
     }
+    
+    public void testParameterCopy() throws Exception
+    {
+        Map params = new HashMap();
+        params.put(new Integer(1), "1");
+        params.put(new Integer(2), "2");
+        callableStatementHandler.prepareResultSet("call1", resultSet1, params);
+        MockCallableStatement callableStatement = (MockCallableStatement)connection.prepareCall("call1");
+        params.put(new Integer(2), "3");
+        callableStatement.setString(1, "1");
+        callableStatement.setString(2, "3");
+        MockResultSet currentResult = (MockResultSet)callableStatement.executeQuery();
+        assertNull(currentResult);
+        callableStatement.setString(2, "2");
+        currentResult = (MockResultSet)callableStatement.executeQuery();
+        assertTrue(isResultSet1(currentResult));
+        params = new HashMap();
+        params.put(new Integer(1), "1");
+        params.put(new Integer(2), "2");
+        callableStatementHandler.prepareUpdateCount("call2", 5, params);
+        callableStatement = (MockCallableStatement)connection.prepareCall("call2");
+        params.put(new Integer(2), "3");
+        callableStatement.setString(1, "1");
+        callableStatement.setString(2, "3");
+        assertEquals(0, callableStatement.executeUpdate());
+        callableStatement.setString(2, "2");
+        assertEquals(5, callableStatement.executeUpdate());
+        params = new HashMap();
+        params.put(new Integer(1), "1");
+        params.put(new Integer(2), "2");
+        callableStatementHandler.prepareThrowsSQLException("call3", params);
+        callableStatement = (MockCallableStatement)connection.prepareCall("call3");
+        params.put(new Integer(2), "3");
+        callableStatement.setString(1, "1");
+        callableStatement.setString(2, "3");
+        callableStatement.execute();
+        callableStatement.setString(2, "2");
+        try
+        {
+            callableStatement.execute();
+            fail();
+        } 
+        catch (SQLException exc)
+        {
+            //should throw exception
+        }
+        params = new HashMap();
+        params.put(new Integer(1), "1");
+        params.put(new Integer(2), "2");
+        callableStatementHandler.prepareOutParameter("call4", params, params);
+        callableStatement = (MockCallableStatement)connection.prepareCall("call4");
+        params.put(new Integer(2), "3");
+        callableStatement.setString(1, "1");
+        callableStatement.setString(2, "3");
+        callableStatement.execute();
+        assertNull(callableStatement.getString(1)); 
+        assertNull(callableStatement.getString(2)); 
+        callableStatement.setString(2, "2");
+        callableStatement.execute(); 
+        assertEquals("1", callableStatement.getString(1)); 
+        assertEquals("2", callableStatement.getString(2)); 
+    }
 }
