@@ -198,7 +198,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
             list = new ArrayList();
             outParameterForStatementParameters.put(sql, list);
         }
-        list.add(new MockOutParameterWrapper(new HashMap(outParameters), parameters));
+        list.add(new MockOutParameterWrapper(new HashMap(outParameters), new HashMap(parameters)));
     }
     
     private class MockOutParameterWrapper

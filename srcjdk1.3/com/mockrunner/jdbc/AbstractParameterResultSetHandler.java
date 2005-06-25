@@ -288,7 +288,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
             list = new ArrayList();
             resultSetsForStatement.put(sql, list);
         }
-        list.add(new MockResultSetWrapper(resultSet, parameters));
+        list.add(new MockResultSetWrapper(resultSet, new HashMap(parameters)));
     }
     
     /**
@@ -358,7 +358,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
             list = new ArrayList();
             throwsSQLException.put(sql, list);
         }
-        list.add(parameters);
+        list.add(new HashMap(parameters));
     }
 
     /**
@@ -431,7 +431,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
             list = new ArrayList();
             updateCountForStatement.put(sql, list);
         }
-        list.add(new MockUpdateCountWrapper(updateCount, parameters));
+        list.add(new MockUpdateCountWrapper(updateCount, new HashMap(parameters)));
     }
     
     private class MockResultSetWrapper
