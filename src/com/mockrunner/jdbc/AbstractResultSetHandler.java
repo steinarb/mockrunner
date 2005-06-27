@@ -364,11 +364,11 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Returns if the specified SQL string is a select that returns
+     * Returns if the specified SQL string is a <i>select</i> that returns
      * a <code>ResultSet</code>.
      * Usually you do not have to specify this.
      * It is assumed that an SQL string returns a <code>ResultSet</code> 
-     * if it contains <i>SELECT</i>.
+     * if it contains the string <i>select</i> (case insensitive).
      * Please note that you can modify the match parameters with 
      * {@link #setCaseSensitive}, {@link #setExactMatch} and 
      * {@link #setUseRegularExpressions}.
@@ -470,10 +470,10 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Prepare if the specified SQL string is a select that returns
+     * Prepare if the specified SQL string is a <i>select</i> that returns
      * a <code>ResultSet</code>. Usually you do not have to specify this.
      * It is assumed that an SQL string returns a <code>ResultSet</code> 
-     * if it contains <i>SELECT</i>.
+     * if it contains the string <i>select</i> (case insensitive).
      * Please note that you can modify the match parameters with 
      * {@link #setCaseSensitive}, {@link #setExactMatch} and 
      * {@link #setUseRegularExpressions}.
