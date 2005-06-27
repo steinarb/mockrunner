@@ -37,6 +37,7 @@ import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.struts.ActionTestModule;
 import com.mockrunner.struts.DefaultExceptionHandlerConfig;
+import com.mockrunner.struts.ExceptionHandlerConfig;
 import com.mockrunner.struts.MapMessageResources;
 
 public class ActionTestModuleTest extends BaseTestCase
@@ -1028,6 +1029,21 @@ public class ActionTestModuleTest extends BaseTestCase
         }
     }
     
+    public void testExceptionHandlerActionForward()
+    {
+        TestExceptionHandlerConfig config1 = new TestExceptionHandlerConfig(true, new MockActionForward("test"));
+        TestExceptionHandlerConfig config2 = new TestExceptionHandlerConfig(false, new Integer(1));
+        module.addExceptionHandler(config1);
+        module.addExceptionHandler(config2);
+        ActionForward forward = module.actionPerform(new TestFailureAction(new Exception()));
+        assertEquals("test", forward.getName());
+        assertSame(forward, module.getActionForward());
+        config1.setCanHandle(false);
+        config2.setCanHandle(true);
+        assertNull(module.actionPerform(new TestFailureAction(new Exception())));
+        assertNull(module.getActionForward());
+    }
+    
     public void testNestedException()
     {
         try
@@ -1335,6 +1351,33 @@ public class ActionTestModuleTest extends BaseTestCase
         public boolean wasExecuteCalled()
         {
             return executeCalled;
+        }
+    }
+    
+    public static class TestExceptionHandlerConfig implements ExceptionHandlerConfig
+    {
+        private boolean canHandle;
+        private Object returnValue;
+        
+        public TestExceptionHandlerConfig(boolean handle, Object value)
+        {            
+            canHandle = handle;
+            returnValue = value;
+        }
+
+        public void setCanHandle(boolean canHandle)
+        {
+            this.canHandle = canHandle;
+        }
+
+        public boolean canHandle(Exception exception)
+        {
+            return canHandle;
+        }
+
+        public Object handle(Exception exception, ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception
+        {
+            return returnValue;
         }
     }
 }
