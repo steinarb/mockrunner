@@ -2,7 +2,9 @@ package com.mockrunner.struts;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.ServletException;
@@ -43,8 +45,10 @@ import com.mockrunner.util.common.StreamUtil;
  * Per default this class does everything like Struts
  * when calling an action but you can change the behaviour
  * (e.g. disable form population).
- * Please note: If your action throws an exception, it
- * will be nested in a {@link com.mockrunner.base.NestedApplicationException}.
+ * Please note: If your action throws an exception and an 
+ * exception handler is registered (use {@link #addExceptionHandler}),
+ * the handler will be called to handle the exception.
+ * Otherwise the exception will be rethrown as {@link com.mockrunner.base.NestedApplicationException}.
  */
 public class ActionTestModule extends HTMLOutputModule
 {
@@ -58,6 +62,7 @@ public class ActionTestModule extends HTMLOutputModule
     private boolean recognizeInSession;
     private String messageAttributeKey;
     private String errorAttributeKey;
+    private List exceptionHandlers;
     
     public ActionTestModule(ActionMockObjectFactory mockFactory)
     {
@@ -68,6 +73,7 @@ public class ActionTestModule extends HTMLOutputModule
         recognizeInSession = true;
         messageAttributeKey = Globals.MESSAGE_KEY;
         errorAttributeKey = Globals.ERROR_KEY;
+        exceptionHandlers = new ArrayList();
     }
     
     /**
@@ -169,6 +175,27 @@ public class ActionTestModule extends HTMLOutputModule
     public void setInput(String input)
     {
         getActionMapping().setInput(input);
+    }
+    
+    /**
+     * Registers an exception handler. The exception handler will
+     * be called if an action throws an exception. Usually, you
+     * will pass an instance of {@link DefaultExceptionHandlerConfig}
+     * to this method. {@link DefaultExceptionHandlerConfig}
+     * relies on Struts <code>ExceptionHandler</code> classes.
+     * In special cases, you may add own implementations of
+     * {@link ExceptionHandlerConfig}, that may be independent from
+     * the Struts exception handling mechanism.
+     * If no matching handler is registered, the exception will be rethrown
+     * as {@link com.mockrunner.base.NestedApplicationException}.
+     * @param handler the exception handler
+     */
+    public void addExceptionHandler(ExceptionHandlerConfig handler)
+    {
+        if(null != handler)
+        {
+            exceptionHandlers.add(handler);
+        }
     }
     
     /**
@@ -1132,7 +1159,27 @@ public class ActionTestModule extends HTMLOutputModule
             }
             if(!hasActionErrors())
             {
-                ActionForward currentForward = (ActionForward) actionObj.execute(getActionMapping(), formObj, mockFactory.getWrappedRequest(), mockFactory.getWrappedResponse());
+                ActionForward currentForward = null;
+                try
+                {
+                    currentForward = (ActionForward)actionObj.execute(getActionMapping(), formObj, mockFactory.getWrappedRequest(), mockFactory.getWrappedResponse());
+                } 
+                catch(Exception exc)
+                {
+                    ExceptionHandlerConfig handler = findExceptionHandler(exc);
+                    if(null == handler)
+                    {
+                        throw exc;
+                    }
+                    else
+                    {
+                        Object result = handler.handle(exc, getActionMapping(), formObj, mockFactory.getWrappedRequest(), mockFactory.getWrappedResponse());
+                        if(result instanceof ActionForward)
+                        {
+                            currentForward = (ActionForward)result;
+                        }
+                    }
+                }
                 setResult(currentForward);
             }
             else
@@ -1175,6 +1222,16 @@ public class ActionTestModule extends HTMLOutputModule
         {
             forward = new MockActionForward(currentForward);
         }
+    }
+    
+    private ExceptionHandlerConfig findExceptionHandler(Exception exc)
+    {
+        for(int ii = 0; ii < exceptionHandlers.size(); ii++)
+        {
+            ExceptionHandlerConfig next = (ExceptionHandlerConfig)exceptionHandlers.get(ii);
+            if(next.canHandle(exc)) return next;
+        }
+        return null;
     }
 
     private void handleActionForm() throws Exception
