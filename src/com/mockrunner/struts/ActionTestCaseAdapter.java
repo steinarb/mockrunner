@@ -153,6 +153,14 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#addExceptionHandler(ExceptionHandlerConfig)}
+     */
+    protected void addExceptionHandler(ExceptionHandlerConfig handler)
+    {
+        actionTestModule.addExceptionHandler(handler);
+    }
+
+    /**
      * Delegates to {@link com.mockrunner.struts.ActionTestModule#setResources(String, MessageResources)}
      */
     protected void setResources(String key, MessageResources resources)
@@ -561,25 +569,17 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, Class)}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action)}
      */
-    protected ActionForward actionPerform(Class action, Class form)
+    protected ActionForward actionPerform(Action action)
     {
-        return actionTestModule.actionPerform(action, form);
+        return actionTestModule.actionPerform(action);
     }
 
     /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, Class)}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, ActionForm)}
      */
-    protected ActionForward actionPerform(Action action, Class form)
-    {
-        return actionTestModule.actionPerform(action, form);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, ActionForm)}
-     */
-    protected ActionForward actionPerform(Class action, ActionForm form)
+    protected ActionForward actionPerform(Action action, ActionForm form)
     {
         return actionTestModule.actionPerform(action, form);
     }
@@ -593,17 +593,25 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action)}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, Class)}
      */
-    protected ActionForward actionPerform(Action action)
+    protected ActionForward actionPerform(Action action, Class form)
     {
-        return actionTestModule.actionPerform(action);
+        return actionTestModule.actionPerform(action, form);
     }
 
     /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, ActionForm)}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, Class)}
      */
-    protected ActionForward actionPerform(Action action, ActionForm form)
+    protected ActionForward actionPerform(Class action, Class form)
+    {
+        return actionTestModule.actionPerform(action, form);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, ActionForm)}
+     */
+    protected ActionForward actionPerform(Class action, ActionForm form)
     {
         return actionTestModule.actionPerform(action, form);
     }

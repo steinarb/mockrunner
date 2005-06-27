@@ -11,6 +11,14 @@ import org.apache.struts.config.ExceptionConfig;
 
 import com.mockrunner.base.NestedApplicationException;
 
+/**
+ * The default implementation of {@link ExceptionHandlerConfig}. It uses the Struts
+ * exception handling mechanism. Use the various constructors to provide your subclass
+ * of <code>ExceptionHandler</code> or to configure exception handling using an
+ * instance of <code>ExceptionConfig</code>. The <code>ExceptionConfig</code> class
+ * allows you to set the handler class an exception type.
+ * Use {@link ActionTestModule#addExceptionHandler} to register an exception handler.
+ */
 public class DefaultExceptionHandlerConfig implements ExceptionHandlerConfig
 {
     private ExceptionConfig exceptionConfig;
@@ -77,11 +85,21 @@ public class DefaultExceptionHandlerConfig implements ExceptionHandlerConfig
         return exceptionHandler.execute((Exception)exception, exceptionConfig, mapping, form, request, response);
     }
 
+    /**
+     * Get the underlying <code>ExceptionConfig</code>. If you did not provide
+     * an instance of <code>ExceptionConfig</code>, this class will create one
+     * internally.
+     * @return the <code>ExceptionConfig</code>
+     */
     public ExceptionConfig getExceptionConfig()
     {
         return exceptionConfig;
     }
 
+    /**
+     * Get the underlying <code>ExceptionHandler</code>.
+     * @return the <code>ExceptionHandler</code>
+     */
     public ExceptionHandler getExceptionHandler()
     {
         return exceptionHandler;

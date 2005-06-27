@@ -6,6 +6,8 @@ mockrunner-0.3.6:
 - added prepareActionMapping to ActionMockObjectFactory to allow the use of custom
   ActionMapping subclasses. Modified LogoutActionTest to demonstrate the use of custom
   mappings. This feature relies on CGLib.
+- added addExceptionHandler() to ActionTestModule. Can be used to simulate and test
+  Struts ExceptionHandler. Please use the class DefaultExceptionHandlerConfig
 - added resetAll() methods to web mock objects
 - JDBC test framework now supports generated keys using getGeneratedKeys()
 - improved version of MockDatabaseMetaData, now supports pattern matching using

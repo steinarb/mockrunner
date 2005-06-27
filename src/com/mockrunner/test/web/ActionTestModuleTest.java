@@ -1,9 +1,13 @@
 package com.mockrunner.test.web;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +24,8 @@ import org.apache.struts.action.ActionMessage;
 import org.apache.struts.action.ActionMessages;
 import org.apache.struts.action.ActionServlet;
 import org.apache.struts.action.DynaActionForm;
+import org.apache.struts.action.ExceptionHandler;
+import org.apache.struts.config.ExceptionConfig;
 import org.apache.struts.config.FormBeanConfig;
 import org.apache.struts.config.FormPropertyConfig;
 import org.apache.struts.util.MessageResources;
@@ -30,6 +36,7 @@ import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.struts.ActionTestModule;
+import com.mockrunner.struts.DefaultExceptionHandlerConfig;
 import com.mockrunner.struts.MapMessageResources;
 
 public class ActionTestModuleTest extends BaseTestCase
@@ -974,6 +981,53 @@ public class ActionTestModuleTest extends BaseTestCase
         assertEquals("testInput", getActionMockObjectFactory().getMockActionMapping().getInput());
     }
     
+    public void testExceptionHandler()
+    {
+        TestExceptionHandler handler1 = new TestExceptionHandler();
+        TestExceptionHandler handler2 = new TestExceptionHandler();
+        TestExceptionHandler handler3 = new TestExceptionHandler();
+        DefaultExceptionHandlerConfig config1 = new DefaultExceptionHandlerConfig(handler1, FileNotFoundException.class);
+        DefaultExceptionHandlerConfig config2 = new DefaultExceptionHandlerConfig(handler2, SQLException.class);
+        DefaultExceptionHandlerConfig config3 = new DefaultExceptionHandlerConfig(handler3, IOException.class);
+        module.addExceptionHandler(config1);
+        module.addExceptionHandler(config2);
+        module.addExceptionHandler(config3);
+        IOException ioException = new IOException();
+        ActionForward forward = module.actionPerform(new TestFailureAction(ioException));
+        assertEquals("testname", forward.getName());
+        assertFalse(handler1.wasExecuteCalled());
+        assertFalse(handler2.wasExecuteCalled());
+        assertTrue(handler3.wasExecuteCalled());
+        assertSame(ioException, handler3.getException());
+        handler3.reset(); 
+        FileNotFoundException fileNotFoundException = new FileNotFoundException();
+        forward = module.actionPerform(new TestFailureAction(fileNotFoundException));
+        assertEquals("testname", forward.getName());
+        assertTrue(handler1.wasExecuteCalled());
+        assertFalse(handler2.wasExecuteCalled());
+        assertFalse(handler3.wasExecuteCalled());
+        assertSame(fileNotFoundException, handler1.getException());
+        handler1.reset();
+        SQLException sqlException = new SQLException();
+        forward = module.actionPerform(new TestFailureAction(sqlException));
+        assertEquals("testname", forward.getName());
+        assertFalse(handler1.wasExecuteCalled());
+        assertTrue(handler2.wasExecuteCalled());
+        assertFalse(handler3.wasExecuteCalled());
+        assertSame(sqlException, handler2.getException());
+        handler2.reset();
+        Exception exception = new Exception();
+        try
+        {
+            module.actionPerform(new TestFailureAction(exception));
+            fail();
+        } 
+        catch(NestedApplicationException exc)
+        {
+            assertSame(exception, exc.getRootCause());
+        }
+    }
+    
     public void testNestedException()
     {
         try
@@ -1008,12 +1062,24 @@ public class ActionTestModuleTest extends BaseTestCase
     
     public static class TestFailureAction extends Action
     {
+        private Exception exception;
+        
+        public TestFailureAction()
+        {
+            exception = new Exception("Expected");
+        }
+        
+        public TestFailureAction(Exception exception)
+        {
+            this.exception = exception;
+        }
+
         public ActionForward execute(ActionMapping mapping,
                                      ActionForm form,
                                      HttpServletRequest request,
                                      HttpServletResponse response) throws Exception
         {
-            throw new Exception("Expected");
+            throw exception;
         }
     }
     
@@ -1241,5 +1307,34 @@ public class ActionTestModuleTest extends BaseTestCase
     public static class TestMapping extends ActionMapping
     {
         
+    }
+    
+    public static class TestExceptionHandler extends ExceptionHandler
+    {
+        private boolean executeCalled = false;
+        private Exception exception;
+        
+        public ActionForward execute(Exception exc, ExceptionConfig config, ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws ServletException
+        {
+            executeCalled = true;
+            exception = exc;
+            return new MockActionForward("testname");
+        }
+
+        public void reset()
+        {
+            executeCalled = false;
+            exception = null;
+        }
+        
+        public Exception getException()
+        {
+            return exception;
+        }
+
+        public boolean wasExecuteCalled()
+        {
+            return executeCalled;
+        }
     }
 }
