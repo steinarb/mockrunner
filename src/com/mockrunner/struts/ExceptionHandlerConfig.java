@@ -8,7 +8,7 @@ import org.apache.struts.action.ActionMapping;
 
 public interface ExceptionHandlerConfig
 {
-    public boolean canHandle(Throwable exception);
+    public boolean canHandle(Exception exception);
     
-    public Object handle(Throwable exception, ActionMapping mapping, ActionForm formInstance, HttpServletRequest request, HttpServletResponse response) throws Exception;
+    public Object handle(Exception exception, ActionMapping mapping, ActionForm formInstance, HttpServletRequest request, HttpServletResponse response) throws Exception;
 }
