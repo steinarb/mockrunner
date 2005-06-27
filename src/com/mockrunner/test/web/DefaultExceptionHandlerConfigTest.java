@@ -69,13 +69,6 @@ public class DefaultExceptionHandlerConfigTest extends TestCase
         assertSame(IOException.class.getName(), config.getType());
     }
     
-    public void testThrowableNotAllowed() throws Exception
-    {
-        DefaultExceptionHandlerConfig handlerConfig = new DefaultExceptionHandlerConfig(Throwable.class);
-        assertFalse(handlerConfig.canHandle(new Throwable()));
-        assertNull(handlerConfig.handle(new Throwable(), new MockActionMapping(), new DynaActionForm(), new MockHttpServletRequest(), new MockHttpServletResponse()));
-    }
-    
     private void doTestCanHandle(DefaultExceptionHandlerConfig config)
     {
         assertFalse(config.canHandle(null));

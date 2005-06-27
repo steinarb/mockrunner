@@ -65,12 +65,12 @@ public class DefaultExceptionHandlerConfig implements ExceptionHandlerConfig
         this.exceptionConfig.setType(exceptionClass.getName());
     }
     
-    public boolean canHandle(Throwable exception)
+    public boolean canHandle(Exception exception)
     {
-        return (exception instanceof Exception) && (exceptionClass.isInstance(exception));
+        return exceptionClass.isInstance(exception);
     }
 
-    public Object handle(Throwable exception, ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws ServletException
+    public Object handle(Exception exception, ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws ServletException
     {
         if(!canHandle(exception)) return null;
         if(null == exceptionHandler) return null;
