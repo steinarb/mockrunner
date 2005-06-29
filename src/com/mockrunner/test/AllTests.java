@@ -8,6 +8,7 @@ import junit.framework.TestSuite;
 
 import org.activemq.mockrunner.test.AllActiveMQMockrunnerTests;
 
+import com.mockrunner.test.connector.AllConnectorTests;
 import com.mockrunner.test.consistency.AllConsistencyTests;
 import com.mockrunner.test.ejb.AllEJBTests;
 import com.mockrunner.test.gen.AllGenTests;
@@ -27,6 +28,7 @@ public class AllTests
         suite.addTest(AllJDBCTests.suite());
         suite.addTest(AllEJBTests.suite());
         suite.addTest(AllJMSTests.suite());
+        suite.addTest(AllConnectorTests.suite());
         suite.addTest(AllUtilTests.suite());
         suite.addTest(AllActiveMQMockrunnerTests.suite());
         suite.addTest(AllConsistencyTests.suite());

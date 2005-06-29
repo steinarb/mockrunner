@@ -1,5 +1,5 @@
 JBoss (http://www.jboss.org) is distributed under the LGPL. Mockrunner 
-includes the jboss-j2ee.jar.
+includes the jboss-j2ee.jar and jboss-jaas.jar.
 
 GNU LESSER GENERAL PUBLIC LICENSE
 		       Version 2.1, February 1999

@@ -13,6 +13,7 @@ import javax.naming.Context;
 import org.mockejb.jndi.MockContextFactory;
 
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.mock.connector.cci.ConnectorMockObjectFactory;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jdbc.MockDriver;
@@ -96,6 +97,16 @@ public class BaseTestCaseTest extends BaseTestCase
         setEJBMockObjectFactory(null);
         assertNotNull(getEJBMockObjectFactory());
         assertNotSame(ejbFactory, getEJBMockObjectFactory());
+    }
+    
+    public void testSetConnectorFactory()
+    {
+        ConnectorMockObjectFactory connectorFactory = new ConnectorMockObjectFactory();
+        setConnectorMockObjectFactory(connectorFactory);
+        assertSame(connectorFactory, getConnectorMockObjectFactory());
+        setConnectorMockObjectFactory(null);
+        assertNotNull(getConnectorMockObjectFactory());
+        assertNotSame(connectorFactory, getConnectorMockObjectFactory());
     }
 
     public static class TestDriver implements Driver
