@@ -17,12 +17,13 @@ import com.mockrunner.ejb.Configuration;
  * Used to create all types of EJB mock objects. 
  * Maintains the necessary dependencies between the mock objects.
  * If you use the mock objects returned by this
- * factory in your tests you can be sure, they are all
+ * factory in your tests you can be sure that they are all
  * up to date.
  * This factory takes the <code>UserTransaction</code>
  * from the MockEJB mock context. If there's no transaction
- * bound to the mock context, the factory will create and bind a
- * {@link com.mockrunner.mock.ejb.MockUserTransaction}.
+ * bound to the mock context, the factory will create a
+ * {@link com.mockrunner.mock.ejb.MockUserTransaction} and bind
+ * it to the context.
  * If the bound transaction is no
  * {@link com.mockrunner.mock.ejb.MockUserTransaction},
  * the method {@link #getMockUserTransaction} returns <code>null</code>.
