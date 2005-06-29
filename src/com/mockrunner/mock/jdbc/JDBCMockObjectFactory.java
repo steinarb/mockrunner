@@ -14,7 +14,7 @@ import com.mockrunner.base.NestedApplicationException;
  * Used to create all types of JDBC mock objects. 
  * Maintains the necessary dependencies between the mock objects.
  * If you use the mock objects returned by this
- * factory in your tests you can be sure, they are all
+ * factory in your tests you can be sure that they are all
  * up to date.
  * Please note, that this class removes all drivers
  * from the JDBC <code>DriverManager</code> and registers

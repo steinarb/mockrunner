@@ -6,10 +6,10 @@ import com.mockrunner.connector.InteractionHandler;
  * Used to create all types of JCA mock objects. 
  * Maintains the necessary dependencies between the mock objects.
  * If you use the mock objects returned by this
- * factory in your tests you can be sure, they are all
+ * factory in your tests you can be sure that they are all
  * up to date. If you are using JNDI for obtaining the
- * factories you have to bind them to the mock context
- * with {@link com.mockrunner.ejb.EJBTestModule#bindToContext}.
+ * <code>MockConnectionFactory</code> you have to bind them to 
+ * the mock JNDI context with {@link com.mockrunner.ejb.EJBTestModule#bindToContext}.
  */
 public class ConnectorMockObjectFactory
 {
