@@ -32,6 +32,7 @@ public class MockrunnerJars
         mockrunnerJ2EE14Jars.add("mockrunner-jdbc.jar");
         mockrunnerJ2EE14Jars.add("mockrunner-jdbc-jdk1.3.jar");
         mockrunnerJ2EE14Jars.add("mockrunner-jms.jar");
+        mockrunnerJ2EE14Jars.add("mockrunner-jca.jar");
         mockrunnerJ2EE14Jars.add("mockrunner-servlet.jar");
         mockrunnerJ2EE14Jars.add("mockrunner-tag.jar");
         mockrunnerJ2EE14Jars.add("mockrunner-struts.jar");
@@ -50,6 +51,7 @@ public class MockrunnerJars
         permissions.put("mockrunner-jdbc.jar", new Permission(false, false, false, false, true));
         permissions.put("mockrunner-jdbc-jdk1.3.jar", new Permission(false, false, false, false, true));
         permissions.put("mockrunner-jms.jar", new Permission(false, false, true, false, false));
+        permissions.put("mockrunner-jca.jar", new Permission(false, false, true, false, false));
         permissions.put("mockrunner-servlet.jar", new Permission(false, true, false, false, true));
         permissions.put("mockrunner-tag.jar", new Permission(false, true, false, false, true));
         permissions.put("mockrunner-struts.jar", new Permission(true, true, false, false, true));

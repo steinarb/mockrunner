@@ -10,7 +10,7 @@ public class AllEJBTests
         TestSuite suite = new TestSuite("Test for com.mockrunner.test.ejb");
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(EJBTestModuleTest.class));
-        //suite.addTest(new TestSuite(EJBMockObjectFactoryTest.class));
+        suite.addTest(new TestSuite(EJBMockObjectFactoryTest.class));
         suite.addTest(new TestSuite(MockUserTransactionTest.class));
         suite.addTest(new TestSuite(EJBTestCaseAdapterTest.class));
         suite.addTest(new TestSuite(BasicEJBTestCaseAdapterTest.class));

@@ -134,6 +134,7 @@ servlet.jar
 JBoss 3.2.3:
 http://www.jboss.org
 jboss-j2ee.jar
+jboss-jaas.jar
 
 Commons:
 http://jakarta.apache.org/commons       

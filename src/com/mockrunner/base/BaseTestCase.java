@@ -2,9 +2,12 @@ package com.mockrunner.base;
 
 import junit.framework.TestCase;
 
+import com.mockrunner.connector.ConnectorTestModule;
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.jdbc.JDBCTestModule;
 import com.mockrunner.jms.JMSTestModule;
+import com.mockrunner.mock.connector.cci.ConnectorMockObjectFactory;
+import com.mockrunner.mock.connector.cci.MockConnectionFactory;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
@@ -23,6 +26,7 @@ public abstract class BaseTestCase extends TestCase
     private ActionMockObjectFactory actionMockFactory;
     private JDBCMockObjectFactory jdbcMockFactory;
     private EJBMockObjectFactory ejbMockFactory;
+	private ConnectorMockObjectFactory connectorMockFactory;
     private JMSMockObjectFactory jmsMockFactory;
     
     public BaseTestCase()
@@ -51,6 +55,7 @@ public abstract class BaseTestCase extends TestCase
         webMockFactory = null;
         actionMockFactory = null;
         jmsMockFactory  = null;
+        connectorMockFactory = null;
     }
 
     /**
@@ -239,13 +244,47 @@ public abstract class BaseTestCase extends TestCase
     }
 
     /**
-     * Sets the current {@link JDBCMockObjectFactory}.
-     * @param mockFactory the {@link JDBCMockObjectFactory}
+     * Sets the current {@link EJBMockObjectFactory}.
+     * @param mockFactory the {@link EJBMockObjectFactory}
      */
     protected void setEJBMockObjectFactory(EJBMockObjectFactory mockFactory)
     {
         this.ejbMockFactory = mockFactory;
     }
+    
+	/**
+	 * Creates a {@link ConnectorMockObjectFactory}. 
+	 * @return the created {@link ConnectorMockObjectFactory}
+	 */
+	protected ConnectorMockObjectFactory createConnectorMockObjectFactory()
+	{
+		return new ConnectorMockObjectFactory();
+	}
+
+	/**
+	 * Gets the current {@link ConnectorMockObjectFactory}.
+	 * @return the {@link ConnectorMockObjectFactory}
+	 */
+	protected ConnectorMockObjectFactory getConnectorMockObjectFactory()
+	{
+		synchronized(MockConnectionFactory.class) 
+		{
+			if(connectorMockFactory == null)
+			{
+                connectorMockFactory = createConnectorMockObjectFactory();
+			}
+		}
+		return connectorMockFactory;
+	}
+
+	/**
+	 * Sets the current {@link ConnectorMockObjectFactory}.
+	 * @param mockFactory the {@link ConnectorMockObjectFactory}
+	 */
+	protected void setConnectorMockObjectFactory(ConnectorMockObjectFactory mockFactory)
+	{
+		this.connectorMockFactory = mockFactory;
+	}
     
     /**
      * Creates a {@link JMSMockObjectFactory}. 
@@ -386,6 +425,27 @@ public abstract class BaseTestCase extends TestCase
     {
         return new EJBTestModule(getEJBMockObjectFactory());
     }
+    
+	/**
+	 * Creates an {@link com.mockrunner.connector.ConnectorTestModule} with the specified
+	 * {@link ConnectorMockObjectFactory}.
+	 * @return the created {@link com.mockrunner.connector.ConnectorTestModule}
+	 */
+	protected ConnectorTestModule createConnectorTestModule(ConnectorMockObjectFactory mockFactory)
+	{
+		return new ConnectorTestModule(mockFactory);
+	}
+
+	/**
+	 * Creates an {@link com.mockrunner.connector.ConnectorTestModule} based on the current
+	 * {@link ConnectorMockObjectFactory}.
+	 * Same as <code>createConnectorTestModule(getConnectorMockConnectionFactory())</code>.
+	 * @return the created {@link com.mockrunner.connector.ConnectorTestModule}
+	 */
+	protected ConnectorTestModule createConnectorTestModule()
+	{
+		return new ConnectorTestModule(getConnectorMockObjectFactory());
+	}
     
     /**
      * Creates a {@link com.mockrunner.jms.JMSTestModule} with the specified

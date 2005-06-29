@@ -3,6 +3,7 @@ package com.mockrunner.gen;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.mockrunner.connector.ConnectorTestModule;
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.gen.proc.BasicAdapterProcessor;
 import com.mockrunner.gen.proc.EJBBasicAdapterProcessor;
@@ -48,6 +49,8 @@ public class AdapterGenerator extends AbstractAdapterGenerator
         units.add(new ProcessingUnit(JDBCTestModule.class, new JDBCBasicAdapterProcessor(), null));
         units.add(new ProcessingUnit(JMSTestModule.class, new StandardAdapterProcessor(), null));
         units.add(new ProcessingUnit(JMSTestModule.class, new BasicAdapterProcessor(), null));
+        units.add(new ProcessingUnit(ConnectorTestModule.class, new StandardAdapterProcessor(), null));
+        units.add(new ProcessingUnit(ConnectorTestModule.class, new BasicAdapterProcessor(), null));
         return units;
     } 
 }
