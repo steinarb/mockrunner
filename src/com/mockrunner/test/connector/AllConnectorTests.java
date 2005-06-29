@@ -12,6 +12,7 @@ public class AllConnectorTests
         suite.addTest(new TestSuite(BasicConnectorTestCaseAdapterTest.class));
         suite.addTest(new TestSuite(ConnectorMockObjectFactoryTest.class));
         suite.addTest(new TestSuite(InteractionHandlerTest.class));
+        suite.addTest(new TestSuite(MockConnectionFactoryTest.class));
         //$JUnit-END$
         return suite;
     }

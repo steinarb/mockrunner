@@ -12,47 +12,51 @@ import javax.resource.cci.ResourceAdapterMetaData;
 /**
  * Mock implementation of <code>ConnectionFactory</code>
  */
-public class MockConnectionFactory implements ConnectionFactory 
+public class MockConnectionFactory implements ConnectionFactory
 {
-	private MockConnection connection;
-    
-    public void setConnection(MockConnection connection)
+    private Connection connection;
+
+    public void setConnection(Connection connection)
     {
         this.connection = connection;
     }
 
-	public Connection getConnection() throws ResourceException 
+    public Connection getConnection() throws ResourceException
     {
-		return connection;
-	}
+        return connection;
+    }
 
-	public MockConnection getMockConnection() 
+    public MockConnection getMockConnection()
     {
-		return connection;
-	}
+        if(connection instanceof MockConnection)
+        {
+            return (MockConnection)connection;
+        }
+        return null;
+    }
 
-	public Connection getConnection(ConnectionSpec cs) throws ResourceException 
+    public Connection getConnection(ConnectionSpec cs) throws ResourceException
     {
-		return connection;
-	}
+        return connection;
+    }
 
-	public RecordFactory getRecordFactory() throws ResourceException 
+    public RecordFactory getRecordFactory() throws ResourceException
     {
-		return null;
-	}
+        return null;
+    }
 
-	public ResourceAdapterMetaData getMetaData() throws ResourceException 
+    public ResourceAdapterMetaData getMetaData() throws ResourceException
     {
-		return null;
-	}
+        return null;
+    }
 
-	public void setReference(Reference reference) 
+    public void setReference(Reference reference)
     {
 
-	}
+    }
 
-	public Reference getReference() throws NamingException 
+    public Reference getReference() throws NamingException
     {
-		return null;
-	}
+        return null;
+    }
 }
