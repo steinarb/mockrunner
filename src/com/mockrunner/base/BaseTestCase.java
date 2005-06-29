@@ -258,7 +258,7 @@ public abstract class BaseTestCase extends TestCase
 	 */
 	protected ConnectorMockObjectFactory createConnectorMockObjectFactory()
 	{
-		return new ConnectorMockObjectFactory();
+	    return new ConnectorMockObjectFactory();
 	}
 
 	/**
@@ -267,12 +267,12 @@ public abstract class BaseTestCase extends TestCase
 	 */
 	protected ConnectorMockObjectFactory getConnectorMockObjectFactory()
 	{
-		synchronized(MockConnectionFactory.class) 
+	    synchronized(MockConnectionFactory.class) 
 		{
-			if(connectorMockFactory == null)
+		    if(connectorMockFactory == null)
 			{
-                connectorMockFactory = createConnectorMockObjectFactory();
-			}
+			    connectorMockFactory = createConnectorMockObjectFactory();
+		    }
 		}
 		return connectorMockFactory;
 	}
@@ -283,7 +283,7 @@ public abstract class BaseTestCase extends TestCase
 	 */
 	protected void setConnectorMockObjectFactory(ConnectorMockObjectFactory mockFactory)
 	{
-		this.connectorMockFactory = mockFactory;
+	    this.connectorMockFactory = mockFactory;
 	}
     
     /**
@@ -433,7 +433,7 @@ public abstract class BaseTestCase extends TestCase
 	 */
 	protected ConnectorTestModule createConnectorTestModule(ConnectorMockObjectFactory mockFactory)
 	{
-		return new ConnectorTestModule(mockFactory);
+	    return new ConnectorTestModule(mockFactory);
 	}
 
 	/**
@@ -444,7 +444,7 @@ public abstract class BaseTestCase extends TestCase
 	 */
 	protected ConnectorTestModule createConnectorTestModule()
 	{
-		return new ConnectorTestModule(getConnectorMockObjectFactory());
+	    return new ConnectorTestModule(getConnectorMockObjectFactory());
 	}
     
     /**
