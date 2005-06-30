@@ -15,6 +15,13 @@ import javax.resource.cci.ResourceAdapterMetaData;
 public class MockConnectionFactory implements ConnectionFactory
 {
     private Connection connection;
+    private ResourceAdapterMetaData metaData;
+    private Reference reference;
+
+    public MockConnectionFactory()
+    {
+        metaData = new MockResourceAdapterMetaData();
+    }
 
     public void setConnection(Connection connection)
     {
@@ -47,16 +54,25 @@ public class MockConnectionFactory implements ConnectionFactory
 
     public ResourceAdapterMetaData getMetaData() throws ResourceException
     {
-        return null;
+        return metaData;
     }
 
     public void setReference(Reference reference)
     {
-
+        this.reference = reference;
     }
 
     public Reference getReference() throws NamingException
     {
-        return null;
+        return reference;
+    }
+    
+    /**
+     * Sets the resource adapter meta data
+     * @param metaData the resource adapter meta data
+     */
+    public void setMetaData(ResourceAdapterMetaData metaData) throws ResourceException
+    {
+        this.metaData = metaData;
     }
 }
