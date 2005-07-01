@@ -17,7 +17,7 @@ public class MockClobTest extends TestCase
     protected void setUp() throws Exception
     {
         super.setUp();
-        clob = new MockClob("This is a Test Clob");   
+        clob = new MockClob("This is a Test Clob");
     }
 
     public void testGetData() throws Exception
@@ -65,6 +65,20 @@ public class MockClobTest extends TestCase
         writer = clob.setCharacterStream(1);
         writer.write("This is a Test ClobThis is a Test Clob");
         assertEquals("This is a Test ClobThis is a Test Clob", clob.getSubString(1, 38));
+    }
+    
+    public void testEquals() throws Exception
+    {
+        MockClob clob1 = new MockClob("This is a Test Clob");
+        assertFalse(clob1.equals(null));
+        assertTrue(clob1.equals(clob1));
+        MockClob clob2 = new MockClob("This is another Test Clob");
+        assertFalse(clob1.equals(clob2));
+        assertFalse(clob2.equals(clob1));
+        clob2 = new MockClob("This is a Test Clob");
+        assertTrue(clob1.equals(clob2));
+        assertTrue(clob2.equals(clob1));
+        assertEquals(clob1.hashCode(), clob2.hashCode());
     }
     
     public void testClone() throws Exception

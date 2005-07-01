@@ -20,6 +20,38 @@ public class MockStructTest extends TestCase
         return struct;
     }
     
+    public void testEquals() throws Exception
+    {
+        MockStruct nullStruct = new MockStruct(null);
+        assertFalse(nullStruct.equals(null));
+        assertTrue(nullStruct.equals(nullStruct));
+        MockStruct struct = new MockStruct("test");
+        assertFalse(struct.equals(nullStruct));
+        assertFalse(nullStruct.equals(struct));
+        MockStruct other = new MockStruct("test");
+        assertTrue(struct.equals(other));
+        assertTrue(other.equals(struct));
+        assertEquals(struct.hashCode(), other.hashCode());
+        other = new MockStruct("test") {};
+        assertFalse(other.equals(struct));
+        assertFalse(struct.equals(other));
+        other = new MockStruct("test");
+        other.addAttribute("myAttribute1");
+        assertFalse(other.equals(struct));
+        assertFalse(struct.equals(other));
+        struct.addAttribute("myAttribute1");
+        assertTrue(struct.equals(other));
+        assertTrue(other.equals(struct));
+        assertEquals(struct.hashCode(), other.hashCode());
+        other.addAttributes(new String[] {"1", "2"});
+        assertFalse(other.equals(struct));
+        assertFalse(struct.equals(other));
+        struct.addAttributes(new String[] {"1", "2"});
+        assertTrue(struct.equals(other));
+        assertTrue(other.equals(struct));
+        assertEquals(struct.hashCode(), other.hashCode());
+    }
+    
     public void testAttributes() throws Exception
     {
         doTestAttributes(prepareTestStruct());

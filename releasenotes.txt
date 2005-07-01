@@ -19,6 +19,7 @@ mockrunner-0.3.6:
 - fixed bug regarding statement methods getMoreResults, getResultSet and getUpdateCount,
   getMoreResults now returns false since Mockrunner does not support multiple
   result sets and resets the current result set and update count, see patch #1223316
+- added suitable equals method to MockBlob, MockClob, MockStruct and MockArray
 - CallableStatement out parameters are now returned only if the statement
   has been executed
 - it's now possible to specify that only registered out parameters are returned

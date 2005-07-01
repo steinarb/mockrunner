@@ -64,6 +64,42 @@ public class MockArrayTest extends TestCase
         assertEquals(4, resultSet.getByte(2));
     }
     
+    public void testEquals() throws Exception
+    {
+        MockArray stringArray1 = new MockArray(new String[] {"1", "2"});
+        assertFalse(stringArray1.equals(null));
+        assertTrue(stringArray1.equals(stringArray1));
+        MockArray stringArray2 = new MockArray(new String[] {"1", "2", "3"});
+        assertFalse(stringArray1.equals(stringArray2));
+        assertFalse(stringArray2.equals(stringArray1));
+        stringArray2 = new MockArray(new String[] {"1", "2"});
+        assertTrue(stringArray1.equals(stringArray2));
+        assertTrue(stringArray2.equals(stringArray1));
+        assertEquals(stringArray1.hashCode(), stringArray2.hashCode());
+        stringArray2.setBaseTypeName(null);
+        assertFalse(stringArray1.equals(stringArray2));
+        assertFalse(stringArray2.equals(stringArray1));
+        stringArray1.setBaseTypeName(null);
+        assertTrue(stringArray1.equals(stringArray2));
+        assertTrue(stringArray2.equals(stringArray1));
+        assertEquals(stringArray1.hashCode(), stringArray2.hashCode());
+        stringArray1.setBaseTypeName("xyz");
+        stringArray2.setBaseTypeName("xyz1");
+        assertFalse(stringArray1.equals(stringArray2));
+        assertFalse(stringArray2.equals(stringArray1));
+        stringArray2.setBaseTypeName("xyz");
+        assertTrue(stringArray1.equals(stringArray2));
+        assertTrue(stringArray2.equals(stringArray1));
+        assertEquals(stringArray1.hashCode(), stringArray2.hashCode());
+        stringArray1.setBaseType(5);
+        assertFalse(stringArray1.equals(stringArray2));
+        assertFalse(stringArray2.equals(stringArray1));
+        stringArray2.setBaseType(5);
+        assertTrue(stringArray1.equals(stringArray2));
+        assertTrue(stringArray2.equals(stringArray1));
+        assertEquals(stringArray1.hashCode(), stringArray2.hashCode());
+    }
+    
     public void testClone() throws Exception
     {
         MockArray copy = (MockArray)stringArray.clone();
