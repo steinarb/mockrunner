@@ -2126,7 +2126,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public boolean matches(DatabaseIdentifier object) 
         {
             if(null == object) return false;
-            if(!(object instanceof DatabaseIdentifierImpl)) return false;
+            if(!object.getClass().equals(this.getClass())) return false;
             DatabaseIdentifierImpl other = (DatabaseIdentifierImpl)object;
             if(isGlobal != other.isGlobal()) return false;
             if(!matchesCatalog(other)) return false;
@@ -2186,7 +2186,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public boolean equals(Object object)
         {
             if(null == object) return false;
-            if(!(object instanceof DatabaseIdentifierImpl)) return false;
+            if(!object.getClass().equals(this.getClass())) return false;
             DatabaseIdentifierImpl other = (DatabaseIdentifierImpl)object;
             if(isGlobal != other.isGlobal()) return false;
             if(null != catalog && !catalog.equals(other.getCatalog())) return false;
@@ -2237,7 +2237,6 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public boolean matches(DatabaseIdentifier object) 
         {
             if(!super.matches(object)) return false;
-            if(!(object instanceof AttributesDatabaseIdentifierImpl)) return false;
             AttributesDatabaseIdentifierImpl other = (AttributesDatabaseIdentifierImpl)object;
             if(null == attributeNamePattern) return false;
             if(null == other.getAttributeNamePattern()) return false;
@@ -2247,7 +2246,6 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public boolean equals(Object object)
         {
             if(!super.equals(object)) return false;
-            if(!(object instanceof AttributesDatabaseIdentifierImpl)) return false;
             AttributesDatabaseIdentifierImpl other = (AttributesDatabaseIdentifierImpl)object;
             if(null != attributeNamePattern && !attributeNamePattern.equals(other.getAttributeNamePattern())) return false;
             if(null != other.getAttributeNamePattern() && !other.getAttributeNamePattern().equals(attributeNamePattern)) return false;
@@ -2291,7 +2289,6 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public boolean matches(DatabaseIdentifier object) 
         {
             if(!super.matches(object)) return false;
-            if(!(object instanceof ColumnDatabaseIdentifierImpl)) return false;
             ColumnDatabaseIdentifierImpl other = (ColumnDatabaseIdentifierImpl)object;
             if(null == columnNamePattern) return false;
             if(null == other.getColumnNamePattern()) return false;
@@ -2301,7 +2298,6 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public boolean equals(Object object)
         {
             if(!super.equals(object)) return false;
-            if(!(object instanceof ColumnDatabaseIdentifierImpl)) return false;
             ColumnDatabaseIdentifierImpl other = (ColumnDatabaseIdentifierImpl)object;
             if(null != columnNamePattern && !columnNamePattern.equals(other.getColumnNamePattern())) return false;
             if(null != other.getColumnNamePattern() && !other.getColumnNamePattern().equals(columnNamePattern)) return false;
@@ -2357,7 +2353,6 @@ public class MockDatabaseMetaData implements DatabaseMetaData
 
         private boolean isEqual(Object object)
         {
-            if(!(object instanceof RowIdentifierDatabaseIdentifierImpl)) return false;
             RowIdentifierDatabaseIdentifierImpl other = (RowIdentifierDatabaseIdentifierImpl)object;
             if(scope != other.getScope()) return false;
             if(nullable != other.isNullable()) return false;
@@ -2413,7 +2408,6 @@ public class MockDatabaseMetaData implements DatabaseMetaData
 
         private boolean isEqual(Object object)
         {
-            if(!(object instanceof IndexInfoDatabaseIdentifierImpl)) return false;
             IndexInfoDatabaseIdentifierImpl other = (IndexInfoDatabaseIdentifierImpl)object;
             if(unique != other.isUnique()) return false;
             if(approximate != other.isApproximate()) return false;
@@ -2458,7 +2452,6 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public boolean matches(DatabaseIdentifier object) 
         {
             if(!super.matches(object)) return false;
-            if(!(object instanceof TableDatabaseIdentifierImpl)) return false;
             TableDatabaseIdentifierImpl other = (TableDatabaseIdentifierImpl)object;
             if(null == types) return true;
             if(null == other.getTypes()) return false;
@@ -2482,7 +2475,6 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public boolean equals(Object object)
         {
             if(!super.equals(object)) return false;
-            if(!(object instanceof TableDatabaseIdentifierImpl)) return false;
             TableDatabaseIdentifierImpl other = (TableDatabaseIdentifierImpl)object;
             if(null == types && null == other.getTypes()) return true;
             if(null == types) return false;
@@ -2536,7 +2528,6 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public boolean matches(DatabaseIdentifier object) 
         {
             if(!super.matches(object)) return false;
-            if(!(object instanceof UDTDatabaseIdentifierImpl)) return false;
             UDTDatabaseIdentifierImpl other = (UDTDatabaseIdentifierImpl)object;
             if(null == types) return true;
             if(null == other.getTypes()) return false;
@@ -2560,7 +2551,6 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public boolean equals(Object object)
         {
             if(!super.equals(object)) return false;
-            if(!(object instanceof UDTDatabaseIdentifierImpl)) return false;
             UDTDatabaseIdentifierImpl other = (UDTDatabaseIdentifierImpl)object;
             if(null == types && null == other.getTypes()) return true;
             if(null == types) return false;
@@ -2613,7 +2603,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public boolean matches(DatabaseIdentifier object)
         {
             if(null == object) return false;
-            if(!(object instanceof DatabaseIdentifierImplWrapper)) return false;
+            if(!object.getClass().equals(this.getClass())) return false;
             DatabaseIdentifierImplWrapper other = (DatabaseIdentifierImplWrapper)object;
             if(null != identifier1 && !identifier1.matches(other.getIdentifier1())) return false; 
             if(null != identifier2 && !identifier2.matches(other.getIdentifier2())) return false;
@@ -2623,7 +2613,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public boolean equals(Object object)
         {
             if(null == object) return false;
-            if(!(object instanceof DatabaseIdentifierImplWrapper)) return false;
+            if(!object.getClass().equals(this.getClass())) return false;
             DatabaseIdentifierImplWrapper other = (DatabaseIdentifierImplWrapper)object;
             if(null != identifier1 && !identifier1.equals(other.getIdentifier1())) return false;
             if(null != other.getIdentifier1() && !other.getIdentifier1().equals(identifier1)) return false;

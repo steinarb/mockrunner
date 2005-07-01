@@ -58,6 +58,26 @@ public class MockStruct implements Struct, Cloneable
         attributes.clear();
     }
     
+    public boolean equals(Object obj)
+    {
+        if(null == obj) return false;
+        if(!obj.getClass().equals(this.getClass())) return false;
+        MockStruct other = (MockStruct)obj;
+        if(null != sqlTypeName && !sqlTypeName.equals(other.sqlTypeName)) return false;
+        if(null != other.sqlTypeName && !other.sqlTypeName.equals(sqlTypeName)) return false;
+        if(null == attributes && null == other.attributes) return true;
+        if(null == attributes || null == other.attributes) return false;
+        return attributes.equals(other.attributes);
+    }
+
+    public int hashCode()
+    {
+        int hashCode = 0;
+        if(null != sqlTypeName) hashCode += 31 * sqlTypeName.hashCode();
+        if(null != attributes) hashCode += 31 * attributes.hashCode();
+        return hashCode;
+    }
+
     public String toString()
     {
         StringBuffer buffer = new StringBuffer("Struct data:\n");

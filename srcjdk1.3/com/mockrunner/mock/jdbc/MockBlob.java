@@ -98,6 +98,19 @@ public class MockBlob implements Blob, Cloneable
         }
     }
     
+    public boolean equals(Object obj)
+    {
+        if(null == obj) return false;
+        if(!obj.getClass().equals(this.getClass())) return false;
+        MockBlob other = (MockBlob)obj;
+        return blobData.equals(other.blobData);
+    }
+
+    public int hashCode()
+    {
+        return blobData.hashCode();
+    }
+
     public String toString()
     {
         StringBuffer buffer = new StringBuffer("Blob data: ");

@@ -280,6 +280,63 @@ public class ArrayUtil
     }
     
     /**
+     * Compares the two specified arrays. If both passed objects are
+     * <code>null</code>, <code>true</code> is returned. If both passed 
+     * objects are not arrays, they are compared using <code>equals</code>. 
+     * Otherwise all array elements are compared using <code>equals</code>.
+     * This method does not handle multidimensional arrays, i.e. if an
+     * array contains another array, comparison is based on identity.
+     * @param array1 the first array
+     * @param array2 the second array
+     * @return <code>true</code> if the arrays are equal, <code>false</code>
+     *         otherwise
+     */
+    public static boolean areArraysEqual(Object array1, Object array2)
+    {
+        if(null == array1 && null == array2) return true;
+        if(null == array1 || null == array2) return false;
+        if(!array1.getClass().isArray() && !array2.getClass().isArray()) return array1.equals(array2);
+        if(!array1.getClass().isArray() || !array2.getClass().isArray()) return false;
+        int length1 = Array.getLength(array1);
+        int length2 = Array.getLength(array2);
+        if(length1 != length2) return false;
+        for(int ii = 0; ii < length1; ii++)
+        {
+            Object value1 = Array.get(array1, ii);
+            Object value2 = Array.get(array2, ii);
+            if(null != value1 && !value1.equals(value2)) return false;
+            if(null == value1 && null != value2) return false;
+        }
+        return true;
+    }
+    
+    /**
+     * Returns a suitable hash code for the specified array. If the passed
+     * object is <code>null</code>, <code>0</code> is returned.
+     * It is allowed to pass an object that is not an array, in this case, 
+     * the hash code of the object will be returned. Otherwise the hash code
+     * will be based on the array elements. <code>null</code> elements are
+     * allowed.
+     * This method does not handle multidimensional arrays, i.e. if an
+     * array contains another array, the hash code is based on identity.
+     * @param array the array
+     * @return a suitable hash code
+     */
+    public static int computeHashCode(Object array)
+    {
+        if(null == array) return 0;
+        if(!array.getClass().isArray()) return array.hashCode();
+        int length = Array.getLength(array);
+        int hashCode = 0;
+        for(int ii = 0; ii < length; ii++)
+        {
+            Object value = Array.get(array, ii);
+            if(null != value) hashCode += 31 * value.hashCode();
+        }
+        return hashCode;
+    }
+    
+    /**
      * Returns the index of the first occurence of the
      * array <i>bytes</i> in the array <i>source</i>.
      * @param source the array in which to search

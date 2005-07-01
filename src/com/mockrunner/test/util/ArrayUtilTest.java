@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mockrunner.util.common.ArrayUtil;
-
 import junit.framework.TestCase;
+
+import com.mockrunner.util.common.ArrayUtil;
 
 public class ArrayUtilTest extends TestCase
 {
@@ -180,7 +180,7 @@ public class ArrayUtilTest extends TestCase
     {
         int[] intArray = new int[] {1, 2, 3};
         Object array = ArrayUtil.convertToArray(intArray);
-        assertTrue(intArray == array);
+        assertSame(intArray, array);
         String[] stringArray = new String[] {"This", "is", "an", "array", "of", "strings"};
         array = ArrayUtil.convertToArray(stringArray);
         assertTrue(stringArray == array);
@@ -194,19 +194,59 @@ public class ArrayUtilTest extends TestCase
     {
         byte[] byteArray = new byte[] {1, 2, 3, 4, 5};
         byte[] copyByteArray = (byte[])ArrayUtil.copyArray(byteArray);
-        assertFalse(byteArray == copyByteArray);
+        assertNotSame(byteArray, copyByteArray);
         assertTrue(Arrays.equals(byteArray, copyByteArray));
         String testWrong = (String)ArrayUtil.copyArray("testWrong");
         assertEquals(testWrong, "testWrong");
         String[] stringArray = new String[] {"This", "is", "an", "array", "of", "strings"};
         String[] copyStringArray = (String[])ArrayUtil.copyArray(stringArray);
-        assertFalse(stringArray == copyStringArray);
+        assertNotSame(stringArray, copyStringArray);
         assertTrue(Arrays.equals(stringArray, copyStringArray));
         Object myObject = new Object();
         Object[] myArray = new Object[] {myObject};
         Object[] myCopy = (Object[])ArrayUtil.copyArray(myArray);
-        assertFalse(myArray == myCopy);
-        assertTrue(myArray[0] == myCopy[0]);
+        assertNotSame(myArray, myCopy);
+        assertSame(myArray[0], myCopy[0]);
+        String[] firstStringArray = new String[] {"1", "2", "3"};
+        String[] secondStringArray = new String[] {"4", "5", "6"};
+        String[][] dim2StringArray = new String[][] {firstStringArray, secondStringArray};
+        String[][] copy2Dim = (String[][])ArrayUtil.copyArray(dim2StringArray);
+        assertNotSame(dim2StringArray, copy2Dim);
+        assertSame(firstStringArray, copy2Dim[0]);
+        assertSame(secondStringArray, copy2Dim[1]);
+    }
+    
+    public void testAreArraysEqual()
+    {
+        assertTrue(ArrayUtil.areArraysEqual(null, null));
+        assertTrue(ArrayUtil.areArraysEqual("1", "1"));
+        assertTrue(ArrayUtil.areArraysEqual(new Long(1), new Long(1)));
+        assertFalse(ArrayUtil.areArraysEqual(null, "1"));
+        assertFalse(ArrayUtil.areArraysEqual("1", null));
+        assertFalse(ArrayUtil.areArraysEqual("1", "2"));
+        assertFalse(ArrayUtil.areArraysEqual("1", new String[] {"1"}));
+        assertFalse(ArrayUtil.areArraysEqual(new String[] {"1", "2"}, new Integer(2)));
+        assertFalse(ArrayUtil.areArraysEqual(new String[] {}, new String[] {"1"}));
+        assertTrue(ArrayUtil.areArraysEqual(new String[] {"1"}, new String[] {"1"}));
+        assertTrue(ArrayUtil.areArraysEqual(new int[] {1, 2, 3}, new int[] {1, 2, 3}));
+        assertFalse(ArrayUtil.areArraysEqual(new int[] {1, 2}, new int[] {1, 2, 3}));
+        assertFalse(ArrayUtil.areArraysEqual(new Object[] {new Object()}, new Object[] {new Object()}));
+        assertFalse(ArrayUtil.areArraysEqual(new Object[] {new Object()}, new Object[] {new Object()}));
+        assertTrue(ArrayUtil.areArraysEqual(new Object[] {"1"}, new String[] {"1"}));
+        assertFalse(ArrayUtil.areArraysEqual(new String[] {"1"}, new String[][] {{"1"}}));
+        assertFalse(ArrayUtil.areArraysEqual(new String[][] {{"1"}}, new String[][] {{"1"}}));
+        String[][][] dim3Array = new String[][][] {{{"1"}}, {{"2"}}, {{"3"}}};
+        assertTrue(ArrayUtil.areArraysEqual(dim3Array, dim3Array));
+    }
+    
+    public void testComputeHashCode()
+    {
+        assertEquals(0, ArrayUtil.computeHashCode(null));
+        assertEquals("123".hashCode(), ArrayUtil.computeHashCode("123"));
+        assertEquals(ArrayUtil.computeHashCode(new String[] {"1", null}), ArrayUtil.computeHashCode(new String[] {null, "1"}));
+        assertEquals(ArrayUtil.computeHashCode(new String[] {"1", "2"}), ArrayUtil.computeHashCode(new String[] {"2", "1"}));
+        assertEquals(62, ArrayUtil.computeHashCode(new byte[] {1, 1}));
+        assertFalse(ArrayUtil.computeHashCode(new String[] {"1", "2"}) == ArrayUtil.computeHashCode(new String[] {"1", "2", "3"}));
     }
     
     public void testEnsureUnique()
