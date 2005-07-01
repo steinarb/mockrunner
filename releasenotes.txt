@@ -14,6 +14,8 @@ mockrunner-0.3.6:
 - JDBC test framework now supports generated keys using getGeneratedKeys()
 - improved version of MockDatabaseMetaData, now supports pattern matching using
   "_" and "%" and case insensitive matching (contribution by Richard Emberson)
+- applied patch 1230604 by David Stern, this fixes some issues with finding
+  files in result set factories and introduces a template feature for FileResultSetFactory
 - fixed bug regarding statement methods getMoreResults, getResultSet and getUpdateCount,
   getMoreResults now returns false since Mockrunner does not support multiple
   result sets and resets the current result set and update count, see patch #1223316

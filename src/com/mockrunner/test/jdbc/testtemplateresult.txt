@@ -1,0 +1,3 @@
+TestColumn1;	TestColumn2;	TestColumn3
+$defaultDate;	$defaultString;	$defaultInteger;
+%customMarker;	;				%anotherCustomMarker

@@ -1,6 +1,7 @@
 package com.mockrunner.jdbc;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -83,7 +84,15 @@ public class XMLResultSetFactory implements ResultSetFactory
         }
         else
         {
-            return FileUtil.findFile(fileName);
+            try 
+            {
+                file = FileUtil.findFile(file.getPath());
+                return file;
+            } 
+            catch(FileNotFoundException exc) 
+            {
+                throw new RuntimeException("Could not find: " + file.getPath());
+            }
         }
     }
 
