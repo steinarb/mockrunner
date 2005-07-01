@@ -74,8 +74,24 @@ public class XMLResultSetFactoryTest extends TestCase
         factory = new XMLResultSetFactory(new File("src/com/mockrunner/test/jdbc/xmltestresult.xml"));
         assertEquals(new File("src/com/mockrunner/test/jdbc/xmltestresult.xml"), factory.getXMLFile());
         factory = new XMLResultSetFactory("badfile");
-        assertNull(factory.getXMLFile());
+        try
+        {
+            factory.getXMLFile();
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
         factory = new XMLResultSetFactory(new File("badfile"));
-        assertNull(factory.getXMLFile());
+        try
+        {
+            factory.getXMLFile();
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
     }
 }

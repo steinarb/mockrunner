@@ -1,6 +1,7 @@
 package com.mockrunner.test.util;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -31,7 +32,16 @@ public class FileUtilTest extends TestCase
         assertNotNull(file);
         lineList = FileUtil.getLinesFromFile(file);
         assertNotNull(FileUtil.findFile("FileUtil.class"));
-        assertNull(FileUtil.findFile("notfound"));
+        assertNotNull(FileUtil.findFile("com/mockrunner/test/util/file name with blanks.txt"));
+        try
+        {
+            FileUtil.findFile("notfound");
+            fail();
+        } 
+        catch(FileNotFoundException exc)
+        {
+            //should throw exception
+        }
     }
     
     private void doTestLines(List lineList)

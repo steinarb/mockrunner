@@ -2,6 +2,8 @@ package com.mockrunner.test.jdbc;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import junit.framework.TestCase;
 
@@ -24,7 +26,6 @@ public class FileResultSetFactoryTest extends TestCase
         factory = new FileResultSetFactory(new File("src/com/mockrunner/test/jdbc/testresult.txt"));
         resultSet = factory.create("");
         doTestResultSet(factory, resultSet);
-        
     }
     
     public void testBadCreate() throws Exception
@@ -53,8 +54,8 @@ public class FileResultSetFactoryTest extends TestCase
 
     private void doTestResultSet(FileResultSetFactory factory, MockResultSet resultSet) throws SQLException
     {
-        assertTrue(resultSet.getRowCount() == 5);
-        assertTrue(resultSet.getColumnCount() == 3);
+        assertEquals(5, resultSet.getRowCount());
+        assertEquals(3, resultSet.getColumnCount());
         resultSet.next();
         assertEquals("TestColumn1", resultSet.getString(1));
         assertEquals("TestColumn2", resultSet.getString(2));
@@ -77,8 +78,8 @@ public class FileResultSetFactoryTest extends TestCase
         assertEquals("Test", resultSet.getString(3));
         factory.setFirstLineContainsColumnNames(true);
         resultSet = factory.create("");
-        assertTrue(resultSet.getRowCount() == 4);
-        assertTrue(resultSet.getColumnCount() == 3);
+        assertEquals(4, resultSet.getRowCount());
+        assertEquals(3, resultSet.getColumnCount());
         resultSet.next();
         assertEquals(1, resultSet.getInt("TestColumn1"));
         assertEquals(3, resultSet.getLong("TestColumn2"));
@@ -89,6 +90,68 @@ public class FileResultSetFactoryTest extends TestCase
         assertEquals("Entry3", resultSet.getObject(3));
     }
     
+    public void testCreateWithTemplates() throws Exception
+    {
+        FileResultSetFactory factory = new FileResultSetFactory("src/com/mockrunner/test/jdbc/testtemplateresult.txt");
+        factory.setFirstLineContainsColumnNames(true);
+        MockResultSet resultSet = factory.create("");
+        doTestResultSetTemplatesDisabled(factory, resultSet);
+        factory.setUseTemplates(true);
+        resultSet = factory.create("");
+        doTestResultSetDefaultTemplatesEnabled(factory, resultSet);
+        Map customMap = new HashMap();
+        customMap.put("customMarker", "template1");
+        customMap.put("anotherCustomMarker", "template2");
+        factory.setTemplateConfiguration("%", customMap);
+        resultSet = factory.create("");
+        doTestResultSetCustomTemplatesEnabled(factory, resultSet);
+        factory.setUseTemplates(false);
+        resultSet = factory.create("");
+        doTestResultSetTemplatesDisabled(factory, resultSet);
+    }
+    
+    private void doTestResultSetTemplatesDisabled(FileResultSetFactory factory, MockResultSet resultSet) throws SQLException
+    {
+        assertEquals(2, resultSet.getRowCount());
+        assertEquals(3, resultSet.getColumnCount());
+        resultSet.next();
+        assertEquals("$defaultDate", resultSet.getString("TestColumn1"));
+        assertEquals("$defaultString", resultSet.getString("TestColumn2"));
+        assertEquals("$defaultInteger", resultSet.getString(3));
+        resultSet.next();
+        assertEquals("%customMarker", resultSet.getObject(1));
+        assertEquals(null, resultSet.getString(2));
+        assertEquals("%anotherCustomMarker", resultSet.getObject("TestColumn3"));
+    }
+    
+    private void doTestResultSetDefaultTemplatesEnabled(FileResultSetFactory factory, MockResultSet resultSet) throws SQLException
+    {
+        assertEquals(2, resultSet.getRowCount());
+        assertEquals(3, resultSet.getColumnCount());
+        resultSet.next();
+        assertEquals("1970-01-01", resultSet.getString(1));
+        assertEquals("", resultSet.getString("TestColumn2"));
+        assertEquals(0, resultSet.getInt("TestColumn3"));
+        resultSet.next();
+        assertEquals("%customMarker", resultSet.getObject(1));
+        assertEquals(null, resultSet.getString(2));
+        assertEquals("%anotherCustomMarker", resultSet.getObject("TestColumn3"));
+    }
+    
+    private void doTestResultSetCustomTemplatesEnabled(FileResultSetFactory factory, MockResultSet resultSet) throws SQLException
+    {
+        assertEquals(2, resultSet.getRowCount());
+        assertEquals(3, resultSet.getColumnCount());
+        resultSet.next();
+        assertEquals("$defaultDate", resultSet.getString("TestColumn1"));
+        assertEquals("$defaultString", resultSet.getString("TestColumn2"));
+        assertEquals("$defaultInteger", resultSet.getString(3));
+        resultSet.next();
+        assertEquals("template1", resultSet.getObject(1));
+        assertEquals(null, resultSet.getString("TestColumn2"));
+        assertEquals("template2", resultSet.getObject("TestColumn3"));
+    }
+    
     public void testGetFile()
     {
         FileResultSetFactory factory = new FileResultSetFactory("src/com/mockrunner/test/jdbc/testresult.txt");
@@ -96,8 +159,24 @@ public class FileResultSetFactoryTest extends TestCase
         factory = new FileResultSetFactory(new File("src/com/mockrunner/test/jdbc/testresult.txt"));
         assertEquals(new File("src/com/mockrunner/test/jdbc/testresult.txt"), factory.getFile());
         factory = new FileResultSetFactory("badfile");
-        assertNull(factory.getFile());
+        try
+        {
+            factory.getFile();
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
         factory = new FileResultSetFactory(new File("badfile"));
-        assertNull(factory.getFile());
+        try
+        {
+            factory.getFile();
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
     }
 }
