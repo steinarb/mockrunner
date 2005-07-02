@@ -13,6 +13,9 @@ public class AllConnectorTests
         suite.addTest(new TestSuite(ConnectorMockObjectFactoryTest.class));
         suite.addTest(new TestSuite(InteractionHandlerTest.class));
         suite.addTest(new TestSuite(MockConnectionFactoryTest.class));
+        suite.addTest(new TestSuite(MockRecordTest.class));
+        suite.addTest(new TestSuite(MockIndexedRecordTest.class));
+        suite.addTest(new TestSuite(MockMappedRecordTest.class));
         //$JUnit-END$
         return suite;
     }
