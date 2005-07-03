@@ -15,12 +15,14 @@ import javax.resource.cci.ResourceAdapterMetaData;
 public class MockConnectionFactory implements ConnectionFactory
 {
     private Connection connection;
+    private RecordFactory recordFactory;
     private ResourceAdapterMetaData metaData;
     private Reference reference;
 
     public MockConnectionFactory()
     {
         metaData = new MockResourceAdapterMetaData();
+        recordFactory  = new MockRecordFactory();
     }
 
     public void setConnection(Connection connection)
@@ -49,7 +51,7 @@ public class MockConnectionFactory implements ConnectionFactory
 
     public RecordFactory getRecordFactory() throws ResourceException
     {
-        return null;
+        return recordFactory;
     }
 
     public ResourceAdapterMetaData getMetaData() throws ResourceException
@@ -68,11 +70,24 @@ public class MockConnectionFactory implements ConnectionFactory
     }
     
     /**
-     * Sets the resource adapter meta data
-     * @param metaData the resource adapter meta data
+     * Sets the resource adapter meta data. If you do not set an explicit
+     * <code>ResourceAdapterMetaData</code> object, a default {@link MockResourceAdapterMetaData} 
+     * will be created.
+     * @param metaData the <code>ResourceAdapterMetaData</code>
      */
-    public void setMetaData(ResourceAdapterMetaData metaData) throws ResourceException
+    public void setMetaData(ResourceAdapterMetaData metaData)
     {
         this.metaData = metaData;
+    }
+    
+    /**
+     * Sets the record factory. If you do not set an explicit
+     * <code>RecordFactory</code>, a default {@link MockRecordFactory} 
+     * will be created.
+     * @param recordFactory the <code>RecordFactory</code>
+     */
+    public void setRecordFactory(RecordFactory recordFactory)
+    {
+        this.recordFactory = recordFactory;
     }
 }

@@ -1,8 +1,10 @@
 package com.mockrunner.connector;
 
-import com.mockrunner.mock.connector.cci.ConnectorMockObjectFactory;
+import java.util.List;
 
 import junit.framework.TestCase;
+
+import com.mockrunner.mock.connector.cci.ConnectorMockObjectFactory;
 
 /**
  * Delegator for {@link com.mockrunner.connector.ConnectorTestModule}. You can
@@ -126,5 +128,69 @@ public class BasicConnectorTestCaseAdapter extends TestCase
     protected InteractionHandler getInteractionHandler()
     {
         return connectorTestModule.getInteractionHandler();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#getCreatedIndexedRecords}
+     */
+    protected List getCreatedIndexedRecords()
+    {
+        return connectorTestModule.getCreatedIndexedRecords();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#getCreatedIndexedRecords(String)}
+     */
+    protected List getCreatedIndexedRecords(String recordName)
+    {
+        return connectorTestModule.getCreatedIndexedRecords(recordName);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#getCreatedMappedRecords}
+     */
+    protected List getCreatedMappedRecords()
+    {
+        return connectorTestModule.getCreatedMappedRecords();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#getCreatedMappedRecords(String)}
+     */
+    protected List getCreatedMappedRecords(String recordName)
+    {
+        return connectorTestModule.getCreatedMappedRecords(recordName);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyNumberCreatedIndexedRecords(int)}
+     */
+    protected void verifyNumberCreatedIndexedRecords(int expected)
+    {
+        connectorTestModule.verifyNumberCreatedIndexedRecords(expected);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyNumberCreatedIndexedRecords(String, int)}
+     */
+    protected void verifyNumberCreatedIndexedRecords(String recordName, int expected)
+    {
+        connectorTestModule.verifyNumberCreatedIndexedRecords(recordName, expected);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyNumberCreatedMappedRecords(int)}
+     */
+    protected void verifyNumberCreatedMappedRecords(int expected)
+    {
+        connectorTestModule.verifyNumberCreatedMappedRecords(expected);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyNumberCreatedMappedRecords(String, int)}
+     */
+    protected void verifyNumberCreatedMappedRecords(String recordName, int expected)
+    {
+        connectorTestModule.verifyNumberCreatedMappedRecords(recordName, expected);
     }
 }
