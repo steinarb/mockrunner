@@ -297,28 +297,28 @@
         <antcall target="jar">
             <param name="jarname" value="mockrunner-jms.jar" />
             <param name="jdkver" value="1.3, 1.4, 1.5" />
-            <param name="j2eever" value="1.3 and 1.4" />
+            <param name="j2eever" value="1.3, 1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="jms.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-ejb.jar" />
             <param name="jdkver" value="1.3, 1.4, 1.5" />
-            <param name="j2eever" value="1.3 and 1.4" />
+            <param name="j2eever" value="1.3, 1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="ejb.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-jdbc.jar" />
             <param name="jdkver" value="1.4, 1.5" />
-            <param name="j2eever" value="1.3 and 1.4" />
+            <param name="j2eever" value="1.3, 1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="jdbc.jar.classes" />
         </antcall>
         <antcall target="jar">
             <param name="jarname" value="mockrunner-jca.jar" />
             <param name="jdkver" value="1.3, 1.4, 1.5" />
-            <param name="j2eever" value="1.3 and 1.4" />
+            <param name="j2eever" value="1.3, 1.4" />
             <param name="builddir" value="${build}" />
             <param name="jarpattern" value="connector.jar.classes" />
         </antcall>
@@ -388,7 +388,7 @@
         <antcall target="jar">
             <param name="jarname" value="mockrunner-jdbc-jdk1.3.jar" />
             <param name="jdkver" value="1.3" />
-            <param name="j2eever" value="1.3 and 1.4" />
+            <param name="j2eever" value="1.3, 1.4" />
             <param name="builddir" value="${buildjdk1.3}" />
             <param name="jarpattern" value="jdbc.jar.classes" />
         </antcall>

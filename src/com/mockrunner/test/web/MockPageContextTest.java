@@ -9,12 +9,14 @@ import javax.servlet.jsp.PageContext;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.web.MockBodyContent;
+import com.mockrunner.mock.web.MockExpressionEvaluator;
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.MockHttpServletResponse;
 import com.mockrunner.mock.web.MockJspWriter;
 import com.mockrunner.mock.web.MockPageContext;
 import com.mockrunner.mock.web.MockRequestDispatcher;
 import com.mockrunner.mock.web.MockServletConfig;
+import com.mockrunner.mock.web.MockVariableResolver;
 
 public class MockPageContextTest extends BaseTestCase
 {
@@ -311,6 +313,18 @@ public class MockPageContextTest extends BaseTestCase
         assertFalse(jspWriter.isFlushed());
         pageContext.include("aPath", true);
         assertTrue(jspWriter.isFlushed());
+    }
+    
+    public void testExpressionEvaluatorAndVariable() throws Exception
+    {
+        assertTrue(pageContext.getExpressionEvaluator() instanceof MockExpressionEvaluator);
+        MockExpressionEvaluator evaluator = new MockExpressionEvaluator() {};
+        pageContext.setExpressionEvaluator(evaluator);
+        assertSame(evaluator, pageContext.getExpressionEvaluator());
+        assertTrue(pageContext.getVariableResolver() instanceof MockVariableResolver);
+        MockVariableResolver resolver = new MockVariableResolver() {};
+        pageContext.setVariableResolver(resolver);
+        assertSame(resolver, pageContext.getVariableResolver());
     }
     
     private class TestJspWriter extends MockJspWriter

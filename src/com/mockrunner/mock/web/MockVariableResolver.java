@@ -13,11 +13,19 @@ public class MockVariableResolver implements VariableResolver
 {
     private Map variables = new HashMap();
     
+    /**
+     * Adds a variable that resolves to the specified object.
+     * @param name the variable name
+     * @param value the variable value
+     */
     public void addVariable(String name, Object value)
     {
         variables.put(name, value);
     }
     
+    /**
+     * Clears all variables.
+     */
     public void clearVariables()
     {
         variables.clear();

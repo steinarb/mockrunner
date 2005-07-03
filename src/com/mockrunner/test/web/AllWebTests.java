@@ -40,6 +40,7 @@ public class AllWebTests
         suite.addTest(new TestSuite(ActionMappingProxyGeneratorTest.class));
         suite.addTest(new TestSuite(MockServletConfigTest.class));
         suite.addTest(new TestSuite(DefaultExceptionHandlerConfigTest.class));
+        suite.addTest(new TestSuite(MockVariableResolverTest.class));
         //$JUnit-END$
         return suite;
     }

@@ -42,6 +42,8 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
         mockPageContextProc.addLine("import javax.servlet.jsp.el.VariableResolver;");
         mockPageContextProc.addLine("private ExpressionEvaluator evaluator;");
         mockPageContextProc.addLine("private VariableResolver resolver;");
+        mockPageContextProc.addLine("evaluator = new MockExpressionEvaluator();");
+        mockPageContextProc.addLine("resolver = new MockVariableResolver();");
         mockPageContextProc.addBlock("public void setExpressionEvaluator(ExpressionEvaluator evaluator)");
         mockPageContextProc.addBlock("public void setVariableResolver(VariableResolver resolver)");
         mockPageContextProc.addBlock("public ExpressionEvaluator getExpressionEvaluator()");
