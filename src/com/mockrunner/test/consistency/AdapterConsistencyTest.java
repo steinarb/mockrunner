@@ -17,6 +17,9 @@ import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.HTMLOutputTestCase;
 import com.mockrunner.base.WebTestCase;
 import com.mockrunner.base.WebTestModule;
+import com.mockrunner.connector.BasicConnectorTestCaseAdapter;
+import com.mockrunner.connector.ConnectorTestCaseAdapter;
+import com.mockrunner.connector.ConnectorTestModule;
 import com.mockrunner.ejb.BasicEJBTestCaseAdapter;
 import com.mockrunner.ejb.EJBTestCaseAdapter;
 import com.mockrunner.ejb.EJBTestModule;
@@ -73,6 +76,9 @@ public class AdapterConsistencyTest extends TestCase
         
         addAdapter(JMSTestModule.class, JMSTestCaseAdapter.class);
         addAdapter(JMSTestModule.class, BasicJMSTestCaseAdapter.class);
+        
+        addAdapter(ConnectorTestModule.class, ConnectorTestCaseAdapter.class);
+        addAdapter(ConnectorTestModule.class, BasicConnectorTestCaseAdapter.class);
         
         addAdapter(HTMLOutputModule.class, HTMLOutputTestCase.class);
         addAdapter(HTMLOutputModule.class, BasicHTMLOutputTestCase.class);
