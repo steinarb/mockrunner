@@ -16,11 +16,19 @@ public class MockExpressionEvaluator extends ExpressionEvaluator
 {
     private Map expressions = new HashMap();
     
+    /**
+     * Adds an object as a result for the specified expression.
+     * @param expression the expression
+     * @param object the object
+     */
     public void addObject(String expression, Object object)
     {
         expressions.put(expression, object);
     }
     
+    /**
+     * Clears all expressions and corresponding objects.
+     */
     public void clearObjects()
     {
         expressions.clear();

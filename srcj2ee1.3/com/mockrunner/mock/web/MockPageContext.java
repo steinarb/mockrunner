@@ -54,6 +54,8 @@ public class MockPageContext extends PageContext
         jspWriter = new MockJspWriter();
         outStack = new Stack();
         attributes = new HashMap();
+        //evaluator = new MockExpressionEvaluator();
+        //resolver = new MockVariableResolver();
     }
     
     /**
@@ -396,11 +398,21 @@ public class MockPageContext extends PageContext
         outStack = new Stack();
     }
     
+    /**
+     * Sets the expression evaluator. The default expression evaluator
+     * is {@link MockExpressionEvaluator}.
+     * @param evaluator the <code>ExpressionEvaluator</code>
+     */
     /*public void setExpressionEvaluator(ExpressionEvaluator evaluator)
     {
         this.evaluator = evaluator;
     }*/
 
+    /**
+     * Sets the variable resolver. The default variable resolver
+     * is {@link MockVariableResolver}.
+     * @param resolver the <code>VariableResolver</code>
+     */
     /*public void setVariableResolver(VariableResolver resolver)
     {
         this.resolver = resolver;
