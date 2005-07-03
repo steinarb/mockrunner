@@ -948,7 +948,7 @@ public class ActionTestModule extends HTMLOutputModule
     }
     
     /**
-     * Returns the currently set <code>ActionForm</code>.
+     * Returns the current <code>ActionForm</code>.
      * @return the <code>ActionForm</code> object
      */
     public ActionForm getActionForm()
@@ -958,7 +958,7 @@ public class ActionTestModule extends HTMLOutputModule
 
     /**
      * Sets the specified <code>ActionForm</code> object as the
-     * current <code>ActionForm</code>. Will be used in next test.
+     * current <code>ActionForm</code>.
      * @param formObj the <code>ActionForm</code> object
      */
     public void setActionForm(ActionForm formObj)
@@ -992,7 +992,7 @@ public class ActionTestModule extends HTMLOutputModule
     
     /**
      * Creates a new <code>DynaActionForm</code> based on the specified
-     * form config.
+     * form config and sets it as the current <code>ActionForm</code>.
      * @param formConfig the <code>FormBeanConfig</code>
      */
     public DynaActionForm createDynaActionForm(FormBeanConfig formConfig)
@@ -1017,7 +1017,7 @@ public class ActionTestModule extends HTMLOutputModule
 
     /**
      * Populates the current request parameters to the
-     * <code>ActionForm</code>. The form will be reseted 
+     * <code>ActionForm</code>. The form will be reset
      * before populating if reset is enabled ({@link #setReset}.
      * If form validation is enabled (use {@link #setValidate}) the
      * form will be validated after populating it and the
@@ -1038,7 +1038,8 @@ public class ActionTestModule extends HTMLOutputModule
 
     /**
      * Calls the action of the specified type using
-     * no <code>ActionForm</code>.
+     * no <code>ActionForm</code>. Sets the current action
+     * form to <code>null</code>.
      * @param action the <code>Class</code> of the action
      * @return the resulting <code>ActionForward</code>
      */
@@ -1049,7 +1050,8 @@ public class ActionTestModule extends HTMLOutputModule
     
     /**
      * Calls the specified action using
-     * no <code>ActionForm</code>.
+     * no <code>ActionForm</code>. Sets the current <code>ActionForm</code>
+     * to <code>null</code>.
      * @param action the <code>Action</code>
      * @return the resulting <code>ActionForward</code>
      */
@@ -1061,9 +1063,10 @@ public class ActionTestModule extends HTMLOutputModule
     /**
      * Calls the action of the specified type using
      * the <code>ActionForm</code> of the specified type. 
-     * Creates the appropriate <code>ActionForm</code> and 
-     * populates it before calling the action (if populating is
-     * disabled, the form will not be populated, use {@link #setDoPopulate}). 
+     * Creates the appropriate <code>ActionForm</code>, sets it as the 
+     * current <code>ActionForm</code> and populates it before calling the action 
+     * (if populating is disabled, the form will not be populated, use 
+     * {@link #setDoPopulate}). 
      * If form validation is enabled (use {@link #setValidate}) and 
      * fails, the action will not be called. In this case,
      * the returned  <code>ActionForward</code> is based on the 
@@ -1081,9 +1084,10 @@ public class ActionTestModule extends HTMLOutputModule
     /**
      * Calls the specified action using
      * the <code>ActionForm</code> of the specified type. 
-     * Creates the appropriate <code>ActionForm</code> and 
-     * populates it before calling the action (if populating is
-     * disabled, the form will not be populated, use {@link #setDoPopulate}). 
+     * Creates the appropriate <code>ActionForm</code>, sets it as the 
+     * current <code>ActionForm</code> and populates it before calling the action 
+     * (if populating is disabled, the form will not be populated, use 
+     * {@link #setDoPopulate}).
      * If form validation is enabled (use {@link #setValidate}) and 
      * fails, the action will not be called. In this case,
      * the returned  <code>ActionForward</code> is based on the 
@@ -1100,11 +1104,12 @@ public class ActionTestModule extends HTMLOutputModule
 
     /**
      * Calls the action of the specified type using
-     * the specified <code>ActionForm</code> object. The form 
+     * the specified <code>ActionForm</code> object. The form will
+     * be set as the current <code>ActionForm</code> and
      * will be populated before the action is called (if populating is
      * disabled, the form will not be populated, use {@link #setDoPopulate}).
      * Please note that request parameters will eventually overwrite
-     * form values. Furthermore the form will be reseted
+     * form values. Furthermore the form will be reset
      * before populating it. If you do not want that, disable reset 
      * using {@link #setReset}. If form validation is enabled 
      * (use {@link #setValidate}) and fails, the action will not be 
@@ -1130,11 +1135,12 @@ public class ActionTestModule extends HTMLOutputModule
     
     /**
      * Calls the specified action using
-     * the specified <code>ActionForm</code> object. The form 
+     * the specified <code>ActionForm</code> object. The form will
+     * be set as the current <code>ActionForm</code> and
      * will be populated before the action is called (if populating is
      * disabled, the form will not be populated, use {@link #setDoPopulate}).
      * Please note that request parameters will eventually overwrite
-     * form values. Furthermore the form will be reseted
+     * form values. Furthermore the form will be reset
      * before populating it. If you do not want that, disable reset 
      * using {@link #setReset}. If form validation is enabled 
      * (use {@link #setValidate}) and fails, the action will not be 
