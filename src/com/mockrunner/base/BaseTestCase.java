@@ -26,7 +26,7 @@ public abstract class BaseTestCase extends TestCase
     private ActionMockObjectFactory actionMockFactory;
     private JDBCMockObjectFactory jdbcMockFactory;
     private EJBMockObjectFactory ejbMockFactory;
-	private ConnectorMockObjectFactory connectorMockFactory;
+    private ConnectorMockObjectFactory connectorMockFactory;
     private JMSMockObjectFactory jmsMockFactory;
     
     public BaseTestCase()
