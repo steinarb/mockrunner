@@ -193,4 +193,36 @@ public class BasicConnectorTestCaseAdapter extends TestCase
     {
         connectorTestModule.verifyNumberCreatedMappedRecords(recordName, expected);
     }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyLocalTransactionCommitted}
+     */
+    protected void verifyLocalTransactionCommitted()
+    {
+        connectorTestModule.verifyLocalTransactionCommitted();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyLocalTransactionNotCommitted}
+     */
+    protected void verifyLocalTransactionNotCommitted()
+    {
+        connectorTestModule.verifyLocalTransactionNotCommitted();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyLocalTransactionRolledBack}
+     */
+    protected void verifyLocalTransactionRolledBack()
+    {
+        connectorTestModule.verifyLocalTransactionRolledBack();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyLocalTransactionNotRolledBack}
+     */
+    protected void verifyLocalTransactionNotRolledBack()
+    {
+        connectorTestModule.verifyLocalTransactionNotRolledBack();
+    }
 }

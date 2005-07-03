@@ -46,7 +46,7 @@ public class MockConnectionFactoryTest extends TestCase
     public void testGetMetaData() throws Exception
     {
         assertTrue(factory.getMetaData() instanceof MockResourceAdapterMetaData);
-        MockResourceAdapterMetaData metaData = new MockResourceAdapterMetaData();
+        MockResourceAdapterMetaData metaData = new MockResourceAdapterMetaData() {};
         factory.setMetaData(metaData);
         assertSame(metaData, factory.getMetaData());
     }

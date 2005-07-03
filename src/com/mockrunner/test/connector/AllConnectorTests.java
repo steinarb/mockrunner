@@ -11,12 +11,15 @@ public class AllConnectorTests
         //$JUnit-BEGIN$
         suite.addTest(new TestSuite(BasicConnectorTestCaseAdapterTest.class));
         suite.addTest(new TestSuite(ConnectorMockObjectFactoryTest.class));
+        suite.addTest(new TestSuite(ConnectorTestModuleTest.class));
         suite.addTest(new TestSuite(InteractionHandlerTest.class));
         suite.addTest(new TestSuite(MockConnectionFactoryTest.class));
         suite.addTest(new TestSuite(MockRecordTest.class));
         suite.addTest(new TestSuite(MockIndexedRecordTest.class));
         suite.addTest(new TestSuite(MockMappedRecordTest.class));
         suite.addTest(new TestSuite(MockRecordFactoryTest.class));
+        suite.addTest(new TestSuite(MockConnectionTest.class));
+        suite.addTest(new TestSuite(MockLocalTransactionTest.class));
         //$JUnit-END$
         return suite;
     }

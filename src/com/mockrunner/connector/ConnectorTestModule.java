@@ -7,6 +7,7 @@ import javax.resource.cci.RecordFactory;
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.connector.cci.ConnectorMockObjectFactory;
+import com.mockrunner.mock.connector.cci.MockLocalTransaction;
 import com.mockrunner.mock.connector.cci.MockRecordFactory;
 
 /**
@@ -148,6 +149,58 @@ public class ConnectorTestModule
         if(list.size() != expected)
         {
             throw new VerifyFailedException("Expected " + expected + " mapped records with the name " + recordName + ", actual " + list.size() + " mapped records");
+        }
+    }
+    
+    /**
+     * Verifies that the current local transaction was committed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyLocalTransactionCommitted()
+    {
+        MockLocalTransaction transaction = mockFactory.getMockConnection().getMockLocalTransaction();
+        if(!transaction.wasCommitCalled())
+        {
+            throw new VerifyFailedException("Local transaction not committed");
+        }
+    }
+    
+    /**
+     * Verifies that the current local transaction was not committed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyLocalTransactionNotCommitted()
+    {
+        MockLocalTransaction transaction = mockFactory.getMockConnection().getMockLocalTransaction();
+        if(transaction.wasCommitCalled())
+        {
+            throw new VerifyFailedException("Local transaction was committed");
+        }
+    }
+    
+    /**
+     * Verifies that the current local transaction was rolled back.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyLocalTransactionRolledBack()
+    {
+        MockLocalTransaction transaction = mockFactory.getMockConnection().getMockLocalTransaction();
+        if(!transaction.wasRollbackCalled())
+        {
+            throw new VerifyFailedException("Local transaction not rolled back");
+        }
+    }
+    
+    /**
+     * Verifies that the current local transaction was not rolled back.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyLocalTransactionNotRolledBack()
+    {
+        MockLocalTransaction transaction = mockFactory.getMockConnection().getMockLocalTransaction();
+        if(transaction.wasRollbackCalled())
+        {
+            throw new VerifyFailedException("Local transaction was rolled back");
         }
     }
 }
