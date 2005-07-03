@@ -137,4 +137,54 @@ public class ConnectorTestModuleTest extends TestCase
             //should throw exception
         }
     }
+    
+    public void testVerifyLocalTransaction() throws Exception
+    {
+        module.verifyLocalTransactionNotCommitted();
+        module.verifyLocalTransactionNotRolledBack();
+        try
+        {
+            module.verifyLocalTransactionCommitted();
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            module.verifyLocalTransactionRolledBack();
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        mockFactory.getMockConnection().getLocalTransaction().begin();
+        mockFactory.getMockConnection().getLocalTransaction().commit();
+        module.verifyLocalTransactionCommitted();
+        module.verifyLocalTransactionNotRolledBack();
+        try
+        {
+            module.verifyLocalTransactionNotCommitted();
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+        mockFactory.getMockConnection().getLocalTransaction().begin();
+        mockFactory.getMockConnection().getLocalTransaction().rollback();
+        module.verifyLocalTransactionNotCommitted();
+        module.verifyLocalTransactionRolledBack();
+        try
+        {
+            module.verifyLocalTransactionCommitted();
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
 }

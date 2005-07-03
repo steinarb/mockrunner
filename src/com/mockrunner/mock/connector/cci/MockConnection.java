@@ -17,12 +17,23 @@ public class MockConnection implements Connection
 	private boolean closed;
 	private InteractionHandler interactionHandler;
     private ConnectionMetaData metaData;
+    private LocalTransaction localTransaction;
 	
 	public MockConnection() 
     {
 		closed = false;
         metaData = new MockConnectionMetaData();
+        localTransaction = new MockLocalTransaction();
 	}
+    
+    public MockLocalTransaction getMockLocalTransaction() 
+    {
+        if(localTransaction instanceof MockLocalTransaction)
+        {
+            return (MockLocalTransaction)localTransaction;
+        }
+        return null;
+    }
 
 	public void close() throws ResourceException 
     {
@@ -36,7 +47,7 @@ public class MockConnection implements Connection
 
 	public LocalTransaction getLocalTransaction() throws ResourceException 
     {
-		return null;
+		return localTransaction;
 	}
 
 	public ConnectionMetaData getMetaData() throws ResourceException 
@@ -75,5 +86,14 @@ public class MockConnection implements Connection
     public void setMetaData(ConnectionMetaData metaData)
     {
         this.metaData = metaData;
+    }
+    
+    /**
+     * Sets the <code>LocalTransaction</code>
+     * @param localTransaction the <code>LocalTransaction</code>
+     */
+    public void setLocalTransaction(LocalTransaction localTransaction)
+    {
+        this.localTransaction = localTransaction;
     }
 }
