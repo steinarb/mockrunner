@@ -20,6 +20,7 @@ public class AllConnectorTests
         suite.addTest(new TestSuite(MockRecordFactoryTest.class));
         suite.addTest(new TestSuite(MockConnectionTest.class));
         suite.addTest(new TestSuite(MockLocalTransactionTest.class));
+        suite.addTest(new TestSuite(MockResultSetInfoTest.class));
         //$JUnit-END$
         return suite;
     }

@@ -8,6 +8,7 @@ import junit.framework.TestCase;
 import com.mockrunner.mock.connector.cci.MockConnection;
 import com.mockrunner.mock.connector.cci.MockConnectionMetaData;
 import com.mockrunner.mock.connector.cci.MockLocalTransaction;
+import com.mockrunner.mock.connector.cci.MockResultSetInfo;
 
 public class MockConnectionTest extends TestCase
 {
@@ -29,6 +30,14 @@ public class MockConnectionTest extends TestCase
         MockConnectionMetaData metaData = new MockConnectionMetaData() {};
         connection.setMetaData(metaData);
         assertSame(metaData, connection.getMetaData());
+    }
+    
+    public void testGetResultSetInfo() throws Exception
+    {
+        assertTrue(connection.getResultSetInfo() instanceof MockResultSetInfo);
+        MockResultSetInfo resultSetInfo = new MockResultSetInfo() {};
+        connection.setResultSetInfo(resultSetInfo);
+        assertSame(resultSetInfo, connection.getResultSetInfo());
     }
     
     public void testGetLocalTransaction() throws Exception
