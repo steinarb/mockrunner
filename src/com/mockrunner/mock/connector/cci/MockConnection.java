@@ -18,14 +18,24 @@ public class MockConnection implements Connection
 	private InteractionHandler interactionHandler;
     private ConnectionMetaData metaData;
     private LocalTransaction localTransaction;
+    private ResultSetInfo resultSetInfo;
 	
 	public MockConnection() 
     {
 		closed = false;
         metaData = new MockConnectionMetaData();
         localTransaction = new MockLocalTransaction();
+        resultSetInfo = new MockResultSetInfo();
 	}
     
+    /**
+     * Returns the {@link MockLocalTransaction}. If the underlying
+     * <code>LocalTransaction</code> is not an instance of
+     * {@link MockLocalTransaction}, this method returns
+     * <code>null</code>. Otherwise it returns the same object
+     * as {@link #getLocalTransaction}.
+     * @return the {@link MockLocalTransaction}
+     */
     public MockLocalTransaction getMockLocalTransaction() 
     {
         if(localTransaction instanceof MockLocalTransaction)
@@ -57,7 +67,7 @@ public class MockConnection implements Connection
 
 	public ResultSetInfo getResultSetInfo() throws ResourceException 
     {
-		return null;
+		return resultSetInfo;
 	}
 	
 	public boolean isClosed()
@@ -69,6 +79,15 @@ public class MockConnection implements Connection
     {
 		return interactionHandler;
 	}
+    
+    /**
+     * Sets this connections <code>ResultSetInfo</code>
+     * @param resultSetInfo the <code>ResultSetInfo</code>
+     */
+    public void setResultSetInfo(ResultSetInfo resultSetInfo) 
+    {
+        this.resultSetInfo = resultSetInfo;
+    }
     
     /**
      * Sets this connections <code>InteractionHandler</code>
