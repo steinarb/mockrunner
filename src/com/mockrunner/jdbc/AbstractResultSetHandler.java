@@ -527,7 +527,7 @@ public abstract class AbstractResultSetHandler
      * {@link #setCaseSensitive}, {@link #setExactMatch} and 
      * {@link #setUseRegularExpressions}.
      * @param sql the SQL string
-     * @param exc the SQLException that should be thrown
+     * @param exc the <code>SQLException</code> that should be thrown
      */
     public void prepareThrowsSQLException(String sql, SQLException exc)
     {
