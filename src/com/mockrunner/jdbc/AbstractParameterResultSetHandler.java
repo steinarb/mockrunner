@@ -397,7 +397,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * {@link #setUseRegularExpressions} and the match parameters for the 
      * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
-     * @param exc the SQLException that should be thrown
+     * @param exc the <code>SQLException</code> that should be thrown
      * @param parameters the parameters
      */
     public void prepareThrowsSQLException(String sql, SQLException exc, Object[] parameters)
@@ -421,7 +421,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * {@link #setUseRegularExpressions} and the match parameters for the 
      * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
-     * @param exc the SQLException that should be thrown
+     * @param exc the <code>SQLException</code> that should be thrown
      * @param parameters the parameters
      */
     public void prepareThrowsSQLException(String sql, SQLException exc, List parameters)
@@ -444,7 +444,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * {@link #setUseRegularExpressions} and the match parameters for the 
      * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
-     * @param exc the SQLException that should be thrown
+     * @param exc the <code>SQLException</code> that should be thrown
      * @param parameters the parameters
      */
     public void prepareThrowsSQLException(String sql, SQLException exc, Map parameters)
