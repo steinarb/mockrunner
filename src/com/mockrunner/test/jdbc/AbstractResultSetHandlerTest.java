@@ -1,5 +1,8 @@
 package com.mockrunner.test.jdbc;
 
+import java.sql.BatchUpdateException;
+import java.sql.SQLException;
+
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockConnection;
@@ -70,12 +73,22 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
 	
 	public void testGetThrowsSQLException()
 	{
-	    statementHandler.prepareThrowsSQLException("[abc] statement");
+	    SQLException exc = new BatchUpdateException();
+        statementHandler.prepareThrowsSQLException("[abc] statement", exc);
+        statementHandler.prepareThrowsSQLException("[abc] statementxyz");
 	    assertFalse(statementHandler.getThrowsSQLException("a stAtement"));
+        assertNull(statementHandler.getSQLException("a stAtement"));
 	    statementHandler.setUseRegularExpressions(true);
 	    assertTrue(statementHandler.getThrowsSQLException("a stAtement"));
+        assertSame(exc, statementHandler.getSQLException("a stAtement"));
 	    statementHandler.setCaseSensitive(true);
 	    assertFalse(statementHandler.getThrowsSQLException("a stAtement"));
+        assertNull(statementHandler.getSQLException("a stAtement"));
 	    assertTrue(statementHandler.getThrowsSQLException("b statement"));
+        assertSame(exc, statementHandler.getSQLException("b statement"));
+        assertTrue(statementHandler.getThrowsSQLException("b statementxyz"));
+        assertNotSame(exc, statementHandler.getSQLException("b statementxyz"));
+        String message = statementHandler.getSQLException("b statementxyz").getMessage();
+        assertTrue(message.indexOf("[abc] statementxyz") != -1);
 	}
 }

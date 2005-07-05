@@ -1,6 +1,8 @@
 package com.mockrunner.test.jdbc;
 
+import java.sql.BatchUpdateException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,12 +60,32 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 	
 	public void testGetThrowsSQLException()
 	{
-	    preparedStatementHandler.prepareThrowsSQLException(".*", new HashMap());
+        SQLException exc = new BatchUpdateException();
+        preparedStatementHandler.prepareThrowsSQLException(".*", exc, new HashMap());
+        preparedStatementHandler.prepareThrowsSQLException(".*", new Object[] {"1"});
 	    assertFalse(preparedStatementHandler.getThrowsSQLException("select * from", new HashMap()));
+        assertNull(preparedStatementHandler.getSQLException("select * from", new HashMap()));
 	    preparedStatementHandler.setUseRegularExpressions(true);
 	    assertTrue(preparedStatementHandler.getThrowsSQLException("select * from", new HashMap()));
-	    assertFalse(preparedStatementHandler.getThrowsSQLException("select * from"));
-	}
+	    assertSame(exc, preparedStatementHandler.getSQLException("select * from", new HashMap()));
+        assertFalse(preparedStatementHandler.getThrowsSQLException("select * from"));
+        assertNull(preparedStatementHandler.getSQLException("select * from"));
+        Map parameters = new HashMap();
+        parameters.put(new Integer(1), "1");
+        assertTrue(preparedStatementHandler.getThrowsSQLException("select * from", parameters));
+        assertSame(exc, preparedStatementHandler.getSQLException("select * from", parameters));
+        preparedStatementHandler.setExactMatchParameter(true);
+        assertNotSame(exc, preparedStatementHandler.getSQLException("select * from", parameters));
+        String message = preparedStatementHandler.getSQLException("select * from", parameters).getMessage();
+        assertTrue(message.indexOf(".*") != -1);
+        preparedStatementHandler.prepareThrowsSQLException("abc", exc, new Object[] {"1"});
+        preparedStatementHandler.setUseRegularExpressions(false);
+        preparedStatementHandler.setExactMatchParameter(false);
+        preparedStatementHandler.setExactMatch(true);
+        parameters.put(new Integer(2), "2");
+        assertSame(exc, preparedStatementHandler.getSQLException("abc", parameters));
+        assertNull(preparedStatementHandler.getSQLException("abcxyz", parameters));
+    }
 	
 	public void testGetParameterMapForExecutedStatementNull() throws Exception
 	{

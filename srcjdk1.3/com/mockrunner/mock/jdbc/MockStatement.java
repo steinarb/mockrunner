@@ -102,9 +102,10 @@ public class MockStatement implements Statement
     
     public ResultSet executeQuery(String sql) throws SQLException
     {
-        if(resultSetHandler.getThrowsSQLException(sql))
+        SQLException exception = resultSetHandler.getSQLException(sql);
+        if(null != exception)
         {
-            throw new SQLException("Statement " + sql + " was specified to throw an exception");
+            throw exception;
         }
         resultSetHandler.addExecutedStatement(sql);
         MockResultSet result = resultSetHandler.getResultSet(sql);
@@ -123,9 +124,10 @@ public class MockStatement implements Statement
 
     public int executeUpdate(String sql) throws SQLException
     {
-        if(resultSetHandler.getThrowsSQLException(sql))
+        SQLException exception = resultSetHandler.getSQLException(sql);
+        if(null != exception)
         {
-            throw new SQLException("Statement " + sql + " was specified to throw an exception");
+            throw exception;
         }
         resultSetHandler.addExecutedStatement(sql);
         Integer returnValue = resultSetHandler.getUpdateCount(sql);

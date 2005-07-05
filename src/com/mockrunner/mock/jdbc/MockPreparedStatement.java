@@ -141,13 +141,15 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     
     protected ResultSet executeQuery(Map params) throws SQLException
     {
-        if(resultSetHandler.getThrowsSQLException(getSQL(), params))
+        SQLException exception = resultSetHandler.getSQLException(sql, params);
+        if(null != exception)
         {
-            throw new SQLException("Statement " + getSQL() + " was specified to throw an exception");
+            throw exception;
         }
-        if(resultSetHandler.getThrowsSQLException(getSQL()))
+        exception = resultSetHandler.getSQLException(sql);
+        if(null != exception)
         {
-            throw new SQLException("Statement " + getSQL() + " was specified to throw an exception");
+            throw exception;
         }
         MockResultSet result = resultSetHandler.getResultSet(getSQL(), params);
 		resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy(params));
@@ -169,13 +171,15 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     
     protected int executeUpdate(Map params) throws SQLException
     {
-        if(resultSetHandler.getThrowsSQLException(getSQL(), params))
+        SQLException exception = resultSetHandler.getSQLException(sql, params);
+        if(null != exception)
         {
-            throw new SQLException("Statement " + getSQL() + " was specified to throw an exception");
+            throw exception;
         }
-        if(resultSetHandler.getThrowsSQLException(getSQL()))
+        exception = resultSetHandler.getSQLException(sql);
+        if(null != exception)
         {
-            throw new SQLException("Statement " + getSQL() + " was specified to throw an exception");
+            throw exception;
         }
         Integer updateCount = resultSetHandler.getUpdateCount(getSQL(), params);
 		resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy(params));
