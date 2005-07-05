@@ -1,5 +1,6 @@
 package com.mockrunner.jdbc;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -144,16 +145,35 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public boolean getThrowsSQLException(String sql, Map parameters)
     {
+        return (getSQLException(sql, parameters) != null);
+    }
+    
+    /**
+     * Returns the <code>SQLException</code> the specified SQL string
+     * should throw. Returns <code>null</code> if the specified SQL string
+     * should not throw an exception.
+     * This can be used to simulate database exceptions.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param parameters the parameters
+     * @return the <code>SQLException</code>, resp. <code>null</code>
+     */
+    public SQLException getSQLException(String sql, Map parameters)
+    {
         SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
         List list = matcher.getMatchingObjects(throwsSQLException, sql, true, true);
         for(int ii = 0; ii < list.size(); ii++)
         {
-            if(doParameterMatch((Map)list.get(ii), parameters))
+            MockSQLExceptionWrapper wrapper = (MockSQLExceptionWrapper)list.get(ii);
+            if(doParameterMatch(wrapper.getParamters(), parameters))
             {
-                return true;
+                return wrapper.getException();
             }
         }
-        return false;
+        return null;
     }
 
     protected boolean doParameterMatch(Map expectedParameters, Map actualParameters)
@@ -221,7 +241,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
     /**
      * Prepare a <code>ResultSet</code> for a specified SQL string and
      * the specified parameters. The specified parameters array
-     * must contain the parameters in the correct order starting with 0 as
+     * must contain the parameters in the correct order starting with index 0 for
      * the first parameter. Please keep in mind that parameters in
      * <code>PreparedStatement</code> objects start with 1 as the first
      * parameter. So <code>parameters[0]</code> maps to the
@@ -242,7 +262,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
     /**
      * Prepare a <code>ResultSet</code> for a specified SQL string and
      * the specified parameters. The specified parameters <code>List</code>
-     * must contain the parameters in the correct order starting with 0 as
+     * must contain the parameters in the correct order starting with index 0 for
      * the first parameter. Please keep in mind that parameters in
      * <code>PreparedStatement</code> objects start with 1 as the first
      * parameter. So <code>parameters.get(0)</code> maps to the
@@ -292,11 +312,14 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
     }
     
     /**
-     * Prepare if the specified SQL string with the specified parameters
+     * Prepare that the specified SQL string with the specified parameters
      * should raise an exception.
      * This can be used to simulate database exceptions.
+     * This method creates an <code>SQLException</code> and will throw this 
+     * exception. With {@link #prepareThrowsSQLException(String, SQLException, Object[])} 
+     * you can specify the exception.
      * The specified parameters array must contain the parameters in 
-     * the correct order starting with 0 as the first parameter. 
+     * the correct order starting with index 0 for the first parameter. 
      * Please keep in mind that parameters in <code>PreparedStatement</code> 
      * objects start with 1 as the first parameter. So <code>parameters[0]</code> 
      * maps to the parameter with index 1.
@@ -309,15 +332,19 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public void prepareThrowsSQLException(String sql, Object[] parameters)
     {
-        prepareThrowsSQLException(sql, ArrayUtil.getListFromObjectArray(parameters));
+        SQLException exc = new SQLException("Statement " + sql + " was specified to throw an exception");
+        prepareThrowsSQLException(sql, exc, parameters);
     }
     
     /**
-     * Prepare if the specified SQL string with the specified parameters
+     * Prepare that the specified SQL string with the specified parameters
      * should raise an exception.
      * This can be used to simulate database exceptions.
+     * This method creates an <code>SQLException</code> and will throw this 
+     * exception. With {@link #prepareThrowsSQLException(String, SQLException, List)} 
+     * you can specify the exception.
      * The specified parameters <code>List</code> must contain the 
-     * parameters in the correct order starting with 0 as the first 
+     * parameters in the correct order starting with index 0 for the first 
      * parameter. Please keep in mind that parameters in 
      * <code>PreparedStatement</code> objects start with 1 as the first
      * parameter. So <code>parameters.get(0)</code> maps to the parameter 
@@ -331,18 +358,17 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public void prepareThrowsSQLException(String sql, List parameters)
     {
-        Map params = new HashMap();
-        for(int ii = 0; ii < parameters.size(); ii++)
-        {
-            params.put(new Integer(ii + 1), parameters.get(ii));
-        }
-        prepareThrowsSQLException(sql, params);
+        SQLException exc = new SQLException("Statement " + sql + " was specified to throw an exception");
+        prepareThrowsSQLException(sql, exc, parameters);
     }
     
     /**
-     * Prepare if the specified SQL string with the specified parameters
+     * Prepare that the specified SQL string with the specified parameters
      * should raise an exception.
      * This can be used to simulate database exceptions.
+     * This method creates an <code>SQLException</code> and will throw this 
+     * exception. With {@link #prepareThrowsSQLException(String, SQLException, Map)} 
+     * you can specify the exception.
      * Please note that you can modify the match parameters with 
      * {@link #setCaseSensitive}, {@link #setExactMatch} and 
      * {@link #setUseRegularExpressions} and the match parameters for the 
@@ -352,19 +378,90 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public void prepareThrowsSQLException(String sql, Map parameters)
     {
+        SQLException exc = new SQLException("Statement " + sql + " was specified to throw an exception");
+        prepareThrowsSQLException(sql, exc, parameters);
+    }
+    
+    /**
+     * Prepare that the specified SQL string with the specified parameters
+     * should raise an exception.
+     * This can be used to simulate database exceptions.
+     * This method takes an exception object that will be thrown.
+     * The specified parameters array must contain the parameters in 
+     * the correct order starting with index 0 for the first parameter. 
+     * Please keep in mind that parameters in <code>PreparedStatement</code> 
+     * objects start with 1 as the first parameter. So <code>parameters[0]</code> 
+     * maps to the parameter with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param exc the SQLException that should be thrown
+     * @param parameters the parameters
+     */
+    public void prepareThrowsSQLException(String sql, SQLException exc, Object[] parameters)
+    {
+        prepareThrowsSQLException(sql, exc, ArrayUtil.getListFromObjectArray(parameters));
+    }
+    
+    /**
+     * Prepare that the specified SQL string with the specified parameters
+     * should raise an exception.
+     * This can be used to simulate database exceptions.
+     * This method takes an exception object that will be thrown.
+     * The specified parameters <code>List</code> must contain the 
+     * parameters in the correct order starting with index 0 for the first 
+     * parameter. Please keep in mind that parameters in 
+     * <code>PreparedStatement</code> objects start with 1 as the first
+     * parameter. So <code>parameters.get(0)</code> maps to the parameter 
+     * with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param exc the SQLException that should be thrown
+     * @param parameters the parameters
+     */
+    public void prepareThrowsSQLException(String sql, SQLException exc, List parameters)
+    {
+        Map params = new HashMap();
+        for(int ii = 0; ii < parameters.size(); ii++)
+        {
+            params.put(new Integer(ii + 1), parameters.get(ii));
+        }
+        prepareThrowsSQLException(sql, exc, params);
+    }
+    
+    /**
+     * Prepare that the specified SQL string with the specified parameters
+     * should raise an exception.
+     * This can be used to simulate database exceptions.
+     * This method takes an exception object that will be thrown.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param exc the SQLException that should be thrown
+     * @param parameters the parameters
+     */
+    public void prepareThrowsSQLException(String sql, SQLException exc, Map parameters)
+    {
         List list = (List)throwsSQLException.get(sql);
         if(null == list)
         {
             list = new ArrayList();
             throwsSQLException.put(sql, list);
         }
-        list.add(new HashMap(parameters));
+        list.add(new MockSQLExceptionWrapper(exc, new HashMap(parameters)));
     }
 
     /**
      * Prepare the update count for execute update calls for a specified SQL string
      * and the specified parameters. The specified parameters array
-     * must contain the parameters in the correct order starting with 0 as
+     * must contain the parameters in the correct order starting with index 0 for
      * the first parameter. Please keep in mind that parameters in
      * <code>PreparedStatement</code> objects start with 1 as the first
      * parameter. So <code>parameters[0]</code> maps to the
@@ -385,7 +482,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
     /**
      * Prepare the update count for execute update calls for a specified SQL string
      * and the specified parameters. The specified parameters <code>List</code>
-     * must contain the parameters in the correct order starting with 0 as
+     * must contain the parameters in the correct order starting with index 0 for
      * the first parameter. Please keep in mind that parameters in
      * <code>PreparedStatement</code> objects start with 1 as the first
      * parameter. So <code>parameters.get(0)</code> maps to the
@@ -432,6 +529,28 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
             updateCountForStatement.put(sql, list);
         }
         list.add(new MockUpdateCountWrapper(updateCount, new HashMap(parameters)));
+    }
+    
+    private class MockSQLExceptionWrapper
+    {
+        private SQLException exception;
+        private Map parameters;
+    
+        public MockSQLExceptionWrapper(SQLException exception, Map parameters)
+        {
+            this.exception = exception;
+            this.parameters = parameters;
+        }
+    
+        public Map getParamters()
+        {
+            return parameters;
+        }
+
+        public SQLException getException()
+        {
+            return exception;
+        }
     }
     
     private class MockResultSetWrapper

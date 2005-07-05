@@ -2,6 +2,7 @@ package com.mockrunner.test.jdbc;
 
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
+import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -182,7 +183,9 @@ public class MockStatementTest extends BaseTestCase
     
     public void testPrepareThrowsSQLException() throws Exception
     {
-        statementHandler.prepareThrowsSQLException("insert into test");
+        SQLException exception = new SQLWarning();
+        statementHandler.prepareThrowsSQLException("insert into test", exception);
+        statementHandler.prepareThrowsSQLException("select from");
         MockStatement statement = (MockStatement)connection.createStatement();
         statementHandler.prepareGlobalGeneratedKeys(resultSet1);
         statement.executeUpdate("update xy", Statement.RETURN_GENERATED_KEYS);
@@ -196,12 +199,23 @@ public class MockStatementTest extends BaseTestCase
         catch(SQLException exc)
         {
             assertTrue(isResultSet1((MockResultSet)statement.getGeneratedKeys()));
+            assertSame(exception, exc);
         }
         statementHandler.setExactMatch(true);
         statement.executeUpdate("insert into test values");
         statementHandler.setExactMatch(false);
         statementHandler.setCaseSensitive(true);
         statement.executeUpdate("iNsert into test values");
+        try
+        {
+            statement.executeQuery("select from");
+            fail();
+        }
+        catch(SQLException exc)
+        {
+            assertNotSame(exception, exc);
+            assertTrue(exc.getMessage().indexOf("select from") != -1);
+        }
     }
     
     public void testPrepareResultSetPreparedStatement() throws Exception
@@ -387,11 +401,12 @@ public class MockStatementTest extends BaseTestCase
     
     public void testPrepareThrowsSQLExceptionPreparedStatement() throws Exception
     {
+        SQLException exception = new SQLWarning();
         preparedStatementHandler.prepareThrowsSQLException("insert into");
         preparedStatementHandler.prepareUpdateCount("insert into", 3, new ArrayList());
         List params = new ArrayList();
         params.add("test");
-        preparedStatementHandler.prepareThrowsSQLException("UPDATE", params);
+        preparedStatementHandler.prepareThrowsSQLException("UPDATE", exception, params);
         preparedStatementHandler.prepareThrowsSQLException("UPDATE", new Object[] {"1", "2"});
         MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("insert into x(y) values(?)");
         try
@@ -401,7 +416,8 @@ public class MockStatementTest extends BaseTestCase
         }
         catch(SQLException exc)
         {
-            //should throw Exception
+            assertNotSame(exception, exc);
+            assertTrue(exc.getMessage().indexOf("insert into") != -1);
         }
         preparedStatementHandler.setExactMatch(true);
         statement.execute();
@@ -415,7 +431,7 @@ public class MockStatementTest extends BaseTestCase
         }
         catch(SQLException exc)
         {
-            //should throw Exception
+            assertSame(exception, exc);
         }
         preparedStatementHandler.setCaseSensitive(true);
         statement.execute();
@@ -430,7 +446,8 @@ public class MockStatementTest extends BaseTestCase
         }
         catch(SQLException exc)
         {
-            //should throw Exception
+            assertNotSame(exception, exc);
+            assertTrue(exc.getMessage().indexOf("UPDATE") != -1);
         }
         preparedStatementHandler.setExactMatchParameter(true);
         statement.execute();
@@ -561,7 +578,8 @@ public class MockStatementTest extends BaseTestCase
     
     public void testPrepareThrowsSQLExceptionCallableStatement() throws Exception
     {
-        callableStatementHandler.prepareThrowsSQLException("doValues");
+        SQLException exception = new SQLWarning();
+        callableStatementHandler.prepareThrowsSQLException("doValues", exception);
         Map params = new HashMap();
         params.put("1", "Test");
         params.put(new Integer(5), new Long(2));
@@ -585,6 +603,8 @@ public class MockStatementTest extends BaseTestCase
         catch(SQLException exc)
         {
             assertNull(statement.getString("name"));
+            assertNotSame(exception, exc);
+            assertTrue(exc.getMessage().indexOf("doTest") != -1);
         }
         callableStatementHandler.setExactMatchParameter(true);
         try
@@ -595,6 +615,8 @@ public class MockStatementTest extends BaseTestCase
         catch(SQLException exc)
         {
             assertNull(statement.getString("name"));
+            assertNotSame(exception, exc);
+            assertTrue(exc.getMessage().indexOf("doTest") != -1);
         }
         callableStatementHandler.setCaseSensitive(true);
         statement.execute();
@@ -608,6 +630,7 @@ public class MockStatementTest extends BaseTestCase
         catch(SQLException exc)
         {
             assertNull(statement.getString("name"));
+            assertSame(exception, exc);
         }
         callableStatementHandler.setExactMatch(true);
         statement.executeQuery();

@@ -131,7 +131,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     /**
      * Prepare an out parameter <code>Map</code> for a specified SQL string and
      * the specified parameters. The specified parameters array
-     * must contain the parameters in the correct order starting with 0 as
+     * must contain the parameters in the correct order starting with index 0 for
      * the first parameter. Please keep in mind that parameters in
      * <code>CallableStatement</code> objects start with 1 as the first
      * parameter. So <code>parameters[0]</code> maps to the
@@ -152,7 +152,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     /**
      * Prepare an out parameter <code>Map</code> for a specified SQL string and
      * the specified parameters. The specified parameters array
-     * must contain the parameters in the correct order starting with 0 as
+     * must contain the parameters in the correct order starting with index 0 for
      * the first parameter. Please keep in mind that parameters in
      * <code>CallableStatement</code> objects start with 1 as the first
      * parameter. So <code>parameters.get(0)</code> maps to the

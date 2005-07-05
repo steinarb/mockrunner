@@ -1,5 +1,6 @@
 package com.mockrunner.jdbc;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public abstract class AbstractResultSetHandler
     private MockResultSet globalGeneratedKeys;
     private Map generatedKeysForStatement = new HashMap();
     private Map returnsResultSetMap = new HashMap();
-    private List throwsSQLException = new ArrayList();
+    private Map throwsSQLException = new HashMap();
     private List executedStatements = new ArrayList();
     private List returnedResultSets = new ArrayList();
     
@@ -398,9 +399,26 @@ public abstract class AbstractResultSetHandler
      */
     public boolean getThrowsSQLException(String sql)
     {
+        return (getSQLException(sql) != null);
+    }
+    
+    /**
+     * Returns the <code>SQLException</code> the specified SQL string
+     * should throw. Returns <code>null</code> if the specified SQL string
+     * should not throw an exception.
+     * This can be used to simulate database exceptions.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions}.
+     * @param sql the SQL string
+     * @return the <code>SQLException</code>, resp. <code>null</code>
+     */
+    public SQLException getSQLException(String sql)
+    {
         SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
-        if(matcher.contains(throwsSQLException, sql, true)) return true;
-        return false;
+        List list = matcher.getMatchingObjects(throwsSQLException, sql, true, true);
+        if(null == list || list.size() == 0) return null;
+        return (SQLException)list.get(0);
     }
     
     /**
@@ -486,8 +504,11 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Prepare if the specified SQL string should raise an exception.
-     * This can be used to simulate database exceptions.
+     * Prepare that the specified SQL string should raise an exception.
+     * This can be used to simulate database exceptions. This method
+     * creates an <code>SQLException</code> and will throw this exception.
+     * With {@link #prepareThrowsSQLException(String, SQLException)} you
+     * can specify the exception.
      * Please note that you can modify the match parameters with 
      * {@link #setCaseSensitive}, {@link #setExactMatch} and 
      * {@link #setUseRegularExpressions}.
@@ -495,7 +516,22 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareThrowsSQLException(String sql)
     {
-        throwsSQLException.add(sql);
+        throwsSQLException.put(sql, new SQLException("Statement " + sql + " was specified to throw an exception"));
+    }
+    
+    /**
+     * Prepare that the specified SQL string should raise an exception.
+     * This can be used to simulate database exceptions. This method
+     * takes an exception object that will be thrown.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions}.
+     * @param sql the SQL string
+     * @param exc the SQLException that should be thrown
+     */
+    public void prepareThrowsSQLException(String sql, SQLException exc)
+    {
+        throwsSQLException.put(sql, exc);
     }
     
     /**
