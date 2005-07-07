@@ -133,10 +133,13 @@ public class MockStreamMessageTest extends TestCase
         message = new MockStreamMessage();
         byte[] data = new byte[] {1, 2, 3, 4};
         message.writeBytes(data);
+        message.writeBytes(data);
         message.reset();
         data = new byte[4];
         int number = message.readBytes(data);
         assertEquals(4, number);
+        assertTrue(Arrays.equals(data, new byte[] {1, 2, 3, 4}));
+        data = (byte[])message.readObject();
         assertTrue(Arrays.equals(data, new byte[] {1, 2, 3, 4}));
         message = new MockStreamMessage();
         data = new byte[] {1, 2, 3, 4};
