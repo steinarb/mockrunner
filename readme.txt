@@ -123,7 +123,7 @@ Tomcat 5.0.28:
 http://jakarta.apache.org/tomcat
 servlet-api.jar
 jsp-api.jar
-JBoss 4.0.2:
+JBoss 4.0.1sp1:
 http://www.jboss.org
 jboss-j2ee.jar
 
