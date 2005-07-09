@@ -113,6 +113,7 @@ public class StreamableByteArrayInteractionTest extends TestCase
         interaction.setResponse(mappedResponse);
         assertSame(mappedResponse, interaction.execute(spec, request));
         interaction.setResponse(new byte[] {1, 2, 3}, TestRecord.class);
+        interaction.setResponse((Record)null);
         assertTrue(interaction.execute(spec, request) instanceof TestRecord);
         interaction.setResponse(new byte[] {1, 2, 3, 4, 5});
         response = (MockStreamableByteArrayRecord)interaction.execute(spec, request);
@@ -124,6 +125,11 @@ public class StreamableByteArrayInteractionTest extends TestCase
         response = (MockStreamableByteArrayRecord)interaction.execute(spec, request);
         assertTrue(Arrays.equals(new byte[] {1}, response.getContent()));
         interaction = new StreamableByteArrayInteraction(new byte[] {1, 2}, (Class)null);
+        response = (MockStreamableByteArrayRecord)interaction.execute(spec, request);
+        assertTrue(Arrays.equals(new byte[] {1, 2}, response.getContent()));
+        interaction.setResponse(mappedResponse);
+        assertSame(mappedResponse, interaction.execute(spec, request));
+        interaction.setResponse((Record)null);
         response = (MockStreamableByteArrayRecord)interaction.execute(spec, request);
         assertTrue(Arrays.equals(new byte[] {1, 2}, response.getContent()));
     }
@@ -145,11 +151,15 @@ public class StreamableByteArrayInteractionTest extends TestCase
         assertTrue(Arrays.equals(new byte[] {1, 2, 3}, response.getContent()));
         assertFalse(interaction.execute(spec, request, new MockMappedRecord()));
         assertTrue(interaction.execute(spec, request, new TestRecord()));
+        interaction.setResponse((byte[])null);
         interaction.setResponse(new TestRecord());
         response = new MockStreamableByteArrayRecord();
         assertTrue(interaction.execute(spec, request, response));
         assertNull(response.getContent());
         interaction = new StreamableByteArrayInteraction(null, new byte[] {1});
+        assertTrue(interaction.execute(spec, request, response));
+        assertTrue(Arrays.equals(new byte[] {1}, response.getContent()));
+        interaction.setResponse(new TestRecord());
         assertTrue(interaction.execute(spec, request, response));
         assertTrue(Arrays.equals(new byte[] {1}, response.getContent()));
     }
