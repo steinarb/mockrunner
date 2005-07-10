@@ -23,7 +23,9 @@ import com.mockrunner.util.common.StreamUtil;
  * request and returns the specified result. If a request byte array is specified, 
  * this implementor accepts only requests that are equal to the specified request 
  * byte array. If a request is accepted, this implementor replies with the specified
- * response. Please check out the documentation of the various methods for details.
+ * response. You can use the various constructors and <code>set</code> methods
+ * to configure the expected request data and the response.<br>
+ * Please check out the documentation of the various methods for details.
  */
 public class StreamableByteArrayInteraction implements InteractionImplementor
 {
@@ -32,43 +34,140 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
     private Class responseClass;
     private Record responseRecord;
     
+    /**
+     * Sets the expected request and the response to <code>null</code>,
+     * i.e. an empty reponse is returned for every request.
+     */
     public StreamableByteArrayInteraction()
     {
         this(null, null, MockStreamableByteArrayRecord.class);
     }
     
+    /**
+     * Sets the expected request to <code>null</code> and prepares
+     * the specified response data. The response class for the
+     * {@link #execute(InteractionSpec,Record)} method is set
+     * to the default {@link com.mockrunner.mock.connector.cci.MockStreamableByteArrayRecord}.
+     * It is allowed to pass <code>null</code> for the response data which is equivalent
+     * to an empty response.
+     * The specified reponse is returned for every request.
+     * @param responseData the response data
+     */
     public StreamableByteArrayInteraction(byte[] responseData)
     {
         this(null, responseData, MockStreamableByteArrayRecord.class);
     }
     
+    /**
+     * Sets the specified expected request data and prepares
+     * the specified response data. The response class for the
+     * {@link #execute(InteractionSpec,Record)} method is set
+     * to the default {@link com.mockrunner.mock.connector.cci.MockStreamableByteArrayRecord}.
+     * It is allowed to pass <code>null</code> for the request and response data 
+     * which is equivalent to an empty expected request (i.e. every request is accepted)
+     * resp. to an empty response.
+     * The specified reponse is returned, if the actual request matches the specified expected 
+     * request data.
+     * @param expectedRequest the expected request data
+     * @param responseData the response data
+     */
     public StreamableByteArrayInteraction(byte[] expectedRequest, byte[] responseData)
     {
         this(expectedRequest, responseData, MockStreamableByteArrayRecord.class);
     }
     
+    /**
+     * Sets the expected request to <code>null</code> and prepares
+     * the specified response data. The response class for the
+     * {@link #execute(InteractionSpec,Record)} method is set
+     * to the specified <code>responseClass</code>. The specified 
+     * <code>responseClass</code> must implement <code>Record</code>
+     * and <code>Streamable</code>, otherwise an 
+     * <code>IllegalArgumentException</code> will be thrown.
+     * It is allowed to pass <code>null</code> for the response data which is 
+     * equivalent to an empty response.
+     * The specified reponse is returned for every request.
+     * @param responseData the response data
+     * @param responseClass the response <code>Record</code> class
+     * @throws IllegalArgumentException if the <code>responseClass</code>
+     *         is not valid
+     */
     public StreamableByteArrayInteraction(byte[] responseData, Class responseClass)
     {
         this(null, responseData, responseClass);
     }
     
+    /**
+     * Sets the specified expected request data and prepares
+     * the specified response data. The response class for the
+     * {@link #execute(InteractionSpec,Record)} method is set
+     * to the specified <code>responseClass</code>. The specified 
+     * <code>responseClass</code> must implement <code>Record</code>
+     * and <code>Streamable</code>, otherwise an 
+     * <code>IllegalArgumentException</code> will be thrown.
+     * It is allowed to pass <code>null</code> for the request and response data 
+     * which is equivalent to an empty expected request (i.e. every request is accepted)
+     * resp. to an empty response.
+     * The specified reponse is returned, if the actual request matches the specified expected 
+     * request data.
+     * @param expectedRequest the expected request data
+     * @param responseData the response data
+     * @param responseClass the response <code>Record</code> class
+     * @throws IllegalArgumentException if the <code>responseClass</code>
+     *         is not valid
+     */
     public StreamableByteArrayInteraction(byte[] expectedRequest, byte[] responseData, Class responseClass)
     {
         setExpectedRequest(expectedRequest);
         setResponse(responseData, responseClass);
     }
     
+    /**
+     * Sets the specified expected request data and the response
+     * <code>Record</code> for the {@link #execute(InteractionSpec, Record)}
+     * method. The response <code>Record</code> is ignored for 
+     * {@link #execute(InteractionSpec,Record,Record)} but takes precedence
+     * over the specified reponse byte data for {@link #execute(InteractionSpec, Record)}.
+     * It is allowed to pass <code>null</code> for the request and response <code>Record</code> 
+     * which is equivalent to an empty expected request (i.e. every request is accepted)
+     * resp. to no specified response <code>Record</code>, i.e. the specified reponse
+     * byte data is taken.
+     * The specified reponse is returned, if the actual request matches the specified expected 
+     * request data.
+     * @param expectedRequest the expected request data
+     * @param responseRecord the response <code>Record</code>
+     */
     public StreamableByteArrayInteraction(byte[] expectedRequest, Record responseRecord)
     {
         setExpectedRequest(expectedRequest);
         setResponse(responseRecord);
     }
     
+    /**
+     * Sets the expected request to <code>null</code> and prepares the response
+     * <code>Record</code> for the {@link #execute(InteractionSpec, Record)}
+     * method. The response <code>Record</code> is ignored for 
+     * {@link #execute(InteractionSpec,Record,Record)} but takes precedence
+     * over the specified reponse byte data for {@link #execute(InteractionSpec, Record)}.
+     * It is allowed to pass <code>null</code> for the response <code>Record</code> 
+     * which is equivalent to no specified response <code>Record</code>, i.e. the specified reponse
+     * byte data is taken.
+     * The specified reponse is returned for every request.
+     * @param responseRecord the response <code>Record</code>
+     */
     public StreamableByteArrayInteraction(Record responseRecord)
     {
         this(null, responseRecord);
     }
     
+    /**
+     * Sets the specified expected request data. The reponse is returned, 
+     * if the actual request matches the specified expected request data.
+     * It is allowed to pass <code>null</code> for the request data 
+     * which is equivalent to an empty expected request (i.e. every request 
+     * is accepted).
+     * @param expectedRequest the expected request data
+     */
     public void setExpectedRequest(byte[] expectedRequest)
     {
         if(null == expectedRequest)
@@ -81,6 +180,14 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
         }
     }
     
+    /**
+     * Reads the expected request data from the specified <code>InputStream</code>.
+     * The reponse is returned, if the actual request matches the  expected request data.
+     * It is allowed to pass <code>null</code> for the <code>InputStream</code>
+     * which is equivalent to an empty expected request (i.e. every request
+     * is accepted).
+     * @param expectedRequest the expected request
+     */
     public void setExpectedRequest(InputStream expectedRequest)
     {
         if(null == expectedRequest)
@@ -93,11 +200,33 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
         }
     }
     
+    /**
+     * Prepares the specified response data. The response class for the
+     * {@link #execute(InteractionSpec,Record)} method is set
+     * to the default {@link com.mockrunner.mock.connector.cci.MockStreamableByteArrayRecord}.
+     * It is allowed to pass <code>null</code> for the response data
+     * which is equivalent to an empty response.
+     * @param responseData the response data
+     */
     public void setResponse(byte[] responseData)
     {
         setResponse(responseData, MockStreamableByteArrayRecord.class);
     }
     
+    /**
+     * Prepares the specified response data. The response class for the
+     * {@link #execute(InteractionSpec,Record)} method is set
+     * to the specified <code>responseClass</code>. The specified 
+     * <code>responseClass</code> must implement <code>Record</code>
+     * and <code>Streamable</code>, otherwise an 
+     * <code>IllegalArgumentException</code> will be thrown.
+     * It is allowed to pass <code>null</code> for the response data 
+     * which is equivalent to an empty response.
+     * @param responseData the response data
+     * @param responseClass the response <code>Record</code> class
+     * @throws IllegalArgumentException if the <code>responseClass</code>
+     *         is not valid
+     */
     public void setResponse(byte[] responseData, Class responseClass)
     {
         if(!isReponseClassAcceptable(responseClass))
@@ -115,11 +244,35 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
         this.responseClass = responseClass;
     }
 
+    /**
+     * Reads the response data from the specified <code>InputStream</code>. 
+     * The response class for the {@link #execute(InteractionSpec,Record)} method 
+     * is set to the default 
+     * {@link com.mockrunner.mock.connector.cci.MockStreamableByteArrayRecord}.
+     * It is allowed to pass <code>null</code> for the <code>InputStream</code>
+     * which is equivalent to an empty response.
+     * @param responseData the response data
+     */
     public void setResponse(InputStream responseData)
     {
         setResponse(responseData, MockStreamableByteArrayRecord.class);
     }
     
+    /**
+     * Reads the response data from the specified <code>InputStream</code>. 
+     * The response class for the
+     * {@link #execute(InteractionSpec,Record)} method is set
+     * to the specified <code>responseClass</code>. The specified 
+     * <code>responseClass</code> must implement <code>Record</code>
+     * and <code>Streamable</code>, otherwise an 
+     * <code>IllegalArgumentException</code> will be thrown.
+     * It is allowed to pass <code>null</code> for the <code>InputStream</code>
+     * which is equivalent to an empty response.
+     * @param responseData the response data
+     * @param responseClass the response <code>Record</code> class
+     * @throws IllegalArgumentException if the <code>responseClass</code>
+     *         is not valid
+     */
     public void setResponse(InputStream responseData, Class responseClass)
     {
         if(!isReponseClassAcceptable(responseClass))
@@ -137,6 +290,17 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
         this.responseClass = responseClass;
     }
     
+    /**
+     * Prepares the response <code>Record</code> for the 
+     * {@link #execute(InteractionSpec, Record)} method. The response 
+     * <code>Record</code> is ignored for {@link #execute(InteractionSpec,Record,Record)} 
+     * but takes precedence over the specified reponse byte data for 
+     * {@link #execute(InteractionSpec, Record)}.
+     * It is allowed to pass <code>null</code> for the response <code>Record</code> 
+     * which is equivalent to no specified response <code>Record</code>, i.e. the specified reponse
+     * byte data is taken.
+     * @param responseRecord the response <code>Record</code>
+     */
     public void setResponse(Record responseRecord)
     {
         this.responseRecord = responseRecord;
