@@ -12,16 +12,16 @@ import javax.resource.cci.Streamable;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.connector.StreamableByteArrayInteraction;
+import com.mockrunner.connector.StreamableRecordByteArrayInteraction;
 import com.mockrunner.mock.connector.cci.MockIndexedRecord;
 import com.mockrunner.mock.connector.cci.MockMappedRecord;
 import com.mockrunner.mock.connector.cci.MockStreamableByteArrayRecord;
 
-public class StreamableByteArrayInteractionTest extends TestCase
+public class StreamableRecordByteArrayInteractionTest extends TestCase
 {
     public void testSetResponseArguments()
     {
-        StreamableByteArrayInteraction interaction = new StreamableByteArrayInteraction();
+        StreamableRecordByteArrayInteraction interaction = new StreamableRecordByteArrayInteraction();
         try
         {
             interaction.setResponse(new byte[0], String.class);
@@ -54,7 +54,7 @@ public class StreamableByteArrayInteractionTest extends TestCase
         interaction.setResponse(new ByteArrayInputStream(new byte[0]), MockStreamableByteArrayRecord.class);
         try
         {
-            interaction = new StreamableByteArrayInteraction(new byte[0], Integer.class);
+            interaction = new StreamableRecordByteArrayInteraction(new byte[0], Integer.class);
             fail();
         } 
         catch(IllegalArgumentException exc)
@@ -63,19 +63,19 @@ public class StreamableByteArrayInteractionTest extends TestCase
         }
         try
         {
-            interaction = new StreamableByteArrayInteraction(new byte[0], Record.class);
+            interaction = new StreamableRecordByteArrayInteraction(new byte[0], Record.class);
             fail();
         } 
         catch(IllegalArgumentException exc)
         {
             //should throw exception
         }
-        interaction = new StreamableByteArrayInteraction(new byte[0], (Class)null);
+        interaction = new StreamableRecordByteArrayInteraction(new byte[0], (Class)null);
     }
     
     public void testCanHandle()
     {
-        StreamableByteArrayInteraction interaction = new StreamableByteArrayInteraction();
+        StreamableRecordByteArrayInteraction interaction = new StreamableRecordByteArrayInteraction();
         InteractionSpec spec = new InteractionSpec() {};
         assertTrue(interaction.canHandle(spec, null, null));
         assertTrue(interaction.canHandle(spec, null, new MockStreamableByteArrayRecord()));
@@ -91,17 +91,17 @@ public class StreamableByteArrayInteractionTest extends TestCase
         assertFalse(interaction.canHandle(spec, request, new MockStreamableByteArrayRecord()));
         interaction.setExpectedRequest(new ByteArrayInputStream(new byte[] {1, 2, 3, 4}));
         assertTrue(interaction.canHandle(spec, request, new MockStreamableByteArrayRecord()));
-        interaction = new StreamableByteArrayInteraction(new byte[] {5, 6, 7}, new MockStreamableByteArrayRecord());
+        interaction = new StreamableRecordByteArrayInteraction(new byte[] {5, 6, 7}, new MockStreamableByteArrayRecord());
         assertFalse(interaction.canHandle(spec, request, new MockStreamableByteArrayRecord()));
         request.setContent(new byte[] {5, 6, 7});
         assertTrue(interaction.canHandle(spec, request, new MockStreamableByteArrayRecord()));
-        interaction = new StreamableByteArrayInteraction(new byte[] {1}, MockStreamableByteArrayRecord.class);
+        interaction = new StreamableRecordByteArrayInteraction(new byte[] {1}, MockStreamableByteArrayRecord.class);
         assertTrue(interaction.canHandle(spec, request, new MockStreamableByteArrayRecord()));
     }
     
     public void testExecuteReturnsRecord() throws Exception
     {
-        StreamableByteArrayInteraction interaction = new StreamableByteArrayInteraction();
+        StreamableRecordByteArrayInteraction interaction = new StreamableRecordByteArrayInteraction();
         InteractionSpec spec = new InteractionSpec() {};
         interaction.setExpectedRequest(new byte[] {1});
         assertNull(interaction.execute(spec, new MockIndexedRecord()));
@@ -121,10 +121,10 @@ public class StreamableByteArrayInteractionTest extends TestCase
         interaction.setResponse(new TestRecord());
         assertTrue(interaction.execute(spec, request) instanceof TestRecord);
         assertNull(interaction.execute(spec, new MockStreamableByteArrayRecord()));
-        interaction = new StreamableByteArrayInteraction(new byte[] {1}, MockStreamableByteArrayRecord.class);
+        interaction = new StreamableRecordByteArrayInteraction(new byte[] {1}, MockStreamableByteArrayRecord.class);
         response = (MockStreamableByteArrayRecord)interaction.execute(spec, request);
         assertTrue(Arrays.equals(new byte[] {1}, response.getContent()));
-        interaction = new StreamableByteArrayInteraction(new byte[] {1, 2}, (Class)null);
+        interaction = new StreamableRecordByteArrayInteraction(new byte[] {1, 2}, (Class)null);
         response = (MockStreamableByteArrayRecord)interaction.execute(spec, request);
         assertTrue(Arrays.equals(new byte[] {1, 2}, response.getContent()));
         interaction.setResponse(mappedResponse);
@@ -136,7 +136,7 @@ public class StreamableByteArrayInteractionTest extends TestCase
     
     public void testExecuteReturnsBoolean() throws Exception
     {
-        StreamableByteArrayInteraction interaction = new StreamableByteArrayInteraction();
+        StreamableRecordByteArrayInteraction interaction = new StreamableRecordByteArrayInteraction();
         InteractionSpec spec = new InteractionSpec() {};
         interaction.setExpectedRequest(new byte[] {1});
         assertFalse(interaction.execute(spec, new MockIndexedRecord(), null));
@@ -156,7 +156,7 @@ public class StreamableByteArrayInteractionTest extends TestCase
         response = new MockStreamableByteArrayRecord();
         assertTrue(interaction.execute(spec, request, response));
         assertNull(response.getContent());
-        interaction = new StreamableByteArrayInteraction(null, new byte[] {1});
+        interaction = new StreamableRecordByteArrayInteraction(null, new byte[] {1});
         assertTrue(interaction.execute(spec, request, response));
         assertTrue(Arrays.equals(new byte[] {1}, response.getContent()));
         interaction.setResponse(new TestRecord());

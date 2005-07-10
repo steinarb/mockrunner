@@ -22,7 +22,8 @@ public class AllConnectorTests
         suite.addTest(new TestSuite(MockLocalTransactionTest.class));
         suite.addTest(new TestSuite(MockResultSetInfoTest.class));
         suite.addTest(new TestSuite(MockStreamableByteArrayRecordTest.class));
-        suite.addTest(new TestSuite(StreamableByteArrayInteractionTest.class));
+        suite.addTest(new TestSuite(StreamableRecordByteArrayInteractionTest.class));
+        suite.addTest(new TestSuite(MappedRecordInteractionTest.class));
         //$JUnit-END$
         return suite;
     }

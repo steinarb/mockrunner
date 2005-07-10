@@ -27,7 +27,7 @@ import com.mockrunner.util.common.StreamUtil;
  * to configure the expected request data and the response.<br>
  * Please check out the documentation of the various methods for details.
  */
-public class StreamableByteArrayInteraction implements InteractionImplementor
+public class StreamableRecordByteArrayInteraction implements InteractionImplementor
 {
     private byte[] expectedRequest;
     private byte[] responseData;
@@ -36,9 +36,9 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
     
     /**
      * Sets the expected request and the response to <code>null</code>,
-     * i.e. an empty reponse is returned for every request.
+     * i.e. an empty response is returned for every request.
      */
-    public StreamableByteArrayInteraction()
+    public StreamableRecordByteArrayInteraction()
     {
         this(null, null, MockStreamableByteArrayRecord.class);
     }
@@ -50,10 +50,10 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
      * to the default {@link com.mockrunner.mock.connector.cci.MockStreamableByteArrayRecord}.
      * It is allowed to pass <code>null</code> for the response data which is equivalent
      * to an empty response.
-     * The specified reponse is returned for every request.
+     * The specified response is returned for every request.
      * @param responseData the response data
      */
-    public StreamableByteArrayInteraction(byte[] responseData)
+    public StreamableRecordByteArrayInteraction(byte[] responseData)
     {
         this(null, responseData, MockStreamableByteArrayRecord.class);
     }
@@ -66,12 +66,12 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
      * It is allowed to pass <code>null</code> for the request and response data 
      * which is equivalent to an empty expected request (i.e. every request is accepted)
      * resp. to an empty response.
-     * The specified reponse is returned, if the actual request matches the specified expected 
+     * The specified response is returned, if the actual request matches the specified expected 
      * request data.
      * @param expectedRequest the expected request data
      * @param responseData the response data
      */
-    public StreamableByteArrayInteraction(byte[] expectedRequest, byte[] responseData)
+    public StreamableRecordByteArrayInteraction(byte[] expectedRequest, byte[] responseData)
     {
         this(expectedRequest, responseData, MockStreamableByteArrayRecord.class);
     }
@@ -86,13 +86,13 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
      * <code>IllegalArgumentException</code> will be thrown.
      * It is allowed to pass <code>null</code> for the response data which is 
      * equivalent to an empty response.
-     * The specified reponse is returned for every request.
+     * The specified response is returned for every request.
      * @param responseData the response data
      * @param responseClass the response <code>Record</code> class
      * @throws IllegalArgumentException if the <code>responseClass</code>
      *         is not valid
      */
-    public StreamableByteArrayInteraction(byte[] responseData, Class responseClass)
+    public StreamableRecordByteArrayInteraction(byte[] responseData, Class responseClass)
     {
         this(null, responseData, responseClass);
     }
@@ -108,7 +108,7 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
      * It is allowed to pass <code>null</code> for the request and response data 
      * which is equivalent to an empty expected request (i.e. every request is accepted)
      * resp. to an empty response.
-     * The specified reponse is returned, if the actual request matches the specified expected 
+     * The specified response is returned, if the actual request matches the specified expected 
      * request data.
      * @param expectedRequest the expected request data
      * @param responseData the response data
@@ -116,7 +116,7 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
      * @throws IllegalArgumentException if the <code>responseClass</code>
      *         is not valid
      */
-    public StreamableByteArrayInteraction(byte[] expectedRequest, byte[] responseData, Class responseClass)
+    public StreamableRecordByteArrayInteraction(byte[] expectedRequest, byte[] responseData, Class responseClass)
     {
         setExpectedRequest(expectedRequest);
         setResponse(responseData, responseClass);
@@ -127,17 +127,17 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
      * <code>Record</code> for the {@link #execute(InteractionSpec, Record)}
      * method. The response <code>Record</code> is ignored for 
      * {@link #execute(InteractionSpec,Record,Record)} but takes precedence
-     * over the specified reponse byte data for {@link #execute(InteractionSpec, Record)}.
+     * over the specified response byte data for {@link #execute(InteractionSpec, Record)}.
      * It is allowed to pass <code>null</code> for the request and response <code>Record</code> 
      * which is equivalent to an empty expected request (i.e. every request is accepted)
-     * resp. to no specified response <code>Record</code>, i.e. the specified reponse
+     * resp. to no specified response <code>Record</code>, i.e. the specified response
      * byte data is taken.
-     * The specified reponse is returned, if the actual request matches the specified expected 
+     * The specified response is returned, if the actual request matches the specified expected 
      * request data.
      * @param expectedRequest the expected request data
      * @param responseRecord the response <code>Record</code>
      */
-    public StreamableByteArrayInteraction(byte[] expectedRequest, Record responseRecord)
+    public StreamableRecordByteArrayInteraction(byte[] expectedRequest, Record responseRecord)
     {
         setExpectedRequest(expectedRequest);
         setResponse(responseRecord);
@@ -148,20 +148,20 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
      * <code>Record</code> for the {@link #execute(InteractionSpec, Record)}
      * method. The response <code>Record</code> is ignored for 
      * {@link #execute(InteractionSpec,Record,Record)} but takes precedence
-     * over the specified reponse byte data for {@link #execute(InteractionSpec, Record)}.
+     * over the specified response byte data for {@link #execute(InteractionSpec, Record)}.
      * It is allowed to pass <code>null</code> for the response <code>Record</code> 
-     * which is equivalent to no specified response <code>Record</code>, i.e. the specified reponse
+     * which is equivalent to no specified response <code>Record</code>, i.e. the specified response
      * byte data is taken.
-     * The specified reponse is returned for every request.
+     * The specified response is returned for every request.
      * @param responseRecord the response <code>Record</code>
      */
-    public StreamableByteArrayInteraction(Record responseRecord)
+    public StreamableRecordByteArrayInteraction(Record responseRecord)
     {
         this(null, responseRecord);
     }
     
     /**
-     * Sets the specified expected request data. The reponse is returned, 
+     * Sets the specified expected request data. The response is returned, 
      * if the actual request matches the specified expected request data.
      * It is allowed to pass <code>null</code> for the request data 
      * which is equivalent to an empty expected request (i.e. every request 
@@ -182,7 +182,7 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
     
     /**
      * Reads the expected request data from the specified <code>InputStream</code>.
-     * The reponse is returned, if the actual request matches the  expected request data.
+     * The response is returned, if the actual request matches the  expected request data.
      * It is allowed to pass <code>null</code> for the <code>InputStream</code>
      * which is equivalent to an empty expected request (i.e. every request
      * is accepted).
@@ -229,7 +229,7 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
      */
     public void setResponse(byte[] responseData, Class responseClass)
     {
-        if(!isReponseClassAcceptable(responseClass))
+        if(!isresponseClassAcceptable(responseClass))
         {
             throw new IllegalArgumentException("responseClass must implement " + Streamable.class.getName() + " and " + Record.class.getName());
         }
@@ -275,7 +275,7 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
      */
     public void setResponse(InputStream responseData, Class responseClass)
     {
-        if(!isReponseClassAcceptable(responseClass))
+        if(!isresponseClassAcceptable(responseClass))
         {
             throw new IllegalArgumentException("responseClass must implement " + Streamable.class.getName() + " and " + Record.class.getName());
         }
@@ -294,10 +294,10 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
      * Prepares the response <code>Record</code> for the 
      * {@link #execute(InteractionSpec, Record)} method. The response 
      * <code>Record</code> is ignored for {@link #execute(InteractionSpec,Record,Record)} 
-     * but takes precedence over the specified reponse byte data for 
+     * but takes precedence over the specified response byte data for 
      * {@link #execute(InteractionSpec, Record)}.
      * It is allowed to pass <code>null</code> for the response <code>Record</code> 
-     * which is equivalent to no specified response <code>Record</code>, i.e. the specified reponse
+     * which is equivalent to no specified response <code>Record</code>, i.e. the specified response
      * byte data is taken.
      * @param responseRecord the response <code>Record</code>
      */
@@ -357,7 +357,7 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
         return (null == response) || (response instanceof Streamable);
     }
     
-    private boolean isReponseClassAcceptable(Class responseClass)
+    private boolean isresponseClassAcceptable(Class responseClass)
     {
         return (null == responseClass) || ((Streamable.class.isAssignableFrom(responseClass)) && (Record.class.isAssignableFrom(responseClass)));
     }
@@ -369,14 +369,14 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
      * normal conditions since the {@link InteractionHandler} does not call 
      * <code>execute</code>, if {@link #canHandle} returns <code>false</code>.
      * <br><br>
-     * Otherwise, this method returns the specified reponse. If a response 
+     * Otherwise, this method returns the specified response. If a response 
      * <code>Record</code> object is specified (use {@link #setResponse(Record)}), 
      * it always takes precedence, i.e. the byte array response will be ignored.
      * If no <code>Record</code> object is specified, a <code>Record</code> object
      * is created and filled with the specified byte response data. Use the 
      * <code>setResponse</code> methods that take a byte array or an <code>InputStream</code>
      * to prepare response data. The created <code>Record</code> is of the the
-     * specified type (the <code>setResponse</code> methods that take  a second
+     * specified type (the <code>setResponse</code> methods that take a second
      * <code>Class</code> parameter allows for specifying a type). If no type
      * is specified, a {@link com.mockrunner.mock.connector.cci.MockStreamableByteArrayRecord}
      * is created. If no response data is specified at all, an empty
@@ -422,7 +422,7 @@ public class StreamableByteArrayInteraction implements InteractionImplementor
      * normal conditions since the {@link InteractionHandler} does not call 
      * <code>execute</code>, if {@link #canHandle} returns <code>false</code>.
      * <br><br>
-     * Otherwise, this method fills the reponse <code>Record</code> with the
+     * Otherwise, this method fills the response <code>Record</code> with the
      * specified byte response data. Use the <code>setResponse</code> methods that 
      * take a byte array or an <code>InputStream</code> to prepare response data. 
      * The response <code>Record</code> must implement <code>Streamable</code>
