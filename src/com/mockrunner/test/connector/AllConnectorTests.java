@@ -24,6 +24,7 @@ public class AllConnectorTests
         suite.addTest(new TestSuite(MockStreamableByteArrayRecordTest.class));
         suite.addTest(new TestSuite(StreamableRecordByteArrayInteractionTest.class));
         suite.addTest(new TestSuite(MappedRecordInteractionTest.class));
+        suite.addTest(new TestSuite(IndexedRecordInteractionTest.class));
         //$JUnit-END$
         return suite;
     }

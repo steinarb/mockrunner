@@ -73,7 +73,7 @@ public class MappedRecordInteractionTest extends TestCase
         assertTrue(interaction.canHandle(spec, new MockMappedRecord(), new MockMappedRecord()));
         Map expectedRequestMap = new HashMap();
         expectedRequestMap.put("key1", "value1");
-        expectedRequestMap.put("key2", "value2");
+        expectedRequestMap.put("key2", null);
         expectedRequestMap.put("key3", "value3");
         interaction.setExpectedRequest(expectedRequestMap);
         expectedRequestMap.put("key4", "value4");
@@ -81,7 +81,7 @@ public class MappedRecordInteractionTest extends TestCase
         assertFalse(interaction.canHandle(spec, new MockMappedRecord(), new MockMappedRecord()));
         MockMappedRecord request = new MockMappedRecord();
         request.put("key1", "value1");
-        request.put("key2", "value2");
+        request.put("key2", null);
         request.put("key3", "value3");
         assertTrue(interaction.canHandle(spec, request, new MockMappedRecord()));
         request.put("key4", "value4");
@@ -178,7 +178,7 @@ public class MappedRecordInteractionTest extends TestCase
         assertEquals(0, response.size());
         Map responseMap = new HashMap();
         responseMap.put(new Integer(1), "value1");
-        responseMap.put(new Integer(2), "value2");
+        responseMap.put(new Integer(2), "value1");
         responseMap.put(new Integer(3), "value3");
         interaction.setResponse(responseMap);
         assertTrue(interaction.execute(spec, request, response));
@@ -196,6 +196,11 @@ public class MappedRecordInteractionTest extends TestCase
         assertTrue(interaction.execute(spec, request, response));
         assertTrue(new HashMap(response).equals(responseMap));
         interaction.setResponse((Record)new TestRecord());
+        assertTrue(interaction.execute(spec, request, response));
+        assertTrue(new HashMap(response).equals(responseMap));
+        responseMap = new HashMap();
+        responseMap.put(new Integer(2), "value2");
+        interaction.setResponse(responseMap);
         assertTrue(interaction.execute(spec, request, response));
         assertTrue(new HashMap(response).equals(responseMap));
     }
