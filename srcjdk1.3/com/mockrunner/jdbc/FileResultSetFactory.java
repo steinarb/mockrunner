@@ -53,21 +53,21 @@ public class FileResultSetFactory implements ResultSetFactory
      */
     public File getFile()
     {
-        if(file.exists() && file.isFile())
+        if (file.exists() && file.isFile())
         {
             return file;
-        }
+        } 
         else
         {
-            try 
+            try
             {
-				file = FileUtil.findFile(file.getPath());
-				return file;
-			} 
-            catch(FileNotFoundException exc) 
+                file = FileUtil.findFile(file.getPath());
+                return file;
+            } 
+            catch (FileNotFoundException exc)
             {
-				throw new RuntimeException("Could not find: " + file.getPath());
-			}
+                throw new RuntimeException("Could not find: " + file.getPath());
+            }
         }
     }
     
