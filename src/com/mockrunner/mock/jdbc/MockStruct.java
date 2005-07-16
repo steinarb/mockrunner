@@ -25,6 +25,11 @@ public class MockStruct implements Struct, Cloneable
         return sqlTypeName;
     }
     
+    public void setSQLTypeName(String sqlTypeName)
+    {
+        this.sqlTypeName = sqlTypeName;
+    }
+
     public Object[] getAttributes() throws SQLException
     {
         return attributes.toArray();
