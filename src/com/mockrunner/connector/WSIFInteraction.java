@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import javax.resource.ResourceException;
 import javax.resource.cci.InteractionSpec;
 import javax.resource.cci.Record;
-import com.mockrunner.connector.InteractionImplementor;
 
 /**
  * Implementor for IBM environments using the
@@ -36,14 +35,14 @@ public class WSIFInteraction implements InteractionImplementor
 		this.responsePart = responsePart;
 	}
 
-	public boolean execute(InteractionSpec is, Record request, Record response) throws ResourceException
+	public boolean canHandle(InteractionSpec interactionSpec, Record actualRequest, Record actualResponse)
     {
-        Class specClass = getClassNamed(is.getClass(), isClassName);
+        Class specClass = getClassNamed(interactionSpec.getClass(), isClassName);
         if (specClass != null)
         {
             try
             {
-                Class wsifMessageClass = getClassNamed(request.getClass(), "org.apache.wsif.base.WSIFDefaultMessage");
+                Class wsifMessageClass = getClassNamed(actualRequest.getClass(), "org.apache.wsif.base.WSIFDefaultMessage");
                 Class wsifFormatPartClass = getClassNamed(requestPart.getClass(), "com.ibm.wsif.format.jca.WSIFFormatPartImpl");
                 if (wsifMessageClass != null && wsifFormatPartClass != null)
                 {
@@ -54,7 +53,7 @@ public class WSIFInteraction implements InteractionImplementor
                     {
                         Object[] gopArgs = new Object[1];
                         gopArgs[0] = requestPartName;
-                        Object o1 = gop.invoke(request, gopArgs);
+                        Object o1 = gop.invoke(actualRequest, gopArgs);
                         if (o1 != null)
                         {
                             Class[] elementsParams = new Class[0];
@@ -66,30 +65,50 @@ public class WSIFInteraction implements InteractionImplementor
                                 Object map2 = elements.invoke(o1, elementsArgs);
                                 if (map1.equals(map2))
                                 {
-                                    Class[] sopParams = new Class[2];
-                                    sopParams[0] = String.class;
-                                    sopParams[1] = Object.class;
-                                    Method sop = wsifMessageClass.getMethod("setObjectPart", sopParams);
-                                    if (sop != null)
-                                    {
-                                        Object[] sopArgs = new Object[2];
-                                        sopArgs[0] = responsePartName;
-                                        sopArgs[1] = responsePart;
-                                        sop.invoke(response, sopArgs);
-                                        return true;
-                                    }
+                                    return true;
                                 }
                             }
                         }
                     }
                 }
             } 
-            catch (Exception e)
+            catch(Exception exc)
             {
-                ResourceException re = new ResourceException("execute() failed");
-                re.setLinkedException(e);
-                throw re;
+                return false;
             }
+        }
+        return false;
+    }
+
+    public Record execute(InteractionSpec interactionSpec, Record actualRequest) throws ResourceException
+    {
+        throw new RuntimeException(this.getClass().getName() + " does not implement public Record execute(InteractionSpec  Record)");
+    }
+
+    public boolean execute(InteractionSpec interactionSpec, Record actualRequest, Record actualResponse) throws ResourceException
+    {
+        if(!canHandle(interactionSpec, actualRequest, actualResponse)) return false;
+        try
+        {
+            Class wsifMessageClass = getClassNamed(actualRequest.getClass(), "org.apache.wsif.base.WSIFDefaultMessage");
+            Class[] sopParams = new Class[2];
+            sopParams[0] = String.class;
+            sopParams[1] = Object.class;
+            Method sop = wsifMessageClass.getMethod("setObjectPart", sopParams);
+            if (sop != null)
+            {
+                Object[] sopArgs = new Object[2];
+                sopArgs[0] = responsePartName;
+                sopArgs[1] = responsePart;
+                sop.invoke(actualResponse, sopArgs);
+                return true;
+            }
+        } 
+        catch(Exception exc)
+        {
+            ResourceException resExc = new ResourceException("execute() failed");
+            resExc.setLinkedException(exc);
+            throw resExc;
         }
         return false;
     }

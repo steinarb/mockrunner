@@ -31,7 +31,7 @@ public class MockInteraction implements Interaction
 
 	public Record execute(InteractionSpec is, Record record) throws ResourceException 
     {
-		return null;
+        return mockConnection.getInteractionHandler().execute(is, record);
 	}
 
 	public boolean execute(InteractionSpec is, Record request, Record response) throws ResourceException 
