@@ -40,7 +40,7 @@ public class InteractionHandler
         return null;
     }
     
-	public boolean execute(InteractionSpec is, Record request, Record response) throws ResourceException 
+    public boolean execute(InteractionSpec is, Record request, Record response) throws ResourceException 
     {
 		Iterator iter = implementors.iterator();
 		while (iter.hasNext())
