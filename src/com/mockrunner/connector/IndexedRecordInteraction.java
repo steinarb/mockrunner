@@ -204,7 +204,7 @@ public class IndexedRecordInteraction implements InteractionImplementor
      */
     public void setResponse(List responseList, Class responseClass)
     {
-        if(!isresponseClassAcceptable(responseClass))
+        if(!isResponseClassAcceptable(responseClass))
         {
             throw new IllegalArgumentException("responseClass must implement " + IndexedRecord.class.getName());
         }
@@ -300,7 +300,7 @@ public class IndexedRecordInteraction implements InteractionImplementor
         return (null == response) || (response instanceof IndexedRecord);
     }
     
-    private boolean isresponseClassAcceptable(Class responseClass)
+    private boolean isResponseClassAcceptable(Class responseClass)
     {
         return (null == responseClass) || (IndexedRecord.class.isAssignableFrom(responseClass));
     }
