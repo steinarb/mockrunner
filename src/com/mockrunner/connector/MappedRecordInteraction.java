@@ -205,7 +205,7 @@ public class MappedRecordInteraction implements InteractionImplementor
      */
     public void setResponse(Map responseMap, Class responseClass)
     {
-        if(!isresponseClassAcceptable(responseClass))
+        if(!isResponseClassAcceptable(responseClass))
         {
             throw new IllegalArgumentException("responseClass must implement " + MappedRecord.class.getName());
         }
@@ -303,7 +303,7 @@ public class MappedRecordInteraction implements InteractionImplementor
         return (null == response) || (response instanceof MappedRecord);
     }
     
-    private boolean isresponseClassAcceptable(Class responseClass)
+    private boolean isResponseClassAcceptable(Class responseClass)
     {
         return (null == responseClass) || (MappedRecord.class.isAssignableFrom(responseClass));
     }

@@ -229,7 +229,7 @@ public class StreamableRecordByteArrayInteraction implements InteractionImplemen
      */
     public void setResponse(byte[] responseData, Class responseClass)
     {
-        if(!isresponseClassAcceptable(responseClass))
+        if(!isResponseClassAcceptable(responseClass))
         {
             throw new IllegalArgumentException("responseClass must implement " + Streamable.class.getName() + " and " + Record.class.getName());
         }
@@ -275,7 +275,7 @@ public class StreamableRecordByteArrayInteraction implements InteractionImplemen
      */
     public void setResponse(InputStream responseData, Class responseClass)
     {
-        if(!isresponseClassAcceptable(responseClass))
+        if(!isResponseClassAcceptable(responseClass))
         {
             throw new IllegalArgumentException("responseClass must implement " + Streamable.class.getName() + " and " + Record.class.getName());
         }
@@ -357,7 +357,7 @@ public class StreamableRecordByteArrayInteraction implements InteractionImplemen
         return (null == response) || (response instanceof Streamable);
     }
     
-    private boolean isresponseClassAcceptable(Class responseClass)
+    private boolean isResponseClassAcceptable(Class responseClass)
     {
         return (null == responseClass) || ((Streamable.class.isAssignableFrom(responseClass)) && (Record.class.isAssignableFrom(responseClass)));
     }
