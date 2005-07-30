@@ -582,7 +582,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
         byte[] data = byteOutStream.toByteArray();
         for(int ii = 0; ii < data.length; ii++)
         {
-            value += data[ii];
+            value += 31 * data[ii];
         }
         return value;
     }
