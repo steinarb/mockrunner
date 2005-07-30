@@ -339,12 +339,12 @@ public class MockMapMessage extends MockMessage implements MapMessage
             {
                 for(int ii = 0; ii < ((byte[])nextValue).length; ii++)
                 {
-                    value += ((byte[])nextValue)[ii];
+                    value += 31 * ((byte[])nextValue)[ii];
                 }
             }
             else if(nextValue != null)
             {
-                value += nextValue.hashCode();
+                value += 31 * nextValue.hashCode();
             }
         }
         return value;

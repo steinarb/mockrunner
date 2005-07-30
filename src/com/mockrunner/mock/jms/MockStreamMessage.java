@@ -455,12 +455,12 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             {
                 for(int yy = 0; yy < ((byte[])nextValue).length; yy++)
                 {
-                    value += ((byte[])nextValue)[yy];
+                    value += 31 * ((byte[])nextValue)[yy];
                 }
             }
             else if(nextValue != null)
             {
-                value += nextValue.hashCode();
+                value += 31 * nextValue.hashCode();
             }
         }
         return value;
