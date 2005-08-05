@@ -10,5 +10,5 @@ public interface InteractionImplementor
     
     public Record execute(InteractionSpec interactionSpec, Record actualRequest) throws ResourceException;
     
-    public boolean execute(InteractionSpec is, Record request, Record response) throws ResourceException;
+    public boolean execute(InteractionSpec interactionSpec, Record actualRequest, Record actualResponse) throws ResourceException;
 }
