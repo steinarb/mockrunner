@@ -9,9 +9,12 @@ import javax.resource.cci.Record;
 
 /**
  * This class can be used to add implementations of {@link InteractionImplementor}.
- * An <code>Interaction</code> delegates the <code>execute</code> calls to this
- * class to find a suitable {@link InteractionImplementor} that can handle
- * the request.
+ * The {@link com.mockrunner.mock.connector.cci.MockInteraction} delegates the 
+ * <code>execute</code> calls to this class to find a suitable 
+ * {@link InteractionImplementor} that can handle the request.
+ * The <code>execute</code> method of the first {@link InteractionImplementor} 
+ * that returns <code>true</code> for {@link InteractionImplementor#canHandle} will
+ * be called.
  */
 public class InteractionHandler 
 {
@@ -43,7 +46,9 @@ public class InteractionHandler
     }
 
     /**
-     * Delegator for <code>Interaction</code>.
+     * Delegator for {@link com.mockrunner.mock.connector.cci.MockInteraction}.
+     * Dispatches the call to the {@link InteractionImplementor} that
+     * returns <code>true</code> for {@link InteractionImplementor#canHandle}.
      */
     public Record execute(InteractionSpec is, Record request) throws ResourceException
     {
@@ -60,7 +65,9 @@ public class InteractionHandler
     }
 
     /**
-     * Delegator for <code>Interaction</code>.
+     * Delegator for {@link com.mockrunner.mock.connector.cci.MockInteraction}.
+     * Dispatches the call to the {@link InteractionImplementor} that
+     * returns <code>true</code> for {@link InteractionImplementor#canHandle}.
      */
     public boolean execute(InteractionSpec is, Record request, Record response) throws ResourceException
     {

@@ -67,6 +67,6 @@ public class MockManagedConnectionFactory implements ManagedConnectionFactory, S
 
 	public void setLogWriter(PrintWriter pw) throws ResourceException 
     {
-		this.pw=pw;
+		this.pw = pw;
 	}
 }
