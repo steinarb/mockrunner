@@ -60,6 +60,7 @@ public class StreamUtil
                 nextValue = stream.read();
                 if(checkLength) length--;
             }
+            byteStream.flush();
         }
         catch(IOException exc)
         {
