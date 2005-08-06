@@ -98,7 +98,14 @@ public class MockServletContext implements ServletContext
     public synchronized void setAttribute(String key, Object value)
     {
         Object oldValue = attributes.get(key);
-        attributes.put(key, value);
+        if(null == value)
+        {
+            attributes.remove(key);
+        }
+        else
+        {
+            attributes.put(key, value);
+        }
         handleAttributeListenerCalls(key, value, oldValue);
     }
     

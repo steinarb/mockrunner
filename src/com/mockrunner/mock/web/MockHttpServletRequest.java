@@ -179,7 +179,14 @@ public class MockHttpServletRequest implements HttpServletRequest
     public void setAttribute(String key, Object value)
     {
         Object oldValue = attributes.get(key);
-        attributes.put(key, value);
+        if(null == value)
+        {
+            attributes.remove(key);
+        }
+        else
+        {
+            attributes.put(key, value);
+        }
         handleAttributeListenerCalls(key, value, oldValue);
     }
     

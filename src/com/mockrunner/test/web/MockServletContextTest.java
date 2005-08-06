@@ -6,6 +6,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
@@ -23,9 +25,20 @@ import com.mockrunner.util.common.StreamUtil;
 
 public class MockServletContextTest extends TestCase
 {
+    private MockServletContext context;
+
+    protected void setUp()
+    {
+        context = new MockServletContext();
+    }
+
+    protected void tearDown()
+    {
+        context = null;
+    }
+    
     public void testResetAll() throws Exception
     {
-        MockServletContext context = new MockServletContext();
         context.setAttribute("key", "value");
         context.addResourcePaths("path", new ArrayList());
         context.setResource("path", new URL("file://test"));
@@ -37,7 +50,6 @@ public class MockServletContextTest extends TestCase
     
     public void testResources() throws Exception
     {
-        MockServletContext context = new MockServletContext();
         context.setResource("testPath", new URL("http://test"));
         assertEquals(new URL("http://test"), context.getResource("testPath"));
         context.addResourcePath("testPath", "path1");
@@ -68,7 +80,6 @@ public class MockServletContextTest extends TestCase
     
     public void testAttributeListenerCalled()
     {
-        MockServletContext context = new MockServletContext();
         TestAttributeListener listener1 = new TestAttributeListener();
         TestAttributeListener listener2 = new TestAttributeListener();
         TestAttributeListener listener3 = new TestAttributeListener();
@@ -100,7 +111,6 @@ public class MockServletContextTest extends TestCase
 
     public void testAttributeListenerValues()
     {
-        MockServletContext context = new MockServletContext();
         TestAttributeOrderListener listener = new TestAttributeOrderListener();
         context.addAttributeListener(listener);
         context.setAttribute("key", "value");
@@ -116,7 +126,6 @@ public class MockServletContextTest extends TestCase
 
     public void testAttributeListenerNullValue()
     {
-        MockServletContext context = new MockServletContext();
         TestAttributeListener listener = new TestAttributeListener();
         context.addAttributeListener(listener);
         context.setAttribute("key", null);
@@ -134,12 +143,38 @@ public class MockServletContextTest extends TestCase
         assertFalse(listener.wasAttributeRemovedCalled());
     }
     
+    public void testGetAttributeNames()
+    {
+        Enumeration enumeration = context.getAttributeNames();
+        assertFalse(enumeration.hasMoreElements());
+        context.setAttribute("key", null);
+        enumeration = context.getAttributeNames();
+        assertFalse(enumeration.hasMoreElements());
+        context.setAttribute("key1", "value1");
+        context.setAttribute("key2", "value2");
+        enumeration = context.getAttributeNames();
+        List testList = new ArrayList();
+        testList.add(enumeration.nextElement());
+        testList.add(enumeration.nextElement());
+        assertFalse(enumeration.hasMoreElements());
+        assertTrue(testList.contains("key1"));
+        assertTrue(testList.contains("key2"));
+        context.setAttribute("key2", null);
+        enumeration = context.getAttributeNames();
+        testList = new ArrayList();
+        testList.add(enumeration.nextElement());
+        assertFalse(enumeration.hasMoreElements());
+        assertTrue(testList.contains("key1"));
+        context.setAttribute("key1", null);
+        enumeration = context.getAttributeNames();
+        assertFalse(enumeration.hasMoreElements());
+    }
+    
     public void testRequestDispatcher() throws Exception
     {
         final String rdPath1 = "rdPathOne";
         final String rdPath2 = "rdPathTwo";
         final String rdPath3 = "rdPathThree";
-        MockServletContext context = new MockServletContext();
     
         assertEquals(0, context.getRequestDispatcherMap().size());
 
@@ -186,7 +221,6 @@ public class MockServletContextTest extends TestCase
     
     public void testSetResourceAsStream() throws Exception
     {
-        MockServletContext context = new MockServletContext();
         byte[] input = {1, 2, 3, 4};
         context.setResourceAsStream("testpath1", input);
         InputStream result = context.getResourceAsStream("testpath1");

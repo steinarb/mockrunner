@@ -157,7 +157,14 @@ public class MockHttpSession implements HttpSession
     {
         if (!isValid) throw new IllegalStateException("session invalid");
         Object oldValue = attributes.get(key); 
-        attributes.put(key, value);
+        if(null == value)
+        {
+            attributes.remove(key);
+        }
+        else
+        {
+            attributes.put(key, value);
+        }
         handleBindingListenerCalls(key, value, oldValue);
         handleAttributeListenerCalls(key, value, oldValue);
     }

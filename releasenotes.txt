@@ -11,6 +11,7 @@ mockrunner-0.3.6:
 - added addExceptionHandler() to ActionTestModule. Can be used to simulate and test
   Struts ExceptionHandler. Please use the class DefaultExceptionHandlerConfig
 - added resetAll() methods to web mock objects
+- fixed bug 1253272 regarding setAttribute for null values
 - JDBC test framework now supports generated keys using getGeneratedKeys()
 - improved version of MockDatabaseMetaData, now supports pattern matching using
   "_" and "%" and case insensitive matching (contribution by Richard Emberson)
