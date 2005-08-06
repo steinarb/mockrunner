@@ -3,10 +3,9 @@ package com.mockrunner.example.connector;
 import java.io.ByteArrayOutputStream;
 
 /**
- * Represents a person. The person data can be converted to
- * commarea bytes and back.
+ * Represents a person.
  */
-public class Person implements MarshalledDataProvider
+public class Person extends DomainObjectRecord
 {
     private String id;
     private String firstName;
