@@ -1,5 +1,9 @@
 package com.mockrunner.test.web;
 
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
@@ -10,9 +14,20 @@ import com.mockrunner.mock.web.MockHttpSession;
 
 public class MockHttpSessionTest extends TestCase
 {
+    private MockHttpSession session;
+
+    protected void setUp()
+    {
+        session = new MockHttpSession();
+    }
+
+    protected void tearDown()
+    {
+        session = null;
+    }
+
     public void testResetAll() throws Exception
     {
-        MockHttpSession session = new MockHttpSession();
         session.setAttribute("key", "value");
         session.setMaxInactiveInterval(3);
         session.resetAll();
@@ -22,7 +37,6 @@ public class MockHttpSessionTest extends TestCase
     
     public void testBindingListenerInvalidate()
     {
-        MockHttpSession session = new MockHttpSession();
         TestSessionListener listener1 = new TestSessionListener();
         TestSessionListener listener2 = new TestSessionListener();
         session.setAttribute("key1", listener1);
@@ -39,7 +53,6 @@ public class MockHttpSessionTest extends TestCase
     
     public void testBindingListenerOverwriteAttribute()
     {
-        MockHttpSession session = new MockHttpSession();
         TestSessionListener listener1 = new TestSessionListener();
         TestSessionListener listener2 = new TestSessionListener();
         session.setAttribute("key", listener1);
@@ -51,7 +64,6 @@ public class MockHttpSessionTest extends TestCase
     
     public void testBindingListenerOverwriteSameAttribute()
     {
-        MockHttpSession session = new MockHttpSession();
         TestSessionListener listener = new TestSessionListener();
         session.setAttribute("key", listener);
         listener.reset();
@@ -63,7 +75,6 @@ public class MockHttpSessionTest extends TestCase
     
     public void testBindingListenerCorrectOrder()
     {
-        MockHttpSession session = new MockHttpSession();
         session.setAttribute("key", "test");
         TestSessionOrderListener listener = new TestSessionOrderListener();
         session.setAttribute("key", listener);
@@ -86,7 +97,6 @@ public class MockHttpSessionTest extends TestCase
     
     public void testAttributeListenerCalled()
     {
-        MockHttpSession session = new MockHttpSession();
         TestAttributeListener listener1 = new TestAttributeListener();
         TestAttributeListener listener2 = new TestAttributeListener();
         TestAttributeListener listener3 = new TestAttributeListener();
@@ -118,7 +128,6 @@ public class MockHttpSessionTest extends TestCase
     
     public void testAttributeListenerOrder()
     {
-        MockHttpSession session = new MockHttpSession();
         TestAttributeOrderListener listener = new TestAttributeOrderListener();
         session.addAttributeListener(listener);
         session.setAttribute("key", "value");
@@ -137,7 +146,6 @@ public class MockHttpSessionTest extends TestCase
     
     public void testAttributeListenerNullValue()
     {
-        MockHttpSession session = new MockHttpSession();
         TestAttributeListener listener = new TestAttributeListener();
         session.addAttributeListener(listener);
         session.setAttribute("key", null);
@@ -153,6 +161,33 @@ public class MockHttpSessionTest extends TestCase
         assertFalse(listener.wasAttributeReplacedCalled());
         session.removeAttribute("myKey");
         assertFalse(listener.wasAttributeRemovedCalled());
+    }
+    
+    public void testGetAttributeNames()
+    {
+        Enumeration enumeration = session.getAttributeNames();
+        assertFalse(enumeration.hasMoreElements());
+        session.setAttribute("key", null);
+        enumeration = session.getAttributeNames();
+        assertFalse(enumeration.hasMoreElements());
+        session.setAttribute("key1", "value1");
+        session.setAttribute("key2", "value2");
+        enumeration = session.getAttributeNames();
+        List testList = new ArrayList();
+        testList.add(enumeration.nextElement());
+        testList.add(enumeration.nextElement());
+        assertFalse(enumeration.hasMoreElements());
+        assertTrue(testList.contains("key1"));
+        assertTrue(testList.contains("key2"));
+        session.setAttribute("key2", null);
+        enumeration = session.getAttributeNames();
+        testList = new ArrayList();
+        testList.add(enumeration.nextElement());
+        assertFalse(enumeration.hasMoreElements());
+        assertTrue(testList.contains("key1"));
+        session.setAttribute("key1", null);
+        enumeration = session.getAttributeNames();
+        assertFalse(enumeration.hasMoreElements());
     }
     
     private static class TestSessionListener implements HttpSessionBindingListener

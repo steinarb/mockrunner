@@ -25,10 +25,14 @@ public class MockHttpServletRequestTest extends TestCase
 {
     private MockHttpServletRequest request;
     
-    protected void setUp() throws Exception
+    protected void setUp()
     {
-        super.setUp();
         request = new MockHttpServletRequest();
+    }
+    
+    protected void tearDown()
+    {
+        request = null;
     }
     
     public void testResetAll() throws Exception
@@ -105,6 +109,33 @@ public class MockHttpServletRequestTest extends TestCase
         assertFalse(listener.wasAttributeReplacedCalled());
         request.removeAttribute("myKey");
         assertFalse(listener.wasAttributeRemovedCalled());
+    }
+    
+    public void testGetAttributeNames()
+    {
+        Enumeration enumeration = request.getAttributeNames();
+        assertFalse(enumeration.hasMoreElements());
+        request.setAttribute("key", null);
+        enumeration = request.getAttributeNames();
+        assertFalse(enumeration.hasMoreElements());
+        request.setAttribute("key1", "value1");
+        request.setAttribute("key2", "value2");
+        enumeration = request.getAttributeNames();
+        List testList = new ArrayList();
+        testList.add(enumeration.nextElement());
+        testList.add(enumeration.nextElement());
+        assertFalse(enumeration.hasMoreElements());
+        assertTrue(testList.contains("key1"));
+        assertTrue(testList.contains("key2"));
+        request.setAttribute("key2", null);
+        enumeration = request.getAttributeNames();
+        testList = new ArrayList();
+        testList.add(enumeration.nextElement());
+        assertFalse(enumeration.hasMoreElements());
+        assertTrue(testList.contains("key1"));
+        request.setAttribute("key1", null);
+        enumeration = request.getAttributeNames();
+        assertFalse(enumeration.hasMoreElements());
     }
     
     public void testAddRequestParameter() throws Exception
