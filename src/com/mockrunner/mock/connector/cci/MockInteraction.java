@@ -9,6 +9,8 @@ import javax.resource.cci.ResourceWarning;
 
 /**
  * Mock implementation of <code>Interaction</code>.
+ * The <code>execute</code> calls are delegated to
+ * {@link com.mockrunner.connector.InteractionHandler}.
  */
 public class MockInteraction implements Interaction 
 {
@@ -29,11 +31,17 @@ public class MockInteraction implements Interaction
 		mockConnection.close();
 	}
 
+    /**
+     * Calls {@link com.mockrunner.connector.InteractionHandler#execute(InteractionSpec, Record)}.
+     */
 	public Record execute(InteractionSpec is, Record record) throws ResourceException 
     {
         return mockConnection.getInteractionHandler().execute(is, record);
 	}
 
+    /**
+     * Calls {@link com.mockrunner.connector.InteractionHandler#execute(InteractionSpec, Record, Record)}.
+     */
 	public boolean execute(InteractionSpec is, Record request, Record response) throws ResourceException 
     {
 		return mockConnection.getInteractionHandler().execute(is, request, response);
@@ -44,6 +52,9 @@ public class MockInteraction implements Interaction
 		return mockConnection;
 	}
 
+    /**
+     * Returns <code>null</code>, warnings not supported yet.
+     */
 	public ResourceWarning getWarnings() throws ResourceException 
     {
 		return null;

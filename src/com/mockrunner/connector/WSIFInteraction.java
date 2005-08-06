@@ -80,6 +80,9 @@ public class WSIFInteraction implements InteractionImplementor
         return false;
     }
 
+    /**
+     * not implemented yet.
+     */
     public Record execute(InteractionSpec interactionSpec, Record actualRequest) throws ResourceException
     {
         throw new RuntimeException(this.getClass().getName() + " does not implement public Record execute(InteractionSpec  Record)");
