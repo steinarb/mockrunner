@@ -180,12 +180,14 @@ public class MockHttpSessionTest extends TestCase
         assertTrue(testList.contains("key1"));
         assertTrue(testList.contains("key2"));
         session.setAttribute("key2", null);
+        assertNull(session.getAttribute("key2"));
         enumeration = session.getAttributeNames();
         testList = new ArrayList();
         testList.add(enumeration.nextElement());
         assertFalse(enumeration.hasMoreElements());
         assertTrue(testList.contains("key1"));
         session.setAttribute("key1", null);
+        assertNull(session.getAttribute("key1"));
         enumeration = session.getAttributeNames();
         assertFalse(enumeration.hasMoreElements());
     }
