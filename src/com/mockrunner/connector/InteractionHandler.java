@@ -18,7 +18,7 @@ import javax.resource.cci.Record;
  */
 public class InteractionHandler 
 {
-	private Vector implementors = null;
+    private Vector implementors = null;
 
     public InteractionHandler()
     {
