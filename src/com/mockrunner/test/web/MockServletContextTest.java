@@ -160,12 +160,14 @@ public class MockServletContextTest extends TestCase
         assertTrue(testList.contains("key1"));
         assertTrue(testList.contains("key2"));
         context.setAttribute("key2", null);
+        assertNull(context.getAttribute("key2"));
         enumeration = context.getAttributeNames();
         testList = new ArrayList();
         testList.add(enumeration.nextElement());
         assertFalse(enumeration.hasMoreElements());
         assertTrue(testList.contains("key1"));
         context.setAttribute("key1", null);
+        assertNull(context.getAttribute("key1"));
         enumeration = context.getAttributeNames();
         assertFalse(enumeration.hasMoreElements());
     }
