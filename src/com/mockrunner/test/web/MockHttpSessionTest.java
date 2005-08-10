@@ -52,7 +52,7 @@ public class MockHttpSessionTest extends TestCase
         session.addAttributeListener(listener);
         session.invalidate();
         assertTrue(listener1.wasValueUnboundCalled());
-        assertTrue(listener.getDidThrowException());
+        assertTrue(listener.getDidThrowIllegalStateException());
         try
         {
             session.invalidate();
@@ -304,7 +304,7 @@ public class MockHttpSessionTest extends TestCase
     
     private static class InvalidateAttributeListener implements HttpSessionAttributeListener
     {
-        private boolean didThrowException = false;
+        private boolean didThrowIllegalStateException = false;
         
         public void attributeAdded(HttpSessionBindingEvent event)
         {
@@ -314,13 +314,14 @@ public class MockHttpSessionTest extends TestCase
         public void attributeRemoved(HttpSessionBindingEvent event)
         {
             HttpSession session = event.getSession();
+            didThrowIllegalStateException = false;
             try
             {
                 session.getAttribute(event.getName());
             } 
             catch(IllegalStateException exc)
             {
-                didThrowException = true;
+                didThrowIllegalStateException = true;
             }
         }
 
@@ -329,9 +330,9 @@ public class MockHttpSessionTest extends TestCase
             
         }
 
-        public boolean getDidThrowException()
+        public boolean getDidThrowIllegalStateException()
         {
-            return didThrowException;
+            return didThrowIllegalStateException;
         }
     }
     
