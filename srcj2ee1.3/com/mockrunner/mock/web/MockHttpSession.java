@@ -84,13 +84,14 @@ public class MockHttpSession implements HttpSession
 
     public synchronized void invalidate()
     {
+        if (!isValid) throw new IllegalStateException("session invalid");
+        isValid = false;
         Map clone = new HashMap(attributes);
         Iterator keys = clone.keySet().iterator();
         while (keys.hasNext())
         {
-            removeAttribute((String) keys.next());
-        }
-        isValid = false;
+            doRemoveAttribute((String) keys.next());
+        } 
     }
 
     public synchronized String getId()
@@ -144,6 +145,11 @@ public class MockHttpSession implements HttpSession
     public synchronized void removeAttribute(String key)
     {
         if (!isValid) throw new IllegalStateException("session invalid");
+        doRemoveAttribute(key);
+    }
+
+    private void doRemoveAttribute(String key)
+    {
         Object value = attributes.get(key);
         attributes.remove(key);
         if(null != value)
