@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
@@ -47,8 +48,20 @@ public class MockHttpSessionTest extends TestCase
         assertFalse(listener2.wasValueUnboundCalled());
         session.removeAttribute("key2");
         assertTrue(listener2.wasValueUnboundCalled());
+        InvalidateAttributeListener listener = new InvalidateAttributeListener();
+        session.addAttributeListener(listener);
         session.invalidate();
         assertTrue(listener1.wasValueUnboundCalled());
+        assertTrue(listener.getDidThrowException());
+        try
+        {
+            session.invalidate();
+            fail();
+        } 
+        catch(IllegalStateException exc)
+        {
+            //should throw exception
+        }
     }
     
     public void testBindingListenerOverwriteAttribute()
@@ -286,6 +299,39 @@ public class MockHttpSessionTest extends TestCase
         public Object getUnboundSessionValue()
         {
             return unboundSessionValue;
+        }
+    }
+    
+    private static class InvalidateAttributeListener implements HttpSessionAttributeListener
+    {
+        private boolean didThrowException = false;
+        
+        public void attributeAdded(HttpSessionBindingEvent event)
+        {
+            
+        }
+
+        public void attributeRemoved(HttpSessionBindingEvent event)
+        {
+            HttpSession session = event.getSession();
+            try
+            {
+                session.getAttribute(event.getName());
+            } 
+            catch(IllegalStateException exc)
+            {
+                didThrowException = true;
+            }
+        }
+
+        public void attributeReplaced(HttpSessionBindingEvent event)
+        {
+            
+        }
+
+        public boolean getDidThrowException()
+        {
+            return didThrowException;
         }
     }
     
