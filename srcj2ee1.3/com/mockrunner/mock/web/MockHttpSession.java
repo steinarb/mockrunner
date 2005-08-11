@@ -90,7 +90,7 @@ public class MockHttpSession implements HttpSession
         Iterator keys = clone.keySet().iterator();
         while (keys.hasNext())
         {
-            doRemoveAttribute((String) keys.next());
+            doRemoveAttribute((String)keys.next());
         } 
     }
 
