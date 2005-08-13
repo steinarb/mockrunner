@@ -7,13 +7,13 @@ import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 
+import junit.framework.TestCase;
+
 import org.mockejb.jndi.MockContextFactory;
 
 import com.mockrunner.ejb.Configuration;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 import com.mockrunner.mock.ejb.MockUserTransaction;
-
-import junit.framework.TestCase;
 
 public class EJBMockObjectFactoryTest extends TestCase
 {
@@ -117,6 +117,14 @@ public class EJBMockObjectFactoryTest extends TestCase
         assertFalse(transaction.wasRollbackCalled());
     }
     
+
+    public void testOverrideCreate()
+    {
+        EJBMockObjectFactory factory = new TestEJBMockObjectFactory();
+        assertNotSame(factory.getMockUserTransaction().getClass(), MockUserTransaction.class);
+    }
+    
+    
     public void testSetConfiguration() throws Exception
     {
         InitialContext context = new InitialContext();
@@ -192,5 +200,13 @@ public class EJBMockObjectFactoryTest extends TestCase
         {
             //ignore
         }
+    }
+    
+    public static class TestEJBMockObjectFactory extends EJBMockObjectFactory
+    {
+        public MockUserTransaction createMockUserTransaction()
+        {
+            return new MockUserTransaction() {};
+        }  
     }
 }

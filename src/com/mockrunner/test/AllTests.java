@@ -35,6 +35,7 @@ public class AllTests
         suite.addTest(AllGenTests.suite());
         suite.addTest(AllExampleTests.suite());
         suite.addTest(new TestSuite(BaseTestCaseTest.class));
+        suite.addTest(new TestSuite(ExtendedBaseTestCaseTest.class));
         suite.addTest(new TestSuite(NestedApplicationExceptionTest.class));
         //$JUnit-END$
         return suite;

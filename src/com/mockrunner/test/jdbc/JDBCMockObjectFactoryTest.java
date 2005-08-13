@@ -9,10 +9,12 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
-import com.mockrunner.mock.jdbc.MockDriver;
-
 import junit.framework.TestCase;
+
+import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
+import com.mockrunner.mock.jdbc.MockConnection;
+import com.mockrunner.mock.jdbc.MockDataSource;
+import com.mockrunner.mock.jdbc.MockDriver;
 
 public class JDBCMockObjectFactoryTest extends TestCase
 {
@@ -85,6 +87,14 @@ public class JDBCMockObjectFactoryTest extends TestCase
        assertTrue(numberDrivers == newNumberDrivers);
     }
     
+    public void testOverrideCreate()
+    {
+        JDBCMockObjectFactory factory = new TestJDBCMockObjectFactory();
+        assertNotSame(factory.getMockConnection().getClass(), MockConnection.class);
+        assertNotSame(factory.getMockDataSource().getClass(), MockDataSource.class);
+        assertNotSame(factory.getMockDriver().getClass(), MockDriver.class);
+    }
+    
     public static class TestDriver implements Driver
     {
     
@@ -116,6 +126,24 @@ public class JDBCMockObjectFactoryTest extends TestCase
         public boolean jdbcCompliant()
         {
             return false;
+        }
+    }
+    
+    public static class TestJDBCMockObjectFactory extends JDBCMockObjectFactory
+    {
+        public MockConnection createMockConnection()
+        {
+            return new MockConnection() {};
+        }
+
+        public MockDataSource createMockDataSource()
+        {
+            return new MockDataSource() {};
+        }
+
+        public MockDriver createMockDriver()
+        {
+            return new MockDriver() {};
         }
     }
 }

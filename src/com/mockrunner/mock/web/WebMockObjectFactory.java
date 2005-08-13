@@ -66,8 +66,8 @@ public class WebMockObjectFactory
     private void createMockObjects()
     {
         createNewMockObjects(true);
-        config = new MockServletConfig();
-        context = new MockServletContext();
+        config = createMockServletConfig();
+        context = createMockServletContext();
         setUpDependencies();
     }
 
@@ -87,13 +87,13 @@ public class WebMockObjectFactory
 
     private void createNewMockObjects(boolean createNewSession)
     {
-        request = new MockHttpServletRequest();
-        response = new MockHttpServletResponse();
+        request = createMockRequest();
+        response = createMockResponse();
         wrappedRequest = request;
         wrappedResponse = response;
-        if(createNewSession) session = new MockHttpSession();
-        filterChain = new MockFilterChain();
-        filterConfig = new MockFilterConfig();
+        if(createNewSession) session = createMockSession();
+        filterChain = createMockFilterChain();
+        filterConfig = createMockFilterConfig();
     }
 
     private void setUpDependencies()
@@ -101,7 +101,10 @@ public class WebMockObjectFactory
         config.setServletContext(context);
         request.setSession(session);
         session.setupServletContext(context);
-        pageContext = new MockPageContext(config, request, response);
+        pageContext = createMockPageContext();
+        pageContext.setServletConfig(config);
+        pageContext.setServletRequest(request);
+        pageContext.setServletResponse(response);
         filterConfig.setupServletContext(context);
     }
     
@@ -112,6 +115,86 @@ public class WebMockObjectFactory
     public void refresh()
     {
         pageContext = new MockPageContext(config, wrappedRequest, wrappedResponse);
+    }
+    
+    /**
+     * Creates the {@link com.mockrunner.mock.web.MockServletContext} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.web.MockServletContext}.
+     * @return the {@link com.mockrunner.mock.web.MockServletContext}
+     */
+    public MockServletContext createMockServletContext()
+    {
+        return new MockServletContext();
+    }
+
+    /**
+     * Creates the {@link com.mockrunner.mock.web.MockServletConfig} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.web.MockServletConfig}.
+     * @return the {@link com.mockrunner.mock.web.MockServletConfig}
+     */
+    public MockServletConfig createMockServletConfig()
+    {
+        return new MockServletConfig();
+    }
+    
+    /**
+     * Creates the {@link com.mockrunner.mock.web.MockHttpServletResponse} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.web.MockHttpServletResponse}.
+     * @return the {@link com.mockrunner.mock.web.MockHttpServletResponse}
+     */
+    public MockHttpServletResponse createMockResponse()
+    {
+        return new MockHttpServletResponse();
+    }
+
+    /**
+     * Creates the {@link com.mockrunner.mock.web.MockHttpServletRequest} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.web.MockHttpServletRequest}.
+     * @return the {@link com.mockrunner.mock.web.MockHttpServletRequest}
+     */
+    public MockHttpServletRequest createMockRequest()
+    {
+        return new MockHttpServletRequest();
+    }
+    
+    /**
+     * Creates the {@link com.mockrunner.mock.web.MockHttpSession} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.web.MockHttpSession}.
+     * @return the {@link com.mockrunner.mock.web.MockHttpSession}
+     */
+    public MockHttpSession createMockSession()
+    {
+        return new MockHttpSession();
+    }
+    
+    /**
+     * Creates the {@link com.mockrunner.mock.web.MockPageContext} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.web.MockPageContext}.
+     * @return the {@link com.mockrunner.mock.web.MockPageContext}
+     */
+    public MockPageContext createMockPageContext()
+    {
+        return new MockPageContext();
+    }
+    
+    /**
+     * Creates the {@link com.mockrunner.mock.web.MockFilterConfig} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.web.MockFilterConfig}.
+     * @return the {@link com.mockrunner.mock.web.MockFilterConfig}
+     */
+    public MockFilterConfig createMockFilterConfig()
+    {
+        return new MockFilterConfig();
+    }
+
+    /**
+     * Creates the {@link com.mockrunner.mock.web.MockFilterChain} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.web.MockFilterChain}.
+     * @return the {@link com.mockrunner.mock.web.MockFilterChain}
+     */
+    public MockFilterChain createMockFilterChain()
+    {
+        return new MockFilterChain();
     }
     
     /**

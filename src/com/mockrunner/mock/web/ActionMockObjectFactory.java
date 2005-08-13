@@ -59,15 +59,15 @@ public class ActionMockObjectFactory extends WebMockObjectFactory
     
     private void createMockObjects()
     {
-        mockMapping = new MockActionMapping();
+        mockMapping = createMockActionMapping();
         mapping = mockMapping;
-        mockModuleConfig = new MockModuleConfig("testmodule");
-        mockActionServlet = new MockActionServlet();
+        mockModuleConfig = createMockModuleConfig();
+        mockActionServlet = createMockActionServlet();
         mockActionServlet.setServletConfig(getMockServletConfig());
         mockActionServlet.setServletContext(getMockServletContext());
         refresh();
     }
-    
+
     /**
      * Refreshes the mock objects dependencies. May be called after setting request
      * and response wrappers.
@@ -77,6 +77,36 @@ public class ActionMockObjectFactory extends WebMockObjectFactory
         super.refresh();
         getWrappedRequest().setAttribute(Globals.MAPPING_KEY, mapping);
         getWrappedRequest().setAttribute(Globals.MODULE_KEY, mockModuleConfig);
+    }
+    
+    /**
+     * Creates the {@link com.mockrunner.mock.web.MockActionServlet} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.web.MockActionServlet}.
+     * @return the {@link com.mockrunner.mock.web.MockActionServlet}
+     */
+    public MockActionServlet createMockActionServlet()
+    {
+        return new MockActionServlet();
+    }
+
+    /**
+     * Creates the {@link com.mockrunner.mock.web.MockModuleConfig} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.web.MockModuleConfig}.
+     * @return the {@link com.mockrunner.mock.web.MockModuleConfig}
+     */
+    public MockModuleConfig createMockModuleConfig()
+    {
+        return new MockModuleConfig("testmodule");
+    }
+
+    /**
+     * Creates the {@link com.mockrunner.mock.web.MockActionMapping} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.web.MockActionMapping}.
+     * @return the {@link com.mockrunner.mock.web.MockActionMapping}
+     */
+    public MockActionMapping createMockActionMapping()
+    {
+        return new MockActionMapping();
     }
     
     /**

@@ -27,9 +27,39 @@ public class JMSMockObjectFactory
     {
         destinationManager = new DestinationManager();
         configurationManager = new ConfigurationManager();
-        queueConnectionFactory = new MockQueueConnectionFactory(destinationManager, configurationManager);
-        topicConnectionFactory = new MockTopicConnectionFactory(destinationManager, configurationManager);
-        connectionFactory = new MockConnectionFactory(destinationManager, configurationManager);
+        queueConnectionFactory = createMockQueueConnectionFactory();
+        topicConnectionFactory = createMockTopicConnectionFactory();
+        connectionFactory = createMockConnectionFactory();
+    }
+
+    /**
+     * Creates the {@link com.mockrunner.mock.jms.MockConnectionFactory} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.jms.MockConnectionFactory}.
+     * @return the {@link com.mockrunner.mock.jms.MockConnectionFactory}
+     */
+    public MockConnectionFactory createMockConnectionFactory()
+    {
+        return new MockConnectionFactory(destinationManager, configurationManager);
+    }
+
+    /**
+     * Creates the {@link com.mockrunner.mock.jms.MockTopicConnectionFactory} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.jms.MockTopicConnectionFactory}.
+     * @return the {@link com.mockrunner.mock.jms.MockTopicConnectionFactory}
+     */
+    public MockTopicConnectionFactory createMockTopicConnectionFactory()
+    {
+        return new MockTopicConnectionFactory(destinationManager, configurationManager);
+    }
+
+    /**
+     * Creates the {@link com.mockrunner.mock.jms.MockQueueConnectionFactory} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.jms.MockQueueConnectionFactory}.
+     * @return the {@link com.mockrunner.mock.jms.MockQueueConnectionFactory}
+     */
+    public MockQueueConnectionFactory createMockQueueConnectionFactory()
+    {
+        return new MockQueueConnectionFactory(destinationManager, configurationManager);
     }
     
     /**
