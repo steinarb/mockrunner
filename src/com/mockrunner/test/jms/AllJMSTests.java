@@ -28,6 +28,7 @@ public class AllJMSTests
         suite.addTest(new TestSuite(MockMessageConsumerTest.class));
         suite.addTest(new TestSuite(MockDestinationTest.class));
         suite.addTest(new TestSuite(BasicJMSTestCaseAdapterTest.class));
+        suite.addTest(new TestSuite(JMSMockObjectFactoryTest.class));
         //$JUnit-END$
         return suite;
     }

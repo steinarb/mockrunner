@@ -19,23 +19,55 @@ public class ConnectorMockObjectFactory
     
     public ConnectorMockObjectFactory()
     {
-        connectionFactory = new MockConnectionFactory();
-        connection = new MockConnection();
+        connectionFactory = createMockConnectionFactory();
+        connection = createMockConnection();
         connectionFactory.setConnection(connection);
         interactionHandler = new InteractionHandler();
         connection.setInteractionHandler(interactionHandler);
     }
 
+    /**
+     * Creates the {@link com.mockrunner.mock.connector.cci.MockConnection} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.connector.cci.MockConnection}.
+     * @return the {@link com.mockrunner.mock.connector.cci.MockConnection}
+     */
+    public MockConnection createMockConnection()
+    {
+        return new MockConnection();
+    }
+
+    /**
+     * Creates the {@link com.mockrunner.mock.connector.cci.MockConnectionFactory} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.connector.cci.MockConnectionFactory}.
+     * @return the {@link com.mockrunner.mock.connector.cci.MockConnectionFactory}
+     */
+    public MockConnectionFactory createMockConnectionFactory()
+    {
+        return new MockConnectionFactory();
+    }
+
+    /**
+     * Returns the {@link com.mockrunner.mock.connector.cci.MockConnection}.
+     * @return the {@link com.mockrunner.mock.connector.cci.MockConnection}
+     */
     public MockConnection getMockConnection()
     {
         return connection;
     }
 
+    /**
+     * Returns the {@link com.mockrunner.mock.connector.cci.MockConnectionFactory}.
+     * @return the {@link com.mockrunner.mock.connector.cci.MockConnectionFactory}
+     */
     public MockConnectionFactory getMockConnectionFactory()
     {
         return connectionFactory;
     }
 
+    /**
+     * Returns the {@link com.mockrunner.connector.InteractionHandler}.
+     * @return the {@link com.mockrunner.connector.InteractionHandler}
+     */
     public InteractionHandler getInteractionHandler()
     {
         return interactionHandler;

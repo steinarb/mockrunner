@@ -13,7 +13,10 @@ import org.apache.struts.action.ActionMapping;
 
 import com.mockrunner.mock.web.ActionMockObjectFactory;
 import com.mockrunner.mock.web.MockActionForward;
+import com.mockrunner.mock.web.MockActionMapping;
+import com.mockrunner.mock.web.MockActionServlet;
 import com.mockrunner.mock.web.MockHttpServletRequest;
+import com.mockrunner.mock.web.MockModuleConfig;
 
 public class ActionMockObjectFactoryTest extends TestCase
 {
@@ -48,6 +51,15 @@ public class ActionMockObjectFactoryTest extends TestCase
         factory.getMockActionMapping().addForward("success", "testpath");
         MockActionForward forward = (MockActionForward)testMapping.findForward("success");
         assertEquals("testpath", forward.getPath());
+    }
+    
+    public void testOverrideCreate()
+    {
+        ActionMockObjectFactory factory = new TestActionMockObjectFactory();
+        assertNotSame(factory.getMockActionMapping().getClass(), MockActionMapping.class);
+        assertNotSame(factory.getActionMapping().getClass(), MockActionMapping.class);
+        assertNotSame(factory.getMockActionServlet().getClass(), MockActionServlet.class);
+        assertNotSame(factory.getMockModuleConfig().getClass(), MockModuleConfig.class);
     }
     
     private class TestWrapper extends HttpServletRequestWrapper
@@ -119,5 +131,23 @@ public class ActionMockObjectFactoryTest extends TestCase
         {
             methodCalled = true;
         }
+    }
+    
+    public static class TestActionMockObjectFactory extends ActionMockObjectFactory
+    {
+        public MockActionMapping createMockActionMapping()
+        {
+            return new MockActionMapping() {};
+        }
+
+        public MockActionServlet createMockActionServlet()
+        {
+            return new MockActionServlet() {};
+        }
+
+        public MockModuleConfig createMockModuleConfig()
+        {
+            return new MockModuleConfig("testmodule") {};
+        }  
     }
 }

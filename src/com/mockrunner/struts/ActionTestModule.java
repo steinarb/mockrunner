@@ -220,8 +220,8 @@ public class ActionTestModule extends HTMLOutputModule
      * You can use this method, if your action calls 
      * <code>Action.getResources(HttpServletRequest, String)</code>.
      * Please note that the {@link com.mockrunner.mock.web.MockModuleConfig}
-     * is set by Mockrunner as the current module. It has the name <i>testmodule</i>
-     * but this can be changed with <code>ModuleConfig.setPrefix</code>.
+     * is set by Mockrunner as the current module. It has the name <i>testmodule</i>.
+     * This can be changed with <code>ModuleConfig.setPrefix</code>.
      * @param key the key of the messages resources
      * @param resources the messages resources
      */

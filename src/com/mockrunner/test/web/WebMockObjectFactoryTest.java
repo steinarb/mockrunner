@@ -5,9 +5,14 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import com.mockrunner.mock.web.MockFilterChain;
+import com.mockrunner.mock.web.MockFilterConfig;
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.MockHttpServletResponse;
+import com.mockrunner.mock.web.MockHttpSession;
 import com.mockrunner.mock.web.MockPageContext;
+import com.mockrunner.mock.web.MockServletConfig;
+import com.mockrunner.mock.web.MockServletContext;
 import com.mockrunner.mock.web.WebMockObjectFactory;
 
 import junit.framework.TestCase;
@@ -105,6 +110,19 @@ public class WebMockObjectFactoryTest extends TestCase
         assertSame(responseWrapper, pageContext.getResponse());
     }
     
+    public void testOverrideCreate()
+    {
+        WebMockObjectFactory factory = new TestWebMockObjectFactory();
+        assertNotSame(factory.getMockRequest().getClass(), MockHttpServletRequest.class);
+        assertNotSame(factory.getMockResponse().getClass(), MockHttpServletResponse.class);
+        assertNotSame(factory.getMockFilterChain().getClass(), MockFilterChain.class);
+        assertNotSame(factory.getMockFilterConfig().getClass(), MockFilterConfig.class);
+        assertNotSame(factory.getMockPageContext().getClass(), MockPageContext.class);
+        assertNotSame(factory.getMockServletConfig().getClass(), MockServletConfig.class);
+        assertNotSame(factory.getMockServletContext().getClass(), MockServletContext.class);
+        assertNotSame(factory.getMockSession().getClass(), MockHttpSession.class);
+    }
+    
     public static class TestRequestWrapper extends MockHttpServletRequest
     {
         private HttpServletRequest request;
@@ -132,6 +150,50 @@ public class WebMockObjectFactoryTest extends TestCase
         public HttpServletResponse getResponse()
         {
             return response;
+        }
+    }
+    
+    public static class TestWebMockObjectFactory extends WebMockObjectFactory
+    {
+        public MockFilterChain createMockFilterChain()
+        {
+            return new MockFilterChain() {};
+        }
+
+        public MockFilterConfig createMockFilterConfig()
+        {
+            return new MockFilterConfig() {};
+        }
+        
+        public MockPageContext createMockPageContext()
+        {
+            return new MockPageContext() {};
+        }
+
+        public MockHttpServletRequest createMockRequest()
+        {
+  
+            return new MockHttpServletRequest() {};
+        }
+
+        public MockHttpServletResponse createMockResponse()
+        {
+            return new MockHttpServletResponse() {};
+        }
+
+        public MockServletConfig createMockServletConfig()
+        {
+            return new MockServletConfig() {};
+        }
+
+        public MockServletContext createMockServletContext()
+        {
+            return new MockServletContext() {};
+        }
+
+        public MockHttpSession createMockSession()
+        {
+            return new MockHttpSession() {};
         }
     }
 }

@@ -68,7 +68,7 @@ public class EJBMockObjectFactory
             }
             catch(NameNotFoundException nameExc)
             {
-                transaction = new MockUserTransaction();
+                transaction = createMockUserTransaction();
                 if(configuration.getBindMockUserTransactionToJNDI())
                 {
                     context.rebind(configuration.getUserTransactionJNDIName(), transaction);
@@ -80,12 +80,22 @@ public class EJBMockObjectFactory
         catch(Exception exc)
         {
             log.error(exc.getMessage(), exc);
-            transaction = new MockUserTransaction();
+            transaction = createMockUserTransaction();
         }
         if(transaction instanceof MockUserTransaction)
         {
             ((MockUserTransaction)transaction).reset();
         }
+    }
+
+    /**
+     * Creates the {@link com.mockrunner.mock.ejb.MockUserTransaction} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.ejb.MockUserTransaction}.
+     * @return the {@link com.mockrunner.mock.ejb.MockUserTransaction}
+     */
+    public MockUserTransaction createMockUserTransaction()
+    {
+        return new MockUserTransaction();
     }
     
     /**

@@ -33,13 +33,13 @@ public class JDBCMockObjectFactory
      */
     public JDBCMockObjectFactory()
     {
-        dataSource = new MockDataSource();
-        driver = new MockDriver();
-        connection = new MockConnection();
+        dataSource = createMockDataSource();
+        driver = createMockDriver();
+        connection = createMockConnection();
         preservedDrivers = new HashSet();
         setUpDependencies();
     }
-    
+
     private void setUpDependencies()
     {
         dataSource.setupConnection(connection);
@@ -138,6 +138,36 @@ public class JDBCMockObjectFactory
             throw new NestedApplicationException(exc);
         }
         preservedDrivers.clear();
+    }
+    
+    /**
+     * Creates the {@link com.mockrunner.mock.jdbc.MockConnection} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.jdbc.MockConnection}.
+     * @return the {@link com.mockrunner.mock.jdbc.MockConnection}
+     */
+    public MockConnection createMockConnection()
+    {
+        return new MockConnection();
+    }
+
+    /**
+     * Creates the {@link com.mockrunner.mock.jdbc.MockDriver} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.jdbc.MockDriver}.
+     * @return the {@link com.mockrunner.mock.jdbc.MockDriver}
+     */
+    public MockDriver createMockDriver()
+    {
+        return new MockDriver();
+    }
+
+    /**
+     * Creates the {@link com.mockrunner.mock.jdbc.MockDataSource} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.jdbc.MockDataSource}.
+     * @return the {@link com.mockrunner.mock.jdbc.MockDataSource}
+     */
+    public MockDataSource createMockDataSource()
+    {
+        return new MockDataSource();
     }
 
     /**
