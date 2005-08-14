@@ -78,8 +78,9 @@ public abstract class MockDestination implements Destination
     }
 
     /**
-     * Returns the next message. The message will be deleted. 
-     * If there's no message <code>null</code> will be returned.
+     * Returns the next message. The message will be removed from the list
+     * of current messages. 
+     * If there's no message, <code>null</code> will be returned.
      * @return the <code>Message</code>
      */
     public Message getMessage()
@@ -90,8 +91,8 @@ public abstract class MockDestination implements Destination
     
     /**
      * Returns the next message that matches the filter. 
-     * The message will be deleted. 
-     * If there's no matching message <code>null</code> will be returned.
+     * The message will be removed from the list of current messages. 
+     * If there's no matching message, <code>null</code> will be returned.
      * @param filter the message filter
      * @return the <code>Message</code>
      */
@@ -117,8 +118,7 @@ public abstract class MockDestination implements Destination
     }
 
     /**
-     * Returns a <code>List</code> of all messages. 
-     * No messages will be deleted.
+     * Returns a <code>List</code> of all current messages.
      * @return the <code>List</code> of messages
      */
     public List getCurrentMessageList()
