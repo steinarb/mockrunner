@@ -43,12 +43,12 @@ public class Bank
         {
             if(!isValid(sourceId, amount)) return;
             preparedStatement = connection.prepareStatement("update account set balance=balance+? where id=?");
-			preparedStatement.setInt(1, -amount);
-			preparedStatement.setInt(2, sourceId);
-			preparedStatement.executeUpdate();
-			preparedStatement.setInt(1, amount);
-			preparedStatement.setInt(2, targetId);
-			preparedStatement.executeUpdate();
+            preparedStatement.setInt(1, -amount);
+            preparedStatement.setInt(2, sourceId);
+            preparedStatement.executeUpdate();
+            preparedStatement.setInt(1, amount);
+            preparedStatement.setInt(2, targetId);
+            preparedStatement.executeUpdate();
             connection.commit();
         }
         catch(SQLException exc)
