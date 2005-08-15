@@ -691,21 +691,21 @@ public class EJBTestModule
         return object;
     }
     
-    private Object invokeHomeMethod(Object home, String createMethod, Object[] parameters, Class[] parameterTypes)
+    private Object invokeHomeMethod(Object home, String methodName, Object[] parameters, Class[] parameterTypes)
     {
         if(null == parameterTypes)
         {
-            checkNullParameters(createMethod, parameters);
+            checkNullParameters(methodName, parameters);
         }
         try
         {
             if(null == parameterTypes)
             {
-                return MethodUtils.invokeMethod(home, createMethod, parameters);
+                return MethodUtils.invokeMethod(home, methodName, parameters);
             }
             else
             {
-                return MethodUtils.invokeExactMethod(home, createMethod, parameters, parameterTypes);
+                return MethodUtils.invokeExactMethod(home, methodName, parameters, parameterTypes);
             }
         }
         catch(Exception exc)
