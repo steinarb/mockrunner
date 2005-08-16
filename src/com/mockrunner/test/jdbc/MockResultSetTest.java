@@ -2,6 +2,8 @@ package com.mockrunner.test.jdbc;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Clob;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -141,6 +143,10 @@ public class MockResultSetTest extends TestCase
         resultSet.addColumn("column", column);
         resultSet.next();
         assertEquals(1.2f, resultSet.getFloat(1), 0.0);
+        assertEquals(new BigDecimal("1.2"), resultSet.getBigDecimal(1));
+        assertEquals(new BigDecimal(new BigInteger("120000"), 5), resultSet.getBigDecimal(1, 5));
+        assertEquals(new BigDecimal("1.2"), resultSet.getBigDecimal("column"));
+        assertEquals(new BigDecimal(new BigInteger("120000"), 5), resultSet.getBigDecimal("column", 5));
         assertFalse(resultSet.wasNull());
         assertEquals(1.2, resultSet.getDouble("column"), 0.0);
         assertTrue(Arrays.equals(new byte[] {49, 46, 50}, resultSet.getBytes(1)));
