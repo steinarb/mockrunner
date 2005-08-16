@@ -934,7 +934,7 @@ public class MockResultSet implements ResultSet, Cloneable
         BigDecimal value = getBigDecimal(columnIndex);
         if(null != value)
         {
-            value.setScale(scale);
+            return value.setScale(scale);
         }
         return null;
     }
@@ -944,7 +944,7 @@ public class MockResultSet implements ResultSet, Cloneable
         BigDecimal value = getBigDecimal(columnName);
         if(null != value)
         {
-            value.setScale(scale);
+            return value.setScale(scale);
         }
         return null;
     }
