@@ -29,6 +29,7 @@ mockrunner-0.3.6:
   has been executed
 - it's now possible to specify that only registered out parameters are returned
   for a CallableStatement
+- added ArrayResultSetFactory implemented by Erick G. Reid
 - it's now possible to specify an SQLException object when using prepareThrowsSQLException
   as suggested by Eugene Tishkin
 - added loadMessage() method to MockDestination to preload test messages
