@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import com.mockrunner.example.connector.PersonSearchDAOTest;
 import com.mockrunner.example.ejb.BillManagerSessionTest;
 import com.mockrunner.example.ejb.LogActionTest;
 import com.mockrunner.example.ejb.PaySessionTest;
@@ -62,6 +63,7 @@ public class AllExampleTests
         suite.addTest(new TestSuite(PrintSessionBeanTest.class));
         suite.addTest(new TestSuite(NewsSubscriberTest.class));
         suite.addTest(new TestSuite(UserLoginSessionTest.class));
+        suite.addTest(new TestSuite(PersonSearchDAOTest.class));
         //$JUnit-END$
         return suite;
     }
