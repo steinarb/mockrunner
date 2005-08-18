@@ -17,11 +17,11 @@ import javax.resource.cci.InteractionSpec;
  * <code>com.ibm.connector2.cics.ECIInteractionSpec</code>
  * should be used.
  */
-public class PersonAccessDAO
+public class PersonSearchDAO
 {
     private ConnectionFactory connectionFactory;
 
-    public PersonAccessDAO()
+    public PersonSearchDAO()
     {
         try
         {
@@ -42,7 +42,7 @@ public class PersonAccessDAO
         Person response = new Person();
         try
         {
-            connectionFactory.getConnection();
+            connection = connectionFactory.getConnection();
             Interaction interaction = connection.createInteraction();
             ECIInteractionSpec interactionSpec = new ECIInteractionSpec();
             interactionSpec.setFunctionName("PER3AC");
