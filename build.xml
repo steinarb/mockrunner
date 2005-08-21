@@ -653,10 +653,10 @@
     </target>
 
 	<target name="clean" depends="init">
-	    <delete dir="${bin}" />
-	    <delete dir="${doc}" />
-	    <delete dir="${build}" />
-	    <delete dir="${buildjdk1.3}" />
+        <delete dir="${bin}" />
+        <delete dir="${doc}" />
+        <delete dir="${build}" />
+        <delete dir="${buildjdk1.3}" />
         <delete dir="${buildj2ee1.3}" />
         <delete dir="${buildjdk1.3j2ee1.3}" />
         <delete dir="${dependencies}" />
