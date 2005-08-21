@@ -2,13 +2,14 @@ package com.mockrunner.test.connector;
 
 import java.util.List;
 
+import javax.resource.cci.Interaction;
 import javax.resource.cci.Record;
+
+import junit.framework.TestCase;
 
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.connector.ConnectorTestModule;
 import com.mockrunner.mock.connector.cci.ConnectorMockObjectFactory;
-
-import junit.framework.TestCase;
 
 public class ConnectorTestModuleTest extends TestCase
 {
@@ -35,6 +36,81 @@ public class ConnectorTestModuleTest extends TestCase
     private void createMappedRecord(String name) throws Exception
     {
         mockFactory.getMockConnectionFactory().getRecordFactory().createMappedRecord(name);
+    }
+    
+    public void testGetCreatedInteractions() throws Exception
+    {
+        Interaction interaction1 = mockFactory.getMockConnection().createInteraction();
+        Interaction interaction2 = mockFactory.getMockConnection().createInteraction();
+        List interactionList = module.getCreatedInteractions();
+        assertEquals(2, interactionList.size());
+        assertEquals(interaction1, interactionList.get(0));
+        assertEquals(interaction2, interactionList.get(1));
+    }
+    
+    public void testVerifyConnectionClosed() throws Exception
+    {
+        try
+        {
+            module.verifyConnectionClosed();
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //expected exception
+        }
+        mockFactory.getMockConnection().close();
+        module.verifyConnectionClosed();
+    }
+    
+    public void testVerifyInteractionClosed() throws Exception
+    {
+        Interaction interaction1 = mockFactory.getMockConnection().createInteraction();
+        Interaction interaction2 = mockFactory.getMockConnection().createInteraction();
+        Interaction interaction3 = mockFactory.getMockConnection().createInteraction();
+        try
+        {
+            module.verifyAllInteractionsClosed();
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //expected exception
+        }
+        try
+        {
+            module.verifyInteractionClosed(3);
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //expected exception
+        }
+        try
+        {
+            module.verifyInteractionClosed(2);
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //expected exception
+        }
+        interaction3.close();
+        module.verifyInteractionClosed(2);
+        try
+        {
+            module.verifyAllInteractionsClosed();
+            fail();
+        } 
+        catch(VerifyFailedException exc)
+        {
+            //expected exception
+        }
+        interaction1.close();
+        interaction2.close();
+        module.verifyInteractionClosed(0);
+        module.verifyInteractionClosed(1);
+        module.verifyAllInteractionsClosed();
     }
     
     public void testGetCreatedIndexedRecords() throws Exception

@@ -15,10 +15,12 @@ import javax.resource.cci.ResourceWarning;
 public class MockInteraction implements Interaction 
 {
 	private MockConnection mockConnection;
+    private boolean closed;
 
 	public MockInteraction(MockConnection mockConnection) 
     {
 		this.mockConnection = mockConnection;
+        closed = false;
 	}
 
 	public void clearWarnings() throws ResourceException 
@@ -28,7 +30,7 @@ public class MockInteraction implements Interaction
 
 	public void close() throws ResourceException 
     {
-		mockConnection.close();
+        closed = true;
 	}
 
     /**
@@ -51,6 +53,16 @@ public class MockInteraction implements Interaction
     {
 		return mockConnection;
 	}
+    
+    /**
+     * Returns if this <code>Interaction</code> is closed.
+     * @return <code>true</code> if this <code>Interaction</code> is closed,
+     *         <code>false</code> otherwise
+     */
+    public boolean isClosed()
+    {
+        return closed;
+    }
 
     /**
      * Returns <code>null</code>, warnings not supported yet.
