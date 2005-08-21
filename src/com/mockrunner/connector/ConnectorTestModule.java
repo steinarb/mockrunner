@@ -7,6 +7,7 @@ import javax.resource.cci.RecordFactory;
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.connector.cci.ConnectorMockObjectFactory;
+import com.mockrunner.mock.connector.cci.MockInteraction;
 import com.mockrunner.mock.connector.cci.MockLocalTransaction;
 import com.mockrunner.mock.connector.cci.MockRecordFactory;
 
@@ -49,6 +50,16 @@ public class ConnectorTestModule
     }
     
     /**
+     * Returns a list of all created <code>Interaction</code> objects
+     * by delegating to {@link com.mockrunner.mock.connector.cci.MockConnection#getInteractionList()}.
+     * @return the <code>List</code> of all created <code>Interaction</code> objects
+     */
+    public List getCreatedInteractions()
+    {
+        return mockFactory.getMockConnection().getInteractionList();
+    }
+    
+    /**
      * Returns a list of all created indexed records
      * by delegating to {@link com.mockrunner.mock.connector.cci.MockRecordFactory#getCreatedIndexedRecords()}.
      * @return the <code>List</code> of all created indexed records
@@ -88,6 +99,54 @@ public class ConnectorTestModule
     public List getCreatedMappedRecords(String recordName)
     {
         return getMockRecordFactory().getCreatedMappedRecords(recordName);
+    }
+    
+    /**
+     * Verifies that the connection is closed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyConnectionClosed()
+    {
+        if(!mockFactory.getMockConnection().isClosed())
+        {
+            throw new VerifyFailedException("Connection is not closed.");
+        }
+    }
+    
+    /**
+     * Verifies that all interactions are closed.
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyAllInteractionsClosed()
+    {
+        List interactions = getCreatedInteractions();
+        for(int ii = 0; ii < interactions.size(); ii++)
+        {
+            MockInteraction interaction = (MockInteraction)interactions.get(ii);
+            if(!interaction.isClosed())
+            {
+                throw new VerifyFailedException("Interaction with index " + ii + " is not closed.");
+            }
+        }
+    }
+    
+    /**
+     * Verifies that the specified interaction is closed.
+     * @param index the index of the <code>Interaction</code>
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifyInteractionClosed(int index)
+    {
+        List interactions = getCreatedInteractions();
+        if(index >= interactions.size())
+        {
+            throw new VerifyFailedException("Interaction with index " + index + " does not exist, only " + interactions.size() + " interactions.");
+        }
+        MockInteraction interaction = (MockInteraction)interactions.get(index);
+        if(!interaction.isClosed())
+        {
+            throw new VerifyFailedException("Interaction with index " + index + " is not closed.");
+        }
     }
     
     /**

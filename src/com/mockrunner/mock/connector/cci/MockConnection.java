@@ -1,5 +1,9 @@
 package com.mockrunner.mock.connector.cci;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.resource.ResourceException;
 import javax.resource.cci.Connection;
 import javax.resource.cci.ConnectionMetaData;
@@ -19,6 +23,7 @@ public class MockConnection implements Connection
     private ConnectionMetaData metaData;
     private LocalTransaction localTransaction;
     private ResultSetInfo resultSetInfo;
+    private List interactions;
 	
 	public MockConnection() 
     {
@@ -26,6 +31,7 @@ public class MockConnection implements Connection
         metaData = new MockConnectionMetaData();
         localTransaction = new MockLocalTransaction();
         resultSetInfo = new MockResultSetInfo();
+        interactions = new ArrayList();
 	}
     
     /**
@@ -44,15 +50,30 @@ public class MockConnection implements Connection
         }
         return null;
     }
+    
+    /**
+     * Returns the list of all created <code>Interaction</code> objects.
+     * @return the list <code>Interaction</code> objects
+     */
+    public List getInteractionList()
+    {
+        return Collections.unmodifiableList(interactions);
+    }
 
 	public void close() throws ResourceException 
     {
-		closed = true;
+		for(int ii = 0; ii < interactions.size(); ii++)
+        {
+            ((Interaction)interactions.get(ii)).close();
+        }
+        closed = true;
 	}
 
 	public Interaction createInteraction() throws ResourceException 
     {
-		return new MockInteraction(this);
+        Interaction interaction = new MockInteraction(this);
+        interactions.add(interaction);
+        return interaction;
 	}
 
 	public LocalTransaction getLocalTransaction() throws ResourceException 
@@ -70,6 +91,11 @@ public class MockConnection implements Connection
 		return resultSetInfo;
 	}
 	
+    /**
+     * Returns if this <code>Connection</code> is closed.
+     * @return <code>true</code> if this <code>Interaction</code> is closed,
+     *         <code>false</code> otherwise
+     */
 	public boolean isClosed()
 	{
 		return closed;

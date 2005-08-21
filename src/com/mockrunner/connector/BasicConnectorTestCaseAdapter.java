@@ -123,6 +123,14 @@ public class BasicConnectorTestCaseAdapter extends TestCase
     }
 
     /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyConnectionClosed}
+     */
+    protected void verifyConnectionClosed()
+    {
+        connectorTestModule.verifyConnectionClosed();
+    }
+
+    /**
      * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#getInteractionHandler}
      */
     protected InteractionHandler getInteractionHandler()
@@ -131,11 +139,11 @@ public class BasicConnectorTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#getCreatedIndexedRecords}
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#getCreatedInteractions}
      */
-    protected List getCreatedIndexedRecords()
+    protected List getCreatedInteractions()
     {
-        return connectorTestModule.getCreatedIndexedRecords();
+        return connectorTestModule.getCreatedInteractions();
     }
 
     /**
@@ -147,11 +155,11 @@ public class BasicConnectorTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#getCreatedMappedRecords}
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#getCreatedIndexedRecords}
      */
-    protected List getCreatedMappedRecords()
+    protected List getCreatedIndexedRecords()
     {
-        return connectorTestModule.getCreatedMappedRecords();
+        return connectorTestModule.getCreatedIndexedRecords();
     }
 
     /**
@@ -160,6 +168,30 @@ public class BasicConnectorTestCaseAdapter extends TestCase
     protected List getCreatedMappedRecords(String recordName)
     {
         return connectorTestModule.getCreatedMappedRecords(recordName);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#getCreatedMappedRecords}
+     */
+    protected List getCreatedMappedRecords()
+    {
+        return connectorTestModule.getCreatedMappedRecords();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyAllInteractionsClosed}
+     */
+    protected void verifyAllInteractionsClosed()
+    {
+        connectorTestModule.verifyAllInteractionsClosed();
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyInteractionClosed(int)}
+     */
+    protected void verifyInteractionClosed(int index)
+    {
+        connectorTestModule.verifyInteractionClosed(index);
     }
 
     /**
@@ -179,19 +211,19 @@ public class BasicConnectorTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyNumberCreatedMappedRecords(int)}
-     */
-    protected void verifyNumberCreatedMappedRecords(int expected)
-    {
-        connectorTestModule.verifyNumberCreatedMappedRecords(expected);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyNumberCreatedMappedRecords(String, int)}
      */
     protected void verifyNumberCreatedMappedRecords(String recordName, int expected)
     {
         connectorTestModule.verifyNumberCreatedMappedRecords(recordName, expected);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyNumberCreatedMappedRecords(int)}
+     */
+    protected void verifyNumberCreatedMappedRecords(int expected)
+    {
+        connectorTestModule.verifyNumberCreatedMappedRecords(expected);
     }
 
     /**
