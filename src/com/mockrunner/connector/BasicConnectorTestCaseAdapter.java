@@ -139,11 +139,11 @@ public class BasicConnectorTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#getCreatedInteractions}
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#getInteractionList}
      */
-    protected List getCreatedInteractions()
+    protected List getInteractionList()
     {
-        return connectorTestModule.getCreatedInteractions();
+        return connectorTestModule.getInteractionList();
     }
 
     /**

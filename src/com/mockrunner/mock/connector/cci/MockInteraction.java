@@ -12,48 +12,48 @@ import javax.resource.cci.ResourceWarning;
  * The <code>execute</code> calls are delegated to
  * {@link com.mockrunner.connector.InteractionHandler}.
  */
-public class MockInteraction implements Interaction 
+public class MockInteraction implements Interaction
 {
-	private MockConnection mockConnection;
+    private MockConnection mockConnection;
     private boolean closed;
 
-	public MockInteraction(MockConnection mockConnection) 
+    public MockInteraction(MockConnection mockConnection)
     {
-		this.mockConnection = mockConnection;
+        this.mockConnection = mockConnection;
         closed = false;
-	}
+    }
 
-	public void clearWarnings() throws ResourceException 
+    public void clearWarnings() throws ResourceException
     {
 
-	}
+    }
 
-	public void close() throws ResourceException 
+    public void close() throws ResourceException
     {
         closed = true;
-	}
+    }
 
     /**
      * Calls {@link com.mockrunner.connector.InteractionHandler#execute(InteractionSpec, Record)}.
      */
-	public Record execute(InteractionSpec is, Record record) throws ResourceException 
+    public Record execute(InteractionSpec is, Record record) throws ResourceException
     {
         return mockConnection.getInteractionHandler().execute(is, record);
-	}
+    }
 
     /**
      * Calls {@link com.mockrunner.connector.InteractionHandler#execute(InteractionSpec, Record, Record)}.
      */
-	public boolean execute(InteractionSpec is, Record request, Record response) throws ResourceException 
+    public boolean execute(InteractionSpec is, Record request, Record response) throws ResourceException
     {
-		return mockConnection.getInteractionHandler().execute(is, request, response);
-	}
+        return mockConnection.getInteractionHandler().execute(is, request, response);
+    }
 
-	public Connection getConnection() 
+    public Connection getConnection()
     {
-		return mockConnection;
-	}
-    
+        return mockConnection;
+    }
+
     /**
      * Returns if this <code>Interaction</code> is closed.
      * @return <code>true</code> if this <code>Interaction</code> is closed,
@@ -67,8 +67,8 @@ public class MockInteraction implements Interaction
     /**
      * Returns <code>null</code>, warnings not supported yet.
      */
-	public ResourceWarning getWarnings() throws ResourceException 
+    public ResourceWarning getWarnings() throws ResourceException
     {
-		return null;
-	}
+        return null;
+    }
 }

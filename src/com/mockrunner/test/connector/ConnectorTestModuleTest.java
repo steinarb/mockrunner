@@ -38,11 +38,11 @@ public class ConnectorTestModuleTest extends TestCase
         mockFactory.getMockConnectionFactory().getRecordFactory().createMappedRecord(name);
     }
     
-    public void testGetCreatedInteractions() throws Exception
+    public void testGetInteractionList() throws Exception
     {
         Interaction interaction1 = mockFactory.getMockConnection().createInteraction();
         Interaction interaction2 = mockFactory.getMockConnection().createInteraction();
-        List interactionList = module.getCreatedInteractions();
+        List interactionList = module.getInteractionList();
         assertEquals(2, interactionList.size());
         assertEquals(interaction1, interactionList.get(0));
         assertEquals(interaction2, interactionList.get(1));

@@ -16,43 +16,43 @@ import com.mockrunner.connector.InteractionHandler;
 /**
  * Mock implementation of <code>Connection</code>.
  */
-public class MockConnection implements Connection 
+public class MockConnection implements Connection
 {
-	private boolean closed;
-	private InteractionHandler interactionHandler;
+    private boolean closed;
+    private InteractionHandler interactionHandler;
     private ConnectionMetaData metaData;
     private LocalTransaction localTransaction;
     private ResultSetInfo resultSetInfo;
     private List interactions;
-	
-	public MockConnection() 
+    
+    public MockConnection()
     {
-		closed = false;
+        closed = false;
         metaData = new MockConnectionMetaData();
         localTransaction = new MockLocalTransaction();
         resultSetInfo = new MockResultSetInfo();
         interactions = new ArrayList();
-	}
-    
+    }
+
     /**
      * Returns the {@link MockLocalTransaction}. If the underlying
      * <code>LocalTransaction</code> is not an instance of
-     * {@link MockLocalTransaction}, this method returns
-     * <code>null</code>. Otherwise it returns the same object
-     * as {@link #getLocalTransaction}.
+     * {@link MockLocalTransaction}, this method returns <code>null</code>.
+     * Otherwise it returns the same object as {@link #getLocalTransaction}.
      * @return the {@link MockLocalTransaction}
      */
-    public MockLocalTransaction getMockLocalTransaction() 
+    public MockLocalTransaction getMockLocalTransaction()
     {
         if(localTransaction instanceof MockLocalTransaction)
         {
-            return (MockLocalTransaction)localTransaction;
+            return (MockLocalTransaction) localTransaction;
         }
         return null;
     }
-    
+
     /**
      * Returns the list of all created <code>Interaction</code> objects.
+     * 
      * @return the list <code>Interaction</code> objects
      */
     public List getInteractionList()
@@ -60,70 +60,70 @@ public class MockConnection implements Connection
         return Collections.unmodifiableList(interactions);
     }
 
-	public void close() throws ResourceException 
+    public void close() throws ResourceException
     {
-		for(int ii = 0; ii < interactions.size(); ii++)
+        for(int ii = 0; ii < interactions.size(); ii++)
         {
             ((Interaction)interactions.get(ii)).close();
         }
         closed = true;
-	}
+    }
 
-	public Interaction createInteraction() throws ResourceException 
+    public Interaction createInteraction() throws ResourceException
     {
         Interaction interaction = new MockInteraction(this);
         interactions.add(interaction);
         return interaction;
-	}
+    }
 
-	public LocalTransaction getLocalTransaction() throws ResourceException 
+    public LocalTransaction getLocalTransaction() throws ResourceException
     {
-		return localTransaction;
-	}
+        return localTransaction;
+    }
 
-	public ConnectionMetaData getMetaData() throws ResourceException 
+    public ConnectionMetaData getMetaData() throws ResourceException
     {
-		return metaData;
-	}
+        return metaData;
+    }
 
-	public ResultSetInfo getResultSetInfo() throws ResourceException 
+    public ResultSetInfo getResultSetInfo() throws ResourceException
     {
-		return resultSetInfo;
-	}
-	
+        return resultSetInfo;
+    }
+
     /**
      * Returns if this <code>Connection</code> is closed.
      * @return <code>true</code> if this <code>Interaction</code> is closed,
      *         <code>false</code> otherwise
      */
-	public boolean isClosed()
-	{
-		return closed;
-	}
-
-	public InteractionHandler getInteractionHandler() 
+    public boolean isClosed()
     {
-		return interactionHandler;
-	}
-    
+        return closed;
+    }
+
+    public InteractionHandler getInteractionHandler()
+    {
+        return interactionHandler;
+    }
+
     /**
      * Sets this connections <code>ResultSetInfo</code>
      * @param resultSetInfo the <code>ResultSetInfo</code>
      */
-    public void setResultSetInfo(ResultSetInfo resultSetInfo) 
+    public void setResultSetInfo(ResultSetInfo resultSetInfo)
     {
         this.resultSetInfo = resultSetInfo;
     }
-    
+
     /**
      * Sets this connections <code>InteractionHandler</code>
      * @param interactionHandler the <code>InteractionHandler</code>
      */
-    public void setInteractionHandler(InteractionHandler interactionHandler) 
+    public void setInteractionHandler(InteractionHandler interactionHandler)
     {
         this.interactionHandler = interactionHandler;
     }
-    
+
     /**
      * Sets this connections meta data
      * @param metaData the meta data
@@ -132,7 +132,7 @@ public class MockConnection implements Connection
     {
         this.metaData = metaData;
     }
-    
+
     /**
      * Sets the <code>LocalTransaction</code>
      * @param localTransaction the <code>LocalTransaction</code>

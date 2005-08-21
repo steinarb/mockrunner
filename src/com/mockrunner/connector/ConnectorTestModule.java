@@ -54,7 +54,7 @@ public class ConnectorTestModule
      * by delegating to {@link com.mockrunner.mock.connector.cci.MockConnection#getInteractionList()}.
      * @return the <code>List</code> of all created <code>Interaction</code> objects
      */
-    public List getCreatedInteractions()
+    public List getInteractionList()
     {
         return mockFactory.getMockConnection().getInteractionList();
     }
@@ -119,7 +119,7 @@ public class ConnectorTestModule
      */
     public void verifyAllInteractionsClosed()
     {
-        List interactions = getCreatedInteractions();
+        List interactions = getInteractionList();
         for(int ii = 0; ii < interactions.size(); ii++)
         {
             MockInteraction interaction = (MockInteraction)interactions.get(ii);
@@ -137,7 +137,7 @@ public class ConnectorTestModule
      */
     public void verifyInteractionClosed(int index)
     {
-        List interactions = getCreatedInteractions();
+        List interactions = getInteractionList();
         if(index >= interactions.size())
         {
             throw new VerifyFailedException("Interaction with index " + index + " does not exist, only " + interactions.size() + " interactions.");
