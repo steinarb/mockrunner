@@ -126,7 +126,7 @@ public class MockHttpServletRequest implements HttpServletRequest
 
     public String[] getParameterValues(String key)
     {
-        return (String[]) parameters.get(key);
+        return (String[])parameters.get(key);
     }
 
     public void setupAddParameter(String key, String[] values)
