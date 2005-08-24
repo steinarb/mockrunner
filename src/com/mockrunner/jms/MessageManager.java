@@ -48,7 +48,7 @@ public class MessageManager
     }
     
     /**
-     * Returns a <code>Message</code> by its index resp.
+     * Returns a <code>Message</code> by its index or
      * <code>null</code>, if no such <code>Message</code> is
      * present.
      * @param index the index of the <code>Message</code>
@@ -82,7 +82,7 @@ public class MessageManager
     }
 
     /**
-     * Returns a <code>BytesMessage</code> by its index resp.
+     * Returns a <code>BytesMessage</code> by its index or
      * <code>null</code>, if no such <code>BytesMessage</code> is
      * present.
      * @param index the index of the <code>BytesMessage</code>
@@ -116,7 +116,7 @@ public class MessageManager
     }
 
     /**
-     * Returns a <code>MapMessage</code> by its index resp.
+     * Returns a <code>MapMessage</code> by its index or
      * <code>null</code>, if no such <code>MapMessage</code> is
      * present.
      * @param index the index of the <code>MapMessage</code>
@@ -150,7 +150,7 @@ public class MessageManager
     }
 
     /**
-     * Returns a <code>TextMessage</code> by its index resp.
+     * Returns a <code>TextMessage</code> by its index or
      * <code>null</code>, if no such <code>TextMessage</code> is
      * present.
      * @param index the index of the <code>TextMessage</code>
@@ -184,7 +184,7 @@ public class MessageManager
     }
 
     /**
-     * Returns a <code>StreamMessage</code> by its index resp.
+     * Returns a <code>StreamMessage</code> by its index or
      * <code>null</code>, if no such <code>StreamMessage</code> is
      * present.
      * @param index the index of the <code>StreamMessage</code>
@@ -218,7 +218,7 @@ public class MessageManager
     }
 
     /**
-     * Returns a <code>ObjectMessage</code> by its index resp.
+     * Returns a <code>ObjectMessage</code> by its index or
      * <code>null</code>, if no such <code>ObjectMessage</code> is
      * present.
      * @param index the index of the <code>ObjectMessage</code>

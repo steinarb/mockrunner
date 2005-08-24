@@ -65,7 +65,7 @@ public class StreamableRecordByteArrayInteraction implements InteractionImplemen
      * to the default {@link com.mockrunner.mock.connector.cci.MockStreamableByteArrayRecord}.
      * It is allowed to pass <code>null</code> for the request and response data 
      * which is equivalent to an empty expected request (i.e. every request is accepted)
-     * resp. to an empty response.
+     * or to an empty response respectively.
      * The specified response is returned, if the actual request matches the specified expected 
      * request data.
      * @param expectedRequest the expected request data
@@ -107,7 +107,7 @@ public class StreamableRecordByteArrayInteraction implements InteractionImplemen
      * <code>IllegalArgumentException</code> will be thrown.
      * It is allowed to pass <code>null</code> for the request and response data 
      * which is equivalent to an empty expected request (i.e. every request is accepted)
-     * resp. to an empty response.
+     * or to an empty response respectively.
      * The specified response is returned, if the actual request matches the specified expected 
      * request data.
      * @param expectedRequest the expected request data
@@ -130,7 +130,7 @@ public class StreamableRecordByteArrayInteraction implements InteractionImplemen
      * over the specified response byte data for {@link #execute(InteractionSpec, Record)}.
      * It is allowed to pass <code>null</code> for the request and response <code>Record</code> 
      * which is equivalent to an empty expected request (i.e. every request is accepted)
-     * resp. to no specified response <code>Record</code>, i.e. the specified response
+     * or to no specified response <code>Record</code>, i.e. the specified response
      * byte data is taken.
      * The specified response is returned, if the actual request matches the specified expected 
      * request data.

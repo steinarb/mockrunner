@@ -59,7 +59,7 @@ public class EJBTestModule
     }
     
     /**
-     * Sets the suffix of the remote (resp. local) interface. The
+     * Sets the suffix of the remote (local respectively) interface. The
      * default is an empty string, i.e. if the implementation class is
      * <code>TestBean</code>, the remote interface is <code>Test</code>
      * @param businessInterfaceSuffix the bean remote interface suffix
@@ -70,7 +70,7 @@ public class EJBTestModule
     }
     
     /**
-     * Sets the suffix of the home (resp. local home) interface. The
+     * Sets the suffix of the home (local home respectively) interface. The
      * default is <i>"Home"</i>, i.e. if the implementation class is
      * <code>TestBean</code>, the home interface is <code>TestHome</code>
      * @param homeInterfaceSuffix the bean home interface suffix
@@ -93,7 +93,7 @@ public class EJBTestModule
     }
     
     /**
-     * Sets the package for the bean home (resp. local home) interface. Per
+     * Sets the package for the bean home (local home respectively) interface. Per
      * default, the framework expects that the interfaces are in the
      * same package as the bean implementation classes.
      * @param homeInterfacePackage the package name for home interface
@@ -104,7 +104,7 @@ public class EJBTestModule
     }
     
     /**
-     * Sets the package for the bean remote (resp. local) interface. Per
+     * Sets the package for the bean remote (local respectively) interface. Per
      * default, the framework expects that the interfaces are in the
      * same package as the bean implementation classes.
      * @param businessInterfacePackage the package name for remote interface

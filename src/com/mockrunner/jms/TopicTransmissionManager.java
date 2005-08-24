@@ -121,7 +121,7 @@ public class TopicTransmissionManager
     }
 
     /**
-     * Returns a <code>TopicPublisher</code> by its index resp.
+     * Returns a <code>TopicPublisher</code> by its index or
      * <code>null</code>, if no such <code>TopicPublisher</code> is
      * present.
      * @param index the index of the <code>TopicPublisher</code>
@@ -202,7 +202,7 @@ public class TopicTransmissionManager
     }
 
     /**
-     * Returns a <code>TopicSubscriber</code> by its index resp.
+     * Returns a <code>TopicSubscriber</code> by its index or
      * <code>null</code>, if no such <code>TopicSubscriber</code> is
      * present.
      * @param index the index of the <code>TopicSubscriber</code>
@@ -285,7 +285,7 @@ public class TopicTransmissionManager
     }
 
     /**
-     * Returns a durable <code>TopicSubscriber</code> by its name resp.
+     * Returns a durable <code>TopicSubscriber</code> by its name or
      * <code>null</code>, if no such durable <code>TopicSubscriber</code> is
      * present.
      * @param name the name of the <code>TopicSubscriber</code>

@@ -56,7 +56,7 @@ public class TransmissionManagerWrapper
 
     /**
      * Returns the {@link com.mockrunner.mock.jms.MockMessageProducer} object
-     * with the specified index resp. <code>null</code>, if no such
+     * with the specified index or <code>null</code>, if no such
      * {@link com.mockrunner.mock.jms.MockMessageProducer} exists.
      * @param index the index
      * @return the {@link com.mockrunner.mock.jms.MockMessageProducer} object
@@ -108,7 +108,7 @@ public class TransmissionManagerWrapper
 
     /**
      * Returns the {@link com.mockrunner.mock.jms.MockQueueSender} object
-     * with the specified index resp. <code>null</code>, if no such 
+     * with the specified index or <code>null</code>, if no such 
      * {@link com.mockrunner.mock.jms.MockQueueSender} exists.
      * In contrast to {@link QueueTransmissionManager#getQueueSender},
      * this methods also recognizes the senders that were created without
@@ -151,7 +151,7 @@ public class TransmissionManagerWrapper
 
     /**
      * Returns the {@link com.mockrunner.mock.jms.MockTopicPublisher} object
-     * with the specified index resp. <code>null</code>, if no such
+     * with the specified index or <code>null</code>, if no such
      * {@link com.mockrunner.mock.jms.MockTopicPublisher} exists.
      * In contrast to {@link TopicTransmissionManager#getTopicPublisher},
      * this methods also recognizes the publishers that were created without
@@ -169,7 +169,7 @@ public class TransmissionManagerWrapper
 
     /**
      * Returns the {@link com.mockrunner.mock.jms.MockMessageConsumer} object
-     * with the specified index resp. <code>null</code>, if no such
+     * with the specified index or <code>null</code>, if no such
      * {@link com.mockrunner.mock.jms.MockMessageConsumer} exists.
      * @param index the index
      * @return the {@link com.mockrunner.mock.jms.MockMessageConsumer} object

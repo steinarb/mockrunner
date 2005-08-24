@@ -28,7 +28,7 @@ public class MockQueueConnectionFactory extends MockConnectionFactory
     
     /**
      * Returns the connection with the specified index
-     * resp. <code>null</code> if no such connection
+     * or <code>null</code> if no such connection
      * exists.
      * @param index the index
      * @return the connection
@@ -41,7 +41,7 @@ public class MockQueueConnectionFactory extends MockConnectionFactory
     
     /**
      * Returns the latest created connection
-     * resp. <code>null</code> if no such connection
+     * or <code>null</code> if no such connection
      * exists.
      * @return the connection
      */

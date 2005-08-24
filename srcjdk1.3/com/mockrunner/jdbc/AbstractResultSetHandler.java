@@ -411,7 +411,7 @@ public abstract class AbstractResultSetHandler
      * {@link #setCaseSensitive}, {@link #setExactMatch} and 
      * {@link #setUseRegularExpressions}.
      * @param sql the SQL string
-     * @return the <code>SQLException</code>, resp. <code>null</code>
+     * @return the <code>SQLException</code> or <code>null</code>
      */
     public SQLException getSQLException(String sql)
     {
