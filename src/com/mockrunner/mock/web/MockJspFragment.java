@@ -74,7 +74,7 @@ public class MockJspFragment extends JspFragment
     
     /**
      * Sets the <code>JspContext</code>. Also calls <code>setJspContext</code>
-     * resp. <code>setPageContext</code> for all child tags.
+     * (or <code>setPageContext</code>) for all child tags.
      * <code>setPageContext</code> is only called if the specified <code>JspContext</code>
      * is an instance of <code>PageContext</code>.
      * @param jspContext the <code>JspContext</code>

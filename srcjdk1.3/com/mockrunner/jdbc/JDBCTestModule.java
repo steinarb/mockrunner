@@ -196,7 +196,7 @@ public class JDBCTestModule
 	 * If more than one {@link ParameterSets} object is found, the first one
 	 * will be returned.
 	 * @param sql the the SQL statement
-	 * @return the {@link ParameterSets} object resp. <code>null</code> if no
+	 * @return the {@link ParameterSets} object or <code>null</code> if no
      *         matching object is found
 	 */
 	public ParameterSets getExecutedSQLStatementParameterSets(String sql)

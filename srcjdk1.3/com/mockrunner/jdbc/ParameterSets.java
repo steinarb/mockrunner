@@ -11,7 +11,7 @@ import java.util.Map;
  * If the prepared statement is executed multiple times, this
  * class contains multiple maps with the corresponding parameters.
  * Each <code>execute</code> call creates a parameter set.
- * A parameter set is a map, the index resp. the name of the 
+ * A parameter set is a map, the index or the name of the 
  * parameter maps to the value.
  */
 public class ParameterSets

@@ -8,7 +8,7 @@ import com.mockrunner.struts.ActionTestModule;
 /**
  * Example test for {@link PayAction}. Demonstrates the usage of 
  * {@link com.mockrunner.jdbc.JDBCTestModule} 
- * resp. {@link com.mockrunner.jdbc.JDBCTestCaseAdapter}.
+ * and {@link com.mockrunner.jdbc.JDBCTestCaseAdapter}.
  * This is also a good example how to combine the Struts and
  * the JDBC testframework.
  */

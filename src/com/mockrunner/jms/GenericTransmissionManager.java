@@ -98,7 +98,7 @@ public class GenericTransmissionManager
     }
 
     /**
-     * Returns a <code>MessageProducer</code> by its index resp.
+     * Returns a <code>MessageProducer</code> by its index or
      * <code>null</code>, if no such <code>MessageProducer</code> is
      * present.
      * @param index the index of the <code>MessageProducer</code>

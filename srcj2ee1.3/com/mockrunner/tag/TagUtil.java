@@ -37,7 +37,7 @@ public class TagUtil
     /**
      * Creates an {@link com.mockrunner.tag.NestedTag} instance wrapping the
      * specified tag. Returns an instance of {@link com.mockrunner.tag.NestedStandardTag}
-     * resp. {@link com.mockrunner.tag.NestedBodyTag} depending on the
+     * or {@link com.mockrunner.tag.NestedBodyTag} depending on the
      * type of specified tag.
      * @param tag the tag class
      * @param pageContext the corresponding <code>PageContext</code> or <code>JspContext</code>
@@ -64,7 +64,7 @@ public class TagUtil
     /**
      * Creates an {@link com.mockrunner.tag.NestedTag} instance wrapping the
      * specified tag. Returns an instance of {@link com.mockrunner.tag.NestedStandardTag}
-     * resp. {@link com.mockrunner.tag.NestedBodyTag} depending on the
+     * or {@link com.mockrunner.tag.NestedBodyTag} depending on the
      * type of specified tag.
      * @param tag the tag
      * @param pageContext the corresponding <code>PageContext</code> or <code>JspContext</code>

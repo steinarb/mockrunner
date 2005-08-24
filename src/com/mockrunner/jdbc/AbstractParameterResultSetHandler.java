@@ -159,7 +159,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * specified parameter list with {@link #setExactMatchParameter}.
      * @param sql the SQL string
      * @param parameters the parameters
-     * @return the <code>SQLException</code>, resp. <code>null</code>
+     * @return the <code>SQLException</code> or <code>null</code>
      */
     public SQLException getSQLException(String sql, Map parameters)
     {

@@ -341,7 +341,7 @@ public class ArrayUtil
      * array <i>bytes</i> in the array <i>source</i>.
      * @param source the array in which to search
      * @param bytes the array to search
-     * @return the index of the first occurence, resp.
+     * @return the index of the first occurence or
      *         -1, if <i>source</i> does not contain <i>bytes</i>
      */
     public static int indexOf(byte[] source, byte[] bytes)
@@ -355,7 +355,7 @@ public class ArrayUtil
      * @param source the array in which to search
      * @param bytes the array to search
      * @param index the index where to begin the search
-     * @return the index of the first occurence, resp.
+     * @return the index of the first occurence or
      *         -1, if <i>source</i> does not contain <i>bytes</i>
      */
     public static int indexOf(byte[] source, byte[] bytes, int index)

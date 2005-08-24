@@ -24,7 +24,7 @@ public class ParameterUtil
      * Copies a parameter of a <code>PreparedStatement</code>,
      * <code>CallableStatement</code> or <code>ResultSet</code>.
      * <code>InputStream</code> objects, <code>Reader</code> objects 
-     * and arrays are copied into new allocated streams resp. arrays.
+     * and arrays are copied into new allocated streams or arrays.
      * All other objects are cloned by calling the clone method. 
      * If the object is not cloneable, it is returned unchanged.
      * @param source the parameter to copy

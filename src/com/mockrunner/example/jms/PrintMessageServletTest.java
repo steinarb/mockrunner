@@ -19,12 +19,12 @@ import com.mockrunner.servlet.ServletTestModule;
  * need the JNDI implementation of MockEJB.
  * The JMS test framework can work with more than one connection.
  * Per default, the latest created connection is used, i.e.
- * unless the servlet <code>doGet</code> resp. <code>doPost</code>
+ * unless the servlet <code>doGet</code> or <code>doPost</code>
  * is called, the framework works with the receiver connection
  * created in the <code>init</code> method.
  * Note that you can override the default behavior by calling
  * {@link com.mockrunner.jms.JMSTestModule#setCurrentQueueConnectionIndex}
- * resp.
+ * or
  * {@link com.mockrunner.jms.JMSTestModule#setCurrentTopicConnectionIndex}.
  */
 public class PrintMessageServletTest extends JMSTestCaseAdapter

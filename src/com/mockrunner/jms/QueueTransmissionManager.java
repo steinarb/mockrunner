@@ -119,7 +119,7 @@ public class QueueTransmissionManager
     }
 
     /**
-     * Returns a <code>QueueSender</code> by its index resp.
+     * Returns a <code>QueueSender</code> by its index or
      * <code>null</code>, if no such <code>QueueSender</code> is
      * present.
      * @param index the index of the <code>QueueSender</code>
@@ -198,7 +198,7 @@ public class QueueTransmissionManager
     }
 
     /**
-     * Returns a <code>QueueReceiver</code> by its index resp.
+     * Returns a <code>QueueReceiver</code> by its index or
      * <code>null</code>, if no such <code>QueueReceiver</code> is
      * present.
      * @param index the index of the <code>QueueReceiver</code>
@@ -277,7 +277,7 @@ public class QueueTransmissionManager
     }
 
     /**
-     * Returns a <code>QueueBrowser</code> by its index resp.
+     * Returns a <code>QueueBrowser</code> by its index or
      * <code>null</code>, if no such <code>QueueBrowser</code> is
      * present.
      * @param index the index of the <code>QueueBrowser</code>

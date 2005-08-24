@@ -63,7 +63,7 @@ public class MappedRecordInteraction implements InteractionImplementor
      * to the default {@link com.mockrunner.mock.connector.cci.MockMappedRecord}.
      * It is allowed to pass <code>null</code> for the request and response <code>Map</code> 
      * which is equivalent to an empty expected request (i.e. every request is accepted)
-     * resp. to an empty response.
+     * or to an empty response respectively.
      * The specified response is returned, if the actual request matches the specified expected 
      * request.
      * @param expectedRequest the expected request <code>Map</code>
@@ -103,7 +103,7 @@ public class MappedRecordInteraction implements InteractionImplementor
      * otherwise an <code>IllegalArgumentException</code> will be thrown.
      * It is allowed to pass <code>null</code> for the request and response <code>Map</code> 
      * which is equivalent to an empty expected request (i.e. every request is accepted)
-     * resp. to an empty response.
+     * or to an empty response respectively.
      * The specified response is returned, if the actual request matches the specified expected 
      * request.
      * @param expectedRequest the expected request <code>Map</code>
@@ -126,7 +126,7 @@ public class MappedRecordInteraction implements InteractionImplementor
      * over the specified response <code>Map</code> for {@link #execute(InteractionSpec, Record)}.
      * It is allowed to pass <code>null</code> for the request and response <code>Record</code> 
      * which is equivalent to an empty expected request (i.e. every request is accepted)
-     * resp. to no specified response <code>Record</code>, i.e. the specified response
+     * or to no specified response <code>Record</code>, i.e. the specified response
      * <code>Map</code> is taken.
      * The specified response is returned, if the actual request matches the specified expected 
      * request.

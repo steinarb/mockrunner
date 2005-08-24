@@ -51,7 +51,7 @@ import com.mockrunner.mock.jms.MockTopicSubscriber;
  * It is recommended to use {@link com.mockrunner.mock.jms.MockQueueConnectionFactory}
  * if you only use queues and  {@link com.mockrunner.mock.jms.MockTopicConnectionFactory}
  * if you only use topics and are not interested in having one factory for both.
- * It is possible to create a {@link MockQueueConnection} resp. a {@link MockTopicConnection}
+ * It is possible to create a {@link MockQueueConnection} or a {@link MockTopicConnection}
  * using the {@link com.mockrunner.mock.jms.MockConnectionFactory}.
  * However, the <code>Queue</code> methods (e.g. {@link #verifyAllQueueReceiversClosed})
  * only work, if you use {@link MockQueueConnectionFactory} and the 
@@ -86,7 +86,7 @@ public class JMSTestModule
     
     /**
      * Returns the current {@link MockQueueConnection} based on its
-     * index resp. <code>null</code> if no queue connection
+     * index or <code>null</code> if no queue connection
      * was created. The connection has to be created using the
      * {@link MockQueueConnectionFactory}.
      * @return the queue connection
@@ -113,7 +113,7 @@ public class JMSTestModule
 
     /**
      * Returns the current {@link MockTopicConnection} based on its
-     * index resp. <code>null</code> if no topic connection
+     * index or <code>null</code> if no topic connection
      * was created. The connection has to be created using the
      * {@link MockTopicConnectionFactory}.
      * @return the topic connection
@@ -140,7 +140,7 @@ public class JMSTestModule
 
     /**
      * Returns the current {@link MockConnection} based on its
-     * index resp. <code>null</code> if no connection
+     * index or <code>null</code> if no connection
      * was created. The connection has to be created using the
      * {@link com.mockrunner.mock.jms.MockConnectionFactory}.
      * @return the topic connection
@@ -630,7 +630,7 @@ public class JMSTestModule
     
     /**
      * Returns the list of messages that are currently present in the queue
-     * resp. <code>null</code> if no such queue exists.
+     * or <code>null</code> if no such queue exists.
      * @param name the name of the queue
      * @return the list of messages
      */
@@ -643,7 +643,7 @@ public class JMSTestModule
     
     /**
      * Returns the list of messages that are currently present in the 
-     * temporary queue resp. <code>null</code> if no such queue exists.
+     * temporary queue or <code>null</code> if no such queue exists.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
@@ -658,7 +658,7 @@ public class JMSTestModule
     
     /**
      * Returns the list of messages that were received by the queue
-     * resp. <code>null</code> if no such queue exists.
+     * or <code>null</code> if no such queue exists.
      * @param name the name of the queue
      * @return the list of messages
      */
@@ -671,7 +671,7 @@ public class JMSTestModule
 
     /**
      * Returns the list of messages that were received by the 
-     * temporary queue resp. <code>null</code> if no such queue exists.
+     * temporary queue or <code>null</code> if no such queue exists.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfQueue the index of the temporary queue
@@ -686,7 +686,7 @@ public class JMSTestModule
     
     /**
      * Returns the list of messages that are currently present in the topic
-     * resp. <code>null</code> if no such topic exists.
+     * or <code>null</code> if no such topic exists.
      * @param name the name of the queue
      * @return the list of messages
      */
@@ -699,7 +699,7 @@ public class JMSTestModule
 
     /**
      * Returns the list of messages that are currently present in the 
-     * temporary topic resp. <code>null</code> if no such topic exists.
+     * temporary topic or <code>null</code> if no such topic exists.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfTopic the index of the temporary topic
@@ -714,7 +714,7 @@ public class JMSTestModule
 
     /**
      * Returns the list of messages that were received by the topic
-     * resp. <code>null</code> if no such topic exists.
+     * or <code>null</code> if no such topic exists.
      * @param name the name of the topic
      * @return the list of messages
      */
@@ -727,7 +727,7 @@ public class JMSTestModule
 
     /**
      * Returns the list of messages that were received by the 
-     * temporary topic resp. <code>null</code> if no such topic exists.
+     * temporary topic or <code>null</code> if no such topic exists.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfTopic the index of the temporary topic

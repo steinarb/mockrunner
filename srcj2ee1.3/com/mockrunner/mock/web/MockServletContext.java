@@ -148,8 +148,8 @@ public class MockServletContext implements ServletContext
      * {@link #getRequestDispatcher} or {@link #getNamedDispatcher}
      * with the specified path or name.
      * If no <code>RequestDispatcher</code>
-     * is set for the specified path, {@link #getRequestDispatcher} resp.
-     * {@link #getNamedDispatcher} automatically creates a new one.
+     * is set for the specified path, {@link #getRequestDispatcher} and
+     * {@link #getNamedDispatcher} automatically create a new one.
      * @param path the path for the <code>RequestDispatcher</code>
      * @param dispatcher the <code>RequestDispatcher</code> object
      */
