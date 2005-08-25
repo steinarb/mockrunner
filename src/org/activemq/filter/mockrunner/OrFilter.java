@@ -27,7 +27,7 @@ import javax.jms.Message;
  * 
  * Represents a logical OR operation on two filters
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class OrFilter implements Filter {
 

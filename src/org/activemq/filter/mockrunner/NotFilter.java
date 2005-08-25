@@ -27,7 +27,7 @@ import javax.jms.Message;
  * 
  * Represents a logical not operation on another filter
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class NotFilter implements Filter {
 

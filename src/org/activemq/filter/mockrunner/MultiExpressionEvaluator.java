@@ -71,7 +71,7 @@ import java.util.Iterator;
  * When a CacheExpressionnotices it's last cached value was generated in an old 'view',
  * it invalidates its cached value.
  *
- * @version $Revision: 1.1 $ $Date: 2005/04/13 16:42:08 $
+ * @version $Revision: 1.2 $ $Date: 2005/08/25 16:23:28 $
  */
 public class MultiExpressionEvaluator {
 

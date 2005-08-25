@@ -35,7 +35,7 @@ import org.apache.oro.text.regex.Perl5Matcher;
  * 
  * A filter performing a comparison of two objects
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class ComparisonExpression extends BinaryExpression implements BooleanExpression {
 
@@ -111,7 +111,7 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
                     regexp.append(c);
                 }
             }
-            regexp.append("\\Z"); // The end of the input
+            regexp.append("\\Z"); 
 
             try
             {

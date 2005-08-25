@@ -28,7 +28,7 @@ import javax.jms.Message;
  * 
  * Represents a constant expression
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public class ConstantExpression implements Expression {
 
@@ -147,7 +147,7 @@ public class ConstantExpression implements Expression {
      * @param string
      * @return
      */
-    private String encodeString(String s) {
+    public static String encodeString(String s) {
         StringBuffer b = new StringBuffer();
         b.append('\'');
         for (int i = 0; i < s.length(); i++) {
