@@ -2,12 +2,10 @@
 package org.activemq.selector.mockrunner;
 
 /**
+ * Alwin Ibba: Changed package
+ * 
  * An implementation of interface CharStream, where the stream is assumed to
  * contain only ASCII characters (without unicode processing).
- */
-
-/** 
- * Alwin Ibba: Changed package
  */
 public final class SimpleCharStream {
     public static final boolean staticFlag = false;

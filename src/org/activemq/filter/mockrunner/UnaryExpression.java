@@ -28,11 +28,11 @@ import javax.jms.Message;
 
 /**
  * Alwin Ibba: Changed package
- * Alwin Ibba: Modification to be Java 1.3 compatible
+ * Alwin Ibba: Removed create XPath methods
  * 
  * An expression which performs an operation on two expression values
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public abstract class UnaryExpression implements Expression {
 

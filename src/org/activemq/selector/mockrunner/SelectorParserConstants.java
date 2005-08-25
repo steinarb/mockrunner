@@ -20,13 +20,15 @@ public interface SelectorParserConstants {
   int TRUE = 16;
   int FALSE = 17;
   int NULL = 18;
-  int DECIMAL_LITERAL = 19;
-  int HEX_LITERAL = 20;
-  int OCTAL_LITERAL = 21;
-  int FLOATING_POINT_LITERAL = 22;
-  int EXPONENT = 23;
-  int STRING_LITERAL = 24;
-  int ID = 25;
+  int XPATH = 19;
+  int XQUERY = 20;
+  int DECIMAL_LITERAL = 21;
+  int HEX_LITERAL = 22;
+  int OCTAL_LITERAL = 23;
+  int FLOATING_POINT_LITERAL = 24;
+  int EXPONENT = 25;
+  int STRING_LITERAL = 26;
+  int ID = 27;
 
   int DEFAULT = 0;
 
@@ -50,6 +52,8 @@ public interface SelectorParserConstants {
     "\"TRUE\"",
     "\"FALSE\"",
     "\"NULL\"",
+    "\"XPATH\"",
+    "\"XQUERY\"",
     "<DECIMAL_LITERAL>",
     "<HEX_LITERAL>",
     "<OCTAL_LITERAL>",

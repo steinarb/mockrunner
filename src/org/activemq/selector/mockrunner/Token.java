@@ -6,7 +6,6 @@ package org.activemq.selector.mockrunner;
  * 
  * Describes the input token stream.
  */
-
 public class Token {
 
     /**

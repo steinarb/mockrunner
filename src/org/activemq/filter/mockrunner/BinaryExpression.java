@@ -23,7 +23,7 @@ package org.activemq.filter.mockrunner;
  * 
  * An expression which performs an operation on two expression values.
  * 
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 abstract public class BinaryExpression implements Expression {
     protected Expression left;

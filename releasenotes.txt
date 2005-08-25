@@ -46,6 +46,7 @@ mockrunner-0.3.6:
 - updated struts.jar and all corresponding commons-jars to Struts 1.2.7
 - Struts 1.2.7 does no longer depend on commons-collections.jar and Mockrunner does neither,
   so this dependency was removed. For older Struts versions, you'll need it of course
+- replaced ActiveMQ classes with 3.1 version
 - updated nekohtml.jar from 0.9.4 to 0.9.5
 - updated cglib from 2.0.2 to 2.1_2 (cglib-nodep-2.1_2.jar)
 - updated xercesImpl.jar and xml-apis.jar from Xerces 2.6.2 to 2.7.1

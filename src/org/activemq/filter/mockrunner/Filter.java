@@ -27,7 +27,7 @@ import javax.jms.Message;
  * 
  * Represents a subscription filter
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  */
 public interface Filter {
 
