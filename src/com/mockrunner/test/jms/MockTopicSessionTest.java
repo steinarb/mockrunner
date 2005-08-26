@@ -27,6 +27,7 @@ import com.mockrunner.mock.jms.MockBytesMessage;
 import com.mockrunner.mock.jms.MockMapMessage;
 import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockStreamMessage;
+import com.mockrunner.mock.jms.MockTemporaryTopic;
 import com.mockrunner.mock.jms.MockTextMessage;
 import com.mockrunner.mock.jms.MockTopic;
 import com.mockrunner.mock.jms.MockTopicConnection;
@@ -539,6 +540,56 @@ public class MockTopicSessionTest extends TestCase
         assertEquals(1, topic2.getReceivedMessageList().size());
         assertEquals(1, topic2.getCurrentMessageList().size());
         assertEquals(7, listener.getMessageList().size());
+    }
+    
+    public void testCloseSession() throws Exception
+    {
+        DestinationManager manager = connection.getDestinationManager();
+        manager.createTopic("Topic");
+        MockTopicSession session = (MockTopicSession)connection.createTopicSession(false, TopicSession.CLIENT_ACKNOWLEDGE);
+        MockTopic topic = (MockTopic)session.createTopic("Topic");
+        MockTopicSubscriber subscriber1 = (MockTopicSubscriber)session.createSubscriber(topic);
+        MockTopicPublisher publisher1 = (MockTopicPublisher)session.createPublisher(topic);
+        MockTopicPublisher publisher2 = (MockTopicPublisher)session.createPublisher(topic);
+        session.close();
+        assertTrue(session.isClosed());
+        assertFalse(session.isRolledBack());
+        assertTrue(subscriber1.isClosed());
+        assertTrue(publisher1.isClosed());
+        assertTrue(publisher2.isClosed());
+        session = (MockTopicSession)connection.createTopicSession(true, TopicSession.CLIENT_ACKNOWLEDGE);
+        topic = (MockTopic)session.createTopic("Topic");
+        subscriber1 = (MockTopicSubscriber)session.createSubscriber(topic);
+        publisher1 = (MockTopicPublisher)session.createPublisher(topic);
+        publisher2 = (MockTopicPublisher)session.createPublisher(topic);
+        session.close();
+        assertTrue(session.isClosed());
+        assertTrue(session.isRolledBack());
+        assertTrue(subscriber1.isClosed());
+        assertTrue(publisher1.isClosed());
+        assertTrue(publisher2.isClosed());
+        session = (MockTopicSession)connection.createTopicSession(true, TopicSession.CLIENT_ACKNOWLEDGE);
+        session.commit();
+        session.close();
+        assertTrue(session.isClosed());
+        assertFalse(session.isRolledBack());
+    }
+    
+    public void testCloseSessionRemove() throws Exception
+    {
+        DestinationManager manager = connection.getDestinationManager();
+        MockTopic topic1 = manager.createTopic("Topic1");
+        MockTopic topic2 = manager.createTopic("Topic2");
+        MockTopicSession session = (MockTopicSession)connection.createTopicSession(false, TopicSession.CLIENT_ACKNOWLEDGE);
+        session.createTopic("Topic2");
+        MockTemporaryTopic tempTopic = (MockTemporaryTopic)session.createTemporaryTopic();
+        assertFalse(topic1.sessionSet().contains(session));
+        assertTrue(topic2.sessionSet().contains(session));
+        assertTrue(tempTopic.sessionSet().contains(session));
+        session.close();
+        assertFalse(topic1.sessionSet().contains(session));
+        assertFalse(topic2.sessionSet().contains(session));
+        assertFalse(tempTopic.sessionSet().contains(session));
     }
     
     public void testTransmissionWithNullDestination() throws Exception

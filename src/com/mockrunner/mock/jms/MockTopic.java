@@ -33,7 +33,7 @@ public class MockTopic extends MockDestination implements Topic
      */
     public void addMessage(Message message) throws JMSException
     {
-        receivedMessageList().add(message);    
+        addReceivedMessage(message);    
         boolean isConsumed = false;
         Iterator sessionsIterator = sessionSet().iterator();
         while(sessionsIterator.hasNext())
@@ -75,7 +75,7 @@ public class MockTopic extends MockDestination implements Topic
         }
         if(!isConsumed)
         {
-            currentMessageList().add(message);
+            addCurrentMessage(message);
         }
     }
 }
