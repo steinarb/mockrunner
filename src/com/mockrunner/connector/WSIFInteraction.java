@@ -12,7 +12,7 @@ import javax.resource.cci.Record;
  */
 public class WSIFInteraction implements InteractionImplementor 
 {
-	private String isClassName;
+    private String isClassName;
     private String requestPartName;
     private Object requestPart;
     private String responsePartName;
