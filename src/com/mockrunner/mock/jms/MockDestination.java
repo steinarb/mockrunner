@@ -47,7 +47,7 @@ public abstract class MockDestination implements Destination
      */
     public void loadMessage(Message message)
     {
-        currentMessages.add(message);
+        addCurrentMessage(message);
     }
     
     /**
@@ -144,19 +144,32 @@ public abstract class MockDestination implements Destination
         sessions.add(session);
     }
     
-    protected List receivedMessageList()
+    /**
+     * Removes a <code>Session</code>.
+     * @param session the session
+     */
+    public void removeSession(Session session)
     {
-        return receivedMessages;
+        sessions.remove(session);
     }
     
-    protected List currentMessageList()
+    /**
+     * Return a <code>Set</code> of all sessions.
+     * @return a <code>Set</code> of all sessions
+     */
+    public Set sessionSet()
     {
-        return currentMessages;
+        return Collections.unmodifiableSet(sessions);
     }
     
-    protected Set sessionSet()
+    protected void addReceivedMessage(Message message)
     {
-        return sessions;
+        receivedMessages.add(message);
+    }
+    
+    protected void addCurrentMessage(Message message)
+    {
+        currentMessages.add(message);
     }
     
     protected void acknowledgeMessage(Message message, MockSession session) throws JMSException

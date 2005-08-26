@@ -34,7 +34,7 @@ public class MockQueue extends MockDestination implements Queue
      */
     public void addMessage(Message message) throws JMSException
     {
-        receivedMessageList().add(message);    
+        addReceivedMessage(message);    
         boolean isConsumed = false;
         Iterator sessionsIterator = sessionSet().iterator();
         while(sessionsIterator.hasNext() && !isConsumed)
@@ -64,7 +64,7 @@ public class MockQueue extends MockDestination implements Queue
         }
         if(!isConsumed)
         {
-            currentMessageList().add(message);
+            addCurrentMessage(message);
         }
     }
 }

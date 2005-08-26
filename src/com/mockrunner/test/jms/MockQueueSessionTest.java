@@ -36,6 +36,7 @@ import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSender;
 import com.mockrunner.mock.jms.MockQueueSession;
 import com.mockrunner.mock.jms.MockStreamMessage;
+import com.mockrunner.mock.jms.MockTemporaryQueue;
 import com.mockrunner.mock.jms.MockTextMessage;
 
 public class MockQueueSessionTest extends TestCase
@@ -517,6 +518,23 @@ public class MockQueueSessionTest extends TestCase
         session.close();
         assertTrue(session.isClosed());
         assertFalse(session.isRolledBack());
+    }
+    
+    public void testCloseSessionRemove() throws Exception
+    {
+        DestinationManager manager = connection.getDestinationManager();
+        MockQueue queue1 = manager.createQueue("Queue1");
+        MockQueue queue2 = manager.createQueue("Queue2");
+        MockQueueSession session = (MockQueueSession)connection.createQueueSession(false, QueueSession.CLIENT_ACKNOWLEDGE);
+        session.createQueue("Queue1");
+        MockTemporaryQueue tempQueue = (MockTemporaryQueue)session.createTemporaryQueue();
+        assertTrue(queue1.sessionSet().contains(session));
+        assertFalse(queue2.sessionSet().contains(session));
+        assertTrue(tempQueue.sessionSet().contains(session));
+        session.close();
+        assertFalse(queue1.sessionSet().contains(session));
+        assertFalse(queue2.sessionSet().contains(session));
+        assertFalse(tempQueue.sessionSet().contains(session));
     }
     
     public void testTransmissionWithNullDestination() throws Exception

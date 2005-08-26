@@ -2,8 +2,12 @@ package com.mockrunner.mock.jms;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.jms.BytesMessage;
 import javax.jms.Destination;
@@ -67,6 +71,8 @@ public class MockSession implements Session
     private MessageListener messageListener;
     private List tempQueues;
     private List tempTopics;
+    private Set queues;
+    private Set topics;
     private boolean transacted;
     private int acknowledgeMode;
     private int numberCommits;
@@ -86,6 +92,8 @@ public class MockSession implements Session
         messageManager = new MessageManager();
         tempQueues = new ArrayList();
         tempTopics = new ArrayList();
+        queues = new HashSet();
+        topics = new HashSet();
         messageListener = null;
         numberCommits = 0;
         numberRollbacks = 0;
@@ -365,7 +373,24 @@ public class MockSession implements Session
         getQueueTransmissionManager().closeAll();
         getTopicTransmissionManager().closeAll();
         getGenericTransmissionManager().closeAll();
+        removeSessionFromDestinations(tempQueues);
+        removeSessionFromDestinations(tempTopics);
+        removeSessionFromDestinations(queues);
+        removeSessionFromDestinations(topics);
+        queues.clear();
+        topics.clear();
         closed = true;
+    }
+    
+    private void removeSessionFromDestinations(Collection destinations)
+    {
+        Iterator iterator = destinations.iterator();
+        while(iterator.hasNext())
+        {
+            Object currentDestination = (Object)iterator.next();
+            if(currentDestination instanceof MockDestination)
+            ((MockDestination)currentDestination).removeSession(this);
+        }
     }
 
     public void recover() throws JMSException
@@ -524,6 +549,7 @@ public class MockSession implements Session
         if(queue instanceof MockQueue)
         {
             ((MockQueue)queue).addSession(this);
+            queues.add(queue);
         }
     }
     
@@ -532,6 +558,7 @@ public class MockSession implements Session
         if(topic instanceof MockTopic)
         {
             ((MockTopic)topic).addSession(this);
+            topics.add(topic);
         }
     }
     
