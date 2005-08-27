@@ -109,6 +109,17 @@ public class IndexedRecordInteractionTest extends TestCase
         assertTrue(interaction.canHandle(spec, request, new MockIndexedRecord()));
     }
     
+    public void testEnableAndDisable()
+    {
+        IndexedRecordInteraction interaction = new IndexedRecordInteraction();
+        InteractionSpec spec = new InteractionSpec() {};
+        assertTrue(interaction.canHandle(spec, null, null));
+        interaction.disable();
+        assertFalse(interaction.canHandle(spec, null, null));
+        interaction.enable();
+        assertTrue(interaction.canHandle(spec, null, null));
+    }  
+    
     public void testExecuteReturnsRecord() throws Exception
     {
         IndexedRecordInteraction interaction = new IndexedRecordInteraction();

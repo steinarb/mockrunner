@@ -26,6 +26,7 @@ import com.mockrunner.mock.connector.cci.MockIndexedRecord;
  */
 public class IndexedRecordInteraction implements InteractionImplementor
 {
+    private boolean enabled;
     private List expectedRequest;
     private List responseData;
     private Class responseClass;
@@ -115,6 +116,7 @@ public class IndexedRecordInteraction implements InteractionImplementor
     {
         setExpectedRequest(expectedRequest);
         setResponse(responseList, responseClass);
+        this.enabled = true;
     }
     
     /**
@@ -136,6 +138,7 @@ public class IndexedRecordInteraction implements InteractionImplementor
     {
         setExpectedRequest(expectedRequest);
         setResponse(responseRecord);
+        this.enabled = true;
     }
     
     /**
@@ -153,6 +156,23 @@ public class IndexedRecordInteraction implements InteractionImplementor
     public IndexedRecordInteraction(Record responseRecord)
     {
         this(null, responseRecord);
+    }
+    
+    /**
+     * Enables this implementor.
+     */
+    public void enable()
+    {
+        this.enabled = true;
+    }
+    
+    /**
+     * Disables this implementor. {@link #canHandle(InteractionSpec, Record, Record)}
+     * always returns <code>false</code>, if this implementor is disabled.
+     */
+    public void disable()
+    {
+        this.enabled = false;
     }
     
     /**
@@ -236,12 +256,13 @@ public class IndexedRecordInteraction implements InteractionImplementor
     }
     
     /**
-     * Returns <code>true</code> if this implementor will handle the request.
-     * This method returns <code>true</code> in the following cases:<br><br>
+     * Returns <code>true</code> if this implementor is enabled and will handle the request.
+     * This method returns <code>true</code> if the following prerequisites are fulfilled:<br><br>
+     * It is enabled.<br><br>
      * The response <code>Record</code> must implement <code>IndexedRecord</code>
      * or it must be <code>null</code> (which is the case, if the actual request 
      * targets the {@link #execute(InteractionSpec,Record)} method instead of 
-     * {@link #execute(InteractionSpec,Record,Record)})<br><br>
+     * {@link #execute(InteractionSpec,Record,Record)}).<br><br>
      * The expected request must be <code>null</code> (use the various
      * <code>setExpectedRequest</code> methods) or the actual request <code>Record</code>
      * must implement <code>IndexedRecord</code> and must contain the same data as
@@ -255,6 +276,7 @@ public class IndexedRecordInteraction implements InteractionImplementor
      */
     public boolean canHandle(InteractionSpec interactionSpec, Record actualRequest, Record actualResponse)
     {
+        if(!enabled) return false;
         if(!isResponseAcceptable(actualResponse)) return false;
         return doesRequestMatch(actualRequest);
     }
