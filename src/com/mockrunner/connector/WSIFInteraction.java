@@ -12,6 +12,7 @@ import javax.resource.cci.Record;
  */
 public class WSIFInteraction implements InteractionImplementor 
 {
+    private boolean enabled;
     private String isClassName;
     private String requestPartName;
     private Object requestPart;
@@ -33,10 +34,29 @@ public class WSIFInteraction implements InteractionImplementor
 		this.requestPart = requestPart;
 		this.responsePartName = responsePartName;
 		this.responsePart = responsePart;
+        this.enabled = true;
 	}
+    
+    /**
+     * Enables this implementor.
+     */
+    public void enable()
+    {
+        this.enabled = true;
+    }
+    
+    /**
+     * Disables this implementor. {@link #canHandle(InteractionSpec, Record, Record)}
+     * always returns <code>false</code>, if this implementor is disabled.
+     */
+    public void disable()
+    {
+        this.enabled = false;
+    }
 
 	public boolean canHandle(InteractionSpec interactionSpec, Record actualRequest, Record actualResponse)
     {
+        if(!enabled) return false;
         Class specClass = getClassNamed(interactionSpec.getClass(), isClassName);
         if (specClass != null)
         {
@@ -85,7 +105,7 @@ public class WSIFInteraction implements InteractionImplementor
      */
     public Record execute(InteractionSpec interactionSpec, Record actualRequest) throws ResourceException
     {
-        throw new RuntimeException(this.getClass().getName() + " does not implement public Record execute(InteractionSpec  Record)");
+        throw new RuntimeException(this.getClass().getName() + " does not implement public Record execute(InteractionSpec, Record)");
     }
 
     public boolean execute(InteractionSpec interactionSpec, Record actualRequest, Record actualResponse) throws ResourceException

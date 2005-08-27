@@ -108,6 +108,17 @@ public class MappedRecordInteractionTest extends TestCase
         assertTrue(interaction.canHandle(spec, request, new MockMappedRecord()));
     }
     
+    public void testEnableAndDisable()
+    {
+        MappedRecordInteraction interaction = new MappedRecordInteraction();
+        InteractionSpec spec = new InteractionSpec() {};
+        assertTrue(interaction.canHandle(spec, null, null));
+        interaction.disable();
+        assertFalse(interaction.canHandle(spec, null, null));
+        interaction.enable();
+        assertTrue(interaction.canHandle(spec, null, null));
+    }
+    
     public void testExecuteReturnsRecord() throws Exception
     {
         MappedRecordInteraction interaction = new MappedRecordInteraction();

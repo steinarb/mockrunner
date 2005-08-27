@@ -49,7 +49,6 @@ public class PersonSearchDAO
             interactionSpec.setInteractionVerb(ECIInteractionSpec.SYNC_SEND_RECEIVE);
             interactionSpec.setCommareaLength(32);
             interaction.execute(interactionSpec, request, response);
-            connection.close();
         } 
         catch(ResourceException exc)
         {
