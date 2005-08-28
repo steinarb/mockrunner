@@ -31,9 +31,9 @@ public class PrintSessionBeanTest extends JMSTestCaseAdapter
         ejbModule.setInterfacePackage("com.mockrunner.example.jms.interfaces");
         ejbModule.deploySessionBean("com/mockrunner/example/PrintSession", PrintSessionBean.class, TransactionPolicy.REQUIRED);
         bean = (PrintSession)ejbModule.createBean("com/mockrunner/example/PrintSession");
-		QueueConnectionFactory factory = getJMSMockObjectFactory().getMockQueueConnectionFactory();
-		Queue queue = getDestinationManager().createQueue("testQueue");
-		ejbModule.deployMessageBean("java:/ConnectionFactory", "queue/testQueue", factory, queue, new PrintMessageDrivenBean());
+        QueueConnectionFactory factory = getJMSMockObjectFactory().getMockQueueConnectionFactory();
+        Queue queue = getDestinationManager().createQueue("testQueue");
+        ejbModule.deployMessageBean("java:/ConnectionFactory", "queue/testQueue", factory, queue, new PrintMessageDrivenBean());
     }
     
     //The following commented out setUp method is an alternative approach to
@@ -44,17 +44,17 @@ public class PrintSessionBeanTest extends JMSTestCaseAdapter
     //In this test case we only test JTA transactions while *sending* the message,
     //so this approach works quite well.
 	/*protected void setUp() throws Exception
-	{
-		super.setUp();
-		ejbModule = createEJBTestModule();
-		ejbModule.bindToContext("java:/ConnectionFactory", getJMSMockObjectFactory().getMockQueueConnectionFactory());
-		Queue queue = getDestinationManager().createQueue("testQueue");
-		ejbModule.bindToContext("queue/testQueue", queue);
-		registerTestMessageListenerForQueue("testQueue", new PrintMessageDrivenBean());
-		ejbModule.setInterfacePackage("com.mockrunner.example.jms.interfaces");
-		ejbModule.deploySessionBean("com/mockrunner/example/PrintSession", PrintSessionBean.class, TransactionPolicy.REQUIRED);
-		bean = (PrintSession)ejbModule.createBean("com/mockrunner/example/PrintSession");
-	}*/
+    {
+        super.setUp();
+        ejbModule = createEJBTestModule();
+        ejbModule.bindToContext("java:/ConnectionFactory", getJMSMockObjectFactory().getMockQueueConnectionFactory());
+        Queue queue = getDestinationManager().createQueue("testQueue");
+        ejbModule.bindToContext("queue/testQueue", queue);
+        registerTestMessageListenerForQueue("testQueue", new PrintMessageDrivenBean());
+        ejbModule.setInterfacePackage("com.mockrunner.example.jms.interfaces");
+        ejbModule.deploySessionBean("com/mockrunner/example/PrintSession", PrintSessionBean.class, TransactionPolicy.REQUIRED);
+        bean = (PrintSession)ejbModule.createBean("com/mockrunner/example/PrintSession");
+    }*/
     
     public void testSuccessfulDelivery() throws Exception
     {
