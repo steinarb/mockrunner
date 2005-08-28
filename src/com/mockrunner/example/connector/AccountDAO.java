@@ -43,11 +43,14 @@ public class AccountDAO
             transaction.begin();
             IndexedRecord outputRecord = (IndexedRecord)interaction.execute(spec, inputRecord);
             transaction.commit();
-            Iterator iterator = outputRecord.iterator();
-            if(iterator.hasNext())
+            if(null != outputRecord)
             {
-                Integer value = (Integer)iterator.next();
-                return value.intValue();
+                Iterator iterator = outputRecord.iterator();
+                if(iterator.hasNext())
+                {
+                    Integer value = (Integer)iterator.next();
+                    return value.intValue();
+                }
             }
         }
         catch(Exception exc)
@@ -70,7 +73,6 @@ public class AccountDAO
 
     private void handleException(Exception exc, LocalTransaction transaction)
     {
-        exc.printStackTrace();
         if(null != transaction)
         {
             try

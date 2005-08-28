@@ -2,12 +2,12 @@ package com.mockrunner.test.connector;
 
 import javax.resource.ResourceException;
 
-import com.mockrunner.connector.FailureInteraction;
+import com.mockrunner.connector.GenericFailureInteraction;
 import com.mockrunner.connector.InteractionHandler;
 
 import junit.framework.TestCase;
 
-public class FailureInteractionTest extends TestCase
+public class GenericFailureInteractionTest extends TestCase
 {
     private InteractionHandler interactionHandler;
 
@@ -23,7 +23,7 @@ public class FailureInteractionTest extends TestCase
     
     public void testEnableAndDisable() throws Exception
     {
-        FailureInteraction interaction = new FailureInteraction();
+        GenericFailureInteraction interaction = new GenericFailureInteraction();
         assertTrue(interaction.canHandle(null, null, null));
         interaction.disable();
         assertFalse(interaction.canHandle(null, null, null));
@@ -45,7 +45,7 @@ public class FailureInteractionTest extends TestCase
     
     public void testThrowsException() throws Exception
     {
-        FailureInteraction interaction = new FailureInteraction();
+        GenericFailureInteraction interaction = new GenericFailureInteraction();
         interactionHandler.addImplementor(interaction);
         try
         {
@@ -76,7 +76,7 @@ public class FailureInteractionTest extends TestCase
         ResourceException setExc = new ResourceException();
         Exception nested = new Exception();
         setExc.setLinkedException(nested);
-        FailureInteraction interaction = new FailureInteraction(true, setExc);
+        GenericFailureInteraction interaction = new GenericFailureInteraction(true, setExc);
         interactionHandler.addImplementor(interaction);
         try
         {
