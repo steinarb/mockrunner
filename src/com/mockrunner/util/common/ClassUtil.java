@@ -85,7 +85,7 @@ public class ClassUtil
      * If the specified <code>argumentType</code> is an array,
      * an <code>"s"</code> is appended to the string.
      * If the resulting string is a Java keyword, <code>"Value"</code> 
-     * is appended to the string (what is always the case with
+     * is appended to the string (which is always the case with
      * primitive types).
      * @param argumentType the argument type
      * @return a suitable mixed case argument name

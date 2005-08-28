@@ -12,7 +12,7 @@ import javax.resource.cci.Record;
  * and <code>null</code> for {@link #execute(InteractionSpec, Record)} instead of
  * throwing an exception.
  */
-public class FailureInteraction implements InteractionImplementor
+public class GenericFailureInteraction implements InteractionImplementor
 {
     private boolean enabled;
     private boolean throwException;
@@ -21,7 +21,7 @@ public class FailureInteraction implements InteractionImplementor
     /**
      * Sets the default values, i.e. throwing a <code>ResourceException</code>.
      */
-    public FailureInteraction()
+    public GenericFailureInteraction()
     {
         this(true);
     }
@@ -32,7 +32,7 @@ public class FailureInteraction implements InteractionImplementor
      * @param throwException <code>true</code> thrown an exception,
      *                       <code>false</code> return failure values for <code>execute</code>
      */
-    public FailureInteraction(boolean throwException)
+    public GenericFailureInteraction(boolean throwException)
     {
         this(throwException, new ResourceException("Simulated test exception"));
     }
@@ -45,7 +45,7 @@ public class FailureInteraction implements InteractionImplementor
      *                       <code>false</code> return failure values for <code>execute</code>
      * @param exception the exception to be thrown
      */
-    public FailureInteraction(boolean throwException, ResourceException exception)
+    public GenericFailureInteraction(boolean throwException, ResourceException exception)
     {
         this.enabled = true;
         this.throwException = throwException;

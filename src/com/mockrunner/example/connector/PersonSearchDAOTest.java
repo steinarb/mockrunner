@@ -48,7 +48,7 @@ public class PersonSearchDAOTest extends ConnectorTestCaseAdapter
         response.close();
     }
 
-    public void testFindPersonByIdSuccessful() throws Exception
+    public void testFindPersonByIdFound() throws Exception
     {
         prepareInteraction();
         Person response = dao.findPersonById("1");
@@ -60,7 +60,7 @@ public class PersonSearchDAOTest extends ConnectorTestCaseAdapter
         verifyAllInteractionsClosed();
     }
     
-    public void testFindPersonByIdFailure() throws Exception
+    public void testFindPersonByIdNotFound() throws Exception
     {
         prepareInteraction();
         Person response = dao.findPersonById("2");
