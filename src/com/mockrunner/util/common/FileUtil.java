@@ -59,8 +59,8 @@ public class FileUtil
     {
         File file = new File(fileName);
         if(isExistingFile(file)) return file;
-		fileName = fileName.replace('\\', '/');
-		file = new File(fileName);
+        fileName = fileName.replace('\\', '/');
+        file = new File(fileName);
         if(isExistingFile(file)) return file;
         URL fileURL = FileUtil.class.getClassLoader().getResource(fileName);
         file = decodeFileURL(fileURL);
