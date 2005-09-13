@@ -377,7 +377,7 @@ public class MockTopicSessionTest extends TestCase
         subscriber1.setMessageListener(listener1);
         publisher.publish(new MockTextMessage("Text"));
         assertNull(subscriber1.receive());
-        assertEquals("Text", listener1.getMessage().toString());
+        assertEquals(new MockTextMessage("Text"), listener1.getMessage());
         listener1.reset();
         subscriber1.close();
         publisher.publish(new MockTextMessage("Text"));
@@ -392,11 +392,11 @@ public class MockTopicSessionTest extends TestCase
             //should throw exception
         }
         TopicSubscriber subscriber2 = session.createSubscriber(topic1); 
-        assertEquals("Text", subscriber2.receive().toString());
+        assertEquals(new MockTextMessage("Text"), subscriber2.receive());
         TestMessageListener listener2 = new TestMessageListener();
         subscriber2.setMessageListener(listener2);
         publisher.publish(new MockTextMessage("Text"));
-        assertEquals("Text", listener2.getMessage().toString());
+        assertEquals(new MockTextMessage("Text"), listener2.getMessage());
         publisher.close();
         try
         {
@@ -510,7 +510,7 @@ public class MockTopicSessionTest extends TestCase
         assertEquals(1, topic1.getReceivedMessageList().size());
         assertEquals(0, topic1.getCurrentMessageList().size());
         assertEquals(2, listener.getMessageList().size());
-        assertEquals("Text1", listener.getMessageList().get(0).toString());
+        assertEquals(new MockTextMessage("Text1"), listener.getMessageList().get(0));
         MockTopicSubscriber subscriber2 = (MockTopicSubscriber)session.createSubscriber(topic1);
         subscriber2.setMessageListener(listener);
         session.setMessageListener(null);
@@ -518,10 +518,10 @@ public class MockTopicSessionTest extends TestCase
         assertEquals(2, topic1.getReceivedMessageList().size());
         assertEquals(0, topic1.getCurrentMessageList().size());
         assertEquals(4, listener.getMessageList().size());
-        assertEquals("Text1", listener.getMessageList().get(0).toString());
-        assertEquals("Text1", listener.getMessageList().get(1).toString());
-        assertEquals("Text2", listener.getMessageList().get(2).toString());
-        assertEquals("Text2", listener.getMessageList().get(3).toString());
+        assertEquals(new MockTextMessage("Text1"), listener.getMessageList().get(0));
+        assertEquals(new MockTextMessage("Text1"), listener.getMessageList().get(1));
+        assertEquals(new MockTextMessage("Text2"), listener.getMessageList().get(2));
+        assertEquals(new MockTextMessage("Text2"), listener.getMessageList().get(3));
         MockTopicSubscriber subscriber3 = (MockTopicSubscriber)session.createSubscriber(topic1);
         subscriber3.setMessageListener(listener);
         publisher = anotherSession.createPublisher(topic2);

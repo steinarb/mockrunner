@@ -307,4 +307,13 @@ public class MockStreamMessageTest extends TestCase
         assertEquals("test1", message.readString());
         assertEquals("test2", message.readString());
     }
+    
+    public void testToString() throws Exception
+    {
+        MockStreamMessage message = new MockStreamMessage();
+        assertEquals(MockStreamMessage.class.getName() + ": []", message.toString());
+        message.writeInt(12);
+        message.writeString("abc");
+        assertEquals(MockStreamMessage.class.getName() + ": [12, abc]", message.toString());
+    }
 }

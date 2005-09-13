@@ -41,15 +41,15 @@ public class MockTopicTest extends TestCase
         assertFalse(topic.isEmpty());
         assertEquals(3, topic.getCurrentMessageList().size());
         assertEquals(3, topic.getReceivedMessageList().size());
-        assertEquals("test1", topic.getMessage().toString());
+        assertEquals(new MockTextMessage("test1"), topic.getMessage());
         assertFalse(topic.isEmpty());
         assertEquals(2, topic.getCurrentMessageList().size());
         assertEquals(3, topic.getReceivedMessageList().size());
-        assertEquals("test2", topic.getMessage().toString());
+        assertEquals(new MockTextMessage("test2"), topic.getMessage());
         assertFalse(topic.isEmpty());
         assertEquals(1, topic.getCurrentMessageList().size());
         assertEquals(3, topic.getReceivedMessageList().size());
-        assertEquals("test3", topic.getMessage().toString());
+        assertEquals(new MockTextMessage("test3"), topic.getMessage());
         assertTrue(topic.isEmpty());
         assertEquals(0, topic.getCurrentMessageList().size());
         assertEquals(3, topic.getReceivedMessageList().size());
@@ -73,7 +73,7 @@ public class MockTopicTest extends TestCase
         topic.addMessage(new MockTextMessage("test"));
         assertEquals(1, topic.getCurrentMessageList().size());
         assertEquals(1, topic.getReceivedMessageList().size());
-        assertEquals("test", topic.getMessage().toString());
+        assertEquals(new MockTextMessage("test"), topic.getMessage());
         TestMessageListener listener1 = new TestMessageListener();
         TestMessageListener listener2 = new TestMessageListener();
         MockTopicSubscriber  subscriber1 = (MockTopicSubscriber)session.createSubscriber(topic);
@@ -84,7 +84,7 @@ public class MockTopicTest extends TestCase
         assertEquals(0, topic.getCurrentMessageList().size());
         assertEquals(1, topic.getReceivedMessageList().size());
         assertNull(topic.getMessage());
-        assertEquals("test", listener1.getMessage().toString());
+        assertEquals(new MockTextMessage("test"), listener1.getMessage());
         assertFalse(((MockMessage)listener1.getMessage()).isAcknowledged());
         assertNull(listener2.getMessage());
         session.setMessageListener(null);
@@ -97,8 +97,8 @@ public class MockTopicTest extends TestCase
         assertEquals(0, topic.getCurrentMessageList().size());
         assertEquals(1, topic.getReceivedMessageList().size());
         assertNull(topic.getMessage());
-        assertEquals("test", listener1.getMessage().toString());
-        assertEquals("test", listener2.getMessage().toString());
+        assertEquals(new MockTextMessage("test"), listener1.getMessage());
+        assertEquals(new MockTextMessage("test"), listener2.getMessage());
         assertFalse(((MockMessage)listener1.getMessage()).isAcknowledged());
         assertFalse(((MockMessage)listener2.getMessage()).isAcknowledged());
         topic.reset();
@@ -109,7 +109,7 @@ public class MockTopicTest extends TestCase
         assertEquals(0, topic.getCurrentMessageList().size());
         assertEquals(1, topic.getReceivedMessageList().size());
         assertNull(topic.getMessage());
-        assertEquals("test", listener2.getMessage().toString());
+        assertEquals(new MockTextMessage("test"), listener2.getMessage());
         assertNull(listener1.getMessage());
         topic.reset();
         listener1.reset();
@@ -118,7 +118,7 @@ public class MockTopicTest extends TestCase
         topic.addMessage(new MockTextMessage("test"));
         assertEquals(1, topic.getCurrentMessageList().size());
         assertEquals(1, topic.getReceivedMessageList().size());
-        assertEquals("test", topic.getMessage().toString());
+        assertEquals(new MockTextMessage("test"), topic.getMessage());
         assertNull(topic.getMessage());
         assertEquals(0, topic.getCurrentMessageList().size());
         topic.reset();
@@ -131,8 +131,8 @@ public class MockTopicTest extends TestCase
         topic.addMessage(new MockTextMessage("test"));
         assertEquals(0, topic.getCurrentMessageList().size());
         assertEquals(1, topic.getReceivedMessageList().size());
-        assertEquals("test", listener1.getMessage().toString());
-        assertEquals("test", listener2.getMessage().toString()); 
+        assertEquals(new MockTextMessage("test"), listener1.getMessage());
+        assertEquals(new MockTextMessage("test"), listener2.getMessage()); 
         assertFalse(((MockMessage)listener1.getMessage()).isAcknowledged());
         assertFalse(((MockMessage)listener2.getMessage()).isAcknowledged());
         listener1.reset();

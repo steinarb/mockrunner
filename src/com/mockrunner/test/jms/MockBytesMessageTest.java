@@ -219,4 +219,23 @@ public class MockBytesMessageTest extends TestCase
         assertNotSame(message, newMessage);
         assertEquals(message, newMessage);
     }
+    
+    public void testGetBytes() throws Exception
+    {
+        MockBytesMessage message = new MockBytesMessage();
+        assertTrue(Arrays.equals(new byte[0], message.getBytes()));
+        message.writeBytes(new byte[] {1 , 2, 3});
+        assertTrue(Arrays.equals(new byte[] {1 , 2, 3}, message.getBytes()));
+    }
+    
+    public void testToString() throws Exception
+    {
+        MockBytesMessage message = new MockBytesMessage();
+        assertEquals(MockBytesMessage.class.getName() + ": []", message.toString());
+        message.writeBytes(new byte[] {1});
+        assertEquals(MockBytesMessage.class.getName() + ": [1]", message.toString());
+        message.writeBytes(new byte[] {1 , 2, 3});
+        assertEquals(MockBytesMessage.class.getName() + ": [1, 1, 2, 3]", message.toString());
+        message.writeUTF("abc");
+    }
 }
