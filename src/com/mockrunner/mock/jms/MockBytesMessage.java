@@ -564,6 +564,24 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     }
     
     /**
+     * Returns the underlying byte data regardless if the message
+     * is in read or write mode.
+     * @return the byte data
+     */
+    public byte[] getBytes()
+    {
+        try
+        {
+            outStream.flush();
+        }
+        catch(IOException exc)
+        {
+            throw new RuntimeException(exc.getMessage());
+        }
+        return byteOutStream.toByteArray();
+    }
+    
+    /**
      * Compares the underlying byte data.
      */
     public boolean equals(Object otherObject)
@@ -571,15 +589,15 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
         if(null == otherObject) return false;
         if(!(otherObject instanceof MockBytesMessage)) return false;
         MockBytesMessage otherMessage = (MockBytesMessage)otherObject;
-        byte[] firstData = byteOutStream.toByteArray();
-        byte[] secondData = otherMessage.byteOutStream.toByteArray();
+        byte[] firstData = getBytes();
+        byte[] secondData = otherMessage.getBytes();
         return Arrays.equals(firstData, secondData);
     }
 
     public int hashCode()
     {
         int value = 0;
-        byte[] data = byteOutStream.toByteArray();
+        byte[] data = getBytes();
         for(int ii = 0; ii < data.length; ii++)
         {
             value += 31 * data[ii];
@@ -593,12 +611,29 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
         try
         {
             message.clearBody();
-            message.outStream.write(byteOutStream.toByteArray());
+            message.outStream.write(getBytes());
             return message;
         }
         catch(Exception exc)
         {
             throw new RuntimeException(exc.getMessage());
         }
+    }
+
+    public String toString()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(this.getClass().getName() + ": [");
+        byte[] data = getBytes();
+        for(int ii = 0; ii < data.length; ii++)
+        {
+            buffer.append(data[ii]);
+            if(ii < data.length - 1)
+            {
+                buffer.append(", ");
+            }
+        }
+        buffer.append("]");
+        return buffer.toString();
     }
 }

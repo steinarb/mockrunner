@@ -66,8 +66,22 @@ public class MockObjectMessageTest extends TestCase
         assertNotSame(testObject, newMessage.getObject());
     }
     
+    public void testToString() throws Exception
+    {
+        MockObjectMessage message = new MockObjectMessage();
+        assertEquals(MockObjectMessage.class.getName() + ": null", message.toString());
+        message.setObject(new Integer(3));
+        assertEquals(MockObjectMessage.class.getName() + ": 3", message.toString());
+        message.setObject(new TestObject());
+        assertEquals(MockObjectMessage.class.getName() + ": TestObject", message.toString());
+    }
+    
     public static class TestObject implements Serializable
     {
-    
+        public String toString()
+        {    
+            return "TestObject";
+        }
+        
     }
 }

@@ -247,8 +247,8 @@ public class MockQueueSessionTest extends TestCase
         sender.send(new MockTextMessage("Text2"));
         assertEquals(2, queue.getReceivedMessageList().size());
         assertEquals(2, queue.getCurrentMessageList().size());
-        assertEquals("Text1", receiver1.receive().toString());
-        assertEquals("Text2", receiver3.receiveNoWait().toString());
+        assertEquals(new MockTextMessage("Text1"), receiver1.receive());
+        assertEquals(new MockTextMessage("Text2"), receiver3.receiveNoWait());
         assertEquals(0, queue.getCurrentMessageList().size());
         assertNull(queue.getMessage());
         assertTrue(queue.isEmpty());
@@ -263,12 +263,12 @@ public class MockQueueSessionTest extends TestCase
         sender = session.createSender(anotherQueue);
         sender.send(new MockTextMessage("Text4"));
         assertEquals(1, anotherQueue.getReceivedMessageList().size());
-        assertEquals("Text4", receiver4.receive().toString());
+        assertEquals(new MockTextMessage("Text4"), receiver4.receive());
         sender = session.createSender(queue);
         TestMessageListener listener = new TestMessageListener();
         receiver3.setMessageListener(listener);
         sender.send(new MockTextMessage("Text5"));
-        assertEquals("Text5", listener.getMessage().toString());
+        assertEquals(new MockTextMessage("Text5"), listener.getMessage());
     }
     
     public void testTransmissionResetCalled() throws Exception
@@ -300,7 +300,7 @@ public class MockQueueSessionTest extends TestCase
         QueueSender sender = session.createSender(queue);
         sender.send(new MockTextMessage("Text"));
         assertNull(receiver1.receive());
-        assertEquals("Text", listener1.getMessage().toString());
+        assertEquals(new MockTextMessage("Text"), listener1.getMessage());
         listener1.reset();
         receiver1.close();
         sender.send(new MockTextMessage("Text"));
@@ -315,11 +315,11 @@ public class MockQueueSessionTest extends TestCase
             //should throw exception
         }
         MockQueueReceiver receiver2 = (MockQueueReceiver)session.createReceiver(queue); 
-        assertEquals("Text", receiver2.receive().toString());
+        assertEquals(new MockTextMessage("Text"), receiver2.receive());
         TestMessageListener listener2 = new TestMessageListener();
         receiver2.setMessageListener(listener2);
         sender.send(new MockTextMessage("Text"));
-        assertEquals("Text", listener2.getMessage().toString());
+        assertEquals(new MockTextMessage("Text"), listener2.getMessage());
         sender.close();
         try
         {
@@ -428,7 +428,7 @@ public class MockQueueSessionTest extends TestCase
         assertEquals(1, queue.getReceivedMessageList().size());
         assertEquals(0, queue.getCurrentMessageList().size());
         assertEquals(1, listener.getMessageList().size());
-        assertEquals("Text1", listener.getMessageList().get(0).toString());
+        assertEquals(new MockTextMessage("Text1"), listener.getMessageList().get(0));
         MockQueueReceiver receiver2 = (MockQueueReceiver)session.createReceiver(queue);
         receiver2.setMessageListener(listener);
         session.setMessageListener(null);
@@ -436,7 +436,7 @@ public class MockQueueSessionTest extends TestCase
         assertEquals(2, queue.getReceivedMessageList().size());
         assertEquals(0, queue.getCurrentMessageList().size());
         assertEquals(2, listener.getMessageList().size());
-        assertEquals("Text2", listener.getMessageList().get(1).toString());
+        assertEquals(new MockTextMessage("Text2"), listener.getMessageList().get(1));
         MockQueueReceiver receiver3 = (MockQueueReceiver)session.createReceiver(queue);
         receiver3.setMessageListener(listener);
         sender = anotherSession.createSender(sameQueue);

@@ -39,7 +39,9 @@ public class MockTextMessage extends MockMessage implements TextMessage
     {
         try
         {
-            return getText();
+            StringBuffer buffer = new StringBuffer();
+            buffer.append(this.getClass().getName() + ": " + getText());
+            return buffer.toString();
         }
         catch(JMSException exc)
         {

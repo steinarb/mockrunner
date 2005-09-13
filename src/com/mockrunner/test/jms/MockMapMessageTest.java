@@ -214,4 +214,12 @@ public class MockMapMessageTest extends TestCase
         assertNotSame(myArray, message.getBytes("bytes"));
         assertTrue(Arrays.equals(myArray, message.getBytes("bytes")));
     }
+    
+    public void testToString() throws Exception
+    {
+        MockMapMessage message = new MockMapMessage();
+        assertEquals(MockMapMessage.class.getName() + ": {}", message.toString());
+        message.setInt("name", 3);
+        assertEquals(MockMapMessage.class.getName() + ": {name=3}", message.toString());
+    }
 }

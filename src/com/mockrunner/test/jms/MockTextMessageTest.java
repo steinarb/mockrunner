@@ -55,4 +55,12 @@ public class MockTextMessageTest extends TestCase
         assertEquals("test", newMessage.getStringProperty("string"));
         assertEquals(3, newMessage.getJMSPriority());
     }
+    
+    public void testToString() throws Exception
+    {
+        MockTextMessage message = new MockTextMessage();
+        assertEquals(MockTextMessage.class.getName() + ": null", message.toString());
+        message.setText("Hello World");
+        assertEquals(MockTextMessage.class.getName() + ": Hello World", message.toString());
+    }
 }

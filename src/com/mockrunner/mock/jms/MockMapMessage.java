@@ -370,4 +370,11 @@ public class MockMapMessage extends MockMessage implements MapMessage
         }
         return message;
     }
+    
+    public String toString()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append(this.getClass().getName() + ": " + data.toString());
+        return buffer.toString();
+    }
 }

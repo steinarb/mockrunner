@@ -41,15 +41,15 @@ public class MockQueueTest extends TestCase
         assertFalse(queue.isEmpty());
         assertEquals(3, queue.getCurrentMessageList().size());
         assertEquals(3, queue.getReceivedMessageList().size());
-        assertEquals("test1", queue.getMessage().toString());
+        assertEquals(new MockTextMessage("test1"), queue.getMessage());
         assertFalse(queue.isEmpty());
         assertEquals(2, queue.getCurrentMessageList().size());
         assertEquals(3, queue.getReceivedMessageList().size());
-        assertEquals("test2", queue.getMessage().toString());
+        assertEquals(new MockTextMessage("test2"), queue.getMessage());
         assertFalse(queue.isEmpty());
         assertEquals(1, queue.getCurrentMessageList().size());
         assertEquals(3, queue.getReceivedMessageList().size());
-        assertEquals("test3", queue.getMessage().toString());
+        assertEquals(new MockTextMessage("test3"), queue.getMessage());
         assertTrue(queue.isEmpty());
         assertEquals(0, queue.getCurrentMessageList().size());
         assertEquals(3, queue.getReceivedMessageList().size());
@@ -75,7 +75,7 @@ public class MockQueueTest extends TestCase
         queue.addMessage(new MockTextMessage("test"));
         assertEquals(1, queue.getCurrentMessageList().size());
         assertEquals(1, queue.getReceivedMessageList().size());
-        assertEquals("test", queue.getMessage().toString());
+        assertEquals(new MockTextMessage("test"), queue.getMessage());
         TestMessageListener listener1 = new TestMessageListener();
         TestMessageListener listener2 = new TestMessageListener();
         MockQueueReceiver receiver1 = (MockQueueReceiver)session.createReceiver(queue);
@@ -86,7 +86,7 @@ public class MockQueueTest extends TestCase
         assertEquals(0, queue.getCurrentMessageList().size());
         assertEquals(1, queue.getReceivedMessageList().size());
         assertNull(queue.getMessage());
-        assertEquals("test", listener1.getMessage().toString());
+        assertEquals(new MockTextMessage("test"), listener1.getMessage());
         assertFalse(((MockMessage)listener1.getMessage()).isAcknowledged());
         assertNull(listener2.getMessage());
         session.setMessageListener(null);
@@ -97,7 +97,7 @@ public class MockQueueTest extends TestCase
         assertEquals(0, queue.getCurrentMessageList().size());
         assertEquals(1, queue.getReceivedMessageList().size());
         assertNull(queue.getMessage());
-        assertEquals("test", listener2.getMessage().toString());
+        assertEquals(new MockTextMessage("test"), listener2.getMessage());
         assertFalse(((MockMessage)listener2.getMessage()).isAcknowledged());
         assertNull(listener1.getMessage());
         queue.reset();
@@ -110,7 +110,7 @@ public class MockQueueTest extends TestCase
         assertEquals(0, queue.getCurrentMessageList().size());
         assertEquals(1, queue.getReceivedMessageList().size());
         assertNull(queue.getMessage());
-        assertEquals("test", listener2.getMessage().toString());
+        assertEquals(new MockTextMessage("test"), listener2.getMessage());
         assertFalse(((MockMessage)listener2.getMessage()).isAcknowledged());
         assertNull(listener1.getMessage());
         queue.reset();
@@ -122,7 +122,7 @@ public class MockQueueTest extends TestCase
         assertEquals(0, queue.getCurrentMessageList().size());
         assertEquals(1, queue.getReceivedMessageList().size());
         assertNull(queue.getMessage());
-        assertEquals("test", listener2.getMessage().toString());
+        assertEquals(new MockTextMessage("test"), listener2.getMessage());
         assertFalse(((MockMessage)listener2.getMessage()).isAcknowledged());
         assertNull(listener1.getMessage());
         queue.reset();
@@ -134,7 +134,7 @@ public class MockQueueTest extends TestCase
         assertEquals(1, queue.getReceivedMessageList().size());
         assertNull(listener1.getMessage());
         assertNull(listener2.getMessage());
-        assertEquals("test", queue.getMessage().toString());
+        assertEquals(new MockTextMessage("test"), queue.getMessage());
     }
     
     public void testAddMessageAutoAcknowledge() throws Exception
