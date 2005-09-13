@@ -226,6 +226,11 @@ public class MockBytesMessageTest extends TestCase
         assertTrue(Arrays.equals(new byte[0], message.getBytes()));
         message.writeBytes(new byte[] {1 , 2, 3});
         assertTrue(Arrays.equals(new byte[] {1 , 2, 3}, message.getBytes()));
+        message.getBytes()[0] = 5;
+        assertTrue(Arrays.equals(new byte[] {1 , 2, 3}, message.getBytes()));
+        MockBytesMessage otherMessage = new MockBytesMessage();
+        otherMessage.writeBytes(new byte[] {1 , 2, 3});
+        assertTrue(message.equals(otherMessage));
     }
     
     public void testToString() throws Exception
