@@ -564,7 +564,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     }
     
     /**
-     * Returns the underlying byte data regardless if the message
+     * Returns a copy of the underlying byte data regardless if the message
      * is in read or write mode.
      * @return the byte data
      */

@@ -288,11 +288,24 @@ public class MockMapMessage extends MockMessage implements MapMessage
     {
         return data.containsKey(name);
     }
-
+    
     public void clearBody() throws JMSException
     {
         super.clearBody();
         data.clear();
+    }
+    
+    /**
+     * Returns a copy of the underlying data as a <code>Map</code>
+     * regardless if the message is in read or write mode. Primitives
+     * are wrapped into their corresponding type.
+     * @return the <code>Map</code> data
+     */
+    public Map getMap()
+    {
+        Map map = new HashMap();
+        copyDataToMap(map);
+        return map;
     }
     
     /**
@@ -354,6 +367,12 @@ public class MockMapMessage extends MockMessage implements MapMessage
     {
         MockMapMessage message = (MockMapMessage)super.clone();
         message.data = new HashMap(data.size());
+        copyDataToMap(message.data);
+        return message;
+    }
+    
+    private void copyDataToMap(Map target)
+    {
         Iterator keys = data.keySet().iterator();
         while(keys.hasNext())
         {
@@ -361,14 +380,13 @@ public class MockMapMessage extends MockMessage implements MapMessage
             Object nextValue = data.get(nextKey);
             if(nextValue instanceof byte[])
             {
-                message.data.put(nextKey, ArrayUtil.copyArray(nextValue));
+                target.put(nextKey, ArrayUtil.copyArray(nextValue));
             }
             else
             {
-                message.data.put(nextKey, nextValue);
+                target.put(nextKey, nextValue);
             }
         }
-        return message;
     }
     
     public String toString()

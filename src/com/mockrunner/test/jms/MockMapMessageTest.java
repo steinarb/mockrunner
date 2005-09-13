@@ -196,6 +196,25 @@ public class MockMapMessageTest extends TestCase
         assertFalse(message2.equals(message1));
     }
     
+    public void testGetMap() throws Exception
+    {
+        MockMapMessage message = new MockMapMessage();
+        assertTrue(message.getMap().isEmpty());
+        message.setString("1", "value1");
+        message.setInt("2", 2);
+        assertEquals(2, message.getMap().size());
+        assertEquals("value1", message.getMap().get("1"));
+        assertEquals(new Integer(2), message.getMap().get("2"));
+        message.getMap().put("3", "3");
+        assertEquals(2, message.getMap().size());
+        assertEquals("value1", message.getMap().get("1"));
+        assertEquals(new Integer(2), message.getMap().get("2"));
+        MockMapMessage otherMessage = new MockMapMessage();
+        otherMessage.setString("1", "value1");
+        otherMessage.setInt("2", 2);
+        assertTrue(message.equals(otherMessage));
+    }
+    
     public void testClone() throws Exception
     {
         MockMapMessage message = new MockMapMessage();
