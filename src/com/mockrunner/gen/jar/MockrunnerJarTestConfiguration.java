@@ -10,6 +10,7 @@ import java.util.List;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import com.mockrunner.example.connector.AccountDAOTest;
 import com.mockrunner.example.ejb.UserLoginSessionTest;
 import com.mockrunner.example.jdbc.BookstoreTest;
 import com.mockrunner.example.jms.StockQuotePublisherTest;
@@ -32,6 +33,7 @@ public class MockrunnerJarTestConfiguration
     public final static String SERVLET_REFERENCE_TEST = RedirectServletTest.class.getName();
     public final static String STRUTS_REFERENCE_TEST = AuthenticationActionTest.class.getName();
     public final static String TAG_REFERENCE_TEST = TableEnumTagTest.class.getName();
+    public final static String CONNECTOR_REFERENCE_TEST = AccountDAOTest.class.getName();
     
     public Mapping[] createMappings()
     {
@@ -97,6 +99,10 @@ public class MockrunnerJarTestConfiguration
         else if(jarName.indexOf("jdbc") > -1)
         {
             return JDBC_REFERENCE_TEST;
+        }
+        else if(jarName.indexOf("jca") > -1)
+        {
+            return CONNECTOR_REFERENCE_TEST;
         }
         return ALL_REFERENCE_TEST;
     }
@@ -234,6 +240,7 @@ public class MockrunnerJarTestConfiguration
             suite.addTest(new TestSuite(RedirectServletTest.class));
             suite.addTest(new TestSuite(AuthenticationActionTest.class));
             suite.addTest(new TestSuite(TableEnumTagTest.class));
+            suite.addTest(new TestSuite(AccountDAOTest.class));
             return suite;
         }
     }

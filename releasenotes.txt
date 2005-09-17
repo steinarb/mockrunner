@@ -2,7 +2,10 @@
 mockrunner-0.3.6:
 
 - Introduced new test module for JCA connectors (developed and donated to Mockrunner
-  by Gábor Lipták).
+  by Gábor Lipták). The framework can be used simulate backend systems that are 
+  accessed through the use of the JCA Common Client Interface API. Check out
+  the ConnectorTestModule and the corresponding examples in the 
+  com.mockrunner.example.connector package.
 - changed ActionTestModule.getActionMessages() and ActionTestModule.getActionErrors
   to return the union of request and session messages. Check out migratingfrom0.3.5.txt
 - added prepareActionMapping to ActionMockObjectFactory to allow the use of custom
