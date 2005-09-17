@@ -1,7 +1,7 @@
 Mockrunner is a lightweight framework for unit testing applications in
 the J2EE environment. It supports Struts actions and forms, servlets, 
-filters and tag classes. Furthermore it includes a JDBC and a JMS test framework
-and can be used in conjunction with MockEJB (http://mockejb.sourceforge.net/)
+filters and tag classes. Furthermore it includes a JDBC, a JMS and a JCA test 
+framework and can be used in conjunction with MockEJB (http://mockejb.sourceforge.net/)
 to test EJB based applications.
 
 Mockrunner extends JUnit and simulates the necessary behaviour without calling 
@@ -32,6 +32,11 @@ The JMS test framework implements all JMS interfaces and can be used to test JMS
 based code. The JMS test framework is able to send and receive messages and to keep
 track of everything that happens while delivering the message.
 Receivers can be plain Java classes or message driven beans.
+
+The JCA test framework can be used to simulate backend systems that are accessed 
+through the use of the JCA Common Client Interface API. Application code that uses 
+the Common Client Interface can be executed against a simulated connector. The test 
+framework intercepts the backend call and provides a suitable response.
 
 All test modules in Mockrunner can be combined. You can test a Servlet
 that calls a SessionBean that uses some JDBC code to read data from a database.
