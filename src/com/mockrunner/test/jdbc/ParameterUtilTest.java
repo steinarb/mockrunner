@@ -21,6 +21,8 @@ public class ParameterUtilTest extends TestCase
 {
     public void testCompareParameter()
     {
+        assertTrue(ParameterUtil.compareParameter(null, null));
+        assertFalse(ParameterUtil.compareParameter("test", null));
         assertTrue(ParameterUtil.compareParameter("test", "test"));
         assertFalse(ParameterUtil.compareParameter(new Double(1), new Double(2)));
         assertTrue(ParameterUtil.compareParameter(new byte[] {1, 2, 3}, new byte[] {1, 2, 3}));

@@ -142,13 +142,18 @@ public class JDBCTestModuleTest extends TestCase
         MockPreparedStatement statement = module.getPreparedStatement("update");
         statement.setInt(1, 3);
         statement.setLong(2, 10000);
+        statement.setNull(3, 1);
         assertEquals(new Integer(3), statement.getParameter(1));
         assertEquals(new Long(10000), statement.getParameter(2));
+        assertNull(statement.getParameter(3));
+        assertTrue(statement.getParameterMap().containsKey(new Integer(3)));
         module.verifyPreparedStatementParameterPresent(statement, 1);
-        module.verifyPreparedStatementParameterNotPresent("update", 3);
+        module.verifyPreparedStatementParameterPresent("update", 3);
+        module.verifyPreparedStatementParameterNotPresent("update", 4);
         module.verifyPreparedStatementParameterNotPresent(0, 1);
         module.verifyPreparedStatementParameter(statement, 1, new Integer(3));
         module.verifyPreparedStatementParameter(2, 2, new Long(10000));
+        module.verifyPreparedStatementParameter(statement, 3, null);
         statement = module.getPreparedStatement("INSERT INTO TEST (COL1, COL2) VALUES(?, ?)");  
         statement.setString(1, "test1");
         statement.setString(2, "test2");
@@ -212,13 +217,13 @@ public class JDBCTestModuleTest extends TestCase
         prepareCallableStatements();
         MockCallableStatement statement = module.getCallableStatement("{call setData(?, ?, ?, ?)}");
         statement.setInt("xyz", 1);
-        statement.setString("3", "xyz");
+        statement.setString("3", null);
         statement.setString(1, "xyz");
         Map namedParameter = statement.getNamedParameterMap();
         Map indexedParameter = statement.getIndexedParameterMap();
         assertTrue(namedParameter.size() == 2);
         assertEquals(new Integer(1), namedParameter.get("xyz"));
-        assertEquals("xyz", namedParameter.get("3"));
+        assertNull(namedParameter.get("3"));
         assertTrue(indexedParameter.size() == 1);
         assertEquals("xyz", indexedParameter.get(new Integer(1)));
         module.verifyCallableStatementParameterPresent(1, 1);
@@ -236,9 +241,19 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyCallableStatementParameterNotPresent(statement, "31"); 
         module.verifyCallableStatementParameter("{call setData(?, ?, ?, ?)}", "xyz", new Integer(1));
         module.verifyCallableStatementParameter(1, 1, "xyz");
+        module.verifyCallableStatementParameter(1, "3", null);
         try
         {
             module.verifyCallableStatementParameter(1, 1, "zzz");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw Exception
+        }
+        try
+        {
+            module.verifyCallableStatementParameter(1, 5, null);
             fail();
         }
         catch(VerifyFailedException exc)
@@ -905,6 +920,23 @@ public class JDBCTestModuleTest extends TestCase
 			//should throw exception
 		}
 	}
+    
+    public void testSQLStatementNullParameterPreparedStatement() throws Exception
+    {
+        preparePreparedStatements();
+        module.getPreparedStatement(0).setString(1, null);
+        module.getPreparedStatement(0).execute();
+        module.verifySQLStatementParameter("INSERT INTO TEST (COL1, COL2) VALUES(?, ?)", 0, 1, null);
+        try
+        {
+            module.verifySQLStatementParameter("INSERT INTO TEST (COL1, COL2) VALUES(?, ?)", 0, 1, "test");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
 	
 	public void testSQLStatementParameterCallableStatement() throws Exception
 	{
@@ -967,6 +999,23 @@ public class JDBCTestModuleTest extends TestCase
 			//should throw exception
 		}
 	}
+    
+    public void testSQLStatementNullParameterCallableStatement() throws Exception
+    {
+        prepareCallableStatements();
+        module.getCallableStatement(0).setString("1", null);
+        module.getCallableStatement(0).execute();
+        module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 0, "1", null);
+        try
+        {
+            module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 0, "1", "test");
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw exception
+        }
+    }
 	
 	public void testSQLStatementParameterMultipleParameterSets() throws Exception
 	{

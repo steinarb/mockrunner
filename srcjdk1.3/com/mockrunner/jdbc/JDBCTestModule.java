@@ -1608,7 +1608,7 @@ public class JDBCTestModule
      */
     public void verifyPreparedStatementParameterPresent(PreparedStatement statement, int indexOfParameter)
     {
-        if(null == getPreparedStatementParameter(statement, indexOfParameter))
+        if(!containsPreparedStatementParameter(statement, indexOfParameter))
         {
             throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " not present.");
         }
@@ -1624,7 +1624,7 @@ public class JDBCTestModule
      */
     public void verifyPreparedStatementParameterPresent(String sql, int indexOfParameter)
     {
-        if(null == getPreparedStatementParameter(sql, indexOfParameter))
+        if(!containsPreparedStatementParameter(sql, indexOfParameter))
         {
             throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " not present.");
         }
@@ -1639,7 +1639,7 @@ public class JDBCTestModule
      */
     public void verifyPreparedStatementParameterPresent(int indexOfStatement, int indexOfParameter)
     {
-        if(null == getPreparedStatementParameter(indexOfStatement, indexOfParameter))
+        if(!containsPreparedStatementParameter(indexOfStatement, indexOfParameter))
         {
             throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " not present.");
         }
@@ -1653,7 +1653,7 @@ public class JDBCTestModule
      */
     public void verifyPreparedStatementParameterNotPresent(PreparedStatement statement, int indexOfParameter)
     {
-        if(null != getPreparedStatementParameter(statement, indexOfParameter))
+        if(containsPreparedStatementParameter(statement, indexOfParameter))
         {
             throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " present.");
         }
@@ -1668,7 +1668,7 @@ public class JDBCTestModule
      */
     public void verifyPreparedStatementParameterNotPresent(String sql, int indexOfParameter)
     {
-        if(null != getPreparedStatementParameter(sql, indexOfParameter))
+        if(containsPreparedStatementParameter(sql, indexOfParameter))
         {
             throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " present.");
         }
@@ -1682,10 +1682,29 @@ public class JDBCTestModule
      */
     public void verifyPreparedStatementParameterNotPresent(int indexOfStatement, int indexOfParameter)
     {
-        if(null != getPreparedStatementParameter(indexOfStatement, indexOfParameter))
+        if(containsPreparedStatementParameter(indexOfStatement, indexOfParameter))
         {
             throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " present.");
         }
+    }
+    
+    private boolean containsPreparedStatementParameter(int indexOfStatement, int indexOfParameter)
+    {
+        MockPreparedStatement statement = getPreparedStatement(indexOfStatement);
+        if(null == statement) return false;
+        return containsPreparedStatementParameter(statement, indexOfParameter);
+    }
+    
+    private boolean containsPreparedStatementParameter(String sql, int indexOfParameter)
+    {
+        MockPreparedStatement statement = getPreparedStatement(sql);
+        if(null == statement) return false;
+        return containsPreparedStatementParameter(statement, indexOfParameter);
+    }
+    
+    private boolean containsPreparedStatementParameter(PreparedStatement statement, int indexOfParameter)
+    {
+        return ((MockPreparedStatement)statement).getParameterMap().containsKey(new Integer(indexOfParameter));
     }
     
     /**
@@ -1697,7 +1716,7 @@ public class JDBCTestModule
      */
     public void verifyCallableStatementParameterPresent(CallableStatement statement, int indexOfParameter)
     {
-        if(null == getCallableStatementParameter(statement, indexOfParameter))
+        if(!containsCallableStatementParameter(statement, indexOfParameter))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " not present.");
         }
@@ -1713,7 +1732,7 @@ public class JDBCTestModule
      */
     public void verifyCallableStatementParameterPresent(String sql, int indexOfParameter)
     {
-        if(null == getCallableStatementParameter(sql, indexOfParameter))
+        if(!containsCallableStatementParameter(sql, indexOfParameter))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " not present.");
         }
@@ -1728,7 +1747,7 @@ public class JDBCTestModule
      */
     public void verifyCallableStatementParameterPresent(int indexOfStatement, int indexOfParameter)
     {
-        if(null == getCallableStatementParameter(indexOfStatement, indexOfParameter))
+        if(!containsCallableStatementParameter(indexOfStatement, indexOfParameter))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " not present.");
         }
@@ -1742,7 +1761,7 @@ public class JDBCTestModule
      */
     public void verifyCallableStatementParameterNotPresent(CallableStatement statement, int indexOfParameter)
     {
-        if(null != getCallableStatementParameter(statement, indexOfParameter))
+        if(containsCallableStatementParameter(statement, indexOfParameter))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " present.");
         }
@@ -1757,7 +1776,7 @@ public class JDBCTestModule
      */
     public void verifyCallableStatementParameterNotPresent(String sql, int indexOfParameter)
     {
-        if(null != getCallableStatementParameter(sql, indexOfParameter))
+        if(containsCallableStatementParameter(sql, indexOfParameter))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " present.");
         }
@@ -1771,7 +1790,7 @@ public class JDBCTestModule
      */
     public void verifyCallableStatementParameterNotPresent(int indexOfStatement, int indexOfParameter)
     {
-        if(null != getCallableStatementParameter(indexOfStatement, indexOfParameter))
+        if(containsCallableStatementParameter(indexOfStatement, indexOfParameter))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " present.");
         }
@@ -1786,7 +1805,7 @@ public class JDBCTestModule
      */
     public void verifyCallableStatementParameterPresent(CallableStatement statement, String nameOfParameter)
     {
-        if(null == getCallableStatementParameter(statement, nameOfParameter))
+        if(!containsCallableStatementParameter(statement, nameOfParameter))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + nameOfParameter + " not present.");
         }
@@ -1802,7 +1821,7 @@ public class JDBCTestModule
      */
     public void verifyCallableStatementParameterPresent(String sql, String nameOfParameter)
     {
-        if(null == getCallableStatementParameter(sql, nameOfParameter))
+        if(!containsCallableStatementParameter(sql, nameOfParameter))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + nameOfParameter + " not present.");
         }
@@ -1817,7 +1836,7 @@ public class JDBCTestModule
      */
     public void verifyCallableStatementParameterPresent(int indexOfStatement, String nameOfParameter)
     {
-        if(null == getCallableStatementParameter(indexOfStatement, nameOfParameter))
+        if(!containsCallableStatementParameter(indexOfStatement, nameOfParameter))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + nameOfParameter + " not present.");
         }
@@ -1831,7 +1850,7 @@ public class JDBCTestModule
      */
     public void verifyCallableStatementParameterNotPresent(CallableStatement statement, String nameOfParameter)
     {
-        if(null != getCallableStatementParameter(statement, nameOfParameter))
+        if(containsCallableStatementParameter(statement, nameOfParameter))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + nameOfParameter + " present.");
         }
@@ -1846,7 +1865,7 @@ public class JDBCTestModule
      */
     public void verifyCallableStatementParameterNotPresent(String sql, String nameOfParameter)
     {
-        if(null != getCallableStatementParameter(sql, nameOfParameter))
+        if(containsCallableStatementParameter(sql, nameOfParameter))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + nameOfParameter + " present.");
         }
@@ -1860,10 +1879,48 @@ public class JDBCTestModule
      */
     public void verifyCallableStatementParameterNotPresent(int indexOfStatement, String nameOfParameter)
     {
-        if(null != getCallableStatementParameter(indexOfStatement, nameOfParameter))
+        if(containsCallableStatementParameter(indexOfStatement, nameOfParameter))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + nameOfParameter + " present.");
         }
+    }
+    
+    private boolean containsCallableStatementParameter(int indexOfStatement, int indexOfParameter)
+    {
+        MockCallableStatement statement = getCallableStatement(indexOfStatement);
+        if(null == statement) return false;
+        return containsCallableStatementParameter(statement, indexOfParameter);
+    }
+    
+    private boolean containsCallableStatementParameter(String sql, int indexOfParameter)
+    {
+        MockCallableStatement statement = getCallableStatement(sql);
+        if(null == statement) return false;
+        return containsCallableStatementParameter(statement, indexOfParameter);
+    }
+    
+    private boolean containsCallableStatementParameter(CallableStatement statement, int indexOfParameter)
+    {
+        return ((MockCallableStatement)statement).getParameterMap().containsKey(new Integer(indexOfParameter));
+    }
+    
+    private boolean containsCallableStatementParameter(int indexOfStatement, String nameOfParameter)
+    {
+        MockCallableStatement statement = getCallableStatement(indexOfStatement);
+        if(null == statement) return false;
+        return containsCallableStatementParameter(statement, nameOfParameter);
+    }
+    
+    private boolean containsCallableStatementParameter(String sql, String nameOfParameter)
+    {
+        MockCallableStatement statement = getCallableStatement(sql);
+        if(null == statement) return false;
+        return containsCallableStatementParameter(statement, nameOfParameter);
+    }
+    
+    private boolean containsCallableStatementParameter(CallableStatement statement, String nameOfParameter)
+    {
+        return ((MockCallableStatement)statement).getParameterMap().containsKey(nameOfParameter);
     }
     
     /**

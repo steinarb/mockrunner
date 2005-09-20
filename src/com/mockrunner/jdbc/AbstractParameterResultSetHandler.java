@@ -185,8 +185,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
             while(iterator.hasNext())
             {
                 Object currentKey = iterator.next();
+                if(!actualParameters.containsKey(currentKey)) return false;
                 Object expectedObject = expectedParameters.get(currentKey);
-                if(null == expectedObject) return false;
                 if(!ParameterUtil.compareParameter(actualParameters.get(currentKey), expectedObject))
                 {
                     return false;
@@ -200,8 +200,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
             while(iterator.hasNext())
             {
                 Object currentKey = iterator.next();
+                if(!actualParameters.containsKey(currentKey)) return false;
                 Object actualObject = actualParameters.get(currentKey);
-                if(null == actualObject) return false;
                 if(!ParameterUtil.compareParameter(actualObject, expectedParameters.get(currentKey)))
                 {
                     return false;
