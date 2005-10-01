@@ -2,14 +2,8 @@ package com.mockrunner.jdbc;
 
 import java.io.InputStream;
 import java.io.Reader;
-import java.sql.SQLException;
 import java.util.Arrays;
 
-import com.mockrunner.mock.jdbc.MockArray;
-import com.mockrunner.mock.jdbc.MockBlob;
-import com.mockrunner.mock.jdbc.MockClob;
-import com.mockrunner.mock.jdbc.MockRef;
-import com.mockrunner.mock.jdbc.MockStruct;
 import com.mockrunner.util.common.ArrayUtil;
 import com.mockrunner.util.common.MethodUtil;
 import com.mockrunner.util.common.StreamUtil;
@@ -22,7 +16,7 @@ public class ParameterUtil
 {
     /**
      * Copies a parameter of a <code>PreparedStatement</code>,
-     * <code>CallableStatement</code> or <code>ResultSet</code>.
+     * <code>CallableStatement</code> or a <code>ResultSet</code> value.
      * <code>InputStream</code> objects, <code>Reader</code> objects 
      * and arrays are copied into new allocated streams or arrays.
      * All other objects are cloned by calling the clone method. 
@@ -61,16 +55,18 @@ public class ParameterUtil
     
     /**
      * Compares two parameters of a <code>PreparedStatement</code> or
-     * <code>CallableStatement</code>. You can use it to compare
-     * parameters of a <code>ResultSet</code>. It is used by
+     * <code>CallableStatement</code>. Can also be used to compare
+     * values of a <code>ResultSet</code>. It is used by
      * {@link com.mockrunner.jdbc.PreparedStatementResultSetHandler}
      * for comparing parameters specified in the <code>prepare</code>
      * methods.
      * Since the parameters can be of the type <code>byte[]</code>,
-     * <code>InputStream</code>, <code>Reader</code>, <code>Ref</code>,
-     * <code>Array</code>, <code>Blob</code>, <code>Clob</code> or
-     * <code>Struct</code> this method can handle these types of objects. 
-     * All other objects are compared using the <code>equals</code> method.
+     * <code>InputStream</code> and <code>Reader</code> this method handles 
+     * these types of objects. All other objects are compared using the 
+     * <code>equals</code> method. The mock versions of <code>Ref</code>,
+     * <code>Array</code>, <code>Blob</code>, <code>Clob</code> and
+     * <code>Struct</code> all provide a suitable <code>equals</code>
+     * implementation.
      * @param source the first parameter
      * @param target the second parameter
      * @return <code>true</code> if <i>source</i> is equal to <i>target</i>,
@@ -92,97 +88,7 @@ public class ParameterUtil
         {
             return StreamUtil.compareReaders((Reader)source, (Reader)target);
         }
-        if(source instanceof MockRef && target instanceof MockRef)
-        {
-            return compareRef(source, target);
-        }
-        if(source instanceof MockArray && target instanceof MockArray)
-        {
-            return compareArray(source, target);
-        }
-        if(source instanceof MockBlob && target instanceof MockBlob)
-        {
-            return compareBlob(source, target);
-        }
-        if(source instanceof MockClob && target instanceof MockClob)
-        {
-            return compareClob(source, target);
-        }
-        if(source instanceof MockStruct && target instanceof MockStruct)
-        {
-            return compareStruct(source, target);
-        }
         return source.equals(target);
-    }
-    
-    private static boolean compareClob(Object source, Object target)
-    {
-        try
-        {
-            String sourceString = ((MockClob)source).getSubString(1, (int)((MockClob)source).length());
-            String targetString = ((MockClob)target).getSubString(1, (int)((MockClob)target).length());
-            return sourceString.equals(targetString);
-        }
-        catch(SQLException exc)
-        {
-            return false;
-        }
-    }
-    
-    private static boolean compareBlob(Object source, Object target)
-    {
-        try
-        {
-            byte[] sourceArray = ((MockBlob)source).getBytes(1, (int)((MockBlob)source).length());
-            byte[] targetArray = ((MockBlob)target).getBytes(1, (int)((MockBlob)target).length());
-            return Arrays.equals(sourceArray, targetArray);
-        }
-        catch(SQLException exc)
-        {
-            return false;
-        }
-    }
-    
-    private static boolean compareArray(Object source, Object target)
-    {
-        try
-        {
-            Object[] sourceArray = ArrayUtil.convertToObjectArray(((MockArray)source).getArray());
-            Object[] targetArray = ArrayUtil.convertToObjectArray(((MockArray)target).getArray());
-            return Arrays.equals(sourceArray, targetArray);
-        }
-        catch(SQLException exc)
-        {
-            return false;
-        }
-    }
-    
-    private static boolean compareRef(Object source, Object target)
-    {
-        try
-        {
-            return ((MockRef)source).getObject().equals(((MockRef)target).getObject());
-        }
-        catch(SQLException exc)
-        {
-            return false;
-        }
-    }
-    
-    private static boolean compareStruct(Object source, Object target)
-    {
-        try
-        {
-            String sourceName = ((MockStruct)source).getSQLTypeName();
-            String targetName = ((MockStruct)target).getSQLTypeName();
-            Object[] sourceArray = ((MockStruct)source).getAttributes();
-            Object[] targetArray = ((MockStruct)target).getAttributes();
-            return (sourceName.equals(targetName)) && (Arrays.equals(sourceArray, targetArray));
-        }
-        catch(SQLException exc)
-        {
-            return false;
-        }
     }
 }
 
