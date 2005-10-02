@@ -267,7 +267,7 @@ public class TagTestModule extends HTMLOutputModule
     
     /**
      * Specify if the <code>release</code> method should be called
-     * before populating a tag. Delegates to {@link NestedTag#setDoRelease}
+     * after processing the tag lifecycle. Delegates to {@link NestedTag#setDoRelease}
      * Defaults to <code>false</code>. It's the container behaviour to call 
      * <code>release</code>, but it's usually not necessary in the tests, 
      * because the tag instances are not reused during a test run.
@@ -284,7 +284,7 @@ public class TagTestModule extends HTMLOutputModule
     
     /**
      * Specify if the <code>release</code> method should be called
-     * before populating a tag. Delegates to {@link NestedTag#setDoReleaseRecursive}
+     * after processing the tag lifecycle. Delegates to {@link NestedTag#setDoReleaseRecursive}
      * Defaults to <code>false</code>. It's the container behaviour to call 
      * <code>release</code>, but it's usually not necessary in the tests, 
      * because the tag instances are not reused during a test run.

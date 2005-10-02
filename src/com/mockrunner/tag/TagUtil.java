@@ -19,7 +19,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.mockrunner.base.NestedApplicationException;
-import com.mockrunner.util.common.MethodUtil;
 import com.mockrunner.util.common.StringUtil;
 
 /**
@@ -111,16 +110,12 @@ public class TagUtil
     }
     
     /**
-     * Populates the specified attributes to the specified tag. Calls the
-     * <code>release</code> method before populating, if <i>doRelease</i> is set to
-     * <code>true</code>.
+     * Populates the specified attributes to the specified tag.
      * @param tag the tag
      * @param attributes the attribute map
-     * @param doRelease should release be called
      */
-    public static void populateTag(Object tag, Map attributes, boolean doRelease)
+    public static void populateTag(Object tag, Map attributes)
     {
-        if(doRelease) MethodUtil.invoke(tag, "release");
         if(null == attributes || attributes.isEmpty()) return;
         try
         {

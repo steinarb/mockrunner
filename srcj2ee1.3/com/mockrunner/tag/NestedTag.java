@@ -24,8 +24,8 @@ public interface NestedTag
 {
     /**
      * Specify if the <code>release</code> method should be called
-     * before populating a tag. Defaults to <code>false</code>. It's
-     * the container behaviour to call <code>release</code> when the tag
+     * after processing the tag lifecycle. Defaults to <code>false</code>. 
+     * It's the container behaviour to call <code>release</code> when the tag
      * goes back to the pool. It's usually not necessary in the tests
      * to call this method, because the tag instances are not pooled and 
      * reused during a test run.
@@ -37,8 +37,8 @@ public interface NestedTag
     
     /**
      * Specify if the <code>release</code> method should be called
-     * before populating a tag. Defaults to <code>false</code>. It's
-     * the container behaviour to call <code>release</code> when the tag
+     * after processing the tag lifecycle. Defaults to <code>false</code>. 
+     * It's the container behaviour to call <code>release</code> when the tag
      * goes back to the pool. It's usually not necessary in the tests
      * to call this method, because the tag instances are not pooled and 
      * reused during a test run.
@@ -56,10 +56,12 @@ public interface NestedTag
     public void populateAttributes();
     
     /**
-     * Performs the tags lifecycle. All <code>doBody</code> and <code>doTag</code> 
+     * Performs the tag lifecycle. All <code>doBody</code> and <code>doTag</code> 
      * methods are called as  in the real web container. The evaluation of the body 
      * is simulated by performing the lifecycle recursively for all childs of the 
-     * <code>NestedTag</code>.
+     * <code>NestedTag</code>. Calls <code>release</code> on the tag after
+     * processing the tag lifecycle, if <code>doRelease</code> is <code>true</code> 
+     * (use {@link #setDoRelease(boolean)}).
      * @return the result of the final <code>doEndTag</code> call
      */
     public int doLifecycle() throws JspException;
