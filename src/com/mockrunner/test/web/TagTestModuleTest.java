@@ -159,11 +159,11 @@ public class TagTestModuleTest extends BaseTestCase
         }
         TestTag tag = (TestTag)module.createTag(TestTag.class);
         module.setDoRelease(true);
-        module.populateAttributes();
+        module.processTagLifecycle();
         assertTrue(tag.wasReleaseCalled());
         tag = (TestTag)module.createTag(TestTag.class);
         module.setDoReleaseRecursive(true);
-        module.populateAttributes();
+        module.processTagLifecycle();
         assertTrue(tag.wasReleaseCalled());
     }
     
@@ -499,6 +499,23 @@ public class TagTestModuleTest extends BaseTestCase
         {
             //should throw exception
         }
+    }
+    
+    public void testRelease()
+    {
+        module.createWrappedTag(TestSimpleTag.class);
+        try
+        {
+            module.release();
+            fail();
+        } 
+        catch(RuntimeException exc)
+        {
+            //should throw exception
+        }
+        TestTag tag = (TestTag)module.createWrappedTag(TestTag.class);
+        module.release();
+        assertTrue(tag.wasReleaseCalled());
     }
     
     public static class AnotherTag implements Tag

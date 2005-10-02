@@ -16,6 +16,7 @@ public class TestBodyTag extends BodyTagSupport
     private PageContext context;
     private JspWriter bufferedOut;
     private boolean releaseCalled = false;
+    private boolean releaseLastCall = false;
     private int doStartTagReturnValue = TagSupport.EVAL_BODY_INCLUDE;
     private int doEndTagReturnValue = TagSupport.EVAL_PAGE;
     private int doAfterBodyReturnValue = TagSupport.SKIP_BODY;
@@ -124,12 +125,21 @@ public class TestBodyTag extends BodyTagSupport
     
     public void release()
     {
+        if(wasDoStartTagCalled() && wasDoEndTagCalled())
+        {
+            releaseLastCall = true;
+        }
         releaseCalled = true;
     }
     
     public boolean wasReleaseCalled()
     {
         return releaseCalled;
+    }
+    
+    public boolean wasReleaseCallLastMethodCall()
+    {
+        return releaseLastCall;
     }
     
     public boolean wasDoInitBodyCalled()

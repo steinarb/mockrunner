@@ -68,6 +68,7 @@ public class TagLifecycleTest extends BaseTestCase
     
     public void testMethodsCalled() throws Exception
     {
+        root.setDoReleaseRecursive(true);
         level1child1Tag.setDoStartTagReturnValue(TagSupport.EVAL_BODY_INCLUDE);
         level1child2Tag.setDoStartTagReturnValue(TagSupport.SKIP_BODY);
         level1child3Tag.setDoStartTagReturnValue(BodyTagSupport.EVAL_BODY_BUFFERED);
@@ -75,33 +76,44 @@ public class TagLifecycleTest extends BaseTestCase
         assertTrue(rootTag.wasDoStartTagCalled());
         assertTrue(rootTag.wasDoAfterBodyCalled());
         assertTrue(rootTag.wasDoEndTagCalled());
+        assertTrue(rootTag.wasReleaseCalled());
+        assertTrue(rootTag.wasReleaseCallLastMethodCall());
   
         assertTrue(level1child1Tag.wasDoStartTagCalled());
         assertFalse(level1child1Tag.wasDoInitBodyCalled());
         assertTrue(level1child1Tag.wasDoAfterBodyCalled());
         assertTrue(level1child1Tag.wasDoEndTagCalled());
+        assertTrue(level1child1Tag.wasReleaseCalled());
+        assertTrue(level1child1Tag.wasReleaseCallLastMethodCall());
         
         assertTrue(level1child2Tag.wasDoStartTagCalled());
         assertFalse(level1child2Tag.wasDoAfterBodyCalled());
         assertTrue(level1child2Tag.wasDoEndTagCalled());
+        assertTrue(level1child2Tag.wasReleaseCalled());
+        assertTrue(level1child2Tag.wasReleaseCallLastMethodCall());
         
         assertTrue(level1child3Tag.wasDoStartTagCalled());
         assertTrue(level1child3Tag.wasDoInitBodyCalled());
         assertTrue(level1child3Tag.wasDoAfterBodyCalled());
         assertTrue(level1child3Tag.wasDoEndTagCalled());
+        assertTrue(level1child3Tag.wasReleaseCalled());
+        assertTrue(level1child3Tag.wasReleaseCallLastMethodCall());
         
         assertFalse(level2child1Tag.wasDoStartTagCalled());
         assertFalse(level2child1Tag.wasDoAfterBodyCalled());
         assertFalse(level2child1Tag.wasDoEndTagCalled());
+        assertFalse(level2child1Tag.wasReleaseCalled());
         
         assertFalse(level2child2Tag.wasDoStartTagCalled());
         assertFalse(level2child2Tag.wasDoInitBodyCalled());
         assertFalse(level2child2Tag.wasDoAfterBodyCalled());
         assertFalse(level2child2Tag.wasDoEndTagCalled());
+        assertFalse(level2child2Tag.wasReleaseCalled());
         
         assertFalse(level3child1Tag.wasDoStartTagCalled());
         assertFalse(level3child1Tag.wasDoAfterBodyCalled());
         assertFalse(level3child1Tag.wasDoEndTagCalled());
+        assertFalse(level3child1Tag.wasReleaseCalled());
         
         assertFalse(level3child2Tag.wasDoStartTagCalled());
         assertFalse(level3child2Tag.wasDoAfterBodyCalled());

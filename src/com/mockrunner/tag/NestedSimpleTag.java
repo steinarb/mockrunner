@@ -99,7 +99,7 @@ public class NestedSimpleTag extends SimpleTagSupport implements NestedTag
      */
     public void populateAttributes()
     {
-        TagUtil.populateTag(tag, attributes, false);
+        TagUtil.populateTag(tag, attributes);
     }
     
     /**

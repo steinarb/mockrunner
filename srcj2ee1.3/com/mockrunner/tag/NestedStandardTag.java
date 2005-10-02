@@ -110,7 +110,7 @@ public class NestedStandardTag extends TagSupport implements NestedTag
      */
     public void populateAttributes()
     {
-        TagUtil.populateTag(tag, attributes, doRelease);
+        TagUtil.populateTag(tag, attributes);
     }
     
     /**
@@ -129,7 +129,9 @@ public class NestedStandardTag extends TagSupport implements NestedTag
                 TagUtil.evalBody(childs, pageContext);
             }
         }
-        return tag.doEndTag();
+        int returnValue = tag.doEndTag();
+        if(doRelease) tag.release();
+        return returnValue;
     }
     
     /**

@@ -116,7 +116,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
      */
     public void populateAttributes()
     {
-        TagUtil.populateTag(tag, attributes, doRelease);
+        TagUtil.populateTag(tag, attributes);
     }
     
     /**
@@ -147,7 +147,9 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
             }
             pageContext.popBody();
         }
-        return tag.doEndTag();
+        int returnValue = tag.doEndTag();
+        if(doRelease) tag.release();
+        return returnValue;
     }
     
     /**

@@ -13,6 +13,7 @@ public class TestTag extends TagSupport
     private Integer testInteger;
     private double testDouble;
     private boolean releaseCalled = false;
+    private boolean releaseLastCall = false;
     private PageContext context;
     private int doStartTagReturnValue = TagSupport.EVAL_BODY_INCLUDE;
     private int doEndTagReturnValue = TagSupport.EVAL_PAGE;
@@ -99,12 +100,21 @@ public class TestTag extends TagSupport
 
     public void release()
     {
+        if(wasDoStartTagCalled() && wasDoEndTagCalled())
+        {
+            releaseLastCall = true;
+        }
         releaseCalled = true;
     }
 
     public boolean wasReleaseCalled()
     {
         return releaseCalled;
+    }
+    
+    public boolean wasReleaseCallLastMethodCall()
+    {
+        return releaseLastCall;
     }
     
     public boolean wasDoAfterBodyCalled()

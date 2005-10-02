@@ -120,22 +120,19 @@ public class TagUtilTest extends BaseTestCase
         testMap.put("testDouble", new Double(12.3));
         testMap.put("testInteger", new Integer(100));
         TestTag tag = new TestTag();
-        TagUtil.populateTag(tag, testMap, false);
+        TagUtil.populateTag(tag, testMap);
         assertEquals("test", tag.getTestString());
         assertEquals(12.3, tag.getTestDouble(), 0.00);
         assertEquals(new Integer(100), tag.getTestInteger());
-        assertFalse(tag.wasReleaseCalled());
         testMap.put("testInteger", "3");
         testMap.put("noValidProperty", "123");
         testMap.put("testDouble", "notValid");
-        TagUtil.populateTag(tag, testMap, true);
-        assertTrue(tag.wasReleaseCalled());
+        TagUtil.populateTag(tag, testMap);
         assertEquals(new Integer(3), tag.getTestInteger());
         assertEquals(0.0, tag.getTestDouble(), 0.00);
         tag = new TestTag();
         testMap.clear();
-        TagUtil.populateTag(tag, testMap, true);
-        assertTrue(tag.wasReleaseCalled());
+        TagUtil.populateTag(tag, testMap);
         assertNull(tag.getTestInteger());
         assertNull(tag.getTestString());
         assertEquals(0, tag.getTestDouble(), 0.0);
@@ -143,7 +140,7 @@ public class TagUtilTest extends BaseTestCase
         testMap.put("booleanProperty", "true");
         testMap.put("floatProperty", "123.x");
         testMap.put("stringProperty", "aString");
-        TagUtil.populateTag(testSimpleTag, testMap, false);
+        TagUtil.populateTag(testSimpleTag, testMap);
         assertEquals(0.0, testSimpleTag.getFloatProperty(), 0.0);
         assertTrue(testSimpleTag.getBooleanProperty());
         assertEquals("aString", testSimpleTag.getStringProperty());
@@ -154,11 +151,11 @@ public class TagUtilTest extends BaseTestCase
         testMap.put("object", this);
         testMap.put("tagUtilTest", this);
         ArbitraryTag tag = new ArbitraryTag();
-        TagUtil.populateTag(tag, testMap, false);
+        TagUtil.populateTag(tag, testMap);
         assertSame(this, tag.getObject());
         assertSame(this, tag.getTagUtilTest());
         testMap.put("object", "abc");
-        TagUtil.populateTag(tag, testMap, false);
+        TagUtil.populateTag(tag, testMap);
         assertEquals("abc", tag.getObject());
         assertSame(this, tag.getTagUtilTest());
     }
@@ -170,7 +167,7 @@ public class TagUtilTest extends BaseTestCase
         ArbitraryTag tag = new ArbitraryTag();
         try
         {
-            TagUtil.populateTag(tag, testMap, false);
+            TagUtil.populateTag(tag, testMap);
             fail();
         } 
         catch(IllegalArgumentException exc)
@@ -179,7 +176,7 @@ public class TagUtilTest extends BaseTestCase
         }
         testMap.clear();
         testMap.put("testobject", object);
-        TagUtil.populateTag(tag, testMap, false);
+        TagUtil.populateTag(tag, testMap);
     }
     
     public void testPopulateDynamicAttributesWithDynamicBean()
@@ -187,7 +184,7 @@ public class TagUtilTest extends BaseTestCase
         Object object = new Object(); 
         testMap.put("object", new DynamicAttribute("uri", object));
         DynamicTag tag = new DynamicTag();
-        TagUtil.populateTag(tag, testMap, false);
+        TagUtil.populateTag(tag, testMap);
         assertNull(tag.getObject());
         assertEquals(1, tag.getDynamicAttributesMap().size());
         DynamicAttribute attribute = (DynamicAttribute)tag.getDynamicAttributesMap().get("object");
@@ -196,7 +193,7 @@ public class TagUtilTest extends BaseTestCase
         tag.clearDynamicAttributes();
         testMap.put("object", object);
         testMap.put("testobject", object);
-        TagUtil.populateTag(tag, testMap, false);
+        TagUtil.populateTag(tag, testMap);
         assertSame(object, tag.getObject());
         assertEquals(1, tag.getDynamicAttributesMap().size());
         attribute = (DynamicAttribute)tag.getDynamicAttributesMap().get("testobject");

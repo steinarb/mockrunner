@@ -1,6 +1,9 @@
 
 mockrunner-0.3.7:
 
+- refactored release call handling while processing the tag lifecycle. Check out
+  migratingfrom0.3.6.txt for details.
+
 mockrunner-0.3.6:
 
 - Introduced new JCA test module (developed and donated to Mockrunner
