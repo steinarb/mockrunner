@@ -185,6 +185,8 @@ public class MockHttpSessionTest extends TestCase
         assertFalse(enumeration.hasMoreElements());
         session.setAttribute("key1", "value1");
         session.setAttribute("key2", "value2");
+        assertEquals("value1", session.getAttribute("key1"));
+        assertEquals("value2", session.getAttribute("key2"));
         enumeration = session.getAttributeNames();
         List testList = new ArrayList();
         testList.add(enumeration.nextElement());
