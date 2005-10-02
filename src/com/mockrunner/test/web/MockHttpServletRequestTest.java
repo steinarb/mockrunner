@@ -120,6 +120,8 @@ public class MockHttpServletRequestTest extends TestCase
         assertFalse(enumeration.hasMoreElements());
         request.setAttribute("key1", "value1");
         request.setAttribute("key2", "value2");
+        assertEquals("value1", request.getAttribute("key1"));
+        assertEquals("value2", request.getAttribute("key2"));
         enumeration = request.getAttributeNames();
         List testList = new ArrayList();
         testList.add(enumeration.nextElement());

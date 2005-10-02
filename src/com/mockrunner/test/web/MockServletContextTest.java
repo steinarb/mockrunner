@@ -152,6 +152,8 @@ public class MockServletContextTest extends TestCase
         assertFalse(enumeration.hasMoreElements());
         context.setAttribute("key1", "value1");
         context.setAttribute("key2", "value2");
+        assertEquals("value1", context.getAttribute("key1"));
+        assertEquals("value2", context.getAttribute("key2"));
         enumeration = context.getAttributeNames();
         List testList = new ArrayList();
         testList.add(enumeration.nextElement());
