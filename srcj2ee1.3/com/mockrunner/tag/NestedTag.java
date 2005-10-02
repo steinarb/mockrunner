@@ -16,9 +16,9 @@ import javax.servlet.jsp.tagext.TagSupport;
  * internally. If you only want to test the ouptput of one single tag
  * without interaction with other tags, you do not have to care about
  * <code>NestedTag</code>. Use it, if you want to write sophisticated
- * tests of body tags. <code>NestedTag</code> instances are created with
- * the help of {@link TagTestModule#createNestedTag}. You do not need to
- * create them on your own in the tests.
+ * tests of body tags. <code>NestedTag</code> instances are created using
+ * {@link TagTestModule#createNestedTag}. You do not need to create them 
+ * on your own in the tests.
  */
 public interface NestedTag
 {
@@ -26,10 +26,11 @@ public interface NestedTag
      * Specify if the <code>release</code> method should be called
      * before populating a tag. Defaults to <code>false</code>. It's
      * the container behaviour to call <code>release</code> when the tag
-     * goes back to the pool. It's usually not necessary in the tests, 
-     * because the tag instances are not pooled and reused during a test run.
-     * Only sets the <code>doRelease</code> flag for this tag and
-     * leaves the flag for child tags.
+     * goes back to the pool. It's usually not necessary in the tests
+     * to call this method, because the tag instances are not pooled and 
+     * reused during a test run.
+     * This method sets the <code>doRelease</code> flag for this tag but
+     * does not set the flag for child tags.
      * @param doRelease should release be called, default is <code>false</code>
      */
     public void setDoRelease(boolean doRelease);
@@ -38,10 +39,11 @@ public interface NestedTag
      * Specify if the <code>release</code> method should be called
      * before populating a tag. Defaults to <code>false</code>. It's
      * the container behaviour to call <code>release</code> when the tag
-     * goes back to the pool. It's usually not necessary in the tests, 
-     * because the tag instances are not pooled and reused during a test run.
-     * Recursively sets the <code>doRelease</code> flag for this
-     * tag and all childs.
+     * goes back to the pool. It's usually not necessary in the tests
+     * to call this method, because the tag instances are not pooled and 
+     * reused during a test run.
+     * This method sets the <code>doRelease</code> flag for this
+     * tag and all child tags recursively.
      * @param doRelease should release be called, default is <code>false</code>
      */
     public void setDoReleaseRecursive(boolean doRelease);
