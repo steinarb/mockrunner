@@ -234,6 +234,16 @@ public class MockServletContextTest extends TestCase
         assertTrue(StreamUtil.compareStreams(new ByteArrayInputStream(input), result));
     }
     
+    public void testGetContext() throws Exception
+    {
+        assertNull(context.getContext("abc"));
+        context.setContext("abc", context);
+        assertSame(context, context.getContext("abc"));
+        MockServletContext anotherContext = new MockServletContext();
+        context.setContext("xyz", anotherContext);
+        assertSame(anotherContext, context.getContext("xyz"));
+    }
+    
     private class TestAttributeListener implements ServletContextAttributeListener
     {
         private boolean wasAttributeAddedCalled = false;
