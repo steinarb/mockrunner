@@ -32,7 +32,7 @@ public class MockServletContext implements ServletContext
 {
     private Map attributes;
     private Map requestDispatchers;
-    private Map subContexts;
+    private Map contexts;
     private Map initParameters;
     private Map mimeTypes;
     private Map realPaths;
@@ -54,7 +54,7 @@ public class MockServletContext implements ServletContext
     {
         attributes = new HashMap();
         requestDispatchers = new HashMap();
-        subContexts = new HashMap();
+        contexts = new HashMap();
         initParameters = new HashMap();
         mimeTypes = new HashMap();
         realPaths = new HashMap();
@@ -164,12 +164,12 @@ public class MockServletContext implements ServletContext
     
     public synchronized ServletContext getContext(String url)
     {
-        return (ServletContext)subContexts.get(url);
+        return (ServletContext)contexts.get(url);
     }
     
     public synchronized void setContext(String url, ServletContext context)
     {
-        subContexts.put(url, context);
+        contexts.put(url, context);
     }
     
     public synchronized void clearInitParameters()
