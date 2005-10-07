@@ -1,12 +1,12 @@
 mockrunner-0.3.7:
 
-As of version 0.3.7, the processing of the tag lifecycle has been changed. In version
-0.3.6 and previous, the release method of a tag was called before populating
-the attributes. Now this method is called after calling doEndTag() at the end
-of the lifecycle. Calling this method before populating the attributes did not
-make much sense. It's very unlikely that this change will affect your tests. release
-is only called, if setDoRelease() is set to true. It is false per default and it
-is usually not necessary to change it.
+As of version 0.3.7, the processing of the tag lifecycle in the tag classes test 
+framework has been changed. In version 0.3.6 and previous, the release method of 
+a tag was called before populating the attributes. Now this method is called after 
+calling doEndTag() at the end of the lifecycle. Calling this method before populating 
+the attributes did not make much sense. It's very unlikely that this change will 
+affect your tests. release is only called, if setDoRelease() is set to true. It is 
+false per default and it is usually not necessary to change it.
 
 Older API changes:
 
