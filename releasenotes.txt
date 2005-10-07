@@ -3,6 +3,7 @@ mockrunner-0.3.7:
 
 - refactored release call handling while processing the tag lifecycle. Check out
   migratingfrom0.3.6.txt for details.
+- improved version of ArrayResultSetFactory by Erick G. Reid
 
 mockrunner-0.3.6:
 
