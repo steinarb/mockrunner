@@ -188,7 +188,7 @@ regexp 1.3:
 http://jakarta.apache.org/regexp
 jakarta-regexp-1.3.jar (from JarAnalyzer 0.9.3 release)
 
-Ant 1.6.4:
+Ant 1.6.5:
 http://ant.apache.org
 ant.jar
 
