@@ -3,6 +3,11 @@ mockrunner-0.3.7:
 
 - refactored release call handling while processing the tag lifecycle. Check out
   migratingfrom0.3.6.txt for details.
+- the tag test framework now supports the TryCatchFinally interface
+- fixed bug in NestedStandardTag, doAfterBody() is only called if the tag
+  implements IterationTag
+- fixed bug in NestedStandardTag.addTagChild(JspTag), the method now works
+  even if the JspTag is not an instance of TagSupport
 - improved version of ArrayResultSetFactory by Erick G. Reid
 
 mockrunner-0.3.6:

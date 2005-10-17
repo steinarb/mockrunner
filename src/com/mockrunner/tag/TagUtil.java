@@ -12,6 +12,7 @@ import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.DynamicAttributes;
 import javax.servlet.jsp.tagext.SimpleTag;
 import javax.servlet.jsp.tagext.Tag;
+import javax.servlet.jsp.tagext.TryCatchFinally;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
@@ -95,6 +96,56 @@ public class TagUtil
             throw new IllegalArgumentException("tag must be an instance of Tag or SimpleTag");
         }
         return nestedTag;
+    }
+    
+    /**
+     * Handles an exception that is thrown during tag lifecycle processing.
+     * Invokes <code>doCatch()</code>, if the tag implements 
+     * <code>TryCatchFinally</code>.
+     * @param tag the tag
+     * @param exc the exception to be handled
+     */
+    public static void handleException(Tag tag, Throwable exc) throws JspException
+    {
+        if(tag instanceof TryCatchFinally)
+        {
+            try
+            {
+                ((TryCatchFinally)tag).doCatch(exc);
+                return;
+            } 
+            catch(Throwable otherExc)
+            {
+                exc = otherExc;
+            }
+        }
+        if(exc instanceof JspException)
+        {
+            throw ((JspException)exc);
+        }
+        throw new JspException(exc);
+    }
+    
+    /**
+     * Handles the finally block of tag lifecycle processing.
+     * Invokes <code>doFinally()</code>, if the tag implements 
+     * <code>TryCatchFinally</code>.
+     * @param tag the tag
+     */
+    public static void handleFinally(Tag tag) throws JspException
+    {
+        if(tag instanceof TryCatchFinally)
+        {
+            try
+            {
+                ((TryCatchFinally)tag).doFinally();
+                return;
+            } 
+            catch(Throwable exc)
+            {
+                throw new JspException(exc);
+            }
+        }
     }
     
     private static void checkPageContext(Object pageContext)
