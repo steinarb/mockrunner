@@ -8,6 +8,11 @@ the attributes did not make much sense. It's very unlikely that this change will
 affect your tests. release is only called, if setDoRelease() is set to true. It is 
 false per default and it is usually not necessary to change it.
 
+The exception handling of the tag test framework has been changed. The tag test framework
+now supports the TryCatchFinally interface. A RuntimeException in a tag method is
+wrapped in a JspException (which is finally wrapped in a NestedApplicationException
+in TagTestModule). In earlier versions, a RuntimeException has been gone through.
+
 Older API changes:
 
 mockrunner-0.3.6:

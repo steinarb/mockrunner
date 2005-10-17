@@ -120,16 +120,31 @@ public class NestedStandardTag extends TagSupport implements NestedTag
     public int doLifecycle() throws JspException
     {
         populateAttributes();
-        int result = tag.doStartTag();
-        if(Tag.EVAL_BODY_INCLUDE == result)
+        int returnValue = -1;
+        try
         {
-            TagUtil.evalBody(childs, pageContext);
-            while(IterationTag.EVAL_BODY_AGAIN == doAfterBody())
+            int result = tag.doStartTag();
+            if(Tag.EVAL_BODY_INCLUDE == result)
             {
                 TagUtil.evalBody(childs, pageContext);
+                if(tag instanceof IterationTag)
+                {
+                    while(IterationTag.EVAL_BODY_AGAIN == doAfterBody())
+                    {
+                        TagUtil.evalBody(childs, pageContext);
+                    }
+                }
             }
+            returnValue = tag.doEndTag();
+        } 
+        catch(Throwable exc)
+        {
+            TagUtil.handleException(tag, exc);
         }
-        int returnValue = tag.doEndTag();
+        finally
+        {
+            TagUtil.handleFinally(tag);
+        }
         if(doRelease) tag.release();
         return returnValue;
     }
@@ -234,7 +249,7 @@ public class NestedStandardTag extends TagSupport implements NestedTag
      */
     /*public NestedTag addTagChild(JspTag tag)
     {
-        return addTagChild((TagSupport)tag);
+        return addTagChild(tag, new HashMap());
     }*/
     
     /**

@@ -126,28 +126,40 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     public int doLifecycle() throws JspException
     {
         populateAttributes();
-        int result = tag.doStartTag();
-        if(Tag.EVAL_BODY_INCLUDE == result)
+        int returnValue = -1;
+        try
         {
-            TagUtil.evalBody(childs, pageContext);
-            while(IterationTag.EVAL_BODY_AGAIN == doAfterBody())
+            int result = tag.doStartTag();
+            if(Tag.EVAL_BODY_INCLUDE == result)
             {
                 TagUtil.evalBody(childs, pageContext);
+                while(IterationTag.EVAL_BODY_AGAIN == doAfterBody())
+                {
+                    TagUtil.evalBody(childs, pageContext);
+                }
             }
-        }
-        else if(BodyTag.EVAL_BODY_BUFFERED == result)
-        {
-            MockBodyContent bodyContent = (MockBodyContent)pageContext.pushBody();
-            tag.setBodyContent(bodyContent);
-            tag.doInitBody();
-            TagUtil.evalBody(childs, pageContext);
-            while(IterationTag.EVAL_BODY_AGAIN == doAfterBody())
+            else if(BodyTag.EVAL_BODY_BUFFERED == result)
             {
+                MockBodyContent bodyContent = (MockBodyContent)pageContext.pushBody();
+                tag.setBodyContent(bodyContent);
+                tag.doInitBody();
                 TagUtil.evalBody(childs, pageContext);
+                while(IterationTag.EVAL_BODY_AGAIN == doAfterBody())
+                {
+                    TagUtil.evalBody(childs, pageContext);
+                }
+                pageContext.popBody();
             }
-            pageContext.popBody();
+            returnValue = tag.doEndTag();
+        } 
+        catch(Throwable exc)
+        {
+            TagUtil.handleException(tag, exc);
         }
-        int returnValue = tag.doEndTag();
+        finally
+        {
+            TagUtil.handleFinally(tag);
+        }
         if(doRelease) tag.release();
         return returnValue;
     }

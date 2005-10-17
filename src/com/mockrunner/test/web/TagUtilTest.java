@@ -13,6 +13,7 @@ import javax.servlet.jsp.el.ExpressionEvaluator;
 import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.tagext.DynamicAttributes;
 import javax.servlet.jsp.tagext.SimpleTag;
+import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.mockrunner.base.BaseTestCase;
@@ -231,6 +232,81 @@ public class TagUtilTest extends BaseTestCase
         catch(IllegalArgumentException exc)
         {
             //should throw exception
+        }
+    }
+    
+    public void testHandleException() throws Exception
+    {
+        Tag tag = new TestTag();
+        RuntimeException excToBeHandled = new RuntimeException();
+        try
+        {
+            TagUtil.handleException(tag, excToBeHandled);
+            fail();
+        } 
+        catch(JspException exc)
+        {
+            assertSame(excToBeHandled, exc.getRootCause());
+        }
+        JspException jspExcToBeHandled = new JspException();
+        try
+        {
+            TagUtil.handleException(tag, jspExcToBeHandled);
+            fail();
+        } 
+        catch(JspException exc)
+        {
+            assertSame(jspExcToBeHandled, exc);
+        }
+        ExceptionTestTag testTag = new ExceptionTestTag();
+        TagUtil.handleException(testTag, jspExcToBeHandled);
+        assertTrue(testTag.wasDoCatchCalled());
+        assertSame(jspExcToBeHandled, testTag.getCaughtException());
+        RuntimeException excToBeRethrown = new RuntimeException();
+        testTag = new ExceptionTestTag(excToBeRethrown);
+        try
+        {
+            TagUtil.handleException(testTag, excToBeHandled);
+            fail();
+        } 
+        catch(JspException exc)
+        {
+            assertTrue(testTag.wasDoCatchCalled());
+            assertSame(excToBeHandled, testTag.getCaughtException());
+            assertSame(excToBeRethrown, exc.getRootCause());
+        }
+        JspException jspExcToBeRethrown = new JspException();
+        testTag = new ExceptionTestTag(jspExcToBeRethrown);
+        try
+        {
+            TagUtil.handleException(testTag, excToBeHandled);
+            fail();
+        } 
+        catch(JspException exc)
+        {
+            assertTrue(testTag.wasDoCatchCalled());
+            assertSame(excToBeHandled, testTag.getCaughtException());
+            assertSame(jspExcToBeRethrown, exc);
+        }
+    }
+    
+    public void testHandleFinally() throws Exception
+    {
+        Tag tag = new TestTag();
+        TagUtil.handleFinally(tag);
+        ExceptionTestTag testTag = new ExceptionTestTag();
+        TagUtil.handleFinally(testTag);
+        assertTrue(testTag.wasDoFinallyCalled());
+        RuntimeException excToBeRethrown = new RuntimeException();
+        testTag = new ExceptionTestTag(excToBeRethrown);
+        try
+        {
+            TagUtil.handleFinally(testTag);
+        } 
+        catch (JspException exc)
+        {
+            assertTrue(testTag.wasDoFinallyCalled());
+            assertSame(excToBeRethrown, exc.getRootCause());
         }
     }
     

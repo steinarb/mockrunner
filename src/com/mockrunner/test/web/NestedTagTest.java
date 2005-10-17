@@ -138,6 +138,10 @@ public class NestedTagTest extends BaseTestCase
         assertEquals(2, simpleTag.getChilds().size());
         assertTrue(((NestedTag)simpleTag.getChild(0)).getWrappedTag() instanceof TestBodyTag);
         assertTrue(((NestedTag)simpleTag.getChild(1)).getWrappedTag() instanceof TestSimpleTag);
+        NestedStandardTag standardtag = (NestedStandardTag)nestedTagRoot.getChild(0);
+        standardtag.addTagChild(new TestSimpleTag());
+        assertEquals(1, standardtag.getChilds().size());
+        assertTrue(((NestedTag)standardtag.getChild(0)).getWrappedTag() instanceof TestSimpleTag);
     }
     
     public void testFindTag()
@@ -377,6 +381,83 @@ public class NestedTagTest extends BaseTestCase
         }
     }
     
+    public void testNoIterationTag() throws Exception
+    {
+        NestedStandardTag tag = new NestedStandardTag(new NoIterationTag(), context);
+        assertEquals(Tag.EVAL_PAGE, tag.doLifecycle());
+    }
+    
+    public void testTryCatchFinallyHandlingStandardTag() throws Exception
+    {
+        ExceptionTestTag testTag = new ExceptionTestTag();
+        NestedStandardTag tag = new NestedStandardTag(testTag, context);
+        RuntimeException excToBeThrown = new RuntimeException();
+        tag.addTagChild(new FailureTestTag(excToBeThrown));
+        assertEquals(-1, tag.doLifecycle());
+        assertTrue(testTag.wasDoCatchCalled());
+        assertTrue(testTag.wasDoFinallyCalled());
+        assertSame(excToBeThrown, ((JspException)testTag.getCaughtException()).getRootCause());
+        RuntimeException excToBeRethrown = new RuntimeException();
+        testTag = new ExceptionTestTag(excToBeRethrown);
+        tag = new NestedStandardTag(testTag, context);
+        excToBeThrown = new RuntimeException();
+        tag.addTagChild(new FailureTestTag(excToBeThrown));
+        try
+        {
+            tag.doLifecycle();
+        } 
+        catch(JspException exc)
+        {
+            assertTrue(testTag.wasDoCatchCalled());
+            assertTrue(testTag.wasDoFinallyCalled());
+            assertSame(excToBeThrown, ((JspException)testTag.getCaughtException()).getRootCause());
+            assertSame(excToBeRethrown, exc.getRootCause());
+        }
+    }
+    
+    public void testTryCatchFinallyHandlingBodyTag() throws Exception
+    {
+        ExceptionTestTag testTag = new ExceptionTestTag();
+        NestedBodyTag tag = new NestedBodyTag(testTag, context);
+        RuntimeException excToBeThrown = new RuntimeException();
+        tag.addTagChild(new FailureTestTag(excToBeThrown));
+        assertEquals(-1, tag.doLifecycle());
+        assertTrue(testTag.wasDoCatchCalled());
+        assertTrue(testTag.wasDoFinallyCalled());
+        assertSame(excToBeThrown, ((JspException)testTag.getCaughtException()).getRootCause());
+        RuntimeException excToBeRethrown = new RuntimeException();
+        testTag = new ExceptionTestTag(excToBeRethrown);
+        tag = new NestedBodyTag(testTag, context);
+        excToBeThrown = new RuntimeException();
+        tag.addTagChild(new FailureTestTag(excToBeThrown));
+        try
+        {
+            tag.doLifecycle();
+        } 
+        catch(JspException exc)
+        {
+            assertTrue(testTag.wasDoCatchCalled());
+            assertTrue(testTag.wasDoFinallyCalled());
+            assertSame(excToBeThrown, ((JspException)testTag.getCaughtException()).getRootCause());
+            assertSame(excToBeRethrown, exc.getRootCause());
+        }
+    }
+    
+    private class FailureTestTag extends TagSupport
+    {
+        private RuntimeException exc;
+        
+        public FailureTestTag(RuntimeException exc)
+        {
+            this.exc = exc;
+        }
+        
+        public int doStartTag() throws JspException
+        {
+            throw exc;
+        } 
+    }
+    
     private class TestJspFragment extends JspFragment
     {
         public JspContext getJspContext()
@@ -441,5 +522,38 @@ public class NestedTagTest extends BaseTestCase
         {
             return 0;
         }
+    }
+    
+    private class NoIterationTag implements Tag
+    {
+        public int doStartTag() throws JspException
+        {
+            return Tag.EVAL_BODY_INCLUDE;
+        }
+        
+        public int doEndTag() throws JspException
+        {
+            return Tag.EVAL_PAGE;
+        }
+
+        public Tag getParent()
+        {
+            return null;
+        }
+
+        public void release()
+        {
+            
+        }
+
+        public void setPageContext(PageContext context)
+        {
+            
+        }
+
+        public void setParent(Tag parent)
+        {
+            
+        } 
     }
 }
