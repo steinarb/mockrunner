@@ -396,7 +396,7 @@ public class NestedTagTest extends BaseTestCase
         assertEquals(-1, tag.doLifecycle());
         assertTrue(testTag.wasDoCatchCalled());
         assertTrue(testTag.wasDoFinallyCalled());
-        assertSame(excToBeThrown, ((JspException)testTag.getCaughtException()).getRootCause());
+        assertSame(excToBeThrown, testTag.getCaughtException());
         RuntimeException excToBeRethrown = new RuntimeException();
         testTag = new ExceptionTestTag(excToBeRethrown);
         tag = new NestedStandardTag(testTag, context);
@@ -406,12 +406,12 @@ public class NestedTagTest extends BaseTestCase
         {
             tag.doLifecycle();
         } 
-        catch(JspException exc)
+        catch(Exception exc)
         {
             assertTrue(testTag.wasDoCatchCalled());
             assertTrue(testTag.wasDoFinallyCalled());
-            assertSame(excToBeThrown, ((JspException)testTag.getCaughtException()).getRootCause());
-            assertSame(excToBeRethrown, exc.getRootCause());
+            assertSame(excToBeThrown, testTag.getCaughtException());
+            assertSame(excToBeRethrown, exc);
         }
     }
     
@@ -424,7 +424,7 @@ public class NestedTagTest extends BaseTestCase
         assertEquals(-1, tag.doLifecycle());
         assertTrue(testTag.wasDoCatchCalled());
         assertTrue(testTag.wasDoFinallyCalled());
-        assertSame(excToBeThrown, ((JspException)testTag.getCaughtException()).getRootCause());
+        assertSame(excToBeThrown, testTag.getCaughtException());
         RuntimeException excToBeRethrown = new RuntimeException();
         testTag = new ExceptionTestTag(excToBeRethrown);
         tag = new NestedBodyTag(testTag, context);
@@ -434,12 +434,12 @@ public class NestedTagTest extends BaseTestCase
         {
             tag.doLifecycle();
         } 
-        catch(JspException exc)
+        catch(Exception exc)
         {
             assertTrue(testTag.wasDoCatchCalled());
             assertTrue(testTag.wasDoFinallyCalled());
-            assertSame(excToBeThrown, ((JspException)testTag.getCaughtException()).getRootCause());
-            assertSame(excToBeRethrown, exc.getRootCause());
+            assertSame(excToBeThrown, testTag.getCaughtException());
+            assertSame(excToBeRethrown, exc);
         }
     }
     
