@@ -123,6 +123,10 @@ public class TagUtil
         {
             throw ((JspException)exc);
         }
+        if(exc instanceof RuntimeException)
+        {
+            throw ((RuntimeException)exc);
+        }
         throw new JspException(exc);
     }
     
@@ -132,19 +136,11 @@ public class TagUtil
      * <code>TryCatchFinally</code>.
      * @param tag the tag
      */
-    public static void handleFinally(Tag tag) throws JspException
+    public static void handleFinally(Tag tag)
     {
         if(tag instanceof TryCatchFinally)
         {
-            try
-            {
-                ((TryCatchFinally)tag).doFinally();
-                return;
-            } 
-            catch(Throwable exc)
-            {
-                throw new JspException(exc);
-            }
+            ((TryCatchFinally)tag).doFinally();
         }
     }
     
