@@ -246,7 +246,7 @@ public class MockServletContext implements ServletContext
     
     public synchronized void setResourceAsStream(String path, byte[] data)
     {
-        byte[] copy = (byte[])ArrayUtil.copyArray(data);
+        byte[] copy = (byte[])data.clone();
         resourceStreams.put(path, copy);
     }
 
