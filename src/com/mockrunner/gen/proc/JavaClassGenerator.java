@@ -71,7 +71,7 @@ public class JavaClassGenerator
     
     public void setClassComment(String[] commentLines)
     {
-        classCommentLines = (String[])ArrayUtil.copyArray(commentLines);
+        classCommentLines = (String[])commentLines.clone();
     }
     
     public void addMemberDeclaration(Class memberType, String name)
@@ -372,56 +372,56 @@ public class JavaClassGenerator
         public String[] getCodeLines()
         {
             if(null == codeLines) return null;
-            return (String[])ArrayUtil.copyArray(codeLines);
+            return (String[])codeLines.clone();
         }
         
         public void setCodeLines(String[] codeLines)
         {
-            this.codeLines = (String[])ArrayUtil.copyArray(codeLines);
+            this.codeLines = (String[])codeLines.clone();
         }
         
         public String[] getCommentLines()
         {
             if(null == commentLines) return null;
-            return (String[])ArrayUtil.copyArray(commentLines);
+            return (String[])commentLines.clone();
         }
         
         public void setCommentLines(String[] commentLines)
         {
-            this.commentLines = (String[])ArrayUtil.copyArray(commentLines);
+            this.commentLines = (String[])commentLines.clone();
         }
        
         public String[] getArgumentNames()
         {
             if(null == argumentNames) return null;
-            return (String[])ArrayUtil.copyArray(argumentNames);
+            return (String[])argumentNames.clone();
         }
         
         public void setArgumentNames(String[] argumentNames)
         {
-            this.argumentNames = (String[])ArrayUtil.copyArray(argumentNames);
+            this.argumentNames = (String[])argumentNames.clone();
         }
         
         public Class[] getArguments()
         {
             if(null == arguments) return null;
-            return (Class[])ArrayUtil.copyArray(arguments);
+            return (Class[])arguments.clone();
         }
         
         public void setArguments(Class[] arguments)
         {
-            this.arguments = (Class[])ArrayUtil.copyArray(arguments);
+            this.arguments = (Class[])arguments.clone();
         }
         
         public Class[] getExceptions()
         {
             if(null == exceptions) return null;
-            return (Class[])ArrayUtil.copyArray(exceptions);
+            return (Class[])exceptions.clone();
         }
         
         public void setExceptions(Class[] exceptions)
         {
-            this.exceptions = (Class[])ArrayUtil.copyArray(exceptions);
+            this.exceptions = (Class[])exceptions.clone();
         }
     }
     

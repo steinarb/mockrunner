@@ -196,7 +196,7 @@ public class StreamableRecordByteArrayInteraction implements InteractionImplemen
         }
         else
         {
-            this.expectedRequest = (byte[])ArrayUtil.copyArray(expectedRequest);
+            this.expectedRequest = (byte[])expectedRequest.clone();
         }
     }
     
@@ -259,7 +259,7 @@ public class StreamableRecordByteArrayInteraction implements InteractionImplemen
         }
         else
         {
-            this.responseData = (byte[])ArrayUtil.copyArray(responseData);
+            this.responseData = (byte[])responseData.clone();
         }
         this.responseClass = responseClass;
     }
