@@ -389,7 +389,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         }
         if(object instanceof byte[])
         {
-            byte[] arrayData = (byte[])ArrayUtil.copyArray(object);
+            byte[] arrayData = (byte[])((byte[])object).clone();
             data.push(arrayData);
             return;
         }
@@ -475,7 +475,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             Object nextValue = data.get(ii);
             if(nextValue instanceof byte[])
             {
-                message.data.add(ArrayUtil.copyArray(nextValue));
+                message.data.add(((byte[])nextValue).clone());
             }
             else
             {

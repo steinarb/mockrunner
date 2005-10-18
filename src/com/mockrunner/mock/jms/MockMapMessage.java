@@ -251,7 +251,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
 
     public void setBytes(String name, byte[] byteData) throws JMSException
     {
-        byte[] copy = (byte[])ArrayUtil.copyArray(byteData);
+        byte[] copy = (byte[])byteData.clone();
         setObject(name, copy);
     }
 
@@ -380,7 +380,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
             Object nextValue = data.get(nextKey);
             if(nextValue instanceof byte[])
             {
-                target.put(nextKey, ArrayUtil.copyArray(nextValue));
+                target.put(nextKey, ((byte[])nextValue).clone());
             }
             else
             {
