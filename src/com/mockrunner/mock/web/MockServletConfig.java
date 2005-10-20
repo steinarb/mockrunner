@@ -56,10 +56,14 @@ public class MockServletConfig implements ServletConfig
     {
         initParameters.put(name, value);
     }
+    
+    public synchronized void setInitParameters(Map parameters) 
+    {
+        initParameters.putAll(parameters);
+    }
 
     public synchronized Enumeration getInitParameterNames()
     {
         return new Vector(initParameters.keySet()).elements();
     }
-
 }

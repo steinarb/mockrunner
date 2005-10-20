@@ -8,13 +8,13 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.mock.web.MockServletConfig;
+import com.mockrunner.mock.web.MockFilterConfig;
 
-public class MockServletConfigTest extends TestCase
+public class MockFilterConfigTest extends TestCase
 {
     public void testInitParameters()
     {
-        MockServletConfig config = new MockServletConfig();
+        MockFilterConfig config = new MockFilterConfig();
         config.setInitParameter("key1", "value1");
         Map parameters = new HashMap();
         parameters.put("key2", "value2");

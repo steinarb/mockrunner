@@ -8,6 +8,7 @@ mockrunner-0.3.7:
   implements IterationTag
 - fixed bug in NestedStandardTag.addTagChild(JspTag), the method now works
   even if the JspTag is not an instance of TagSupport
+- fixed bug in MockFilterConfig, now init parameters work properly
 - improved version of ArrayResultSetFactory by Erick G. Reid
 
 mockrunner-0.3.6:

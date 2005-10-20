@@ -1,6 +1,9 @@
 package com.mockrunner.mock.web;
 
 import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Vector;
 
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletContext;
@@ -11,35 +14,56 @@ import javax.servlet.ServletContext;
 public class MockFilterConfig implements FilterConfig
 {
     private ServletContext context;
+    private Map initParameters;
     private String name;
     
-    public void setupServletContext(ServletContext context)
+    public MockFilterConfig()
+    {
+        initParameters = new HashMap();
+    }
+
+    public synchronized void setupServletContext(ServletContext context)
     {
         this.context = context;
     }
-    
-    public String getInitParameter(String key)
-    {
-        return getServletContext().getInitParameter(key);
-    }
 
-    public Enumeration getInitParameterNames()
-    {
-        return getServletContext().getInitParameterNames();
-    }
-    
-    public String getFilterName()
+    public synchronized String getFilterName()
     {
         return name;
     }
     
-    public void setFilterName(String name)
+    public synchronized void setFilterName(String name)
     {
         this.name = name;
     }
 
-    public ServletContext getServletContext()
+    public synchronized ServletContext getServletContext()
     {
         return context;
+    }
+    
+    public synchronized void clearInitParameters()
+    {
+        initParameters.clear();
+    }
+
+    public synchronized String getInitParameter(String name)
+    {
+        return (String)initParameters.get(name);
+    }
+    
+    public synchronized void setInitParameter(String name, String value) 
+    {
+        initParameters.put(name, value);
+    }
+    
+    public synchronized void setInitParameters(Map parameters) 
+    {
+        initParameters.putAll(parameters);
+    }
+
+    public synchronized Enumeration getInitParameterNames()
+    {
+        return new Vector(initParameters.keySet()).elements();
     }
 }
