@@ -23,39 +23,39 @@ public class WebMockObjectFactoryTest extends TestCase
     {
         WebMockObjectFactory factory1 = new WebMockObjectFactory();
         WebMockObjectFactory factory2 = new WebMockObjectFactory();
-        assertTrue(factory1.getMockRequest() != factory2.getMockRequest());
-        assertTrue(factory1.getMockResponse() != factory2.getMockResponse());
-        assertTrue(factory1.getMockSession() != factory2.getMockSession());
-        assertTrue(factory1.getMockServletConfig() != factory2.getMockServletConfig());
-        assertTrue(factory1.getMockServletContext() != factory2.getMockServletContext());
+        assertNotSame(factory1.getMockRequest(), factory2.getMockRequest());
+        assertNotSame(factory1.getMockResponse(), factory2.getMockResponse());
+        assertNotSame(factory1.getMockSession(), factory2.getMockSession());
+        assertNotSame(factory1.getMockServletConfig(), factory2.getMockServletConfig());
+        assertNotSame(factory1.getMockServletContext(), factory2.getMockServletContext());
     }
     
     public void testMockObjectsWithSameContext()
     {
         WebMockObjectFactory factory1 = new WebMockObjectFactory();
         WebMockObjectFactory factory2 = new WebMockObjectFactory(factory1);
-        assertTrue(factory1.getMockRequest() != factory2.getMockRequest());
-        assertTrue(factory1.getMockResponse() != factory2.getMockResponse());
-        assertTrue(factory1.getMockSession() != factory2.getMockSession());
-        assertTrue(factory1.getMockServletConfig() == factory2.getMockServletConfig());
-        assertTrue(factory1.getMockServletContext() == factory2.getMockServletContext());
+        assertNotSame(factory1.getMockRequest(), factory2.getMockRequest());
+        assertNotSame(factory1.getMockResponse(), factory2.getMockResponse());
+        assertNotSame(factory1.getMockSession(), factory2.getMockSession());
+        assertNotSame(factory1.getMockServletConfig(), factory2.getMockServletConfig());
+        assertSame(factory1.getMockServletContext(), factory2.getMockServletContext());
     }
     
     public void testMockObjectsWithSameSessionAndContext()
     {
         WebMockObjectFactory factory1 = new WebMockObjectFactory();
         WebMockObjectFactory factory2 = new WebMockObjectFactory(factory1, false);
-        assertTrue(factory1.getMockRequest() != factory2.getMockRequest());
-        assertTrue(factory1.getMockResponse() != factory2.getMockResponse());
-        assertTrue(factory1.getMockSession() == factory2.getMockSession());
-        assertTrue(factory1.getMockServletConfig() == factory2.getMockServletConfig());
-        assertTrue(factory1.getMockServletContext() == factory2.getMockServletContext());
+        assertNotSame(factory1.getMockRequest(), factory2.getMockRequest());
+        assertNotSame(factory1.getMockResponse(), factory2.getMockResponse());
+        assertSame(factory1.getMockSession(), factory2.getMockSession());
+        assertNotSame(factory1.getMockServletConfig(), factory2.getMockServletConfig());
+        assertSame(factory1.getMockServletContext(), factory2.getMockServletContext());
         factory2 = new WebMockObjectFactory(factory1, true);
-        assertTrue(factory1.getMockRequest() != factory2.getMockRequest());
-        assertTrue(factory1.getMockResponse() != factory2.getMockResponse());
-        assertTrue(factory1.getMockSession() != factory2.getMockSession());
-        assertTrue(factory1.getMockServletConfig() == factory2.getMockServletConfig());
-        assertTrue(factory1.getMockServletContext() == factory2.getMockServletContext());
+        assertNotSame(factory1.getMockRequest(), factory2.getMockRequest());
+        assertNotSame(factory1.getMockResponse(), factory2.getMockResponse());
+        assertNotSame(factory1.getMockSession(), factory2.getMockSession());
+        assertNotSame(factory1.getMockServletConfig(), factory2.getMockServletConfig());
+        assertSame(factory1.getMockServletContext(), factory2.getMockServletContext());
     }
     
     public void testAddRequestWrapper()

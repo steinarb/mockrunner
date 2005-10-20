@@ -9,6 +9,8 @@ mockrunner-0.3.7:
 - fixed bug in NestedStandardTag.addTagChild(JspTag), the method now works
   even if the JspTag is not an instance of TagSupport
 - fixed bug in MockFilterConfig, now init parameters work properly
+- refactored WebMockObjectFactory to create a new MockServletConfig in shared mode
+  consistent with MockFilterConfig
 - improved version of ArrayResultSetFactory by Erick G. Reid
 
 mockrunner-0.3.6:

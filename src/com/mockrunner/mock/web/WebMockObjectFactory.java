@@ -66,7 +66,6 @@ public class WebMockObjectFactory
     private void createMockObjects()
     {
         createNewMockObjects(true);
-        config = createMockServletConfig();
         context = createMockServletContext();
         setUpDependencies();
     }
@@ -80,7 +79,6 @@ public class WebMockObjectFactory
     {
         createNewMockObjects(createNewSession);
         if(!createNewSession) session = factory.getMockSession();
-        config = factory.getMockServletConfig();
         context = factory.getMockServletContext();
         setUpDependencies();
     }
@@ -92,6 +90,7 @@ public class WebMockObjectFactory
         wrappedRequest = request;
         wrappedResponse = response;
         if(createNewSession) session = createMockSession();
+        config = createMockServletConfig();
         filterChain = createMockFilterChain();
         filterConfig = createMockFilterConfig();
     }
