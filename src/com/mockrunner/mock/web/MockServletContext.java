@@ -22,7 +22,6 @@ import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextAttributeListener;
 import javax.servlet.ServletException;
 
-import com.mockrunner.util.common.ArrayUtil;
 import com.mockrunner.util.common.StreamUtil;
 
 /**
@@ -185,6 +184,11 @@ public class MockServletContext implements ServletContext
     public synchronized void setInitParameter(String name, String value) 
     {
         initParameters.put(name, value);
+    }
+    
+    public synchronized void setInitParameters(Map parameters) 
+    {
+        initParameters.putAll(parameters);
     }
 
     public synchronized Enumeration getInitParameterNames()

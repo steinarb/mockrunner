@@ -7,7 +7,9 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
@@ -242,6 +244,31 @@ public class MockServletContextTest extends TestCase
         MockServletContext anotherContext = new MockServletContext();
         context.setContext("xyz", anotherContext);
         assertSame(anotherContext, context.getContext("xyz"));
+    }
+    
+    public void testInitParameters()
+    {
+        context.setInitParameter("key1", "value1");
+        Map parameters = new HashMap();
+        parameters.put("key2", "value2");
+        parameters.put("key3", "value3");
+        context.setInitParameters(parameters);
+        assertEquals("value1", context.getInitParameter("key1"));
+        assertEquals("value2", context.getInitParameter("key2"));
+        assertEquals("value3", context.getInitParameter("key3"));
+        Enumeration params = context.getInitParameterNames();
+        List list = new ArrayList();
+        list.add(params.nextElement());
+        list.add(params.nextElement());
+        list.add(params.nextElement());
+        assertFalse(params.hasMoreElements());
+        assertTrue(list.contains("key1"));
+        assertTrue(list.contains("key2"));
+        assertTrue(list.contains("key3"));
+        context.clearInitParameters();
+        assertNull(context.getInitParameter("key1"));
+        params = context.getInitParameterNames();
+        assertFalse(params.hasMoreElements());
     }
     
     private class TestAttributeListener implements ServletContextAttributeListener

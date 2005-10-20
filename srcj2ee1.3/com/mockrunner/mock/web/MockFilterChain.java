@@ -30,7 +30,7 @@ public class MockFilterChain implements FilterChain
     private List requestList = new ArrayList();
     private List responseList = new ArrayList();
     
-    public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException
+    public synchronized void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException
     {
         requestList.add(request);
         responseList.add(response);
@@ -55,7 +55,7 @@ public class MockFilterChain implements FilterChain
      * Adds a filter to the chain.
      * @param filter the filter
      */
-    public void addFilter(Filter filter) 
+    public synchronized void addFilter(Filter filter) 
     {
         filters.add(filter);
     }
@@ -67,7 +67,7 @@ public class MockFilterChain implements FilterChain
      * @throws IllegalArgumentException if the specified class does not implement
      *         <code>javax.servlet.Filter</code>
      */
-    public void addFilter(Class filterClass) 
+    public synchronized void addFilter(Class filterClass) 
     {
         if(!Filter.class.isAssignableFrom(filterClass))
         {
@@ -88,7 +88,7 @@ public class MockFilterChain implements FilterChain
      * Sets the servlet that is called at the end of the chain.
      * @param servlet the servlet
      */
-    public void setServlet(Servlet servlet) 
+    public synchronized void setServlet(Servlet servlet) 
     {
         this.servlet = servlet;
     }
@@ -96,7 +96,7 @@ public class MockFilterChain implements FilterChain
     /**
      * Clears all filters and sets the current servlet to <code>null</code>.
      */
-    public void release()
+    public synchronized void release()
     {
         filters.clear();
         setServlet(null);
@@ -107,7 +107,7 @@ public class MockFilterChain implements FilterChain
      * {@link #doFilter} when iterating through the chain.
      * @return the request list
      */
-    public List getRequestList()
+    public synchronized List getRequestList()
     {
         return Collections.unmodifiableList(requestList);
     }
@@ -117,7 +117,7 @@ public class MockFilterChain implements FilterChain
      * {@link #doFilter} when iterating through the chain.
      * @return the response list
      */
-    public List getResponseList()
+    public synchronized List getResponseList()
     {
         return Collections.unmodifiableList(responseList);
     }
@@ -130,7 +130,7 @@ public class MockFilterChain implements FilterChain
      * {@link #getRequestList}.
      * @return the last request
      */
-    public ServletRequest getLastRequest()
+    public synchronized ServletRequest getLastRequest()
     {
         if(requestList.isEmpty()) return null;
         return (ServletRequest)requestList.get(requestList.size() - 1);
@@ -144,7 +144,7 @@ public class MockFilterChain implements FilterChain
      * {@link #getResponseList}.
      * @return the last response
      */
-    public ServletResponse getLastResponse()
+    public synchronized ServletResponse getLastResponse()
     {
         if(responseList.isEmpty()) return null;
         return (ServletResponse)responseList.get(responseList.size() - 1);
