@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.mock.jdbc.MockResultSet;
+import com.mockrunner.util.common.ArrayUtil;
 
 /**
  * Abstract base class for all <code>ResultSet</code> handlers.
@@ -29,9 +30,9 @@ public abstract class AbstractResultSetHandler
     private boolean caseSensitive = false;
     private boolean exactMatch = false;
     private boolean useRegularExpressions = false;
-    private MockResultSet globalResultSet;
+    private MockResultSet[] globalResultSets;
     private Map resultSetsForStatement = new HashMap();
-    private int globalUpdateCount = 0;
+    private int[] globalUpdateCounts;
     private Map updateCountForStatement = new HashMap();
     private MockResultSet globalGeneratedKeys;
     private Map generatedKeysForStatement = new HashMap();
@@ -182,7 +183,7 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Clears the <code>ResultSet</code> objects.
+     * Clears all prepared <code>ResultSet</code> objects.
      */
     public void clearResultSets()
     {
@@ -190,7 +191,7 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Clears the update counts.
+     * Clears all prepared update counts.
      */
     public void clearUpdateCounts()
     {
@@ -223,15 +224,15 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Clears the global <code>ResultSet</code>.
+     * Clears the prepared global <code>ResultSet</code>.
      */
     public void clearGlobalResultSet()
     {
-        this.globalResultSet = null;
+        this.globalResultSets = null;
     }
     
     /**
-     * Clears the global generated keys <code>ResultSet</code>.
+     * Clears the prepared global generated keys <code>ResultSet</code>.
      */
     public void clearGlobalGeneratedKeys()
     {
@@ -239,11 +240,11 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Clears the global update count.
+     * Clears the prepared global update count.
      */
     public void clearGlobalUpdateCount()
     {
-        this.globalUpdateCount = 0;
+        this.globalUpdateCounts = null;
     }
     
     /**
@@ -290,11 +291,29 @@ public abstract class AbstractResultSetHandler
      */
     public MockResultSet getResultSet(String sql)
     {
+        MockResultSet[] resultSets = getResultSets(sql);
+        if(null != resultSets && resultSets.length > 0)
+        {
+            return resultSets[0];
+        }
+        return null;
+    }
+    
+    public MockResultSet[] getResultSets(String sql)
+    {
         SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
         List list = matcher.getMatchingObjects(resultSetsForStatement, sql, true, true);
         if(null != list && list.size() > 0)
         {
-            return (MockResultSet)list.get(0);
+            Object resultSets = list.get(0);
+            if(resultSets instanceof MockResultSet)
+            {
+                return new MockResultSet[] {(MockResultSet)resultSets};
+            }
+            else if(resultSets instanceof MockResultSet[])
+            {
+                return (MockResultSet[])resultSets;
+            }
         }
         return null;
     }
@@ -305,7 +324,13 @@ public abstract class AbstractResultSetHandler
      */
     public MockResultSet getGlobalResultSet()
     {
-        return globalResultSet;
+        if(null == globalResultSets || globalResultSets.length <= 0) return null;
+        return globalResultSets[0];
+    }
+    
+    public MockResultSet[] getGlobalResultSets()
+    {
+        return globalResultSets;
     }
     
     /**
@@ -318,11 +343,29 @@ public abstract class AbstractResultSetHandler
      */
     public Integer getUpdateCount(String sql)
     {
+        Integer[] updateCounts = getUpdateCounts(sql);
+        if(null != updateCounts && updateCounts.length > 0)
+        {
+            return updateCounts[0];
+        }
+        return null;
+    }
+    
+    public Integer[] getUpdateCounts(String sql)
+    {
         SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
         List list = matcher.getMatchingObjects(updateCountForStatement, sql, true, true);
         if(null != list && list.size() > 0)
         {
-            return (Integer)list.get(0);
+            Object values = list.get(0);
+            if(values instanceof Integer)
+            {
+                return new Integer[] {(Integer)values};
+            }
+            else if(values instanceof Integer[])
+            {
+                return (Integer[])values;
+            }
         }
         return null;
     }
@@ -333,7 +376,13 @@ public abstract class AbstractResultSetHandler
      */
     public int getGlobalUpdateCount()
     {
-        return globalUpdateCount;
+        if(null == globalUpdateCounts || globalUpdateCounts.length <= 0) return 0;
+        return globalUpdateCounts[0];
+    }
+    
+    public int[] getGlobalUpdateCounts()
+    {
+        return globalUpdateCounts;
     }
     
     /**
@@ -433,6 +482,11 @@ public abstract class AbstractResultSetHandler
     {
         resultSetsForStatement.put(sql, resultSet);
     }
+    
+    public void prepareResultSets(String sql, MockResultSet[] resultSets)
+    {
+        resultSetsForStatement.put(sql, resultSets.clone());
+    }
 
     /**
      * Prepare the global <code>ResultSet</code>.
@@ -440,7 +494,12 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareGlobalResultSet(MockResultSet resultSet)
     {
-        this.globalResultSet = resultSet;
+        this.globalResultSets = new MockResultSet[] {resultSet};
+    }
+    
+    public void prepareGlobalResultSets(MockResultSet[] resultSets)
+    {
+        this.globalResultSets = (MockResultSet[])resultSets.clone();
     }
     
     /**
@@ -456,13 +515,23 @@ public abstract class AbstractResultSetHandler
         updateCountForStatement.put(sql, new Integer(updateCount));
     }
     
+    public void prepareUpdateCounts(String sql, int[] updateCounts)
+    {
+        updateCountForStatement.put(sql, ArrayUtil.convertToObjectArray(updateCounts));
+    }
+    
     /**
      * Prepare the global update count for <code>executeUpdate</code> calls.
      * @param updateCount the update count
      */
     public void prepareGlobalUpdateCount(int updateCount)
     {
-        this.globalUpdateCount = updateCount;
+        this.globalUpdateCounts = new int[] {updateCount};
+    }
+    
+    public void prepareGlobalUpdateCounts(int[] updateCounts)
+    {
+        this.globalUpdateCounts = (int[])updateCounts.clone();
     }
     
     /**
