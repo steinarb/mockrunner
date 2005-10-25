@@ -48,7 +48,6 @@ public class MockSessionTest extends TestCase
         QueueSender sender = session.createSender(queue);
         MockMessage message = new MockTextMessage("Text1");
         message.setJMSTimestamp(0);
-        message.setJMSMessageID("xyz");
         sender.setDisableMessageTimestamp(true);
         sender.setDisableMessageID(true);
         sender.setTimeToLive(0);
@@ -57,11 +56,15 @@ public class MockSessionTest extends TestCase
         sender.send(message);
         message = (MockMessage)queue.getMessage();
         assertEquals(0, message.getJMSTimestamp());
-        assertEquals("xyz", message.getJMSMessageID());
+        assertNull(message.getJMSMessageID());
         assertEquals(0, message.getJMSExpiration());
         assertEquals(9, message.getJMSPriority());
         assertEquals(DeliveryMode.PERSISTENT, message.getJMSDeliveryMode());
         assertEquals(queue, message.getJMSDestination());
+        message.setJMSMessageID("xyz");
+        sender.send(message);
+        message = (MockMessage)queue.getMessage();
+        assertEquals("xyz", message.getJMSMessageID());
         message = new MockTextMessage("Text1");
         sender.setDisableMessageTimestamp(false);
         sender.setDisableMessageID(false);

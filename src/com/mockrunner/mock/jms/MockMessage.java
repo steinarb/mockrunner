@@ -37,7 +37,7 @@ public class MockMessage implements Message, Cloneable
     
     public MockMessage()
     {
-        messageId = "ID:" + String.valueOf(Math.random());
+        messageId = null;
         timestamp = System.currentTimeMillis();
         deliveryMode = DeliveryMode.PERSISTENT;
         redelivered = false;
