@@ -30,10 +30,10 @@ import org.activemq.selector.mockrunner.SelectorParser;
 /**
  * Alwin Ibba: Changed package
  * 
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class SelectorParserTest extends TestCase {
-
+    
     public void testParseWithParensAround() throws Exception {
         String[] values = {"x = 1 and y = 2", "(x = 1) and (y = 2)", "((x = 1) and (y = 2))"};
 

@@ -26,7 +26,7 @@ import javax.jms.Message;
  * 
  * Represents a property  expression
  * 
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class PropertyExpression implements Expression {
 

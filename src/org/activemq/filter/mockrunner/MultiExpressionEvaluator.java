@@ -25,8 +25,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 /**
- * Alwin Ibba: Changed package
- * 
  * A MultiExpressionEvaluator is used to evaluate multiple expressions in
  * single method call.
  * <p/>
@@ -71,7 +69,9 @@ import java.util.Iterator;
  * When a CacheExpressionnotices it's last cached value was generated in an old 'view',
  * it invalidates its cached value.
  *
- * @version $Revision: 1.2 $ $Date: 2005/08/25 16:23:28 $
+ * Alwin Ibba: Changed package
+ *
+ * @version $Revision: 1.3 $ $Date: 2005/10/27 16:38:12 $
  */
 public class MultiExpressionEvaluator {
 

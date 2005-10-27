@@ -27,7 +27,7 @@ import javax.jms.Message;
  * 
  * Represents a filter using an expression
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class ExpressionFilter implements Filter {
 

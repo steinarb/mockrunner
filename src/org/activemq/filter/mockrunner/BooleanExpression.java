@@ -19,12 +19,12 @@ package org.activemq.filter.mockrunner;
 
 
 /**
- * Alwin Ibba: Changed package
- * 
  * A BooleanExpression is an expression that always
  * produces a Boolean result.
+ * 
+ * Alwin Ibba: Changed package
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public interface BooleanExpression extends Expression {
 }
