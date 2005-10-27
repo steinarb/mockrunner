@@ -27,7 +27,7 @@ import javax.jms.Message;
  * 
  * Represents a logical AND operation on two filters
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.3 $
  */
 public class AndFilter implements Filter {
 

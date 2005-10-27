@@ -12,6 +12,7 @@ mockrunner-0.3.7:
 - refactored WebMockObjectFactory to create a new MockServletConfig in shared mode
   consistent with MockFilterConfig
 - improved version of ArrayResultSetFactory by Erick G. Reid
+- replaced ActiveMQ classes with 3.2 version
 
 mockrunner-0.3.6:
 
