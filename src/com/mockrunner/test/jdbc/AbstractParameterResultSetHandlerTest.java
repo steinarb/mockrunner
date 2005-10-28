@@ -3,8 +3,10 @@ package com.mockrunner.test.jdbc;
 import java.sql.BatchUpdateException;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.base.BaseTestCase;
@@ -42,6 +44,40 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 	    parameter.put(new Integer(2), "b");
 	    assertSame(result, preparedStatementHandler.getResultSet("select x", parameter));
 	}
+    
+    public void testGetResultSets() throws Exception
+    {
+        MockResultSet result1 = new MockResultSet("id1");
+        MockResultSet result2 = new MockResultSet("id2");
+        MockResultSet[] results = new MockResultSet[] {result1, result2};
+        List parameterList = new ArrayList();
+        parameterList.add(new Integer(5));
+        parameterList.add("6");
+        parameterList.add("7");
+        callableStatementHandler.prepareResultSets("select from", results, parameterList);
+        assertNull(callableStatementHandler.getResultSets("select from"));
+        Map parameter = new HashMap();
+        parameter.put(new Integer(1), new Integer(5));
+        parameter.put(new Integer(2), "6");
+        assertNull(callableStatementHandler.getResultSets("select from", parameter));
+        parameter.put(new Integer(3), "7");
+        MockResultSet[] returnedResults = callableStatementHandler.getResultSets("select from", parameter);
+        assertNotSame(results, returnedResults);
+        assertEquals(2, returnedResults.length);
+        assertSame(result1, returnedResults[0]);
+        assertSame(result2, returnedResults[1]);
+        callableStatementHandler.prepareResultSets("select abc", new MockResultSet[] {result2}, new String[0]);
+        returnedResults = callableStatementHandler.getResultSets("select abc", new HashMap());
+        assertEquals(1, returnedResults.length);
+        assertSame(result2, returnedResults[0]);
+        parameter = new HashMap();
+        parameter.put("abc", "1");
+        parameter.put("def", "2");
+        callableStatementHandler.prepareResultSets("select 123", new MockResultSet[] {result1}, parameter);
+        returnedResults = callableStatementHandler.getResultSets("select 123", parameter);
+        assertEquals(1, returnedResults.length);
+        assertSame(result1, returnedResults[0]);
+    }
 	
 	public void testGetUpdateCount() throws Exception
 	{
@@ -52,11 +88,30 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 	    assertEquals(new Integer(2), callableStatementHandler.getUpdateCount("INSERT INTO", new HashMap()));
 	    Map parameter = new HashMap();
 	    parameter.put(new Integer(1), "a");
-	    parameter.put(new Integer(2), "b");
+	    parameter.put("2", "b");
 	    assertEquals(new Integer(2), callableStatementHandler.getUpdateCount("INSERT INTO", parameter));
 	    callableStatementHandler.setExactMatchParameter(true);
 	    assertNull(callableStatementHandler.getUpdateCount("INSERT INTO", parameter));
 	}
+    
+    public void testGetUpdateCounts() throws Exception
+    {
+        Map parameter = new HashMap();
+        parameter.put(new Integer(1), "1");
+        preparedStatementHandler.prepareUpdateCounts("insert into", new int[] {3}, parameter);
+        assertNull(preparedStatementHandler.getUpdateCounts("insert into", new HashMap()));
+        Integer[] returnedUpdateCounts = preparedStatementHandler.getUpdateCounts("insert into", parameter);
+        assertEquals(1, returnedUpdateCounts.length);
+        assertEquals(new Integer(3), returnedUpdateCounts[0]);
+        preparedStatementHandler.prepareUpdateCounts("insert abc", new int[] {5, 6, 7}, new ArrayList());
+        returnedUpdateCounts = preparedStatementHandler.getUpdateCounts("insert abc", parameter);
+        assertEquals(3, returnedUpdateCounts.length);
+        assertEquals(new Integer(5), returnedUpdateCounts[0]);
+        assertEquals(new Integer(6), returnedUpdateCounts[1]);
+        assertEquals(new Integer(7), returnedUpdateCounts[2]);
+        preparedStatementHandler.setExactMatchParameter(true);
+        assertNull(preparedStatementHandler.getUpdateCounts("insert abc", parameter));
+    }
 	
 	public void testGetThrowsSQLException()
 	{
