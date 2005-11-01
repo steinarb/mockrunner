@@ -25,7 +25,7 @@ import javax.sql.DataSource;
  * @ejb:bean name="UserEntity"
  *           display-name="UserEntity"
  *           type="BMP"
- *           jndi-name="de/test/UserEntity"
+ *           jndi-name="com/mockrunner/example/UserEntity"
  *
  * @ejb:pk class="java.lang.String"
  *

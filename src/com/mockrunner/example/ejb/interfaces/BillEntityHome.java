@@ -10,7 +10,7 @@ public interface BillEntityHome
    extends javax.ejb.EJBHome
 {
    public static final String COMP_NAME="java:comp/env/ejb/BillEntity";
-   public static final String JNDI_NAME="com/mockrunner/example/BillEntity";
+   public static final String JNDI_NAME="com/mockrunner/example/UserEntity";
 
    public com.mockrunner.example.ejb.interfaces.BillEntity create(java.lang.Integer id)
       throws javax.ejb.CreateException,java.rmi.RemoteException;
