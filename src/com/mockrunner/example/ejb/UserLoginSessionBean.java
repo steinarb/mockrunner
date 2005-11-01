@@ -17,7 +17,7 @@ import com.mockrunner.example.ejb.interfaces.UserEntityHome;
  *           display-name="UserLoginSessionBean"
  *           type="Stateless"
  *           transaction-type="Container"
- *           jndi-name="de/test/UserLoginSession"
+ *           jndi-name="com/mockrunner/example/UserLoginSession"
  * 
  * @ejb:ejb-ref ejb-name="UserEntity" view-type="remote" ref-name="ejb/UserEntity"
  **/

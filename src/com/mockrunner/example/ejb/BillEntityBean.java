@@ -15,7 +15,7 @@ import javax.ejb.RemoveException;
  *           type="CMP"
  *           cmp-version="2.x"
  *           primkey-field="id"
- *           jndi-name="de/test/BillEntity"
+ *           jndi-name="com/mockrunner/example/UserEntity"
  *
  * @ejb:pk class="java.lang.Integer"
  *
