@@ -28,5 +28,4 @@ public class Launcher
             throw new RuntimeException("Test " + testClassName + " failed");
         }
     }
-    
 }
