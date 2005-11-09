@@ -12,7 +12,6 @@ import javax.resource.cci.Streamable;
 
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.mock.connector.cci.MockStreamableByteArrayRecord;
-import com.mockrunner.util.common.ArrayUtil;
 import com.mockrunner.util.common.StreamUtil;
 
 /**
