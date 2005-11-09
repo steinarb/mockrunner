@@ -202,7 +202,7 @@ public class BCELClassAnalyzer
     {
         private boolean deprecated = false;
         
-        public void visitDeprecated(Deprecated arg0)
+        public void visitDeprecated(Deprecated deprecatedValue)
         {
             deprecated = true;
         }
