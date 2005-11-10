@@ -202,7 +202,7 @@ public class TagUtil
         if(!(tag instanceof DynamicAttributes))
         {
             String message = "Attribute " + name + " specified as dynamic attribute but tag ";
-            message += "is not an instance of avax.servlet.jsp.tagext.DynamicAttributes.";
+            message += "is not an instance of " + DynamicAttributes.class.getName();
             throw new IllegalArgumentException(message);
         }
         ((DynamicAttributes)tag).setDynamicAttribute(attribute.getUri(), name, attribute.getValue());
