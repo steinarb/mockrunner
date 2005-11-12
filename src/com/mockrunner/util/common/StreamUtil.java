@@ -116,7 +116,7 @@ public class StreamUtil
     
     /**
      * Returns a copy of the specified stream. If the specified stream supports
-     * marking, it will be reseted after the copy.
+     * marking, it will be reset after the copy.
      * @param sourceStream the stream to copy
      * @return a copy of the stream
      */
@@ -138,7 +138,7 @@ public class StreamUtil
   
     /**
      * Returns a copy of the specified reader. If the specified reader supports
-     * marking, it will be reseted after the copy.
+     * marking, it will be reset after the copy.
      * @param sourceReader the stream to reader
      * @return a copy of the reader
      */
@@ -160,7 +160,7 @@ public class StreamUtil
     
     /**
      * Compares the content of the streams. If the streams support
-     * marking, they will be reseted after the comparison.
+     * marking, they will be reset after the comparison.
      * @param sourceStream the source stream
      * @param targetStream the target stream
      * @return <code>true</code>, if the streams are identical, <code>false</code> otherwise
@@ -186,7 +186,7 @@ public class StreamUtil
     
     /**
      * Compares the content of the readers. If the readers support
-     * marking, they will be reseted after the comparison.
+     * marking, they will be reset after the comparison.
      * @param sourceReader the source stream
      * @param targetReader the target stream
      * @return <code>true</code>, if the streams are identical, <code>false</code> otherwise
