@@ -32,6 +32,11 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertSame(result, statementHandler.getResultSet("SELECT xyz from table"));
         statementHandler.setCaseSensitive(true);
         assertNull(statementHandler.getResultSet("SELECT xyz from table"));
+        MockResultSet result0 = new MockResultSet("id0");
+        MockResultSet result1 = new MockResultSet("id1");
+        MockResultSet[] results = new MockResultSet[] {result0, result1};
+        statementHandler.prepareResultSets("select abc", results);
+        assertSame(result0, statementHandler.getResultSet("select abc"));
     }
     
     public void testGetResultSets()
@@ -52,6 +57,19 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertSame(result0, returnedResults[0]);
     }
     
+    public void testHasMultipleResultSets()
+    {
+        MockResultSet result0 = new MockResultSet("id0");
+        MockResultSet result1 = new MockResultSet("id1");
+        statementHandler.prepareResultSets("select column from table", new MockResultSet[] {result0, result1});
+        statementHandler.prepareResultSets("select column from abc", new MockResultSet[] {result1});
+        statementHandler.prepareResultSet("select .*", result0);
+        assertTrue(statementHandler.hasMultipleResultSets("select column from table"));
+        assertTrue(statementHandler.hasMultipleResultSets("select column from abc"));
+        assertFalse(statementHandler.hasMultipleResultSets("select .*"));
+        assertFalse(statementHandler.hasMultipleResultSets("do nothing"));
+    }
+    
     public void testGetGlobalResultSet()
     {
         MockResultSet result0 = new MockResultSet("id0");
@@ -69,6 +87,18 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertEquals(2, returnedResults.length);
         assertSame(result0, returnedResults[0]);
         assertSame(result1, returnedResults[1]);
+    }
+    
+    public void testHasMutipleGlobalResultSets()
+    {
+        MockResultSet result0 = new MockResultSet("id0");
+        MockResultSet result1 = new MockResultSet("id1");
+        statementHandler.prepareGlobalResultSet(result0);
+        assertFalse(statementHandler.hasMultipleGlobalResultSets());
+        statementHandler.prepareGlobalResultSets(new MockResultSet[] {result1});
+        assertTrue(statementHandler.hasMultipleGlobalResultSets());
+        statementHandler.prepareGlobalResultSets(new MockResultSet[] {result0, result1});
+        assertTrue(statementHandler.hasMultipleGlobalResultSets());
     }
     
     public void testGetGeneratedKeys()
@@ -98,6 +128,8 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         statementHandler.setExactMatch(true);
         assertEquals(new Integer(4), statementHandler.getUpdateCount("insert Xyz"));
         assertNull(statementHandler.getUpdateCount("insert"));
+        statementHandler.prepareUpdateCounts("update", new int[] {1, 2});
+        assertEquals(new Integer(1), statementHandler.getUpdateCount("update"));
     }
     
     public void testGetUpdateCounts()
@@ -112,6 +144,18 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         returnedUpdateCounts = statementHandler.getUpdateCounts("insert xyz");
         assertEquals(1, returnedUpdateCounts.length);
         assertEquals(new Integer(4), returnedUpdateCounts[0]);
+        assertNull(statementHandler.getUpdateCounts("do nothing"));
+    }
+    
+    public void testHasMultipleUpdateCounts()
+    {
+        statementHandler.prepareUpdateCount("update", 3);
+        statementHandler.prepareUpdateCounts("insert into xyz", new int [] {4});
+        statementHandler.prepareUpdateCounts("insert into abc", new int [] {1, 2, 4});
+        assertFalse(statementHandler.hasMultipleUpdateCounts("update"));
+        assertFalse(statementHandler.hasMultipleUpdateCounts("do nothing"));
+        assertTrue(statementHandler.hasMultipleUpdateCounts("insert into xyz"));
+        assertTrue(statementHandler.hasMultipleUpdateCounts("insert into abc"));
     }
     
     public void testGetGlobalUpdateCount()
@@ -129,6 +173,16 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertEquals(2, returnedUpdateCounts.length);
         assertEquals(1, returnedUpdateCounts[0]);
         assertEquals(2, returnedUpdateCounts[1]);
+    }
+    
+    public void testHasMutipleGlobalUpdateCounts()
+    {
+        statementHandler.prepareGlobalUpdateCount(4);
+        assertFalse(statementHandler.hasMultipleGlobalUpdateCounts());
+        statementHandler.prepareGlobalUpdateCounts(new int[] {1});
+        assertTrue(statementHandler.hasMultipleGlobalUpdateCounts());
+        statementHandler.prepareGlobalUpdateCounts(new int[] {7, 8});
+        assertTrue(statementHandler.hasMultipleGlobalUpdateCounts());
     }
     
     public void testGetReturnsResultSet()
