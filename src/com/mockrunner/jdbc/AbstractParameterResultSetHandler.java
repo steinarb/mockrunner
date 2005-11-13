@@ -115,6 +115,12 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         }
         return null;
     }
+    
+    public boolean hasMultipleUpdateCounts(String sql, Map parameters)
+    {
+        ParameterWrapper wrapper = (ParameterWrapper)getMatchingParameterWrapper(sql, parameters, updateCountForStatement);
+        return (wrapper instanceof MockUpdateCountArrayWrapper);
+    }
 
     /**
      * Returns the first <code>ResultSet</code> that matches the
@@ -152,6 +158,12 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
             }
         }
         return null;
+    }
+    
+    public boolean hasMultipleResultSets(String sql, Map parameters)
+    {
+        ParameterWrapper wrapper = (ParameterWrapper)getMatchingParameterWrapper(sql, parameters, resultSetsForStatement);
+        return (wrapper instanceof MockResultSetArrayWrapper);
     }
     
     /**

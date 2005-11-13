@@ -30,9 +30,9 @@ public abstract class AbstractResultSetHandler
     private boolean caseSensitive = false;
     private boolean exactMatch = false;
     private boolean useRegularExpressions = false;
-    private MockResultSet[] globalResultSets;
+    private Object globalResultSets;
     private Map resultSetsForStatement = new HashMap();
-    private int[] globalUpdateCounts;
+    private Object globalUpdateCounts;
     private Map updateCountForStatement = new HashMap();
     private MockResultSet globalGeneratedKeys;
     private Map generatedKeysForStatement = new HashMap();
@@ -291,29 +291,51 @@ public abstract class AbstractResultSetHandler
      */
     public MockResultSet getResultSet(String sql)
     {
-        MockResultSet[] resultSets = getResultSets(sql);
-        if(null != resultSets && resultSets.length > 0)
+        Object resultSets = getMatchingResultSets(sql);
+        if(null == resultSets) return null;
+        if(resultSets instanceof MockResultSet)
         {
-            return resultSets[0];
+            return (MockResultSet)resultSets;
+        }
+        else if(resultSets instanceof MockResultSet[])
+        {
+            MockResultSet[] actualResults = (MockResultSet[])resultSets;
+            if(actualResults.length > 0)
+            {
+                return actualResults[0];
+            }
         }
         return null;
     }
     
     public MockResultSet[] getResultSets(String sql)
     {
+        Object resultSets = getMatchingResultSets(sql);
+        if(null == resultSets) return null;
+        if(resultSets instanceof MockResultSet)
+        {
+            return new MockResultSet[] {(MockResultSet)resultSets};
+        }
+        else if(resultSets instanceof MockResultSet[])
+        {
+            return (MockResultSet[])resultSets;
+        }
+        return null;
+    }
+
+    public boolean hasMultipleResultSets(String sql)
+    {
+        Object resultSets = getMatchingResultSets(sql);
+        return (resultSets instanceof MockResultSet[]);
+    }
+    
+    private Object getMatchingResultSets(String sql)
+    {
         SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
         List list = matcher.getMatchingObjects(resultSetsForStatement, sql, true, true);
         if(null != list && list.size() > 0)
         {
-            Object resultSets = list.get(0);
-            if(resultSets instanceof MockResultSet)
-            {
-                return new MockResultSet[] {(MockResultSet)resultSets};
-            }
-            else if(resultSets instanceof MockResultSet[])
-            {
-                return (MockResultSet[])resultSets;
-            }
+            return list.get(0);
         }
         return null;
     }
@@ -324,13 +346,32 @@ public abstract class AbstractResultSetHandler
      */
     public MockResultSet getGlobalResultSet()
     {
-        if(null == globalResultSets || globalResultSets.length <= 0) return null;
-        return globalResultSets[0];
+        if(null == globalResultSets) return null;
+        if(globalResultSets instanceof MockResultSet)
+        {
+            return (MockResultSet)globalResultSets;
+        }
+        MockResultSet[] resultSets = getGlobalResultSets();
+        if(null != resultSets && resultSets.length > 0)
+        {
+            return resultSets[0];
+        }
+        return null;
     }
     
     public MockResultSet[] getGlobalResultSets()
     {
-        return globalResultSets;
+        if(null == globalResultSets) return null;
+        if(globalResultSets instanceof MockResultSet[])
+        {
+            return (MockResultSet[])globalResultSets;
+        }
+        return new MockResultSet[] {(MockResultSet)globalResultSets};
+    }
+    
+    public boolean hasMultipleGlobalResultSets()
+    {
+        return (globalResultSets instanceof MockResultSet[]);
     }
     
     /**
@@ -343,29 +384,51 @@ public abstract class AbstractResultSetHandler
      */
     public Integer getUpdateCount(String sql)
     {
-        Integer[] updateCounts = getUpdateCounts(sql);
-        if(null != updateCounts && updateCounts.length > 0)
+        Object updateCounts = getMatchingUpdateCounts(sql);
+        if(null == updateCounts) return null;
+        if(updateCounts instanceof Integer)
         {
-            return updateCounts[0];
+            return (Integer)updateCounts;
+        }
+        else if(updateCounts instanceof Integer[])
+        {
+            Integer[] actualUpdateCounts = (Integer[])updateCounts;
+            if(actualUpdateCounts.length > 0)
+            {
+                return actualUpdateCounts[0];
+            }
         }
         return null;
     }
     
     public Integer[] getUpdateCounts(String sql)
     {
+        Object updateCounts = getMatchingUpdateCounts(sql);
+        if(null == updateCounts) return null;
+        if(updateCounts instanceof Integer)
+        {
+            return new Integer[] {(Integer)updateCounts};
+        }
+        else if(updateCounts instanceof Integer[])
+        {
+            return (Integer[])updateCounts;
+        }
+        return null;
+    }
+    
+    public boolean hasMultipleUpdateCounts(String sql)
+    {
+        Object updateCounts = getMatchingUpdateCounts(sql);
+        return (updateCounts instanceof Integer[]);
+    }
+    
+    private Object getMatchingUpdateCounts(String sql)
+    {
         SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
         List list = matcher.getMatchingObjects(updateCountForStatement, sql, true, true);
         if(null != list && list.size() > 0)
         {
-            Object values = list.get(0);
-            if(values instanceof Integer)
-            {
-                return new Integer[] {(Integer)values};
-            }
-            else if(values instanceof Integer[])
-            {
-                return (Integer[])values;
-            }
+            return list.get(0);
         }
         return null;
     }
@@ -376,13 +439,32 @@ public abstract class AbstractResultSetHandler
      */
     public int getGlobalUpdateCount()
     {
-        if(null == globalUpdateCounts || globalUpdateCounts.length <= 0) return 0;
-        return globalUpdateCounts[0];
+        if(null == globalUpdateCounts) return 0;
+        if(globalUpdateCounts instanceof Integer)
+        {
+            return ((Integer)globalUpdateCounts).intValue();
+        }
+        int[] updateCounts = getGlobalUpdateCounts();
+        if(null != updateCounts && updateCounts.length > 0)
+        {
+            return updateCounts[0];
+        }
+        return 0;
     }
     
     public int[] getGlobalUpdateCounts()
     {
-        return globalUpdateCounts;
+        if(null == globalUpdateCounts) return null;
+        if(globalUpdateCounts instanceof int[])
+        {
+            return (int[])globalUpdateCounts;
+        }
+        return new int[] {((Integer)globalUpdateCounts).intValue()};
+    }
+    
+    public boolean hasMultipleGlobalUpdateCounts()
+    {
+        return (globalUpdateCounts instanceof int[]);
     }
     
     /**
@@ -494,7 +576,7 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareGlobalResultSet(MockResultSet resultSet)
     {
-        this.globalResultSets = new MockResultSet[] {resultSet};
+        this.globalResultSets = resultSet;
     }
     
     public void prepareGlobalResultSets(MockResultSet[] resultSets)
@@ -526,7 +608,7 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareGlobalUpdateCount(int updateCount)
     {
-        this.globalUpdateCounts = new int[] {updateCount};
+        this.globalUpdateCounts = new Integer(updateCount);
     }
     
     public void prepareGlobalUpdateCounts(int[] updateCounts)

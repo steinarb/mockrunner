@@ -43,6 +43,16 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 	    parameter.put(new Integer(1), "a");
 	    parameter.put(new Integer(2), "b");
 	    assertSame(result, preparedStatementHandler.getResultSet("select x", parameter));
+        preparedStatementHandler.setUseRegularExpressions(false);
+        preparedStatementHandler.setExactMatchParameter(true);
+        MockResultSet result1 = new MockResultSet("id1");
+        MockResultSet result2 = new MockResultSet("id2");
+        preparedStatementHandler.prepareResultSets("xyz", new MockResultSet[] {result1, result2}, new String[] {"a"});
+        parameter = new HashMap();
+        assertNull(preparedStatementHandler.getResultSet("xyz", parameter));
+        parameter = new HashMap();
+        parameter.put(new Integer(1), "a");
+        assertSame(result1, preparedStatementHandler.getResultSet("xyz", parameter));
 	}
     
     public void testGetResultSets() throws Exception
@@ -78,6 +88,29 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertEquals(1, returnedResults.length);
         assertSame(result1, returnedResults[0]);
     }
+    
+    public void testHasMultipleResultSets() throws Exception
+    {
+        MockResultSet result1 = new MockResultSet("id1");
+        MockResultSet result2 = new MockResultSet("id2");
+        List parameterList = new ArrayList();
+        parameterList.add(new Integer(5));
+        Map parameterMap = new HashMap();
+        parameterMap.put(new Integer(1), new Integer(5));
+        callableStatementHandler.prepareResultSet("select from", result1, parameterList);
+        assertFalse(callableStatementHandler.hasMultipleResultSets("select from", new HashMap()));
+        assertFalse(callableStatementHandler.hasMultipleResultSets("select from", parameterMap));
+        callableStatementHandler.prepareResultSets("select 123", new MockResultSet[] {result1}, parameterList);
+        assertFalse(callableStatementHandler.hasMultipleResultSets("select 123", new HashMap()));
+        assertTrue(callableStatementHandler.hasMultipleResultSets("select 123", parameterMap));
+        callableStatementHandler.prepareResultSets("select 123", new MockResultSet[] {result1, result2}, parameterList);
+        assertFalse(callableStatementHandler.hasMultipleResultSets("select 123", new HashMap()));
+        assertTrue(callableStatementHandler.hasMultipleResultSets("select 123", parameterMap));
+        parameterMap.put(new Integer(2), new Integer(5));
+        assertTrue(callableStatementHandler.hasMultipleResultSets("select 123", parameterMap));
+        callableStatementHandler.setExactMatchParameter(true);
+        assertFalse(callableStatementHandler.hasMultipleResultSets("select 123", parameterMap));
+    }
 	
 	public void testGetUpdateCount() throws Exception
 	{
@@ -92,7 +125,9 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 	    assertEquals(new Integer(2), callableStatementHandler.getUpdateCount("INSERT INTO", parameter));
 	    callableStatementHandler.setExactMatchParameter(true);
 	    assertNull(callableStatementHandler.getUpdateCount("INSERT INTO", parameter));
-	}
+        callableStatementHandler.prepareUpdateCounts("update", new int[] {1, 3}, new HashMap());
+        assertEquals(new Integer(1), callableStatementHandler.getUpdateCount("update", new HashMap()));
+    }
     
     public void testGetUpdateCounts() throws Exception
     {
@@ -111,6 +146,25 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertEquals(new Integer(7), returnedUpdateCounts[2]);
         preparedStatementHandler.setExactMatchParameter(true);
         assertNull(preparedStatementHandler.getUpdateCounts("insert abc", parameter));
+    }
+    
+    public void testHasMultipleUpdateCounts() throws Exception
+    {
+        Map parameter = new HashMap();
+        parameter.put(new Integer(1), "1");
+        preparedStatementHandler.prepareUpdateCount("insert into", 3, new Object[] {"1"});
+        assertFalse(preparedStatementHandler.hasMultipleUpdateCounts("insert into", new HashMap()));
+        assertFalse(preparedStatementHandler.hasMultipleUpdateCounts("insert into", parameter));
+        preparedStatementHandler.prepareUpdateCounts("insert 123", new int[] {3}, new Object[] {"1"});
+        assertFalse(preparedStatementHandler.hasMultipleUpdateCounts("insert 123", new HashMap()));
+        assertTrue(preparedStatementHandler.hasMultipleUpdateCounts("insert 123", parameter));
+        preparedStatementHandler.prepareUpdateCounts("insert 123", new int[] {3, 5}, new Object[] {"1"});
+        assertFalse(preparedStatementHandler.hasMultipleUpdateCounts("insert 123", new HashMap()));
+        assertTrue(preparedStatementHandler.hasMultipleUpdateCounts("insert 123", parameter));
+        preparedStatementHandler.setExactMatchParameter(true);
+        assertTrue(preparedStatementHandler.hasMultipleUpdateCounts("insert 123", parameter));
+        parameter.put(new Integer(2), "1");
+        assertFalse(preparedStatementHandler.hasMultipleUpdateCounts("insert 123", parameter));
     }
 	
 	public void testGetThrowsSQLException()
