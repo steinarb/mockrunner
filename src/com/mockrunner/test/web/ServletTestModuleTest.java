@@ -209,6 +209,40 @@ public class ServletTestModuleTest extends BaseTestCase
         assertSame(responseWrapper, getWebMockObjectFactory().getMockFilterChain().getLastResponse());
     }
     
+    public void testDoFilterReset()
+    {
+        TestFilter filter1 = new TestFilter();
+        SkipTestFilter filter2 = new SkipTestFilter();
+        TestFilter filter3 = new TestFilter();
+        module.addFilter(filter1);
+        module.addFilter(filter2);
+        module.addFilter(filter3);
+        module.doFilter();
+        assertTrue(filter1.wasDoFilterCalled());
+        assertFalse(filter3.wasDoFilterCalled());
+        module.doFilter();
+        assertTrue(filter1.wasDoFilterCalled());
+        assertFalse(filter3.wasDoFilterCalled());
+    }
+    
+    public static class SkipTestFilter implements Filter
+    {
+        public void init(FilterConfig config) throws ServletException
+        {
+
+        }
+
+        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
+        {
+            
+        }
+
+        public void destroy()
+        {
+       
+        }
+    }
+    
     public static class TestFilter implements Filter
     {
         private boolean initCalled  = false;

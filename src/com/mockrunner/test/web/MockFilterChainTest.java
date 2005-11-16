@@ -123,6 +123,39 @@ public class MockFilterChainTest extends TestCase
         assertSame(response, chain.getLastResponse());
     }
     
+    public void testReset() throws Exception
+    {
+        MockHttpServletRequest request = new MockHttpServletRequest();
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        SkipTestFilter filter1 = new SkipTestFilter();
+        TestFilter filter2 = new TestFilter();
+        chain.addFilter(filter1);
+        chain.addFilter(filter2);
+        chain.doFilter(request, response);
+        assertFalse(filter2.wasDoFilterCalled());
+        chain.reset();
+        chain.doFilter(request, response);
+        assertFalse(filter2.wasDoFilterCalled());
+    }
+    
+    public static class SkipTestFilter implements Filter
+    {
+        public void init(FilterConfig config) throws ServletException
+        {
+
+        }
+
+        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
+        {
+            
+        }
+
+        public void destroy()
+        {
+       
+        }
+    }
+    
     public static class TestFilter implements Filter
     {
         private boolean doFilterCalled  = false;

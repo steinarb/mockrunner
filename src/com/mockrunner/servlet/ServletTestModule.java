@@ -213,6 +213,7 @@ public class ServletTestModule extends HTMLOutputModule
         try
         {
             mockFactory.getMockFilterChain().doFilter(mockFactory.getWrappedRequest(), mockFactory.getWrappedResponse());
+            mockFactory.getMockFilterChain().reset();
         }
         catch(Exception exc)
         {
