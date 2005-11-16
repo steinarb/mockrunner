@@ -50,6 +50,14 @@ public class MockFilterChain implements FilterChain
             servlet.service(request, response);
         }
     }
+    
+    /**
+     * Resets the chain.
+     */
+    public void reset()
+    {
+        iterator = null;
+    }
 
     /**
      * Adds a filter to the chain.
@@ -100,6 +108,7 @@ public class MockFilterChain implements FilterChain
     {
         filters.clear();
         setServlet(null);
+        reset();
     }
     
     /**
