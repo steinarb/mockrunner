@@ -45,14 +45,14 @@ public class MockFilterChain implements FilterChain
         }
         else
         {
-            iterator = null;
+            reset();
             if(null == servlet) return;
             servlet.service(request, response);
         }
     }
     
     /**
-     * Resets the chain.
+     * Resets the internal iterator of this chain.
      */
     public void reset()
     {
