@@ -22,6 +22,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
     private Map resultSetsForStatement = new HashMap();
     private Map updateCountForStatement = new HashMap();
     private Map throwsSQLException = new HashMap();
+    private Map generatedKeysForStatement = new HashMap();
 	private Map executedStatementParameters = new HashMap();
     
 	/**
@@ -206,6 +207,27 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         }
         return null;
     }
+    
+    /**
+     * Returns the first generated keys <code>ResultSet</code> that 
+     * matches the specified SQL string. 
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param parameters the parameters
+     * @return the corresponding generated keys {@link MockResultSet}
+     */
+    public MockResultSet getGeneratedKeys(String sql, Map parameters)
+    {
+        MockResultSetWrapper wrapper = (MockResultSetWrapper)getMatchingParameterWrapper(sql, parameters, generatedKeysForStatement);
+        if(null != wrapper)
+        {
+            return wrapper.getResultSet();
+        }
+        return null;
+    }
 
     protected ParameterWrapper getMatchingParameterWrapper(String sql, Map parameters, Map statementMap)
     {
@@ -283,6 +305,15 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         super.clearThrowsSQLException();
         throwsSQLException.clear();
     }
+    
+    /**
+     * Clears the list of statements that return generated keys.
+     */
+    public void clearGeneratedKeys()
+    {
+        super.clearGeneratedKeys();
+        generatedKeysForStatement.clear();
+    }
 
     /**
      * Prepare a <code>ResultSet</code> for a specified SQL string and
@@ -343,8 +374,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * the specified parameters. The specified parameters <code>Map</code>
      * must contain the parameters by mapping <code>Integer</code> objects
      * to the corresponding parameter. The <code>Integer</code> object
-     * is the index of the parameter. In the case of a <code>CallableStatement</code>
-     * there are also allowed <code>String</code> keys for named parameters.
+     * is the index of the parameter. In the case of a <code>CallableStatement</code>,
+     * <code>String</code> keys for named parameters are also allowed.
      * Please note that you can modify the match parameters with 
      * {@link #setCaseSensitive}, {@link #setExactMatch} and 
      * {@link #setUseRegularExpressions} and the match parameters for the 
@@ -423,6 +454,11 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * This method creates an <code>SQLException</code> and will throw this 
      * exception. With {@link #prepareThrowsSQLException(String, SQLException, Map)} 
      * you can specify the exception.
+     * The specified parameters <code>Map</code> must contain the parameters by 
+     * mapping <code>Integer</code> objects to the corresponding parameter. 
+     * The <code>Integer</code> object is the index of the parameter. In the case
+     * of a <code>CallableStatement</code>, 
+     * <code>String</code> keys for named parameters are also allowed.
      * Please note that you can modify the match parameters with 
      * {@link #setCaseSensitive}, {@link #setExactMatch} and 
      * {@link #setUseRegularExpressions} and the match parameters for the 
@@ -489,6 +525,11 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * should raise an exception.
      * This can be used to simulate database exceptions.
      * This method takes an exception object that will be thrown.
+     * The specified parameters <code>Map</code> must contain the parameters by 
+     * mapping <code>Integer</code> objects to the corresponding parameter. 
+     * The <code>Integer</code> object is the index of the parameter. In the case
+     * of a <code>CallableStatement</code>, 
+     * <code>String</code> keys for named parameters are also allowed.
      * Please note that you can modify the match parameters with 
      * {@link #setCaseSensitive}, {@link #setExactMatch} and 
      * {@link #setUseRegularExpressions} and the match parameters for the 
@@ -562,8 +603,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * and the specified parameters. The specified parameters <code>Map</code>
      * must contain the parameters by mapping <code>Integer</code> objects
      * to the corresponding parameter. The <code>Integer</code> object
-     * is the index of the parameter. In the case of a <code>CallableStatement</code>
-     * there are also allowed <code>String</code> keys for named parameters.
+     * is the index of the parameter. In the case of a <code>CallableStatement</code>,
+     * <code>String</code> keys for named parameters are also allowed.
      * Please note that you can modify the match parameters with 
      * {@link #setCaseSensitive}, {@link #setExactMatch} and 
      * {@link #setUseRegularExpressions} and the match parameters for the 
@@ -582,6 +623,72 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
     {
         List list = getListFromMapForSQLStatement(sql, updateCountForStatement);
         list.add(new MockUpdateCountArrayWrapper((int[])updateCounts.clone(), new HashMap(parameters)));
+    }
+    
+    /**
+     * Prepare the generated keys <code>ResultSet</code> 
+     * for a specified SQL string.
+     * The specified parameters array must contain the parameters in 
+     * the correct order starting with index 0 for the first parameter. 
+     * Please keep in mind that parameters in <code>PreparedStatement</code> 
+     * objects start with 1 as the first parameter. So <code>parameters[0]</code> 
+     * maps to the parameter with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param generatedKeysResult the generated keys {@link MockResultSet}
+     * @param parameters the parameters
+     */
+    public void prepareGeneratedKeys(String sql, MockResultSet generatedKeysResult, Object[] parameters)
+    {
+        prepareGeneratedKeys(sql, generatedKeysResult, ArrayUtil.getListFromObjectArray(parameters));
+    }
+    
+    /**
+     * Prepare the generated keys <code>ResultSet</code> 
+     * for a specified SQL string.
+     * The specified parameters <code>List</code> must contain the 
+     * parameters in the correct order starting with index 0 for the first 
+     * parameter. Please keep in mind that parameters in 
+     * <code>PreparedStatement</code> objects start with 1 as the first
+     * parameter. So <code>parameters.get(0)</code> maps to the parameter 
+     * with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param generatedKeysResult the generated keys {@link MockResultSet}
+     * @param parameters the parameters
+     */
+    public void prepareGeneratedKeys(String sql, MockResultSet generatedKeysResult, List parameters)
+    {
+        Map params = createParameterMap(parameters);
+        prepareGeneratedKeys(sql, generatedKeysResult, params);
+    }
+    
+    /**
+     * Prepare the generated keys <code>ResultSet</code> 
+     * for a specified SQL string.
+     * The specified parameters <code>Map</code> must contain the parameters by 
+     * mapping <code>Integer</code> objects to the corresponding parameter. 
+     * The <code>Integer</code> object is the index of the parameter. In the case
+     * of a <code>CallableStatement</code>, 
+     * <code>String</code> keys for named parameters are also allowed.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param generatedKeysResult the generated keys {@link MockResultSet}
+     * @param parameters the parameters
+     */
+    public void prepareGeneratedKeys(String sql, MockResultSet generatedKeysResult, Map parameters)
+    {
+        List list = getListFromMapForSQLStatement(sql, generatedKeysForStatement);
+        list.add(new MockResultSetWrapper(generatedKeysResult, new HashMap(parameters)));
     }
     
     private List getListFromMapForSQLStatement(String sql, Map map)

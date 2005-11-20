@@ -213,4 +213,23 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         String message = statementHandler.getSQLException("b statementxyz").getMessage();
         assertTrue(message.indexOf("[abc] statementxyz") != -1);
     }
+    
+    public void testClearMethods()
+    {
+        statementHandler.prepareResultSet("select", new MockResultSet("id"));
+        statementHandler.prepareUpdateCount("select", 3);
+        statementHandler.prepareThrowsSQLException("select");
+        statementHandler.prepareReturnsResultSet("select", true);
+        statementHandler.prepareGeneratedKeys("select", new MockResultSet("id"));
+        statementHandler.clearResultSets();
+        statementHandler.clearUpdateCounts();
+        statementHandler.clearThrowsSQLException();
+        statementHandler.clearReturnsResultSet();
+        statementHandler.clearGeneratedKeys();
+        assertNull(statementHandler.getResultSet("select"));
+        assertNull(statementHandler.getUpdateCount("select"));
+        assertFalse(statementHandler.getThrowsSQLException("select"));
+        assertNull(statementHandler.getReturnsResultSet("select"));
+        assertNull(statementHandler.getGeneratedKeys("select"));
+    }
 }
