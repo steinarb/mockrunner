@@ -40,11 +40,18 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     private List batchParameters = new ArrayList();
     private String sql;
     private MockParameterMetaData parameterMetaData;
+    private boolean returnGeneratedKeys = false;
     
     public MockPreparedStatement(Connection connection, String sql)
     {
+        this(connection, sql, false);
+    }
+    
+    public MockPreparedStatement(Connection connection, String sql, boolean returnGeneratedKeys)
+    {
         super(connection);
         this.sql = sql;
+        this.returnGeneratedKeys = returnGeneratedKeys;
         prepareParameterMetaData();
     }
     
@@ -159,9 +166,12 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             result = cloneResultSet(result);
             resultSetHandler.addReturnedResultSet(result);
             setResultSet(result);
+            setGeneratedKeysResultSet(sql, params);
             return result;
         }
-        return super.executeQuery(getSQL());
+        ResultSet superResultSet = super.executeQuery(getSQL());
+        setGeneratedKeysResultSet(sql, params);
+        return superResultSet;
     }
 
     public int executeUpdate() throws SQLException
@@ -188,9 +198,12 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             resultSetHandler.addExecutedStatement(getSQL());
             int updateCountInt = updateCount.intValue();
             setUpdateCount(updateCountInt);
+            setGeneratedKeysResultSet(sql, params);
             return updateCountInt;
         }
-        return super.executeUpdate(getSQL());
+        int superUpdateCount = super.executeUpdate(getSQL());
+        setGeneratedKeysResultSet(sql, params);
+        return superUpdateCount;
     }
     
     public int[] executeBatch() throws SQLException
@@ -211,6 +224,26 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             results[ii] = executeUpdate(currentParameters);
         }
         return results;
+    }
+    
+    private void setGeneratedKeysResultSet(String sql, Map params) throws SQLException
+    {
+        MockResultSet generatedKeys = resultSetHandler.getGeneratedKeys(sql, params);
+        if(returnGeneratedKeys)
+        {
+            if(null != generatedKeys)
+            {
+                setLastGeneratedKeysResultSet(generatedKeys);
+            }
+            else
+            {
+                setLastGeneratedKeysResultSet(determineGeneratedKeysResultSet(sql));
+            }
+        }
+        else
+        {
+            setLastGeneratedKeysResultSet(null);
+        }
     }
 
     public ResultSetMetaData getMetaData() throws SQLException

@@ -195,6 +195,35 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertSame(exc, preparedStatementHandler.getSQLException("abc", parameters));
         assertNull(preparedStatementHandler.getSQLException("abcxyz", parameters));
     }
+    
+    public void testGetGeneratedKeys() throws Exception
+    {
+        MockResultSet resultSet1 = new MockResultSet("id1");
+        MockResultSet resultSet2 = new MockResultSet("id2");
+        preparedStatementHandler.prepareGeneratedKeys("select * from", resultSet1, new Object[] {"1"});
+        Map parameters = new HashMap();
+        parameters.put(new Integer(1), "1");
+        parameters.put("2", "2");
+        preparedStatementHandler.prepareGeneratedKeys("insert into", resultSet2, parameters);
+        Map actualParameters = new HashMap();
+        actualParameters.put(new Integer(1), "1");
+        actualParameters.put("2", "3");
+        actualParameters.put("3", "3");
+        assertNull(preparedStatementHandler.getGeneratedKeys("insert into", actualParameters));
+        actualParameters.put("2", "2");
+        assertSame(resultSet2, preparedStatementHandler.getGeneratedKeys("insert into", actualParameters));
+        preparedStatementHandler.setExactMatchParameter(true);
+        assertNull(preparedStatementHandler.getGeneratedKeys("insert into", actualParameters));
+        actualParameters.remove("3");
+        assertSame(resultSet2, preparedStatementHandler.getGeneratedKeys("insert into", actualParameters));
+        actualParameters = new HashMap();
+        actualParameters.put(new Integer(1), "1");
+        assertNull(preparedStatementHandler.getGeneratedKeys("insert into", actualParameters));
+        assertSame(resultSet1, preparedStatementHandler.getGeneratedKeys("selECt * from", actualParameters));
+        preparedStatementHandler.setCaseSensitive(true);
+        assertNull(preparedStatementHandler.getGeneratedKeys("selECt * from", actualParameters));
+        assertSame(resultSet1, preparedStatementHandler.getGeneratedKeys("select * from", actualParameters));
+    }
 	
 	public void testGetParameterMapForExecutedStatementNull() throws Exception
 	{

@@ -1,6 +1,8 @@
 
 mockrunner-0.3.7:
 
+- JDBC generated keys are now supported for prepared statements as well 
+  (0.3.6 supports them only for normal statements)
 - refactored release call handling while processing the tag lifecycle. Check out
   migratingfrom0.3.6.txt for details.
 - the tag test framework now supports the TryCatchFinally interface

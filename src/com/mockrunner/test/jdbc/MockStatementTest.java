@@ -51,6 +51,11 @@ public class MockStatementTest extends BaseTestCase
         callableStatementHandler = connection.getCallableStatementResultSetHandler();
     }
     
+    private boolean isEmpty(MockResultSet resultSet)
+    {
+        return resultSet.getRowCount() == 0;
+    }
+    
     private boolean isResultSet1(MockResultSet resultSet)
     {
         return resultSet.getRowCount() == 1;
@@ -101,32 +106,46 @@ public class MockStatementTest extends BaseTestCase
         statementHandler.prepareGeneratedKeys("insert into table", resultSet3);
         MockStatement statement = (MockStatement)connection.createStatement();
         statement.executeUpdate("inser", new int[1]);
-        assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
         assertSame(statement, ((MockResultSet)statement.getGeneratedKeys()).getStatement());
         statement.execute("insert into", Statement.NO_GENERATED_KEYS);
-        assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
         statement.executeUpdate("do insert into table xyz", new String[0]);
         assertTrue(isResultSet3((MockResultSet)statement.getGeneratedKeys()));
         assertSame(statement, ((MockResultSet)statement.getGeneratedKeys()).getStatement());
         statementHandler.setUseRegularExpressions(true);
         statement.executeUpdate("insert into table xyz", new String[0]);
-        assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
         statementHandler.prepareGlobalGeneratedKeys(resultSet1);
         statement.execute("insert into table xyz", Statement.RETURN_GENERATED_KEYS);
         assertTrue(isResultSet1((MockResultSet)statement.getGeneratedKeys()));
         assertSame(statement, ((MockResultSet)statement.getGeneratedKeys()).getStatement());
+        statement.execute("insert into table xyz");
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
         statementHandler.setExactMatch(true);
         statement.executeUpdate("insert into othertable", Statement.RETURN_GENERATED_KEYS);
         assertTrue(isResultSet2((MockResultSet)statement.getGeneratedKeys()));
         assertSame(statement, ((MockResultSet)statement.getGeneratedKeys()).getStatement());
         statement.executeUpdate("insert into othertable", Statement.NO_GENERATED_KEYS);
-        assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
         statementHandler.clearGlobalGeneratedKeys();
         statement.executeUpdate("abc", Statement.RETURN_GENERATED_KEYS);
-        assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
         statementHandler.clearGeneratedKeys();
         statement.execute("insert into othertable", Statement.RETURN_GENERATED_KEYS);
-        assertEquals(0, ((MockResultSet)statement.getGeneratedKeys()).getRowCount());
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
+    }
+    
+    public void testPrepareGeneratedKeysBatch() throws Exception
+    {
+        statementHandler.prepareGeneratedKeys("insert into othertable", resultSet2);
+        statementHandler.prepareGeneratedKeys("insert into table", resultSet3);
+        MockStatement statement = (MockStatement)connection.createStatement();
+        statement.executeUpdate("insert into othertable", Statement.RETURN_GENERATED_KEYS);
+        assertTrue(isResultSet2((MockResultSet)statement.getGeneratedKeys()));
+        statement.addBatch("insert into othertable");
+        statement.executeBatch();
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
     }
     
     public void testPrepareUpdateCount() throws Exception
@@ -494,6 +513,88 @@ public class MockStatementTest extends BaseTestCase
         }
         preparedStatementHandler.setExactMatchParameter(true);
         statement.execute();
+    }
+    
+    public void testPrepareGeneratedKeysPreparedStatement() throws Exception
+    {
+        List params = new ArrayList();
+        params.add("1");
+        params.add(new Long(2));
+        preparedStatementHandler.prepareGeneratedKeys("delete xyz", resultSet1);
+        preparedStatementHandler.prepareGeneratedKeys("insert into", resultSet2);
+        preparedStatementHandler.prepareGeneratedKeys("insert into", resultSet3, params);
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("delete xyz", Statement.RETURN_GENERATED_KEYS);
+        statement.executeUpdate("delete xyz");
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
+        statement.executeUpdate();
+        assertTrue(isResultSet1((MockResultSet)statement.getGeneratedKeys()));
+        statement.executeQuery();
+        assertTrue(isResultSet1((MockResultSet)statement.getGeneratedKeys()));
+        statement.execute();
+        assertTrue(isResultSet1((MockResultSet)statement.getGeneratedKeys()));
+        statement = (MockPreparedStatement)connection.prepareStatement("insert into xyz", Statement.RETURN_GENERATED_KEYS);
+        statement.execute();
+        assertTrue(isResultSet2((MockResultSet)statement.getGeneratedKeys()));
+        statement.setString(1, "1");
+        statement.executeQuery();
+        assertTrue(isResultSet2((MockResultSet)statement.getGeneratedKeys()));
+        statement.setLong(2, 2);
+        statement.execute();
+        assertTrue(isResultSet3((MockResultSet)statement.getGeneratedKeys()));
+        statement.executeUpdate("delete xyz");
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
+        statement.setLong(2, 1);
+        statement.executeUpdate();
+        assertTrue(isResultSet2((MockResultSet)statement.getGeneratedKeys()));
+        statement.executeQuery("select");
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
+        preparedStatementHandler.setExactMatch(true);
+        statement.executeUpdate();
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
+        preparedStatementHandler.setExactMatch(false);
+        preparedStatementHandler.setExactMatchParameter(true);
+        statement.setLong(2, 2);
+        statement.execute();
+        assertTrue(isResultSet3((MockResultSet)statement.getGeneratedKeys()));
+        statement.setString(3, "3");
+        statement.executeQuery();
+        assertTrue(isResultSet2((MockResultSet)statement.getGeneratedKeys()));
+        statement = (MockPreparedStatement)connection.prepareStatement("insert into xyz", Statement.NO_GENERATED_KEYS);
+        statement.execute();
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
+        statement.execute("insert into xyz", Statement.RETURN_GENERATED_KEYS);
+        assertTrue(isResultSet2((MockResultSet)statement.getGeneratedKeys()));
+        statement.executeQuery();
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
+    }
+    
+    public void testPrepareGeneratedKeysBatchPreparedStatement() throws Exception
+    {
+        List params = new ArrayList();
+        params.add("1");
+        params.add(new Long(2));
+        preparedStatementHandler.prepareGeneratedKeys("insert into", resultSet2, new Object[] {"2"});
+        preparedStatementHandler.prepareGeneratedKeys("insert into", resultSet3, params);
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("insert into", Statement.RETURN_GENERATED_KEYS);
+        statement.setString(1, "2");
+        statement.addBatch();
+        statement.executeBatch();
+        assertTrue(isResultSet2((MockResultSet)statement.getGeneratedKeys()));
+        statement.setString(1, "3");
+        statement.addBatch();
+        statement.executeBatch();
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
+        statement.setString(1, "1");
+        statement.setLong(2, 2);
+        statement.setString(3, "1");
+        statement.addBatch();
+        statement.executeBatch();
+        assertTrue(isResultSet3((MockResultSet)statement.getGeneratedKeys()));
+        statement = (MockPreparedStatement)connection.prepareStatement("insert into", Statement.NO_GENERATED_KEYS);
+        statement.setString(1, "2");
+        statement.addBatch();
+        statement.executeBatch();
+        assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
     }
     
     public void testClearResultSetsAndUpdateCounts() throws Exception
