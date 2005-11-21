@@ -28,6 +28,7 @@ import java.util.Map;
 
 import com.mockrunner.jdbc.AbstractParameterResultSetHandler;
 import com.mockrunner.jdbc.ParameterUtil;
+import com.mockrunner.util.common.ArrayUtil;
 import com.mockrunner.util.common.StringUtil;
 
 /**
@@ -158,20 +159,56 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         {
             throw exception;
         }
-        MockResultSet result = resultSetHandler.getResultSet(getSQL(), params);
 		resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy(params));
-        if(null != result)
+        if(resultSetHandler.hasMultipleResultSets(getSQL(), params))
         {
-            resultSetHandler.addExecutedStatement(getSQL());
-            result = cloneResultSet(result);
-            resultSetHandler.addReturnedResultSet(result);
-            setResultSet(result);
-            setGeneratedKeysResultSet(sql, params);
-            return result;
+            MockResultSet[] results = resultSetHandler.getResultSets(getSQL(), params);
+            if(null != results)
+            {
+                resultSetHandler.addExecutedStatement(getSQL());
+                return cloneAndSetMultipleResultSets(results, params);
+            }
+        }
+        else
+        {
+            MockResultSet result = resultSetHandler.getResultSet(getSQL(), params);
+            if(null != result)
+            {
+                resultSetHandler.addExecutedStatement(getSQL());
+                return cloneAndSetSingleResultSet(result, params);
+            }
         }
         ResultSet superResultSet = super.executeQuery(getSQL());
         setGeneratedKeysResultSet(sql, params);
         return superResultSet;
+    }
+    
+    private MockResultSet cloneAndSetSingleResultSet(MockResultSet result, Map params)
+    {
+        result = cloneResultSet(result);
+        if(null != result)
+        {
+            resultSetHandler.addReturnedResultSet(result);
+        }
+        setResultSets(new MockResultSet[] {result});
+        setGeneratedKeysResultSet(sql, params);
+        return result;
+    }
+    
+    private MockResultSet cloneAndSetMultipleResultSets(MockResultSet[] results, Map params)
+    {
+        results = cloneResultSets(results);
+        if(null != results)
+        {
+            resultSetHandler.addReturnedResultSets(results);
+        }
+        setResultSets(results);
+        setGeneratedKeysResultSet(sql, params);
+        if(null != results && results.length > 0)
+        {
+            return results[0];
+        }
+        return null;
     }
 
     public int executeUpdate() throws SQLException
@@ -191,19 +228,46 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         {
             throw exception;
         }
-        Integer updateCount = resultSetHandler.getUpdateCount(getSQL(), params);
 		resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy(params));
-        if(null != updateCount)
+        if(resultSetHandler.hasMultipleUpdateCounts(getSQL(), params))
         {
-            resultSetHandler.addExecutedStatement(getSQL());
-            int updateCountInt = updateCount.intValue();
-            setUpdateCount(updateCountInt);
-            setGeneratedKeysResultSet(sql, params);
-            return updateCountInt;
+            Integer[] updateCounts = resultSetHandler.getUpdateCounts(getSQL(), params);
+            if(null != updateCounts)
+            {
+                resultSetHandler.addExecutedStatement(getSQL());
+                return setMultipleUpdateCounts((int[])ArrayUtil.convertToPrimitiveArray(updateCounts), params);
+            }
+        }
+        else
+        {
+            Integer updateCount = resultSetHandler.getUpdateCount(getSQL(), params);
+            if(null != updateCount)
+            {
+                resultSetHandler.addExecutedStatement(getSQL());
+                return setSingleUpdateCount(updateCount.intValue(), params);
+            }
         }
         int superUpdateCount = super.executeUpdate(getSQL());
         setGeneratedKeysResultSet(sql, params);
         return superUpdateCount;
+    }
+    
+    private int setSingleUpdateCount(int updateCount, Map params)
+    {
+        setUpdateCounts(new int[] {updateCount});
+        setGeneratedKeysResultSet(sql, params);
+        return updateCount;
+    }
+    
+    private int setMultipleUpdateCounts(int[] updateCounts, Map params)
+    {
+        setUpdateCounts(updateCounts);
+        setGeneratedKeysResultSet(sql, params);
+        if(null != updateCounts && updateCounts.length > 0)
+        {
+            return updateCounts[0];
+        }
+        return 0;
     }
     
     public int[] executeBatch() throws SQLException
@@ -226,7 +290,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return results;
     }
     
-    private void setGeneratedKeysResultSet(String sql, Map params) throws SQLException
+    private void setGeneratedKeysResultSet(String sql, Map params)
     {
         MockResultSet generatedKeys = resultSetHandler.getGeneratedKeys(sql, params);
         if(returnGeneratedKeys)
