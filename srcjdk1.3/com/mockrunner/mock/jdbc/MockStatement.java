@@ -12,6 +12,7 @@ import java.util.List;
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.jdbc.AbstractResultSetHandler;
 import com.mockrunner.jdbc.SQLUtil;
+import com.mockrunner.util.common.ArrayUtil;
 
 /**
  * Mock implementation of <code>Statement</code>.
@@ -19,8 +20,10 @@ import com.mockrunner.jdbc.SQLUtil;
 public class MockStatement implements Statement
 {
     private AbstractResultSetHandler resultSetHandler;
-    private ResultSet currentResultSet = null;
-    private int currentUpdateCount = -1;
+    private ResultSet[] currentResultSets = null;
+    private int[] currentUpdateCounts = null;
+    private int currentResultSetIndex = 0;
+    private int currentUpdateCountIndex = 0;
     private List batches = new ArrayList();
     private String cursorName = "";
     private int querySeconds = 0;
@@ -83,16 +86,20 @@ public class MockStatement implements Statement
         this.resultSetHandler = resultSetHandler;
     }
     
-    protected void setResultSet(ResultSet resultSet)
+    protected void setResultSets(ResultSet[] resultSets)
     {
-        this.currentUpdateCount = -1;
-        this.currentResultSet = resultSet;
+        this.currentUpdateCounts = null;
+        this.currentResultSets = resultSets;
+        this.currentResultSetIndex = 0;
+        this.currentUpdateCountIndex = 0;
     }
     
-    protected void setUpdateCount(int updateCount)
+    protected void setUpdateCounts(int[] updateCounts)
     {
-        this.currentResultSet = null;
-        this.currentUpdateCount = updateCount;
+        this.currentResultSets = null;
+        this.currentUpdateCounts = updateCounts;
+        this.currentResultSetIndex = 0;
+        this.currentUpdateCountIndex = 0;
     }
     
     public String getCursorName()
@@ -108,20 +115,49 @@ public class MockStatement implements Statement
             throw exception;
         }
         resultSetHandler.addExecutedStatement(sql);
-        MockResultSet result = resultSetHandler.getResultSet(sql);
+        if(resultSetHandler.hasMultipleResultSets(sql))
+        {
+            MockResultSet[] results = resultSetHandler.getResultSets(sql);
+            if(null != results) return cloneAndSetMultipleResultSets(results);
+        }
+        else
+        {
+            MockResultSet result = resultSetHandler.getResultSet(sql);
+            if(null != result) return cloneAndSetSingleResultSet(result);
+        }
+        if(resultSetHandler.hasMultipleGlobalResultSets())
+        {
+            return cloneAndSetMultipleResultSets(resultSetHandler.getGlobalResultSets());
+        }
+        return cloneAndSetSingleResultSet(resultSetHandler.getGlobalResultSet());
+    }
+    
+    private MockResultSet cloneAndSetSingleResultSet(MockResultSet result)
+    {
+        result = cloneResultSet(result);
         if(null != result)
         {
-            result = cloneResultSet(result);
             resultSetHandler.addReturnedResultSet(result);
-            setResultSet(result);
-            setLastGeneratedKeysResultSet(null);
-            return result;
         }
-        result = cloneResultSet(resultSetHandler.getGlobalResultSet());
-        resultSetHandler.addReturnedResultSet(result);
-        setResultSet(result);
+        setResultSets(new MockResultSet[] {result});
         setLastGeneratedKeysResultSet(null);
         return result;
+    }
+    
+    private MockResultSet cloneAndSetMultipleResultSets(MockResultSet[] results)
+    {
+        results = cloneResultSets(results);
+        if(null != results)
+        {
+            resultSetHandler.addReturnedResultSets(results);
+        }
+        setResultSets(results);
+        setLastGeneratedKeysResultSet(null);
+        if(null != results && results.length > 0)
+        {
+            return results[0];
+        }
+        return null;
     }
 
     public int executeUpdate(String sql) throws SQLException
@@ -132,18 +168,45 @@ public class MockStatement implements Statement
             throw exception;
         }
         resultSetHandler.addExecutedStatement(sql);
-        Integer returnValue = resultSetHandler.getUpdateCount(sql);
-        if(null != returnValue)
+        if(resultSetHandler.hasMultipleUpdateCounts(sql))
         {
-            int updateCount = returnValue.intValue();
-            setUpdateCount(updateCount);
-            setLastGeneratedKeysResultSet(null);
-            return updateCount;
+            Integer[] returnValues = resultSetHandler.getUpdateCounts(sql);
+            if(null != returnValues)
+            {
+                return setMultipleUpdateCounts((int[])ArrayUtil.convertToPrimitiveArray(returnValues));
+            }
         }
-        int updateCount = resultSetHandler.getGlobalUpdateCount();
-        setUpdateCount(updateCount);
+        else
+        {
+            Integer returnValue = resultSetHandler.getUpdateCount(sql);
+            if(null != returnValue)
+            {
+                return setSingleUpdateCount(returnValue.intValue());
+            }
+        }
+        if(resultSetHandler.hasMultipleGlobalUpdateCounts())
+        {
+            return setMultipleUpdateCounts(resultSetHandler.getGlobalUpdateCounts());
+        }
+        return setSingleUpdateCount(resultSetHandler.getGlobalUpdateCount());
+    }
+    
+    private int setSingleUpdateCount(int updateCount)
+    {
+        setUpdateCounts(new int[] {updateCount});
         setLastGeneratedKeysResultSet(null);
         return updateCount;
+    }
+    
+    private int setMultipleUpdateCounts(int[] updateCounts)
+    {
+        setUpdateCounts(updateCounts);
+        setLastGeneratedKeysResultSet(null);
+        if(null != updateCounts && updateCounts.length > 0)
+        {
+            return updateCounts[0];
+        }
+        return 0;
     }
     
     public boolean execute(String sql) throws SQLException
@@ -225,7 +288,7 @@ public class MockStatement implements Statement
         }
     }*/
     
-    protected void setLastGeneratedKeysResultSet(MockResultSet generatedKeys) throws SQLException
+    protected void setLastGeneratedKeysResultSet(MockResultSet generatedKeys)
     {
         lastGeneratedKeys = generatedKeys;
     }
@@ -314,22 +377,37 @@ public class MockStatement implements Statement
 
     public ResultSet getResultSet() throws SQLException
     {
-        return currentResultSet;
+        if(null == currentResultSets) return null;
+        if(currentResultSetIndex >= currentResultSets.length) return null;
+        return currentResultSets[currentResultSetIndex];
     }
 
     public int getUpdateCount() throws SQLException
     {
-        return currentUpdateCount;
+        if(null == currentUpdateCounts) return -1;
+        if(currentUpdateCountIndex >= currentUpdateCounts.length) return -1;
+        return currentUpdateCounts[currentUpdateCountIndex];
     }
 
     public boolean getMoreResults() throws SQLException
     {
-        if(null != currentResultSet)
+        if(null != currentResultSets)
         {
-            currentResultSet.close();
+            if(currentResultSetIndex < currentResultSets.length && null != currentResultSets[currentResultSetIndex])
+            {
+                currentResultSets[currentResultSetIndex].close();
+                currentResultSetIndex++;
+            }
+            return (currentResultSetIndex < currentResultSets.length);
         }
-        currentResultSet = null;
-        currentUpdateCount = -1;
+        else if(null != currentUpdateCounts)
+        {
+            if(currentUpdateCountIndex < currentUpdateCounts.length)
+            {
+                currentUpdateCountIndex++;
+            }
+            return (currentUpdateCountIndex < currentUpdateCounts.length);
+        }
         return false;
     }
 
@@ -399,11 +477,25 @@ public class MockStatement implements Statement
         return resultSetHoldability;
     }*/
     
-    protected MockResultSet cloneResultSet(MockResultSet resultSet) throws SQLException
+    protected MockResultSet cloneResultSet(MockResultSet resultSet)
     {
         if(null == resultSet) return null;
         MockResultSet clone = (MockResultSet)resultSet.clone();
         clone.setStatement(this);
         return clone;
+    }
+    
+    protected MockResultSet[] cloneResultSets(MockResultSet[] resultSets)
+    {
+        if(null == resultSets) return null;
+        MockResultSet[] clonedResultsSets = new MockResultSet[resultSets.length];
+        for(int ii = 0; ii < resultSets.length; ii++)
+        {
+            if(null != resultSets[ii])
+            {
+                clonedResultsSets[ii] = (MockResultSet)resultSets[ii].clone();
+            }
+        }
+        return clonedResultsSets;
     }
 }

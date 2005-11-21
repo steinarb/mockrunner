@@ -264,6 +264,66 @@ public class ArrayUtil
     }
     
     /**
+     * Returns a primitive array by unwrapping the corresponding types. If the 
+     * specified array is not an array of primitive wrapper types (e.g. <code>Integer[]</code>), 
+     * an <code>IllegalArgumentException</code> will be thrown.
+     * If an array element is <code>null</code>, an <code>IllegalArgumentException</code> 
+     * will be thrown.
+     * @param sourceArray the array
+     * @return the corresponding primitive array
+     * @throws IllegalArgumentException if the specified array
+     *         is not an array of primitive wrapper types or if an
+     *         array element is <code>null</code>
+     */
+    public static Object convertToPrimitiveArray(Object[] sourceArray)
+    {
+        Class componentType = sourceArray.getClass().getComponentType();
+        if(componentType.equals(Boolean.class))
+        {
+            componentType = Boolean.TYPE;
+        }
+        else if(componentType.equals(Byte.class)) 
+        {
+            componentType = Byte.TYPE;
+        }
+        else if(componentType.equals(Character.class))
+        {
+            componentType = Character.TYPE;
+        }
+        else if(componentType.equals(Short.class))
+        {
+            componentType = Short.TYPE;
+        }
+        else if(componentType.equals(Integer.class))
+        {
+            componentType = Integer.TYPE;
+        }
+        else if(componentType.equals(Long.class))
+        {
+            componentType = Long.TYPE;
+        }
+        else if(componentType.equals(Float.class))
+        {
+            componentType = Float.TYPE;
+        }
+        else if(componentType.equals(Double.class))
+        {
+            componentType = Double.TYPE;
+        }
+        else
+        {
+            throw new IllegalArgumentException("sourceArray is of type " + componentType + " which is not allowed");
+        }
+        int length = Array.getLength(sourceArray);
+        Object targetArray = Array.newInstance(componentType, length);
+        for(int ii = 0; ii < length; ii++)
+        {
+            Array.set(targetArray, ii, Array.get(sourceArray, ii));
+        }
+        return targetArray;
+    }
+    
+    /**
      * Creates an array with a single object as component.
      * If the specified object is an array, it will be returned
      * unchanged. Otherwise an array with the specified object

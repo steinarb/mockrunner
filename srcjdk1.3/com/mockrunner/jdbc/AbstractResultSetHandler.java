@@ -164,6 +164,12 @@ public abstract class AbstractResultSetHandler
         returnedResultSets.add(resultSet);
     }
     
+    public void addReturnedResultSets(MockResultSet[] resultSets)
+    {
+        if(null == resultSets) return;
+        returnedResultSets.add(resultSets);
+    }
+    
     /**
      * Returns the <code>List</code> of all executed SQL strings.
      * @return the <code>List</code> of executed SQL strings

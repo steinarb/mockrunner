@@ -176,6 +176,42 @@ public class ArrayUtilTest extends TestCase
         assertEquals(new Boolean(false), booleanWrappedArray[2]);
     }
     
+    public void testConvertToPrimitiveArray()
+    {
+        Integer[] integerArray = new Integer[] {new Integer(1), new Integer(2), new Integer(3)};
+        int[] intUnwrappedArray = (int[])ArrayUtil.convertToPrimitiveArray(integerArray);
+        assertEquals(1, intUnwrappedArray[0]);
+        assertEquals(2, intUnwrappedArray[1]);
+        assertEquals(3, intUnwrappedArray[2]);
+        Float[] floatArray = new Float[] {new Float(1)};
+        float[] floatUnwrappedArray = (float[])ArrayUtil.convertToPrimitiveArray(floatArray);
+        assertEquals(1.0, floatUnwrappedArray[0], 0);
+        Boolean[] booleanArray = new Boolean[] {new Boolean(true), new Boolean(false)};
+        boolean[] booleanUnwrappedArray = (boolean[])ArrayUtil.convertToPrimitiveArray(booleanArray);
+        assertTrue(booleanUnwrappedArray[0]);
+        assertFalse(booleanUnwrappedArray[1]);
+        intUnwrappedArray = (int[])ArrayUtil.convertToPrimitiveArray(new Integer[0]);
+        assertEquals(0, intUnwrappedArray.length);
+        try
+        {
+            ArrayUtil.convertToPrimitiveArray(new String[] {"1"});
+            fail();
+        } 
+        catch (IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+        try
+        {
+            ArrayUtil.convertToPrimitiveArray(new Integer[] {new Integer(1), null});
+            fail();
+        } 
+        catch (IllegalArgumentException exc)
+        {
+            //should throw exception
+        }
+    }
+    
     public void testConvertToArray()
     {
         int[] intArray = new int[] {1, 2, 3};
