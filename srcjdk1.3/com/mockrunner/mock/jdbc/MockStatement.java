@@ -388,14 +388,27 @@ public class MockStatement implements Statement
         if(currentUpdateCountIndex >= currentUpdateCounts.length) return -1;
         return currentUpdateCounts[currentUpdateCountIndex];
     }
+    
+    /*public boolean getMoreResults(int current) throws SQLException
+    {
+        return getMoreResults(current != Statement.KEEP_CURRENT_RESULT);
+    }*/
 
     public boolean getMoreResults() throws SQLException
     {
+        return getMoreResults(true);
+    }
+    
+    private boolean getMoreResults(boolean doCloseCurrentResult) throws SQLException
+    {
         if(null != currentResultSets)
         {
-            if(currentResultSetIndex < currentResultSets.length && null != currentResultSets[currentResultSetIndex])
+            if(currentResultSetIndex < currentResultSets.length)
             {
-                currentResultSets[currentResultSetIndex].close();
+                if(null != currentResultSets[currentResultSetIndex] && doCloseCurrentResult)
+                {
+                    currentResultSets[currentResultSetIndex].close();
+                }
                 currentResultSetIndex++;
             }
             return (currentResultSetIndex < currentResultSets.length);
@@ -406,7 +419,6 @@ public class MockStatement implements Statement
             {
                 currentUpdateCountIndex++;
             }
-            return (currentUpdateCountIndex < currentUpdateCounts.length);
         }
         return false;
     }
@@ -444,11 +456,6 @@ public class MockStatement implements Statement
     public Connection getConnection() throws SQLException
     {
         return connection;
-    }
-
-    public boolean getMoreResults(int current) throws SQLException
-    {
-        return getMoreResults();
     }
 
     public ResultSet getGeneratedKeys() throws SQLException
