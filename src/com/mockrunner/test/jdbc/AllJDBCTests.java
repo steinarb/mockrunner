@@ -16,6 +16,8 @@ public class AllJDBCTests
         suite.addTest(new TestSuite(MockStructTest.class));
         suite.addTest(new TestSuite(MockResultSetTest.class));
         suite.addTest(new TestSuite(MockStatementTest.class));
+        suite.addTest(new TestSuite(MockPreparedStatementTest.class));
+        suite.addTest(new TestSuite(MockCallableStatementTest.class));
         suite.addTest(new TestSuite(FileResultSetFactoryTest.class));
         suite.addTest(new TestSuite(JDBCMockObjectFactoryTest.class));
         suite.addTest(new TestSuite(AbstractResultSetHandlerTest.class));
