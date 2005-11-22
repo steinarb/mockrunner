@@ -194,7 +194,7 @@ ant.jar
 
 You can also get Mockrunner from CVS to have everything in place including
 a build script:
-:pserver:anonymous@cvs.sourceforge.net:/cvsroot/mockrunner
+cvs -d:pserver:anonymous@cvs.sourceforge.net:/cvsroot/mockrunner
 
 IMPORTANT NOTE: In order to fix problems with JUnits TestCaseClassLoader, all
 Mockrunner jar files contain an excluded.properties file including all org.apache,

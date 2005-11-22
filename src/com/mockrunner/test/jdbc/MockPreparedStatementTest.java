@@ -203,7 +203,7 @@ public class MockPreparedStatementTest extends BaseTestCase
         statement.setLong(1, 1);
         statement.setLong(2, 2);
         statement.setString(3, "3");
-        statement.executeQuery();
+        statement.execute();
         MockResultSet testResultSet1 = (MockResultSet)statement.getResultSet();
         statement.getMoreResults();
         MockResultSet testResultSet2 = (MockResultSet)statement.getResultSet();
@@ -223,7 +223,7 @@ public class MockPreparedStatementTest extends BaseTestCase
         assertFalse(testResultSet1.isClosed());
         assertFalse(testResultSet2.isClosed());
         assertFalse(testResultSet3.isClosed());
-        statement.executeQuery();
+        statement.execute();
         testResultSet1 = (MockResultSet)statement.getResultSet();
         statement.getMoreResults(Statement.KEEP_CURRENT_RESULT);
         testResultSet2 = (MockResultSet)statement.getResultSet();
@@ -233,6 +233,22 @@ public class MockPreparedStatementTest extends BaseTestCase
         assertFalse(testResultSet1.isClosed());
         assertTrue(testResultSet2.isClosed());
         assertFalse(testResultSet3.isClosed());
+    }
+    
+    public void testPrepareResultSetsStatementSet() throws Exception
+    {
+        preparedStatementHandler.prepareResultSet("select xyz", resultSet1);
+        preparedStatementHandler.prepareResultSets("select xyz", new MockResultSet[] {resultSet3, resultSet2}, new Object[] {"1"});
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("select xyz from x where value = ? and y = ?");
+        MockResultSet testResultSet1 = (MockResultSet)statement.executeQuery();
+        statement.setString(1, "1");
+        statement.execute();
+        MockResultSet testResultSet2 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults();
+        MockResultSet testResultSet3 = (MockResultSet)statement.getResultSet();
+        assertSame(statement, testResultSet1.getStatement());
+        assertSame(statement, testResultSet2.getStatement());
+        assertSame(statement, testResultSet3.getStatement());
     }
     
     public void testPrepareResultSetsNullValues() throws Exception

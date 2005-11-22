@@ -501,6 +501,7 @@ public class MockStatement implements Statement
             if(null != resultSets[ii])
             {
                 clonedResultsSets[ii] = (MockResultSet)resultSets[ii].clone();
+                clonedResultsSets[ii].setStatement(this);
             }
         }
         return clonedResultsSets;

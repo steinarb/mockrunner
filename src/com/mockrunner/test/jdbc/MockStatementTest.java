@@ -137,7 +137,7 @@ public class MockStatementTest extends BaseTestCase
         assertFalse(testResultSet3.isClosed());
         statement.getMoreResults();
         assertTrue(testResultSet3.isClosed());
-        statement.executeQuery("select test");
+        statement.execute("select test");
         testResultSet1 = (MockResultSet)statement.getResultSet();
         statement.getMoreResults(Statement.KEEP_CURRENT_RESULT);
         testResultSet2 = (MockResultSet)statement.getResultSet();
@@ -147,7 +147,25 @@ public class MockStatementTest extends BaseTestCase
         assertFalse(testResultSet1.isClosed());
         assertFalse(testResultSet2.isClosed());
         assertTrue(testResultSet3.isClosed());
+    }
+    
+    public void testPrepareResultSetsStatementSet() throws Exception
+    {
+        MockResultSet resultSet = new MockResultSet("id");
+        statementHandler.prepareGlobalResultSet(resultSet);
+        statementHandler.prepareResultSets("select test", new MockResultSet[] {resultSet1, resultSet2, resultSet3});
+        MockStatement statement = (MockStatement)connection.createStatement();
         statement.executeQuery("select test");
+        MockResultSet testResultSet1 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults();
+        MockResultSet testResultSet2 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults();
+        MockResultSet testResultSet3 = (MockResultSet)statement.getResultSet();
+        MockResultSet testResultSet = (MockResultSet)statement.executeQuery("xyz");
+        assertSame(statement, testResultSet.getStatement());
+        assertSame(statement, testResultSet1.getStatement());
+        assertSame(statement, testResultSet2.getStatement());
+        assertSame(statement, testResultSet3.getStatement());
     }
     
     public void testPrepareResultSetsNullValues() throws Exception
@@ -307,6 +325,14 @@ public class MockStatementTest extends BaseTestCase
         assertFalse(statement.getMoreResults());
         assertEquals(-1, statement.getUpdateCount());
         assertNull(statement.getResultSet());
+        statement.execute("insert into");
+        assertEquals(1, statement.getUpdateCount());
+        assertFalse(statement.getMoreResults());
+        assertEquals(2, statement.getUpdateCount());
+        assertFalse(statement.getMoreResults());
+        assertEquals(3, statement.getUpdateCount());
+        assertFalse(statement.getMoreResults());
+        assertEquals(-1, statement.getUpdateCount());
     }
     
     public void testPrepareUpdateCountBatch() throws Exception
