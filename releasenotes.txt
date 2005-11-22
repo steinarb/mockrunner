@@ -17,6 +17,7 @@ mockrunner-0.3.7:
 - improved version of ArrayResultSetFactory by Erick G. Reid
 - replaced ActiveMQ classes with 3.2 version
 - updated cglib from 2.1_2 to 2.1_3
+- updated struts.jar and all corresponding commons-jars from Struts 1.2.7 to 1.2.8
 
 mockrunner-0.3.6:
 
