@@ -70,7 +70,7 @@ public class MockPreparedStatementTest extends BaseTestCase
         return resultSet.getRowCount() == 3;
     }
     
-    public void testPrepareResultSetPreparedStatement() throws Exception
+    public void testPrepareResultSet() throws Exception
     {
         preparedStatementHandler.prepareGlobalResultSet(resultSet1); 
         preparedStatementHandler.prepareResultSet("select xyz", resultSet2);
@@ -154,7 +154,112 @@ public class MockPreparedStatementTest extends BaseTestCase
         assertTrue(isResultSet1(testResultSet));
     }
     
-    public void testPrepareResultSetPreparedStatementNullParameter() throws Exception
+    public void testPrepareMultipleResultSets() throws Exception
+    {
+        preparedStatementHandler.prepareResultSet("select xyz", resultSet2);
+        preparedStatementHandler.prepareResultSets("select xyz", new MockResultSet[] {resultSet1, resultSet2, resultSet3}, new Object[] {"1", new Integer(2)});
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("select xyz from x where value = ? and y = ?");
+        statement.setString(1, "1");
+        MockResultSet testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet2(testResultSet));
+        assertTrue(isResultSet2((MockResultSet)statement.getResultSet()));
+        assertEquals(-1, statement.getUpdateCount());
+        assertFalse(statement.getMoreResults());
+        assertNull(statement.getResultSet());
+        assertEquals(-1, statement.getUpdateCount());
+        statement.setInt(2, 2);
+        statement.setInt(3, 2);
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet1(testResultSet));
+        assertTrue(isResultSet1((MockResultSet)statement.getResultSet()));
+        assertNotSame(resultSet1, statement.getResultSet());
+        assertEquals(-1, statement.getUpdateCount());
+        assertTrue(statement.getMoreResults());
+        assertTrue(isResultSet2((MockResultSet)statement.getResultSet()));
+        assertNotSame(resultSet2, statement.getResultSet());
+        assertEquals(-1, statement.getUpdateCount());
+        assertTrue(statement.getMoreResults());
+        assertTrue(isResultSet3((MockResultSet)statement.getResultSet()));
+        assertNotSame(resultSet3, statement.getResultSet());
+        assertEquals(-1, statement.getUpdateCount());
+        assertFalse(statement.getMoreResults());
+        assertNull(statement.getResultSet());
+        assertEquals(-1, statement.getUpdateCount());
+        preparedStatementHandler.setExactMatchParameter(true);
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet2(testResultSet));
+        assertTrue(isResultSet2((MockResultSet)statement.getResultSet()));
+        assertEquals(-1, statement.getUpdateCount());
+        assertFalse(statement.getMoreResults());
+    }
+    
+    public void testPrepareMultipleResultSetsClose() throws Exception
+    {
+        Map parameters = new HashMap();
+        parameters.put(new Integer(1), new Long(1));
+        parameters.put(new Integer(2), new Long(2));
+        preparedStatementHandler.prepareResultSets("select xyz", new MockResultSet[] {resultSet3, resultSet2, resultSet1}, parameters);
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("select xyz from x where value = ? and y = ?");
+        statement.setLong(1, 1);
+        statement.setLong(2, 2);
+        statement.setString(3, "3");
+        statement.executeQuery();
+        MockResultSet testResultSet1 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults();
+        MockResultSet testResultSet2 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults();
+        MockResultSet testResultSet3 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults();
+        assertTrue(testResultSet1.isClosed());
+        assertTrue(testResultSet2.isClosed());
+        assertTrue(testResultSet3.isClosed());
+        statement.executeQuery();
+        testResultSet1 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults(Statement.KEEP_CURRENT_RESULT);
+        testResultSet2 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults(Statement.KEEP_CURRENT_RESULT);
+        testResultSet3 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults(Statement.KEEP_CURRENT_RESULT);
+        assertFalse(testResultSet1.isClosed());
+        assertFalse(testResultSet2.isClosed());
+        assertFalse(testResultSet3.isClosed());
+        statement.executeQuery();
+        testResultSet1 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults(Statement.KEEP_CURRENT_RESULT);
+        testResultSet2 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults(Statement.CLOSE_ALL_RESULTS);
+        testResultSet3 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults(Statement.KEEP_CURRENT_RESULT);
+        assertFalse(testResultSet1.isClosed());
+        assertTrue(testResultSet2.isClosed());
+        assertFalse(testResultSet3.isClosed());
+    }
+    
+    public void testPrepareResultSetsNullValues() throws Exception
+    {
+        List parameters = new ArrayList();
+        parameters.add("25");
+        preparedStatementHandler.prepareResultSets("select1", new MockResultSet[] {}, parameters);
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("select1");
+        statement.setString(1, "25");
+        MockResultSet testResultSet = (MockResultSet)statement.executeQuery();
+        assertNull(testResultSet);
+        assertNull(statement.getResultSet());
+        assertEquals(-1, statement.getUpdateCount());
+        assertFalse(statement.getMoreResults());
+        assertNull(statement.getResultSet());
+        preparedStatementHandler.prepareResultSet("select2", null, parameters);
+        statement = (MockPreparedStatement)connection.prepareStatement("select2");
+        statement.setString(1, "25");
+        testResultSet = (MockResultSet)statement.executeQuery();
+        assertNull(testResultSet);
+        assertNull(statement.getResultSet());
+        assertEquals(-1, statement.getUpdateCount());
+        assertFalse(statement.getMoreResults());
+        assertNull(statement.getResultSet());
+    }
+    
+    public void testPrepareResultSetNullParameter() throws Exception
     {
         List params = new ArrayList();
         params.add(new Integer(2));
@@ -177,7 +282,7 @@ public class MockPreparedStatementTest extends BaseTestCase
         assertNull(testResultSet);
     }
     
-    public void testPrepareUpdateCountPreparedStatement() throws Exception
+    public void testPrepareUpdateCount() throws Exception
     {
         preparedStatementHandler.prepareGlobalUpdateCount(5);
         preparedStatementHandler.prepareUpdateCount("delete xyz", 1);
@@ -219,7 +324,7 @@ public class MockPreparedStatementTest extends BaseTestCase
         assertNull(statement.getResultSet());
     }
     
-    public void testPrepareUpdateCountPreparedStatementNullValue() throws Exception
+    public void testPrepareUpdateCountNullValue() throws Exception
     {
         preparedStatementHandler.prepareUpdateCount("INSERT INTO", 4, new Object[] {null, "2"});
         MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("insert into x(y) values(?)");
@@ -239,7 +344,7 @@ public class MockPreparedStatementTest extends BaseTestCase
         assertEquals(0, testUpdateCount);
     }
         
-    public void testPrepareUpdateCountBatchPreparedStatement() throws Exception
+    public void testPrepareUpdateCountBatch() throws Exception
     {
         preparedStatementHandler.prepareGlobalUpdateCount(2);
         preparedStatementHandler.prepareUpdateCount("insert into", 3);
@@ -294,7 +399,7 @@ public class MockPreparedStatementTest extends BaseTestCase
         }
     }
     
-    public void testPrepareThrowsSQLExceptionPreparedStatement() throws Exception
+    public void testPrepareThrowsSQLException() throws Exception
     {
         SQLException exception = new SQLWarning();
         preparedStatementHandler.prepareThrowsSQLException("insert into");
@@ -348,7 +453,7 @@ public class MockPreparedStatementTest extends BaseTestCase
         statement.execute();
     }
     
-    public void testPrepareGeneratedKeysPreparedStatement() throws Exception
+    public void testPrepareGeneratedKeys() throws Exception
     {
         List params = new ArrayList();
         params.add("1");
@@ -401,7 +506,7 @@ public class MockPreparedStatementTest extends BaseTestCase
         assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
     }
     
-    public void testPrepareGeneratedKeysBatchPreparedStatement() throws Exception
+    public void testPrepareGeneratedKeysBatch() throws Exception
     {
         List params = new ArrayList();
         params.add("1");
@@ -451,7 +556,7 @@ public class MockPreparedStatementTest extends BaseTestCase
         assertEquals(5, updateCount);
     }
     
-    public void testGetMoreResultsPreparedStatement() throws Exception
+    public void testGetMoreResultsSingleResultSetAndUpdateCount() throws Exception
     {
         preparedStatementHandler.prepareResultSet("select", resultSet1, new ArrayList());
         preparedStatementHandler.prepareUpdateCount("insert", 3, new ArrayList());

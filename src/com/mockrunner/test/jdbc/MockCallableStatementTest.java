@@ -64,7 +64,7 @@ public class MockCallableStatementTest extends BaseTestCase
         return resultSet.getRowCount() == 3;
     }
     
-    public void testPrepareResultSetCallableStatement() throws Exception
+    public void testPrepareResultSet() throws Exception
     {
         callableStatementHandler.prepareGlobalResultSet(resultSet1); 
         callableStatementHandler.prepareResultSet("call", resultSet2);
@@ -104,7 +104,7 @@ public class MockCallableStatementTest extends BaseTestCase
         assertTrue(isResultSet1(testResultSet));
     }
     
-    public void testPrepareResultSetCallableStatementNullParameter() throws Exception
+    public void testPrepareResultSetNullParameter() throws Exception
     {
         Map params = new HashMap();
         params.put(new Integer(1), new MockBlob(new byte[] {1}));
@@ -123,7 +123,7 @@ public class MockCallableStatementTest extends BaseTestCase
         assertNull(testResultSet);
     }
     
-    public void testPrepareUpdateCountCallableStatement() throws Exception
+    public void testPrepareUpdateCount() throws Exception
     {
         callableStatementHandler.prepareGlobalUpdateCount(8);
         callableStatementHandler.prepareUpdateCount("doTest", 3);
@@ -151,7 +151,7 @@ public class MockCallableStatementTest extends BaseTestCase
         assertEquals(8, updateCount);
     }
     
-    public void testPrepareUpdateCountCallableStatementNullParameter() throws Exception
+    public void testPrepareUpdateCountNullParameter() throws Exception
     {
         Map params = new HashMap();
         params.put("1", "Test");
@@ -174,7 +174,7 @@ public class MockCallableStatementTest extends BaseTestCase
         assertEquals(0, updateCount);
     }
     
-    public void testPrepareUpdateCountBatchCallableStatement() throws Exception
+    public void testPrepareUpdateCountBatch() throws Exception
     {
         callableStatementHandler.prepareGlobalUpdateCount(5);
         callableStatementHandler.prepareUpdateCount("doTest", 4);
@@ -208,7 +208,7 @@ public class MockCallableStatementTest extends BaseTestCase
         }
     }
     
-    public void testPrepareThrowsSQLExceptionCallableStatement() throws Exception
+    public void testPrepareThrowsSQLException() throws Exception
     {
         SQLException exception = new SQLWarning();
         callableStatementHandler.prepareThrowsSQLException("doValues", exception);
@@ -269,7 +269,7 @@ public class MockCallableStatementTest extends BaseTestCase
         assertEquals("value", statement.getString("name"));
     }
     
-    public void testPrepareOutParameterCallableStatement() throws Exception
+    public void testPrepareOutParameter() throws Exception
     {
         Map outParams = new HashMap();
         outParams.put("1", "test");
@@ -359,7 +359,7 @@ public class MockCallableStatementTest extends BaseTestCase
         assertEquals("test", statement.getString("1"));
     }
     
-    public void testGetMoreResultsCallableStatement() throws Exception
+    public void testGetMoreResults() throws Exception
     {
         callableStatementHandler.prepareResultSet("select", resultSet1);
         callableStatementHandler.prepareUpdateCount("insert", 3);
