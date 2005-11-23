@@ -359,7 +359,7 @@ public class MockCallableStatementTest extends BaseTestCase
         assertEquals("test", statement.getString("1"));
     }
     
-    public void testGetMoreResults() throws Exception
+    public void testGetMoreResultsSingleResultSetAndUpdateCount() throws Exception
     {
         callableStatementHandler.prepareResultSet("select", resultSet1);
         callableStatementHandler.prepareUpdateCount("insert", 3);

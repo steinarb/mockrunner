@@ -340,7 +340,39 @@ public class MockPreparedStatementTest extends BaseTestCase
         assertNull(statement.getResultSet());
     }
     
-    public void testPrepareUpdateCountNullValue() throws Exception
+    public void testPrepareMultipleUpdateCounts() throws Exception
+    {
+        List parameter = new ArrayList();
+        parameter.add("1");
+        parameter.add(new Integer(2));
+        preparedStatementHandler.prepareUpdateCount("insert into", 5);
+        preparedStatementHandler.prepareUpdateCounts("insert into", new int[] {1, 2, 3}, parameter);
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("insert into x(y) values(?)");
+        statement.setString(1, "1");
+        statement.execute();
+        assertEquals(5, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+        assertEquals(-1, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        statement.setInt(2, 2);
+        int updateCount = statement.executeUpdate();
+        assertEquals(1, updateCount);
+        assertEquals(1, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+        assertEquals(2, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+        assertEquals(3, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+        assertEquals(-1, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+    }
+    
+    public void testPrepareUpdateCountNullParameter() throws Exception
     {
         preparedStatementHandler.prepareUpdateCount("INSERT INTO", 4, new Object[] {null, "2"});
         MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("insert into x(y) values(?)");
