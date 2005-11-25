@@ -3,6 +3,7 @@ package com.mockrunner.test.jdbc;
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -104,6 +105,87 @@ public class MockCallableStatementTest extends BaseTestCase
         assertTrue(isResultSet1(testResultSet));
     }
     
+    public void testPrepareMultipleResultSets() throws Exception
+    {
+        Map parameters = new HashMap();
+        parameters.put("param1", "value1");
+        parameters.put(new Integer(2), new Integer(5));
+        callableStatementHandler.prepareGlobalResultSets(new MockResultSet[] {resultSet3}); 
+        callableStatementHandler.prepareResultSets("call", new MockResultSet[] {resultSet2, resultSet3});
+        callableStatementHandler.prepareResultSets("call", new MockResultSet[] {resultSet1, resultSet2, resultSet3}, parameters);
+        MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("xyz");
+        MockResultSet resultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet3(resultSet));
+        assertTrue(isResultSet3((MockResultSet)statement.getResultSet()));
+        assertEquals(-1, statement.getUpdateCount());
+        assertFalse(statement.getMoreResults());
+        assertNull(statement.getResultSet());
+        assertEquals(-1, statement.getUpdateCount());
+        assertFalse(statement.getMoreResults());
+        statement = (MockCallableStatement)connection.prepareCall("do call");
+        statement.setInt(2, 5);
+        resultSet = (MockResultSet)statement.executeQuery();
+        assertTrue(isResultSet2(resultSet));
+        assertTrue(isResultSet2((MockResultSet)statement.getResultSet()));
+        assertEquals(-1, statement.getUpdateCount());
+        assertTrue(statement.getMoreResults());
+        assertTrue(isResultSet3((MockResultSet)statement.getResultSet()));
+        assertEquals(-1, statement.getUpdateCount());
+        assertFalse(statement.getMoreResults());
+        assertNull(statement.getResultSet());
+        assertEquals(-1, statement.getUpdateCount());
+        statement.setString("param1", "value1");
+        callableStatementHandler.prepareReturnsResultSet("do call", true);
+        statement.execute();
+        assertTrue(isResultSet1((MockResultSet)statement.getResultSet()));
+        assertEquals(-1, statement.getUpdateCount());
+        assertTrue(statement.getMoreResults());
+        assertTrue(isResultSet2((MockResultSet)statement.getResultSet()));
+        assertEquals(-1, statement.getUpdateCount());
+        assertTrue(statement.getMoreResults());
+        assertTrue(isResultSet3((MockResultSet)statement.getResultSet()));
+        assertEquals(-1, statement.getUpdateCount());
+        assertFalse(statement.getMoreResults());
+        assertNull(statement.getResultSet());
+        assertEquals(-1, statement.getUpdateCount());
+        assertFalse(statement.getMoreResults());
+        statement.setString("param1", "value2");
+        statement.execute();
+        assertTrue(isResultSet2((MockResultSet)statement.getResultSet()));
+        assertEquals(-1, statement.getUpdateCount());
+        assertTrue(statement.getMoreResults());
+        assertTrue(isResultSet3((MockResultSet)statement.getResultSet()));
+        assertEquals(-1, statement.getUpdateCount());
+        assertFalse(statement.getMoreResults());
+    }
+    
+    public void testPrepareMultipleResultSetsClose() throws Exception
+    {
+        callableStatementHandler.prepareResultSets("call", new MockResultSet[] {resultSet2, resultSet3, resultSet1}, new HashMap());
+        MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("CALL");
+        statement.setString("param1", "value1");
+        statement.executeQuery();
+        MockResultSet testResultSet1 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults();
+        MockResultSet testResultSet2 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults();
+        MockResultSet testResultSet3 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults();
+        assertTrue(testResultSet1.isClosed());
+        assertTrue(testResultSet2.isClosed());
+        assertTrue(testResultSet3.isClosed());
+        statement.executeQuery();
+        testResultSet1 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults(Statement.KEEP_CURRENT_RESULT);
+        testResultSet2 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults(Statement.KEEP_CURRENT_RESULT);
+        testResultSet3 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults(Statement.CLOSE_CURRENT_RESULT);
+        assertFalse(testResultSet1.isClosed());
+        assertFalse(testResultSet2.isClosed());
+        assertTrue(testResultSet3.isClosed());
+    }
+    
     public void testPrepareResultSetNullParameter() throws Exception
     {
         Map params = new HashMap();
@@ -149,6 +231,55 @@ public class MockCallableStatementTest extends BaseTestCase
         callableStatementHandler.setCaseSensitive(true);
         updateCount = statement.executeUpdate();
         assertEquals(8, updateCount);
+    }
+    
+    public void testPrepareMultipleUpdateCounts() throws Exception
+    {
+        callableStatementHandler.prepareGlobalUpdateCounts(new int[] {4, 5, 6});
+        callableStatementHandler.prepareUpdateCounts("doTest", new int[] {7, 8, 9});
+        callableStatementHandler.prepareUpdateCounts("doTest", new int[] {10, 11}, new Object[] {"1", new Long(2)});
+        MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("call");
+        int updateCount = statement.executeUpdate();
+        assertEquals(4, updateCount);
+        assertEquals(4, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+        assertEquals(5, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+        assertEquals(6, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+        assertEquals(-1, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+        statement = (MockCallableStatement)connection.prepareCall("call dotest");
+        statement.execute();
+        assertEquals(7, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+        assertEquals(8, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+        assertEquals(9, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+        assertEquals(-1, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+        statement.setString(1, "1");
+        statement.setLong(2, 2);
+        updateCount = statement.executeUpdate();
+        assertEquals(10, updateCount);
+        assertEquals(10, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+        assertEquals(11, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
+        assertEquals(-1, statement.getUpdateCount());
+        assertNull(statement.getResultSet());
+        assertFalse(statement.getMoreResults());
     }
     
     public void testPrepareUpdateCountNullParameter() throws Exception
