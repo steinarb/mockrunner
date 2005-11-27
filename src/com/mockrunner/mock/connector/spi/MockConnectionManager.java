@@ -10,10 +10,10 @@ import javax.resource.spi.ManagedConnectionFactory;
  */
 public class MockConnectionManager implements ConnectionManager 
 {
-	private static final long serialVersionUID = 3257571719568175408L;
+    private static final long serialVersionUID = 3257571719568175408L;
 
-	public Object allocateConnection(ManagedConnectionFactory managedConnectionFactory, ConnectionRequestInfo connectionRequestInfo) throws ResourceException 
+    public Object allocateConnection(ManagedConnectionFactory managedConnectionFactory, ConnectionRequestInfo connectionRequestInfo) throws ResourceException
     {
-		return null;
-	}
+        return null;
+    }
 }

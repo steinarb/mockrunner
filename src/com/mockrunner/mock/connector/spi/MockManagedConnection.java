@@ -17,71 +17,71 @@ import javax.transaction.xa.XAResource;
  */
 public class MockManagedConnection implements ManagedConnection 
 {
-	private PrintWriter pw;
-	private ManagedConnectionMetaData metaData;
-	private Vector listeners;
+    private PrintWriter logWriter;
+    private ManagedConnectionMetaData metaData;
+    private Vector listeners;
 
-	public MockManagedConnection() 
+    public MockManagedConnection()
     {
-		metaData = new MockManagedConnectionMetaData();
-		listeners = new Vector();
-	}
+        metaData = new MockManagedConnectionMetaData();
+        listeners = new Vector();
+    }
 
-	public Object getConnection(Subject subject, ConnectionRequestInfo connectionRequestInfo) throws ResourceException 
+    public Object getConnection(Subject subject, ConnectionRequestInfo connectionRequestInfo) throws ResourceException
     {
-		return null;
-	}
+        return null;
+    }
 
-	public void destroy() throws ResourceException 
-    {
-
-	}
-
-	public void cleanup() throws ResourceException 
+    public void destroy() throws ResourceException
     {
 
-	}
+    }
 
-	public void associateConnection(Object arg0) throws ResourceException 
+    public void cleanup() throws ResourceException
     {
 
-	}
+    }
 
-	public void addConnectionEventListener(ConnectionEventListener listener) 
+    public void associateConnection(Object connection) throws ResourceException
     {
-		listeners.add(listener);
-	}
 
-	public void removeConnectionEventListener(ConnectionEventListener listener) 
-    {
-		listeners.remove(listener);
-	}
+    }
 
-	public XAResource getXAResource() throws ResourceException 
+    public void addConnectionEventListener(ConnectionEventListener listener)
     {
-		return null;
-	}
+        listeners.add(listener);
+    }
 
-	public LocalTransaction getLocalTransaction() throws ResourceException 
+    public void removeConnectionEventListener(ConnectionEventListener listener)
     {
-		return null;
-	}
+        listeners.remove(listener);
+    }
 
-	public ManagedConnectionMetaData getMetaData() throws ResourceException 
+    public XAResource getXAResource() throws ResourceException
     {
-		return metaData;
-	}
+        return null;
+    }
 
-	public PrintWriter getLogWriter() throws ResourceException 
+    public LocalTransaction getLocalTransaction() throws ResourceException
     {
-		return pw;
-	}
+        return null;
+    }
 
-	public void setLogWriter(PrintWriter pw) throws ResourceException 
+    public ManagedConnectionMetaData getMetaData() throws ResourceException
     {
-		this.pw = pw;
-	}
-    
+        return metaData;
+    }
+
+    public PrintWriter getLogWriter() throws ResourceException
+    {
+        return logWriter;
+    }
+
+    public void setLogWriter(PrintWriter logWriter) throws ResourceException
+    {
+        this.logWriter = logWriter;
+    }
+
     public void setMetaData(ManagedConnectionMetaData metaData)
     {
         this.metaData = metaData;
