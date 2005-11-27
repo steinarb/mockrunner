@@ -18,55 +18,55 @@ import javax.security.auth.Subject;
 public class MockManagedConnectionFactory implements ManagedConnectionFactory, Serializable 
 {
 	private static final long serialVersionUID = 3257291348330558264L;
-    
-	private PrintWriter pw;
-	private ConnectionManager cm;
 
-	public Object createConnectionFactory() throws ResourceException 
-    {
-		return createConnectionFactory(null);
-	}
+    private PrintWriter logWriter;
+    private ConnectionManager connectionManager;
 
-	public Object createConnectionFactory(ConnectionManager cm) throws ResourceException 
+    public Object createConnectionFactory() throws ResourceException
     {
-		this.cm = cm;
-		return this;
-	}
+        return createConnectionFactory(null);
+    }
 
-	public ManagedConnection createManagedConnection(Subject subject, ConnectionRequestInfo cri) throws ResourceException 
+    public Object createConnectionFactory(ConnectionManager connectionManager) throws ResourceException
     {
-		Object mc = null;
-		if(cm == null)
+        this.connectionManager = connectionManager;
+        return this;
+    }
+
+    public ManagedConnection createManagedConnection(Subject subject, ConnectionRequestInfo requestInfo) throws ResourceException
+    {
+        Object managedConnection = null;
+        if(connectionManager == null)
         {
-			// TODO is this correct?
-			mc = new MockManagedConnection().getConnection(subject, cri);
-		} 
-        else 
+            // TODO is this correct?
+            managedConnection = new MockManagedConnection().getConnection(subject, requestInfo);
+        } 
+        else
         {
-			mc = cm.allocateConnection(this, cri);
-		}
-		return (MockManagedConnection)mc;
-	}
-
-	public ManagedConnection matchManagedConnections(Set set, Subject subject, ConnectionRequestInfo connectionRequestInfo) throws ResourceException 
-    {
-		ManagedConnection match = null;
-        Iterator iter = set.iterator();
-        if (iter.hasNext()) 
-        {
-			// TODO also process subject and connectionrequestinfo
-            match = (ManagedConnection) iter.next();
+            managedConnection = connectionManager.allocateConnection(this, requestInfo);
         }
-        return match;
-	}
+        return (MockManagedConnection)managedConnection;
+    }
 
-	public PrintWriter getLogWriter() throws ResourceException 
+    public ManagedConnection matchManagedConnections(Set set, Subject subject, ConnectionRequestInfo connectionRequestInfo) throws ResourceException
     {
-		return pw;
-	}
+        ManagedConnection managedConnection = null;
+        Iterator iterator = set.iterator();
+        if(iterator.hasNext())
+        {
+            // TODO also process subject and connectionrequestinfo
+            managedConnection = (ManagedConnection)iterator.next();
+        }
+        return managedConnection;
+    }
 
-	public void setLogWriter(PrintWriter pw) throws ResourceException 
+    public PrintWriter getLogWriter() throws ResourceException
     {
-		this.pw = pw;
-	}
+        return logWriter;
+    }
+
+    public void setLogWriter(PrintWriter logWriter) throws ResourceException
+    {
+        this.logWriter = logWriter;
+    }
 }

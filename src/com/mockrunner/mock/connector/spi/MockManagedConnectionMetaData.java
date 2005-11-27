@@ -8,30 +8,30 @@ import javax.resource.spi.ManagedConnectionMetaData;
  */
 public class MockManagedConnectionMetaData implements ManagedConnectionMetaData 
 {
-	private String eisProductName = "Mockrunner";
+    private String eisProductName = "Mockrunner";
     private String eisProductVersion = "";
     private int maxConnections = 1;
     private String userName = "";
-    
-    public String getEISProductName() throws ResourceException 
-    {
-		return eisProductName;
-	}
 
-	public String getEISProductVersion() throws ResourceException 
+    public String getEISProductName() throws ResourceException
     {
-		return eisProductVersion;
-	}
+        return eisProductName;
+    }
 
-	public int getMaxConnections() throws ResourceException 
+    public String getEISProductVersion() throws ResourceException
     {
-		return maxConnections;
-	}
+        return eisProductVersion;
+    }
 
-	public String getUserName() throws ResourceException 
+    public int getMaxConnections() throws ResourceException
     {
-		return userName;
-	}
+        return maxConnections;
+    }
+
+    public String getUserName() throws ResourceException
+    {
+        return userName;
+    }
 
     public void setEisProductName(String eisProductName)
     {
