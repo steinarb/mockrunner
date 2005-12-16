@@ -367,6 +367,65 @@ public class JDBCTestModuleTest extends TestCase
         module.verifySQLStatementExecuted("UPDATE");
     }
     
+    public void testGetReturnedResultSets() throws Exception
+    {
+        prepareStatements();
+        preparePreparedStatements();
+        prepareCallableStatements();
+        MockResultSet resultSet1 = module.getStatementResultSetHandler().createResultSet("1");
+        MockResultSet resultSet2 = module.getStatementResultSetHandler().createResultSet("2");
+        MockResultSet resultSet3 = module.getStatementResultSetHandler().createResultSet("3");
+        MockResultSet resultSet4 = module.getStatementResultSetHandler().createResultSet("4");
+        MockResultSet resultSet5 = module.getStatementResultSetHandler().createResultSet("5");
+        MockResultSet resultSet6 = module.getStatementResultSetHandler().createResultSet("6");
+        MockResultSet resultSet7 = module.getStatementResultSetHandler().createResultSet("7");
+        module.getStatementResultSetHandler().prepareGlobalResultSet(resultSet1);
+        module.getStatementResultSetHandler().prepareResultSet("select id", resultSet2);
+        module.getStatementResultSetHandler().prepareResultSets("select xyz", new MockResultSet[] {resultSet3, resultSet5});
+        module.getPreparedStatementResultSetHandler().prepareResultSet("select name", resultSet4, new String[] {"test"});
+        module.getCallableStatementResultSetHandler().prepareResultSet("call set", resultSet5);
+        module.getCallableStatementResultSetHandler().prepareResultSets("call set", new MockResultSet[] {resultSet6, resultSet7, resultSet1}, new String[] {"xyz"});
+        MockStatement statement = module.getStatement(0);
+        statement.executeQuery("select name");
+        statement.executeQuery("select id");
+        statement.executeQuery("select xyz");
+        List list = module.getReturnedResultSets();
+        assertEquals(3, list.size());
+        assertEquals("1", ((MockResultSet)list.get(0)).getId());
+        assertEquals("2", ((MockResultSet)list.get(1)).getId());
+        assertEquals("3", ((MockResultSet[])list.get(2))[0].getId());
+        assertEquals("5", ((MockResultSet[])list.get(2))[1].getId());
+        MockPreparedStatement preparedStatement = (MockPreparedStatement)mockfactory.getMockConnection().prepareStatement("SELECT NAME");
+        preparedStatement.setString(1, "test");
+        preparedStatement.executeQuery();
+        list = module.getReturnedResultSets();
+        assertEquals(4, list.size());
+        assertEquals("4", ((MockResultSet)list.get(3)).getId());
+        MockCallableStatement callableStatement = module.getCallableStatement("call set");
+        callableStatement.executeQuery();
+        list = module.getReturnedResultSets();
+        assertEquals(5, list.size());
+        assertEquals("5", ((MockResultSet)list.get(4)).getId());
+        callableStatement.setString(1, "xyz");
+        callableStatement.executeQuery();
+        list = module.getReturnedResultSets();
+        assertEquals(6, list.size());
+        assertEquals("6", ((MockResultSet[])list.get(5))[0].getId());
+        assertEquals("7", ((MockResultSet[])list.get(5))[1].getId());
+        assertEquals("1", ((MockResultSet[])list.get(5))[2].getId());
+        list = module.getReturnedResultSets("1");
+        assertEquals(2, list.size());
+        MockResultSet returned1 = (MockResultSet)list.get(0);
+        MockResultSet returned2 = (MockResultSet)list.get(1);
+        assertEquals("1", returned1.getId());
+        assertEquals("1", returned2.getId());
+        assertNotSame(returned1, returned2);
+        assertNotSame(returned1, resultSet1);
+        MockResultSet returned = module.getReturnedResultSet("1");
+        assertEquals("1", returned.getId());
+        assertSame(returned1, returned);
+    }
+    
     public void testReturnedResultSetsClosed() throws Exception
     {
         prepareStatements();
@@ -386,20 +445,20 @@ public class JDBCTestModuleTest extends TestCase
         statement.executeQuery("select name");
         statement.executeQuery("select id");
         List list = module.getReturnedResultSets();
-        assertTrue(list.size() == 2);
+        assertEquals(2, list.size());
         assertEquals("1", ((MockResultSet)list.get(0)).getId());
         assertEquals("2", ((MockResultSet)list.get(1)).getId());
         MockPreparedStatement preparedStatement = module.getPreparedStatement("insert");
         preparedStatement.execute();
         list = module.getReturnedResultSets();
-        assertTrue(list.size() == 2);
+        assertEquals(2, list.size());
         assertEquals("1", ((MockResultSet)list.get(0)).getId());
         assertEquals("2", ((MockResultSet)list.get(1)).getId());
         preparedStatement = (MockPreparedStatement)mockfactory.getMockConnection().prepareStatement("SELECT NAME");
         preparedStatement.setString(1, "test");
         preparedStatement.executeQuery();
         list = module.getReturnedResultSets();
-        assertTrue(list.size() == 3);
+        assertEquals(3, list.size());
         assertEquals("1", ((MockResultSet)list.get(0)).getId());
         assertEquals("2", ((MockResultSet)list.get(1)).getId());
         assertEquals("4", ((MockResultSet)list.get(2)).getId());
@@ -407,14 +466,14 @@ public class JDBCTestModuleTest extends TestCase
         callableStatement.setString(1, "test");
         callableStatement.executeQuery();
         list = module.getReturnedResultSets();
-        assertTrue(list.size() == 3);
+        assertEquals(3, list.size());
         assertEquals("1", ((MockResultSet)list.get(0)).getId());
         assertEquals("2", ((MockResultSet)list.get(1)).getId());
         assertEquals("4", ((MockResultSet)list.get(2)).getId());
         callableStatement.setString(1, "xyz");
         callableStatement.executeQuery();
         list = module.getReturnedResultSets();
-        assertTrue(list.size() == 4);
+        assertEquals(4, list.size());
         assertEquals("1", ((MockResultSet)list.get(0)).getId());
         assertEquals("2", ((MockResultSet)list.get(1)).getId());
         assertEquals("4", ((MockResultSet)list.get(2)).getId());
@@ -442,6 +501,78 @@ public class JDBCTestModuleTest extends TestCase
         ((MockResultSet)list.get(1)).close();
         ((MockResultSet)list.get(2)).close();
         ((MockResultSet)list.get(3)).close();
+        module.verifyAllResultSetsClosed();
+    }
+    
+    public void testMultipleReturnedResultSetsClosed() throws Exception
+    {
+        prepareStatements();
+        preparePreparedStatements();
+        prepareCallableStatements();
+        MockResultSet resultSet1 = module.getStatementResultSetHandler().createResultSet("1");
+        MockResultSet resultSet2 = module.getStatementResultSetHandler().createResultSet("2");
+        MockResultSet resultSet3 = module.getStatementResultSetHandler().createResultSet("3");
+        MockResultSet resultSet4 = module.getStatementResultSetHandler().createResultSet("4");
+        MockResultSet resultSet5 = module.getStatementResultSetHandler().createResultSet("5");
+        MockResultSet resultSet6 = module.getStatementResultSetHandler().createResultSet("6");
+        MockResultSet resultSet7 = module.getStatementResultSetHandler().createResultSet("7");
+        module.getStatementResultSetHandler().prepareGlobalResultSet(resultSet1);
+        module.getStatementResultSetHandler().prepareResultSet("select id", resultSet2);
+        module.getStatementResultSetHandler().prepareResultSets("select xyz", new MockResultSet[] {resultSet3, resultSet5});
+        module.getPreparedStatementResultSetHandler().prepareResultSet("select name", resultSet4, new String[] {"test"});
+        module.getCallableStatementResultSetHandler().prepareResultSet("call set", resultSet5);
+        module.getCallableStatementResultSetHandler().prepareResultSets("call set", new MockResultSet[] {resultSet6, resultSet7, resultSet1}, new String[] {"xyz"});
+        MockStatement statement = module.getStatement(0);
+        statement.executeQuery("select name");
+        statement.executeQuery("select id");
+        statement.executeQuery("select xyz");
+        MockPreparedStatement preparedStatement = (MockPreparedStatement)mockfactory.getMockConnection().prepareStatement("SELECT NAME");
+        preparedStatement.setString(1, "test");
+        preparedStatement.executeQuery();
+        MockCallableStatement callableStatement = module.getCallableStatement("call set");
+        callableStatement.executeQuery();
+        callableStatement.setString(1, "xyz");
+        callableStatement.executeQuery();
+        try
+        {
+            module.verifyAllStatementsClosed();
+            fail();
+        }
+        catch(Exception exc)
+        {
+            //should throw Exception
+        }
+        List list = module.getReturnedResultSets();
+        for(int ii = 0; ii < list.size() - 1; ii++)
+        {
+            Object object = list.get(ii);
+            if(object instanceof MockResultSet)
+            {
+                ((MockResultSet)object).close();
+            }
+            else
+            {
+                MockResultSet[] resultSets = (MockResultSet[])object;
+                for(int yy = 0; yy < resultSets.length; yy++)
+                {
+                    resultSets[yy].close();
+                }
+            }
+        }
+        try
+        {
+            module.verifyAllStatementsClosed();
+            fail();
+        }
+        catch(Exception exc)
+        {
+            //should throw Exception
+        }
+        MockResultSet[] resultSets = (MockResultSet[])list.get(list.size() - 1);
+        for(int ii = 0; ii < resultSets.length; ii++)
+        {
+            resultSets[ii].close();
+        }
         module.verifyAllResultSetsClosed();
     }
     
