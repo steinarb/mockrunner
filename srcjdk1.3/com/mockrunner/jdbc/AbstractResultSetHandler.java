@@ -164,6 +164,13 @@ public abstract class AbstractResultSetHandler
         returnedResultSets.add(resultSet);
     }
     
+    /**
+     * Collects all <code>ResultSet[]</code> objects that were returned by
+     * a <code>Statement</code>, <code>PreparedStatement</code> or
+     * <code>CallableStatement</code>. Called if a statement returns
+     * multiple result sets.
+     * @param resultSets the <code>ResultSet[]</code>
+     */
     public void addReturnedResultSets(MockResultSet[] resultSets)
     {
         if(null == resultSets) return;
@@ -180,8 +187,14 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Returns the <code>List</code> of all returned <code>ResultSet</code> objects.
-     * @return the <code>List</code> of returned <code>ResultSet</code> objects
+     * Returns the <code>List</code> of all returned <code>ResultSet</code> 
+     * or <code>ResultSet[]</code> objects. The <code>List</code> contains
+     * arrays of result sets, if a query returned multiple result sets.
+     * If a query returned multiple result sets, the list will always contain
+     * the full array of <code>ResultSet</code> objects that were prepared, even
+     * if {@link com.mockrunner.mock.jdbc.MockStatement#getMoreResults()} was
+     * not called for all the result sets.
+     * @return the <code>List</code> of returned <code>ResultSet</code> or <code>ResultSet[]</code> objects
      */
     public List getReturnedResultSets()
     {
@@ -289,8 +302,10 @@ public abstract class AbstractResultSetHandler
     
     /**
      * Returns the first <code>ResultSet</code> that matches the
-     * specified SQL string. Please note that you can modify
-     * the match parameters with {@link #setCaseSensitive},
+     * specified SQL string. If the specified SQL string was
+     * prepared to return multiple result sets, the first one will
+     * be returned.
+     * Please note that you can modify the match parameters with {@link #setCaseSensitive},
      * {@link #setExactMatch} and {@link #setUseRegularExpressions}.
      * @param sql the SQL string
      * @return the corresponding {@link MockResultSet}
@@ -314,6 +329,16 @@ public abstract class AbstractResultSetHandler
         return null;
     }
     
+    /**
+     * Returns the first <code>ResultSet[]</code> that matches the
+     * specified SQL string. If the specified SQL string was
+     * prepared to return one single result set, this <code>ResultSet</code>
+     * will be wrapped in an array with one element.
+     * Please note that you can modify the match parameters with {@link #setCaseSensitive},
+     * {@link #setExactMatch} and {@link #setUseRegularExpressions}.
+     * @param sql the SQL string
+     * @return the corresponding <code>MockResultSet[]</code>
+     */
     public MockResultSet[] getResultSets(String sql)
     {
         Object resultSets = getMatchingResultSets(sql);
@@ -329,6 +354,14 @@ public abstract class AbstractResultSetHandler
         return null;
     }
 
+    /**
+     * Returns the if the specified SQL string returns multiple result sets.
+     * Please note that you can modify the match parameters with {@link #setCaseSensitive},
+     * {@link #setExactMatch} and {@link #setUseRegularExpressions}.
+     * @param sql the SQL string
+     * @return <code>true</code> if the query returns multiple result sets,
+     *         <code>false</code> otherwise
+     */
     public boolean hasMultipleResultSets(String sql)
     {
         Object resultSets = getMatchingResultSets(sql);
@@ -347,7 +380,9 @@ public abstract class AbstractResultSetHandler
     }
     
     /**
-     * Returns the global <code>ResultSet</code>.
+     * Returns the global <code>ResultSet</code>. 
+     * If an array of global result sets was prepared, the first one will
+     * be returned.
      * @return the global {@link MockResultSet}
      */
     public MockResultSet getGlobalResultSet()
@@ -365,6 +400,12 @@ public abstract class AbstractResultSetHandler
         return null;
     }
     
+    /**
+     * Returns the global <code>ResultSet[]</code>. 
+     * If one single <code>ResultSet</code> was prepared, this <code>ResultSet</code>
+     * will be wrapped in an array with one element.
+     * @return the global <code>MockResultSet[]</code>
+     */
     public MockResultSet[] getGlobalResultSets()
     {
         if(null == globalResultSets) return null;
@@ -375,6 +416,12 @@ public abstract class AbstractResultSetHandler
         return new MockResultSet[] {(MockResultSet)globalResultSets};
     }
     
+    /**
+     * Returns if multiple global result sets have been prepared, i.e. if
+     * an array of global result sets was prepared.
+     * @return <code>true</code> if an array of global result sets was prepared,
+     *         <code>false</code> otherwise
+     */
     public boolean hasMultipleGlobalResultSets()
     {
         return (globalResultSets instanceof MockResultSet[]);
@@ -382,8 +429,10 @@ public abstract class AbstractResultSetHandler
     
     /**
      * Returns the first update count that matches the
-     * specified SQL string. Please note that you can modify
-     * the match parameters with {@link #setCaseSensitive},
+     * specified SQL string. If the specified SQL string was
+     * prepared to return multiple update counts, the first one will
+     * be returned.
+     * Please note that you can modify the match parameters with {@link #setCaseSensitive},
      * {@link #setExactMatch} and {@link #setUseRegularExpressions}.
      * @param sql the SQL string
      * @return the corresponding update count
@@ -407,6 +456,16 @@ public abstract class AbstractResultSetHandler
         return null;
     }
     
+    /**
+     * Returns the first update count array that matches the
+     * specified SQL string. If the specified SQL string was
+     * prepared to return one update count, this value
+     * will be wrapped in an array with one element.
+     * Please note that you can modify the match parameters with {@link #setCaseSensitive},
+     * {@link #setExactMatch} and {@link #setUseRegularExpressions}.
+     * @param sql the SQL string
+     * @return the corresponding update count array
+     */
     public Integer[] getUpdateCounts(String sql)
     {
         Object updateCounts = getMatchingUpdateCounts(sql);
@@ -422,6 +481,14 @@ public abstract class AbstractResultSetHandler
         return null;
     }
     
+    /**
+     * Returns the if the specified SQL string returns multiple update counts.
+     * Please note that you can modify the match parameters with {@link #setCaseSensitive},
+     * {@link #setExactMatch} and {@link #setUseRegularExpressions}.
+     * @param sql the SQL string
+     * @return <code>true</code> if the SQL string returns multiple update counts,
+     *         <code>false</code> otherwise
+     */
     public boolean hasMultipleUpdateCounts(String sql)
     {
         Object updateCounts = getMatchingUpdateCounts(sql);
@@ -441,6 +508,8 @@ public abstract class AbstractResultSetHandler
     
     /**
      * Returns the global update count for <code>executeUpdate</code> calls.
+     * If an array of global update counts was prepared, the first one will
+     * be returned.
      * @return the global update count
      */
     public int getGlobalUpdateCount()
@@ -458,6 +527,12 @@ public abstract class AbstractResultSetHandler
         return 0;
     }
     
+    /**
+     * Returns the array of global update counts.
+     * If one single update count value was prepared, this value
+     * will be wrapped in an array with one element.
+     * @return the array of global update counts
+     */
     public int[] getGlobalUpdateCounts()
     {
         if(null == globalUpdateCounts) return null;
@@ -468,6 +543,12 @@ public abstract class AbstractResultSetHandler
         return new int[] {((Integer)globalUpdateCounts).intValue()};
     }
     
+    /**
+     * Returns if multiple global update counts have been prepared, i.e. if
+     * an array of global update counts was prepared.
+     * @return <code>true</code> if an array of global update counts was prepared,
+     *         <code>false</code> otherwise
+     */
     public boolean hasMultipleGlobalUpdateCounts()
     {
         return (globalUpdateCounts instanceof int[]);
@@ -571,6 +652,15 @@ public abstract class AbstractResultSetHandler
         resultSetsForStatement.put(sql, resultSet);
     }
     
+    /**
+     * Prepare an array of <code>ResultSet</code> objects for a specified SQL string.
+     * This method can be used for queries that return multiple result sets.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions}.
+     * @param sql the SQL string
+     * @param resultSets the corresponding <code>MockResultSet[]</code>
+     */
     public void prepareResultSets(String sql, MockResultSet[] resultSets)
     {
         resultSetsForStatement.put(sql, resultSets.clone());
@@ -585,6 +675,10 @@ public abstract class AbstractResultSetHandler
         this.globalResultSets = resultSet;
     }
     
+    /**
+     * Prepare an array of global <code>ResultSet</code> objects.
+     * @param resultSets the corresponding <code>MockResultSet[]</code>
+     */
     public void prepareGlobalResultSets(MockResultSet[] resultSets)
     {
         this.globalResultSets = (MockResultSet[])resultSets.clone();
@@ -603,6 +697,15 @@ public abstract class AbstractResultSetHandler
         updateCountForStatement.put(sql, new Integer(updateCount));
     }
     
+    /**
+     * Prepare an array update count values for <code>executeUpdate</code> calls 
+     * for a specified SQL string. This method can be used if multiple update counts
+     * are returned.
+     * Please note that you can modify the match parameters with {@link #setCaseSensitive},
+     * {@link #setExactMatch} and {@link #setUseRegularExpressions}.
+     * @param sql the SQL string
+     * @param updateCounts the update count array
+     */
     public void prepareUpdateCounts(String sql, int[] updateCounts)
     {
         updateCountForStatement.put(sql, ArrayUtil.convertToObjectArray(updateCounts));
@@ -617,6 +720,10 @@ public abstract class AbstractResultSetHandler
         this.globalUpdateCounts = new Integer(updateCount);
     }
     
+    /**
+     * Prepare an array of global update count values for <code>executeUpdate</code> calls.
+     * @param updateCounts the update count array
+     */
     public void prepareGlobalUpdateCounts(int[] updateCounts)
     {
         this.globalUpdateCounts = (int[])updateCounts.clone();

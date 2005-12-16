@@ -81,7 +81,9 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
 
     /**
      * Returns the first update count that matches the
-     * specified SQL string and the specified parameters. 
+     * specified SQL string and the specified parameters.
+     * If the specified SQL string was prepared to return multiple update 
+     * counts, the first one will be returned.
      * Please note that you can modify the match parameters with 
      * {@link #setCaseSensitive}, {@link #setExactMatch} and 
      * {@link #setUseRegularExpressions} and the match parameters for the 
@@ -100,6 +102,19 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         return null;
     }
     
+    /**
+     * Returns the first update count array that matches the
+     * specified SQL string and the specified parameters. 
+     * If the specified SQL string was prepared to return one update count, 
+     * this value will be wrapped in an array with one element.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param parameters the parameters
+     * @return the corresponding update count
+     */
     public Integer[] getUpdateCounts(String sql, Map parameters)
     {
         ParameterWrapper wrapper = (ParameterWrapper)getMatchingParameterWrapper(sql, parameters, updateCountForStatement);
@@ -117,6 +132,15 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         return null;
     }
     
+    /**
+     * Returns the if the specified SQL string with the specified parameters
+     * returns multiple update counts.
+     * Please note that you can modify the match parameters with {@link #setCaseSensitive},
+     * {@link #setExactMatch} and {@link #setUseRegularExpressions}.
+     * @param sql the SQL string
+     * @return <code>true</code> if the SQL string returns multiple update counts,
+     *         <code>false</code> otherwise
+     */
     public boolean hasMultipleUpdateCounts(String sql, Map parameters)
     {
         ParameterWrapper wrapper = (ParameterWrapper)getMatchingParameterWrapper(sql, parameters, updateCountForStatement);
@@ -126,6 +150,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
     /**
      * Returns the first <code>ResultSet</code> that matches the
      * specified SQL string and the specified parameters.
+     * If the specified SQL string was prepared to return multiple result 
+     * sets, the first one will be returned.
      * Please note that you can modify the match parameters with 
      * {@link #setCaseSensitive}, {@link #setExactMatch} and 
      * {@link #setUseRegularExpressions} and the match parameters for the 
@@ -144,6 +170,20 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         return null;
     }
     
+    /**
+     * Returns the first <code>ResultSet[]</code> that matches the
+     * specified SQL string and the specified parameters. 
+     * If the specified SQL string was prepared to return one single 
+     * <code>ResultSet</code>, this <code>ResultSet</code> will be wrapped 
+     * in an array with  one element.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param parameters the parameters
+     * @return the corresponding update count
+     */
     public MockResultSet[] getResultSets(String sql, Map parameters)
     {
         ParameterWrapper wrapper = (ParameterWrapper)getMatchingParameterWrapper(sql, parameters, resultSetsForStatement);
@@ -161,6 +201,15 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         return null;
     }
     
+    /**
+     * Returns the if the specified SQL string with the specified parameters
+     * returns multiple result sets.
+     * Please note that you can modify the match parameters with {@link #setCaseSensitive},
+     * {@link #setExactMatch} and {@link #setUseRegularExpressions}.
+     * @param sql the SQL string
+     * @return <code>true</code> if the SQL string returns multiple update counts,
+     *         <code>false</code> otherwise
+     */
     public boolean hasMultipleResultSets(String sql, Map parameters)
     {
         ParameterWrapper wrapper = (ParameterWrapper)getMatchingParameterWrapper(sql, parameters, resultSetsForStatement);
@@ -336,6 +385,23 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         prepareResultSet(sql, resultSet, ArrayUtil.getListFromObjectArray(parameters));
     }
     
+    /**
+     * Prepare an array of <code>ResultSet</code> objects for a specified SQL string and
+     * the specified parameters. This method can be used for queries that return 
+     * multiple result sets. The specified parameters array
+     * must contain the parameters in the correct order starting with index 0 for
+     * the first parameter. Please keep in mind that parameters in
+     * <code>PreparedStatement</code> objects start with 1 as the first
+     * parameter. So <code>parameters[0]</code> maps to the
+     * parameter with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param resultSets the corresponding <code>MockResultSet[]</code>
+     * @param parameters the parameters
+     */
     public void prepareResultSets(String sql, MockResultSet[] resultSets, Object[] parameters)
     {
         prepareResultSets(sql, resultSets, ArrayUtil.getListFromObjectArray(parameters));
@@ -363,6 +429,23 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         prepareResultSet(sql, resultSet, params);
     }
     
+    /**
+     * Prepare an array of <code>ResultSet</code> objects for a specified SQL string and
+     * the specified parameters. This method can be used for queries that return 
+     * multiple result sets. The specified parameters <code>List</code>
+     * must contain the parameters in the correct order starting with index 0 for
+     * the first parameter. Please keep in mind that parameters in
+     * <code>PreparedStatement</code> objects start with 1 as the first
+     * parameter. So <code>parameters.get(0)</code> maps to the
+     * parameter with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param resultSets the corresponding <code>MockResultSet[]</code>
+     * @param parameters the parameters
+     */
     public void prepareResultSets(String sql, MockResultSet[] resultSets, List parameters)
     {
         Map params = createParameterMap(parameters);
@@ -390,6 +473,22 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         list.add(new MockResultSetWrapper(resultSet, new HashMap(parameters)));
     }
     
+    /**
+     * Prepare an array of <code>ResultSet</code> objects for a specified SQL string and
+     * the specified parameters. This method can be used for queries that return 
+     * multiple result sets. The specified parameters <code>Map</code>
+     * must contain the parameters by mapping <code>Integer</code> objects
+     * to the corresponding parameter. The <code>Integer</code> object
+     * is the index of the parameter. In the case of a <code>CallableStatement</code>,
+     * <code>String</code> keys for named parameters are also allowed.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param resultSets the corresponding <code>MockResultSet[]</code>
+     * @param parameters the parameters
+     */
     public void prepareResultSets(String sql, MockResultSet[] resultSets, Map parameters)
     {
         List list = getListFromMapForSQLStatement(sql, resultSetsForStatement);
@@ -565,6 +664,23 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         prepareUpdateCount(sql, updateCount, ArrayUtil.getListFromObjectArray(parameters));
     }
     
+    /**
+     * Prepare an array update count values for execute update calls for a specified SQL string
+     * and the specified parameters. This method can be used if multiple update counts
+     * are returned. The specified parameters array
+     * must contain the parameters in the correct order starting with index 0 for
+     * the first parameter. Please keep in mind that parameters in
+     * <code>PreparedStatement</code> objects start with 1 as the first
+     * parameter. So <code>parameters[0]</code> maps to the
+     * parameter with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param updateCounts the update count array
+     * @param parameters the parameters
+     */
     public void prepareUpdateCounts(String sql, int[] updateCounts, Object[] parameters)
     {
         prepareUpdateCounts(sql, updateCounts, ArrayUtil.getListFromObjectArray(parameters));
@@ -592,6 +708,23 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         prepareUpdateCount(sql, updateCount,  params);
     }
     
+    /**
+     * Prepare an array update count values for execute update calls for a specified SQL string
+     * and the specified parameters. This method can be used if multiple update counts
+     * are returned. The specified parameters <code>List</code>
+     * must contain the parameters in the correct order starting with index 0 for
+     * the first parameter. Please keep in mind that parameters in
+     * <code>PreparedStatement</code> objects start with 1 as the first
+     * parameter. So <code>parameters.get(0)</code> maps to the
+     * parameter with index 1.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param updateCounts the update count array
+     * @param parameters the parameters
+     */
     public void prepareUpdateCounts(String sql, int[] updateCounts, List parameters)
     {
         Map params = createParameterMap(parameters);
@@ -619,6 +752,22 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         list.add(new MockUpdateCountWrapper(updateCount, new HashMap(parameters)));
     }
     
+    /**
+     * Prepare an array update count values for execute update calls for a specified SQL string
+     * and the specified parameters. This method can be used if multiple update counts
+     * are returned. The specified parameters <code>Map</code>
+     * must contain the parameters by mapping <code>Integer</code> objects
+     * to the corresponding parameter. The <code>Integer</code> object
+     * is the index of the parameter. In the case of a <code>CallableStatement</code>,
+     * <code>String</code> keys for named parameters are also allowed.
+     * Please note that you can modify the match parameters with 
+     * {@link #setCaseSensitive}, {@link #setExactMatch} and 
+     * {@link #setUseRegularExpressions} and the match parameters for the 
+     * specified parameter list with {@link #setExactMatchParameter}.
+     * @param sql the SQL string
+     * @param updateCounts the update count array
+     * @param parameters the parameters
+     */
     public void prepareUpdateCounts(String sql, int[] updateCounts, Map parameters)
     {
         List list = getListFromMapForSQLStatement(sql, updateCountForStatement);

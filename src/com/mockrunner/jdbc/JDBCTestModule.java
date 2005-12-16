@@ -283,11 +283,15 @@ public class JDBCTestModule
      * Please note that the <code>List</code> may contain arrays of <code>ResultSet</code> objects,
      * if a query returned multiple result sets. The <code>List</code> may
      * contain <code>ResultSet</code> objects and <code>ResultSet[]</code> objects.
+     * If a query returned multiple result sets, the list will always contain
+     * the full array of <code>ResultSet</code> objects that were prepared, even
+     * if {@link com.mockrunner.mock.jdbc.MockStatement#getMoreResults()} was
+     * not called for all the result sets.
      * Please note that <code>ResultSet</code> objects are cloned when executing 
      * statements. The <code>ResultSet</code> objects in the <code>List</code>
      * returned by this method are really the instances the statement returned
      * and not the instances you have used when preparing them.
-     * @return the <code>List</code> of <code>ResultSet</code> objects
+     * @return the <code>List</code> of <code>ResultSet</code> or <code>ResultSet[]</code> objects
      */
     public List getReturnedResultSets()
     {
