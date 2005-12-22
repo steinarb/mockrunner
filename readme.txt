@@ -1,7 +1,7 @@
 Mockrunner is a lightweight framework for unit testing applications in
-the J2EE environment. It supports Struts actions and forms, servlets, 
-filters and tag classes. Furthermore it includes a JDBC, a JMS and a JCA test 
-framework and can be used in conjunction with MockEJB (http://mockejb.sourceforge.net/)
+the J2EE environment. It supports servlets, filters, tag classes and Struts actions 
+and forms. Furthermore it includes a JDBC, a JMS and a JCA test framework and can 
+be used in conjunction with MockEJB (http://mockejb.sourceforge.net/)
 to test EJB based applications.
 
 Mockrunner extends JUnit and simulates the necessary behaviour without calling 
