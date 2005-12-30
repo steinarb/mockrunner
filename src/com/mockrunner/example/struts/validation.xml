@@ -9,14 +9,13 @@
    <formset>
 
       <form name="/greetings">
-         <field property="name"
-         	   depends="required,minlength">
-         	     <arg0 key="mykey"/>
+         <field property="name" depends="required,minlength">
+         	     <arg0 key="name" resource="false"/>
          	     <arg1 name="minlength" key="${var:minlength}" resource="false"/>
-                     <var>
-                       <var-name>minlength</var-name>
-                       <var-value>5</var-value>
-                     </var>
+                 <var>
+                     <var-name>minlength</var-name>
+                     <var-value>5</var-value>
+                 </var>
          </field>
       </form>
       
