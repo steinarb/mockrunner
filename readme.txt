@@ -64,7 +64,7 @@ environment in future releases.
 Mockrunner requires at least Java 1.3 to run. If you are using Java 1.3
 you have to use the jar files with "-jdk1.3" in their name. If a jar
 file doesn't have a corresponding "-jdk1.3"-version, it can be used with
-Java 1.3, 1.4 and 1.5. The JDBCTestModule  is limited to JDBC API 2.1 if Java 1.3 
+Java 1.3, 1.4 and 1.5. The JDBCTestModule is limited to JDBC API 2.1 if Java 1.3 
 is used. If you are running Java 1.4 or 1.5 you can use JDBC 3.0. 
 Mockrunner supports J2EE 1.3 and J2EE 1.4. For J2EE 1.3 you have to use
 the jar files with "-j2ee1.3" in their name (these files are in lib/j2ee1.3
@@ -92,18 +92,20 @@ which extend BaseTestCase. BaseTestCase provides easy access to all test modules
 mock object factories. BaseTestCase depends on all third-party libraries but you don't
 have to add all the jar files to the classpath, just those that are related to the 
 test module you use, because the factories are lazy initialized when necessary.
-If you only use one technology, e.g. JDBC, it's recommended to subclass the basic
-adapter versions (e.g. BasicJDBCTestCaseAdapter), which do not extend BaseTestCase
-and do not depend on all third-party libraries. Please note, that all adapters
-just delegate to their corresponding module. If you don't want to extend a Mockrunner
-adapter, you can always create a module like this:
+In addition to the "all-in-one"-files (mockrunner.jar, mockrunner-jdk1.3.jar,
+mockrunner-j2ee1.3.jar and mockrunner-jdk1.3-j2ee1.3.jar), separate jars for the 
+different technologies are provided. These additional jar files contain only the classes 
+necessary to test the corresponding technology. If you only need one technology it's 
+recommended to use the corresponding jar file instead of the "all-in-one" jar files. 
+E.g. if you only want to use the JDBC test framework, you can use mockrunner-jdbc.jar.
+You have to to subclass the basic adapter versions (e.g. BasicJDBCTestCaseAdapter) in 
+this case, which do not extend BaseTestCase and do not depend on all third-party libraries.
+
+Please note, that all adapters just delegate to their corresponding module. If you 
+don't want to extend a Mockrunner adapter, you can always create a module like this:
 
 JDBCMockObjectFactory factory = new JDBCMockObjectFactory();
 JDBCTestModule module = new JDBCTestModule(factory);
-
-In addition to the "all-in-one"-files, separate jars for the different technologies 
-are provided. These additional jar files contain only the classes necessary to test 
-the corresponding technology.
 
 Please check out the files dependencies.txt and dependenciesj2ee1.3.txt for a detailed 
 list of required third-party libraries for each mockrunner provided jar file.
@@ -181,7 +183,7 @@ http://jakarta.apache.org/bcel
 bcel-5.1.jar
 
 JarAnalyzer 0.9.3:
-http://www.kirkk.com/wiki/wiki.php/Main/JarAnalyzer
+http://www.kirkk.com/main/Main/JarAnalyzer
 jaranalyzer-0.9.3.jar
 
 regexp 1.3:
