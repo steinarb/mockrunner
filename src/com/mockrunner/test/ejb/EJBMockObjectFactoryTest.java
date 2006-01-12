@@ -9,6 +9,7 @@ import javax.naming.NamingException;
 
 import junit.framework.TestCase;
 
+import org.mockejb.jndi.MockContext;
 import org.mockejb.jndi.MockContextFactory;
 
 import com.mockrunner.ejb.Configuration;
@@ -117,13 +118,11 @@ public class EJBMockObjectFactoryTest extends TestCase
         assertFalse(transaction.wasRollbackCalled());
     }
     
-
     public void testOverrideCreate()
     {
         EJBMockObjectFactory factory = new TestEJBMockObjectFactory();
         assertNotSame(factory.getMockUserTransaction().getClass(), MockUserTransaction.class);
     }
-    
     
     public void testSetConfiguration() throws Exception
     {
@@ -171,6 +170,13 @@ public class EJBMockObjectFactoryTest extends TestCase
         {
             //should throw exception
         }
+        TestContext testContext = new TestContext();
+        factory = new EJBMockObjectFactory(configuration);
+        assertSame(factory.getContext(), configuration.getContext());
+        configuration.setContext(testContext);
+        factory = new EJBMockObjectFactory(configuration);
+        assertSame(configuration.getContext(), factory.getContext());
+        assertSame(testContext, factory.getContext());
     }
     
     private void unbind() throws Exception
@@ -208,5 +214,13 @@ public class EJBMockObjectFactoryTest extends TestCase
         {
             return new MockUserTransaction() {};
         }  
+    }
+    
+    public static class TestContext extends MockContext
+    {
+        public TestContext()
+        {
+            super(null);
+        } 
     }
 }
