@@ -5,70 +5,37 @@ import java.util.Properties;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
-import javax.naming.NamingException;
 
 import junit.framework.TestCase;
 
-import org.mockejb.jndi.MockContext;
 import org.mockejb.jndi.MockContextFactory;
 
 import com.mockrunner.ejb.Configuration;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 import com.mockrunner.mock.ejb.MockUserTransaction;
+import com.mockrunner.test.ejb.TestJNDI.NullContext;
 
 public class EJBMockObjectFactoryTest extends TestCase
 {
     private Properties savedProperties;
+    private Context context;
     
     protected void setUp() throws Exception
     {
         super.setUp();
-        saveProperties();
+        savedProperties = new Properties();
+        TestJNDI.saveProperties(savedProperties);
         MockContextFactory.setAsInitial();
-        unbind();
+        context = new InitialContext();
+        TestJNDI.unbind(context);
     }
     
     protected void tearDown() throws Exception
     {
         super.tearDown();
-        unbind();
+        TestJNDI.unbind(context);
         MockContextFactory.revertSetAsInitial();
-        restoreProperties();
-    }
-    
-    private void saveProperties()
-    {
-        savedProperties = new Properties();
-        String factory = System.getProperty(Context.INITIAL_CONTEXT_FACTORY);
-        if(null != factory && !factory.equals(MockContextFactory.class.getName()))
-        {
-            savedProperties.setProperty(Context.INITIAL_CONTEXT_FACTORY, factory);
-        }
-        String urlPrefix = System.getProperty(Context.URL_PKG_PREFIXES);
-        if(null != urlPrefix && !urlPrefix.equals("org.mockejb.jndi"))
-        {
-            savedProperties.setProperty(Context.URL_PKG_PREFIXES, factory);
-        }
-    }
-    
-    private void restoreProperties()
-    {
-        if(null != savedProperties.getProperty(Context.INITIAL_CONTEXT_FACTORY))
-        {
-            System.setProperty(Context.INITIAL_CONTEXT_FACTORY, savedProperties.getProperty(Context.INITIAL_CONTEXT_FACTORY));
-        }
-        else
-        {
-            System.getProperties().remove(Context.INITIAL_CONTEXT_FACTORY);
-        }
-        if(null != savedProperties.getProperty(Context.URL_PKG_PREFIXES))
-        {
-            System.setProperty(Context.URL_PKG_PREFIXES, savedProperties.getProperty(Context.URL_PKG_PREFIXES));
-        }
-        else
-        {
-            System.getProperties().remove(Context.URL_PKG_PREFIXES);
-        }
+        TestJNDI.restoreProperties(savedProperties);
     }
     
     public void testInitMockContextFactory() throws Exception
@@ -102,9 +69,8 @@ public class EJBMockObjectFactoryTest extends TestCase
         assertNull(System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
     }
 
-    public void testIntialize() throws Exception
+    public void testInitializeUserTransaction() throws Exception
     {
-        InitialContext context = new InitialContext();
         EJBMockObjectFactory factory = new EJBMockObjectFactory();
         MockUserTransaction transaction = factory.getMockUserTransaction();
         assertNotNull(transaction);
@@ -126,19 +92,18 @@ public class EJBMockObjectFactoryTest extends TestCase
     
     public void testSetConfiguration() throws Exception
     {
-        InitialContext context = new InitialContext();
         EJBMockObjectFactory factory = new EJBMockObjectFactory();
         MockUserTransaction transaction = factory.getMockUserTransaction();
         assertSame(context.lookup("javax.transaction.UserTransaction"), transaction);
         assertSame(context.lookup("java:comp/UserTransaction"), transaction);
-        unbind();
+        TestJNDI.unbind(context);
         Configuration configuration = new Configuration("myJNDIName");
         factory = new EJBMockObjectFactory(configuration);
         transaction = factory.getMockUserTransaction();
         assertSame(context.lookup("myJNDIName"), transaction);
         assertSame(context.lookup("javax.transaction.UserTransaction"), transaction);
         assertSame(context.lookup("java:comp/UserTransaction"), transaction);
-        unbind();
+        TestJNDI.unbind(context);
         configuration.setBindMockUserTransactionToJNDI(false);
         factory = new EJBMockObjectFactory(configuration);
         transaction = factory.getMockUserTransaction();
@@ -170,7 +135,7 @@ public class EJBMockObjectFactoryTest extends TestCase
         {
             //should throw exception
         }
-        TestContext testContext = new TestContext();
+        NullContext testContext = new NullContext();
         factory = new EJBMockObjectFactory(configuration);
         assertSame(factory.getContext(), configuration.getContext());
         configuration.setContext(testContext);
@@ -179,48 +144,11 @@ public class EJBMockObjectFactoryTest extends TestCase
         assertSame(testContext, factory.getContext());
     }
     
-    private void unbind() throws Exception
-    {
-        InitialContext context = new InitialContext();
-        try
-        {
-            context.unbind("myJNDIName");
-        } 
-        catch(NamingException exc)
-        {
-            //ignore
-        }
-        try
-        {
-            context.unbind("javax.transaction.UserTransaction");
-        } 
-        catch(NamingException exc)
-        {
-            //ignore
-        }
-        try
-        {
-            context.unbind("java:comp/UserTransaction");
-        } 
-        catch(NamingException exc)
-        {
-            //ignore
-        }
-    }
-    
     public static class TestEJBMockObjectFactory extends EJBMockObjectFactory
     {
         public MockUserTransaction createMockUserTransaction()
         {
             return new MockUserTransaction() {};
         }  
-    }
-    
-    public static class TestContext extends MockContext
-    {
-        public TestContext()
-        {
-            super(null);
-        } 
     }
 }

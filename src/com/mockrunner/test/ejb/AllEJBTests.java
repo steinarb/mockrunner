@@ -16,6 +16,7 @@ public class AllEJBTests
         suite.addTest(new TestSuite(BasicEJBTestCaseAdapterTest.class));
         suite.addTest(new TestSuite(EJBTestCaseAdapterDelegateEnvJNDITest.class));
         suite.addTest(new TestSuite(EJBTestCaseAdapterExternalJNDITest.class));
+        suite.addTest(new TestSuite(JNDIUtilTest.class));
         //$JUnit-END$
         return suite;
     }

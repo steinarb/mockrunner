@@ -1,6 +1,7 @@
 package com.mockrunner.test.ejb;
 
 import java.util.Hashtable;
+import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.Name;
@@ -9,8 +10,73 @@ import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 import javax.naming.spi.InitialContextFactory;
 
+import org.mockejb.jndi.MockContext;
+import org.mockejb.jndi.MockContextFactory;
+
 public class TestJNDI
 {
+    public static void saveProperties(Properties properties)
+    {
+        String factory = System.getProperty(Context.INITIAL_CONTEXT_FACTORY);
+        if(null != factory && !factory.equals(MockContextFactory.class.getName()))
+        {
+            properties.setProperty(Context.INITIAL_CONTEXT_FACTORY, factory);
+        }
+        String urlPrefix = System.getProperty(Context.URL_PKG_PREFIXES);
+        if(null != urlPrefix && !urlPrefix.equals("org.mockejb.jndi"))
+        {
+            properties.setProperty(Context.URL_PKG_PREFIXES, factory);
+        }
+    }
+    
+    public static void restoreProperties(Properties properties)
+    {
+        if(null != properties.getProperty(Context.INITIAL_CONTEXT_FACTORY))
+        {
+            System.setProperty(Context.INITIAL_CONTEXT_FACTORY, properties.getProperty(Context.INITIAL_CONTEXT_FACTORY));
+        }
+        else
+        {
+            System.getProperties().remove(Context.INITIAL_CONTEXT_FACTORY);
+        }
+        if(null != properties.getProperty(Context.URL_PKG_PREFIXES))
+        {
+            System.setProperty(Context.URL_PKG_PREFIXES, properties.getProperty(Context.URL_PKG_PREFIXES));
+        }
+        else
+        {
+            System.getProperties().remove(Context.URL_PKG_PREFIXES);
+        }
+    }
+    
+    public static void unbind(Context context) throws Exception
+    {
+        try
+        {
+            context.unbind("myJNDIName");
+        } 
+        catch(NamingException exc)
+        {
+            //ignore
+        }
+        try
+        {
+            context.unbind("javax.transaction.UserTransaction");
+        } 
+        catch(NamingException exc)
+        {
+            //ignore
+        }
+        try
+        {
+            context.unbind("java:comp/UserTransaction");
+        } 
+        catch(NamingException exc)
+        {
+            //ignore
+        }
+    }
+    
     public static class TestContextFactory implements InitialContextFactory 
     {
         public Context getInitialContext(Hashtable env) throws NamingException
@@ -165,5 +231,13 @@ public class TestJNDI
         {
             
         }    
+    }
+    
+    public static class NullContext extends MockContext
+    {
+        public NullContext()
+        {
+            super(null);
+        } 
     }
 }
