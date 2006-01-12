@@ -15,7 +15,7 @@ import com.mockrunner.base.NestedApplicationException;
 public class JNDIUtil
 {
     /**
-     * Calls <code>MockContextFactory.setAsInitial()</code>, if 
+     * Calls <code>MockContextFactory.setAsInitial()</code>, if the
      * <code>MockContextFactory</code> is not already the current
      * context factory.
      */
@@ -29,7 +29,7 @@ public class JNDIUtil
     }
     
     /**
-     * Calls <code>MockContextFactory.revertSetAsInitial()</code>, if 
+     * Calls <code>MockContextFactory.revertSetAsInitial()</code>, if the
      * <code>MockContextFactory</code> is the current context factory.
      */
     public static void resetMockContextFactory()
