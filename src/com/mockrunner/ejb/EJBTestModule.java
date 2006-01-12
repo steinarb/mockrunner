@@ -5,7 +5,7 @@ import javax.ejb.EJBLocalHome;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.Topic;
-import javax.naming.InitialContext;
+import javax.naming.Context;
 import javax.naming.NamingException;
 
 import org.apache.commons.beanutils.MethodUtils;
@@ -387,7 +387,7 @@ public class EJBTestModule
     {
         try
         {
-            InitialContext context = new InitialContext();
+            Context context = mockFactory.getContext();
             context.rebind(name, object);
         }
         catch(NamingException exc)
@@ -407,7 +407,7 @@ public class EJBTestModule
     {
         try
         {
-            InitialContext context = new InitialContext();
+            Context context = mockFactory.getContext();
             return context.lookup(name);
         }
         catch(NamingException exc)

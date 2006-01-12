@@ -1,5 +1,7 @@
 package com.mockrunner.ejb;
 
+import javax.naming.Context;
+
 /**
  * Global configuration options regarding EJB and JNDI.
  * Usually you do not have to change these options.
@@ -8,6 +10,7 @@ public class Configuration
 {
     private String userTransactionJNDIName;
     private boolean bindMockUserTransactionToJNDI;
+    private Context context;
     
     public Configuration()
     {
@@ -23,8 +26,29 @@ public class Configuration
     {
         this.userTransactionJNDIName = userTransactionJNDIName;
         this.bindMockUserTransactionToJNDI = bindMockUserTransactionToJNDI;
+        this.context = null;
     }
     
+    /**
+     * Get the JNDI context. Unless set, this method returns <code>null</code>.
+     * In this case the {@link com.mockrunner.mock.ejb.EJBMockObjectFactory}
+     * uses the MockEJB JNDI implementation.
+     * @return the JNDI context
+     */
+    public Context getContext()
+    {
+        return context;
+    }
+
+    /**
+     * Set the JNDI context used by {@link com.mockrunner.mock.ejb.EJBMockObjectFactory}.
+     * @param context the JNDI context
+     */
+    public void setContext(Context context)
+    {
+        this.context = context;
+    }
+
     /**
      * Get if the mock transaction should be bound to JNDI.
      * @return if the mock transaction should be bound to JNDI
