@@ -1,7 +1,6 @@
 package com.mockrunner.mock.ejb;
 
 import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 import javax.transaction.UserTransaction;
@@ -9,17 +8,15 @@ import javax.transaction.UserTransaction;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mockejb.MockContainer;
-import org.mockejb.jndi.MockContextFactory;
 
-import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.ejb.Configuration;
+import com.mockrunner.ejb.JNDIUtil;
 
 /**
  * Used to create all types of EJB mock objects. 
  * Maintains the necessary dependencies between the mock objects.
- * If you use the mock objects returned by this
- * factory in your tests you can be sure that they are all
- * up to date.
+ * If you use the mock objects returned by this factory in your tests 
+ * you can be sure that they are all up to date.
  * This factory takes the <code>UserTransaction</code> from the JNDI context. 
  * If there's no transaction bound to the  context, the factory will create a
  * {@link com.mockrunner.mock.ejb.MockUserTransaction} and bind it to the context.
@@ -60,20 +57,7 @@ public class EJBMockObjectFactory
 
     private void initializeContext()
     {
-        context = configuration.getContext();
-        if(null == context)
-        {
-            try
-            {
-                initMockContextFactory();
-                context = new InitialContext();
-            } 
-            catch(NamingException exc)
-            {
-                throw new NestedApplicationException(exc);
-            }
-            configuration.setContext(context);
-        }
+        context = JNDIUtil.getContext(configuration);
     }
     
     private void initializeUserTransaction()
@@ -87,12 +71,7 @@ public class EJBMockObjectFactory
             catch(NameNotFoundException nameExc)
             {
                 transaction = createMockUserTransaction();
-                if(configuration.getBindMockUserTransactionToJNDI())
-                {
-                    context.rebind(configuration.getUserTransactionJNDIName(), transaction);
-                    context.rebind("javax.transaction.UserTransaction", transaction);
-                    context.rebind("java:comp/UserTransaction", transaction);
-                }
+                JNDIUtil.bindUserTransaction(configuration, context, transaction);
             }
         }
         catch(Exception exc)
@@ -106,7 +85,7 @@ public class EJBMockObjectFactory
         }
     }
     
-    protected void initializeEJBContainer()
+    private void initializeEJBContainer()
     {
         container = new MockContainer(context); 
     }
@@ -128,11 +107,7 @@ public class EJBMockObjectFactory
      */
     public void initMockContextFactory() throws NamingException
     {
-        String factory = System.getProperty(Context.INITIAL_CONTEXT_FACTORY);
-        if(null == factory || !factory.equals(MockContextFactory.class.getName()))
-        {
-            MockContextFactory.setAsInitial();
-        }
+        JNDIUtil.initMockContextFactory();
     }
     
     /**
@@ -141,11 +116,7 @@ public class EJBMockObjectFactory
      */
     public void resetMockContextFactory()
     {
-        String factory = System.getProperty(Context.INITIAL_CONTEXT_FACTORY);
-        if(null != factory && factory.equals(MockContextFactory.class.getName()))
-        {
-            MockContextFactory.revertSetAsInitial();
-        }
+        JNDIUtil.resetMockContextFactory();
     }
     
     /**

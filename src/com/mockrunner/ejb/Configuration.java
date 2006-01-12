@@ -30,8 +30,8 @@ public class Configuration
     }
     
     /**
-     * Get the JNDI context. Unless set, this method returns <code>null</code>.
-     * In this case the {@link com.mockrunner.mock.ejb.EJBMockObjectFactory}
+     * Get the JNDI context. This method returns <code>null</code> if no context
+     * is set. In this case the {@link com.mockrunner.mock.ejb.EJBMockObjectFactory}
      * uses the MockEJB JNDI implementation.
      * @return the JNDI context
      */
