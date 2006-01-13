@@ -19,6 +19,7 @@ mockrunner-0.3.7:
 - replaced ActiveMQ classes with 3.2 version
 - The EJB test framework now supports custom JNDI implementations. Use
   Configuration.setContext to specify the context used by the EJB test framework
+- added DBStatefulTest to demonstrate how to test BMT stateful beans
 - updated cglib from 2.1_2 to 2.1_3
 - updated struts.jar and all corresponding commons-jars from Struts 1.2.7 to 1.2.8
 

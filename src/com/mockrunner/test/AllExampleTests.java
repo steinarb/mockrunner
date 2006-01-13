@@ -9,6 +9,7 @@ import junit.framework.TestSuite;
 import com.mockrunner.example.connector.AccountDAOTest;
 import com.mockrunner.example.connector.PersonSearchDAOTest;
 import com.mockrunner.example.ejb.BillManagerSessionTest;
+import com.mockrunner.example.ejb.DBStatefulTest;
 import com.mockrunner.example.ejb.LogActionTest;
 import com.mockrunner.example.ejb.PaySessionTest;
 import com.mockrunner.example.ejb.UserLoginSessionTest;
@@ -58,6 +59,7 @@ public class AllExampleTests
         suite.addTest(new TestSuite(OrderDBTest.class));
         suite.addTest(new TestSuite(LogActionTest.class));
         suite.addTest(new TestSuite(PaySessionTest.class));
+        suite.addTest(new TestSuite(DBStatefulTest.class));
         suite.addTest(new TestSuite(BillManagerSessionTest.class));
         suite.addTest(new TestSuite(PrintMessageServletTest.class));
         suite.addTest(new TestSuite(StockQuotePublisherTest.class));
