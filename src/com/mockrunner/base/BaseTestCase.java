@@ -268,13 +268,13 @@ public abstract class BaseTestCase extends TestCase
 	protected ConnectorMockObjectFactory getConnectorMockObjectFactory()
 	{
 	    synchronized(MockConnectionFactory.class) 
-		{
+	    {
 		    if(connectorMockFactory == null)
 			{
 			    connectorMockFactory = createConnectorMockObjectFactory();
 		    }
-		}
-		return connectorMockFactory;
+	    }
+	    return connectorMockFactory;
 	}
 
 	/**
