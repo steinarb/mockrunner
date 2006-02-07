@@ -300,7 +300,7 @@ public class MockStatementTest extends BaseTestCase
         assertNull(statement.getResultSet());
     }
     
-    public void testPrepareMultipleUpdateCount() throws Exception
+    public void testPrepareMultipleUpdateCounts() throws Exception
     {
         statementHandler.prepareGlobalUpdateCount(2);
         statementHandler.prepareUpdateCounts("insert into", new int[] {1, 2, 3});
