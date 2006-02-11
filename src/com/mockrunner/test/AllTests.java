@@ -23,7 +23,7 @@ public class AllTests
     {
         Logger.getLogger("").setLevel(Level.OFF);
         TestSuite suite = new TestSuite("Test for com.mockrunner.test");
-        //$JUnit-BEGIN$ 
+        //$JUnit-BEGIN$
         suite.addTest(AllWebTests.suite());
         suite.addTest(AllJDBCTests.suite());
         suite.addTest(AllEJBTests.suite());
