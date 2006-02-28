@@ -61,7 +61,7 @@ public class MethodUtil
      * the methods can be defined by different classes.
      * @param method1 the first method to compare
      * @param method2 the second method to compare
-     * @return <code>true</code> if the methods are equals, <code>false</code>
+     * @return <code>true</code> if the methods are equal, <code>false</code>
      *         otherwise
      * @throws NullPointerException if one of the methods is <code>null</code>
      */
