@@ -159,7 +159,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         {
             throw exception;
         }
-		resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy(params));
+        resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy(params));
         if(resultSetHandler.hasMultipleResultSets(getSQL(), params))
         {
             MockResultSet[] results = resultSetHandler.getResultSets(getSQL(), params);
@@ -228,7 +228,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         {
             throw exception;
         }
-		resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy(params));
+        resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy(params));
         if(resultSetHandler.hasMultipleUpdateCounts(getSQL(), params))
         {
             Integer[] updateCounts = resultSetHandler.getUpdateCounts(getSQL(), params);
