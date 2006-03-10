@@ -335,7 +335,101 @@ public class MockCallableStatementTest extends BaseTestCase
         }
         catch(BatchUpdateException exc)
         {
-            //should throw Exception
+            assertEquals(0, exc.getUpdateCounts().length);
+        }
+    }
+    
+    public void testPrepareUpdateCountBatchFailureWithoutContinue() throws Exception
+    {
+        callableStatementHandler.prepareGlobalUpdateCount(5);
+        callableStatementHandler.prepareUpdateCount("doTest", 4);
+        MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doTest(?, ?, ?)}");
+        statement.setString(6, "xyz");
+        statement.setString("1", "Test");
+        statement.addBatch();
+        statement.setObject(5, new MockStruct("test"));
+        statement.addBatch();
+        statement.addBatch();
+        Map paramMap = new HashMap();
+        paramMap.put(new Integer(5), new MockStruct("test"));
+        callableStatementHandler.prepareThrowsSQLException("doTest", new SQLException("reason", "state", 25), paramMap);
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            assertEquals(1, callableStatementHandler.getExecutedStatements().size());
+            assertEquals("{call doTest(?, ?, ?)}", callableStatementHandler.getExecutedStatements().get(0));
+            assertEquals(1, exc.getUpdateCounts().length);
+            assertEquals(4, exc.getUpdateCounts()[0]);
+            assertEquals("reason", exc.getMessage());
+            assertEquals("state", exc.getSQLState());
+            assertEquals(25, exc.getErrorCode());
+        }
+        callableStatementHandler.prepareThrowsSQLException("doTest", new BatchUpdateException(new int[9]));
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {  
+            assertEquals(9, exc.getUpdateCounts().length);
+        }
+    }
+    
+    public void testPrepareUpdateCountBatchFailureWithContinue() throws Exception
+    {
+        callableStatementHandler.prepareGlobalUpdateCount(5);
+        callableStatementHandler.prepareUpdateCount("doTest", 4);
+        callableStatementHandler.setContinueProcessingOnBatchFailure(true);
+        MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doTest(?, ?, ?)}");
+        statement.setString(6, "xyz");
+        statement.setString("1", "Test");
+        statement.addBatch();
+        statement.clearParameters();
+        statement.setObject(5, new MockStruct("test"));
+        statement.addBatch();
+        statement.clearParameters();
+        statement.addBatch();
+        Map paramMap = new HashMap();
+        paramMap.put(new Integer(5), new MockStruct("test"));
+        callableStatementHandler.prepareThrowsSQLException("doTest", new SQLException("reason", "state", 25), paramMap);
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            assertEquals(2, callableStatementHandler.getExecutedStatements().size());
+            assertEquals("{call doTest(?, ?, ?)}", callableStatementHandler.getExecutedStatements().get(0));
+            assertEquals(3, exc.getUpdateCounts().length);
+            assertEquals(4, exc.getUpdateCounts()[0]);
+            assertEquals(-3, exc.getUpdateCounts()[1]);
+            assertEquals(4, exc.getUpdateCounts()[2]);
+            assertEquals("reason", exc.getMessage());
+            assertEquals("state", exc.getSQLState());
+            assertEquals(25, exc.getErrorCode());
+        }
+        callableStatementHandler.prepareThrowsSQLException("doTest", new SQLException("xyz", "abc", 1), new HashMap());
+        callableStatementHandler.setExactMatchParameter(true);
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            assertEquals(3, exc.getUpdateCounts().length);
+            assertEquals(4, exc.getUpdateCounts()[0]);
+            assertEquals(-3, exc.getUpdateCounts()[1]);
+            assertEquals(-3, exc.getUpdateCounts()[2]);
+            assertEquals("xyz", exc.getMessage());
+            assertEquals("abc", exc.getSQLState());
+            assertEquals(1, exc.getErrorCode());
         }
     }
     
@@ -583,5 +677,17 @@ public class MockCallableStatementTest extends BaseTestCase
         callableStatement.execute(); 
         assertEquals("1", callableStatement.getString(1)); 
         assertEquals("2", callableStatement.getString(2)); 
+    }
+    
+    public void testClearParameters() throws Exception
+    {
+        MockCallableStatement callableStatement = (MockCallableStatement)connection.prepareCall("call");
+        callableStatement.setBoolean(0, true);
+        callableStatement.setInt(1, 1);
+        callableStatement.setString("name", "abc");
+        callableStatement.clearParameters();
+        assertEquals(0, callableStatement.getIndexedParameterMap().size());
+        assertEquals(0, callableStatement.getNamedParameterMap().size());
+        assertEquals(0, callableStatement.getParameterMap().size());
     }
 }

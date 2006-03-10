@@ -278,18 +278,37 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     protected int[] executeBatch(List batchParams) throws SQLException
     {
         int[] results = new int[batchParams.size()];
-        if(isQuery(getSQL()))
-        {
-            throw new BatchUpdateException("SQL " + getSQL() + " returned a ResultSet.", null);
-        }
+        SQLException exception = null;
         for(int ii = 0; ii < results.length; ii++)
         {
-            Map currentParameters = (Map)batchParams.get(ii);
-            results[ii] = executeUpdate(currentParameters);
+            if(isQuery(getSQL()))
+            {
+                exception = prepareFailedResult(results, ii, "SQL " + getSQL() + " in the list of batches returned a ResultSet.", null);
+            }
+            else
+            {
+                try
+                {
+                    Map currentParameters = (Map)batchParams.get(ii);
+                    results[ii] = executeUpdate(currentParameters);
+                } 
+                catch(SQLException exc)
+                {
+                    exception = prepareFailedResult(results, ii, null, exc);
+                }
+            }
+            if(null != exception && !resultSetHandler.getContinueProcessingOnBatchFailure())
+            {
+                throw exception;
+            }
+        }
+        if(null != exception)
+        {
+            throw new BatchUpdateException(exception.getMessage(), exception.getSQLState(), exception.getErrorCode(), results);
         }
         return results;
     }
-    
+
     private void setGeneratedKeysResultSet(String sql, Map params)
     {
         MockResultSet generatedKeys = resultSetHandler.getGeneratedKeys(sql, params);

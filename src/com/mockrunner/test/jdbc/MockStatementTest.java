@@ -356,11 +356,110 @@ public class MockStatementTest extends BaseTestCase
         }
         catch(BatchUpdateException exc)
         {
-            //should throw Exception
+            assertEquals(3, exc.getUpdateCounts().length);
+            assertEquals(3, exc.getUpdateCounts()[0]);
+            assertEquals(2, exc.getUpdateCounts()[1]);
+            assertEquals(2, exc.getUpdateCounts()[2]);
         }
         statement.clearBatch();
         updateCounts = statement.executeBatch();
         assertTrue(updateCounts.length == 0);
+    }
+    
+    public void testPrepareUpdateCountBatchFailureWithoutContinue() throws Exception
+    {
+        statementHandler.prepareGlobalUpdateCount(2);
+        statementHandler.prepareUpdateCount("insert into", 3);
+        MockStatement statement = (MockStatement)connection.createStatement();
+        statement.addBatch("insert into x(y) values(1)");
+        statement.addBatch("DELETE xyz where");
+        statement.addBatch("update xy");
+        statementHandler.prepareThrowsSQLException("DELETE", new SQLException("reason", "state", 25));
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            assertEquals(1, exc.getUpdateCounts().length);
+            assertEquals(3, exc.getUpdateCounts()[0]);
+            assertEquals(1, statementHandler.getExecutedStatements().size());
+            assertEquals("insert into x(y) values(1)", statementHandler.getExecutedStatements().get(0));
+            assertEquals("reason", exc.getMessage());
+            assertEquals("state", exc.getSQLState());
+            assertEquals(25, exc.getErrorCode());
+        }
+        statementHandler.prepareThrowsSQLException("insert into", new BatchUpdateException(new int[9]));
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            assertEquals(9, exc.getUpdateCounts().length);
+        }
+    }
+    
+    public void testPrepareUpdateCountBatchFailureWithContinue() throws Exception
+    {
+        statementHandler.prepareGlobalUpdateCount(2);
+        statementHandler.prepareUpdateCount("insert into", 3);
+        MockStatement statement = (MockStatement)connection.createStatement();
+        statement.addBatch("insert into x(y) values(1)");
+        statement.addBatch("DELETE xyz where");
+        statement.addBatch("update xy");
+        statementHandler.prepareThrowsSQLException("DELETE");
+        statementHandler.setContinueProcessingOnBatchFailure(true);
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            assertEquals(3, exc.getUpdateCounts().length);
+            assertEquals(3, exc.getUpdateCounts()[0]);
+            assertEquals(-3, exc.getUpdateCounts()[1]);
+            assertEquals(2, exc.getUpdateCounts()[2]);
+            assertEquals(2, statementHandler.getExecutedStatements().size());
+            assertEquals("insert into x(y) values(1)", statementHandler.getExecutedStatements().get(0));
+            assertEquals("update xy", statementHandler.getExecutedStatements().get(1));
+        }
+        statementHandler.prepareThrowsSQLException("update xy", new SQLException("reason", "state", 25));
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            assertEquals(3, exc.getUpdateCounts().length);
+            assertEquals(3, exc.getUpdateCounts()[0]);
+            assertEquals(-3, exc.getUpdateCounts()[1]);
+            assertEquals(-3, exc.getUpdateCounts()[2]);
+            assertEquals(3, statementHandler.getExecutedStatements().size());
+            assertEquals("reason", exc.getMessage());
+            assertEquals("state", exc.getSQLState());
+            assertEquals(25, exc.getErrorCode());
+        }
+        statement.addBatch("select");
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            assertEquals(4, exc.getUpdateCounts().length);
+            assertEquals(3, exc.getUpdateCounts()[0]);
+            assertEquals(-3, exc.getUpdateCounts()[1]);
+            assertEquals(-3, exc.getUpdateCounts()[2]);
+            assertEquals(-3, exc.getUpdateCounts()[3]);
+            assertEquals(4, statementHandler.getExecutedStatements().size());
+            assertEquals("SQL select in the list of batches returned a ResultSet.", exc.getMessage());
+        }
     }
     
     public void testPrepareMultipleGlobalUpdateCounts() throws Exception

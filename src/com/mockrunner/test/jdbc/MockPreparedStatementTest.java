@@ -419,7 +419,7 @@ public class MockPreparedStatementTest extends BaseTestCase
         }
         catch(BatchUpdateException exc)
         {
-            //should throw Exception
+            assertEquals(0, exc.getUpdateCounts().length);
         }
         statement = (MockPreparedStatement)connection.prepareStatement("update xyz");
         statement.setString(1, "1");
@@ -441,9 +441,111 @@ public class MockPreparedStatementTest extends BaseTestCase
             statement.executeBatch();
             fail();
         }
-        catch(SQLException exc)
+        catch(BatchUpdateException exc)
         {
-            //should throw Exception
+            assertEquals(0, exc.getUpdateCounts().length);
+        }
+    }
+    
+    public void testPrepareUpdateCountBatchFailureWithoutContinue() throws Exception
+    {
+        preparedStatementHandler.prepareGlobalUpdateCount(2);
+        preparedStatementHandler.prepareUpdateCount("insert into", 3);
+        preparedStatementHandler.prepareUpdateCount("insert into", 4, new Object[] {"1", "2"});
+        preparedStatementHandler.setExactMatchParameter(true);
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("insert into x(y) values(?)");
+        statement.setString(1, "1");
+        statement.setString(2, "2");
+        statement.addBatch();
+        statement.clearParameters();
+        statement.addBatch();
+        statement.setString(1, "5");
+        statement.setInt(2, 3);
+        statement.addBatch();
+        Map paramMap = new HashMap();
+        paramMap.put(new Integer(1), "5");
+        paramMap.put(new Integer(2), new Integer(3));
+        preparedStatementHandler.prepareThrowsSQLException("insert", new SQLException("reason", "code", 25), paramMap);
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            assertEquals(2, preparedStatementHandler.getExecutedStatements().size());
+            assertEquals("insert into x(y) values(?)", preparedStatementHandler.getExecutedStatements().get(0));
+            assertEquals("insert into x(y) values(?)", preparedStatementHandler.getExecutedStatements().get(1));
+            assertEquals(2, exc.getUpdateCounts().length);
+            assertEquals(4, exc.getUpdateCounts()[0]);
+            assertEquals(3, exc.getUpdateCounts()[1]);
+        }
+        preparedStatementHandler.prepareThrowsSQLException("insert into", new BatchUpdateException(new int [9]), new HashMap());
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            assertEquals(9, exc.getUpdateCounts().length);
+        }
+        preparedStatementHandler.prepareReturnsResultSet("insert into", true);
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            assertEquals(0, exc.getUpdateCounts().length);
+        }
+    }
+    
+    public void testPrepareUpdateCountBatchFailureWithContinue() throws Exception
+    {
+        preparedStatementHandler.prepareGlobalUpdateCount(2);
+        preparedStatementHandler.prepareUpdateCount("insert into", 3);
+        preparedStatementHandler.prepareUpdateCount("insert into", 4, new Object[] {"1", "2"});
+        preparedStatementHandler.setExactMatchParameter(true);
+        preparedStatementHandler.setContinueProcessingOnBatchFailure(true);
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("insert into x(y) values(?)");
+        statement.setString(1, "1");
+        statement.setString(2, "2");
+        statement.addBatch();
+        statement.clearParameters();
+        statement.addBatch();
+        statement.setString(1, "5");
+        statement.setInt(2, 3);
+        statement.addBatch();
+        preparedStatementHandler.prepareThrowsSQLException("insert", new BatchUpdateException(new int[9]), new HashMap());
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            assertEquals(2, preparedStatementHandler.getExecutedStatements().size());
+            assertEquals("insert into x(y) values(?)", preparedStatementHandler.getExecutedStatements().get(0));
+            assertEquals("insert into x(y) values(?)", preparedStatementHandler.getExecutedStatements().get(1));
+            assertEquals(3, exc.getUpdateCounts().length);
+            assertEquals(4, exc.getUpdateCounts()[0]);
+            assertEquals(-3, exc.getUpdateCounts()[1]);
+            assertEquals(3, exc.getUpdateCounts()[2]);
+        }
+        preparedStatementHandler.prepareReturnsResultSet("insert into", true);
+        try
+        {
+            statement.executeBatch();
+            fail();
+        }
+        catch(BatchUpdateException exc)
+        {
+            assertEquals(3, exc.getUpdateCounts().length);
+            assertEquals(-3, exc.getUpdateCounts()[0]);
+            assertEquals(-3, exc.getUpdateCounts()[1]);
+            assertEquals(-3, exc.getUpdateCounts()[2]);
         }
     }
     
@@ -662,5 +764,15 @@ public class MockPreparedStatementTest extends BaseTestCase
         preparedStatement.executeUpdate("insert", new int[0]);
         keys = (MockResultSet)preparedStatement.getGeneratedKeys();
         assertTrue(isResultSet2(keys));
+    }
+    
+    public void testClearParameters() throws Exception
+    {
+        MockPreparedStatement preparedStatement = (MockPreparedStatement)connection.prepareStatement("insert");
+        preparedStatement.setBoolean(0, true);
+        preparedStatement.setString(1, "abc");
+        preparedStatement.clearParameters();
+        assertEquals(0, preparedStatement.getIndexedParameterMap().size());
+        assertEquals(0, preparedStatement.getParameterMap().size());
     }
 }
