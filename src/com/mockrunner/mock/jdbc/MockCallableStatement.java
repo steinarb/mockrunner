@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Array;
-import java.sql.BatchUpdateException;
 import java.sql.Blob;
 import java.sql.CallableStatement;
 import java.sql.Clob;
@@ -83,6 +82,12 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         return paramObjects.get(name);
     }
     
+    public void clearParameters() throws SQLException
+    {
+        super.clearParameters();
+        paramObjects.clear();
+    }
+    
     public Set getNamedRegisteredOutParameterSet()
     {
         return Collections.unmodifiableSet(registeredOutParameterSetNamed);
@@ -130,17 +135,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
 
     public int[] executeBatch() throws SQLException
     {
-        int[] results = new int[batchParameters.size()];
-        if(isQuery(getSQL()))
-        {
-            throw new BatchUpdateException("SQL " + getSQL() + " returned a ResultSet.", null);
-        }
-        for(int ii = 0; ii < results.length; ii++)
-        {
-            Map currentParameters = (Map)batchParameters.get(ii);
-            results[ii] = executeUpdate(currentParameters);
-        }
-        return results;
+        return executeBatch(batchParameters);
     }
     
     public void registerOutParameter(int parameterIndex, int sqlType) throws SQLException

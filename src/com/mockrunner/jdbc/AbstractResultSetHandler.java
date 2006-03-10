@@ -30,6 +30,7 @@ public abstract class AbstractResultSetHandler
     private boolean caseSensitive = false;
     private boolean exactMatch = false;
     private boolean useRegularExpressions = false;
+    private boolean continueProcessingOnBatchFailure = false;
     private Object globalResultSets;
     private Map resultSetsForStatement = new HashMap();
     private Object globalUpdateCounts;
@@ -141,6 +142,19 @@ public abstract class AbstractResultSetHandler
     public void setUseRegularExpressions(boolean useRegularExpressions)
     {
         this.useRegularExpressions = useRegularExpressions;
+    }
+    
+    /**
+     * Set if batch processing should be continued if one of the commands
+     * in the batch fails. This behaviour is driver dependend. The default is
+     * <code>false</code>, i.e. if a command fails with an exception,
+     * batch processing will not continue and the remaining commands
+     * will not be executed.
+     * @param continueProcessingOnBatchFailure should batch processing be continued
+     */
+    public void setContinueProcessingOnBatchFailure(boolean continueProcessingOnBatchFailure)
+    {
+        this.continueProcessingOnBatchFailure = continueProcessingOnBatchFailure;
     }
     
     /**
@@ -823,5 +837,15 @@ public abstract class AbstractResultSetHandler
     protected boolean getUseRegularExpressions()
     {
         return useRegularExpressions;
+    }
+
+    /**
+     * Returns if batch processing should be continued if one of 
+     * the commands in the batch fails.
+     * @return if batch processing should be continued
+     */
+    public boolean getContinueProcessingOnBatchFailure()
+    {
+        return continueProcessingOnBatchFailure;
     }
 }
