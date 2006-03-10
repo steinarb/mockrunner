@@ -260,7 +260,7 @@ public class MockStatement implements Statement
     protected SQLException prepareFailedResult(int[] actualResults, int index, String message, SQLException caughtException)
     {
         actualResults[index] = -3;
-        if((null != caughtException) && (caughtException instanceof BatchUpdateException))
+        if(caughtException instanceof BatchUpdateException)
         {
             return caughtException;
         }
