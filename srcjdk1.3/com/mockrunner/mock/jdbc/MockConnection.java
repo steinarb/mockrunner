@@ -333,8 +333,7 @@ public class MockConnection implements Connection
         MockSavepoint currentSavepoint = (MockSavepoint)savepoints.get(new Integer(savepoint.getSavepointId()));
         if(currentSavepoint.isReleased())
         {
-            throw new SQLException("Savepoint with id " + currentSavepoint.getSavepointId() + " and name " 
-                    + currentSavepoint.getSavepointName() + " is released");
+            throw new SQLException("Savepoint with id " + currentSavepoint.getSavepointId() + " and name " + currentSavepoint.getSavepointName() + " is released");
         }
         currentSavepoint.setRolledBack(true);
         numberRollbacks++;
