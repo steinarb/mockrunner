@@ -175,41 +175,49 @@ public class JDBCTestModule
         return list;
     }
     
-	/**
-	 * Returns a <code>Map</code> of all parameters that were used when
+    /**
+     * @deprecated use {@link #getExecutedSQLStatementParameterMap}
+     */
+    public Map getExecutedSQLStatementParameter()
+    {
+        return getExecutedSQLStatementParameterMap();
+    }
+    
+    /**
+     * Returns a <code>Map</code> of all parameters that were used when
      * executing a {@link com.mockrunner.mock.jdbc.MockPreparedStatement} or
      * {@link com.mockrunner.mock.jdbc.MockCallableStatement}.
-	 * The keys are the corresponding SQL statements. The values are the 
+     * The keys are the corresponding SQL statements. The values are the 
      * {@link ParameterSets} objects.
-	 * @return the <code>Map</code> of parameters
-	 */
-	public Map getExecutedSQLStatementParameter()
-	{
-		Map map = new HashMap();
-		map.putAll(mockFactory.getMockConnection().getPreparedStatementResultSetHandler().getExecutedStatementParameter());
-		map.putAll(mockFactory.getMockConnection().getCallableStatementResultSetHandler().getExecutedStatementParameter());
-		return map;
-	}
-	
-	/**
-	 * Returns the {@link ParameterSets} object for the specified SQL statement.
-	 * If more than one {@link ParameterSets} object is found, the first one
-	 * will be returned.
-	 * @param sql the the SQL statement
-	 * @return the {@link ParameterSets} object or <code>null</code> if no
+     * @return the <code>Map</code> of parameters
+     */
+    public Map getExecutedSQLStatementParameterMap()
+    {
+        Map map = new HashMap();
+        map.putAll(mockFactory.getMockConnection().getPreparedStatementResultSetHandler().getExecutedStatementParameterMap());
+        map.putAll(mockFactory.getMockConnection().getCallableStatementResultSetHandler().getExecutedStatementParameterMap());
+        return map;
+    }
+    
+    /**
+     * Returns the {@link ParameterSets} object for the specified SQL statement.
+     * If more than one {@link ParameterSets} object is found, the first one
+     * will be returned.
+     * @param sql the the SQL statement
+     * @return the {@link ParameterSets} object or <code>null</code> if no
      *         matching object is found
-	 */
-	public ParameterSets getExecutedSQLStatementParameterSets(String sql)
-	{
-		Map map = getExecutedSQLStatementParameter();
-		SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch, useRegularExpressions);
-		List list = matcher.getMatchingObjects(map, sql, false, false);
-		if(list != null && list.size() > 0)
+     */
+    public ParameterSets getExecutedSQLStatementParameterSets(String sql)
+    {
+        Map map = getExecutedSQLStatementParameterMap();
+        SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch, useRegularExpressions);
+        List list = matcher.getMatchingObjects(map, sql, false, false);
+        if(list != null && list.size() > 0)
         {
             return (ParameterSets)list.get(0);
         }
         return null;
-	}
+    }
     
     /**
      * Returns the <code>ResultSet</code> objects with the specified id. 
@@ -619,141 +627,141 @@ public class JDBCTestModule
         }
     }
     
-	/**
-	 * Verifies the number of parameters for the specified SQL statement.
-	 * If more than one SQL statement is found, this method uses the
-	 * first one. You can specify the index of the parameter set. If
-	 * if a <code>PreparedStatement</code> or <code>CallableStatement</code> 
+    /**
+     * Verifies the number of parameters for the specified SQL statement.
+     * If more than one SQL statement is found, this method uses the
+     * first one. You can specify the index of the parameter set. If
+     * if a <code>PreparedStatement</code> or <code>CallableStatement</code> 
      * is executed N times, it has N parameter sets. Each parameter set
      * can contain any number of parameters (possibly 0 parameters).
      * Ordinary statements do not have parameter sets, of course. If
      * the specified SQL has been executed by an ordinary statements,
      * a <code>VerifyFailedException</code> is thrown stating the reason.
-	 * @param sql the SQL string
-	 * @param indexOfParameterSet the number of the parameter set
-	 * @param number the expected number of parameters
-	 * @throws VerifyFailedException if verification fails
-	 */
-	public void verifySQLStatementParameterNumber(String sql, int indexOfParameterSet, int number)
-	{
-		Map actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
-		if(actualParameterMap.size() != number)
-		{
-			throw new VerifyFailedException("Expected " + number + " parameter, actual " + actualParameterMap.size() + " parameter");
-		}
-	}
+     * @param sql the SQL string
+     * @param indexOfParameterSet the number of the parameter set
+     * @param number the expected number of parameters
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySQLStatementParameterNumber(String sql, int indexOfParameterSet, int number)
+    {
+        Map actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
+        if(actualParameterMap.size() != number)
+        {
+            throw new VerifyFailedException("Expected " + number + " parameter, actual " + actualParameterMap.size() + " parameter");
+        }
+    }
     
-	/**
-	 * Verifies the parameters for the specified SQL statement.
-	 * If more than one SQL statement is found, this method uses the
-	 * first one. The parameter map must match in size and the
-	 * parameters must be equal (by comparing them with
-	 * {de.lv1871.util.ParameterUtil#compareParameter}).
-	 * You can specify the index of the parameter set. If
+    /**
+     * Verifies the parameters for the specified SQL statement.
+     * If more than one SQL statement is found, this method uses the
+     * first one. The parameter map must match in size and the
+     * parameters must be equal (by comparing them with
+     * {de.lv1871.util.ParameterUtil#compareParameter}).
+     * You can specify the index of the parameter set. If
      * if a <code>PreparedStatement</code> or <code>CallableStatement</code> 
      * is executed N times, it has N parameter sets. Each parameter set
      * can contain any number of parameters (possibly 0 parameters).
      * Ordinary statements do not have parameter sets, of course. If
      * the specified SQL has been executed by an ordinary statements,
      * a <code>VerifyFailedException</code> is thrown stating the reason.
-	 * @param sql the SQL string
-	 * @param indexOfParameterSet the number of the parameter set
-	 * @param parameterMap the map of expected parameters
-	 * @throws VerifyFailedException if verification fails
-	 */
-	public void verifySQLStatementParameter(String sql, int indexOfParameterSet, Map parameterMap)
-	{
-		verifySQLStatementParameterNumber(sql, indexOfParameterSet, parameterMap.size());
-		Map actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
-		Iterator keys = parameterMap.keySet().iterator();
-		while(keys.hasNext())
-		{
-			Object nextKey = keys.next();
-			Object nextExpectedParameter = parameterMap.get(nextKey);
-			Object nextActualParameter = actualParameterMap.get(nextKey);
-			if(null == nextActualParameter)
-			{
-				throw new VerifyFailedException("No parameter " + nextKey + " found.");
-			}
-			if(!ParameterUtil.compareParameter(nextExpectedParameter, nextActualParameter))
-			{
-				throw new VerifyFailedException("Expected " + nextExpectedParameter + " for parameter " + nextKey + ", but was " + nextActualParameter);
-			}
-		}
-	}
-	
-	/**
-	 * Verifies the parameter for the specified SQL statement.
-	 * If more than one SQL statement is found, this method uses the
-	 * first one.
-	 * You can specify the index of the parameter set. If
+     * @param sql the SQL string
+     * @param indexOfParameterSet the number of the parameter set
+     * @param parameterMap the map of expected parameters
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySQLStatementParameter(String sql, int indexOfParameterSet, Map parameterMap)
+    {
+        verifySQLStatementParameterNumber(sql, indexOfParameterSet, parameterMap.size());
+        Map actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
+        Iterator keys = parameterMap.keySet().iterator();
+        while(keys.hasNext())
+        {
+            Object nextKey = keys.next();
+            Object nextExpectedParameter = parameterMap.get(nextKey);
+            Object nextActualParameter = actualParameterMap.get(nextKey);
+            if(null == nextActualParameter)
+            {
+                throw new VerifyFailedException("No parameter " + nextKey + " found.");
+            }
+            if(!ParameterUtil.compareParameter(nextExpectedParameter, nextActualParameter))
+            {
+                throw new VerifyFailedException("Expected " + nextExpectedParameter + " for parameter " + nextKey + ", but was " + nextActualParameter);
+            }
+        }
+    }
+    
+    /**
+     * Verifies the parameter for the specified SQL statement.
+     * If more than one SQL statement is found, this method uses the
+     * first one.
+     * You can specify the index of the parameter set. If
      * if a <code>PreparedStatement</code> or <code>CallableStatement</code> 
      * is executed N times, it has N parameter sets. Each parameter set
      * can contain any number of parameters (possibly 0 parameters).
      * Ordinary statements do not have parameter sets, of course. If
      * the specified SQL has been executed by an ordinary statements,
      * a <code>VerifyFailedException</code> is thrown stating the reason.
-	 * @param sql the SQL string
-	 * @param indexOfParameterSet the number of the parameter set
-	 * @param indexOfParameter the index of the parameter
-	 * @param expectedParameter the expected parameter
-	 * @throws VerifyFailedException if verification fails
-	 */
-	public void verifySQLStatementParameter(String sql, int indexOfParameterSet, int indexOfParameter, Object expectedParameter)
-	{
-		Map actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
-		Object actualParameter = actualParameterMap.get(new Integer(indexOfParameter));
-		if(!ParameterUtil.compareParameter(expectedParameter, actualParameter))
-		{
-			throw new VerifyFailedException("Expected " + expectedParameter + " for parameter " + indexOfParameter + ", but was " + actualParameter);
-		}
-	}
-	
-	/**
-	 * Verifies the parameter for the specified SQL statement.
-	 * If more than one SQL statement is found, this method uses the
-	 * first one.
-	 * You can specify the index of the parameter set. If
+     * @param sql the SQL string
+     * @param indexOfParameterSet the number of the parameter set
+     * @param indexOfParameter the index of the parameter
+     * @param expectedParameter the expected parameter
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySQLStatementParameter(String sql, int indexOfParameterSet, int indexOfParameter, Object expectedParameter)
+    {
+        Map actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
+        Object actualParameter = actualParameterMap.get(new Integer(indexOfParameter));
+        if(!ParameterUtil.compareParameter(expectedParameter, actualParameter))
+        {
+            throw new VerifyFailedException("Expected " + expectedParameter + " for parameter " + indexOfParameter + ", but was " + actualParameter);
+        }
+    }
+    
+    /**
+     * Verifies the parameter for the specified SQL statement.
+     * If more than one SQL statement is found, this method uses the
+     * first one.
+     * You can specify the index of the parameter set. If
      * if a <code>PreparedStatement</code> or <code>CallableStatement</code> 
      * is executed N times, it has N parameter sets. Each parameter set
      * can contain any number of parameters (possibly 0 parameters).
      * Ordinary statements do not have parameter sets, of course. If
      * the specified SQL has been executed by an ordinary statements,
      * a <code>VerifyFailedException</code> is thrown stating the reason.
-	 * @param sql the SQL string
-	 * @param indexOfParameterSet the number of the parameter set
-	 * @param nameOfParameter the name of the parameter
-	 * @param expectedParameter the expected parameter
-	 * @throws VerifyFailedException if verification fails
-	 */
-	public void verifySQLStatementParameter(String sql, int indexOfParameterSet, String nameOfParameter, Object expectedParameter)
-	{
-		Map actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
-		Object actualParameter = actualParameterMap.get(nameOfParameter);
-		if(!ParameterUtil.compareParameter(expectedParameter, actualParameter))
-		{
-			throw new VerifyFailedException("Expected " + expectedParameter + " for parameter " + nameOfParameter + ", but was " + actualParameter);
-		}
-	}
+     * @param sql the SQL string
+     * @param indexOfParameterSet the number of the parameter set
+     * @param nameOfParameter the name of the parameter
+     * @param expectedParameter the expected parameter
+     * @throws VerifyFailedException if verification fails
+     */
+    public void verifySQLStatementParameter(String sql, int indexOfParameterSet, String nameOfParameter, Object expectedParameter)
+    {
+        Map actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
+        Object actualParameter = actualParameterMap.get(nameOfParameter);
+        if(!ParameterUtil.compareParameter(expectedParameter, actualParameter))
+        {
+            throw new VerifyFailedException("Expected " + expectedParameter + " for parameter " + nameOfParameter + ", but was " + actualParameter);
+        }
+    }
 
-	private Map verifyAndGetParametersForSQL(String sql, int indexOfParameterSet)
-	{
-		verifySQLStatementExecuted(sql);
-		SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch, useRegularExpressions);
-		List matchingParameterList = matcher.getMatchingObjects(getExecutedSQLStatementParameter(), sql, true, false);
-		if(null == matchingParameterList || matchingParameterList.size() == 0)
-		{
-			throw new VerifyFailedException("No parameter sets for SQL " + sql + " found. Maybe the SQL has been executed by a regular " +
+    private Map verifyAndGetParametersForSQL(String sql, int indexOfParameterSet)
+    {
+        verifySQLStatementExecuted(sql);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch, useRegularExpressions);
+        List matchingParameterList = matcher.getMatchingObjects(getExecutedSQLStatementParameterMap(), sql, true, false);
+        if(null == matchingParameterList || matchingParameterList.size() == 0)
+        {
+            throw new VerifyFailedException("No parameter sets for SQL " + sql + " found. Maybe the SQL has been executed by a regular " +
                                             "statement instead of a prepared statement or callable statement.");
-		}
-		ParameterSets actualParameterSets = (ParameterSets)matchingParameterList.get(0);
-		if(null == actualParameterSets || indexOfParameterSet >= actualParameterSets.getNumberParameterSets())
-		{
-			throw new VerifyFailedException("Statement " + sql + " has no parameter set with index " + indexOfParameterSet +
+        }
+        ParameterSets actualParameterSets = (ParameterSets)matchingParameterList.get(0);
+        if(null == actualParameterSets || indexOfParameterSet >= actualParameterSets.getNumberParameterSets())
+        {
+            throw new VerifyFailedException("Statement " + sql + " has no parameter set with index " + indexOfParameterSet +
                                             ". Maybe it has been executed less than " + (indexOfParameterSet + 1) + " times.");
-		}
-		return actualParameterSets.getParameterSet(indexOfParameterSet);
-	}
+        }
+        return actualParameterSets.getParameterSet(indexOfParameterSet);
+    }
     
     /**
      * Verifies that the connection is closed.

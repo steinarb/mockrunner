@@ -836,7 +836,7 @@ public class JDBCTestModuleTest extends TestCase
 		module.getPreparedStatement(2).execute();
 		module.getCallableStatement(0).execute();
 		module.getCallableStatement(1).execute();
-		Map parameterMap = module.getExecutedSQLStatementParameter();
+		Map parameterMap = module.getExecutedSQLStatementParameterMap();
 		assertEquals(5, parameterMap.size());
 		Map preparedStatementMap1 = ((ParameterSets)parameterMap.get("INSERT INTO TEST (COL1, COL2) VALUES(?, ?)")).getParameterSet(0);
 		assertEquals(2, preparedStatementMap1.size());

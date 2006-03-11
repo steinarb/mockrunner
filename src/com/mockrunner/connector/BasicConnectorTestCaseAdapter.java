@@ -211,19 +211,19 @@ public class BasicConnectorTestCaseAdapter extends TestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyNumberCreatedMappedRecords(String, int)}
-     */
-    protected void verifyNumberCreatedMappedRecords(String recordName, int expected)
-    {
-        connectorTestModule.verifyNumberCreatedMappedRecords(recordName, expected);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyNumberCreatedMappedRecords(int)}
      */
     protected void verifyNumberCreatedMappedRecords(int expected)
     {
         connectorTestModule.verifyNumberCreatedMappedRecords(expected);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.connector.ConnectorTestModule#verifyNumberCreatedMappedRecords(String, int)}
+     */
+    protected void verifyNumberCreatedMappedRecords(String recordName, int expected)
+    {
+        connectorTestModule.verifyNumberCreatedMappedRecords(recordName, expected);
     }
 
     /**
