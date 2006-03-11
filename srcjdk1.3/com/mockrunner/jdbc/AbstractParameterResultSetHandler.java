@@ -60,10 +60,18 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
 	 * object.
 	 * @return the <code>Map</code> of parameters
 	 */
-	public Map getExecutedStatementParameter()
+	public Map getExecutedStatementParameterMap()
 	{
 		return Collections.unmodifiableMap(executedStatementParameters);
 	}
+    
+    /**
+     * @deprecated use {@link #getExecutedStatementParameterMap}
+     */
+    public Map getExecutedStatementParameter()
+    {
+        return getExecutedStatementParameterMap();
+    }
     
     /**
      * Sets if the specified parameters must match exactly

@@ -221,6 +221,14 @@ public class BasicTagTestCaseAdapter extends BasicHTMLOutputTestCase
     }*/
 
     /**
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(JspTag, Map)}
+     */
+    /*protected NestedTag setTag(JspTag tag, Map attributes)
+    {
+        return tagTestModule.setTag(tag, attributes);
+    }*/
+
+    /**
      * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(TagSupport)}
      */
     protected NestedTag setTag(TagSupport tag)
@@ -242,14 +250,6 @@ public class BasicTagTestCaseAdapter extends BasicHTMLOutputTestCase
     /*protected NestedTag setTag(JspTag tag)
     {
         return tagTestModule.setTag(tag);
-    }*/
-
-    /**
-     * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(JspTag, Map)}
-     */
-    /*protected NestedTag setTag(JspTag tag, Map attributes)
-    {
-        return tagTestModule.setTag(tag, attributes);
     }*/
 
     /**

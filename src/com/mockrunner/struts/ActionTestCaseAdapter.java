@@ -161,14 +161,6 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setResources(String, MessageResources)}
-     */
-    protected void setResources(String key, MessageResources resources)
-    {
-        actionTestModule.setResources(key, resources);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.struts.ActionTestModule#setResources(MessageResources)}
      */
     protected void setResources(MessageResources resources)
@@ -177,11 +169,11 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setDataSource(String, DataSource)}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setResources(String, MessageResources)}
      */
-    protected void setDataSource(String key, DataSource dataSource)
+    protected void setResources(String key, MessageResources resources)
     {
-        actionTestModule.setDataSource(key, dataSource);
+        actionTestModule.setResources(key, resources);
     }
 
     /**
@@ -190,6 +182,14 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     protected void setDataSource(DataSource dataSource)
     {
         actionTestModule.setDataSource(dataSource);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setDataSource(String, DataSource)}
+     */
+    protected void setDataSource(String key, DataSource dataSource)
+    {
+        actionTestModule.setDataSource(key, dataSource);
     }
 
     /**
@@ -569,19 +569,27 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action)}
-     */
-    protected ActionForward actionPerform(Action action)
-    {
-        return actionTestModule.actionPerform(action);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, ActionForm)}
      */
     protected ActionForward actionPerform(Action action, ActionForm form)
     {
         return actionTestModule.actionPerform(action, form);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, ActionForm)}
+     */
+    protected ActionForward actionPerform(Class action, ActionForm form)
+    {
+        return actionTestModule.actionPerform(action, form);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action)}
+     */
+    protected ActionForward actionPerform(Action action)
+    {
+        return actionTestModule.actionPerform(action);
     }
 
     /**
@@ -604,14 +612,6 @@ public class ActionTestCaseAdapter extends HTMLOutputTestCase
      * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, Class)}
      */
     protected ActionForward actionPerform(Class action, Class form)
-    {
-        return actionTestModule.actionPerform(action, form);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, ActionForm)}
-     */
-    protected ActionForward actionPerform(Class action, ActionForm form)
     {
         return actionTestModule.actionPerform(action, form);
     }

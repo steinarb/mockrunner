@@ -260,19 +260,19 @@ public class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#addFilter(Filter, boolean)}
-     */
-    protected void addFilter(Filter filter, boolean doInit)
-    {
-        servletTestModule.addFilter(filter, doInit);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.servlet.ServletTestModule#addFilter(Filter)}
      */
     protected void addFilter(Filter filter)
     {
         servletTestModule.addFilter(filter);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#addFilter(Filter, boolean)}
+     */
+    protected void addFilter(Filter filter, boolean doInit)
+    {
+        servletTestModule.addFilter(filter, doInit);
     }
 
     /**

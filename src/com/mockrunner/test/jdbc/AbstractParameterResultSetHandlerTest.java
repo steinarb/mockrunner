@@ -327,7 +327,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 		preparedStatement2.setString(2, "2");
 		preparedStatement1.execute();
 		preparedStatement2.execute();
-		Map parameterMap = preparedStatementHandler.getExecutedStatementParameter();
+		Map parameterMap = preparedStatementHandler.getExecutedStatementParameterMap();
 		assertEquals(2, parameterMap.size());
 		Map deleteParameters = ((ParameterSets)parameterMap.get("delete")).getParameterSet(0);
 		assertEquals(0, deleteParameters.size());
@@ -351,7 +351,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 		callableStatement1.execute();
 		callableStatement2.execute();
 		callableStatement3.execute();
-		Map parameterMap = callableStatementHandler.getExecutedStatementParameter();
+		Map parameterMap = callableStatementHandler.getExecutedStatementParameterMap();
 		assertEquals(3, parameterMap.size());
 		Map insertParameters = (Map)((ParameterSets)parameterMap.get("insert")).getParameterSet(0);
 		assertEquals(1, insertParameters.size());
@@ -381,7 +381,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 		preparedStatement2.execute();
 		preparedStatement2.setString(1, "anothertest");
 		preparedStatement2.execute();
-		Map parameterMap = preparedStatementHandler.getExecutedStatementParameter();
+		Map parameterMap = preparedStatementHandler.getExecutedStatementParameterMap();
 		assertEquals(2, parameterMap.size());
 		ParameterSets setsFor1 = (ParameterSets)parameterMap.get("select");
 		assertEquals(3, setsFor1.getNumberParameterSets());
