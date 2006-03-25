@@ -112,12 +112,12 @@ list of required third-party libraries for each mockrunner provided jar file.
 
 The third-party libraries included in the Mockrunner release are:
 
-Xerces XML Parser 2.7.1:
+Xerces XML Parser 2.8.0:
 http://xml.apache.org/xerces2-j/index.html
 xml-apis.jar
 xercesImpl.jar
 
-Struts 1.2.8:
+Struts 1.2.9:
 http://struts.apache.org
 struts.jar
 
@@ -145,10 +145,10 @@ jboss-jaas.jar
 
 Commons:
 http://jakarta.apache.org/commons       
-commons-logging.jar (from Struts 1.2.8 release)
-commons-beanutils.jar (from Struts 1.2.8 release)
-commons-digester.jar (from Struts 1.2.8 release)
-commons-validator.jar (from Struts 1.2.8 release)
+commons-logging.jar (from Struts 1.2.9 release)
+commons-beanutils.jar (from Struts 1.2.9 release)
+commons-digester.jar (from Struts 1.2.9 release)
+commons-validator.jar (from Struts 1.2.9 release)
 
 MockEJB 0.6 beta2:
 http://mockejb.sourceforge.net

@@ -25,7 +25,7 @@ mockrunner-0.3.7:
 - added DBStatefulTest to demonstrate how to test BMT stateful beans
 - updated cglib from 2.1_2 to 2.1_3
 - updated xercesImpl.jar and xml-apis.jar from Xerces 2.7.1 to 2.8.0
-- updated struts.jar and all corresponding commons-jars from Struts 1.2.7 to 1.2.8
+- updated struts.jar and all corresponding commons-jars from Struts 1.2.7 to 1.2.9
 
 mockrunner-0.3.6:
 
