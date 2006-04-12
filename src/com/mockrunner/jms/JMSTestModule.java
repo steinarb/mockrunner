@@ -2742,6 +2742,10 @@ public class JMSTestModule
     /**
      * Verifies that a message created with {@link MockQueueSession#createMessage} 
      * is acknowledged.
+     * This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -2765,6 +2769,10 @@ public class JMSTestModule
     /**
      * Verifies that a message created with {@link MockQueueSession#createMessage} 
      * is not acknowledged.
+     * This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -2788,6 +2796,10 @@ public class JMSTestModule
     /**
      * Verifies that a bytes message created with {@link MockQueueSession#createMessage} 
      * is acknowledged.
+     * This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -2811,6 +2823,10 @@ public class JMSTestModule
     /**
      * Verifies that a bytes message created with {@link MockQueueSession#createMessage} 
      * is not acknowledged.
+     * This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -2834,6 +2850,10 @@ public class JMSTestModule
     /**
      * Verifies that a map message created with {@link MockQueueSession#createMessage} 
      * is acknowledged.
+     * This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -2857,6 +2877,10 @@ public class JMSTestModule
     /**
      * Verifies that a map message created with {@link MockQueueSession#createMessage} 
      * is not acknowledged.
+     * This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -2880,6 +2904,10 @@ public class JMSTestModule
     /**
      * Verifies that a text message created with {@link MockQueueSession#createMessage} 
      * is acknowledged.
+     * This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -2903,6 +2931,10 @@ public class JMSTestModule
     /**
      * Verifies that a text message created with {@link MockQueueSession#createMessage} 
      * is not acknowledged.
+     * This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -2926,6 +2958,10 @@ public class JMSTestModule
     /**
      * Verifies that a stream message created with {@link MockQueueSession#createMessage} 
      * is acknowledged.
+     * This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -2949,6 +2985,10 @@ public class JMSTestModule
     /**
      * Verifies that a stream message created with {@link MockQueueSession#createMessage} 
      * is not acknowledged.
+     * This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -2972,6 +3012,10 @@ public class JMSTestModule
     /**
      * Verifies that a object message created with {@link MockQueueSession#createMessage} 
      * is acknowledged.
+     * This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -2995,6 +3039,10 @@ public class JMSTestModule
     /**
      * Verifies that a object message created with {@link MockQueueSession#createMessage} 
      * is not acknowledged.
+     * This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockQueueConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3255,7 +3303,7 @@ public class JMSTestModule
     }
 
     /**
-     * Verifies that a received message is not acknowledged.
+     * Verifies that a received message is not acknowledged. 
      * @param nameOfTopic the name of the topic
      * @param indexOfMessage the index of the received message
      * @throws VerifyFailedException if verification fails
@@ -3433,7 +3481,10 @@ public class JMSTestModule
     
     /**
      * Verifies that a message created with {@link MockTopicSession#createMessage} 
-     * is acknowledged.
+     * is acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3456,7 +3507,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a message created with {@link MockTopicSession#createMessage} 
-     * is not acknowledged.
+     * is not acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3479,7 +3533,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a bytes message created with {@link MockTopicSession#createMessage} 
-     * is acknowledged.
+     * is acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3502,7 +3559,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a bytes message created with {@link MockTopicSession#createMessage} 
-     * is not acknowledged.
+     * is not acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3525,7 +3585,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a map message created with {@link MockTopicSession#createMessage} 
-     * is acknowledged.
+     * is acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3548,7 +3611,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a map message created with {@link MockTopicSession#createMessage} 
-     * is not acknowledged.
+     * is not acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3571,7 +3637,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a text message created with {@link MockTopicSession#createMessage} 
-     * is acknowledged.
+     * is acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3594,7 +3663,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a text message created with {@link MockTopicSession#createMessage} 
-     * is not acknowledged.
+     * is not acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3617,7 +3689,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a stream message created with {@link MockTopicSession#createMessage} 
-     * is acknowledged.
+     * is acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3640,7 +3715,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a stream message created with {@link MockTopicSession#createMessage} 
-     * is not acknowledged.
+     * is not acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3663,7 +3741,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a object message created with {@link MockTopicSession#createMessage} 
-     * is acknowledged.
+     * is acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3686,7 +3767,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a object message created with {@link MockTopicSession#createMessage} 
-     * is not acknowledged.
+     * is not acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3811,7 +3895,10 @@ public class JMSTestModule
     
     /**
      * Verifies that a message created with {@link MockSession#createMessage} 
-     * is acknowledged.
+     * is acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3834,7 +3921,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a message created with {@link MockSession#createMessage} 
-     * is not acknowledged.
+     * is not acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3857,7 +3947,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a bytes message created with {@link MockSession#createMessage} 
-     * is acknowledged.
+     * is acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3880,7 +3973,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a bytes message created with {@link MockSession#createMessage} 
-     * is not acknowledged.
+     * is not acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3903,7 +3999,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a map message created with {@link MockSession#createMessage} 
-     * is acknowledged.
+     * is acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3926,7 +4025,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a map message created with {@link MockSession#createMessage} 
-     * is not acknowledged.
+     * is not acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3949,7 +4051,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a text message created with {@link MockSession#createMessage} 
-     * is acknowledged.
+     * is acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3972,7 +4077,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a text message created with {@link MockSession#createMessage} 
-     * is not acknowledged.
+     * is not acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -3995,7 +4103,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a stream message created with {@link MockSession#createMessage} 
-     * is acknowledged.
+     * is acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -4018,7 +4129,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a stream message created with {@link MockSession#createMessage} 
-     * is not acknowledged.
+     * is not acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -4041,7 +4155,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a object message created with {@link MockSession#createMessage} 
-     * is acknowledged.
+     * is acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
@@ -4064,7 +4181,10 @@ public class JMSTestModule
 
     /**
      * Verifies that a object message created with {@link MockSession#createMessage} 
-     * is not acknowledged.
+     * is not acknowledged. This method makes sense if messages are not cloned
+     * when sending them. This is the default, use {@link ConfigurationManager#setDoCloneOnSend}.
+     * If messages are cloned, the cloned message is acknowledged instead of
+     * the created message.
      * The session has to be created using the current {@link MockConnection}.
      * @param indexOfSession the index of the session
      * @param indexOfMessage the index of the message
