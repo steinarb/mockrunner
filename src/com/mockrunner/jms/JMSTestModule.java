@@ -45,7 +45,7 @@ import com.mockrunner.mock.jms.MockTopicSubscriber;
  * in the method name are for connections and sessions that were
  * created using the {@link com.mockrunner.mock.jms.MockConnectionFactory}.
  * {@link com.mockrunner.mock.jms.MockConnectionFactory}
- * also implements <code>QueueConnectionFactory</code> and
+ * also implements the <code>QueueConnectionFactory</code> and
  * <code>TopicConnectionFactory</code> interfaces and can be used to create 
  * queue and topic connections as well as generic JMS 1.1 connections. 
  * It is recommended to use {@link com.mockrunner.mock.jms.MockQueueConnectionFactory}
