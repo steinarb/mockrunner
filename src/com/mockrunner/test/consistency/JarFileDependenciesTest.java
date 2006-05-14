@@ -13,8 +13,8 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import com.kirkk.analyzer.framework.Analyzer;
-import com.kirkk.analyzer.framework.JarBundle;
+import com.kirkk.analyzer.Analyzer;
+import com.kirkk.analyzer.framework.Jar;
 import com.mockrunner.gen.jar.JarFileExtractor;
 import com.mockrunner.gen.jar.MockrunnerJarTestConfiguration;
 import com.mockrunner.gen.jar.MockrunnerJars;
@@ -89,7 +89,7 @@ public class JarFileDependenciesTest extends TestCase
     private boolean doFilesContainIllegalDependencies(File srcDir) throws Exception
     {
         Analyzer analyzer = new Analyzer();
-        JarBundle jarBundle[] = analyzer.analyze(srcDir);
+        Jar jarBundle[] = analyzer.analyze(srcDir);
         JarFileExtractor extractor = new JarFileExtractor(MockrunnerJars.getMockrunnerJars(), MockrunnerJars.getStandardInterfaceJars());
         Map dependencyMap = extractor.createDependencies(jarBundle);
         Iterator jarNames = dependencyMap.keySet().iterator();
@@ -102,10 +102,10 @@ public class JarFileDependenciesTest extends TestCase
                 failure = true;
             }
         }
-        JarBundle filteredBundle[] = extractor.filterBundles(jarBundle);
+        Jar filteredBundle[] = extractor.filterBundles(jarBundle);
         for(int ii = 0; ii < filteredBundle.length; ii++)
         {
-            JarBundle currentBundle = filteredBundle[ii];
+            Jar currentBundle = filteredBundle[ii];
             List extRefList = currentBundle.getAllUnidentifiableExternallyReferencedPackages();
             if(null != extRefList && !extRefList.isEmpty())
             {

@@ -14,8 +14,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.kirkk.analyzer.framework.Analyzer;
-import com.kirkk.analyzer.framework.JarBundle;
+import com.kirkk.analyzer.Analyzer;
+import com.kirkk.analyzer.Configuration;
+import com.kirkk.analyzer.framework.Jar;
 import com.kirkk.analyzer.textui.Summary;
 import com.mockrunner.util.common.StreamUtil;
 
@@ -34,8 +35,17 @@ public class MockrunnerTextSummary implements Summary
     
     public void createSummary(File srcDir, File destFile) throws Exception 
     {
+        createSummary(srcDir, destFile, null, null);
+    }
+    
+    public void createSummary(File srcDir, File destFile, String packageFilter, String jarFilter) throws Exception
+    {
         Analyzer analyzer = new Analyzer();
-        JarBundle jarBundle[] = analyzer.analyze(srcDir);
+        if(null != packageFilter && null != jarFilter)
+        {
+            Configuration.initialize(packageFilter, jarFilter);
+        }
+        Jar[] jarBundle = analyzer.analyze(srcDir);
         JarFileExtractor extractor = new JarFileExtractor(mockrunnerJars, standardJars);
         Map dependencyMap = extractor.createDependencies(jarBundle);
         try

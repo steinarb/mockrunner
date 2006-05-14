@@ -7,8 +7,8 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import com.kirkk.analyzer.framework.JarBundle;
-import com.kirkk.analyzer.framework.bcelbundle.BCELJarBundle;
+import com.kirkk.analyzer.framework.Jar;
+import com.kirkk.analyzer.framework.bcelbundle.JarImpl;
 import com.mockrunner.gen.jar.JarFileExtractor;
 
 public class JarFileExtractorTest extends TestCase
@@ -34,17 +34,17 @@ public class JarFileExtractorTest extends TestCase
         return jars;
     }
     
-    private BCELJarBundle createEmptyJarBundle(String name)
+    private JarImpl createEmptyJarBundle(String name)
     {
-        return new BCELJarBundle(name);
+        return new JarImpl(name);
     }
     
-    private BCELJarBundle createJarBundleWithDependencies(String name, String[] dependencies)
+    private JarImpl createJarBundleWithDependencies(String name, String[] dependencies)
     {
-        BCELJarBundle bundle = createEmptyJarBundle(name);
+        JarImpl bundle = createEmptyJarBundle(name);
         for(int ii = 0; ii < dependencies.length; ii++)
         {
-            bundle.addDependentJar(createEmptyJarBundle(dependencies[ii]));
+            bundle.addOutgoingDependency(createEmptyJarBundle(dependencies[ii]));
         }
         return bundle;
     }
@@ -52,7 +52,7 @@ public class JarFileExtractorTest extends TestCase
     public void testFilter()
     {
         JarFileExtractor extractor = getJarFileExtractor(getMainJars(), new ArrayList());
-        JarBundle[] bundles = new JarBundle[5];
+        Jar[] bundles = new Jar[5];
         bundles[0] = createEmptyJarBundle("test1.jar");
         bundles[1] = createEmptyJarBundle("test2.jar");
         bundles[2] = createEmptyJarBundle("test3.jar");
@@ -68,14 +68,14 @@ public class JarFileExtractorTest extends TestCase
     public void testEmpty()
     {
         JarFileExtractor extractor = getJarFileExtractor(getMainJars(), new ArrayList());
-        Map dependencies = extractor.createDependencies(new JarBundle[0]);
+        Map dependencies = extractor.createDependencies(new Jar[0]);
         assertEquals(0, dependencies.size());
     }
     
     public void testNoDependencies()
     {
         JarFileExtractor extractor = getJarFileExtractor(getMainJars(), new ArrayList());
-        JarBundle[] bundles = new JarBundle[3];
+        Jar[] bundles = new Jar[3];
         bundles[0] = createEmptyJarBundle("test1.jar");
         bundles[1] = createEmptyJarBundle("test2.jar");
         bundles[2] = createEmptyJarBundle("test3.jar");
@@ -89,7 +89,7 @@ public class JarFileExtractorTest extends TestCase
     public void testDependencies()
     {
         JarFileExtractor extractor = getJarFileExtractor(getMainJars(), new ArrayList());
-        JarBundle[] bundles = new JarBundle[1];
+        Jar[] bundles = new Jar[1];
         bundles[0] = createJarBundleWithDependencies("test1.jar", new String[] {"1", "2", "3"});
         Map dependencies = extractor.createDependencies(bundles);
         assertEquals(1, dependencies.size());
@@ -103,13 +103,13 @@ public class JarFileExtractorTest extends TestCase
     public void testRecursiveDependencies()
     {
         JarFileExtractor extractor = getJarFileExtractor(getMainJars(), new ArrayList());
-        BCELJarBundle bundle1 = createEmptyJarBundle("test1.jar");
-        BCELJarBundle nested1 = createJarBundleWithDependencies("nested1.jar", new String[] {"1", "2", "3"});
-        BCELJarBundle nested2 = createJarBundleWithDependencies("nested2.jar", new String[] {"4", "5", "6"});
-        bundle1.addDependentJar(nested1);
-        bundle1.addDependentJar(nested2);
-        BCELJarBundle bundle2 = createJarBundleWithDependencies("test2.jar", new String[] {"7", "8", "9"});
-        JarBundle[] bundles = new JarBundle[] {bundle1, bundle2};
+        JarImpl bundle1 = createEmptyJarBundle("test1.jar");
+        JarImpl nested1 = createJarBundleWithDependencies("nested1.jar", new String[] {"1", "2", "3"});
+        JarImpl nested2 = createJarBundleWithDependencies("nested2.jar", new String[] {"4", "5", "6"});
+        bundle1.addOutgoingDependency(nested1);
+        bundle1.addOutgoingDependency(nested2);
+        JarImpl bundle2 = createJarBundleWithDependencies("test2.jar", new String[] {"7", "8", "9"});
+        Jar[] bundles = new Jar[] {bundle1, bundle2};
         Map dependencies = extractor.createDependencies(bundles);
         assertEquals(2, dependencies.size());
         Set jars1 = (Set)dependencies.get("test1.jar");
