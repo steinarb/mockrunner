@@ -182,9 +182,9 @@ BCEL 5.1:
 http://jakarta.apache.org/bcel
 bcel-5.1.jar
 
-JarAnalyzer 0.9.3:
+JarAnalyzer 1.0:
 http://www.kirkk.com/main/Main/JarAnalyzer
-jaranalyzer-0.9.3.jar
+jaranalyzer-1.0.jar
 
 regexp 1.3:
 http://jakarta.apache.org/regexp

@@ -22,6 +22,6 @@
 	<classpathentry kind="lib" path="lib/jsp-api.jar"/>
 	<classpathentry kind="lib" path="lib/servlet-api.jar"/>
 	<classpathentry kind="lib" path="lib/cglib-nodep-2.1_3.jar"/>
-	<classpathentry kind="lib" path="lib/jaranalyzer-0.9.3.jar"/>
+	<classpathentry kind="lib" path="lib/jaranalyzer-1.0.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
