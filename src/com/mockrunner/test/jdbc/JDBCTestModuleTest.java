@@ -2,6 +2,7 @@ package com.mockrunner.test.jdbc;
 
 import java.sql.ResultSet;
 import java.sql.Savepoint;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -778,12 +779,15 @@ public class JDBCTestModuleTest extends TestCase
     }
     
     public void testVerifyResultSetRowModified() throws Exception
-    {
+    {  
         MockResultSet resultSet = module.getStatementResultSetHandler().createResultSet("test");
         resultSet.addRow(new Integer[] {new Integer(1), new Integer(2), new Integer(3)});
         resultSet.addRow(new Integer[] {new Integer(4), new Integer(5), new Integer(6)});
         resultSet.addRow(new Integer[] {new Integer(7), new Integer(8), new Integer(9)});
-        module.getStatementResultSetHandler().addReturnedResultSet(resultSet);
+        module.getStatementResultSetHandler().prepareResultSet("select", resultSet);
+        Statement statement = mockfactory.getMockConnection().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        MockResultSet returnedResultSet = (MockResultSet)statement.executeQuery("select");
+        resultSet = (MockResultSet)module.getStatementResultSetHandler().getReturnedResultSets().get(0);
         module.verifyResultSetRowNotDeleted(resultSet, 1);
         module.verifyResultSetRowNotDeleted("test", 2);
         module.verifyResultSetRowNotInserted("test", 2);
@@ -798,23 +802,23 @@ public class JDBCTestModuleTest extends TestCase
             //should throw exception
         }
         resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
-        resultSet.next();
-        resultSet.updateRow();
+        returnedResultSet.next();
+        returnedResultSet.updateRow();
         module.verifyResultSetRowUpdated(resultSet, 1);
-        resultSet.next();
-        resultSet.deleteRow();
+        returnedResultSet.next();
+        returnedResultSet.deleteRow();
         module.verifyResultSetRowDeleted(resultSet, 2);
-        resultSet.next();
-        resultSet.moveToInsertRow();
-        resultSet.updateString(1, "test");
-        resultSet.insertRow();
-        resultSet.moveToCurrentRow();
+        returnedResultSet.next();
+        returnedResultSet.moveToInsertRow();
+        returnedResultSet.updateString(1, "test");
+        returnedResultSet.insertRow();
+        returnedResultSet.moveToCurrentRow();
         module.verifyResultSetRowInserted("test", 3);
-        resultSet.first();
-        resultSet.moveToInsertRow();
-        resultSet.updateString(1, "test");
-        resultSet.insertRow();
-        resultSet.moveToCurrentRow();
+        returnedResultSet.first();
+        returnedResultSet.moveToInsertRow();
+        returnedResultSet.updateString(1, "test");
+        returnedResultSet.insertRow();
+        returnedResultSet.moveToCurrentRow();
         module.verifyResultSetRowInserted("test", 1);
         module.verifyResultSetRowDeleted(resultSet, 3);
         module.verifyResultSetRowNotUpdated(resultSet, 4);

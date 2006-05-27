@@ -1,6 +1,7 @@
 package com.mockrunner.test.jdbc;
 
 import java.sql.BatchUpdateException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
@@ -8,6 +9,7 @@ import java.sql.Statement;
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockConnection;
+import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockStatement;
 
@@ -550,5 +552,27 @@ public class MockStatementTest extends BaseTestCase
             assertNotSame(exception, exc);
             assertTrue(exc.getMessage().indexOf("select from") != -1);
         }
-    } 
+    }
+    
+    public void testResultSetType() throws Exception
+    {
+        MockStatement statement1 = (MockStatement)connection.createStatement();
+        statement1.setFetchDirection(ResultSet.FETCH_REVERSE);
+        statement1.setFetchSize(3);
+        MockPreparedStatement statement2 = (MockPreparedStatement)connection.prepareStatement("select2", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        MockResultSet resultSet1 = new MockResultSet("id1");
+        resultSet1.setResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
+        MockResultSet resultSet2 = new MockResultSet("id1");
+        resultSet2.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
+        connection.getStatementResultSetHandler().prepareResultSet("select1", resultSet1);
+        connection.getPreparedStatementResultSetHandler().prepareResultSet("select2", resultSet1);
+        MockResultSet returnedResultSet1 = (MockResultSet)statement1.executeQuery("select1");
+        MockResultSet returnedResultSet2 = (MockResultSet)statement2.executeQuery("select2");
+        assertEquals(ResultSet.TYPE_FORWARD_ONLY, returnedResultSet1.getType());
+        assertEquals(ResultSet.CONCUR_READ_ONLY, returnedResultSet1.getConcurrency());
+        assertEquals(ResultSet.FETCH_REVERSE, returnedResultSet1.getFetchDirection());
+        assertEquals(3, returnedResultSet1.getFetchSize());
+        assertEquals(ResultSet.TYPE_SCROLL_INSENSITIVE, returnedResultSet2.getType());
+        assertEquals(ResultSet.CONCUR_UPDATABLE, returnedResultSet2.getConcurrency());
+    }
 }
