@@ -145,16 +145,16 @@ public class EJBTestModule
         {
             if(descriptor instanceof SessionBeanDescriptor)
             {
-				mockFactory.getMockContainer().deploy((SessionBeanDescriptor)descriptor);
+                mockFactory.getMockContainer().deploy((SessionBeanDescriptor)descriptor);
             }
             else if(descriptor instanceof EntityBeanDescriptor)
             {
-				mockFactory.getMockContainer().deploy((EntityBeanDescriptor)descriptor);
+                mockFactory.getMockContainer().deploy((EntityBeanDescriptor)descriptor);
             }
-			else if(descriptor instanceof MDBDescriptor)
-			{
-				mockFactory.getMockContainer().deploy((MDBDescriptor)descriptor);
-			}
+            else if(descriptor instanceof MDBDescriptor)
+            {
+                mockFactory.getMockContainer().deploy((MDBDescriptor)descriptor);
+            }
             if(null != policy)
             {
                 AspectSystemFactory.getAspectSystem().add(new ClassPointcut(descriptor.getIfaceClass(), false), new TransactionManager(policy));
@@ -178,7 +178,7 @@ public class EJBTestModule
      */
     public void deploySessionBean(String jndiName, Class beanClass)
     {
-		deploySessionBean(jndiName, beanClass, false, TransactionPolicy.SUPPORTS);
+        deploySessionBean(jndiName, beanClass, false, TransactionPolicy.SUPPORTS);
     }
     
     /**
@@ -194,7 +194,7 @@ public class EJBTestModule
      */
     public void deploySessionBean(String jndiName, Class beanClass, boolean stateful)
     {
-		deploySessionBean(jndiName, beanClass, stateful, TransactionPolicy.SUPPORTS);
+        deploySessionBean(jndiName, beanClass, stateful, TransactionPolicy.SUPPORTS);
     }
     
     /**
@@ -210,7 +210,7 @@ public class EJBTestModule
      */
     public void deploySessionBean(String jndiName, Class beanClass, TransactionPolicy policy)
     {
-		deploySessionBean(jndiName, beanClass, false, policy);
+        deploySessionBean(jndiName, beanClass, false, policy);
     }
     
     /**
@@ -232,151 +232,151 @@ public class EJBTestModule
         deploy(descriptor, policy);
     }
     
-	/**
-	 * Deploys a stateless session bean to the mock container. You have to specify
-	 * the implementation class and the JNDI name. The frameworks
-	 * determines the home and remote interfaces based on the
-	 * information specified with the <code>setSuffix</code>
-	 * and <code>setPackage</code> methods.
-	 * Sets the transaction policy <i>SUPPORTS</i>.
-	 * @param jndiName the JNDI name
-	 * @param bean the bean implementation
-	 */
-	public void deploySessionBean(String jndiName, Object bean)
-	{
-		deploySessionBean(jndiName, bean, false, TransactionPolicy.SUPPORTS);
-	}
+    /**
+     * Deploys a stateless session bean to the mock container. You have to specify
+     * the implementation class and the JNDI name. The frameworks
+     * determines the home and remote interfaces based on the
+     * information specified with the <code>setSuffix</code>
+     * and <code>setPackage</code> methods.
+     * Sets the transaction policy <i>SUPPORTS</i>.
+     * @param jndiName the JNDI name
+     * @param bean the bean implementation
+     */
+    public void deploySessionBean(String jndiName, Object bean)
+    {
+        deploySessionBean(jndiName, bean, false, TransactionPolicy.SUPPORTS);
+    }
 
-	/**
-	 * Deploys a session bean to the mock container. You have to specify
-	 * the implementation class and the JNDI name. The frameworks
-	 * determines the home and remote interfaces based on the
-	 * information specified with the <code>setSuffix</code>
-	 * and <code>setPackage</code> methods.
-	 * Sets the transaction policy <i>SUPPORTS</i>.
-	 * @param jndiName the JNDI name
-	 * @param bean the bean implementation
-	 * @param stateful is the bean stateful
-	 */
-	public void deploySessionBean(String jndiName, Object bean, boolean stateful)
-	{
-		deploySessionBean(jndiName, bean, stateful, TransactionPolicy.SUPPORTS);
-	}
+    /**
+     * Deploys a session bean to the mock container. You have to specify
+     * the implementation class and the JNDI name. The frameworks
+     * determines the home and remote interfaces based on the
+     * information specified with the <code>setSuffix</code>
+     * and <code>setPackage</code> methods.
+     * Sets the transaction policy <i>SUPPORTS</i>.
+     * @param jndiName the JNDI name
+     * @param bean the bean implementation
+     * @param stateful is the bean stateful
+     */
+    public void deploySessionBean(String jndiName, Object bean, boolean stateful)
+    {
+        deploySessionBean(jndiName, bean, stateful, TransactionPolicy.SUPPORTS);
+    }
 
-	/**
-	 * Deploys a stateless session bean to the mock container. You have to specify
-	 * the implementation class and the JNDI name. The frameworks
-	 * determines the home and remote interfaces based on the
-	 * information specified with the <code>setSuffix</code>
-	 * and <code>setPackage</code> methods.
-	 * The specified transaction policy will be automatically set.
-	 * @param jndiName the JNDI name
-	 * @param bean the bean implementation
-	 * @param policy the transaction policy
-	 */
-	public void deploySessionBean(String jndiName, Object bean, TransactionPolicy policy)
-	{
-		deploySessionBean(jndiName, bean, false, policy);
-	}
+    /**
+     * Deploys a stateless session bean to the mock container. You have to specify
+     * the implementation class and the JNDI name. The frameworks
+     * determines the home and remote interfaces based on the
+     * information specified with the <code>setSuffix</code>
+     * and <code>setPackage</code> methods.
+     * The specified transaction policy will be automatically set.
+     * @param jndiName the JNDI name
+     * @param bean the bean implementation
+     * @param policy the transaction policy
+     */
+    public void deploySessionBean(String jndiName, Object bean, TransactionPolicy policy)
+    {
+        deploySessionBean(jndiName, bean, false, policy);
+    }
 
-	/**
-	 * Deploys a session bean to the mock container. You have to specify
-	 * the implementation class and the JNDI name. The frameworks
-	 * determines the home and remote interfaces based on the
-	 * information specified with the <code>setSuffix</code>
-	 * and <code>setPackage</code> methods.
-	 * The specified transaction policy will be automatically set.
-	 * @param jndiName the JNDI name
-	 * @param bean the bean implementation
-	 * @param stateful is the bean stateful
-	 * @param policy the transaction policy
-	 */
-	public void deploySessionBean(String jndiName, Object bean, boolean stateful, TransactionPolicy policy)
-	{
-		SessionBeanDescriptor descriptor = new SessionBeanDescriptor(jndiName, getHomeClass(bean.getClass()), getRemoteClass(bean.getClass()), bean);
-		descriptor.setStateful(stateful);
-		deploy(descriptor, policy);
-	}
+    /**
+     * Deploys a session bean to the mock container. You have to specify
+     * the implementation class and the JNDI name. The frameworks
+     * determines the home and remote interfaces based on the
+     * information specified with the <code>setSuffix</code>
+     * and <code>setPackage</code> methods.
+     * The specified transaction policy will be automatically set.
+     * @param jndiName the JNDI name
+     * @param bean the bean implementation
+     * @param stateful is the bean stateful
+     * @param policy the transaction policy
+     */
+    public void deploySessionBean(String jndiName, Object bean, boolean stateful, TransactionPolicy policy)
+    {
+        SessionBeanDescriptor descriptor = new SessionBeanDescriptor(jndiName, getHomeClass(bean.getClass()), getRemoteClass(bean.getClass()), bean);
+        descriptor.setStateful(stateful);
+        deploy(descriptor, policy);
+    }
     
-	/**
-	 * Deploys an entity bean to the mock container. You have to specify
-	 * the implementation class and the JNDI name. The frameworks
-	 * determines the home and remote interfaces based on the
-	 * information specified with the <code>setSuffix</code>
-	 * and <code>setPackage</code> methods.
-	 * Sets the transaction policy <i>SUPPORTS</i>.
-	 * @param jndiName the JNDI name
-	 * @param beanClass the bean implementation class
-	 */
-	public void deployEntityBean(String jndiName, Class beanClass)
-	{
-		deployEntityBean(jndiName, beanClass, TransactionPolicy.SUPPORTS);
-	}
+    /**
+     * Deploys an entity bean to the mock container. You have to specify
+     * the implementation class and the JNDI name. The frameworks
+     * determines the home and remote interfaces based on the
+     * information specified with the <code>setSuffix</code>
+     * and <code>setPackage</code> methods.
+     * Sets the transaction policy <i>SUPPORTS</i>.
+     * @param jndiName the JNDI name
+     * @param beanClass the bean implementation class
+     */
+    public void deployEntityBean(String jndiName, Class beanClass)
+    {
+        deployEntityBean(jndiName, beanClass, TransactionPolicy.SUPPORTS);
+    }
     
-	/**
-	 * Deploys an entity bean to the mock container. You have to specify
-	 * the implementation class and the JNDI name. The frameworks
-	 * determines the home and remote interfaces based on the
-	 * information specified with the <code>setSuffix</code>
-	 * and <code>setPackage</code> methods.
-	 * The specified transaction policy will be automatically set.
-	 * @param jndiName the JNDI name
-	 * @param beanClass the bean implementation class
-	 * @param policy the transaction policy
-	 */
-	public void deployEntityBean(String jndiName, Class beanClass, TransactionPolicy policy)
-	{
-		EntityBeanDescriptor descriptor = new EntityBeanDescriptor(jndiName, getHomeClass(beanClass), getRemoteClass(beanClass), beanClass);
-		deploy(descriptor, policy);
-	}
-	
-	/**
-	 * Deploys a message driven bean to the mock container.
-	 * You have to specify JNDI names for connection factory and
-	 * destination. For creating connection factory and destination 
-	 * objects you can use {@link com.mockrunner.mock.jms.JMSMockObjectFactory}
-	 * and {@link com.mockrunner.jms.DestinationManager}.
-	 * The specified objects are automatically bound to JNDI using
-	 * the specified names. The mock container automatically creates
-	 * a connection and session.
-	 * Sets the transaction policy <i>NOT_SUPPORTED</i>.
-	 * @param connectionFactoryJndiName the JNDI name of the connection factory
-	 * @param destinationJndiName the JNDI name of the destination
-	 * @param connectionFactory the connection factory
-	 * @param destination the destination
-	 * @param bean the message driven bean instance
-	 */
-	public void deployMessageBean(String connectionFactoryJndiName, String destinationJndiName, ConnectionFactory connectionFactory, Destination destination, Object bean)
-	{
-		deployMessageBean(connectionFactoryJndiName, destinationJndiName, connectionFactory, destination, bean, TransactionPolicy.NOT_SUPPORTED);
-	}
-	
-	/**
-	 * Deploys a message driven bean to the mock container.
-	 * You have to specify JNDI names for connection factory and
-	 * destination. For creating connection factory and destination 
-	 * objects you can use {@link com.mockrunner.mock.jms.JMSMockObjectFactory}
-	 * and {@link com.mockrunner.jms.DestinationManager}.
-	 * The specified objects are automatically bound to JNDI using
-	 * the specified names. The mock container automatically creates
-	 * a connection and session.
-	 * The specified transaction policy will be automatically set.
-	 * @param connectionFactoryJndiName the JNDI name of the connection factory
-	 * @param destinationJndiName the JNDI name of the destination
-	 * @param connectionFactory the connection factory
-	 * @param destination the destination
-	 * @param bean the message driven bean instance
-	 * @param policy the transaction policy
-	 */
-	public void deployMessageBean(String connectionFactoryJndiName, String destinationJndiName, ConnectionFactory connectionFactory, Destination destination, Object bean, TransactionPolicy policy)
-	{
-		bindToContext(connectionFactoryJndiName, connectionFactory);
-		bindToContext(destinationJndiName, destination);
-		MDBDescriptor descriptor = new MDBDescriptor(connectionFactoryJndiName, destinationJndiName, bean);
-		descriptor.setIsAlreadyBound(true);
-		descriptor.setIsTopic(destination instanceof Topic);
-		deploy(descriptor, policy);
-	}
+    /**
+     * Deploys an entity bean to the mock container. You have to specify
+     * the implementation class and the JNDI name. The frameworks
+     * determines the home and remote interfaces based on the
+     * information specified with the <code>setSuffix</code>
+     * and <code>setPackage</code> methods.
+     * The specified transaction policy will be automatically set.
+     * @param jndiName the JNDI name
+     * @param beanClass the bean implementation class
+     * @param policy the transaction policy
+     */
+    public void deployEntityBean(String jndiName, Class beanClass, TransactionPolicy policy)
+    {
+        EntityBeanDescriptor descriptor = new EntityBeanDescriptor(jndiName, getHomeClass(beanClass), getRemoteClass(beanClass), beanClass);
+        deploy(descriptor, policy);
+    }
+    
+    /**
+     * Deploys a message driven bean to the mock container.
+     * You have to specify JNDI names for connection factory and
+     * destination. For creating connection factory and destination 
+     * objects you can use {@link com.mockrunner.mock.jms.JMSMockObjectFactory}
+     * and {@link com.mockrunner.jms.DestinationManager}.
+     * The specified objects are automatically bound to JNDI using
+     * the specified names. The mock container automatically creates
+     * a connection and session.
+     * Sets the transaction policy <i>NOT_SUPPORTED</i>.
+     * @param connectionFactoryJndiName the JNDI name of the connection factory
+     * @param destinationJndiName the JNDI name of the destination
+     * @param connectionFactory the connection factory
+     * @param destination the destination
+     * @param bean the message driven bean instance
+     */
+    public void deployMessageBean(String connectionFactoryJndiName, String destinationJndiName, ConnectionFactory connectionFactory, Destination destination, Object bean)
+    {
+        deployMessageBean(connectionFactoryJndiName, destinationJndiName, connectionFactory, destination, bean, TransactionPolicy.NOT_SUPPORTED);
+    }
+    
+    /**
+     * Deploys a message driven bean to the mock container.
+     * You have to specify JNDI names for connection factory and
+     * destination. For creating connection factory and destination 
+     * objects you can use {@link com.mockrunner.mock.jms.JMSMockObjectFactory}
+     * and {@link com.mockrunner.jms.DestinationManager}.
+     * The specified objects are automatically bound to JNDI using
+     * the specified names. The mock container automatically creates
+     * a connection and session.
+     * The specified transaction policy will be automatically set.
+     * @param connectionFactoryJndiName the JNDI name of the connection factory
+     * @param destinationJndiName the JNDI name of the destination
+     * @param connectionFactory the connection factory
+     * @param destination the destination
+     * @param bean the message driven bean instance
+     * @param policy the transaction policy
+     */
+    public void deployMessageBean(String connectionFactoryJndiName, String destinationJndiName, ConnectionFactory connectionFactory, Destination destination, Object bean, TransactionPolicy policy)
+    {
+        bindToContext(connectionFactoryJndiName, connectionFactory);
+        bindToContext(destinationJndiName, destination);
+        MDBDescriptor descriptor = new MDBDescriptor(connectionFactoryJndiName, destinationJndiName, bean);
+        descriptor.setIsAlreadyBound(true);
+        descriptor.setIsTopic(destination instanceof Topic);
+        deploy(descriptor, policy);
+    }
     
     /**
      * Adds an object to the mock context by calling <code>rebind</code>
