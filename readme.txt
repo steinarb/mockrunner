@@ -178,9 +178,9 @@ you probably won't need these tools. In this case, simply delete the com.mockrun
 packages and the corresponding tests. If you want to use these tools, you need
 the following libaries:
 
-BCEL 5.1:
+BCEL 5.2:
 http://jakarta.apache.org/bcel
-bcel-5.1.jar
+bcel-5.2.jar
 
 JarAnalyzer 1.0:
 http://www.kirkk.com/main/Main/JarAnalyzer

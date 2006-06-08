@@ -88,7 +88,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#setDoRelease}.
+     * @inheritDoc
      */
     public void setDoRelease(boolean doRelease)
     {
@@ -96,7 +96,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#setDoReleaseRecursive}.
+     * @inheritDoc
      */
     public void setDoReleaseRecursive(boolean doRelease)
     {
@@ -112,7 +112,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#populateAttributes}.
+     * @inheritDoc
      */
     public void populateAttributes()
     {
@@ -120,8 +120,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#doLifecycle} for body
-     * tags.
+     * @inheritDoc
      */
     public int doLifecycle() throws JspException
     {
@@ -165,7 +164,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#getTag}.
+     * @inheritDoc
      * @throws <code>RuntimeException</code>, if the wrapped tag
      *         is not an instance of <code>TagSupport</code>
      */
@@ -176,7 +175,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#getWrappedTag}.
+     * @inheritDoc
      */
     /*public JspTag getWrappedTag()
     {
@@ -184,7 +183,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }*/
     
     /**
-     * Implementation of {@link NestedTag#removeChilds}.
+     * @inheritDoc
      */
     public void removeChilds()
     {
@@ -192,7 +191,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#getChilds}.
+     * @inheritDoc
      */
     public List getChilds()
     {
@@ -200,7 +199,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#getChild}.
+     * @inheritDoc
      */
     public Object getChild(int index)
     {
@@ -208,7 +207,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#addTextChild}.
+     * @inheritDoc
      */
     public void addTextChild(String text)
     {
@@ -217,7 +216,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#addDynamicChild}.
+     * @inheritDoc
      */
     public void addDynamicChild(DynamicChild child)
     {
@@ -226,7 +225,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#addTagChild(Class)}.
+     * @inheritDoc
      */
     public NestedTag addTagChild(Class tag)
     {
@@ -234,7 +233,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#addTagChild(Class, Map)}.
+     * @inheritDoc
      */
     public NestedTag addTagChild(Class tag, Map attributeMap)
     {
@@ -243,7 +242,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#addTagChild(TagSupport)}.
+     * @inheritDoc
      */
     public NestedTag addTagChild(TagSupport tag)
     {
@@ -251,7 +250,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#addTagChild(TagSupport, Map)}.
+     * @inheritDoc
      */
     public NestedTag addTagChild(TagSupport tag, Map attributeMap)
     {
@@ -260,7 +259,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }
     
     /**
-     * Implementation of {@link NestedTag#addTagChild(JspTag)}.
+     * @inheritDoc
      */
     /*public NestedTag addTagChild(JspTag tag)
     {
@@ -268,7 +267,7 @@ public class NestedBodyTag extends BodyTagSupport implements NestedTag
     }*/
     
     /**
-     * Implementation of {@link NestedTag#addTagChild(JspTag, Map)}.
+     * @inheritDoc
      */
     /*public NestedTag addTagChild(JspTag tag, Map attributeMap)
     {
