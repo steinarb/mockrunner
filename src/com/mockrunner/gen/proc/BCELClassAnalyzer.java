@@ -26,7 +26,14 @@ public class BCELClassAnalyzer
     public BCELClassAnalyzer(Class clazz)
     {
         methodMap = new HashMap();
-        prepareMethodMap(clazz);
+        try
+        {
+            prepareMethodMap(clazz);
+        } 
+        catch(ClassNotFoundException exc)
+        {
+            throw new RuntimeException(exc);
+        }
     }
 
     public boolean isMethodDeprecated(java.lang.reflect.Method reflectMethod)
@@ -75,7 +82,7 @@ public class BCELClassAnalyzer
         return (org.apache.bcel.classfile.Method)methodMap.get(reflectMethod);
     }
     
-    private void prepareMethodMap(Class clazz)
+    private void prepareMethodMap(Class clazz) throws ClassNotFoundException
     {
         java.lang.reflect.Method[] reflectMethods = clazz.getDeclaredMethods();
         JavaClass javaClass = Repository.lookupClass(clazz);
