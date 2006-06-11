@@ -160,7 +160,7 @@ public class MethodUtilTest extends TestCase
         assertEquals(5, methods.length);
         assertEquals(2, methods[1].length);
         assertEquals(5, methods[2].length);
-        assertEquals(2, methods[3].length);
+        assertEquals(3, methods[3].length);
         Method method1Super = TestSuper.class.getDeclaredMethod("testMethod1", null);
         Method method2Super = TestSuper.class.getDeclaredMethod("testMethod2", new Class[] { int[].class, String.class});
         Method method1SubOverride = TestSub.class.getDeclaredMethod("testMethod1", null);
@@ -169,6 +169,7 @@ public class MethodUtilTest extends TestCase
         Method method2SubNotOverride = TestSub.class.getDeclaredMethod("testMethod2", new Class[] { int[].class});
         Method methodSubInterface = TestSub.class.getDeclaredMethod("testInterface", null);
         Method methodSub2another = TestSub2.class.getDeclaredMethod("anotherMethod", null);
+        Method methodSub2anotherProtected = TestSub2.class.getDeclaredMethod("anotherProtectedMethod", null);
         Method methodSub2toString = TestSub2.class.getDeclaredMethod("toString", null);
         assertTrue(Arrays.asList(methods[1]).contains(method1Super));
         assertTrue(Arrays.asList(methods[1]).contains(method2Super));
@@ -178,6 +179,7 @@ public class MethodUtilTest extends TestCase
         assertTrue(Arrays.asList(methods[2]).contains(method2SubNotOverride));
         assertTrue(Arrays.asList(methods[2]).contains(methodSubInterface));
         assertTrue(Arrays.asList(methods[3]).contains(methodSub2another));
+        assertTrue(Arrays.asList(methods[3]).contains(methodSub2anotherProtected));
         assertTrue(Arrays.asList(methods[3]).contains(methodSub2toString));
         assertEquals(0, methods[4].length);
     }
@@ -269,12 +271,12 @@ public class MethodUtilTest extends TestCase
         }
     }
     
-    public interface TestInterface
+    public static interface TestInterface
     {
         public Integer testInterface();
     }
     
-    public class TestSuper
+    public static class TestSuper
     {
         public String testMethod1()
         {
@@ -287,13 +289,13 @@ public class MethodUtilTest extends TestCase
         }
     }
     
-    public class TestSub extends TestSuper implements TestInterface
+    public static class TestSub extends TestSuper implements TestInterface
     {
         public Integer testInterface()
         {
             return null;
         }
-        
+
         public String testMethod1(String param)
         {
             return super.testMethod1();
@@ -313,13 +315,23 @@ public class MethodUtilTest extends TestCase
         {
             super.testMethod2(param, param2);
         }
+        
+        public static void testMethod3(String param)
+        {
+            
+        }
     }
     
-    public class TestSub2 extends TestSub
+    public static class TestSub2 extends TestSub
     {
         public String toString()
         {
             return super.toString();
+        }
+        
+        public static void anotherStaticMethod()
+        {
+            
         }
         
         protected void anotherProtectedMethod()
