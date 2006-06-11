@@ -1,5 +1,9 @@
 package com.mockrunner.util.common;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class ClassUtil
 {
     private final static String[] KEYWORDS = new String[]
@@ -57,6 +61,29 @@ public class ClassUtil
         {
             return clazz.getName().substring(classPackage.length() + 1) + dimensions;
         }
+    }
+    
+    /**
+     * Returns the inheritance hierarchy of the specified class.
+     * The returned array includes all superclasses of the specified class
+     * starting with the most general superclass, which is
+     * <code>java.lang.Object</code>. The returned array also
+     * includes the class itself as the last element. Implemented
+     * interfaces are not included.
+     * @param clazz the Class
+     * @return all superclasses, most general superclass first
+     */
+    public static Class[] getInheritanceHierarchy(Class clazz)
+    {
+        List classes = new ArrayList();
+        Class currentClass = clazz;
+        while(null != currentClass)
+        {
+            classes.add(currentClass);
+            currentClass = currentClass.getSuperclass();
+        }
+        Collections.reverse(classes);
+        return (Class[])classes.toArray(new Class[classes.size()]);
     }
     
     /**

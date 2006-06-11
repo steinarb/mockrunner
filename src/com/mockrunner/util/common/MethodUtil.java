@@ -1,6 +1,7 @@
 package com.mockrunner.util.common;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -74,6 +75,23 @@ public class MethodUtil
     }
     
     /**
+     * Returns if <code>method2</code> overrides <code>method1</code>.
+     * @param method1 method to be overridden
+     * @param method2 overriding method
+     * @return <code>true</code> if <code>method2</code> overrides <code>method1</code>, <code>false</code>
+     *         otherwise
+     * @throws NullPointerException if one of the methods is <code>null</code>
+     */
+    public static boolean overrides(Method method1, Method method2)
+    {
+        if(method1.equals(method2)) return false;
+        if(!method1.getDeclaringClass().isAssignableFrom(method2.getDeclaringClass())) return false;
+        if(!method2.getName().equals(method1.getName())) return false;
+        if(method1.getDeclaringClass().isInterface()) return false;
+        return Arrays.equals(method1.getParameterTypes(), method2.getParameterTypes());
+    }
+    
+    /**
      * Returns the declared methods of the specified class whose names are matching
      * the specified regular expression.
      * @param theClass the class whose methods are examined
@@ -92,5 +110,38 @@ public class MethodUtil
             }
         }
         return (Method[])resultList.toArray(new Method[resultList.size()]);
+    }
+    
+    /**
+     * Returns all public methods declared by the specified class and its
+     * superclasses. The returned array contains the methods of all classes
+     * in the inheritance hierarchy, starting with the methods of the
+     * most general superclass, which is <code>java.lang.Object</code>.
+     * @param theClass the class whose methods are examined
+     * @return the array of method arrays
+     */
+    public static Method[][] getPublicMethodsSortedByInheritanceHierarchy(Class theClass)
+    {
+        List hierarchyList = new ArrayList();
+        Class[] hierarchyClasses = ClassUtil.getInheritanceHierarchy(theClass);
+        for(int ii = 0; ii < hierarchyClasses.length; ii++)
+        {
+            addMethodsForClass(hierarchyList, hierarchyClasses[ii]);
+        }
+        return (Method[][])hierarchyList.toArray(new Method[hierarchyList.size()][]);
+    }
+    
+    private static void addMethodsForClass(List hierarchyList, Class clazz)
+    {
+        List methodList = new ArrayList();
+        Method[] methods = clazz.getDeclaredMethods();
+        for(int ii = 0; ii < methods.length; ii++)
+        {
+            if(Modifier.isPublic(methods[ii].getModifiers()))
+            {
+                methodList.add(methods[ii]);
+            }
+        }
+        hierarchyList.add(methodList.toArray(new Method[methodList.size()]));
     }
 }
