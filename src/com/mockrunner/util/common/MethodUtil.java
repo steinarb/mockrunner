@@ -113,7 +113,7 @@ public class MethodUtil
     }
     
     /**
-     * Returns all public methods declared by the specified class and its
+     * Returns all non-static methods declared by the specified class and its
      * superclasses. The returned array contains the methods of all classes
      * in the inheritance hierarchy, starting with the methods of the
      * most general superclass, which is <code>java.lang.Object</code>.
@@ -137,7 +137,7 @@ public class MethodUtil
         Method[] methods = clazz.getDeclaredMethods();
         for(int ii = 0; ii < methods.length; ii++)
         {
-            if(Modifier.isPublic(methods[ii].getModifiers()))
+            if(!Modifier.isStatic(methods[ii].getModifiers()))
             {
                 methodList.add(methods[ii]);
             }
