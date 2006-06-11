@@ -1,7 +1,9 @@
 package com.mockrunner.test.util;
 
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.net.URL;
+import java.util.Arrays;
 
 import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.util.common.ClassUtil;
@@ -51,8 +53,32 @@ public class ClassUtilTest extends TestCase
         assertEquals("doubleValues", ClassUtil.getArgumentName(Double[][].class));
     }
     
+    public void testGetInheritanceHierarchy()
+    {
+        Class[] classes = ClassUtil.getInheritanceHierarchy(Object.class);
+        assertTrue(Arrays.equals(classes, new Class[] { Object.class }));
+        classes = ClassUtil.getInheritanceHierarchy(Super.class);
+        assertTrue(Arrays.equals(classes, new Class[] { Object.class, Super.class }));
+        classes = ClassUtil.getInheritanceHierarchy(Sub2.class);
+        assertTrue(Arrays.equals(classes, new Class[] { Object.class, Super.class, Sub1.class, Sub2.class }));
+    }
+    
     public static class TestClass
     {
     
+    }
+    
+    public static class Super
+    {
+        
+    }
+    
+    public static class Sub1 extends Super implements Serializable
+    {
+        
+    }
+    public static class Sub2 extends Sub1 implements Cloneable
+    {
+        
     }
 }
