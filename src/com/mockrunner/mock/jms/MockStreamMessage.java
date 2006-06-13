@@ -487,8 +487,6 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
 
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(this.getClass().getName() + ": " + data.toString());
-        return buffer.toString();
+        return this.getClass().getName() + ": " + data.toString();
     }
 }
