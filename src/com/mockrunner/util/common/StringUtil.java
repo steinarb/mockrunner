@@ -1,6 +1,9 @@
 package com.mockrunner.util.common;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -107,6 +110,50 @@ public class StringUtil
             char character = buffer.charAt(ii);
             buffer.setCharAt(ii, Character.toLowerCase(character));
         }
+        return buffer.toString();
+    }
+    
+    /**
+     * Helper method for <code>toString()</code> implementations.
+     * Returns a string <code>"field name: value\n"</code>. Handles
+     * <code>null</code> values, collections and arrays. If the
+     * field is a collection or an array, the returned string will
+     * be:<br>
+     * <code>"field name 0: value0\n"</code>
+     * <code>"field name 1: value1\n"</code>
+     * @param fieldName the field name
+     * @param field the field value
+     * @return a suitable string for <code>toString()</code> implementations
+     */
+    public static String fieldToString(String fieldName, Object field)
+    {
+        StringBuffer buffer = new StringBuffer();
+        if(null == field)
+        {
+            buffer.append(fieldName + ": " + "null");
+        }
+        else if(field.getClass().isArray())
+        {
+            for(int ii = 0; ii < Array.getLength(field); ii++)
+            {
+                buffer.append(fieldToString(fieldName + " " + ii, Array.get(field, ii)));
+            }
+        }
+        else if(field instanceof Collection)
+        {
+            int index = 0;
+            Iterator iterator = ((Collection)field).iterator();
+            while(iterator.hasNext())
+            {  
+                buffer.append(fieldToString(fieldName + " " + index, iterator.next()));
+                index++;
+            }
+        }
+        else
+        {
+            buffer.append(fieldName + ": " + field.toString());
+        }
+        buffer.append("\n");
         return buffer.toString();
     }
     

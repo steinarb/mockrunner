@@ -374,6 +374,7 @@ public class MockResultSetTest extends TestCase
         resultSet.addRow(new String[] {"4", "5", "6"});
         resultSet.addRow(new String[] {"7", "8", "9"});
         resultSet.addRow(new String[] {"10", "11", "12"});
+        System.out.println(resultSet.toString());
         resultSet.last();
         resultSet.setFetchDirection(ResultSet.FETCH_REVERSE);
         assertEquals(ResultSet.FETCH_REVERSE, resultSet.getFetchDirection());

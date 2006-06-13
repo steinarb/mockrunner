@@ -91,16 +91,6 @@ public class MockObjectMessage extends MockMessage implements ObjectMessage
 
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(this.getClass().getName() + ": ");
-        if(null == object)
-        {
-            buffer.append("null");
-        }
-        else
-        {
-            buffer.append(object.toString());
-        }
-        return buffer.toString();
+        return this.getClass().getName() + ": " + object;
     }
 }

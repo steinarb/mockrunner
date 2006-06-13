@@ -391,8 +391,6 @@ public class MockMapMessage extends MockMessage implements MapMessage
     
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(this.getClass().getName() + ": " + data.toString());
-        return buffer.toString();
+        return this.getClass().getName() + ": " + data.toString();
     }
 }
