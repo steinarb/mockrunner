@@ -210,13 +210,13 @@ public class StringUtilTest extends TestCase
     
     public void testFieldToString()
     { 
-        assertEquals("test: class java.lang.String\n", StringUtil.fieldToString("test", String.class));
-        assertEquals("test: 3\n", StringUtil.fieldToString("test", new Integer(3)));
+        assertEquals("test: class java.lang.String", StringUtil.fieldToString("test", String.class));
+        assertEquals("test: 3", StringUtil.fieldToString("test", new Integer(3)));
         List testList = new ArrayList();
         testList.add(new Integer(5));
         testList.add("abc");
         testList.add(this.getClass());
-        assertEquals("test 0: 5\ntest 1: abc\ntest 2: class com.mockrunner.test.util.StringUtilTest\n", StringUtil.fieldToString("test", testList));
-        assertEquals("test 0: 5\ntest 1: abc\ntest 2: class com.mockrunner.test.util.StringUtilTest\n", StringUtil.fieldToString("test", testList.toArray()));
+        assertEquals("test 0: 5\ntest 1: abc\ntest 2: class com.mockrunner.test.util.StringUtilTest", StringUtil.fieldToString("test", testList));
+        assertEquals("test 0: 5\ntest 1: abc\ntest 2: class com.mockrunner.test.util.StringUtilTest", StringUtil.fieldToString("test", testList.toArray()));
     }
 }
