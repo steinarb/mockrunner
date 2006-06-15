@@ -216,7 +216,7 @@ public class StringUtilTest extends TestCase
         testList.add(new Integer(5));
         testList.add("abc");
         testList.add(this.getClass());
-        assertEquals("test 0: 5\ntest 1: abc\ntest 2: class com.mockrunner.test.util.StringUtilTest\n\n", StringUtil.fieldToString("test", testList));
-        assertEquals("test 0: 5\ntest 1: abc\ntest 2: class com.mockrunner.test.util.StringUtilTest\n\n", StringUtil.fieldToString("test", testList.toArray()));
+        assertEquals("test 0: 5\ntest 1: abc\ntest 2: class com.mockrunner.test.util.StringUtilTest\n", StringUtil.fieldToString("test", testList));
+        assertEquals("test 0: 5\ntest 1: abc\ntest 2: class com.mockrunner.test.util.StringUtilTest\n", StringUtil.fieldToString("test", testList.toArray()));
     }
 }
