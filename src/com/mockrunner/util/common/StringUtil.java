@@ -3,7 +3,6 @@ package com.mockrunner.util.common;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.logging.Log;
@@ -115,12 +114,11 @@ public class StringUtil
     
     /**
      * Helper method for <code>toString()</code> implementations.
-     * Returns a string <code>"field name: value\n"</code>. Handles
+     * Returns a string <code>"field name: value"</code>. Handles
      * <code>null</code> values, collections and arrays. If the
      * field is a collection or an array, the returned string will
      * be:<br>
-     * <code>"field name 0: value0\n"</code>
-     * <code>"field name 1: value1\n"</code>
+     * <code>"field name 0: value0\nfield name 1: value1"</code>
      * @param fieldName the field name
      * @param field the field value
      * @return a suitable string for <code>toString()</code> implementations
@@ -130,28 +128,35 @@ public class StringUtil
         StringBuffer buffer = new StringBuffer();
         if(null == field)
         {
-            buffer.append(fieldName + ": " + "null\n");
+            buffer.append(fieldName + ": " + "null");
         }
         else if(field.getClass().isArray())
         {
-            for(int ii = 0; ii < Array.getLength(field); ii++)
+            int length = Array.getLength(field);
+            for(int ii = 0; ii < length; ii++)
             {
                 buffer.append(fieldToString(fieldName + " " + ii, Array.get(field, ii)));
+                if(ii < length - 1)
+                {
+                    buffer.append("\n");
+                }
             }
         }
         else if(field instanceof Collection)
         {
-            int index = 0;
-            Iterator iterator = ((Collection)field).iterator();
-            while(iterator.hasNext())
-            {  
-                buffer.append(fieldToString(fieldName + " " + index, iterator.next()));
-                index++;
+            List list = new ArrayList((Collection)field);
+            for(int ii = 0; ii < list.size(); ii++)
+            { 
+                buffer.append(fieldToString(fieldName + " " + ii, list.get(ii)));
+                if(ii < list.size() - 1)
+                {
+                    buffer.append("\n");
+                }
             }
         }
         else
         {
-            buffer.append(fieldName + ": " + field.toString() + "\n");
+            buffer.append(fieldName + ": " + field.toString());
         }
         return buffer.toString();
     }
