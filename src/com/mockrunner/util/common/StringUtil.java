@@ -130,7 +130,7 @@ public class StringUtil
         StringBuffer buffer = new StringBuffer();
         if(null == field)
         {
-            buffer.append(fieldName + ": " + "null");
+            buffer.append(fieldName + ": " + "null\n");
         }
         else if(field.getClass().isArray())
         {
@@ -151,9 +151,8 @@ public class StringUtil
         }
         else
         {
-            buffer.append(fieldName + ": " + field.toString());
+            buffer.append(fieldName + ": " + field.toString() + "\n");
         }
-        buffer.append("\n");
         return buffer.toString();
     }
     
