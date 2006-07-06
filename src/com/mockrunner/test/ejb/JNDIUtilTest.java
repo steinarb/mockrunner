@@ -65,6 +65,12 @@ public class JNDIUtilTest extends TestCase
         System.setProperty(Context.INITIAL_CONTEXT_FACTORY, MockContextFactory.class.getName());
         JNDIUtil.resetMockContextFactory();
         assertNull(System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
+        System.setProperty(Context.INITIAL_CONTEXT_FACTORY, "test");
+        System.setProperty(Context.URL_PKG_PREFIXES, "testURL");
+        JNDIUtil.initMockContextFactory();
+        JNDIUtil.resetMockContextFactory();
+        assertEquals("test", System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
+        assertEquals("testURL", System.getProperty(Context.URL_PKG_PREFIXES));
     }
     
     public void testGetContext() throws Exception
