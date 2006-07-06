@@ -110,9 +110,9 @@ public class JNDIUtilTest extends TestCase
             //should throw exception
         }
         configuration.setBindMockUserTransactionToJNDI(true);
-        configuration.setUserTransactionJNDIName("myName");
+        configuration.setUserTransactionJNDIName("myJNDIName");
         JNDIUtil.bindUserTransaction(configuration, context, transaction);
-        assertSame(context.lookup("myName"), transaction);
+        assertSame(context.lookup("myJNDIName"), transaction);
         assertSame(context.lookup("javax.transaction.UserTransaction"), transaction);
         assertSame(context.lookup("java:comp/UserTransaction"), transaction);
     }
