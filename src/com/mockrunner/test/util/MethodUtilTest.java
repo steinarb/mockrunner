@@ -154,9 +154,9 @@ public class MethodUtilTest extends TestCase
         assertTrue(MethodUtil.overrides(method2Super, method2SubOverride));
     }
     
-    public void testGetPublicMethodsSortedByInheritanceHierarchy() throws Exception
+    public void testGetMethodsSortedByInheritanceHierarchy() throws Exception
     {
-        Method[][] methods = MethodUtil.getPublicMethodsSortedByInheritanceHierarchy(TestSub3.class);
+        Method[][] methods = MethodUtil.getMethodsSortedByInheritanceHierarchy(TestSub3.class);
         assertEquals(5, methods.length);
         assertEquals(2, methods[1].length);
         assertEquals(5, methods[2].length);

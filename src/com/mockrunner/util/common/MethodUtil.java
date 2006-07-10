@@ -120,7 +120,7 @@ public class MethodUtil
      * @param theClass the class whose methods are examined
      * @return the array of method arrays
      */
-    public static Method[][] getPublicMethodsSortedByInheritanceHierarchy(Class theClass)
+    public static Method[][] getMethodsSortedByInheritanceHierarchy(Class theClass)
     {
         List hierarchyList = new ArrayList();
         Class[] hierarchyClasses = ClassUtil.getInheritanceHierarchy(theClass);
