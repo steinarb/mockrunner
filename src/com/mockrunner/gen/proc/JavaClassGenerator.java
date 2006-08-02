@@ -14,6 +14,7 @@ public class JavaClassGenerator
     private Package packageInfo;
     private List imports;
     private String className;
+    private boolean isAbstract;
     private Class superClass;
     private List interfaces;
     private List memberTypes;
@@ -35,6 +36,7 @@ public class JavaClassGenerator
         memberTypes = new ArrayList();
         memberNames = new ArrayList();
         createJavaDocComments = true;
+        isAbstract = false;
         methods = new ArrayList();
         constructors = new ArrayList();
     }
@@ -54,6 +56,11 @@ public class JavaClassGenerator
         this.className = className;
     }
     
+    public void setAbstract(boolean isAbstract)
+    {
+        this.isAbstract = isAbstract;
+    }
+    
     public void setSuperClass(Class superClass)
     {
         this.superClass = superClass;
@@ -71,7 +78,7 @@ public class JavaClassGenerator
     
     public void setClassComment(String[] commentLines)
     {
-        classCommentLines = (String[])commentLines.clone();
+        classCommentLines = (String[])ArrayUtil.copyArray(commentLines);
     }
     
     public void addMemberDeclaration(Class memberType, String name)
@@ -101,7 +108,14 @@ public class JavaClassGenerator
         assembler.appendPackageInfo(getPackageName());
         appendImportBlocks(assembler);
         appendCommentBlock(assembler, classCommentLines);
-        assembler.appendClassDefintion(className, getClassName(superClass), getClassNames(interfaces));
+        if(isAbstract)
+        {
+            assembler.appendClassDefintion(className, Modifier.toString(Modifier.ABSTRACT), getClassName(superClass), getClassNames(interfaces));
+        }
+        else
+        {
+            assembler.appendClassDefintion(className, "", getClassName(superClass), getClassNames(interfaces));
+        }
         assembler.appendLeftBrace();
         assembler.appendNewLine();
         assembler.setIndentLevel(1);
@@ -372,56 +386,56 @@ public class JavaClassGenerator
         public String[] getCodeLines()
         {
             if(null == codeLines) return null;
-            return (String[])codeLines.clone();
+            return (String[])ArrayUtil.copyArray(codeLines);
         }
         
         public void setCodeLines(String[] codeLines)
         {
-            this.codeLines = (String[])codeLines.clone();
+            this.codeLines = (String[])ArrayUtil.copyArray(codeLines);
         }
         
         public String[] getCommentLines()
         {
             if(null == commentLines) return null;
-            return (String[])commentLines.clone();
+            return (String[])ArrayUtil.copyArray(commentLines);
         }
         
         public void setCommentLines(String[] commentLines)
         {
-            this.commentLines = (String[])commentLines.clone();
+            this.commentLines = (String[])ArrayUtil.copyArray(commentLines);
         }
        
         public String[] getArgumentNames()
         {
             if(null == argumentNames) return null;
-            return (String[])argumentNames.clone();
+            return (String[])ArrayUtil.copyArray(argumentNames);
         }
         
         public void setArgumentNames(String[] argumentNames)
         {
-            this.argumentNames = (String[])argumentNames.clone();
+            this.argumentNames = (String[])ArrayUtil.copyArray(argumentNames);
         }
         
         public Class[] getArguments()
         {
             if(null == arguments) return null;
-            return (Class[])arguments.clone();
+            return (Class[])ArrayUtil.copyArray(arguments);
         }
         
         public void setArguments(Class[] arguments)
         {
-            this.arguments = (Class[])arguments.clone();
+            this.arguments = (Class[])ArrayUtil.copyArray(arguments);
         }
         
         public Class[] getExceptions()
         {
             if(null == exceptions) return null;
-            return (Class[])exceptions.clone();
+            return (Class[])ArrayUtil.copyArray(exceptions);
         }
         
         public void setExceptions(Class[] exceptions)
         {
-            this.exceptions = (Class[])exceptions.clone();
+            this.exceptions = (Class[])ArrayUtil.copyArray(exceptions);
         }
     }
     

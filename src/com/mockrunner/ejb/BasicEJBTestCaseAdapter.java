@@ -21,7 +21,7 @@ import com.mockrunner.mock.ejb.EJBMockObjectFactory;
  * <b>This class is generated from the {@link com.mockrunner.ejb.EJBTestModule}
  * and should not be edited directly</b>.
  */
-public class BasicEJBTestCaseAdapter extends TestCase
+public abstract class BasicEJBTestCaseAdapter extends TestCase
 {
     private EJBTestModule ejbTestModule;
     private EJBMockObjectFactory ejbMockObjectFactory;

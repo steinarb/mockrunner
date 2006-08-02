@@ -17,7 +17,7 @@ import com.mockrunner.base.HTMLOutputTestCase;
  * <b>This class is generated from the {@link com.mockrunner.servlet.ServletTestModule}
  * and should not be edited directly</b>.
  */
-public class ServletTestCaseAdapter extends HTMLOutputTestCase
+public abstract class ServletTestCaseAdapter extends HTMLOutputTestCase
 {
     private ServletTestModule servletTestModule;
 

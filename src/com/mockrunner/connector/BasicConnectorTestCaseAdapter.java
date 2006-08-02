@@ -17,7 +17,7 @@ import com.mockrunner.mock.connector.cci.ConnectorMockObjectFactory;
  * <b>This class is generated from the {@link com.mockrunner.connector.ConnectorTestModule}
  * and should not be edited directly</b>.
  */
-public class BasicConnectorTestCaseAdapter extends TestCase
+public abstract class BasicConnectorTestCaseAdapter extends TestCase
 {
     private ConnectorTestModule connectorTestModule;
     private ConnectorMockObjectFactory connectorMockObjectFactory;

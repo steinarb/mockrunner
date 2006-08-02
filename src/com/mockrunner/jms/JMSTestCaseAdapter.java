@@ -26,7 +26,7 @@ import com.mockrunner.mock.jms.MockTopicSession;
  * <b>This class is generated from the {@link com.mockrunner.jms.JMSTestModule}
  * and should not be edited directly</b>.
  */
-public class JMSTestCaseAdapter extends BaseTestCase
+public abstract class JMSTestCaseAdapter extends BaseTestCase
 {
     private JMSTestModule jmsTestModule;
 

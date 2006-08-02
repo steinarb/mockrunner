@@ -20,7 +20,7 @@ import com.mockrunner.mock.web.WebMockObjectFactory;
  * <b>This class is generated from the {@link com.mockrunner.servlet.ServletTestModule}
  * and should not be edited directly</b>.
  */
-public class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
+public abstract class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCase
 {
     private ServletTestModule servletTestModule;
     private WebMockObjectFactory webMockObjectFactory;

@@ -34,7 +34,7 @@ import com.mockrunner.mock.web.WebMockObjectFactory;
  * <b>This class is generated from the {@link com.mockrunner.struts.ActionTestModule}
  * and should not be edited directly</b>.
  */
-public class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
+public abstract class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
 {
     private ActionTestModule actionTestModule;
     private ActionMockObjectFactory actionMockObjectFactory;

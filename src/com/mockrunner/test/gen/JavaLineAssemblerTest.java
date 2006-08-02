@@ -3,9 +3,9 @@ package com.mockrunner.test.gen;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mockrunner.gen.proc.JavaLineAssembler;
-
 import junit.framework.TestCase;
+
+import com.mockrunner.gen.proc.JavaLineAssembler;
 
 public class JavaLineAssemblerTest extends TestCase
 {
@@ -118,8 +118,11 @@ public class JavaLineAssemblerTest extends TestCase
         assembler.appendClassDefintion("MyClass", new String[0]);
         assertEquals("public class MyClass" + NL, assembler.getResult());
         assembler.reset();
-        assembler.appendClassDefintion("MyClass", "", null);
+        assembler.appendClassDefintion("MyClass", "", "", null);
         assertEquals("public class MyClass" + NL, assembler.getResult());
+        assembler.reset();
+        assembler.appendClassDefintion("MyClass", "abstract", "", null);
+        assertEquals("public abstract class MyClass" + NL, assembler.getResult());
     }
     
     public void testAppendClassDefintionWithSuperClass()
@@ -131,7 +134,7 @@ public class JavaLineAssemblerTest extends TestCase
         assembler.appendClassDefintion("MyClass", "MySuperClass");
         assertEquals("public class MyClass extends MySuperClass" + NL, assembler.getResult());
         assembler.reset();
-        assembler.appendClassDefintion("MyClass", "MySuperClass", null);
+        assembler.appendClassDefintion("MyClass", "", "MySuperClass", null);
         assertEquals("public class MyClass extends MySuperClass" + NL, assembler.getResult());
     }
     
@@ -147,14 +150,14 @@ public class JavaLineAssemblerTest extends TestCase
         assembler.appendClassDefintion("MyClass", new String[] {"Interface1", "Interface2", "Interface3"});
         assertEquals("public class MyClass implements Interface1, Interface2, Interface3" + NL, assembler.getResult());
         assembler.reset();
-        assembler.appendClassDefintion("MyClass", "", new String[] {"1", "2"});
+        assembler.appendClassDefintion("MyClass", "", "", new String[] {"1", "2"});
         assertEquals("public class MyClass implements 1, 2" + NL, assembler.getResult());
     }
     
     public void testAppendClassDefintionWithSuperClassAndInterfaces()
     {
         assembler.setIndentLevel(2);
-        assembler.appendClassDefintion("MyClass", "MySuperClass", new String[] {"1", "2"});
+        assembler.appendClassDefintion("MyClass", "", "MySuperClass", new String[] {"1", "2"});
         assertEquals("        public class MyClass extends MySuperClass implements 1, 2" + NL, assembler.getResult());
     }
     
