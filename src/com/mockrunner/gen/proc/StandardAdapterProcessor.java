@@ -28,6 +28,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
         String className = getClassNameFromBaseName(getBaseName(module));
         name = getJavaFileName(module, className);
         classGenerator.setClassName(className);
+        classGenerator.setAbstract(true);
         Class superClass = getSuperClass(module);
         if(null != superClass)
         {

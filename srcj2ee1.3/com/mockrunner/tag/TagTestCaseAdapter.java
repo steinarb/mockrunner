@@ -18,7 +18,7 @@ import com.mockrunner.mock.web.MockPageContext;
  * <b>This class is generated from the {@link com.mockrunner.tag.TagTestModule}
  * and should not be edited directly</b>.
  */
-public class TagTestCaseAdapter extends HTMLOutputTestCase
+public abstract class TagTestCaseAdapter extends HTMLOutputTestCase
 {
     private TagTestModule tagTestModule;
 

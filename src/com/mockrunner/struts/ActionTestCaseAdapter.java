@@ -30,7 +30,7 @@ import com.mockrunner.mock.web.MockPageContext;
  * <b>This class is generated from the {@link com.mockrunner.struts.ActionTestModule}
  * and should not be edited directly</b>.
  */
-public class ActionTestCaseAdapter extends HTMLOutputTestCase
+public abstract class ActionTestCaseAdapter extends HTMLOutputTestCase
 {
     private ActionTestModule actionTestModule;
 

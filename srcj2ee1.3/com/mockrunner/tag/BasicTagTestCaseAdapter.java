@@ -21,7 +21,7 @@ import com.mockrunner.mock.web.WebMockObjectFactory;
  * <b>This class is generated from the {@link com.mockrunner.tag.TagTestModule}
  * and should not be edited directly</b>.
  */
-public class BasicTagTestCaseAdapter extends BasicHTMLOutputTestCase
+public abstract class BasicTagTestCaseAdapter extends BasicHTMLOutputTestCase
 {
     private TagTestModule tagTestModule;
     private WebMockObjectFactory webMockObjectFactory;

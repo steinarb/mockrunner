@@ -13,7 +13,7 @@ import com.mockrunner.base.BaseTestCase;
  * <b>This class is generated from the {@link com.mockrunner.connector.ConnectorTestModule}
  * and should not be edited directly</b>.
  */
-public class ConnectorTestCaseAdapter extends BaseTestCase
+public abstract class ConnectorTestCaseAdapter extends BaseTestCase
 {
     private ConnectorTestModule connectorTestModule;
 

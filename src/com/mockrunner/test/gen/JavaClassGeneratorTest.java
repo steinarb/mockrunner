@@ -31,6 +31,7 @@ public class JavaClassGeneratorTest extends TestCase
     public void testGenerate()
     {
         generator.setClassName("MyClass");
+        generator.setAbstract(true);
         String[] commentLines = new String[] {"This is", "a comment"};
         generator.setClassComment(commentLines);
         generator.setPackage(this.getClass().getPackage());
@@ -92,7 +93,7 @@ public class JavaClassGeneratorTest extends TestCase
                " * This is" + NL +
                " * a comment" + NL +
                " */" + NL +
-               "public class MyClass extends ClassUtil implements Map, List" + NL +
+               "public abstract class MyClass extends ClassUtil implements Map, List" + NL +
                "{" + NL +
                "    private XmlUtil util;" + NL + 
                "    private String name;" + NL + NL +

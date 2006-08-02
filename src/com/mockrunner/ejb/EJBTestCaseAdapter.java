@@ -17,7 +17,7 @@ import com.mockrunner.base.BaseTestCase;
  * <b>This class is generated from the {@link com.mockrunner.ejb.EJBTestModule}
  * and should not be edited directly</b>.
  */
-public class EJBTestCaseAdapter extends BaseTestCase
+public abstract class EJBTestCaseAdapter extends BaseTestCase
 {
     private EJBTestModule ejbTestModule;
 

@@ -153,15 +153,15 @@ public class JavaLineAssembler
     
     public void appendClassDefintion(String className, String superClass)
     {
-        appendClassDefintion(className, superClass, null);
+        appendClassDefintion(className, "", superClass, null);
     }
     
     public void appendClassDefintion(String className, String[] interfaceDef)
     {
-        appendClassDefintion(className, "", interfaceDef);
+        appendClassDefintion(className, "", "", interfaceDef);
     }
     
-    public void appendClassDefintion(String className, String superClass, String[] interfaceDef)
+    public void appendClassDefintion(String className, String modifier, String superClass, String[] interfaceDef)
     {
         if(null == className || className.length() <= 0) return;
         if(null == superClass || superClass.length() <= 0)
@@ -177,7 +177,15 @@ public class JavaLineAssembler
         {
             interfaceDefList = " implements " + prepareCommaSeparatedList(interfaceDef, null);
         }
-        appendLine("public class " + className + superClass + interfaceDefList);
+        if(null == modifier)
+        {
+            modifier = "";
+        }
+        if(modifier.length() > 0)
+        {
+            modifier += " ";
+        }
+        appendLine("public " + modifier + "class " + className + superClass + interfaceDefList);
     }
     
     public void appendMemberDeclaration(String type, String name)

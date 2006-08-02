@@ -25,7 +25,7 @@ import com.mockrunner.mock.jdbc.MockStatement;
  * <b>This class is generated from the {@link com.mockrunner.jdbc.JDBCTestModule}
  * and should not be edited directly</b>.
  */
-public class BasicJDBCTestCaseAdapter extends TestCase
+public abstract class BasicJDBCTestCaseAdapter extends TestCase
 {
     private JDBCTestModule jdbcTestModule;
     private JDBCMockObjectFactory jdbcMockObjectFactory;
