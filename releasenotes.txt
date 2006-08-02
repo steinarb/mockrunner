@@ -1,6 +1,9 @@
 
 mockrunner-0.3.8:
 
+- the TestCaseAdapter classes are abstract now to prevent problems with some
+  JUnit test runners
+
 mockrunner-0.3.7:
 
 - the JDBC test framework now supports multiple result sets
