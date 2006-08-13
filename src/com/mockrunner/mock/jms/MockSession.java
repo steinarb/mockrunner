@@ -461,10 +461,10 @@ public class MockSession implements Session
     
     public MessageConsumer createConsumer(Destination destination, String messageSelector, boolean noLocal) throws JMSException
     {
-		if(null == destination)
-		{
-			throw new IllegalArgumentException("destination must not be null");
-		}
+        if(null == destination)
+        {
+            throw new IllegalArgumentException("destination must not be null");
+        }
         getConnection().throwJMSException();      
         if(destination instanceof MockQueue)
         {
