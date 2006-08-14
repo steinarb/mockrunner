@@ -27,13 +27,11 @@ public class JNDIUtilTest extends TestCase
         TestJNDI.saveProperties(savedProperties);
         MockContextFactory.setAsInitial();
         context = new InitialContext();
-        TestJNDI.unbind(context);
     }
     
     protected void tearDown() throws Exception
     {
         super.tearDown();
-        TestJNDI.unbind(context);
         MockContextFactory.revertSetAsInitial();
         TestJNDI.restoreProperties(savedProperties);
     }

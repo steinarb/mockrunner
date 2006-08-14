@@ -75,6 +75,7 @@ public class MockrunnerJars
         webJ2EEJars = new HashSet();
         webJ2EEJars.add("servlet-api.jar");
         webJ2EEJars.add("jsp-api.jar");
+        webJ2EEJars.add("servlet.jar");
         
         otherJ2EEJars = new HashSet();
         otherJ2EEJars.add("jboss-j2ee.jar");

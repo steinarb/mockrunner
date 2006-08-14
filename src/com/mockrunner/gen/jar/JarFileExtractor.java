@@ -20,46 +20,46 @@ public class JarFileExtractor
         this.exceptionJars = new ArrayList(exceptionJars);
     }
     
-    public Jar[] filterBundles(Jar jarBundles[])
+    public Jar[] filter(Jar jars[])
     {
         List finalList = new ArrayList();
-        for(int ii = 0; ii < jarBundles.length; ii++) 
+        for(int ii = 0; ii < jars.length; ii++) 
         {
-            if(mainJars.contains(jarBundles[ii].getJarFileName()))
+            if(mainJars.contains(jars[ii].getJarFileName()))
             {
-                finalList.add(jarBundles[ii]);
+                finalList.add(jars[ii]);
             }
         }
         return (Jar[])finalList.toArray(new Jar[finalList.size()]);
     }
     
-    public Map createDependencies(Jar jarBundles[])
+    public Map createDependencies(Jar jars[])
     {
         Map finalMap = new HashMap();
-        for(int ii = 0; ii < jarBundles.length; ii++) 
+        for(int ii = 0; ii < jars.length; ii++) 
         {
-            if(mainJars.contains(jarBundles[ii].getJarFileName()))
+            if(mainJars.contains(jars[ii].getJarFileName()))
             {
-                Set currentSet = createDependencySet(jarBundles[ii]);
-                finalMap.put(jarBundles[ii].getJarFileName(), currentSet);
+                Set currentSet = createDependencySet(jars[ii]);
+                finalMap.put(jars[ii].getJarFileName(), currentSet);
             }
         }
         return finalMap;
     }
     
-    private Set createDependencySet(Jar jarBundle)
+    private Set createDependencySet(Jar jar)
     {
         Set resultSet = new TreeSet();
-        List dependendJars = jarBundle.getOutgoingDependencies();
+        List dependendJars = jar.getOutgoingDependencies();
         if(null == dependendJars) return resultSet;
         for(int ii = 0; ii < dependendJars.size(); ii++)
         {
-            Jar currentBundle = (Jar)dependendJars.get(ii);
-            String currentJarFileName = currentBundle.getJarFileName();
+            Jar currentJar = (Jar)dependendJars.get(ii);
+            String currentJarFileName = currentJar.getJarFileName();
             resultSet.add(currentJarFileName);
             if(!exceptionJars.contains(currentJarFileName))
             {
-                resultSet.addAll(createDependencySet(currentBundle));
+                resultSet.addAll(createDependencySet(currentJar));
             }
         }
         return resultSet;

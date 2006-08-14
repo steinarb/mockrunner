@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 /**
- * Mock implementation of <code>DatSource</code>.
+ * Mock implementation of <code>DataSource</code>.
  */
 public class MockDataSource implements DataSource
 {

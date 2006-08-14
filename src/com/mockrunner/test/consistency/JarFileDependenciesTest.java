@@ -89,9 +89,9 @@ public class JarFileDependenciesTest extends TestCase
     private boolean doFilesContainIllegalDependencies(File srcDir) throws Exception
     {
         Analyzer analyzer = new Analyzer();
-        Jar jarBundle[] = analyzer.analyze(srcDir);
+        Jar jars[] = analyzer.analyze(srcDir);
         JarFileExtractor extractor = new JarFileExtractor(MockrunnerJars.getMockrunnerJars(), MockrunnerJars.getStandardInterfaceJars());
-        Map dependencyMap = extractor.createDependencies(jarBundle);
+        Map dependencyMap = extractor.createDependencies(jars);
         Iterator jarNames = dependencyMap.keySet().iterator();
         boolean failure = false;
         while(jarNames.hasNext())
@@ -102,14 +102,14 @@ public class JarFileDependenciesTest extends TestCase
                 failure = true;
             }
         }
-        Jar filteredBundle[] = extractor.filterBundles(jarBundle);
-        for(int ii = 0; ii < filteredBundle.length; ii++)
+        Jar filteredJars[] = extractor.filter(jars);
+        for(int ii = 0; ii < filteredJars.length; ii++)
         {
-            Jar currentBundle = filteredBundle[ii];
-            List extRefList = currentBundle.getAllUnidentifiableExternallyReferencedPackages();
+            Jar currentJar = filteredJars[ii];
+            List extRefList = currentJar.getAllUnidentifiableExternallyReferencedPackages();
             if(null != extRefList && !extRefList.isEmpty())
             {
-                System.out.println("Unidentifiable dependencies for " + currentBundle.getJarFileName());
+                System.out.println("Unidentifiable dependencies for " + currentJar.getJarFileName());
                 for(int yy = 0; yy < extRefList.size(); yy++)
                 {
                     System.out.println(extRefList.get(yy));
