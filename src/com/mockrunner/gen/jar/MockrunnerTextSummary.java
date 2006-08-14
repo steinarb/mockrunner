@@ -45,9 +45,9 @@ public class MockrunnerTextSummary implements Summary
         {
             Configuration.initialize(packageFilter, jarFilter);
         }
-        Jar[] jarBundle = analyzer.analyze(srcDir);
+        Jar[] jar = analyzer.analyze(srcDir);
         JarFileExtractor extractor = new JarFileExtractor(mockrunnerJars, standardJars);
-        Map dependencyMap = extractor.createDependencies(jarBundle);
+        Map dependencyMap = extractor.createDependencies(jar);
         try
         {
             output(dependencyMap, destFile);

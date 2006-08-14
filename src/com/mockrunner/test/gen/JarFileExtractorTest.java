@@ -34,35 +34,35 @@ public class JarFileExtractorTest extends TestCase
         return jars;
     }
     
-    private JarImpl createEmptyJarBundle(String name)
+    private JarImpl createEmptyJar(String name)
     {
         return new JarImpl(name);
     }
     
-    private JarImpl createJarBundleWithDependencies(String name, String[] dependencies)
+    private JarImpl createJarWithDependencies(String name, String[] dependencies)
     {
-        JarImpl bundle = createEmptyJarBundle(name);
+        JarImpl jar = createEmptyJar(name);
         for(int ii = 0; ii < dependencies.length; ii++)
         {
-            bundle.addOutgoingDependency(createEmptyJarBundle(dependencies[ii]));
+            jar.addOutgoingDependency(createEmptyJar(dependencies[ii]));
         }
-        return bundle;
+        return jar;
     }
     
     public void testFilter()
     {
         JarFileExtractor extractor = getJarFileExtractor(getMainJars(), new ArrayList());
-        Jar[] bundles = new Jar[5];
-        bundles[0] = createEmptyJarBundle("test1.jar");
-        bundles[1] = createEmptyJarBundle("test2.jar");
-        bundles[2] = createEmptyJarBundle("test3.jar");
-        bundles[3] = createEmptyJarBundle("test4.jar");
-        bundles[4] = createEmptyJarBundle("test5.jar");
-        bundles = extractor.filterBundles(bundles);
-        assertEquals(3, bundles.length);
-        assertTrue(bundles[0].getJarFileName().equals("test1.jar"));
-        assertTrue(bundles[1].getJarFileName().equals("test2.jar"));
-        assertTrue(bundles[2].getJarFileName().equals("test3.jar"));
+        Jar[] jars = new Jar[5];
+        jars[0] = createEmptyJar("test1.jar");
+        jars[1] = createEmptyJar("test2.jar");
+        jars[2] = createEmptyJar("test3.jar");
+        jars[3] = createEmptyJar("test4.jar");
+        jars[4] = createEmptyJar("test5.jar");
+        jars = extractor.filter(jars);
+        assertEquals(3, jars.length);
+        assertTrue(jars[0].getJarFileName().equals("test1.jar"));
+        assertTrue(jars[1].getJarFileName().equals("test2.jar"));
+        assertTrue(jars[2].getJarFileName().equals("test3.jar"));
     }
     
     public void testEmpty()
@@ -75,11 +75,11 @@ public class JarFileExtractorTest extends TestCase
     public void testNoDependencies()
     {
         JarFileExtractor extractor = getJarFileExtractor(getMainJars(), new ArrayList());
-        Jar[] bundles = new Jar[3];
-        bundles[0] = createEmptyJarBundle("test1.jar");
-        bundles[1] = createEmptyJarBundle("test2.jar");
-        bundles[2] = createEmptyJarBundle("test3.jar");
-        Map dependencies = extractor.createDependencies(bundles);
+        Jar[] jars = new Jar[3];
+        jars[0] = createEmptyJar("test1.jar");
+        jars[1] = createEmptyJar("test2.jar");
+        jars[2] = createEmptyJar("test3.jar");
+        Map dependencies = extractor.createDependencies(jars);
         assertEquals(3, dependencies.size());
         assertTrue(((Set)dependencies.get("test1.jar")).isEmpty());
         assertTrue(((Set)dependencies.get("test2.jar")).isEmpty());
@@ -89,28 +89,28 @@ public class JarFileExtractorTest extends TestCase
     public void testDependencies()
     {
         JarFileExtractor extractor = getJarFileExtractor(getMainJars(), new ArrayList());
-        Jar[] bundles = new Jar[1];
-        bundles[0] = createJarBundleWithDependencies("test1.jar", new String[] {"1", "2", "3"});
-        Map dependencies = extractor.createDependencies(bundles);
+        Jar[] jars = new Jar[1];
+        jars[0] = createJarWithDependencies("test1.jar", new String[] {"1", "2", "3"});
+        Map dependencies = extractor.createDependencies(jars);
         assertEquals(1, dependencies.size());
-        Set jars = (Set)dependencies.get("test1.jar");
-        assertEquals(3, jars.size());
-        assertTrue(jars.contains("1"));
-        assertTrue(jars.contains("2"));
-        assertTrue(jars.contains("3"));
+        Set jarSet = (Set)dependencies.get("test1.jar");
+        assertEquals(3, jarSet.size());
+        assertTrue(jarSet.contains("1"));
+        assertTrue(jarSet.contains("2"));
+        assertTrue(jarSet.contains("3"));
     }
     
     public void testRecursiveDependencies()
     {
         JarFileExtractor extractor = getJarFileExtractor(getMainJars(), new ArrayList());
-        JarImpl bundle1 = createEmptyJarBundle("test1.jar");
-        JarImpl nested1 = createJarBundleWithDependencies("nested1.jar", new String[] {"1", "2", "3"});
-        JarImpl nested2 = createJarBundleWithDependencies("nested2.jar", new String[] {"4", "5", "6"});
-        bundle1.addOutgoingDependency(nested1);
-        bundle1.addOutgoingDependency(nested2);
-        JarImpl bundle2 = createJarBundleWithDependencies("test2.jar", new String[] {"7", "8", "9"});
-        Jar[] bundles = new Jar[] {bundle1, bundle2};
-        Map dependencies = extractor.createDependencies(bundles);
+        JarImpl jar1 = createEmptyJar("test1.jar");
+        JarImpl nested1 = createJarWithDependencies("nested1.jar", new String[] {"1", "2", "3"});
+        JarImpl nested2 = createJarWithDependencies("nested2.jar", new String[] {"4", "5", "6"});
+        jar1.addOutgoingDependency(nested1);
+        jar1.addOutgoingDependency(nested2);
+        JarImpl jar2 = createJarWithDependencies("test2.jar", new String[] {"7", "8", "9"});
+        Jar[] jars = new Jar[] {jar1, jar2};
+        Map dependencies = extractor.createDependencies(jars);
         assertEquals(2, dependencies.size());
         Set jars1 = (Set)dependencies.get("test1.jar");
         assertEquals(8, jars1.size());
@@ -128,7 +128,7 @@ public class JarFileExtractorTest extends TestCase
         assertTrue(jars2.contains("8"));
         assertTrue(jars2.contains("9"));
         extractor = getJarFileExtractor(getMainJars(), getExceptionJars());
-        dependencies = extractor.createDependencies(bundles);
+        dependencies = extractor.createDependencies(jars);
         assertEquals(2, dependencies.size());
         jars1 = (Set)dependencies.get("test1.jar");
         assertEquals(5, jars1.size());
