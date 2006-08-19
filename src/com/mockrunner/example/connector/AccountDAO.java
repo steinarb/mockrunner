@@ -28,7 +28,7 @@ public class AccountDAO
         try
         {
             InitialContext context = new InitialContext();
-            ConnectionFactory connectionFactory = (ConnectionFactory)context.lookup("java:/ra/db/ConnectionFactory");
+            ConnectionFactory connectionFactory = (ConnectionFactory)context.lookup("java:ra/db/ConnectionFactory");
             connection = connectionFactory.getConnection();
             Interaction interaction = connection.createInteraction();
             CCIInteractionSpec spec = new CCIInteractionSpec();

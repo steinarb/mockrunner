@@ -33,7 +33,7 @@ public class PrintSessionBeanTest extends JMSTestCaseAdapter
         bean = (PrintSession)ejbModule.createBean("com/mockrunner/example/PrintSession");
         QueueConnectionFactory factory = getJMSMockObjectFactory().getMockQueueConnectionFactory();
         Queue queue = getDestinationManager().createQueue("testQueue");
-        ejbModule.deployMessageBean("java:/ConnectionFactory", "queue/testQueue", factory, queue, new PrintMessageDrivenBean());
+        ejbModule.deployMessageBean("java:ConnectionFactory", "queue/testQueue", factory, queue, new PrintMessageDrivenBean());
     }
     
     //The following commented out setUp method is an alternative approach to
@@ -47,7 +47,7 @@ public class PrintSessionBeanTest extends JMSTestCaseAdapter
     {
         super.setUp();
         ejbModule = createEJBTestModule();
-        ejbModule.bindToContext("java:/ConnectionFactory", getJMSMockObjectFactory().getMockQueueConnectionFactory());
+        ejbModule.bindToContext("java:ConnectionFactory", getJMSMockObjectFactory().getMockQueueConnectionFactory());
         Queue queue = getDestinationManager().createQueue("testQueue");
         ejbModule.bindToContext("queue/testQueue", queue);
         registerTestMessageListenerForQueue("testQueue", new PrintMessageDrivenBean());

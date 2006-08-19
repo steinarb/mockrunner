@@ -27,7 +27,7 @@ import javax.sql.DataSource;
  *                   res-sharing-scope="Shareable"
  * 
  * @jboss:resource-manager res-man-name="jdbc/MySQLDB"
- *                         res-man-jndi-name="java:/MySQLDB"
+ *                         res-man-jndi-name="java:MySQLDB"
  */
 /**
  * This simple example EJB can be used to write

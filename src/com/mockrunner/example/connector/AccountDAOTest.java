@@ -32,7 +32,7 @@ public class AccountDAOTest extends ConnectorTestCaseAdapter
     {
         super.setUp();
         ejbModule = createEJBTestModule();
-        ejbModule.bindToContext("java:/ra/db/ConnectionFactory", getConnectorMockObjectFactory().getMockConnectionFactory());
+        ejbModule.bindToContext("java:ra/db/ConnectionFactory", getConnectorMockObjectFactory().getMockConnectionFactory());
         dao = new AccountDAO();
     }
     
