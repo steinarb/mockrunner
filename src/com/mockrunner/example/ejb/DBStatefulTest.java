@@ -20,7 +20,7 @@ public class DBStatefulTest extends EJBTestCaseAdapter
         setInterfacePackage("com.mockrunner.example.ejb.interfaces");
         //true = stateful, null = no TransactionPolicy = BMT
         deploySessionBean("com/mockrunner/example/DBStateful", DBStatefulBean.class, true, null);
-        bindToContext("java:/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
+        bindToContext("java:MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
         bean = (DBStateful)createBean("com/mockrunner/example/DBStateful");
     }
     

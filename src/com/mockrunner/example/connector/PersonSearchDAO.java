@@ -26,7 +26,7 @@ public class PersonSearchDAO
         try
         {
             InitialContext context = new InitialContext();
-            connectionFactory = (ConnectionFactory)context.lookup("java:/ra/cics/ConnectionFactory");
+            connectionFactory = (ConnectionFactory)context.lookup("java:ra/cics/ConnectionFactory");
         } 
         catch(NamingException exc)
         {

@@ -32,7 +32,7 @@ public class PersonSearchDAOTest extends ConnectorTestCaseAdapter
     {
         super.setUp();
         ejbModule = createEJBTestModule();
-        ejbModule.bindToContext("java:/ra/cics/ConnectionFactory", getConnectorMockObjectFactory().getMockConnectionFactory());
+        ejbModule.bindToContext("java:ra/cics/ConnectionFactory", getConnectorMockObjectFactory().getMockConnectionFactory());
         dao = new PersonSearchDAO();
     }
     

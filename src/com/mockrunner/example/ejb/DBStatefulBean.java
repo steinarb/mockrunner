@@ -55,7 +55,7 @@ public class DBStatefulBean implements SessionBean
         try
         {
             InitialContext context = new InitialContext();
-            DataSource dataSource = (DataSource)context.lookup("java:/MySQLDB");
+            DataSource dataSource = (DataSource)context.lookup("java:MySQLDB");
             connection = dataSource.getConnection();
             statement = connection.createStatement();
             statement.execute(sql);
