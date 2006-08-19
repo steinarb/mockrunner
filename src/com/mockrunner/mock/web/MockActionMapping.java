@@ -100,9 +100,4 @@ public class MockActionMapping extends ActionMapping
     {
         return new MockActionForward(getInput(), getInput(), false);
     }
-
-    public String toString()
-    {
-        return "ActionConfig[path=" + getPath() + ",name=" + getName() + ",scope=" + getScope() + ",type=" + getType();
-    }
 }
