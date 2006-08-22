@@ -224,7 +224,7 @@ public class StringUtil
     
     /**
      * Returns how many times <code>string</code> contains
-     * <code>other</coder>.
+     * <code>other</code>.
      * @param string the string to search
      * @param other the string that is searched
      * @return the number of occurences
