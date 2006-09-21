@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponseWrapper;
 
 import org.apache.struts.Globals;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -53,10 +52,10 @@ public class ActionTestModuleTest extends BaseTestCase
     private ActionErrors createTestActionErrors()
     {
         ActionErrors errors = new ActionErrors();
-        ActionError error1 = new ActionError("key1");
+        ActionMessage error1 = new ActionMessage("key1");
         ActionMessage error2 = new ActionMessage("key2", new String[]{"value1" , "value2"});
         ActionMessage error3 = new ActionMessage("key3", "value");
-        errors.add(ActionErrors.GLOBAL_ERROR, error1);
+        errors.add(ActionMessages.GLOBAL_MESSAGE, error1);
         errors.add(ActionMessages.GLOBAL_MESSAGE, error2);
         errors.add(ActionMessages.GLOBAL_MESSAGE, error3);
         return errors;
@@ -215,9 +214,9 @@ public class ActionTestModuleTest extends BaseTestCase
     {
         ActionErrors theErrors1 = createTestActionErrors();
         ActionErrors theErrors2 = new ActionErrors();
-        ActionError error1 = new ActionError("key4");
+        ActionMessage error1 = new ActionMessage("key4");
         ActionMessage error2 = new ActionMessage("key5", new String[]{"value1" , "value2"});
-        theErrors2.add(ActionErrors.GLOBAL_ERROR, error1);
+        theErrors2.add(ActionMessages.GLOBAL_MESSAGE, error1);
         theErrors2.add("abc", error2);
         module.setActionErrors(theErrors1);
         module.setActionErrorsToSession(theErrors2);
@@ -657,10 +656,10 @@ public class ActionTestModuleTest extends BaseTestCase
     public void testVerifyActionErrorProperty()
     {
         ActionErrors errors = new ActionErrors();
-        ActionError error1 = new ActionError("error1");
-        ActionError error2 = new ActionError("error2"); 
+        ActionMessage error1 = new ActionMessage("error1");
+        ActionMessage error2 = new ActionMessage("error2"); 
         errors.add("property", error1);
-        errors.add(ActionErrors.GLOBAL_ERROR, error2);
+        errors.add(ActionMessages.GLOBAL_MESSAGE, error2);
         module.setActionErrors(errors);
         module.verifyActionErrorProperty("error1", "property");
         try
@@ -672,7 +671,7 @@ public class ActionTestModuleTest extends BaseTestCase
         {
             //should throw exception
         }
-        module.verifyActionErrorProperty("error2", ActionErrors.GLOBAL_ERROR);
+        module.verifyActionErrorProperty("error2", ActionMessages.GLOBAL_MESSAGE);
         module.setActionErrors(null);
         module.setActionErrorsToSession(errors);
         module.verifyActionErrorProperty("error1", "property");
@@ -1268,7 +1267,7 @@ public class ActionTestModuleTest extends BaseTestCase
             ActionErrors errors = new ActionErrors();
             if(!validationOk)
             {
-                errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("testkey"));
+                errors.add(ActionMessages.GLOBAL_MESSAGE, new ActionMessage("testkey"));
             }
             return errors;
         }
