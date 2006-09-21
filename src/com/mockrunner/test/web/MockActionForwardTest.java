@@ -10,12 +10,11 @@ public class MockActionForwardTest extends TestCase
 {
     public void testCopyConstructor()
     {
-        ActionForward forward = new ActionForward("name", "path", true, false);
+        ActionForward forward = new ActionForward("name", "path", true);
         MockActionForward mockForward = new MockActionForward(forward);
         assertEquals("name", mockForward.getName());
         assertEquals("path", mockForward.getPath());
         assertTrue(mockForward.getRedirect());
-        assertFalse(mockForward.getContextRelative());
     }
     
     public void testVerifyNameAndPath()

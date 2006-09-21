@@ -1,7 +1,9 @@
 package com.mockrunner.struts;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -242,7 +244,7 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public void setDataSource(DataSource dataSource)
     {
-        setDataSource(Globals.DATA_SOURCE_KEY, dataSource);
+        setDataSource("org.apache.struts.action.DATA_SOURCE", dataSource);
     }
     
     /**
@@ -310,13 +312,14 @@ public class ActionTestModule extends HTMLOutputModule
             String file = resourcesFiles[ii];
             try
             {
-                FileInputStream stream = new FileInputStream(file);
+                File streamFile = new File(file);
+                FileInputStream stream = new FileInputStream(streamFile);
                 byte[] fileData = StreamUtil.getStreamAsByteArray(stream);
                 mockFactory.getMockServletContext().setResourceAsStream(file, fileData);
+                mockFactory.getMockServletContext().setResource(file, streamFile.toURL());
             }
-            catch(FileNotFoundException exc)
+            catch(Exception exc)
             {
-                log.error("File not found", exc);
                 throw new NestedApplicationException(exc);
             }
         }

@@ -1,5 +1,7 @@
 package com.mockrunner.mock.web;
 
+import java.lang.reflect.Method;
+
 import org.apache.struts.action.ActionForward;
 
 /**
@@ -58,7 +60,20 @@ public class MockActionForward extends MockForwardConfig
         setName(copyMe.getName());
         setPath(copyMe.getPath());
         setRedirect(copyMe.getRedirect());
-        setContextRelative(copyMe.getContextRelative());
+        try
+        {
+            Method getContextRelativeMethod = copyMe.getClass().getMethod("getContextRelative", null);
+            Boolean value = (Boolean)getContextRelativeMethod.invoke(copyMe, null);
+            if(null != value)
+            {
+                setContextRelative(value.booleanValue());
+            }
+        } 
+        catch(Exception exc)
+        {
+            //Struts 1.3 does not define the method "getContextRelative"
+            //this hack is necessary to avoid different versions for Struts 1.2 and 1.3
+        }
     }
     
     public boolean verifyName(String name)
