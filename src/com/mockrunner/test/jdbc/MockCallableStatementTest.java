@@ -186,6 +186,20 @@ public class MockCallableStatementTest extends BaseTestCase
         assertTrue(testResultSet3.isClosed());
     }
     
+    public void testCurrentResultSetsCloseOnExecute() throws Exception
+    {
+        callableStatementHandler.prepareResultSets("call", new MockResultSet[] {resultSet1, resultSet2}, new HashMap());
+        MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("CALL");
+        statement.setString("param1", "value1");
+        statement.executeQuery();
+        MockResultSet testResultSet1 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults(Statement.KEEP_CURRENT_RESULT);
+        MockResultSet testResultSet2 = (MockResultSet)statement.getResultSet();
+        statement.execute();
+        assertTrue(testResultSet1.isClosed());
+        assertTrue(testResultSet2.isClosed());
+    }
+    
     public void testPrepareResultSetNullParameter() throws Exception
     {
         Map params = new HashMap();

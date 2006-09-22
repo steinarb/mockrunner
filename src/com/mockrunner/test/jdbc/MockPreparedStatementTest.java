@@ -235,6 +235,21 @@ public class MockPreparedStatementTest extends BaseTestCase
         assertFalse(testResultSet3.isClosed());
     }
     
+    public void testCurrentResultSetCloseOnExecute() throws Exception
+    {
+        Map parameters = new HashMap();
+        parameters.put(new Integer(1), new Long(1));
+        parameters.put(new Integer(2), new Long(2));
+        preparedStatementHandler.prepareResultSet("select xyz", resultSet1);
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("select xyz from x where value = ? and y = ?");
+        statement.setLong(1, 1);
+        statement.setLong(2, 2);
+        MockResultSet testResultSet1 = (MockResultSet)statement.executeQuery();
+        statement.setString(3, "3");
+        statement.executeUpdate();
+        assertTrue(testResultSet1.isClosed());
+    }
+    
     public void testPrepareResultSetsStatementSet() throws Exception
     {
         preparedStatementHandler.prepareResultSet("select xyz", resultSet1);
