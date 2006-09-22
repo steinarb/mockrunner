@@ -151,6 +151,22 @@ public class MockStatementTest extends BaseTestCase
         assertTrue(testResultSet3.isClosed());
     }
     
+    public void testCurrentResultSetsCloseOnExecute() throws Exception
+    {
+        statementHandler.prepareResultSets("select test", new MockResultSet[] {resultSet1, resultSet2, resultSet3});
+        MockStatement statement = (MockStatement)connection.createStatement();
+        statement.executeQuery("select test");
+        MockResultSet testResultSet1 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults(Statement.KEEP_CURRENT_RESULT);
+        MockResultSet testResultSet2 = (MockResultSet)statement.getResultSet();
+        statement.getMoreResults(Statement.KEEP_CURRENT_RESULT);
+        MockResultSet testResultSet3 = (MockResultSet)statement.getResultSet();
+        statement.executeQuery("select xyz");
+        assertTrue(testResultSet1.isClosed());
+        assertTrue(testResultSet2.isClosed());
+        assertTrue(testResultSet3.isClosed());
+    }
+    
     public void testPrepareResultSetsStatementSet() throws Exception
     {
         MockResultSet resultSet = new MockResultSet("id");

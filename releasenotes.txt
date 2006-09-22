@@ -3,6 +3,7 @@ mockrunner-0.3.8:
 
 - the TestCaseAdapter classes are abstract now to prevent problems with some
   JUnit test runners
+- current ResultSet is now closed if execute is called
 - refactored Struts test framework to ensure compatibility to Struts 1.3,
   Mockrunner ships with Struts 1.2.9 because Struts 1.3 is not compatible with Java 1.3
   but the Struts test framework can be used with Struts versions 1.1, 1.2 and 1.3

@@ -88,6 +88,7 @@ public class MockStatement implements Statement
     
     protected void setResultSets(ResultSet[] resultSets)
     {
+        closeCurrentResultSets();
         this.currentUpdateCounts = null;
         this.currentResultSets = resultSets;
         this.currentResultSetIndex = 0;
@@ -96,6 +97,7 @@ public class MockStatement implements Statement
     
     protected void setUpdateCounts(int[] updateCounts)
     {
+        closeCurrentResultSets();
         this.currentResultSets = null;
         this.currentUpdateCounts = updateCounts;
         this.currentResultSetIndex = 0;
@@ -158,6 +160,27 @@ public class MockStatement implements Statement
             return results[0];
         }
         return null;
+    }
+    
+    private void closeCurrentResultSets()
+    {
+        if(null != currentResultSets)
+        {
+            for(int ii = 0; ii < currentResultSets.length; ii++)
+            {
+                /*try
+                {
+                    if(null != currentResultSets[ii])
+                    {
+                        currentResultSets[ii].close();
+                    }
+                }*/ 
+                /*catch(SQLException exc)
+                {
+                    throw new NestedApplicationException(exc);
+                }*/
+            }
+        }
     }
 
     public int executeUpdate(String sql) throws SQLException
