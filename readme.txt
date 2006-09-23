@@ -71,7 +71,7 @@ the jar files with "-j2ee1.3" in their name (these files are in lib/j2ee1.3
 directory). If a jar file doesn't have a corresponding "-j2ee1.3"-version, 
 it can be used with J2EE 1.3 and J2EE 1.4. Older J2EE versions, e.g. Servlet API
 2.2, are not supported.
-Mockrunner supports Struts versions 1.1 and 1.2. It's not possible to use Mockrunner 
+Mockrunner supports Struts versions 1.1, 1.2 and 1.3. It's not possible to use Mockrunner 
 with Struts 1.0.
 Each jar file contains a jarversion.txt which lists the JDK and J2EE version
 this jar supports. Please check out this file, if you are in doubt which jar
