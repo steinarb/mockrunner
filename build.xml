@@ -101,7 +101,7 @@
             <include name="**/*" />
             <exclude name="bcel-5.1.jar" />
             <exclude name="jakarta-regexp-1.3.jar" />
-            <exclude name="jaranalyzer-1.0.jar" />
+            <exclude name="jaranalyzer-1.1.jar" />
             <exclude name="ant.jar" />
         </patternset>
         
