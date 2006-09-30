@@ -80,6 +80,16 @@
             <fileset dir="${lib}">
                 <include name="*.jar" />
             </fileset>
+        </path>
+        
+        <path id="classpathjdk1.3.jar">
+            <fileset dir="${lib}">
+                <include name="*.jar" />
+                <exclude name="struts*.jar" />
+            </fileset>
+            <fileset dir="${lib}/old">
+                <include name="struts.jar" />
+            </fileset>
             <fileset dir="${lib}/j2ee1.3">
                 <include name="jboss-jaas.jar" />
             </fileset>
@@ -91,6 +101,22 @@
                 <exclude name="jboss-j2ee.jar" />
                 <exclude name="servlet-api.jar" />
                 <exclude name="jsp-api.jar" />
+            </fileset>
+            <fileset dir="${lib}/j2ee1.3">
+                <include name="*.jar" />
+            </fileset>
+        </path>
+        
+        <path id="classpathjdk1.3j2ee1.3.jar">
+            <fileset dir="${lib}">
+                <include name="*.jar" />
+                <exclude name="struts*.jar" />
+                <exclude name="jboss-j2ee.jar" />
+                <exclude name="servlet-api.jar" />
+                <exclude name="jsp-api.jar" />
+            </fileset>
+            <fileset dir="${lib}/old">
+                <include name="struts.jar" />
             </fileset>
             <fileset dir="${lib}/j2ee1.3">
                 <include name="*.jar" />
@@ -240,7 +266,7 @@
         <mkdir dir="${buildjdk1.3}" />
         <javac destdir="${buildjdk1.3}" compiler="javac1.3" target="1.2" executable="${java1.3.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
-                <path refid="classpath.jar" />
+                <path refid="classpathjdk1.3.jar" />
             </classpath>
             <src path="${src}/com/mockrunner/base" />
             <src path="${src}/com/mockrunner/servlet" />
@@ -266,7 +292,7 @@
         <mkdir dir="${buildjdk1.3j2ee1.3}" />
         <javac destdir="${buildjdk1.3j2ee1.3}" compiler="javac1.3" target="1.2" executable="${java1.3.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
-                <path refid="classpathj2ee1.3.jar" />
+                <path refid="classpathjdk1.3j2ee1.3.jar" />
             </classpath>
             <src path="${src}/com/mockrunner/base" />
             <src path="${src}/com/mockrunner/servlet" />

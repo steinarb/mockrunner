@@ -64,8 +64,7 @@ environment in future releases.
 Mockrunner requires at least Java 1.3 to run. If you are using Java 1.3
 you have to use the jar files with "-jdk1.3" in their name. If a jar
 file doesn't have a corresponding "-jdk1.3"-version, it can be used with
-Java 1.3, 1.4 and 1.5. The JDBCTestModule is limited to JDBC API 2.1 if Java 1.3 
-is used. If you are running Java 1.4 or 1.5 you can use JDBC 3.0. 
+Java 1.3, 1.4 and 1.5.
 Mockrunner supports J2EE 1.3 and J2EE 1.4. For J2EE 1.3 you have to use
 the jar files with "-j2ee1.3" in their name (these files are in lib/j2ee1.3
 directory). If a jar file doesn't have a corresponding "-j2ee1.3"-version, 
@@ -117,6 +116,12 @@ http://xml.apache.org/xerces2-j/index.html
 xml-apis.jar
 xercesImpl.jar
 
+Struts 1.3.5:
+http://struts.apache.org
+struts-core-1.3.5.jar
+struts-extras-1.3.5.jar
+struts-taglib-1.3.5.jar
+
 Struts 1.2.9:
 http://struts.apache.org
 struts.jar
@@ -145,10 +150,10 @@ jboss-jaas.jar
 
 Commons:
 http://jakarta.apache.org/commons       
-commons-logging.jar (from Struts 1.2.9 release)
-commons-beanutils.jar (from Struts 1.2.9 release)
-commons-digester.jar (from Struts 1.2.9 release)
-commons-validator.jar (from Struts 1.2.9 release)
+commons-logging-1.0.4.jar (from Struts 1.3.5 release)
+commons-beanutils-1.7.0.jar (from Struts 1.3.5 release)
+commons-digester-1.6.jar (from Struts 1.3.5 release)
+commons-validator-1.3.0.jar (from Struts 1.3.5 release)
 
 MockEJB 0.6 beta2:
 http://mockejb.sourceforge.net
