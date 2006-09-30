@@ -70,7 +70,7 @@ public class MockrunnerJars
         standardInterfaceJars.addAll(standardInterfaceJ2EE14Jars);
         
         strutsJars = new HashSet();
-        strutsJars.add("struts.jar");
+        strutsJars.add("struts-core-1.3.5.jar");
         
         webJ2EEJars = new HashSet();
         webJ2EEJars.add("servlet-api.jar");

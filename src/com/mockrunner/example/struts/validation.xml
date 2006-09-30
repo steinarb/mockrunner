@@ -10,8 +10,8 @@
 
       <form name="/greetings">
          <field property="name" depends="required,minlength">
-         	     <arg0 key="name" resource="false"/>
-         	     <arg1 name="minlength" key="${var:minlength}" resource="false"/>
+         	     <arg key="name" resource="false" position="0"/>
+         	     <arg1 name="minlength" key="${var:minlength}" resource="false" position="1"/>
                  <var>
                      <var-name>minlength</var-name>
                      <var-value>5</var-value>
