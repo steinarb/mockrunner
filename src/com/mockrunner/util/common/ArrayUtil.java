@@ -29,22 +29,6 @@ public class ArrayUtil
     }
     
     /**
-     * Returns a <code>List</code> containing the objects from the
-     * specified array.
-     * @param data the data
-     * @return the <code>List</code> with the objects
-     */
-    public static List getListFromObjectArray(Object[] data)
-    {
-        ArrayList list = new ArrayList(data.length);
-        for(int ii = 0; ii < data.length; ii++)
-        {
-            list.add(data[ii]);
-        }
-        return list;
-    }
-    
-    /**
      * Returns a byte array containing the bytes from the <code>List</code>.
      * The <code>List</code> must contain <code>Byte</code> objects.
      * <code>null</code> entries in the <code>List</code> are

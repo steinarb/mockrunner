@@ -21,6 +21,7 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Iterator;
@@ -30,7 +31,6 @@ import java.util.Map;
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.jdbc.ParameterUtil;
 import com.mockrunner.jdbc.SQLUtil;
-import com.mockrunner.util.common.ArrayUtil;
 import com.mockrunner.util.common.CaseAwareMap;
 import com.mockrunner.util.common.CollectionUtil;
 import com.mockrunner.util.common.StreamUtil;
@@ -269,7 +269,7 @@ public class MockResultSet implements ResultSet, Cloneable
      */
     public void addRow(Object[] values)
     {
-        List valueList = ArrayUtil.getListFromObjectArray(values);
+        List valueList = Arrays.asList(values);
         addRow(valueList);
     }
     
@@ -380,7 +380,7 @@ public class MockResultSet implements ResultSet, Cloneable
      */
     public void addColumn(String columnName, Object[] values)
     {
-        List columnValues = ArrayUtil.getListFromObjectArray(values);
+        List columnValues = Arrays.asList(values);
         addColumn(columnName, columnValues);
     }
     

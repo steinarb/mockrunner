@@ -2,6 +2,7 @@ package com.mockrunner.jdbc;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -390,7 +391,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public void prepareResultSet(String sql, MockResultSet resultSet, Object[] parameters)
     {
-        prepareResultSet(sql, resultSet, ArrayUtil.getListFromObjectArray(parameters));
+        prepareResultSet(sql, resultSet, Arrays.asList(parameters));
     }
     
     /**
@@ -412,7 +413,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public void prepareResultSets(String sql, MockResultSet[] resultSets, Object[] parameters)
     {
-        prepareResultSets(sql, resultSets, ArrayUtil.getListFromObjectArray(parameters));
+        prepareResultSets(sql, resultSets, Arrays.asList(parameters));
     }
 
     /**
@@ -599,7 +600,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public void prepareThrowsSQLException(String sql, SQLException exc, Object[] parameters)
     {
-        prepareThrowsSQLException(sql, exc, ArrayUtil.getListFromObjectArray(parameters));
+        prepareThrowsSQLException(sql, exc, Arrays.asList(parameters));
     }
     
     /**
@@ -669,7 +670,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public void prepareUpdateCount(String sql, int updateCount, Object[] parameters)
     {
-        prepareUpdateCount(sql, updateCount, ArrayUtil.getListFromObjectArray(parameters));
+        prepareUpdateCount(sql, updateCount, Arrays.asList(parameters));
     }
     
     /**
@@ -691,7 +692,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public void prepareUpdateCounts(String sql, int[] updateCounts, Object[] parameters)
     {
-        prepareUpdateCounts(sql, updateCounts, ArrayUtil.getListFromObjectArray(parameters));
+        prepareUpdateCounts(sql, updateCounts, Arrays.asList(parameters));
     }
 
     /**
@@ -800,7 +801,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public void prepareGeneratedKeys(String sql, MockResultSet generatedKeysResult, Object[] parameters)
     {
-        prepareGeneratedKeys(sql, generatedKeysResult, ArrayUtil.getListFromObjectArray(parameters));
+        prepareGeneratedKeys(sql, generatedKeysResult, Arrays.asList(parameters));
     }
     
     /**

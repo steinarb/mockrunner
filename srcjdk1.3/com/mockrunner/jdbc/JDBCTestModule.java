@@ -4,6 +4,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -17,7 +18,6 @@ import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
 //import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
-import com.mockrunner.util.common.ArrayUtil;
 import com.mockrunner.util.common.StringUtil;
 
 /**
@@ -1358,7 +1358,7 @@ public class JDBCTestModule
      */
     public void verifyResultSetRow(MockResultSet resultSet, int number, Object[] rowData)
     {
-        List dataList = ArrayUtil.getListFromObjectArray(rowData);
+        List dataList = Arrays.asList(rowData);
         verifyResultSetRow(resultSet, number, dataList);
     }
     
@@ -1394,7 +1394,7 @@ public class JDBCTestModule
      */
     public void verifyResultSetRow(String id, int number, Object[] rowData)
     {
-        List dataList = ArrayUtil.getListFromObjectArray(rowData);
+        List dataList = Arrays.asList(rowData);
         verifyResultSetRow(id, number, dataList);
     }
     
@@ -1437,7 +1437,7 @@ public class JDBCTestModule
      */
     public void verifyResultSetColumn(MockResultSet resultSet, int number, Object[] columnData)
     {
-        List dataList = ArrayUtil.getListFromObjectArray(columnData);
+        List dataList = Arrays.asList(columnData);
         verifyResultSetColumn(resultSet, number, dataList);
     }
 
@@ -1473,7 +1473,7 @@ public class JDBCTestModule
      */
     public void verifyResultSetColumn(String id, int number, Object[] columnData)
     {
-        List dataList = ArrayUtil.getListFromObjectArray(columnData);
+        List dataList = Arrays.asList(columnData);
         verifyResultSetColumn(id, number, dataList);
     }
     
@@ -1516,7 +1516,7 @@ public class JDBCTestModule
      */
     public void verifyResultSetColumn(MockResultSet resultSet, String name, Object[] columnData)
     {
-        List dataList = ArrayUtil.getListFromObjectArray(columnData);
+        List dataList = Arrays.asList(columnData);
         verifyResultSetColumn(resultSet, name, dataList);
     }
 
@@ -1552,7 +1552,7 @@ public class JDBCTestModule
      */
     public void verifyResultSetColumn(String id, String name, Object[] columnData)
     {
-        List dataList = ArrayUtil.getListFromObjectArray(columnData);
+        List dataList = Arrays.asList(columnData);
         verifyResultSetColumn(id, name, dataList);
     }
     
