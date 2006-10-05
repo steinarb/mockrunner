@@ -1,11 +1,10 @@
 package com.mockrunner.jdbc;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.mockrunner.util.common.ArrayUtil;
 
 /**
  * Abstract base class for all statement types
@@ -141,7 +140,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      */
     public void prepareOutParameter(String sql, Map outParameters, Object[] parameters)
     {
-        prepareOutParameter(sql, outParameters, ArrayUtil.getListFromObjectArray(parameters));
+        prepareOutParameter(sql, outParameters, Arrays.asList(parameters));
     }
     
     /**

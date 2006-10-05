@@ -867,7 +867,6 @@ public class ActionTestModuleTest extends BaseTestCase
         module.actionPerform(testAction);
         assertEquals(resources1, testAction.getTestResources());
         assertEquals(resources2, testAction.getTestResourcesForKey());
-        System.out.println(testAction.getTestLocale());
         assertEquals(Locale.TRADITIONAL_CHINESE, testAction.getTestLocale());
     }
     
