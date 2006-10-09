@@ -131,8 +131,8 @@ http://www.junit.org
 junit.jar
 
 J2EE 1.4:
-Tomcat 5.0.28:
-http://jakarta.apache.org/tomcat
+Tomcat 5.5.20:
+http://tomcat.apache.org
 servlet-api.jar
 jsp-api.jar
 JBoss 4.0.1sp1:
@@ -141,7 +141,7 @@ jboss-j2ee.jar
 
 J2EE 1.3:
 Tomcat 4.1.31:
-http://jakarta.apache.org/tomcat
+http://tomcat.apache.org
 servlet.jar
 JBoss 3.2.3:
 http://www.jboss.org
