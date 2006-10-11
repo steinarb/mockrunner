@@ -855,7 +855,7 @@ public class JDBCTestModuleTest extends TestCase
 		assertEquals(0, callableStatementMap1.size());
 		Map callableStatementMap2 = (Map)((ParameterSets)parameterMap.get("{call setData(?, ?, ?, ?)}")).getParameterSet(0);
 		assertEquals(1, callableStatementMap2.size());
-		assertEquals(new Boolean(false), callableStatementMap2.get("name"));
+		assertEquals(Boolean.FALSE, callableStatementMap2.get("name"));
     }
     
     public void testGetExecutedSQLStatementParameterSets() throws Exception

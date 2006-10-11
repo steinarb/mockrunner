@@ -143,8 +143,8 @@ public class JDKVersionGenerator extends AbstractVersionGenerator
         polyResultSetProc.addBlock("public void updateArray(String columnName, Array x) throws SQLException");
         jdbcFiles.put("com.mockrunner.mock.jdbc.PolyResultSet", polyResultSetProc);
         
-        jdbcFiles.put("com.mockrunner.mock.jdbc.MockSavepoint", new Boolean(false));
-        jdbcFiles.put("com.mockrunner.mock.jdbc.MockParameterMetaData", new Boolean(false));
+        jdbcFiles.put("com.mockrunner.mock.jdbc.MockSavepoint", Boolean.FALSE);
+        jdbcFiles.put("com.mockrunner.mock.jdbc.MockParameterMetaData", Boolean.FALSE);
         
         return jdbcFiles;
     }
