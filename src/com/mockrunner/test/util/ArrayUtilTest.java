@@ -159,9 +159,9 @@ public class ArrayUtilTest extends TestCase
         boolean[] booleanArray = new boolean[] {true, true, false};
         Object[] booleanWrappedArray = ArrayUtil.convertToObjectArray(booleanArray);
         assertTrue(booleanWrappedArray instanceof Boolean[]);
-        assertEquals(new Boolean(true), booleanWrappedArray[0]);
-        assertEquals(new Boolean(true), booleanWrappedArray[1]);
-        assertEquals(new Boolean(false), booleanWrappedArray[2]);
+        assertEquals(Boolean.TRUE, booleanWrappedArray[0]);
+        assertEquals(Boolean.TRUE, booleanWrappedArray[1]);
+        assertEquals(Boolean.FALSE, booleanWrappedArray[2]);
     }
     
     public void testConvertToPrimitiveArray()
@@ -174,7 +174,7 @@ public class ArrayUtilTest extends TestCase
         Float[] floatArray = new Float[] {new Float(1)};
         float[] floatUnwrappedArray = (float[])ArrayUtil.convertToPrimitiveArray(floatArray);
         assertEquals(1.0, floatUnwrappedArray[0], 0);
-        Boolean[] booleanArray = new Boolean[] {new Boolean(true), new Boolean(false)};
+        Boolean[] booleanArray = new Boolean[] {Boolean.TRUE, Boolean.FALSE};
         boolean[] booleanUnwrappedArray = (boolean[])ArrayUtil.convertToPrimitiveArray(booleanArray);
         assertTrue(booleanUnwrappedArray[0]);
         assertFalse(booleanUnwrappedArray[1]);

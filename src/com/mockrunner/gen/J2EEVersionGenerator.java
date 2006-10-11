@@ -128,14 +128,14 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
         tagUtilProc.addBlock("else if(pageContext instanceof JspContext)");
         webFiles.put("com.mockrunner.tag.TagUtil", tagUtilProc);
         
-        webFiles.put("com.mockrunner.tag.DynamicAttribute", new Boolean(false));
-        webFiles.put("com.mockrunner.tag.NestedSimpleTag", new Boolean(false));
+        webFiles.put("com.mockrunner.tag.DynamicAttribute", Boolean.FALSE);
+        webFiles.put("com.mockrunner.tag.NestedSimpleTag", Boolean.FALSE);
         
-        webFiles.put("com.mockrunner.mock.web.MockVariableResolver", new Boolean(false));
-        webFiles.put("com.mockrunner.mock.web.MockFunctionMapper", new Boolean(false));
-        webFiles.put("com.mockrunner.mock.web.MockJspFragment", new Boolean(false));
-        webFiles.put("com.mockrunner.mock.web.MockExpression", new Boolean(false));
-        webFiles.put("com.mockrunner.mock.web.MockExpressionEvaluator", new Boolean(false));
+        webFiles.put("com.mockrunner.mock.web.MockVariableResolver", Boolean.FALSE);
+        webFiles.put("com.mockrunner.mock.web.MockFunctionMapper", Boolean.FALSE);
+        webFiles.put("com.mockrunner.mock.web.MockJspFragment", Boolean.FALSE);
+        webFiles.put("com.mockrunner.mock.web.MockExpression", Boolean.FALSE);
+        webFiles.put("com.mockrunner.mock.web.MockExpressionEvaluator", Boolean.FALSE);
         
         return webFiles;
     }

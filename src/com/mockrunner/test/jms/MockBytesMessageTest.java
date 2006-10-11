@@ -92,7 +92,7 @@ public class MockBytesMessageTest extends TestCase
         message.reset();
         assertEquals(1.2, message.readDouble(), 0);
         message = new MockBytesMessage();
-        message.writeObject(new Boolean(true));
+        message.writeObject(Boolean.TRUE);
         message.writeObject(new Long(1));
         message.writeObject("xyz");
         message.writeObject(new byte[] { 1 });

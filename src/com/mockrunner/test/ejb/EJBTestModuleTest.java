@@ -79,14 +79,14 @@ public class EJBTestModuleTest extends TestCase
         assertTrue(bean instanceof TestSession);
         bean = ejbModule.createBean("com/MyLookupTest", new Object[] {new Integer(1)});
         assertTrue(bean instanceof TestSession);
-        bean = ejbModule.createBean("com/MyLookupTest", new Object[] {new Integer(1), new Boolean(true)});
+        bean = ejbModule.createBean("com/MyLookupTest", new Object[] {new Integer(1), Boolean.TRUE});
         assertTrue(bean instanceof TestSession);
-        bean = ejbModule.createBean("com/MyLookupTest", "createWithPostfix", new Object[] {new Integer(1), new Boolean(true)});
+        bean = ejbModule.createBean("com/MyLookupTest", "createWithPostfix", new Object[] {new Integer(1), Boolean.TRUE});
         assertTrue(bean instanceof TestSession);
-        assertNull(ejbModule.createBean("com/MyLookupTest", "createWithPostfiy", new Object[] {new Integer(1), new Boolean(true)}));
+        assertNull(ejbModule.createBean("com/MyLookupTest", "createWithPostfiy", new Object[] {new Integer(1), Boolean.TRUE}));
         try
         {
-            ejbModule.createBean("com/MyLookupTestTest", new Object[] {new Boolean(true), new Integer(1)});
+            ejbModule.createBean("com/MyLookupTestTest", new Object[] {Boolean.TRUE, new Integer(1)});
             fail();
         }
         catch(RuntimeException exc)

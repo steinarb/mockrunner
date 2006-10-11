@@ -190,7 +190,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         statementHandler.prepareReturnsResultSet("select.*", false);
         assertNull(statementHandler.getReturnsResultSet("select abc"));
         statementHandler.setUseRegularExpressions(true);
-        assertEquals(new Boolean(false), statementHandler.getReturnsResultSet("select abc"));
+        assertEquals(Boolean.FALSE, statementHandler.getReturnsResultSet("select abc"));
     }
     
     public void testGetThrowsSQLException()

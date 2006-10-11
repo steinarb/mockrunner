@@ -295,7 +295,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
 		callableStatement.execute();
 		parameterMap = (Map)callableStatementHandler.getParametersForExecutedStatement("select").getParameterSet(0);
 		assertEquals(1, parameterMap.size());
-		assertEquals(new Boolean(true), parameterMap.get(new Integer(1)));
+		assertEquals(Boolean.TRUE, parameterMap.get(new Integer(1)));
 	}
 	
 	public void testGetParameterMapForExecutedStatementUpdate() throws Exception
