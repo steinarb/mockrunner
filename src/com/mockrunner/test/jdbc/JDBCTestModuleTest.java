@@ -894,7 +894,7 @@ public class JDBCTestModuleTest extends TestCase
 		assertEquals(1, sets3.getNumberParameterSets());
 		parameterSet1 = sets3.getParameterSet(0);
 		assertEquals(1, parameterSet1.size());
-		assertEquals(new Boolean(false), parameterSet1.get("name"));
+		assertEquals(Boolean.FALSE, parameterSet1.get("name"));
 		ParameterSets sets4 = module.getExecutedSQLStatementParameterSets("{call getData\\(\\?, \\?, \\?, \\?\\)}");
 		assertEquals(1, sets4.getNumberParameterSets());
 		parameterSet1 = sets4.getParameterSet(0);
@@ -1169,7 +1169,7 @@ public class JDBCTestModuleTest extends TestCase
 		module.verifySQLStatementParameterNumber(".call getData.*}", 2, 2);
 		module.setUseRegularExpressions(false);
 		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 1, 1, "xyz");
-		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 1, "name", new Boolean(true));
+		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 1, "name", Boolean.TRUE);
 		HashMap testMap = new HashMap();
 		testMap.put(new Integer(1), "test1");
 		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 0, testMap);
