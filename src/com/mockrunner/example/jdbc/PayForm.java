@@ -39,5 +39,5 @@ public class PayForm extends ActionForm
     public void setCustomerId(String customerId)
     {
         this.customerId = customerId;
-    } 
+    }
 }
