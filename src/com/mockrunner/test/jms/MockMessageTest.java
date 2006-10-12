@@ -91,7 +91,7 @@ public class MockMessageTest extends TestCase
             //should throw Exception
         }
         message.setBooleanProperty("boolean1", true);
-        assertEquals(new Boolean(true), message.getObjectProperty("boolean1"));
+        assertEquals(Boolean.TRUE, message.getObjectProperty("boolean1"));
         assertEquals("true", message.getStringProperty("boolean1"));
         assertEquals(true, message.getBooleanProperty("boolean1"));
         try
