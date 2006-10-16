@@ -212,6 +212,8 @@ public class StringUtilTest extends TestCase
     { 
         assertEquals("test: class java.lang.String", StringUtil.fieldToString("test", String.class));
         assertEquals("test: 3", StringUtil.fieldToString("test", new Integer(3)));
+        assertEquals("test: empty", StringUtil.fieldToString("test", new ArrayList()));
+        assertEquals("test: empty", StringUtil.fieldToString("test", new Object[0]));
         List testList = new ArrayList();
         testList.add(new Integer(5));
         testList.add("abc");
