@@ -133,24 +133,38 @@ public class StringUtil
         else if(field.getClass().isArray())
         {
             int length = Array.getLength(field);
-            for(int ii = 0; ii < length; ii++)
+            if(0 >= length)
             {
-                buffer.append(fieldToString(fieldName + " " + ii, Array.get(field, ii)));
-                if(ii < length - 1)
+                buffer.append(fieldName + ": " + "empty");
+            }
+            else
+            {
+                for(int ii = 0; ii < length; ii++)
                 {
-                    buffer.append("\n");
+                    buffer.append(fieldToString(fieldName + " " + ii, Array.get(field, ii)));
+                    if(ii < length - 1)
+                    {
+                        buffer.append("\n");
+                    }
                 }
             }
         }
         else if(field instanceof Collection)
         {
             List list = new ArrayList((Collection)field);
-            for(int ii = 0; ii < list.size(); ii++)
-            { 
-                buffer.append(fieldToString(fieldName + " " + ii, list.get(ii)));
-                if(ii < list.size() - 1)
-                {
-                    buffer.append("\n");
+            if(0 >= list.size())
+            {
+                buffer.append(fieldName + ": " + "empty");
+            }
+            else
+            {
+                for(int ii = 0; ii < list.size(); ii++)
+                { 
+                    buffer.append(fieldToString(fieldName + " " + ii, list.get(ii)));
+                    if(ii < list.size() - 1)
+                    {
+                        buffer.append("\n");
+                    }
                 }
             }
         }
