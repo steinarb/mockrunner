@@ -95,22 +95,22 @@ public class FileResultSetFactoryTest extends TestCase
         FileResultSetFactory factory = new FileResultSetFactory("src/com/mockrunner/test/jdbc/testtemplateresult.txt");
         factory.setFirstLineContainsColumnNames(true);
         MockResultSet resultSet = factory.create("");
-        doTestResultSetTemplatesDisabled(factory, resultSet);
+        doTestResultSetTemplatesDisabled(resultSet);
         factory.setUseTemplates(true);
         resultSet = factory.create("");
-        doTestResultSetDefaultTemplatesEnabled(factory, resultSet);
+        doTestResultSetDefaultTemplatesEnabled(resultSet);
         Map customMap = new HashMap();
         customMap.put("customMarker", "template1");
         customMap.put("anotherCustomMarker", "template2");
         factory.setTemplateConfiguration("%", customMap);
         resultSet = factory.create("");
-        doTestResultSetCustomTemplatesEnabled(factory, resultSet);
+        doTestResultSetCustomTemplatesEnabled(resultSet);
         factory.setUseTemplates(false);
         resultSet = factory.create("");
-        doTestResultSetTemplatesDisabled(factory, resultSet);
+        doTestResultSetTemplatesDisabled(resultSet);
     }
     
-    private void doTestResultSetTemplatesDisabled(FileResultSetFactory factory, MockResultSet resultSet) throws SQLException
+    private void doTestResultSetTemplatesDisabled(MockResultSet resultSet) throws SQLException
     {
         assertEquals(2, resultSet.getRowCount());
         assertEquals(3, resultSet.getColumnCount());
@@ -124,7 +124,7 @@ public class FileResultSetFactoryTest extends TestCase
         assertEquals("%anotherCustomMarker", resultSet.getObject("TestColumn3"));
     }
     
-    private void doTestResultSetDefaultTemplatesEnabled(FileResultSetFactory factory, MockResultSet resultSet) throws SQLException
+    private void doTestResultSetDefaultTemplatesEnabled(MockResultSet resultSet) throws SQLException
     {
         assertEquals(2, resultSet.getRowCount());
         assertEquals(3, resultSet.getColumnCount());
@@ -138,7 +138,7 @@ public class FileResultSetFactoryTest extends TestCase
         assertEquals("%anotherCustomMarker", resultSet.getObject("TestColumn3"));
     }
     
-    private void doTestResultSetCustomTemplatesEnabled(FileResultSetFactory factory, MockResultSet resultSet) throws SQLException
+    private void doTestResultSetCustomTemplatesEnabled(MockResultSet resultSet) throws SQLException
     {
         assertEquals(2, resultSet.getRowCount());
         assertEquals(3, resultSet.getColumnCount());
