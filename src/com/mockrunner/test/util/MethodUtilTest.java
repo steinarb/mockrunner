@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import junit.framework.TestCase;
 
@@ -159,7 +160,7 @@ public class MethodUtilTest extends TestCase
         Method[][] methods = MethodUtil.getMethodsSortedByInheritanceHierarchy(TestSub3.class);
         assertEquals(5, methods.length);
         assertEquals(2, methods[1].length);
-        assertEquals(5, methods[2].length);
+        assertEquals(6, methods[2].length);
         assertEquals(3, methods[3].length);
         Method method1Super = TestSuper.class.getDeclaredMethod("testMethod1", null);
         Method method2Super = TestSuper.class.getDeclaredMethod("testMethod2", new Class[] { int[].class, String.class});
@@ -168,7 +169,8 @@ public class MethodUtilTest extends TestCase
         Method method1SubNotOverride = TestSub.class.getDeclaredMethod("testMethod1", new Class[] { String.class });
         Method method2SubNotOverride = TestSub.class.getDeclaredMethod("testMethod2", new Class[] { int[].class});
         Method methodSubInterface = TestSub.class.getDeclaredMethod("testInterface", null);
-        Method methodSub2another = TestSub2.class.getDeclaredMethod("anotherMethod", null);
+        Method methodSubtoString = TestSub.class.getDeclaredMethod("toString", null);
+        Method methodSub2another = TestSub2.class.getDeclaredMethod("anotherMethod", null); 
         Method methodSub2anotherProtected = TestSub2.class.getDeclaredMethod("anotherProtectedMethod", null);
         Method methodSub2toString = TestSub2.class.getDeclaredMethod("toString", null);
         assertTrue(Arrays.asList(methods[1]).contains(method1Super));
@@ -178,10 +180,30 @@ public class MethodUtilTest extends TestCase
         assertTrue(Arrays.asList(methods[2]).contains(method1SubNotOverride));
         assertTrue(Arrays.asList(methods[2]).contains(method2SubNotOverride));
         assertTrue(Arrays.asList(methods[2]).contains(methodSubInterface));
+        assertTrue(Arrays.asList(methods[2]).contains(methodSubtoString));
         assertTrue(Arrays.asList(methods[3]).contains(methodSub2another));
         assertTrue(Arrays.asList(methods[3]).contains(methodSub2anotherProtected));
         assertTrue(Arrays.asList(methods[3]).contains(methodSub2toString));
         assertEquals(0, methods[4].length);
+    }
+    
+    public void testGetOverriddenMethods() throws Exception
+    {
+        Method method2Super = TestSuper.class.getDeclaredMethod("testMethod2", new Class[] { int[].class, String.class});
+        Method method1SubOverride = TestSub.class.getDeclaredMethod("testMethod1", null);
+        Method method2SubOverride = TestSub.class.getDeclaredMethod("testMethod2", new Class[] { int[].class, String.class});
+        Method method2SubNotOverride = TestSub.class.getDeclaredMethod("testMethod2", new Class[] { int[].class});
+        Method methodSubtoString = TestSub.class.getDeclaredMethod("toString", null);
+        Method methodSub2another = TestSub2.class.getDeclaredMethod("anotherMethod", null);
+        Method methodSub2toString = TestSub2.class.getDeclaredMethod("toString", null);
+        Method toString = Object.class.getDeclaredMethod("toString", null);
+        Set methods = MethodUtil.getOverriddenMethods(TestSub2.class, new Method[] { method1SubOverride, method2Super, methodSub2another, method2SubNotOverride, toString});
+        assertEquals(5, methods.size());
+        assertTrue(methods.contains(method2Super));
+        assertTrue(methods.contains(method2SubOverride));
+        assertTrue(methods.contains(toString));
+        assertTrue(methods.contains(methodSubtoString));
+        assertTrue(methods.contains(methodSub2toString));
     }
     
     public class Super
@@ -319,6 +341,11 @@ public class MethodUtilTest extends TestCase
         public static void testMethod3(String param)
         {
             
+        }
+        
+        public String toString()
+        {
+            return super.toString();
         }
     }
     
