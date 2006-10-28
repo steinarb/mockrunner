@@ -4,7 +4,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.mockrunner.base.NestedApplicationException;
 
@@ -89,6 +91,41 @@ public class MethodUtil
         if(!method2.getName().equals(method1.getName())) return false;
         if(method1.getDeclaringClass().isInterface()) return false;
         return Arrays.equals(method1.getParameterTypes(), method2.getParameterTypes());
+    }
+    
+    /**
+     * Returns all methods in <code>methods</code> that are overridden in
+     * the specified class hierarchy. The returned <code>Set</code> contains
+     * all overridden methods and all overriding methods.
+     * @param clazz the class hierarchy
+     * @param methods the <code>Set</code> of methods
+     * @return all overridden and overriding methods.
+     */
+    public static Set getOverriddenMethods(Class clazz, Method[] methods)
+    {
+        Method[][] declaredMethods = MethodUtil.getMethodsSortedByInheritanceHierarchy(clazz); 
+        Set overridingMethods = new HashSet();
+        for(int ii = 0; ii < methods.length; ii++)
+        {
+            Method currentAroundInvokeMethod = methods[ii];
+            Set currentOverridingMethods = new HashSet();
+            for(int yy = 0; yy < declaredMethods.length; yy++)
+            {
+                for(int zz = 0; zz < declaredMethods[yy].length; zz++)
+                {
+                    if(MethodUtil.overrides(currentAroundInvokeMethod, declaredMethods[yy][zz]))
+                    {
+                        currentOverridingMethods.add(declaredMethods[yy][zz]);
+                    }
+                }
+            }
+            if(!currentOverridingMethods.isEmpty())
+            {
+                overridingMethods.add(currentAroundInvokeMethod);
+                overridingMethods.addAll(currentOverridingMethods);
+            }
+        }
+        return overridingMethods;
     }
     
     /**
