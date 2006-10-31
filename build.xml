@@ -87,7 +87,7 @@
                 <include name="*.jar" />
                 <exclude name="struts*.jar" />
             </fileset>
-            <fileset dir="${lib}/old">
+            <fileset dir="${lib}/struts1.2">
                 <include name="struts.jar" />
             </fileset>
             <fileset dir="${lib}/j2ee1.3">
@@ -115,7 +115,7 @@
                 <exclude name="servlet-api.jar" />
                 <exclude name="jsp-api.jar" />
             </fileset>
-            <fileset dir="${lib}/old">
+            <fileset dir="${lib}/struts1.2">
                 <include name="struts.jar" />
             </fileset>
             <fileset dir="${lib}/j2ee1.3">
