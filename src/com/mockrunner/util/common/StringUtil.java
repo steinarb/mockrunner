@@ -3,7 +3,9 @@ package com.mockrunner.util.common;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -132,47 +134,85 @@ public class StringUtil
         }
         else if(field.getClass().isArray())
         {
-            int length = Array.getLength(field);
-            if(0 >= length)
-            {
-                buffer.append(fieldName + ": " + "empty");
-            }
-            else
-            {
-                for(int ii = 0; ii < length; ii++)
-                {
-                    buffer.append(fieldToString(fieldName + " " + ii, Array.get(field, ii)));
-                    if(ii < length - 1)
-                    {
-                        buffer.append("\n");
-                    }
-                }
-            }
+            arrayToString(fieldName, field, buffer);
         }
         else if(field instanceof Collection)
         {
-            List list = new ArrayList((Collection)field);
-            if(0 >= list.size())
-            {
-                buffer.append(fieldName + ": " + "empty");
-            }
-            else
-            {
-                for(int ii = 0; ii < list.size(); ii++)
-                { 
-                    buffer.append(fieldToString(fieldName + " " + ii, list.get(ii)));
-                    if(ii < list.size() - 1)
-                    {
-                        buffer.append("\n");
-                    }
-                }
-            }
+            collectionToString(fieldName, field, buffer);
+        }
+        else if(field instanceof Map)
+        {
+            mapToString(fieldName, field, buffer);
         }
         else
         {
             buffer.append(fieldName + ": " + field.toString());
         }
         return buffer.toString();
+    }
+
+    private static void arrayToString(String fieldName, Object field, StringBuffer buffer)
+    {
+        int length = Array.getLength(field);
+        if(0 >= length)
+        {
+            buffer.append(fieldName + ": " + "empty");
+        }
+        else
+        {
+            for(int ii = 0; ii < length; ii++)
+            {
+                buffer.append(fieldToString(fieldName + " " + ii, Array.get(field, ii)));
+                if(ii < length - 1)
+                {
+                    buffer.append("\n");
+                }
+            }
+        }
+    }
+    
+    private static void collectionToString(String fieldName, Object field, StringBuffer buffer)
+    {
+        List list = new ArrayList((Collection)field);
+        if(0 >= list.size())
+        {
+            buffer.append(fieldName + ": " + "empty");
+        }
+        else
+        {
+            for(int ii = 0; ii < list.size(); ii++)
+            { 
+                buffer.append(fieldToString(fieldName + " " + ii, list.get(ii)));
+                if(ii < list.size() - 1)
+                {
+                    buffer.append("\n");
+                }
+            }
+        }
+    }
+    
+    private static void mapToString(String fieldName, Object field, StringBuffer buffer)
+    {
+        if(0 >= ((Map)field).size())
+        {
+            buffer.append(fieldName + ": " + "empty");
+        }
+        else
+        {
+            Iterator keys = ((Map)field).keySet().iterator();
+            int ii = 0;
+            while(keys.hasNext())
+            {
+                Object key = keys.next();
+                Object value = ((Map)field).get(key);
+                buffer.append(fieldToString(fieldName + " " + key, value));
+                if(ii < ((Map)field).size() - 1)
+                {
+                    buffer.append("\n");
+                }
+                ii++;
+            }
+        }
     }
     
     /**

@@ -1,7 +1,10 @@
 package com.mockrunner.test.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import junit.framework.TestCase;
 
@@ -220,5 +223,11 @@ public class StringUtilTest extends TestCase
         testList.add(this.getClass());
         assertEquals("test 0: 5\ntest 1: abc\ntest 2: class com.mockrunner.test.util.StringUtilTest", StringUtil.fieldToString("test", testList));
         assertEquals("test 0: 5\ntest 1: abc\ntest 2: class com.mockrunner.test.util.StringUtilTest", StringUtil.fieldToString("test", testList.toArray()));
+        Map testMap = new TreeMap();
+        testMap.put("5", "xyz");
+        testMap.put("abc", "xyz");
+        testMap.put("123", null);
+        assertEquals("test 123: null\ntest 5: xyz\ntest abc: xyz", StringUtil.fieldToString("test", testMap));
+        assertEquals("test: empty", StringUtil.fieldToString("test", new HashMap()));
     }
 }
