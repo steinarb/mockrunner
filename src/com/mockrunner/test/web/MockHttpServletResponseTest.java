@@ -52,6 +52,8 @@ public class MockHttpServletResponseTest extends TestCase
         SimpleDateFormat expectedDateFormat = new SimpleDateFormat(WebConstants.DATE_FORMAT_HEADER, Locale.US);
         String expectedDateString = expectedDateFormat.format(new Date(0));
         assertEquals(expectedDateString, response.getHeader("dateHeader"));
+        response.setDateHeader("dateHeader", 0);
+        assertEquals(expectedDateString, response.getHeader("dateHeader"));
         response.addIntHeader("intHeader", 0);
         assertEquals("0", response.getHeader("intHeader"));
         response.clearHeaders();
