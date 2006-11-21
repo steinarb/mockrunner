@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -49,8 +50,7 @@ public class MockHttpServletResponseTest extends TestCase
         assertTrue(response.getHeaderList("testHeader").contains("abc"));
         assertEquals("abc", response.getHeader("testHeader"));
         response.addDateHeader("dateHeader", 0);
-        SimpleDateFormat expectedDateFormat = new SimpleDateFormat(WebConstants.DATE_FORMAT_HEADER, Locale.US);
-        String expectedDateString = expectedDateFormat.format(new Date(0));
+        String expectedDateString = "Thu, 1 Jan 1970 00:00:00 GMT";
         assertEquals(expectedDateString, response.getHeader("dateHeader"));
         response.setDateHeader("dateHeader", 0);
         assertEquals(expectedDateString, response.getHeader("dateHeader"));
