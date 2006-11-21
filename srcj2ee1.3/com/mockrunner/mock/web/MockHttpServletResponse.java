@@ -11,6 +11,7 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.Vector;
 
 import javax.servlet.ServletOutputStream;
@@ -108,9 +109,7 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public void addDateHeader(String key, long date)
     {
-        Date dateValue = new Date(date);
-        String dateString = new SimpleDateFormat(WebConstants.DATE_FORMAT_HEADER, Locale.US).format(dateValue);
-        addHeader(key, dateString);
+        addHeader(key, getDateString(date));
     }
 
     public void addHeader(String key, String value)
@@ -155,10 +154,8 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public void setDateHeader(String key, long date)
     {
-        Date dateValue = new Date(date);
-        String dateString = new SimpleDateFormat(WebConstants.DATE_FORMAT_HEADER, Locale.US).format(dateValue);
-        setHeader(key, dateString);
-    }
+        setHeader(key, getDateString(date));
+    } 
 
     public void setHeader(String key, String value)
     {
@@ -298,5 +295,13 @@ public class MockHttpServletResponse implements HttpServletResponse
     public boolean wasRedirectSent()
     {
         return wasRedirectSent;
+    }
+    
+    private String getDateString(long date)
+    {
+        Date dateValue = new Date(date);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(WebConstants.DATE_FORMAT_HEADER, Locale.US);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
+        return dateFormat.format(dateValue);
     }
 }
