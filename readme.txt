@@ -111,7 +111,7 @@ list of required third-party libraries for each mockrunner provided jar file.
 
 The third-party libraries included in the Mockrunner release are:
 
-Xerces XML Parser 2.8.0:
+Xerces XML Parser 2.9.0:
 http://xml.apache.org/xerces2-j/index.html
 xml-apis.jar
 xercesImpl.jar
