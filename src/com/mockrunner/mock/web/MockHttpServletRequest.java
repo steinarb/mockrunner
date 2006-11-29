@@ -2,7 +2,7 @@ package com.mockrunner.mock.web;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.text.ParseException;
@@ -26,6 +26,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.util.common.CaseAwareMap;
 
 /**
@@ -62,7 +63,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     private int contentLength;
     private String contentType;
     private List cookies;
-    private String bodyContent;
+    private MockServletInputStream bodyContent;
     private String localAddr;
     private String localName;
     private int localPort;
@@ -102,6 +103,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         remotePort = 5000;
         sessionCreated = false;
         attributeListener = new ArrayList();
+        bodyContent = new MockServletInputStream(new byte[0]);
     }
 
     public void addAttributeListener(ServletRequestAttributeListener listener)
@@ -594,23 +596,30 @@ public class MockHttpServletRequest implements HttpServletRequest
 
     public BufferedReader getReader() throws IOException
     {
-        if(null == bodyContent) return null;
-        return new BufferedReader(new StringReader(bodyContent));
+        return new BufferedReader(new InputStreamReader(bodyContent));
     }
     
     public ServletInputStream getInputStream() throws IOException
     {
-        return new MockServletInputStream(bodyContent.getBytes());
+        return bodyContent;
     }
     
     public void setBodyContent(byte[] data)
     {
-        setBodyContent(new String(data));
+        bodyContent = new MockServletInputStream(data); 
     }
     
     public void setBodyContent(String bodyContent)
     {
-        this.bodyContent = bodyContent;
+        String encoding = (null == characterEncoding) ? "ISO-8859-1" : characterEncoding;
+        try
+        {
+            setBodyContent(bodyContent.getBytes(encoding));
+        } 
+        catch(UnsupportedEncodingException exc)
+        {
+            throw new NestedApplicationException(exc);
+        }        
     }
 
     public String getRealPath(String path)

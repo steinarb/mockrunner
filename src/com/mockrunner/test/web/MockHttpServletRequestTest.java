@@ -252,20 +252,18 @@ public class MockHttpServletRequestTest extends TestCase
     
     public void testBodyContent() throws Exception
     {
-        request.setBodyContent("test\nanothertest");
+        request.setBodyContent("test\nanothertestäöü");
         BufferedReader reader = request.getReader();
         assertEquals("test", reader.readLine());
-        assertEquals("anothertest", reader.readLine());
+        assertEquals("anothertestäöü", reader.readLine());
         assertEquals(-1, reader.read());
-        request.setBodyContent(new byte[] {65, 66, 67});
+        request.setBodyContent(new byte[] {0, -128, 3, 127, 55});
         ServletInputStream stream = request.getInputStream();
-        assertEquals(65, stream.read());
-        assertEquals(66, stream.read());
-        assertEquals(67, stream.read());
-        reader = request.getReader();
-        assertEquals('A', (char)reader.read());
-        assertEquals('B', (char)reader.read());
-        assertEquals('C', (char)reader.read());
+        assertEquals(0, stream.read());
+        assertEquals(-128, (byte)stream.read());
+        assertEquals(3, stream.read());
+        assertEquals(127, stream.read());
+        assertEquals(55, stream.read());
     }
     
     public void testRequestDispatcher() throws Exception
