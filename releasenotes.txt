@@ -8,6 +8,7 @@ mockrunner-0.3.8:
 - refactored the Struts test framework to ensure compatibility with Struts 1.2 and 1.3
 - the Mockrunner JDK 1.3 version is compiled against Struts 1.2.9 because Struts 1.3
   is not compatible with Java 1.3 
+- fixed problem with body encoding in MockHttpServletRequest
 - updated xercesImpl.jar and xml-apis.jar from Xerces 2.8.0 to 2.9.0
 - updated servlet-api.jar and jsp-api.jar from Tomcat 5.0.28 to 5.5.20
 
