@@ -598,6 +598,25 @@ public class MockCallableStatementTest extends BaseTestCase
         assertEquals("test", statement.getString("1"));
     }
     
+    public void testMockResultSetOutParameter() throws Exception
+    {
+        Map outParams = new HashMap();
+        MockResultSet resultSet = new MockResultSet("id");
+        outParams.put("TestParam", resultSet);
+        callableStatementHandler.prepareOutParameter("doGetParam", outParams, new Object[] {"1", "2"});
+        MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doGetParam()}");
+        statement.setString(1, "1");
+        statement.setString(2, "2");
+        statement.execute();
+        assertSame(resultSet, statement.getObject("TestParam"));
+        statement.setString(3, "3");
+        statement.execute();
+        assertSame(resultSet, statement.getObject("TestParam"));
+        callableStatementHandler.setExactMatchParameter(true);
+        statement.execute();
+        assertNull(statement.getObject("TestParam"));
+    }
+
     public void testGetMoreResultsSingleResultSetAndUpdateCount() throws Exception
     {
         callableStatementHandler.prepareResultSet("select", resultSet1);
