@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.util.Arrays;
 
+import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.util.common.ArrayUtil;
 import com.mockrunner.util.common.MethodUtil;
 import com.mockrunner.util.common.StreamUtil;
@@ -87,6 +88,10 @@ public class ParameterUtil
         if(source instanceof Reader && target instanceof Reader)
         {
             return StreamUtil.compareReaders((Reader)source, (Reader)target);
+        }
+        if(source instanceof MockResultSet && target instanceof MockResultSet)
+        {
+            return ((MockResultSet)source).isEqual((MockResultSet)target);
         }
         return source.equals(target);
     }
