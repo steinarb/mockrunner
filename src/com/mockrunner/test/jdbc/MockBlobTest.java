@@ -2,11 +2,12 @@ package com.mockrunner.test.jdbc;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.sql.SQLException;
 import java.util.Arrays;
 
-import com.mockrunner.mock.jdbc.MockBlob;
-
 import junit.framework.TestCase;
+
+import com.mockrunner.mock.jdbc.MockBlob;
 
 public class MockBlobTest extends TestCase
 {
@@ -76,6 +77,42 @@ public class MockBlobTest extends TestCase
         anotherAtream.write(16);
         data = blob.getBytes(1, 16);
         assertTrue(Arrays.equals(data, new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}));
+    }
+    
+    public void testFree() throws Exception
+    {
+        assertFalse(blob.wasFreeCalled());
+        blob.free();
+        assertTrue(blob.wasFreeCalled());
+        try
+        {
+            blob.getBytes(1, 0);
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //expected exception
+        }
+        try
+        {
+            blob.truncate(5);
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //expected exception
+        }
+        try
+        {
+            blob.setBytes(1, new byte[0], 2, 3);
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //expected exception
+        }
+        MockBlob copy = (MockBlob)blob.clone();
+        assertTrue(copy.wasFreeCalled());
     }
     
     public void testEquals() throws Exception

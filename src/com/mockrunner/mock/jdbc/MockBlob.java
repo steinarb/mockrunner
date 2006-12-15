@@ -22,6 +22,7 @@ public class MockBlob implements Blob, Cloneable
 {
     private final static Log log = LogFactory.getLog(MockBlob.class);
     private List blobData;
+    private boolean wasFreeCalled = false;
     
     public MockBlob(byte[] data)
     {
@@ -30,22 +31,38 @@ public class MockBlob implements Blob, Cloneable
     
     public long length() throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         return blobData.size();
     }
 
     public byte[] getBytes(long pos, int length) throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         if(pos < 0) pos = 0;
         return ArrayUtil.getByteArrayFromList(blobData, (int)(pos - 1), length);
     }
 
     public InputStream getBinaryStream() throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         return new ByteArrayInputStream(ArrayUtil.getByteArrayFromList(blobData));
     }
 
     public long position(byte[] pattern, long start) throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         byte[] data = ArrayUtil.getByteArrayFromList(blobData);
         int index = ArrayUtil.indexOf(data, pattern, (int)(start - 1));
         if(-1 != index) index += 1;
@@ -59,6 +76,10 @@ public class MockBlob implements Blob, Cloneable
 
     public int setBytes(long pos, byte[] bytes) throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         if(pos < 0) pos = 0;
         ArrayUtil.addBytesToList(bytes, blobData, (int)(pos - 1));
         return bytes.length;
@@ -66,6 +87,10 @@ public class MockBlob implements Blob, Cloneable
 
     public int setBytes(long pos, byte[] bytes, int offset, int len) throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         if(pos < 0) pos = 0;
         ArrayUtil.addBytesToList(bytes, offset, len, blobData, (int)(pos - 1));
         return len;
@@ -73,12 +98,30 @@ public class MockBlob implements Blob, Cloneable
 
     public OutputStream setBinaryStream(long pos) throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         return new BlobOutputStream((int)(pos - 1));
     }
 
     public void truncate(long len) throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         blobData = CollectionUtil.truncateList(blobData, (int)len);
+    }
+    
+    public void free() throws SQLException
+    {
+        wasFreeCalled = true;
+    }
+
+    public boolean wasFreeCalled()
+    {
+        return wasFreeCalled;
     }
     
     private class BlobOutputStream extends OutputStream

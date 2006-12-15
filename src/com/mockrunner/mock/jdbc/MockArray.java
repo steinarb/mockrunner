@@ -19,6 +19,7 @@ public class MockArray implements Array, Cloneable
     private String sqlTypeName = "";
     private int baseType = 0;
     private Object array;
+    private boolean wasFreeCalled = false;
     
     public MockArray(Object array)
     {
@@ -45,16 +46,28 @@ public class MockArray implements Array, Cloneable
 
     public int getBaseType() throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         return baseType;
     }
     
     public String getBaseTypeName() throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         return sqlTypeName;
     }
 
     public Object getArray() throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         return array;
     }
     
@@ -80,6 +93,10 @@ public class MockArray implements Array, Cloneable
 
     public ResultSet getResultSet(long index, int count) throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         Integer[] firstColumn = new Integer[count];
         for(int ii = 0; ii < count; ii++)
         {
@@ -104,7 +121,17 @@ public class MockArray implements Array, Cloneable
     {
         return getResultSet();
     }
+    
+    public void free() throws SQLException
+    {
+        wasFreeCalled = true;
+    }
 
+    public boolean wasFreeCalled()
+    {
+        return wasFreeCalled;
+    }
+    
     public boolean equals(Object obj)
     {
         if(null == obj) return false;
