@@ -4,11 +4,12 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.sql.SQLException;
 import java.util.Arrays;
 
-import com.mockrunner.mock.jdbc.MockClob;
-
 import junit.framework.TestCase;
+
+import com.mockrunner.mock.jdbc.MockClob;
 
 public class MockClobTest extends TestCase
 {
@@ -65,6 +66,42 @@ public class MockClobTest extends TestCase
         writer = clob.setCharacterStream(1);
         writer.write("This is a Test ClobThis is a Test Clob");
         assertEquals("This is a Test ClobThis is a Test Clob", clob.getSubString(1, 38));
+    }
+    
+    public void testFree() throws Exception
+    {
+        assertFalse(clob.wasFreeCalled());
+        clob.free();
+        assertTrue(clob.wasFreeCalled());
+        try
+        {
+            clob.getSubString(1, 2);
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //expected exception
+        }
+        try
+        {
+            clob.getAsciiStream();
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //expected exception
+        }
+        try
+        {
+            clob.position("", 1);
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //expected exception
+        }
+        MockClob copy = (MockClob)clob.clone();
+        assertTrue(copy.wasFreeCalled());
     }
     
     public void testEquals() throws Exception

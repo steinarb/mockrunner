@@ -977,7 +977,14 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != value)
         {
             if(value instanceof byte[]) return (byte[])value;
-            return value.toString().getBytes();
+            try
+            {
+                return value.toString().getBytes("ISO-8859-1");
+            } 
+            catch(UnsupportedEncodingException exc)
+            {
+                throw new NestedApplicationException(exc);
+            }
         }
         return null;
     }
@@ -988,7 +995,14 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != value)
         {
             if(value instanceof byte[]) return (byte[])value;
-            return value.toString().getBytes();
+            try
+            {
+                return value.toString().getBytes("ISO-8859-1");
+            } 
+            catch(UnsupportedEncodingException exc)
+            {
+                throw new NestedApplicationException(exc);
+            }
         }
         return null;
     }

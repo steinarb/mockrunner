@@ -20,6 +20,7 @@ public class MockClob implements Clob, Cloneable
 {
     private final static Log log = LogFactory.getLog(MockClob.class);
     private StringBuffer clobData;
+    private boolean wasFreeCalled = false;
     
     public MockClob(String data)
     {
@@ -33,31 +34,55 @@ public class MockClob implements Clob, Cloneable
 
     public void truncate(long len) throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         clobData.setLength((int)len);
     }
 
     public InputStream getAsciiStream() throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         return new ByteArrayInputStream(clobData.toString().getBytes());
     }
 
     public OutputStream setAsciiStream(long pos) throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         return new ClobOutputStream((int)(pos - 1));
     }
 
     public Reader getCharacterStream() throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         return new StringReader(clobData.toString());
     }
 
     public Writer setCharacterStream(long pos) throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         return new ClobWriter((int)(pos - 1));
     }
 
     public String getSubString(long pos, int length) throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         return clobData.substring((int)(pos - 1), (int)(pos - 1) + length);
     }
 
@@ -68,6 +93,10 @@ public class MockClob implements Clob, Cloneable
 
     public int setString(long pos, String str, int offset, int len) throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         str = str.substring(offset, offset + len);
         clobData.replace((int)(pos - 1), (int)(pos - 1)+ str.length(), str);
         return len;
@@ -75,6 +104,10 @@ public class MockClob implements Clob, Cloneable
 
     public long position(String searchstr, long start) throws SQLException
     {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
         int index = clobData.toString().indexOf(searchstr, (int)(start - 1));
         if(-1 != index) index += 1;
         return index;
@@ -83,6 +116,16 @@ public class MockClob implements Clob, Cloneable
     public long position(Clob searchClob, long start) throws SQLException
     {
         return position(searchClob.getSubString(1, (int)searchClob.length()), start);
+    }
+    
+    public void free() throws SQLException
+    {
+        wasFreeCalled = true;
+    }
+
+    public boolean wasFreeCalled()
+    {
+        return wasFreeCalled;
     }
     
     private class ClobWriter extends Writer

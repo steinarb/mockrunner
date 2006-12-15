@@ -1,5 +1,6 @@
 package com.mockrunner.test.jdbc;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 
 import com.mockrunner.mock.jdbc.MockArray;
@@ -62,6 +63,42 @@ public class MockArrayTest extends TestCase
         resultSet.next();
         assertEquals(2, resultSet.getInt(1));
         assertEquals(4, resultSet.getByte(2));
+    }
+    
+    public void testFree() throws Exception
+    {
+        assertFalse(byteArray.wasFreeCalled());
+        byteArray.free();
+        assertTrue(byteArray.wasFreeCalled());
+        try
+        {
+            byteArray.getArray();
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //expected exception
+        }
+        try
+        {
+            byteArray.getResultSet(1, 1);
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //expected exception
+        }
+        try
+        {
+            byteArray.getBaseType();
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //expected exception
+        }
+        MockArray copy = (MockArray)byteArray.clone();
+        assertTrue(copy.wasFreeCalled());
     }
     
     public void testEquals() throws Exception
