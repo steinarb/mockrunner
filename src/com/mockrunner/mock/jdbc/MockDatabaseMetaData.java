@@ -170,6 +170,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     private Map importedKeysMap = new HashMap();
     private Map primaryKeysMap = new HashMap();
     private Map proceduresMap = new HashMap();
+    private Map functionsMap = new HashMap();
     private Map superTablesMap = new HashMap();
     private Map superTypesMap = new HashMap();
     private Map tablePrivilegesMap = new HashMap();
@@ -181,6 +182,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     private Map columnPrivilegesMap = new HashMap();
     private Map columnsMap = new HashMap();
     private Map procedureColumnsMap = new HashMap();
+    private Map functionColumnsMap = new HashMap();
     private Map tablesMap = new HashMap();
     private Map crossReferenceMap = new HashMap();
     
@@ -1753,6 +1755,27 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         proceduresMap.clear();
     }
     
+    public ResultSet getFunctions(String catalog, String schemaPattern, String functionNamePattern) throws SQLException
+    {
+        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, functionNamePattern, true, true);
+        return findMatchingDatabaseIdentifier(expected, functionsMap);
+    }
+    
+    public void setFunctions(ResultSet functions)
+    {
+        functionsMap.put(new DatabaseIdentifierImpl(), functions);
+    }
+    
+    public void setFunctions(String catalog, String schemaPattern, String functionNamePattern, ResultSet functions)
+    {
+        functionsMap.put(new DatabaseIdentifierImpl(catalog, schemaPattern, functionNamePattern), functions);
+    }
+    
+    public void clearFunctions()
+    {
+        functionsMap.clear();
+    }
+    
     public ResultSet getSuperTables(String catalog, String schemaPattern, String tableNamePattern) throws SQLException
     {
         DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern, true, true);
@@ -1984,6 +2007,27 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         procedureColumnsMap.clear();
     }
     
+    public ResultSet getFunctionColumns(String catalog, String schemaPattern, String functionNamePattern, String columnNamePattern) throws SQLException
+    {
+        DatabaseIdentifier expected = new ColumnDatabaseIdentifierImpl(catalog, schemaPattern, functionNamePattern, true, true, columnNamePattern);
+        return findMatchingDatabaseIdentifier(expected, functionColumnsMap);
+    }
+    
+    public void setFunctionColumns(ResultSet functionColumns)
+    {
+        functionColumnsMap.put(new ColumnDatabaseIdentifierImpl(), functionColumns);
+    }
+    
+    public void setFunctionColumns(String catalog, String schemaPattern, String functionNamePattern, String columnNamePattern, ResultSet functionColumns)
+    {
+        functionColumnsMap.put(new ColumnDatabaseIdentifierImpl(catalog, schemaPattern, functionNamePattern, columnNamePattern), functionColumns);
+    }
+    
+    public void clearFunctionColumns()
+    {
+        functionColumnsMap.clear();
+    }
+    
     public ResultSet getTables(String catalog, String schemaPattern, String tableNamePattern, String[] types) throws SQLException
     {
         DatabaseIdentifier expected = new TableDatabaseIdentifierImpl(catalog, schemaPattern, true, true, tableNamePattern, types);
@@ -2030,6 +2074,16 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     public void clearCrossReference()
     {
         crossReferenceMap.clear();
+    }
+
+    public boolean isWrapperFor(Class iface) throws SQLException
+    {
+        return false;
+    }
+
+    public Object unwrap(Class iface) throws SQLException
+    {
+        throw new SQLException("No object found for " + iface);
     }
     
     /*

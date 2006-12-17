@@ -36,6 +36,7 @@ public class MockStatement implements Statement
     //private int resultSetHoldability = ResultSet.HOLD_CURSORS_OVER_COMMIT;
     private MockResultSet lastGeneratedKeys = null;
     private boolean closed = false;
+    private boolean poolable = false;
     private Connection connection;
     
     public MockStatement(Connection connection)
@@ -546,6 +547,26 @@ public class MockStatement implements Statement
     {
         return resultSetHoldability;
     }*/
+    
+    public boolean isPoolable() throws SQLException
+    {
+        return poolable;
+    }
+
+    public void setPoolable(boolean poolable) throws SQLException
+    {
+        this.poolable = poolable;
+    }
+
+    public boolean isWrapperFor(Class iface) throws SQLException
+    {
+        return false;
+    }
+
+    public Object unwrap(Class iface) throws SQLException
+    {
+        throw new SQLException("No object found for " + iface);
+    }
     
     protected MockResultSet cloneResultSet(MockResultSet resultSet)
     {

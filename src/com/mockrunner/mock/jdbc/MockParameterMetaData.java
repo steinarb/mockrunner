@@ -139,4 +139,14 @@ public class MockParameterMetaData implements ParameterMetaData
         if(null == ParameterTypeName) return Object.class.getName();
         return ParameterTypeName;
     }
+    
+    public boolean isWrapperFor(Class iface) throws SQLException
+    {
+        return false;
+    }
+
+    public Object unwrap(Class iface) throws SQLException
+    {
+        throw new SQLException("No object found for " + iface);
+    }
 }
