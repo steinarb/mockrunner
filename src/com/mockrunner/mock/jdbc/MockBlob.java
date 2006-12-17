@@ -44,7 +44,7 @@ public class MockBlob implements Blob, Cloneable
         {
             throw new SQLException("free() was called");
         }
-        if(pos < 0) pos = 0;
+        length = verifyAndFixLength(pos, length);
         return ArrayUtil.getByteArrayFromList(blobData, (int)(pos - 1), length);
     }
 
@@ -55,6 +55,16 @@ public class MockBlob implements Blob, Cloneable
             throw new SQLException("free() was called");
         }
         return new ByteArrayInputStream(ArrayUtil.getByteArrayFromList(blobData));
+    }
+
+    public InputStream getBinaryStream(long pos, long length) throws SQLException
+    {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
+        length = verifyAndFixLength(pos, (int)length);
+        return new ByteArrayInputStream(ArrayUtil.getByteArrayFromList(blobData, (int)(pos - 1), (int)length));
     }
 
     public long position(byte[] pattern, long start) throws SQLException
@@ -80,7 +90,6 @@ public class MockBlob implements Blob, Cloneable
         {
             throw new SQLException("free() was called");
         }
-        if(pos < 0) pos = 0;
         ArrayUtil.addBytesToList(bytes, blobData, (int)(pos - 1));
         return bytes.length;
     }
@@ -91,7 +100,6 @@ public class MockBlob implements Blob, Cloneable
         {
             throw new SQLException("free() was called");
         }
-        if(pos < 0) pos = 0;
         ArrayUtil.addBytesToList(bytes, offset, len, blobData, (int)(pos - 1));
         return len;
     }
@@ -123,24 +131,7 @@ public class MockBlob implements Blob, Cloneable
     {
         return wasFreeCalled;
     }
-    
-    private class BlobOutputStream extends OutputStream
-    {  
-        private int index;
-        
-        public BlobOutputStream(int index)
-        {
-            this.index = index;
-        }
-        
-        public void write(int byteValue) throws IOException
-        {
-            byte[] bytes = new byte[] {(byte)byteValue};
-            ArrayUtil.addBytesToList(bytes, blobData, index);
-            index++;
-        }
-    }
-    
+
     public boolean equals(Object obj)
     {
         if(null == obj) return false;
@@ -177,5 +168,35 @@ public class MockBlob implements Blob, Cloneable
             log.error(exc.getMessage(), exc);
         }
         return null;
+    }
+    
+    private int verifyAndFixLength(long pos, int length)
+    {
+        if(length < 0)
+        {
+            throw new IllegalArgumentException("length must be greater or equals 0");
+        }
+        if((length + (pos - 1)) > blobData.size())
+        {
+            return blobData.size() - (int)(pos - 1);
+        }
+        return length;
+    }
+    
+    private class BlobOutputStream extends OutputStream
+    {  
+        private int index;
+        
+        public BlobOutputStream(int index)
+        {
+            this.index = index;
+        }
+        
+        public void write(int byteValue) throws IOException
+        {
+            byte[] bytes = new byte[] {(byte)byteValue};
+            ArrayUtil.addBytesToList(bytes, blobData, index);
+            index++;
+        }
     }
 }
