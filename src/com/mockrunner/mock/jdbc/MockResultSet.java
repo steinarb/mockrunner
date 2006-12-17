@@ -1271,7 +1271,7 @@ public class MockResultSet implements ResultSet, Cloneable
             }
             catch(UnsupportedEncodingException exc)
             {
-            
+                throw new NestedApplicationException(exc);
             }
         }
         return null;
@@ -1289,7 +1289,7 @@ public class MockResultSet implements ResultSet, Cloneable
             }
             catch(UnsupportedEncodingException exc)
             {
-            
+                throw new NestedApplicationException(exc);
             }
         }
         return null;
