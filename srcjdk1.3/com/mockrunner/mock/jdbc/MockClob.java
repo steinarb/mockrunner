@@ -6,12 +6,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.sql.Clob;
 import java.sql.SQLException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import com.mockrunner.base.NestedApplicationException;
 
 /**
  * Mock implementation of <code>Clob</code>.
@@ -47,7 +50,14 @@ public class MockClob implements Clob, Cloneable
         {
             throw new SQLException("free() was called");
         }
-        return new ByteArrayInputStream(clobData.toString().getBytes());
+        try
+        {
+            return new ByteArrayInputStream(clobData.toString().getBytes("ISO-8859-1"));
+        } 
+        catch(UnsupportedEncodingException exc)
+        {
+            throw new NestedApplicationException(exc);
+        }
     }
 
     public OutputStream setAsciiStream(long pos) throws SQLException
@@ -68,6 +78,16 @@ public class MockClob implements Clob, Cloneable
         return new StringReader(clobData.toString());
     }
 
+    public Reader getCharacterStream(long pos, long length) throws SQLException
+    {
+        if(wasFreeCalled)
+        {
+            throw new SQLException("free() was called");
+        }
+        length = verifyAndFixLength(pos, (int)length);
+        return new StringReader(getSubString(pos, (int)length));
+    }
+
     public Writer setCharacterStream(long pos) throws SQLException
     {
         if(wasFreeCalled)
@@ -83,6 +103,7 @@ public class MockClob implements Clob, Cloneable
         {
             throw new SQLException("free() was called");
         }
+        length = verifyAndFixLength(pos, length);
         return clobData.substring((int)(pos - 1), (int)(pos - 1) + length);
     }
 
@@ -98,7 +119,7 @@ public class MockClob implements Clob, Cloneable
             throw new SQLException("free() was called");
         }
         str = str.substring(offset, offset + len);
-        clobData.replace((int)(pos - 1), (int)(pos - 1)+ str.length(), str);
+        clobData.replace((int)(pos - 1), (int)(pos - 1) + str.length(), str);
         return len;
     }
 
@@ -126,6 +147,52 @@ public class MockClob implements Clob, Cloneable
     public boolean wasFreeCalled()
     {
         return wasFreeCalled;
+    }
+
+    public boolean equals(Object obj)
+    {
+        if(null == obj) return false;
+        if(!obj.getClass().equals(this.getClass())) return false;
+        MockClob other = (MockClob)obj;
+        return clobData.toString().equals(other.clobData.toString());
+    }
+
+    public int hashCode()
+    {
+        return clobData.toString().hashCode();
+    }
+
+    public String toString()
+    {
+        return "Clob data: " + clobData.toString();
+    }
+    
+    public Object clone()
+    {
+        try
+        {
+            MockClob clone = (MockClob)super.clone();
+            clone.clobData = new StringBuffer(clobData.toString());
+            return clone;
+        }
+        catch(CloneNotSupportedException exc)
+        {
+            log.error(exc.getMessage(), exc);
+        }
+        return null;
+    }
+    
+    private int verifyAndFixLength(long pos, int length)
+    {
+        if(length < 0)
+        {
+            throw new IllegalArgumentException("length must be greater or equals 0");
+        }
+        if((length + (pos - 1)) > clobData.length())
+        {
+            return clobData.length() - (int)(pos - 1);
+        }
+        return length;
     }
     
     private class ClobWriter extends Writer
@@ -183,38 +250,5 @@ public class MockClob implements Clob, Cloneable
             }
             index++;
         }
-    }
-    
-    public boolean equals(Object obj)
-    {
-        if(null == obj) return false;
-        if(!obj.getClass().equals(this.getClass())) return false;
-        MockClob other = (MockClob)obj;
-        return clobData.toString().equals(other.clobData.toString());
-    }
-
-    public int hashCode()
-    {
-        return clobData.toString().hashCode();
-    }
-
-    public String toString()
-    {
-        return "Clob data: " + clobData.toString();
-    }
-    
-    public Object clone()
-    {
-        try
-        {
-            MockClob clone = (MockClob)super.clone();
-            clone.clobData = new StringBuffer(clobData.toString());
-            return clone;
-        }
-        catch(CloneNotSupportedException exc)
-        {
-            log.error(exc.getMessage(), exc);
-        }
-        return null;
     }
 }

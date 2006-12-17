@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.jdbc.AbstractOutParameterResultSetHandler;
 import com.mockrunner.util.common.StreamUtil;
 
@@ -256,7 +258,14 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value)
         {
             if(value instanceof byte[]) return (byte[])value;
-            return value.toString().getBytes();
+            try
+            {
+                return value.toString().getBytes("ISO-8859-1");
+            } 
+            catch(UnsupportedEncodingException exc)
+            {
+                throw new NestedApplicationException(exc);
+            }
         }
         return null;
     }
@@ -363,7 +372,14 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value)
         {
             if(value instanceof byte[]) return (byte[])value;
-            return value.toString().getBytes();
+            try
+            {
+                return value.toString().getBytes("ISO-8859-1");
+            } 
+            catch(UnsupportedEncodingException exc)
+            {
+                throw new NestedApplicationException(exc);
+            }
         }
         return null;
     }

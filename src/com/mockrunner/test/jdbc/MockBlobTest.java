@@ -1,5 +1,6 @@
 package com.mockrunner.test.jdbc;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
@@ -8,6 +9,7 @@ import java.util.Arrays;
 import junit.framework.TestCase;
 
 import com.mockrunner.mock.jdbc.MockBlob;
+import com.mockrunner.util.common.StreamUtil;
 
 public class MockBlobTest extends TestCase
 {
@@ -19,21 +21,49 @@ public class MockBlobTest extends TestCase
         blob = new MockBlob(new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11});
     }
 
-    public void testGetData() throws Exception
+    public void testGetBytes() throws Exception
     {
         byte[] data = blob.getBytes(1, 3);
         assertTrue(Arrays.equals(data, new byte[] {1, 2, 3}));
+        data = blob.getBytes(5, 25);
+        assertTrue(Arrays.equals(data, new byte[] {5, 6, 7, 8, 9, 10, 11}));
+        data = blob.getBytes(5, 2);
+        assertTrue(Arrays.equals(data, new byte[] {5, 6}));
         data = blob.getBytes(1, 12);
-        assertTrue(Arrays.equals(data, new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0}));
-        InputStream stream = blob.getBinaryStream();
-        int nextByte;
-        byte count = 1;
-        while(-1 != (nextByte = stream.read()))
-        {
-            assertEquals((byte)nextByte, count);
-            count++;
-        }
+        assertTrue(Arrays.equals(data, new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11})); 
+        assertTrue(blob.getBytes(5, 0).length == 0);
         assertTrue(new MockBlob(new byte[] {}).getBytes(1, 0).length == 0);
+        try
+        {
+            blob.getBytes(1, -1);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //expected exception
+        }
+    }
+    
+    public void testGetBinaryStream() throws Exception
+    {
+        InputStream stream = blob.getBinaryStream();
+        assertTrue(StreamUtil.compareStreams(stream, new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11})));
+        stream = blob.getBinaryStream(1, 3);
+        assertTrue(StreamUtil.compareStreams(stream, new ByteArrayInputStream(new byte[] {1, 2, 3})));
+        stream = blob.getBinaryStream(7, 45);
+        assertTrue(StreamUtil.compareStreams(stream, new ByteArrayInputStream(new byte[] {7, 8, 9, 10, 11})));
+        blob = new MockBlob(new byte[] {});
+        stream = blob.getBinaryStream();
+        assertTrue(StreamUtil.compareStreams(stream, new ByteArrayInputStream(new byte[0])));
+        try
+        {
+            blob.getBinaryStream(1, -2);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //expected exception
+        }
     }
     
     public void testPosition() throws Exception

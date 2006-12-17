@@ -1,15 +1,15 @@
 package com.mockrunner.test.jdbc;
 
-import java.io.InputStream;
+import java.io.ByteArrayInputStream;
 import java.io.OutputStream;
-import java.io.Reader;
+import java.io.StringReader;
 import java.io.Writer;
 import java.sql.SQLException;
-import java.util.Arrays;
 
 import junit.framework.TestCase;
 
 import com.mockrunner.mock.jdbc.MockClob;
+import com.mockrunner.util.common.StreamUtil;
 
 public class MockClobTest extends TestCase
 {
@@ -21,26 +21,47 @@ public class MockClobTest extends TestCase
         clob = new MockClob("This is a Test Clob");
     }
 
-    public void testGetData() throws Exception
+    public void testSubString() throws Exception
     {
         assertEquals(" is a Test Clob", clob.getSubString(5, 15));
         assertEquals("This is a Test Clob", clob.getSubString(1, 19));
+        assertEquals("This is a Test Clob", clob.getSubString(1, 25));
         assertEquals("Th", clob.getSubString(1, 2));
         assertEquals("C", clob.getSubString(16, 1));
-        Reader reader = clob.getCharacterStream();
-        char[] charData = new char[19];
-        reader.read(charData);
-        String readString = new String(charData);
-        assertEquals("This is a Test Clob", readString);
-        InputStream stream = clob.getAsciiStream();
-        byte[] byteData = new byte[19];
-        stream.read(byteData);
-        assertTrue(Arrays.equals("This is a Test Clob".getBytes(), byteData));
+        assertEquals("", clob.getSubString(16, 0));
+        try
+        {
+            clob.getSubString(5, -1);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //expected exception
+        }
+    }
+    
+    public void testGetStream() throws Exception
+    {
+        assertTrue(StreamUtil.compareReaders(clob.getCharacterStream(), new StringReader("This is a Test Clob")));
+        assertTrue(StreamUtil.compareStreams(clob.getAsciiStream(), new ByteArrayInputStream("This is a Test Clob".getBytes("ISO-8859-1"))));
+        assertTrue(StreamUtil.compareReaders(clob.getCharacterStream(6, 15), new StringReader("is a Test Clob")));
+        assertTrue(StreamUtil.compareReaders(clob.getCharacterStream(6, 16), new StringReader("is a Test Clob")));
+        assertTrue(StreamUtil.compareReaders(clob.getCharacterStream(1, 4), new StringReader("This")));
+        assertTrue(StreamUtil.compareReaders(clob.getCharacterStream(1, 0), new StringReader("")));
+        try
+        {
+            clob.getSubString(1, -1);
+            fail();
+        } 
+        catch(IllegalArgumentException exc)
+        {
+            //expected exception
+        }
     }
     
     public void testPosition() throws Exception
     {
-        assertEquals(16, clob.position("Clob", 1));
+        assertEquals(16, clob.position("Clob", 0));
         assertEquals(16, clob.position(new MockClob("Clob"), 5));
         assertEquals(-1, clob.position(new MockClob("XYZ"), 5));
         assertEquals(1, clob.position("T", 1));
