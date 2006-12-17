@@ -307,6 +307,104 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertEquals(2, resultSets.size());
     }
     
+    public void testFunctions() throws SQLException
+    {
+        assertNull(metaData.getFunctions(null, null, null));
+        assertNull(metaData.getFunctions("abc1", "abc2", "abc3"));
+        ResultSet testResult = new MockResultSet("id");
+        metaData.setFunctions(testResult);
+        assertSame(testResult, metaData.getFunctions(null, null, null));
+        assertSame(testResult, metaData.getFunctions("", "test", "xyz"));
+        assertSame(testResult, metaData.getFunctions("abc1", "test", "xyz"));
+        metaData.clearFunctions();
+        assertNull(metaData.getFunctions("", "test", "xyz"));
+        ResultSet testResult2 = new MockResultSet("id2");
+        ResultSet testResult3 = new MockResultSet("id3");
+        ResultSet testResult4 = new MockResultSet("id4");
+        metaData.setFunctions("", "test1", "xyz", testResult);
+        metaData.setFunctions("abc", "test", "xyz", testResult2);
+        metaData.setFunctions(null, "test", "xyz", testResult3);
+        assertSame(testResult2, metaData.getFunctions("abc", "test", "xyz"));
+        PolyResultSet polyResult = (PolyResultSet)metaData.getFunctions(null, "test", "xyz");
+        List resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(2, resultSets.size());
+        assertTrue(resultSets.contains(testResult2));
+        assertTrue(resultSets.contains(testResult3));
+        assertSame(testResult, metaData.getFunctions("", "test1", "xyz"));
+        assertSame(testResult3, metaData.getFunctions("", "test", "xyz"));
+        assertSame(testResult2, metaData.getFunctions("abc", "test", "xyz"));
+        assertNull(metaData.getFunctions(null, "test3", "xyz"));
+        assertNull(metaData.getFunctions(null, "test", "xyz1"));
+        assertNull(metaData.getFunctions(null, "test", null));
+        metaData.setFunctions(testResult4);
+        assertSame(testResult4, metaData.getFunctions(null, "test3", "xyz"));
+        assertSame(testResult4, metaData.getFunctions(null, "test", "xyz1"));
+        assertSame(testResult4, metaData.getFunctions(null, "test", null));
+        polyResult = (PolyResultSet)metaData.getFunctions(null, "test", "xyz");
+        resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(3, resultSets.size());
+    }
+    
+    public void testFunctionsWithWildcards() throws SQLException
+    {
+        ResultSet testResult = new MockResultSet("id");
+        metaData.setFunctions("abc", "test", "xyz", testResult);
+        assertSame(testResult, metaData.getFunctions("abc", "test", "xyz"));
+        assertSame(testResult, metaData.getFunctions(null, "t__t", "%"));
+        assertSame(testResult, metaData.getFunctions("abc", "tes%", "___"));
+        assertSame(testResult, metaData.getFunctions("abc", "%es%", "x_z"));
+        assertSame(testResult, metaData.getFunctions(null, "_est", "xyz"));
+        assertSame(testResult, metaData.getFunctions(null, "test", "_yz"));
+        assertSame(testResult, metaData.getFunctions("abc", "t%", "xy_"));
+        assertSame(testResult, metaData.getFunctions("abc", "test%", "%xyz"));
+        assertNull(metaData.getFunctions("ab_", "test", "xyz"));
+        assertNull(metaData.getFunctions("a%", "te_t", "xyz"));
+        assertNull(metaData.getFunctions("abc", "test", "a%"));
+        assertNull(metaData.getFunctions("abc", "t____", "xyz"));
+        assertNull(metaData.getFunctions(null, "test", "%xyz_"));
+        assertNull(metaData.getFunctions("abc", "test1%", "x_z"));
+        ResultSet testResult2 = new MockResultSet("id2");
+        ResultSet testResult3 = new MockResultSet("id3");
+        metaData.setFunctions("abc1", "abc", "xyz", testResult2);
+        metaData.setFunctions("abc1", "abc", "xyz1", testResult3);
+        PolyResultSet polyResult = (PolyResultSet)metaData.getFunctions(null, "%", "%");
+        assertEquals(3, polyResult.getUnderlyingResultSetList().size());
+        assertTrue(metaData.getFunctions("abc", "%", "xyz") instanceof MockResultSet);
+        assertTrue(metaData.getFunctions("abc1", "%", "xyz") instanceof MockResultSet);
+        polyResult = (PolyResultSet)metaData.getFunctions(null, "a__", "xyz%");
+        assertEquals(2, polyResult.getUnderlyingResultSetList().size());
+        assertTrue(metaData.getFunctions(null, "a__", "xyz_") instanceof MockResultSet);
+        assertNull(metaData.getFunctions("%", "%", "%"));
+        polyResult = (PolyResultSet)metaData.getFunctions(null, "ab%", "%");
+        List resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(2, resultSets.size());
+        assertTrue(resultSets.contains(testResult2));
+        assertTrue(resultSets.contains(testResult3));
+    }
+    
+    public void testFunctionsCaseSensitive() throws SQLException
+    {
+        ResultSet testResult = new MockResultSet("id");
+        ResultSet testResult2 = new MockResultSet("id2");
+        ResultSet testResult3 = new MockResultSet("id3");
+        metaData.setFunctions("abc", "TEST", "XYz", testResult);
+        metaData.setFunctions("abc", "test", "xyz", testResult2);
+        metaData.setFunctions(null, "test", "xyz", testResult3);
+        PolyResultSet polyResult = (PolyResultSet)metaData.getFunctions(null, "t_st", "xyz");
+        List resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(3, resultSets.size());
+        metaData.setCaseSensitive(true);
+        polyResult = (PolyResultSet)metaData.getFunctions(null, "t_st", "xyz");
+        resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(2, resultSets.size());
+        assertSame(testResult, metaData.getFunctions("abc", "TE%", "XYz"));
+        assertNull(metaData.getFunctions("ABC", "TEST", "XYz"));
+        metaData.setCaseSensitive(false);
+        polyResult = (PolyResultSet)metaData.getFunctions("ABC", "TEST", "_Yz");
+        resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(2, resultSets.size());
+    }
+    
     public void testSuperTables() throws SQLException
     {
         assertNull(metaData.getSuperTables(null, null, null));
@@ -1295,6 +1393,106 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertNull(metaData.getProcedureColumns("ABC", "TEST", "XYz", "efg"));
         metaData.setCaseSensitive(false);
         polyResult = (PolyResultSet)metaData.getProcedureColumns("ABC", "TEST", "_Yz", "EFg");
+        resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(2, resultSets.size());
+    }
+    
+    public void testFunctionColumns() throws SQLException
+    {
+        assertNull(metaData.getFunctionColumns(null, null, null, null));
+        assertNull(metaData.getFunctionColumns("abc1", "abc2", "abc3", "abc4"));
+        ResultSet testResult = new MockResultSet("id");
+        metaData.setFunctionColumns(testResult);
+        assertSame(testResult, metaData.getFunctionColumns(null, null, null, null));
+        assertSame(testResult, metaData.getFunctionColumns("", "test", "xyz", "123"));
+        assertSame(testResult, metaData.getFunctionColumns("abc1", "test", "xyz", "12345"));
+        metaData.clearFunctionColumns();
+        assertNull(metaData.getFunctionColumns("", "test", "xyz", null));
+        ResultSet testResult2 = new MockResultSet("id2");
+        ResultSet testResult3 = new MockResultSet("id3");
+        ResultSet testResult4 = new MockResultSet("id4");
+        metaData.setFunctionColumns("", "test1", "xyz", "123", testResult);
+        metaData.setFunctionColumns("abc", "test", "xyz", "456", testResult2);
+        metaData.setFunctionColumns(null, "test", "xyz", "456", testResult3);
+        assertSame(testResult2, metaData.getFunctionColumns("abc", "test", "xyz", "456"));
+        PolyResultSet polyResult = (PolyResultSet)metaData.getFunctionColumns(null, "test", "xyz", "456");
+        List resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(2, resultSets.size());
+        assertTrue(resultSets.contains(testResult2));
+        assertTrue(resultSets.contains(testResult3));
+        assertSame(testResult, metaData.getFunctionColumns("", "test1", "xyz", "123"));
+        assertSame(testResult3, metaData.getFunctionColumns("", "test", "xyz", "456"));
+        assertSame(testResult2, metaData.getFunctionColumns("abc", "test", "xyz", "456"));
+        assertNull(metaData.getFunctionColumns(null, "test3", "xyz", "123"));
+        assertNull(metaData.getFunctionColumns(null, "test", "xyz1", "456"));
+        assertNull(metaData.getFunctionColumns(null, "test", null, "456"));
+        assertNull(metaData.getFunctionColumns("abc", "test", "xyz", null));
+        metaData.setFunctionColumns(testResult4);
+        assertSame(testResult4, metaData.getFunctionColumns(null, "test3", "xyz", null));
+        assertSame(testResult4, metaData.getFunctionColumns(null, "test", "xyz1", "123"));
+        assertSame(testResult4, metaData.getFunctionColumns(null, "test", null, null));
+        polyResult = (PolyResultSet)metaData.getFunctionColumns(null, "test", "xyz", "456");
+        resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(3, resultSets.size());
+    }
+    
+    public void testFunctionColumnsWithWildcards() throws SQLException
+    {
+        ResultSet testResult = new MockResultSet("id");
+        metaData.setFunctionColumns("abc", "test", "xyz", "123", testResult);
+        assertSame(testResult, metaData.getFunctionColumns("abc", "test", "xyz", "123"));
+        assertSame(testResult, metaData.getFunctionColumns(null, "t__t", "%", "12_"));
+        assertSame(testResult, metaData.getFunctionColumns("abc", "tes%", "___", "123"));
+        assertSame(testResult, metaData.getFunctionColumns("abc", "%es%", "x_z", "%%"));
+        assertSame(testResult, metaData.getFunctionColumns(null, "_est", "xyz", "1_3%"));
+        assertSame(testResult, metaData.getFunctionColumns(null, "test", "_yz", "%123%%"));
+        assertSame(testResult, metaData.getFunctionColumns("abc", "t%", "xy_", "___"));
+        assertSame(testResult, metaData.getFunctionColumns("abc", "test%", "%xyz", "123"));
+        assertNull(metaData.getFunctionColumns("ab_", "test", "xyz", "123"));
+        assertNull(metaData.getFunctionColumns("a%", "te_t", "xyz", "123"));
+        assertNull(metaData.getFunctionColumns("abc", "test", "a%", "1_3"));
+        assertNull(metaData.getFunctionColumns("abc", "t____", "xyz", "1%"));
+        assertNull(metaData.getFunctionColumns(null, "test", "%xyz_", "123"));
+        assertNull(metaData.getFunctionColumns("abc", "test1%", "x_z", "123"));
+        assertNull(metaData.getFunctionColumns("abc", "test%", "xyz", "1___%"));
+        ResultSet testResult2 = new MockResultSet("id2");
+        ResultSet testResult3 = new MockResultSet("id3");
+        metaData.setFunctionColumns("abc1", "abc", "xyz", "456", testResult2);
+        metaData.setFunctionColumns("abc1", "abc", "xyz1", "456", testResult3);
+        PolyResultSet polyResult = (PolyResultSet)metaData.getFunctionColumns(null, "%", "%", "%");
+        assertEquals(3, polyResult.getUnderlyingResultSetList().size());
+        assertTrue(metaData.getFunctionColumns("abc", "%", "xyz", "1__") instanceof MockResultSet);
+        assertTrue(metaData.getFunctionColumns("abc1", "%", "xyz", "456") instanceof MockResultSet);
+        polyResult = (PolyResultSet)metaData.getFunctionColumns(null, "a__", "xyz%", "_56%");
+        assertEquals(2, polyResult.getUnderlyingResultSetList().size());
+        assertTrue(metaData.getFunctionColumns(null, "a__", "xyz_", "4_6") instanceof MockResultSet);
+        assertNull(metaData.getFunctionColumns("%", "%", "%", "%"));
+        polyResult = (PolyResultSet)metaData.getFunctionColumns(null, "ab%", "%", "4%");
+        List resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(2, resultSets.size());
+        assertTrue(resultSets.contains(testResult2));
+        assertTrue(resultSets.contains(testResult3)); 
+    }
+    
+    public void testFunctionColumnsCaseSensitive() throws SQLException
+    {
+        ResultSet testResult = new MockResultSet("id");
+        ResultSet testResult2 = new MockResultSet("id2");
+        ResultSet testResult3 = new MockResultSet("id3");
+        metaData.setFunctionColumns("abc", "TEST", "XYz", "efg", testResult);
+        metaData.setFunctionColumns("abc", "test", "xyz", "EFg", testResult2);
+        metaData.setFunctionColumns(null, "test", "xyz", "EFg", testResult3);
+        PolyResultSet polyResult = (PolyResultSet)metaData.getFunctionColumns(null, "t_st", "xyz", "EFG");
+        List resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(3, resultSets.size());
+        metaData.setCaseSensitive(true);
+        polyResult = (PolyResultSet)metaData.getFunctionColumns(null, "t_st", "xyz", "EFg");
+        resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(2, resultSets.size());
+        assertSame(testResult, metaData.getFunctionColumns("abc", "TE%", "XYz", "efg"));
+        assertNull(metaData.getFunctionColumns("ABC", "TEST", "XYz", "efg"));
+        metaData.setCaseSensitive(false);
+        polyResult = (PolyResultSet)metaData.getFunctionColumns("ABC", "TEST", "_Yz", "EFg");
         resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
     }

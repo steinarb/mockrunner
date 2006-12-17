@@ -343,4 +343,14 @@ public class MockConnection implements Connection
     {
         
     }
+    
+    public boolean isWrapperFor(Class iface) throws SQLException
+    {
+        return false;
+    }
+
+    public Object unwrap(Class iface) throws SQLException
+    {
+        throw new SQLException("No object found for " + iface);
+    }
 }
