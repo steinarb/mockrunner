@@ -25,6 +25,101 @@ public class MockDatabaseMetaDataTest extends TestCase
         super.tearDown();
         metaData = null;
     }
+    
+    public void testSchemas() throws SQLException
+    {
+        assertNull(metaData.getSchemas());
+        assertNull(metaData.getSchemas("abc1", "abc2"));
+        ResultSet testResult = new MockResultSet("id");
+        metaData.setSchemas(testResult);
+        assertSame(testResult, metaData.getSchemas());
+        assertSame(testResult, metaData.getSchemas(null, null));
+        assertSame(testResult, metaData.getSchemas("", "test"));
+        assertSame(testResult, metaData.getSchemas("abc1", "test"));
+        metaData.clearSchemas();
+        assertNull(metaData.getSchemas());
+        ResultSet testResult2 = new MockResultSet("id2");
+        ResultSet testResult3 = new MockResultSet("id3");
+        ResultSet testResult4 = new MockResultSet("id4");
+        metaData.setSchemas("", "test1", testResult);
+        metaData.setSchemas("abc", "test", testResult2);
+        metaData.setSchemas(null, "test", testResult3);
+        assertSame(testResult2, metaData.getSchemas("abc", "test"));
+        PolyResultSet polyResult = (PolyResultSet)metaData.getSchemas(null, "test");
+        List resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(2, resultSets.size());
+        assertTrue(resultSets.contains(testResult2));
+        assertTrue(resultSets.contains(testResult3));
+        polyResult = (PolyResultSet)metaData.getSchemas();
+        resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(3, resultSets.size());
+        assertTrue(resultSets.contains(testResult));
+        assertTrue(resultSets.contains(testResult2));
+        assertTrue(resultSets.contains(testResult3));
+        assertSame(testResult, metaData.getSchemas("", "test1"));
+        assertSame(testResult3, metaData.getSchemas("", "test"));
+        assertSame(testResult2, metaData.getSchemas("abc", "test"));
+        assertNull(metaData.getSchemas(null, "test2"));
+        metaData.setSchemas(testResult4);
+        assertSame(testResult4, metaData.getSchemas(null, "test3"));
+        polyResult = (PolyResultSet)metaData.getSchemas(null, "test");
+        resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(3, resultSets.size());
+    }
+    
+    public void testSchemasWithWildcards() throws SQLException
+    {
+        ResultSet testResult = new MockResultSet("id");
+        metaData.setSchemas("abc", "test", testResult);
+        assertSame(testResult, metaData.getSchemas("abc", "test"));
+        assertSame(testResult, metaData.getSchemas(null, "t__t"));
+        assertSame(testResult, metaData.getSchemas("abc", "tes%"));
+        assertSame(testResult, metaData.getSchemas("abc", "%es%"));
+        assertSame(testResult, metaData.getSchemas(null, "_est"));
+        assertNull(metaData.getSchemas("ab_", "test"));
+        assertNull(metaData.getSchemas("a%", "te_t"));
+        assertNull(metaData.getSchemas("abc", "t____"));
+        assertNull(metaData.getSchemas("abc", "test1%"));
+        ResultSet testResult2 = new MockResultSet("id2");
+        ResultSet testResult3 = new MockResultSet("id3");
+        metaData.setSchemas("abc1", "abc", testResult2);
+        metaData.setSchemas("abc2", "abc", testResult3);
+        PolyResultSet polyResult = (PolyResultSet)metaData.getSchemas(null, "%");
+        assertEquals(3, polyResult.getUnderlyingResultSetList().size());
+        assertTrue(metaData.getSchemas("abc1", "%") instanceof MockResultSet);
+        polyResult = (PolyResultSet)metaData.getSchemas(null, "a__");
+        assertEquals(2, polyResult.getUnderlyingResultSetList().size());
+        assertTrue(metaData.getSchemas(null, "t___") instanceof MockResultSet);
+        assertNull(metaData.getSchemas("%", "%"));
+        polyResult = (PolyResultSet)metaData.getSchemas(null, "ab%");
+        List resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(2, resultSets.size());
+        assertTrue(resultSets.contains(testResult2));
+        assertTrue(resultSets.contains(testResult3));
+    }
+    
+    public void testSchemasCaseSensitive() throws SQLException
+    {
+        ResultSet testResult = new MockResultSet("id");
+        ResultSet testResult2 = new MockResultSet("id2");
+        ResultSet testResult3 = new MockResultSet("id3");
+        metaData.setSchemas("abc", "TEST", testResult);
+        metaData.setSchemas("abc", "test", testResult2);
+        metaData.setSchemas(null, "test", testResult3);
+        PolyResultSet polyResult = (PolyResultSet)metaData.getSchemas(null, "t_st");
+        List resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(3, resultSets.size());
+        metaData.setCaseSensitive(true);
+        polyResult = (PolyResultSet)metaData.getSchemas(null, "t_st");
+        resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(2, resultSets.size());
+        assertSame(testResult, metaData.getSchemas("abc", "TE%"));
+        assertNull(metaData.getSchemas("ABC", "TEST"));
+        metaData.setCaseSensitive(false);
+        polyResult = (PolyResultSet)metaData.getSchemas("ABC", "TEST");
+        resultSets = polyResult.getUnderlyingResultSetList();
+        assertEquals(2, resultSets.size());
+    }
 
     public void testExportedKeys() throws SQLException
     {

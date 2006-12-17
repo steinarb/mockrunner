@@ -1820,6 +1820,16 @@ public class MockResultSet implements ResultSet, Cloneable
         isCursorInInsertRow = false;
     }
     
+    public boolean isWrapperFor(Class iface) throws SQLException
+    {
+        return false;
+    }
+
+    public Object unwrap(Class iface) throws SQLException
+    {
+        throw new SQLException("No object found for " + iface);
+    }
+    
     private void checkColumnName(String columnName) throws SQLException
     {
         if(!columnMap.containsKey(columnName))
