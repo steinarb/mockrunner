@@ -48,6 +48,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     private int maxUserNameLength = 0;
     private int resultSetHoldability = ResultSet.CONCUR_READ_ONLY;
     private int sqlStateType = sqlStateSQL99;
+    private boolean autoCommitFailureClosesAllResultSets = false;
     private boolean allProceduresAreCallable = true;
     private boolean allTablesAreSelectable = true;
     private boolean dataDefinitionCausesTransactionCommit = false;
@@ -143,6 +144,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     private boolean supportsTransactionIsolationLevel = true;
     private boolean updatesAreDetected = true;
     private boolean supportsResultSetConcurrency = true;
+    private boolean supportsStoredFunctionsUsingCallSyntax = true;
     private String catalogSeparator = ".";
     private String catalogTerm = "database";
     private String databaseProductName = "MockDatabase";
@@ -163,9 +165,10 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     private String userName;
     private Connection connection;
     private ResultSet catalogs;
-    private ResultSet schemas;
     private ResultSet tableTypes;
     private ResultSet typeInfo;
+    private ResultSet clientInfoProperties;
+    private Map schemasMap = new HashMap();
     private Map exportedKeysMap = new HashMap();
     private Map importedKeysMap = new HashMap();
     private Map primaryKeysMap = new HashMap();
@@ -486,6 +489,16 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         this.sqlStateType = sqlStateType;
     }
     
+    public boolean autoCommitFailureClosesAllResultSets() throws SQLException
+    {
+        return autoCommitFailureClosesAllResultSets;
+    }
+    
+    public void setAutoCommitFailureClosesAllResultSets(boolean closesAllResultSets)
+    {
+        autoCommitFailureClosesAllResultSets = closesAllResultSets;
+    }
+
     public boolean allProceduresAreCallable() throws SQLException
     {
         return allProceduresAreCallable;
@@ -1441,6 +1454,16 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         this.supportsResultSetConcurrency = supportsResultSetConcurrency;
     }
     
+    public boolean supportsStoredFunctionsUsingCallSyntax() throws SQLException
+    {
+        return supportsStoredFunctionsUsingCallSyntax;
+    }
+    
+    public void setSupportsStoredFunctionsUsingCallSyntax(boolean supportsStoredFunctions)
+    {
+        supportsStoredFunctionsUsingCallSyntax = supportsStoredFunctions;
+    }
+
     public String getCatalogSeparator() throws SQLException
     {
         return catalogSeparator;
@@ -1643,12 +1666,28 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     
     public ResultSet getSchemas() throws SQLException
     {
-        return schemas;
+        return getAll(schemasMap);
+    }
+    
+    public ResultSet getSchemas(String catalog, String schemaPattern) throws SQLException
+    {
+        DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schemaPattern, "", true, false);
+        return findMatchingDatabaseIdentifier(expected, schemasMap);
     }
     
     public void setSchemas(ResultSet schemas)
     {
-        this.schemas = schemas;
+        schemasMap.put(new DatabaseIdentifierImpl(), schemas);
+    }
+    
+    public void setSchemas(String catalog, String schemaPattern, ResultSet schemas)
+    {
+        schemasMap.put(new DatabaseIdentifierImpl(catalog, schemaPattern, ""), schemas);
+    }
+    
+    public void clearSchemas()
+    {
+        schemasMap.clear();
     }
     
     public ResultSet getTableTypes() throws SQLException
@@ -1671,6 +1710,16 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         this.typeInfo = typeInfo;
     }
     
+    public ResultSet getClientInfoProperties() throws SQLException
+    {
+        return clientInfoProperties;
+    }
+    
+    public void setClientInfoProperties(ResultSet clientInfoProperties)
+    {
+        this.clientInfoProperties = clientInfoProperties;
+    }
+
     public ResultSet getExportedKeys(String catalog, String schema, String table) throws SQLException
     {
         DatabaseIdentifier expected = new DatabaseIdentifierImpl(catalog, schema, table);
@@ -2103,6 +2152,15 @@ public class MockDatabaseMetaData implements DatabaseMetaData
                 list.add(entry.getValue());
             }
         }
+        if(list.isEmpty()) return null;
+        if(list.size() == 1) return (ResultSet)list.get(0);
+        return new PolyResultSet(list);
+    }
+    
+    private ResultSet getAll(Map theMap)
+    {
+        List list = new ArrayList();
+        list.addAll(theMap.values());
         if(list.isEmpty()) return null;
         if(list.size() == 1) return (ResultSet)list.get(0);
         return new PolyResultSet(list);

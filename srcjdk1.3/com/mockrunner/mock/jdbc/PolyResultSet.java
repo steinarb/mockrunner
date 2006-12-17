@@ -752,6 +752,16 @@ public class PolyResultSet implements ResultSet
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }*/
+
+    public boolean isWrapperFor(Class iface) throws SQLException
+    {
+        return false;
+    }
+
+    public Object unwrap(Class iface) throws SQLException
+    {
+        throw new SQLException("No object found for " + iface);
+    }
 }
 
 
