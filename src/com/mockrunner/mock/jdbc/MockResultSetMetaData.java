@@ -6,10 +6,12 @@ import java.sql.Types;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mockrunner.base.NestedApplicationException;
+
 /**
  * Mock implementation of <code>ResultSetMetaData</code>.
  */
-public class MockResultSetMetaData implements ResultSetMetaData
+public class MockResultSetMetaData implements ResultSetMetaData, Cloneable
 {
     private int columnCount;
     private Map columnDisplaySizeMap;
@@ -308,6 +310,38 @@ public class MockResultSetMetaData implements ResultSetMetaData
         return tableName;
     }
     
+    public Object clone() throws CloneNotSupportedException
+    {
+        try
+        {       
+            MockResultSetMetaData copy = (MockResultSetMetaData)super.clone();
+            copy.columnDisplaySizeMap = new HashMap(columnDisplaySizeMap);
+            copy.columnTypeMap = new HashMap(columnTypeMap);
+            copy.precisionMap = new HashMap(precisionMap);
+            copy.scaleMap = new HashMap(scaleMap);
+            copy.isNullableMap = new HashMap(isNullableMap);
+            copy.isAutoIncrementMap = new HashMap(isAutoIncrementMap);
+            copy.isCurrencyMap = new HashMap(isCurrencyMap);
+            copy.isDefinitelyWritableMap = new HashMap(isDefinitelyWritableMap);
+            copy.isReadOnlyMap = new HashMap(isReadOnlyMap);
+            copy.isSearchableMap = new HashMap(isSearchableMap);
+            copy.isSignedMap = new HashMap(isSignedMap);
+            copy.isWritableMap = new HashMap(isWritableMap);
+            copy.catalogNameMap = new HashMap(catalogNameMap);
+            copy.columnClassNameMap = new HashMap(columnClassNameMap);
+            copy.columnLabelMap = new HashMap(columnLabelMap);
+            copy.columnNameMap = new HashMap(columnNameMap);
+            copy.columnTypeNameMap = new HashMap(columnTypeNameMap);
+            copy.schemaNameMap = new HashMap(schemaNameMap);
+            copy.tableNameMap = new HashMap(tableNameMap);
+            return copy;
+        }
+        catch(CloneNotSupportedException exc)
+        {
+            throw new NestedApplicationException(exc);
+        }
+    }
+
     public boolean isWrapperFor(Class iface) throws SQLException
     {
         return false;

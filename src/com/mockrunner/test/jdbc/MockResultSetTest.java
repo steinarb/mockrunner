@@ -2,6 +2,8 @@ package com.mockrunner.test.jdbc;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.Clob;
@@ -11,8 +13,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockResultSet;
+import com.mockrunner.mock.jdbc.MockResultSetMetaData;
 import com.mockrunner.mock.jdbc.MockStruct;
 
 import junit.framework.TestCase;
@@ -141,6 +145,15 @@ public class MockResultSetTest extends TestCase
         column.add(null);
         column.add("value");
         resultSet.addColumn("column", column);
+        try
+        {
+            resultSet.getObject(1);
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
         resultSet.next();
         assertEquals(1.2f, resultSet.getFloat(1), 0.0);
         assertEquals(new BigDecimal("1.2"), resultSet.getBigDecimal(1));
@@ -176,6 +189,16 @@ public class MockResultSetTest extends TestCase
         Clob clob = resultSet.getClob("column");
         assertEquals("value", clob.getSubString(1, 5));
         assertFalse(resultSet.wasNull());
+        resultSet.next();
+        try
+        {
+            resultSet.getObject(1);
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
     }
     
     public void testUpdateValues() throws Exception
@@ -190,6 +213,15 @@ public class MockResultSetTest extends TestCase
         column.add(new Integer(2));
         column.add("test");
         resultSet.addColumn("column2", column);
+        try
+        {
+            resultSet.updateObject(1, "value");
+            fail();
+        } 
+        catch (SQLException exc)
+        {
+            //should throw SQLException
+        }
         resultSet.next();
         resultSet.updateNull(2);
         assertNull(resultSet.getObject(1));
@@ -211,6 +243,67 @@ public class MockResultSetTest extends TestCase
         assertEquals(2, inputStream.read());
         assertEquals(3, inputStream.read());
         assertEquals(-1, inputStream.read());
+    }
+    
+    public void testUpdateStreams() throws Exception
+    {
+        resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
+        resultSet.addColumn("column", new Object[] { "value" });
+        resultSet.next();
+        ByteArrayInputStream updateStream = new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5});
+        resultSet.updateAsciiStream(1, updateStream, (long)2);
+        InputStream inputStream = resultSet.getAsciiStream("column");
+        assertEquals(1, inputStream.read());
+        assertEquals(2, inputStream.read());
+        assertEquals(-1, inputStream.read());
+        updateStream = new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5});
+        resultSet.updateAsciiStream(1, updateStream);
+        inputStream = resultSet.getAsciiStream(1);
+        assertEquals(1, inputStream.read());
+        assertEquals(2, inputStream.read());
+        assertEquals(3, inputStream.read());
+        assertEquals(4, inputStream.read());
+        assertEquals(5, inputStream.read());
+        assertEquals(-1, inputStream.read());
+        updateStream = new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5});
+        resultSet.updateBinaryStream("column", updateStream, (long)3);
+        inputStream = resultSet.getBinaryStream("column");
+        assertEquals(1, inputStream.read());
+        assertEquals(2, inputStream.read());
+        assertEquals(3, inputStream.read());
+        assertEquals(-1, inputStream.read());
+        StringReader updateReader = new StringReader("test");
+        resultSet.updateCharacterStream(1, updateReader);
+        Reader inputReader = resultSet.getCharacterStream("column");
+        assertEquals('t', (char)inputReader.read());
+        assertEquals('e', (char)inputReader.read());
+        assertEquals('s', (char)inputReader.read());
+        assertEquals('t', (char)inputReader.read());
+        assertEquals(-1, inputReader.read());
+        updateReader = new StringReader("test");
+        resultSet.updateCharacterStream(1, updateReader, 1);
+        inputReader = resultSet.getCharacterStream(1);
+        assertEquals('t', (char)inputReader.read());
+        assertEquals(-1, inputReader.read());
+    }
+    
+    public void testUpdateBlobAndClob() throws Exception
+    {
+        resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
+        resultSet.addColumn("column", new Object[] { "value" });
+        resultSet.next();
+        resultSet.updateBlob(1, new MockBlob(new byte[] {1, 2, 3}));
+        assertEquals(new MockBlob(new byte[] {1, 2, 3}), resultSet.getBlob("column"));
+        resultSet.updateBlob("column", new ByteArrayInputStream(new byte[] {1, 2, 3}));
+        assertEquals(new MockBlob(new byte[] {1, 2, 3}), resultSet.getBlob(1));
+        resultSet.updateBlob("column", new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5}), 3);
+        assertEquals(new MockBlob(new byte[] {1, 2, 3}), resultSet.getBlob(1));
+        resultSet.updateClob(1, new MockClob("test"));
+        assertEquals(new MockClob("test"), resultSet.getClob("column"));
+        resultSet.updateClob("column", new StringReader("test"));
+        assertEquals(new MockClob("test"), resultSet.getClob(1));
+        resultSet.updateClob("column", new StringReader("testxyz"), 4);
+        assertEquals(new MockClob("test"), resultSet.getClob(1));
     }
     
     public void testError() throws Exception
@@ -306,8 +399,24 @@ public class MockResultSetTest extends TestCase
         assertFalse(resultSet.isBeforeFirst());
         assertFalse(resultSet.isLast());
         
-        assertNull(resultSet.getString("test"));
-        assertNull(resultSet.getString(1));
+        try
+        {
+            resultSet.getString("test");
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
+        try
+        {
+            resultSet.getString(1);
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
     }
     
     public void testCursorPosition() throws Exception
@@ -346,6 +455,53 @@ public class MockResultSetTest extends TestCase
         assertTrue(resultSet.isFirst());
         assertTrue(resultSet.last());
         assertFalse(resultSet.next());
+    }
+    
+    public void testCursorNotAllowed() throws Exception
+    {
+        resultSet.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
+        resultSet.addRow(new String[] {"1", "2", "3"});
+        resultSet.addRow(new String[] {"4", "5", "6"});
+        assertTrue(resultSet.isBeforeFirst());
+        try
+        {
+            resultSet.first();
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
+        assertTrue(resultSet.isBeforeFirst());
+        resultSet.next();
+        resultSet.next();
+        try
+        {
+            resultSet.previous();
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
+        try
+        {
+            resultSet.last();
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
+        try
+        {
+            resultSet.relative(-1);
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
     }
     
     public void testSetFetchDirection() throws Exception
@@ -415,15 +571,6 @@ public class MockResultSetTest extends TestCase
         resultSet.addRow(new String[] {"7", "8", "9"});
         resultSet.addRow(new String[] {"10", "11", "12"});
         resultSet.absolute(3);
-        try
-        {
-            resultSet.insertRow();
-            fail("cursor not in insert row");
-        }
-        catch(SQLException exc)
-        {
-            //should throw SQLException
-        }
         resultSet.moveToInsertRow();
         resultSet.updateString(1, "x");
         resultSet.updateString(2, "y");
@@ -464,6 +611,96 @@ public class MockResultSetTest extends TestCase
         resultSet.next();
         assertFalse(resultSet.rowInserted());
         assertFalse(resultSet.rowDeleted());
+    }
+    
+    public void testInsertRowFailure() throws Exception
+    {
+        resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
+        resultSet.setResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
+        resultSet.addRow(new String[] {"1", "2", "3"});
+        resultSet.next();
+        try
+        {
+            resultSet.insertRow();
+            fail("cursor not in insert row");
+        }
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
+        resultSet.moveToInsertRow();
+        try
+        {
+            resultSet.deleteRow();
+            fail("cursor is in insert row");
+        }
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
+        try
+        {
+            resultSet.updateRow();
+            fail("cursor is in insert row");
+        }
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
+        try
+        {
+            resultSet.cancelRowUpdates();
+            fail("cursor is in insert row");
+        }
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
+    }
+    
+    public void testUpdateDeleteInvalidRow() throws Exception
+    {
+        resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
+        resultSet.setResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
+        resultSet.addRow(new String[] {"1", "2", "3"});
+        try
+        {
+            resultSet.updateRow();
+            fail();
+        }
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
+        try
+        {
+            resultSet.rowUpdated();
+            fail();
+        }
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
+        resultSet.next();
+        resultSet.next();
+        try
+        {
+            resultSet.deleteRow();
+            fail();
+        }
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
+        try
+        {
+            resultSet.rowDeleted();
+            fail();
+        }
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
     }
     
     public void testDatabaseView() throws Exception
@@ -508,7 +745,7 @@ public class MockResultSetTest extends TestCase
         assertFalse(resultSet.rowUpdated());
     }
     
-    public void testEquals() throws Exception
+    public void testIsEqual() throws Exception
     {
         resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
         resultSet.addColumn("col1");
@@ -594,6 +831,9 @@ public class MockResultSetTest extends TestCase
         testList.add("8");
         testList.add("9");
         assertTrue(otherResult.isRowEqual(3, testList));
+        resultSet.addRow(new String[] {"test1", "test2"});
+        resultSet.addRow(new String[] {"test3", "test4"});
+        resultSet.addRow(new Object[] {new MockClob("test5"), new MockStruct("test6")});
     }
     
     public void testRowsInsertedDeletedUpdated() throws Exception
@@ -653,7 +893,53 @@ public class MockResultSetTest extends TestCase
         assertTrue(resultSet.rowUpdated(4));
     }
     
-    public void testClone() throws Exception
+    public void testRowsInsertDeleteUpdateNotAllowed() throws Exception
+    {
+        resultSet.addRow(new String[] {"test1", "test2"});
+        assertFalse(resultSet.rowInserted(1));
+        assertFalse(resultSet.rowDeleted(1));
+        assertFalse(resultSet.rowUpdated(1));
+        resultSet.next();
+        try
+        {
+            resultSet.deleteRow();
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
+        assertFalse(resultSet.rowInserted(1));
+        assertFalse(resultSet.rowDeleted(1));
+        assertFalse(resultSet.rowUpdated(1));
+        try
+        {
+            resultSet.updateRow();
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
+        assertFalse(resultSet.rowInserted(1));
+        assertFalse(resultSet.rowDeleted(1));
+        assertFalse(resultSet.rowUpdated(1));
+        resultSet.moveToInsertRow();
+        try
+        {
+            resultSet.insertRow();
+            fail();
+        } 
+        catch(SQLException exc)
+        {
+            //should throw SQLException
+        }
+        assertFalse(resultSet.rowInserted(1));
+        assertFalse(resultSet.rowDeleted(1));
+        assertFalse(resultSet.rowUpdated(1));
+    }
+    
+    public void testCloneAndIsEqual() throws Exception
     {
         resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
         resultSet.addRow(new String[] {"test1", "test2"});
@@ -684,6 +970,15 @@ public class MockResultSetTest extends TestCase
         list.add(new MockClob("test5"));
         list.add(new MockStruct("test6"));
         assertTrue(cloneResult.isRowEqual(3, list));
+    }
+    
+    public void testCloneDeepCopyMetaData() throws Exception
+    {
+        MockResultSetMetaData metaData1 = new MockResultSetMetaData();
+        resultSet.setResultSetMetaData(metaData1);
+        MockResultSet cloneResult = (MockResultSet)resultSet.clone();
+        assertTrue(resultSet.isEqual(cloneResult));
+        assertNotSame(metaData1, cloneResult.getMetaData());
     }
     
     public void testCaseInsensitiveColumns() throws Exception

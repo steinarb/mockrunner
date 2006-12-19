@@ -133,14 +133,14 @@ public class JDKVersionGenerator extends AbstractVersionGenerator
         JavaLineProcessor polyResultSetProc = new JavaLineProcessor();
         polyResultSetProc.addBlock("public URL getURL(int columnIndex) throws SQLException");
         polyResultSetProc.addBlock("public URL getURL(String columnName) throws SQLException");
-        polyResultSetProc.addBlock("public void updateRef(int columnIndex, Ref x) throws SQLException");
-        polyResultSetProc.addBlock("public void updateRef(String columnName, Ref x) throws SQLException");
-        polyResultSetProc.addBlock("public void updateBlob(int columnIndex, Blob x) throws SQLException");
-        polyResultSetProc.addBlock("public void updateBlob(String columnName, Blob x) throws SQLException");
-        polyResultSetProc.addBlock("public void updateClob(int columnIndex, Clob x) throws SQLException");
-        polyResultSetProc.addBlock("public void updateClob(String columnName, Clob x) throws SQLException");
-        polyResultSetProc.addBlock("public void updateArray(int columnIndex, Array x) throws SQLException");
-        polyResultSetProc.addBlock("public void updateArray(String columnName, Array x) throws SQLException");
+        polyResultSetProc.addBlock("public void updateRef(int columnIndex, Ref value) throws SQLException");
+        polyResultSetProc.addBlock("public void updateRef(String columnName, Ref value) throws SQLException");
+        polyResultSetProc.addBlock("public void updateBlob(int columnIndex, Blob value) throws SQLException");
+        polyResultSetProc.addBlock("public void updateBlob(String columnName, Blob value) throws SQLException");
+        polyResultSetProc.addBlock("public void updateClob(int columnIndex, Clob value) throws SQLException");
+        polyResultSetProc.addBlock("public void updateClob(String columnName, Clob value) throws SQLException");
+        polyResultSetProc.addBlock("public void updateArray(int columnIndex, Array value) throws SQLException");
+        polyResultSetProc.addBlock("public void updateArray(String columnName, Array value) throws SQLException");
         jdbcFiles.put("com.mockrunner.mock.jdbc.PolyResultSet", polyResultSetProc);
         
         jdbcFiles.put("com.mockrunner.mock.jdbc.MockSavepoint", Boolean.FALSE);

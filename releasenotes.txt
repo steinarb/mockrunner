@@ -1,6 +1,9 @@
 
 mockrunner-0.3.9:
 
+- MockResultSet now throws an exception, if a get()-method is called and the cursor
+  is in an invalid row
+
 mockrunner-0.3.8:
 
 - the TestCaseAdapter classes are abstract now to prevent problems with some

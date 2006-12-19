@@ -133,6 +133,10 @@ public class MockResultSet implements ResultSet, Cloneable
             copy.insertRow = copyColumnDataMap(insertRow);
             copy.columnMap = copyColumnDataMap(columnMap);
             copy.columnMapCopy = copyColumnDataMap(columnMapCopy);
+            if(null != resultSetMetaData && resultSetMetaData instanceof MockResultSetMetaData)
+            {
+                copy.resultSetMetaData = (ResultSetMetaData)((MockResultSetMetaData)resultSetMetaData).clone();
+            }
             return copy;
         }
         catch(CloneNotSupportedException exc)
@@ -718,11 +722,7 @@ public class MockResultSet implements ResultSet, Cloneable
     public Object getObject(int columnIndex) throws SQLException
     {
         checkColumnBounds(columnIndex);
-        if(!isCurrentRowValid())
-        {
-            wasNull = true;
-            return null;
-        }
+        checkRowBounds();
         String columnName = (String)columnNameList.get(columnIndex - 1);
         return getObject(columnName);
     }
@@ -730,11 +730,7 @@ public class MockResultSet implements ResultSet, Cloneable
     public Object getObject(String columnName) throws SQLException
     {
         checkColumnName(columnName);
-        if(!isCurrentRowValid())
-        {
-            wasNull = true;
-            return null;
-        }
+        checkRowBounds();
         if(rowDeleted()) throw new SQLException("row was deleted");
         List column;
         if(isDatabaseView)
@@ -1691,6 +1687,26 @@ public class MockResultSet implements ResultSet, Cloneable
         updateBinaryStream(columnName, stream, length);
     }
 
+    public void updateAsciiStream(int columnIndex, InputStream stream, long length) throws SQLException
+    {
+        updateBinaryStream(columnIndex, stream, length);
+    }
+
+    public void updateAsciiStream(String columnName, InputStream stream, long length) throws SQLException
+    {
+        updateBinaryStream(columnName, stream, length);
+    }
+    
+    public void updateAsciiStream(int columnIndex, InputStream stream) throws SQLException
+    {
+        updateBinaryStream(columnIndex, stream);
+    }
+
+    public void updateAsciiStream(String columnName, InputStream stream) throws SQLException
+    {
+        updateBinaryStream(columnName, stream);
+    }
+
     public void updateBinaryStream(int columnIndex, InputStream stream, int length) throws SQLException
     {
         byte[] data = StreamUtil.getStreamAsByteArray(stream, length);
@@ -1700,6 +1716,28 @@ public class MockResultSet implements ResultSet, Cloneable
     public void updateBinaryStream(String columnName, InputStream stream, int length) throws SQLException
     {
         byte[] data = StreamUtil.getStreamAsByteArray(stream, length);
+        updateObject(columnName, new ByteArrayInputStream(data));
+    }
+
+    public void updateBinaryStream(int columnIndex, InputStream stream, long length) throws SQLException
+    {
+        updateBinaryStream(columnIndex, stream, (int)length);
+    }
+
+    public void updateBinaryStream(String columnName, InputStream stream, long length) throws SQLException
+    {
+        updateBinaryStream(columnName, stream, (int)length);
+    }
+    
+    public void updateBinaryStream(int columnIndex, InputStream stream) throws SQLException
+    {
+        byte[] data = StreamUtil.getStreamAsByteArray(stream);
+        updateObject(columnIndex, new ByteArrayInputStream(data));
+    }
+
+    public void updateBinaryStream(String columnName, InputStream stream) throws SQLException
+    {
+        byte[] data = StreamUtil.getStreamAsByteArray(stream);
         updateObject(columnName, new ByteArrayInputStream(data));
     }
 
@@ -1715,6 +1753,28 @@ public class MockResultSet implements ResultSet, Cloneable
         updateObject(columnName, new StringReader(data));
     }
     
+    public void updateCharacterStream(int columnIndex, Reader reader, long length) throws SQLException
+    {
+        updateCharacterStream(columnIndex, reader, (int)length);
+    }
+
+    public void updateCharacterStream(String columnName, Reader reader, long length) throws SQLException
+    {
+        updateCharacterStream(columnName, reader, (int)length);
+    }
+
+    public void updateCharacterStream(int columnIndex, Reader reader) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader);
+        updateObject(columnIndex, new StringReader(data));
+    }
+
+    public void updateCharacterStream(String columnName, Reader reader) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader);
+        updateObject(columnName, new StringReader(data));
+    }
+
     public void updateRef(int columnIndex, Ref ref) throws SQLException
     {
         updateObject(columnIndex, ref);
@@ -1735,6 +1795,30 @@ public class MockResultSet implements ResultSet, Cloneable
         updateObject(columnName, blob);
     }
 
+    public void updateBlob(int columnIndex, InputStream stream, long length) throws SQLException
+    {
+        byte[] data = StreamUtil.getStreamAsByteArray(stream, (int)length);
+        updateBlob(columnIndex, new MockBlob(data));
+    }
+
+    public void updateBlob(String columnName, InputStream stream, long length) throws SQLException
+    {
+        byte[] data = StreamUtil.getStreamAsByteArray(stream, (int)length);
+        updateBlob(columnName, new MockBlob(data));
+    }
+    
+    public void updateBlob(int columnIndex, InputStream stream) throws SQLException
+    {
+        byte[] data = StreamUtil.getStreamAsByteArray(stream);
+        updateBlob(columnIndex, new MockBlob(data));
+    }
+
+    public void updateBlob(String columnName, InputStream stream) throws SQLException
+    {
+        byte[] data = StreamUtil.getStreamAsByteArray(stream);
+        updateBlob(columnName, new MockBlob(data));
+    }
+
     public void updateClob(int columnIndex, Clob clob) throws SQLException
     {
         updateObject(columnIndex, clob);
@@ -1743,6 +1827,30 @@ public class MockResultSet implements ResultSet, Cloneable
     public void updateClob(String columnName, Clob clob) throws SQLException
     {
         updateObject(columnName, clob);
+    }
+
+    public void updateClob(int columnIndex, Reader reader, long length) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader, (int)length);
+        updateClob(columnIndex, new MockClob(data));
+    }  
+
+    public void updateClob(String columnName, Reader reader, long length) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader, (int)length);
+        updateClob(columnName, new MockClob(data));
+    }
+    
+    public void updateClob(int columnIndex, Reader reader) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader);
+        updateClob(columnIndex, new MockClob(data));
+    }
+
+    public void updateClob(String columnName, Reader reader) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader);
+        updateClob(columnName, new MockClob(data));
     }
 
     public void updateArray(int columnIndex, Array array) throws SQLException
@@ -1775,7 +1883,8 @@ public class MockResultSet implements ResultSet, Cloneable
     
     public void insertRow() throws SQLException
     {
-        if(!isCursorInInsertRow) throw new SQLException("cursor is in insert row");
+        if(!isCursorInInsertRow) throw new SQLException("cursor is not in insert row");
+        checkResultSetConcurrency();
         insertRow(cursor);
     }
 
@@ -1783,6 +1892,7 @@ public class MockResultSet implements ResultSet, Cloneable
     {
         if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
         if(rowDeleted()) throw new SQLException("row was deleted");
+        checkResultSetConcurrency();
         checkRowBounds();
         updateRow(cursor, true);
         updatedRows.set(cursor, new Boolean(true));
@@ -1791,6 +1901,7 @@ public class MockResultSet implements ResultSet, Cloneable
     public void deleteRow() throws SQLException
     {
         if(isCursorInInsertRow) throw new SQLException("cursor is in insert row");
+        checkResultSetConcurrency();
         checkRowBounds();
         deleteRow(cursor);
         deletedRows.set(cursor, new Boolean(true));
