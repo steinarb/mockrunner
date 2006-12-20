@@ -201,7 +201,7 @@ public class MockResultSetInfo implements ResultSetInfo
 
         public int hashCode()
         {
-            return (31 * type) + (31 * concurrency);
+            return ((31 + type) * 31) + concurrency;
         }
     }
 }

@@ -88,17 +88,10 @@ public class MockFunctionMapper implements FunctionMapper
 
         public int hashCode()
         {
-            int prefixHash = 0;
-            if(null != prefix)
-            {
-                prefixHash = 31 * prefix.hashCode();
-            }
-            int localHash = 0;
-            if(null != localName)
-            {
-                localHash = 31 * localName.hashCode();
-            }
-            return (prefixHash + localHash);
+            int hashCode = 17;
+            if(null != prefix) hashCode = (31 * hashCode) + prefix.hashCode();
+            if(null != localName) hashCode = (31 * hashCode) + localName.hashCode();
+            return hashCode;
         }
     }
 }

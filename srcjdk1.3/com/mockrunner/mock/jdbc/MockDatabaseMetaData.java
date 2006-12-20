@@ -2473,8 +2473,8 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         
         public int hashCode()
         {
-            int hashCode = super.hashCode() + scope;
-            hashCode += nullable ? 31 : 62;
+            int hashCode = (super.hashCode() * 31) + scope;
+            hashCode = (31 * hashCode) + (nullable ? 31 : 62);
             return hashCode;
         }
     }
@@ -2529,8 +2529,8 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public int hashCode()
         {
             int hashCode = super.hashCode();
-            hashCode += unique ? 31 : 62;
-            hashCode += approximate ? (3 * 31) : (4 * 31);
+            hashCode = (31 * hashCode) + (unique ? 31 : 62);
+            hashCode = (31 * hashCode) + (approximate ? (3 * 31) : (4 * 31));
             return hashCode;
         }
     }
