@@ -20,7 +20,19 @@ public class MockResultSetMetaDataTest extends TestCase
         metaData = null;
     }
     
-    private void verifyMetaData() throws SQLException
+    private void prepareMetaData()
+    {
+        metaData.setColumnClassName(1, "ClassName");
+        metaData.setColumnCount(4);
+        metaData.setColumnTypeName(2, "TypeName");
+        metaData.setColumnDisplaySize(3, 7);
+        metaData.setSearchable(2, false);
+        metaData.setReadOnly(5, true);
+        metaData.setScale(1, 2);
+        metaData.setNullable(2, 3);
+    }
+    
+    private void verifyMetaData(MockResultSetMetaData metaData) throws SQLException
     {
         assertEquals("ClassName", metaData.getColumnClassName(1));
         assertEquals(Object.class.getName(), metaData.getColumnClassName(2));
@@ -39,16 +51,10 @@ public class MockResultSetMetaDataTest extends TestCase
     
     public void testSetAndClone() throws Exception
     {
-        metaData.setColumnClassName(1, "ClassName");
-        metaData.setColumnCount(4);
-        metaData.setColumnTypeName(2, "TypeName");
-        metaData.setColumnDisplaySize(3, 7);
-        metaData.setSearchable(2, false);
-        metaData.setReadOnly(5, true);
-        metaData.setScale(1, 2);
-        metaData.setNullable(2, 3);
-        verifyMetaData();
-        metaData = (MockResultSetMetaData)metaData.clone();
-        verifyMetaData();
+        prepareMetaData();
+        verifyMetaData(metaData);
+        MockResultSetMetaData clonedMetaData = (MockResultSetMetaData)metaData.clone();
+        assertNotSame(metaData, clonedMetaData);
+        verifyMetaData(clonedMetaData);
     }
 }

@@ -268,8 +268,7 @@ public class ArrayUtilTest extends TestCase
         assertEquals(0, ArrayUtil.computeHashCode(null));
         assertEquals("123".hashCode(), ArrayUtil.computeHashCode("123"));
         assertEquals(ArrayUtil.computeHashCode(new String[] {"1", null}), ArrayUtil.computeHashCode(new String[] {null, "1"}));
-        assertEquals(ArrayUtil.computeHashCode(new String[] {"1", "2"}), ArrayUtil.computeHashCode(new String[] {"2", "1"}));
-        assertEquals(62, ArrayUtil.computeHashCode(new byte[] {1, 1}));
+        assertEquals(16369, ArrayUtil.computeHashCode(new byte[] {1, 1}));
         assertFalse(ArrayUtil.computeHashCode(new String[] {"1", "2"}) == ArrayUtil.computeHashCode(new String[] {"1", "2", "3"}));
     }
     

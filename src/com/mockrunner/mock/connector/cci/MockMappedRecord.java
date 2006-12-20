@@ -101,7 +101,7 @@ public class MockMappedRecord extends MockRecord implements MappedRecord
 
     public int hashCode()
     {
-        return super.hashCode() + 31 * backingMap.hashCode();
+        return super.hashCode() * 31 + backingMap.hashCode();
     }
 
     public String toString()

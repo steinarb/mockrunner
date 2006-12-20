@@ -90,7 +90,7 @@ public class MockStreamableByteArrayRecord extends MockRecord implements Streama
 
     public int hashCode()
     {
-        return super.hashCode() + 31 * ArrayUtil.computeHashCode(content);
+        return super.hashCode() * 31 + ArrayUtil.computeHashCode(content);
     }
 
     public Object clone()
