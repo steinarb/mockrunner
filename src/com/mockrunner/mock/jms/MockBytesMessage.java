@@ -596,11 +596,11 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public int hashCode()
     {
-        int value = 0;
+        int value = 17;
         byte[] data = getBytes();
         for(int ii = 0; ii < data.length; ii++)
         {
-            value += 31 * data[ii];
+            value = (31 * value) + data[ii];
         }
         return value;
     }

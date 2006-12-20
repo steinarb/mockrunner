@@ -146,8 +146,8 @@ public class MockArray implements Array, Cloneable
     public int hashCode()
     {
         int hashCode = ArrayUtil.computeHashCode(array);
-        hashCode += 31 * baseType;
-        if(null != sqlTypeName) hashCode += 31 * sqlTypeName.hashCode();
+        hashCode = (31 * hashCode) + baseType;
+        if(null != sqlTypeName) hashCode = (31 * hashCode) + sqlTypeName.hashCode();
         return hashCode;
     }
 

@@ -2312,10 +2312,10 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         
         public int hashCode()
         {
-            int hashCode = 0;
-            if(null != catalog) hashCode += 31 * catalog.hashCode();
-            if(null != schema) hashCode += 31 * schema.hashCode();
-            if(null != table) hashCode += 31 * table.hashCode();
+            int hashCode = 17;
+            if(null != catalog) hashCode = (31 * hashCode) + catalog.hashCode();
+            if(null != schema) hashCode = (31 * hashCode) + schema.hashCode();
+            if(null != table) hashCode = (31 * hashCode) + table.hashCode();
             return hashCode;
         }
     }
@@ -2367,7 +2367,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public int hashCode()
         {
             int hashCode = super.hashCode();
-            if(null != attributeNamePattern) hashCode += 31 * attributeNamePattern.hashCode();
+            if(null != attributeNamePattern) hashCode = (31 * hashCode) + attributeNamePattern.hashCode();
             return hashCode;
         }
     }
@@ -2419,7 +2419,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public int hashCode()
         {
             int hashCode = super.hashCode();
-            if(null != columnNamePattern) hashCode += 31 * columnNamePattern.hashCode();
+            if(null != columnNamePattern) hashCode = (31 * hashCode) + columnNamePattern.hashCode();
             return hashCode;
         }
     }
@@ -2603,7 +2603,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
                 {
                     if(null != types[ii])
                     {
-                        hashCode += 31 * types[ii].hashCode();
+                        hashCode = (31 * hashCode) + types[ii].hashCode();
                     }
                 }
             }
@@ -2677,7 +2677,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             {
                 for(int ii = 0; ii < types.length; ii++)
                 {
-                    hashCode += 31 * types[ii];
+                    hashCode = (31 * hashCode) + types[ii];
                 }
             }
             return hashCode;
@@ -2737,8 +2737,8 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         public int hashCode()
         {
             int hashCode = 0;
-            if(null != identifier1) hashCode += 31 * identifier1.hashCode();
-            if(null != identifier2) hashCode += 31 * identifier2.hashCode();
+            if(null != identifier1) hashCode = (31 * hashCode) + identifier1.hashCode();
+            if(null != identifier2) hashCode = (31 * hashCode) + identifier2.hashCode();
             return hashCode;
         }
     }

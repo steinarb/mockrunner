@@ -343,7 +343,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
 
     public int hashCode()
     {
-        int value = 0;
+        int value = 17;
         Iterator values = data.values().iterator();
         while(values.hasNext())
         {
@@ -352,12 +352,12 @@ public class MockMapMessage extends MockMessage implements MapMessage
             {
                 for(int ii = 0; ii < ((byte[])nextValue).length; ii++)
                 {
-                    value += 31 * ((byte[])nextValue)[ii];
+                    value = (31 * value) + ((byte[])nextValue)[ii];
                 }
             }
             else if(nextValue != null)
             {
-                value += 31 * nextValue.hashCode();
+                value = (31 * value) + nextValue.hashCode();
             }
         }
         return value;

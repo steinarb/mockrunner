@@ -371,11 +371,11 @@ public class ArrayUtil
         if(null == array) return 0;
         if(!array.getClass().isArray()) return array.hashCode();
         int length = Array.getLength(array);
-        int hashCode = 0;
+        int hashCode = 17;
         for(int ii = 0; ii < length; ii++)
         {
             Object value = Array.get(array, ii);
-            if(null != value) hashCode += 31 * value.hashCode();
+            if(null != value) hashCode = (31 * hashCode) + value.hashCode();
         }
         return hashCode;
     }

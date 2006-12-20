@@ -157,7 +157,7 @@ public class MockIndexedRecord extends MockRecord implements IndexedRecord
 
     public int hashCode()
     {
-        return super.hashCode() + 31 * backingList.hashCode();
+        return super.hashCode() * 31 + backingList.hashCode();
     }
 
     public String toString()

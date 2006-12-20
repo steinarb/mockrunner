@@ -447,20 +447,25 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
 
     public int hashCode()
     {
-        int value = 0;
-        for(int ii = 0; ii < data.size(); ii++)
+        int value = 17;
+        Vector theData = new Vector(data);
+        if(isInWriteMode())
         {
-            Object nextValue = data.get(ii);
+            Collections.reverse(theData);
+        }
+        for(int ii = 0; ii < theData.size(); ii++)
+        {
+            Object nextValue = theData.get(ii);
             if(nextValue instanceof byte[])
             {
                 for(int yy = 0; yy < ((byte[])nextValue).length; yy++)
                 {
-                    value += 31 * ((byte[])nextValue)[yy];
+                    value = (31 * value) + ((byte[])nextValue)[yy];
                 }
             }
             else if(nextValue != null)
             {
-                value += 31 * nextValue.hashCode();
+                value = (31 * value) + nextValue.hashCode();
             }
         }
         return value;

@@ -61,8 +61,8 @@ public class MockRecord implements Record
     public int hashCode()
     {
         int hashCode = 0;
-        if(null != recordName) hashCode += 31 * recordName.hashCode();
-        if(null != recordDescription) hashCode += 31 * recordDescription.hashCode();
+        if(null != recordName) hashCode = (31 * hashCode) + recordName.hashCode();
+        if(null != recordDescription) hashCode = (31 * hashCode) + recordDescription.hashCode();
         return hashCode;
     }
 

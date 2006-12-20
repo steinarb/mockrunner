@@ -309,7 +309,7 @@ public class MockResultSetMetaData implements ResultSetMetaData, Cloneable
         if(null == tableName) return "";
         return tableName;
     }
-    
+
     public Object clone() throws CloneNotSupportedException
     {
         try

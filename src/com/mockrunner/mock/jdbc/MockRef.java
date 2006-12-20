@@ -66,8 +66,8 @@ public class MockRef implements Ref, Cloneable
     public int hashCode()
     {
         int hashCode = 0;
-        if(null != baseTypeName) hashCode += 31 * baseTypeName.hashCode();
-        if(null != object) hashCode += 31 * object.hashCode();
+        if(null != baseTypeName) hashCode = (31 * hashCode) + baseTypeName.hashCode();
+        if(null != object) hashCode = (31 * hashCode) + object.hashCode();
         return hashCode;
     }
     
