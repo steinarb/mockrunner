@@ -11,18 +11,19 @@ public class MockStructTest extends TestCase
 {
     private MockStruct prepareTestStruct()
     {
-        MockStruct struct = new MockStruct("teststruct");
-        struct.addAttribute("myAttribute1");
-        struct.addAttributes(new Object[] {new Integer(2), "anAttribute3"});
+        MockStruct struct = new MockStruct("teststruct", new Object[] {new Long(1), "anAttribute2"});
+        struct.addAttribute("myAttribute3");
+        struct.addAttributes(new Object[] {new Integer(4), "anAttribute5"});
         List list = new ArrayList();
-        list.add("myAttribute4");
+        list.add("myAttribute6");
+        list.add("myAttribute7");
         struct.addAttributes(list);
         return struct;
     }
     
     public void testEquals() throws Exception
     {
-        MockStruct nullStruct = new MockStruct(null);
+        MockStruct nullStruct = new MockStruct((String)null);
         assertFalse(nullStruct.equals(null));
         assertTrue(nullStruct.equals(nullStruct));
         MockStruct struct = new MockStruct("test");
@@ -61,10 +62,13 @@ public class MockStructTest extends TestCase
     {
         MockStruct struct = prepareTestStruct();
         String structString = struct.toString();
-        assertContains(structString, "myAttribute1");
-        assertContains(structString, "2");
-        assertContains(structString, "anAttribute3");
-        assertContains(structString, "myAttribute4");
+        assertContains(structString, "1");
+        assertContains(structString, "anAttribute2");
+        assertContains(structString, "myAttribute3");
+        assertContains(structString, "4");
+        assertContains(structString, "anAttribute5");
+        assertContains(structString, "myAttribute6");
+        assertContains(structString, "myAttribute7");
     }
     
     public void testClone() throws Exception
@@ -79,10 +83,13 @@ public class MockStructTest extends TestCase
     {
         assertEquals("teststruct", struct.getSQLTypeName());
         Object[] attributes = struct.getAttributes();
-        assertEquals("myAttribute1", attributes[0]);
-        assertEquals(new Integer(2), attributes[1]);
-        assertEquals("anAttribute3", attributes[2]);
-        assertEquals("myAttribute4", attributes[3]);
+        assertEquals(new Long(1), attributes[0]);
+        assertEquals("anAttribute2", attributes[1]);
+        assertEquals("myAttribute3", attributes[2]);
+        assertEquals(new Integer(4), attributes[3]);
+        assertEquals("anAttribute5", attributes[4]);
+        assertEquals("myAttribute6", attributes[5]);
+        assertEquals("myAttribute7", attributes[6]);
     }
     
     private void assertContains(String structString, String expected)

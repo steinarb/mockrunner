@@ -1,6 +1,7 @@
 
 mockrunner-0.3.9:
 
+- added some constructors to MockStruct
 - MockResultSet now throws an exception, if a get()-method is called and the cursor
   is in an invalid row
 
