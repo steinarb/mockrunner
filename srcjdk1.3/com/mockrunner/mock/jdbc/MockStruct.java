@@ -14,10 +14,21 @@ public class MockStruct implements Struct, Cloneable
     private String sqlTypeName;
     private List attributes;
     
-    public MockStruct(String sqlTypeName)
+    public MockStruct(Object[] attributes)
+    {
+        this(null, attributes);
+    }
+    
+    public MockStruct(String sqlTypeName, Object[] attributes)
     {
         this.sqlTypeName = sqlTypeName;
-        attributes = new ArrayList();
+        this.attributes = new ArrayList();
+        addAttributes(attributes);
+    }
+    
+    public MockStruct(String sqlTypeName)
+    {
+        this(sqlTypeName, new Object[0]);
     }
     
     public String getSQLTypeName() throws SQLException

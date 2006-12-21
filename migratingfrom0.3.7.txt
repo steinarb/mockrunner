@@ -1,3 +1,10 @@
+mockrunner-0.3.9:
+
+In 0.3.9 MockStruct has some more constructors which may cause ambiguity errors
+if you use "new MockStruct(null)".
+
+Older API changes:
+
 mockrunner-0.3.7:
 
 As of version 0.3.7, the processing of the tag lifecycle in the tag classes test 
@@ -7,8 +14,6 @@ calling doEndTag() at the end of the lifecycle. Calling this method before popul
 the attributes did not make much sense. It's very unlikely that this change will 
 affect your tests. release is only called, if setDoRelease() is set to true. It is 
 false per default and it is usually not necessary to change it.
-
-Older API changes:
 
 mockrunner-0.3.6:
 
