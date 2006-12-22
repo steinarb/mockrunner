@@ -82,130 +82,85 @@ public class PolyResultSet implements ResultSet
     {
         return current.getString(columnIndex);
     }
-
-    public String getString(String columnName) throws SQLException
-    {
-        return current.getString(columnName);
-    }
     
     public boolean getBoolean(int columnIndex) throws SQLException
     {
         return current.getBoolean(columnIndex);
-    }
-
-    public boolean getBoolean(String columnName) throws SQLException
-    {
-        return current.getBoolean(columnName);
     }
     
     public byte getByte(int columnIndex) throws SQLException
     {
         return current.getByte(columnIndex);
     }
-
-    public byte getByte(String columnName) throws SQLException
-    {
-        return current.getByte(columnName);
-    }
     
     public short getShort(int columnIndex) throws SQLException
     {
         return current.getShort(columnIndex);
-    }
-
-    public short getShort(String columnName) throws SQLException
-    {
-        return current.getShort(columnName);
     }
     
     public int getInt(int columnIndex) throws SQLException
     {
         return current.getInt(columnIndex);
     }
-
-    public int getInt(String columnName) throws SQLException
-    {
-        return current.getInt(columnName);
-    }
     
     public long getLong(int columnIndex) throws SQLException
     {
         return current.getLong(columnIndex);
-    }
-
-    public long getLong(String columnName) throws SQLException
-    {
-        return current.getLong(columnName);
     }
     
     public float getFloat(int columnIndex) throws SQLException
     {
         return current.getFloat(columnIndex);
     }
-
-    public float getFloat(String columnName) throws SQLException
-    {
-        return current.getFloat(columnName);
-    }
     
     public double getDouble(int columnIndex) throws SQLException
     {
         return current.getDouble(columnIndex);
-    }
-
-    public double getDouble(String columnName) throws SQLException
-    {
-        return current.getDouble(columnName);
     }
     
     public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException
     {
         return current.getBigDecimal(columnIndex);
     }
-
-    public BigDecimal getBigDecimal(String columnName, int scale) throws SQLException
+    
+    public BigDecimal getBigDecimal(int columnIndex) throws SQLException
     {
-        return current.getBigDecimal(columnName);
+        return current.getBigDecimal(columnIndex);
     }
     
     public byte[] getBytes(int columnIndex) throws SQLException
     {
         return current.getBytes(columnIndex);
     }
-
-    public byte[] getBytes(String columnName) throws SQLException
-    {
-        return current.getBytes(columnName);
-    }
     
     public Date getDate(int columnIndex) throws SQLException
     {
         return current.getDate(columnIndex);
     }
-
-    public Date getDate(String columnName) throws SQLException
+    
+    public Date getDate(int columnIndex, Calendar cal) throws SQLException
     {
-        return current.getDate(columnName);
+        return current.getDate(columnIndex, cal);
     }
     
     public Time getTime(int columnIndex) throws SQLException
     {
         return current.getTime(columnIndex);
     }
-
-    public Time getTime(String columnName) throws SQLException
+    
+    public Time getTime(int columnIndex, Calendar cal) throws SQLException
     {
-        return current.getTime(columnName);
+        return current.getTime(columnIndex, cal);
     }
     
     public Timestamp getTimestamp(int columnIndex) throws SQLException
     {
         return current.getTimestamp(columnIndex);
     }
-
-    public Timestamp getTimestamp(String columnName) throws SQLException
+    
+    public Timestamp getTimestamp(int columnIndex, Calendar cal) throws SQLException
     {
-        return current.getTimestamp(columnName);
+        return current.getTimestamp(columnIndex, cal);
     }
     
     public InputStream getAsciiStream(int columnIndex) throws SQLException
@@ -213,29 +168,204 @@ public class PolyResultSet implements ResultSet
         return current.getAsciiStream(columnIndex);
     }
 
-    public InputStream getAsciiStream(String columnName) throws SQLException
+    public InputStream getBinaryStream(int columnIndex) throws SQLException
     {
-        return current.getAsciiStream(columnName);
+        return current.getBinaryStream(columnIndex);
     }
     
     public InputStream getUnicodeStream(int columnIndex) throws SQLException
     {
         return current.getUnicodeStream(columnIndex);
     }
+    
+    public Reader getCharacterStream(int columnIndex) throws SQLException
+    {
+        return current.getCharacterStream(columnIndex);
+    }
+    
+    public Reader getNCharacterStream(int columnIndex) throws SQLException
+    {
+        return current.getCharacterStream(columnIndex);
+    }
+    
+    public Ref getRef(int columnIndex) throws SQLException
+    {
+        return current.getRef(columnIndex);
+    }
 
+    public Blob getBlob(int columnIndex) throws SQLException
+    {
+        return current.getBlob(columnIndex);
+    }
+
+    public Clob getClob(int columnIndex) throws SQLException
+    {
+        return current.getClob(columnIndex);
+    }
+
+    public Array getArray(int columnIndex) throws SQLException
+    {
+        return current.getArray(columnIndex);
+    }
+    
+    /*public URL getURL(int columnIndex) throws SQLException
+    {
+        return current.getURL(columnIndex);
+    }*/
+    
+    public Object getObject(int columnIndex) throws SQLException
+    {
+        return current.getObject(columnIndex);
+    }
+    
+    public Object getObject(int columnIndex, Map map) throws SQLException
+    {
+        return current.getObject(columnIndex, map);
+    }
+    
+    public String getString(String columnName) throws SQLException
+    {
+        return current.getString(columnName);
+    }
+
+    public boolean getBoolean(String columnName) throws SQLException
+    {
+        return current.getBoolean(columnName);
+    }
+
+    public byte getByte(String columnName) throws SQLException
+    {
+        return current.getByte(columnName);
+    }
+
+    public short getShort(String columnName) throws SQLException
+    {
+        return current.getShort(columnName);
+    }
+
+    public int getInt(String columnName) throws SQLException
+    {
+        return current.getInt(columnName);
+    }
+
+    public long getLong(String columnName) throws SQLException
+    {
+        return current.getLong(columnName);
+    }
+
+    public float getFloat(String columnName) throws SQLException
+    {
+        return current.getFloat(columnName);
+    }
+
+    public double getDouble(String columnName) throws SQLException
+    {
+        return current.getDouble(columnName);
+    }
+
+    public BigDecimal getBigDecimal(String columnName, int scale) throws SQLException
+    {
+        return current.getBigDecimal(columnName);
+    }
+    
+    public BigDecimal getBigDecimal(String columnName) throws SQLException
+    {
+        return current.getBigDecimal(columnName);
+    }
+
+    public byte[] getBytes(String columnName) throws SQLException
+    {
+        return current.getBytes(columnName);
+    } 
+
+    public Date getDate(String columnName) throws SQLException
+    {
+        return current.getDate(columnName);
+    }
+    
+    public Date getDate(String columnName, Calendar cal) throws SQLException
+    {
+        return current.getDate(columnName, cal);
+    }
+
+    public Time getTime(String columnName) throws SQLException
+    {
+        return current.getTime(columnName);
+    }
+    
+    public Time getTime(String columnName, Calendar cal) throws SQLException
+    {
+        return current.getTime(columnName, cal);
+    }
+
+    public Timestamp getTimestamp(String columnName) throws SQLException
+    {
+        return current.getTimestamp(columnName);
+    }
+    
+    public Timestamp getTimestamp(String columnName, Calendar cal)  throws SQLException
+    {
+        return current.getTimestamp(columnName, cal);
+    }
+
+    public InputStream getAsciiStream(String columnName) throws SQLException
+    {
+        return current.getAsciiStream(columnName);
+    }
+    
     public InputStream getUnicodeStream(String columnName) throws SQLException
     {
         return current.getUnicodeStream(columnName);
-    }
-    
-    public InputStream getBinaryStream(int columnIndex) throws SQLException
-    {
-        return current.getBinaryStream(columnIndex);
     }
 
     public InputStream getBinaryStream(String columnName) throws SQLException
     {
         return current.getBinaryStream(columnName);
+    }
+    
+    public Reader getCharacterStream(String columnName) throws SQLException
+    {
+        return current.getCharacterStream(columnName);
+    }
+    
+    public Reader getNCharacterStream(String columnName) throws SQLException
+    {
+        return current.getCharacterStream(columnName);
+    }
+    
+    public Ref getRef(String columnName) throws SQLException
+    {
+        return current.getRef(columnName);
+    }
+
+    public Blob getBlob(String columnName) throws SQLException
+    {
+        return current.getBlob(columnName);
+    }
+
+    public Clob getClob(String columnName) throws SQLException
+    {
+        return current.getClob(columnName);
+    }
+
+    public Array getArray(String colName) throws SQLException
+    {
+        return current.getArray(colName);
+    }
+    
+    /*public URL getURL(String columnName) throws SQLException
+    {
+        return current.getURL(columnName);
+    }*/
+    
+    public Object getObject(String columnName) throws SQLException
+    {
+        return current.getObject(columnName);
+    }
+    
+    public Object getObject(String columnName, Map map) throws SQLException
+    {
+        return current.getObject(columnName, map);
     }
 
     public SQLWarning getWarnings() throws SQLException
@@ -258,39 +388,9 @@ public class PolyResultSet implements ResultSet
         return current.getMetaData();
     }
 
-    public Object getObject(int columnIndex) throws SQLException
-    {
-        return current.getObject(columnIndex);
-    }
-
-    public Object getObject(String columnName) throws SQLException
-    {
-        return current.getObject(columnName);
-    }
-
     public int findColumn(String columnName) throws SQLException
     {
         return current.findColumn(columnName);
-    }
-
-    public Reader getCharacterStream(int columnIndex) throws SQLException
-    {
-        return current.getCharacterStream(columnIndex);
-    }
-
-    public Reader getCharacterStream(String columnName) throws SQLException
-    {
-        return current.getCharacterStream(columnName);
-    }
-
-    public BigDecimal getBigDecimal(int columnIndex) throws SQLException
-    {
-        return current.getBigDecimal(columnIndex);
-    }
-
-    public BigDecimal getBigDecimal(String columnName) throws SQLException
-    {
-        return current.getBigDecimal(columnName);
     }
 
     public boolean isBeforeFirst() throws SQLException
@@ -438,96 +538,6 @@ public class PolyResultSet implements ResultSet
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
 
-    public Object getObject(int columnIndex, Map map) throws SQLException
-    {
-        return current.getObject(columnIndex, map);
-    }
-
-    public Ref getRef(int columnIndex) throws SQLException
-    {
-        return current.getRef(columnIndex);
-    }
-
-    public Blob getBlob(int columnIndex) throws SQLException
-    {
-        return current.getBlob(columnIndex);
-    }
-
-    public Clob getClob(int columnIndex) throws SQLException
-    {
-        return current.getClob(columnIndex);
-    }
-
-    public Array getArray(int columnIndex) throws SQLException
-    {
-        return current.getArray(columnIndex);
-    }
-
-    public Object getObject(String columnName, Map map) throws SQLException
-    {
-        return current.getObject(columnName, map);
-    }
-
-    public Ref getRef(String columnName) throws SQLException
-    {
-        return current.getRef(columnName);
-    }
-
-    public Blob getBlob(String columnName) throws SQLException
-    {
-        return current.getBlob(columnName);
-    }
-
-    public Clob getClob(String columnName) throws SQLException
-    {
-        return current.getClob(columnName);
-    }
-
-    public Array getArray(String colName) throws SQLException
-    {
-        return current.getArray(colName);
-    }
-
-    public Date getDate(int columnIndex, Calendar cal) throws SQLException
-    {
-        return current.getDate(columnIndex, cal);
-    }
-
-    public Date getDate(String columnName, Calendar cal) throws SQLException
-    {
-        return current.getDate(columnName, cal);
-    }
-
-    public Time getTime(int columnIndex, Calendar cal) throws SQLException
-    {
-        return current.getTime(columnIndex, cal);
-    }
-
-    public Time getTime(String columnName, Calendar cal) throws SQLException
-    {
-        return current.getTime(columnName, cal);
-    }
-
-    public Timestamp getTimestamp(int columnIndex, Calendar cal) throws SQLException
-    {
-        return current.getTimestamp(columnIndex, cal);
-    }
-
-    public Timestamp getTimestamp(String columnName, Calendar cal)	throws SQLException
-    {
-        return current.getTimestamp(columnName, cal);
-    }
-
-    /*public URL getURL(int columnIndex) throws SQLException
-    {
-        return current.getURL(columnIndex);
-    }*/
-
-    /*public URL getURL(String columnName) throws SQLException
-    {
-        return current.getURL(columnName);
-    }*/
-    
     public void updateNull(int columnIndex) throws SQLException  
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
@@ -578,6 +588,11 @@ public class PolyResultSet implements ResultSet
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
 
+    public void updateNString(int columnIndex, String value) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
+
     public void updateBytes(int columnIndex, byte value[]) throws SQLException
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
@@ -603,17 +618,7 @@ public class PolyResultSet implements ResultSet
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
     
-    public void updateAsciiStream(String columnName, InputStream stream, int length) throws SQLException
-    {
-        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
-    }
-    
     public void updateAsciiStream(int columnIndex, InputStream stream, long length) throws SQLException
-    {
-        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
-    }
-
-    public void updateAsciiStream(String columnName, InputStream stream, long length) throws SQLException
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
@@ -622,12 +627,7 @@ public class PolyResultSet implements ResultSet
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
-
-    public void updateAsciiStream(String columnName, InputStream stream) throws SQLException
-    {
-        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
-    }
-
+    
     public void updateBinaryStream(int columnIndex, InputStream stream, int length) throws SQLException
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
@@ -637,13 +637,88 @@ public class PolyResultSet implements ResultSet
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
-
-    public void updateBinaryStream(String columnName, InputStream stream, long length) throws SQLException
+    
+    public void updateBinaryStream(int columnIndex, InputStream stream) throws SQLException
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
     
-    public void updateBinaryStream(int columnIndex, InputStream stream) throws SQLException
+    public void updateCharacterStream(int columnIndex, Reader reader, int length) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
+    
+    public void updateCharacterStream(int columnIndex, Reader reader, long length) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
+    
+    public void updateCharacterStream(int columnIndex, Reader reader) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
+    
+    public void updateNCharacterStream(int columnIndex, Reader x, long length) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
+
+    public void updateNCharacterStream(int columnIndex, Reader x) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
+
+    /*public void updateRef(int columnIndex, Ref value) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }*/
+    
+    public void updateBlob(int columnIndex, InputStream stream, long length) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
+    
+    /*public void updateBlob(int columnIndex, Blob value) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }*/
+    
+    public void updateBlob(int columnIndex, InputStream stream) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
+    
+    /*public void updateClob(int columnIndex, Clob value) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }*/
+    
+    public void updateClob(int columnIndex, Reader reader) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
+    
+    /*public void updateArray(int columnIndex, Array value) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }*/
+    
+    public void updateAsciiStream(String columnName, InputStream stream, int length) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
+
+    public void updateAsciiStream(String columnName, InputStream stream) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
+    
+    public void updateAsciiStream(String columnName, InputStream stream, long length) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
+
+    public void updateBinaryStream(String columnName, InputStream stream, long length) throws SQLException
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
@@ -652,18 +727,8 @@ public class PolyResultSet implements ResultSet
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
-
-    public void updateCharacterStream(int columnIndex, Reader reader, int length) throws SQLException
-    {
-        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
-    }
-    
+ 
     public void updateCharacterStream(String columnName, Reader reader, int length) throws SQLException
-    {
-        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
-    }
-    
-    public void updateCharacterStream(int columnIndex, Reader reader, long length) throws SQLException
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
@@ -673,22 +738,17 @@ public class PolyResultSet implements ResultSet
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
 
-    public void updateCharacterStream(int columnIndex, Reader reader) throws SQLException
-    {
-        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
-    }
-
     public void updateCharacterStream(String columnName, Reader reader) throws SQLException
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
 
-    public void updateObject(int columnIndex, Object x, int scale) throws SQLException
+    public void updateNCharacterStream(String columnLabel, Reader reader, long length) throws SQLException
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
 
-    public void updateObject(int columnIndex, Object x) throws SQLException
+    public void updateNCharacterStream(String columnLabel, Reader reader) throws SQLException
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
@@ -743,6 +803,11 @@ public class PolyResultSet implements ResultSet
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
 
+    public void updateNString(String columnLabel, String value) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
+
     public void updateBytes(String columnName, byte value[]) throws SQLException
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
@@ -778,17 +843,7 @@ public class PolyResultSet implements ResultSet
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
 
-    /*public void updateRef(int columnIndex, Ref value) throws SQLException
-    {
-        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
-    }*/
-    
     /*public void updateRef(String columnName, Ref value) throws SQLException
-    {
-        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
-    }*/
-
-    /*public void updateBlob(int columnIndex, Blob value) throws SQLException
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }*/
@@ -797,18 +852,8 @@ public class PolyResultSet implements ResultSet
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }*/
-    
-    public void updateBlob(int columnIndex, InputStream stream, long length) throws SQLException
-    {
-        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
-    }
 
     public void updateBlob(String columnName, InputStream stream, long length) throws SQLException
-    {
-        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
-    }
-    
-    public void updateBlob(int columnIndex, InputStream stream) throws SQLException
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
@@ -817,11 +862,6 @@ public class PolyResultSet implements ResultSet
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
-
-    /*public void updateClob(int columnIndex, Clob value) throws SQLException
-    {
-        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
-    }*/
 
     /*public void updateClob(String columnName, Clob value) throws SQLException
     {
@@ -837,26 +877,26 @@ public class PolyResultSet implements ResultSet
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
-    
-    public void updateClob(int columnIndex, Reader reader) throws SQLException
-    {
-        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
-    }
 
     public void updateClob(String columnName, Reader reader) throws SQLException
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
 
-    /*public void updateArray(int columnIndex, Array value) throws SQLException
-    {
-        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
-    }*/
-
     /*public void updateArray(String columnName, Array value) throws SQLException
     {
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }*/
+    
+    public void updateObject(int columnIndex, Object x, int scale) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
+
+    public void updateObject(int columnIndex, Object x) throws SQLException
+    {
+        throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
+    }
 
     public boolean isWrapperFor(Class iface) throws SQLException
     {

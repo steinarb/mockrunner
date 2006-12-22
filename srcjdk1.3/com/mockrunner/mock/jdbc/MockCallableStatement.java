@@ -294,6 +294,11 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         return null;
     }
     
+    public String getNString(int parameterIndex) throws SQLException
+    {
+        return getString(parameterIndex);
+    }
+
     public BigDecimal getBigDecimal(int parameterIndex) throws SQLException
     {
         Object value = getObject(parameterIndex);
@@ -370,6 +375,11 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
             return new StringReader(getString(parameterIndex));
         }
         return null;
+    }
+
+    public Reader getNCharacterStream(int parameterIndex) throws SQLException
+    {
+        return getCharacterStream(parameterIndex);
     }
 
     public Date getDate(int parameterIndex) throws SQLException
@@ -549,7 +559,12 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value) return value.toString();
         return null;
     }
-    
+
+    public String getNString(String parameterName) throws SQLException
+    {
+        return getString(parameterName);
+    }
+
     public BigDecimal getBigDecimal(String parameterName) throws SQLException
     {
         Object value = getObject(parameterName);
@@ -621,6 +636,11 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
             return new StringReader(getString(parameterName));
         }
         return null;
+    }
+
+    public Reader getNCharacterStream(String parameterName) throws SQLException
+    {
+        return getCharacterStream(parameterName);
     }
 
     public Date getDate(String parameterName) throws SQLException
@@ -775,6 +795,16 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     {
         setCharacterStream(parameterName, reader, (int)length);
     }
+    
+    public void setNCharacterStream(String parameterName, Reader reader) throws SQLException
+    {
+        setCharacterStream(parameterName, reader);
+    }
+
+    public void setNCharacterStream(String parameterName, Reader reader, long length) throws SQLException
+    {
+        setCharacterStream(parameterName, reader, length);
+    }
 
     public void setBlob(String parameterName, Blob blob) throws SQLException
     {
@@ -816,6 +846,11 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     }
 
     public void setString(String parameterName, String string) throws SQLException
+    {
+        setObject(parameterName, string);
+    }
+
+    public void setNString(String parameterName, String string) throws SQLException
     {
         setObject(parameterName, string);
     }

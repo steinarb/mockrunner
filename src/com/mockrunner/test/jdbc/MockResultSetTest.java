@@ -165,7 +165,7 @@ public class MockResultSetTest extends TestCase
         assertTrue(Arrays.equals(new byte[] {49, 46, 50}, resultSet.getBytes(1)));
         assertFalse(resultSet.wasNull());
         resultSet.next();
-        assertEquals("3.4", resultSet.getString("column"));
+        assertEquals("3.4", resultSet.getNString("column"));
         assertEquals(3.4, resultSet.getDouble(1), 0.0);
         assertEquals(3, resultSet.getInt(1));
         resultSet.next();
@@ -177,7 +177,7 @@ public class MockResultSetTest extends TestCase
         resultSet.next();
         byte[] byteData = new byte[5];
         resultSet.getBinaryStream("column").read(byteData);
-        assertEquals("value", new String(byteData));
+        assertEquals("value", new String(byteData, "ISO-8859-1"));
         assertFalse(resultSet.wasNull());
         resultSet.next();
         assertEquals(0, resultSet.getShort(1));
@@ -186,6 +186,7 @@ public class MockResultSetTest extends TestCase
         assertTrue(resultSet.wasNull());
         resultSet.next();
         assertEquals("value", resultSet.getObject("column"));
+        assertEquals("value", resultSet.getNString("column"));
         Clob clob = resultSet.getClob("column");
         assertEquals("value", clob.getSubString(1, 5));
         assertFalse(resultSet.wasNull());
@@ -234,8 +235,10 @@ public class MockResultSetTest extends TestCase
         assertEquals(new Double(3.4), resultSet.getObject(1));
         assertTrue(Arrays.equals(new byte[] {1, 2, 3}, resultSet.getBlob("column2").getBytes(1, 3)));
         resultSet.next();
-        resultSet.updateObject(1, new String("3"));
+        resultSet.updateObject(1, "3");
         assertEquals(3, resultSet.getLong(1));
+        resultSet.updateNString(1, "1");
+        assertEquals(1, resultSet.getLong(1));
         ByteArrayInputStream stream = new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5});
         resultSet.updateBinaryStream(1, stream, 3);
         InputStream inputStream = resultSet.getBinaryStream(1);
@@ -282,8 +285,14 @@ public class MockResultSetTest extends TestCase
         assertEquals(-1, inputReader.read());
         updateReader = new StringReader("test");
         resultSet.updateCharacterStream(1, updateReader, 1);
+        inputReader = resultSet.getNCharacterStream(1);
+        assertEquals('t', (char)inputReader.read());
+        assertEquals(-1, inputReader.read());
+        updateReader = new StringReader("test");
+        resultSet.updateNCharacterStream(1, updateReader, 2);
         inputReader = resultSet.getCharacterStream(1);
         assertEquals('t', (char)inputReader.read());
+        assertEquals('e', (char)inputReader.read());
         assertEquals(-1, inputReader.read());
     }
     

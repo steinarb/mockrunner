@@ -98,7 +98,7 @@ public class MockPreparedStatementTest extends BaseTestCase
         assertTrue(isResultSet1(testResultSet));
         statement.clearParameters();
         statement.setInt(1, 2);
-        statement.setString(2, "Test");
+        statement.setNString(2, "Test");
         testResultSet = (MockResultSet)statement.executeQuery();
         assertTrue(isResultSet3(testResultSet));
         statement.setString(3, "Test");
@@ -113,14 +113,14 @@ public class MockPreparedStatementTest extends BaseTestCase
         statement.setString(1, "xyz");
         testResultSet = (MockResultSet)statement.executeQuery();
         assertTrue(isResultSet3(testResultSet));
-        statement.setString(3, "xyz");
+        statement.setNString(3, "xyz");
         testResultSet = (MockResultSet)statement.executeQuery();
         assertTrue(isResultSet1(testResultSet));
         preparedStatementHandler.setExactMatchParameter(false);
         statement.clearParameters();
         statement.setString(1, "xyz");
         statement.setLong(2, 1);
-        statement.setString(3, "xyz");
+        statement.setNString(3, "xyz");
         statement.setString(4, "zzz");
         testResultSet = (MockResultSet)statement.executeQuery();
         assertTrue(isResultSet3(testResultSet));
@@ -833,6 +833,12 @@ public class MockPreparedStatementTest extends BaseTestCase
         preparedStatement.setCharacterStream(1, updateReader, 1);
         inputReader = (Reader)preparedStatement.getParameterMap().get(new Integer(1));
         assertEquals('t', (char)inputReader.read());
+        assertEquals(-1, inputReader.read());
+        updateReader = new StringReader("test");
+        preparedStatement.setNCharacterStream(1, updateReader, 2);
+        inputReader = (Reader)preparedStatement.getParameterMap().get(new Integer(1));
+        assertEquals('t', (char)inputReader.read());
+        assertEquals('e', (char)inputReader.read());
         assertEquals(-1, inputReader.read());
     }
     
