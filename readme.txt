@@ -79,7 +79,7 @@ to use.
 To start with Mockrunner check out the JavaDoc and the examples
 in the com.mockrunner.example packages. Most methods are self-explanatory.
 
-Mockrunner uses some classes from ActiveMQ project (http://activemq.codehaus.org/)
+Mockrunner uses some classes from ActiveMQ project (http://incubator.apache.org/activemq/)
 for JMS message selector parsing. The classes are modified in order to
 fit the needs of Mockrunner. The corresponding classes are in a different package
 than the original ActiveMQ classes, so you should not face classloading problems

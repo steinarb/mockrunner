@@ -1,5 +1,9 @@
 package com.mockrunner.test.jdbc;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
@@ -11,6 +15,7 @@ import java.util.Map;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.jdbc.PreparedStatementResultSetHandler;
+import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
@@ -789,5 +794,62 @@ public class MockPreparedStatementTest extends BaseTestCase
         preparedStatement.clearParameters();
         assertEquals(0, preparedStatement.getIndexedParameterMap().size());
         assertEquals(0, preparedStatement.getParameterMap().size());
+    }
+    
+    public void testSetStreamParameters() throws Exception
+    {
+        MockPreparedStatement preparedStatement = (MockPreparedStatement)connection.prepareStatement("insert");
+        ByteArrayInputStream updateStream = new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5});
+        preparedStatement.setAsciiStream(1, updateStream, (long)2);
+        InputStream inputStream = (InputStream)preparedStatement.getParameterMap().get(new Integer(1));
+        assertEquals(1, inputStream.read());
+        assertEquals(2, inputStream.read());
+        assertEquals(-1, inputStream.read());
+        updateStream = new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5});
+        preparedStatement.setAsciiStream(1, updateStream);
+        inputStream = (InputStream)preparedStatement.getParameterMap().get(new Integer(1));
+        assertEquals(1, inputStream.read());
+        assertEquals(2, inputStream.read());
+        assertEquals(3, inputStream.read());
+        assertEquals(4, inputStream.read());
+        assertEquals(5, inputStream.read());
+        assertEquals(-1, inputStream.read());
+        updateStream = new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5});
+        preparedStatement.setBinaryStream(2, updateStream, (long)3);
+        inputStream = (InputStream)preparedStatement.getParameterMap().get(new Integer(2));
+        assertEquals(1, inputStream.read());
+        assertEquals(2, inputStream.read());
+        assertEquals(3, inputStream.read());
+        assertEquals(-1, inputStream.read());
+        StringReader updateReader = new StringReader("test");
+        preparedStatement.setCharacterStream(1, updateReader);
+        Reader inputReader = (Reader)preparedStatement.getParameterMap().get(new Integer(1));
+        assertEquals('t', (char)inputReader.read());
+        assertEquals('e', (char)inputReader.read());
+        assertEquals('s', (char)inputReader.read());
+        assertEquals('t', (char)inputReader.read());
+        assertEquals(-1, inputReader.read());
+        updateReader = new StringReader("test");
+        preparedStatement.setCharacterStream(1, updateReader, 1);
+        inputReader = (Reader)preparedStatement.getParameterMap().get(new Integer(1));
+        assertEquals('t', (char)inputReader.read());
+        assertEquals(-1, inputReader.read());
+    }
+    
+    public void testSetBlobAndClobParameters() throws Exception
+    {
+        MockPreparedStatement preparedStatement = (MockPreparedStatement)connection.prepareStatement("insert");
+        preparedStatement.setBlob(1, new MockBlob(new byte[] {1, 2, 3}));
+        assertEquals(new MockBlob(new byte[] {1, 2, 3}), preparedStatement.getParameterMap().get(new Integer(1)));
+        preparedStatement.setBlob(1, new ByteArrayInputStream(new byte[] {1, 2, 3}));
+        assertEquals(new MockBlob(new byte[] {1, 2, 3}), preparedStatement.getParameterMap().get(new Integer(1)));
+        preparedStatement.setBlob(1, new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5}), 3);
+        assertEquals(new MockBlob(new byte[] {1, 2, 3}), preparedStatement.getParameterMap().get(new Integer(1)));
+        preparedStatement.setClob(2, new MockClob("test"));
+        assertEquals(new MockClob("test"), preparedStatement.getParameterMap().get(new Integer(2)));
+        preparedStatement.setClob(2, new StringReader("test"));
+        assertEquals(new MockClob("test"), preparedStatement.getParameterMap().get(new Integer(2)));
+        preparedStatement.setClob(2, new StringReader("testxyz"), 4);
+        assertEquals(new MockClob("test"), preparedStatement.getParameterMap().get(new Integer(2)));
     }
 }
