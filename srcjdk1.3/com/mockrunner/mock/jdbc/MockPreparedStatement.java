@@ -395,6 +395,16 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     {
         setCharacterStream(parameterIndex, reader, (int)length);
     }
+    
+    public void setNCharacterStream(int parameterIndex, Reader reader) throws SQLException
+    {
+        setCharacterStream(parameterIndex, reader);
+    }
+
+    public void setNCharacterStream(int parameterIndex, Reader reader, long length) throws SQLException
+    {
+        setCharacterStream(parameterIndex, reader, length);
+    }
 
     public void setBigDecimal(int parameterIndex, BigDecimal bigDecimal) throws SQLException
     {
@@ -501,6 +511,11 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     }
 
     public void setString(int parameterIndex, String string) throws SQLException
+    {
+        setObject(parameterIndex, string);
+    }
+
+    public void setNString(int parameterIndex, String string) throws SQLException
     {
         setObject(parameterIndex, string);
     }

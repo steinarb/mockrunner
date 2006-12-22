@@ -83,7 +83,7 @@ public class MockCallableStatementTest extends BaseTestCase
         assertTrue(isResultSet2(testResultSet));
         statement.setBlob(1, new MockBlob(new byte[] {1}));
         statement.setString(2, "Test");
-        statement.setString("param2", "Test");
+        statement.setNString("param2", "Test");
         testResultSet = (MockResultSet)statement.executeQuery();
         assertTrue(isResultSet3(testResultSet));
         callableStatementHandler.setExactMatchParameter(true);
@@ -528,17 +528,19 @@ public class MockCallableStatementTest extends BaseTestCase
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doGetParam()}");
         statement.execute();
         assertEquals("xyz", statement.getString("TestParam"));
+        assertEquals("xyz", statement.getNString("TestParam"));
+        assertEquals("xyz", statement.getObject("TestParam"));
         assertEquals(2, statement.getInt(1));
         assertTrue(Arrays.equals(new byte[] {1, 2, 3}, statement.getBytes(3)));
         assertNull(statement.getString("1"));
-        statement.setString(1, "1");
+        statement.setNString(1, "1");
         statement.setString(2, "2");
         assertEquals("xyz", statement.getString("TestParam"));
         assertEquals(2, statement.getInt(1));
         assertTrue(Arrays.equals(new byte[] {1, 2, 3}, statement.getBytes(3)));
         assertNull(statement.getString("1"));
         statement.execute();
-        assertEquals("xyz", statement.getString("TestParam"));
+        assertEquals("xyz", statement.getNString("TestParam"));
         assertEquals(5, statement.getInt(1));
         assertTrue(Arrays.equals(new byte[] {1, 2, 3}, statement.getBytes(3)));
         assertNull(statement.getString("1"));
@@ -766,6 +768,12 @@ public class MockCallableStatementTest extends BaseTestCase
         callableStatement.setCharacterStream("column", updateReader, 1);
         inputReader = (Reader)callableStatement.getParameterMap().get("column");
         assertEquals('t', (char)inputReader.read());
+        assertEquals(-1, inputReader.read());
+        updateReader = new StringReader("test");
+        callableStatement.setNCharacterStream("column", updateReader, 2);
+        inputReader = (Reader)callableStatement.getParameterMap().get("column");
+        assertEquals('t', (char)inputReader.read());
+        assertEquals('e', (char)inputReader.read());
         assertEquals(-1, inputReader.read());
     }
     

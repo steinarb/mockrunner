@@ -770,6 +770,15 @@ public class MockResultSet implements ResultSet, Cloneable
         return null;
     }
 
+    public String getNString(int columnIndex) throws SQLException
+    {
+        return getString(columnIndex);
+    }
+
+    public String getNString(String columnLabel) throws SQLException
+    {
+        return getString(columnLabel);
+    }
 
     public boolean getBoolean(int columnIndex) throws SQLException
     {
@@ -1313,6 +1322,15 @@ public class MockResultSet implements ResultSet, Cloneable
         return null;
     }
 
+    public Reader getNCharacterStream(int columnIndex) throws SQLException
+    {
+        return getCharacterStream(columnIndex);
+    }
+
+    public Reader getNCharacterStream(String columnLabel) throws SQLException
+    {
+        return getCharacterStream(columnLabel);
+    }
 
     public SQLWarning getWarnings() throws SQLException
     {
@@ -1547,6 +1565,16 @@ public class MockResultSet implements ResultSet, Cloneable
         updateObject(columnName, value);
     }
 
+    public void updateNString(int columnIndex, String value) throws SQLException
+    {
+        updateObject(columnIndex, value);
+    }
+
+    public void updateNString(String columnLabel, String value) throws SQLException
+    {
+        updateObject(columnLabel, value);
+    }
+
     public void updateNull(int columnIndex) throws SQLException
     {
         updateObject(columnIndex, null);
@@ -1773,6 +1801,26 @@ public class MockResultSet implements ResultSet, Cloneable
     {
         String data = StreamUtil.getReaderAsString(reader);
         updateObject(columnName, new StringReader(data));
+    }
+
+    public void updateNCharacterStream(int columnIndex, Reader reader) throws SQLException
+    {
+        updateCharacterStream(columnIndex, reader);
+    }
+    
+    public void updateNCharacterStream(String columnLabel, Reader reader) throws SQLException
+    {
+        updateCharacterStream(columnLabel, reader);
+    }
+    
+    public void updateNCharacterStream(int columnIndex, Reader reader, long length) throws SQLException
+    {
+        updateCharacterStream(columnIndex, reader, length);
+    }
+
+    public void updateNCharacterStream(String columnLabel, Reader reader, long length) throws SQLException
+    {
+        updateCharacterStream(columnLabel, reader, length);
     }
 
     public void updateRef(int columnIndex, Ref ref) throws SQLException
