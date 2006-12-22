@@ -1,5 +1,9 @@
 package com.mockrunner.test.jdbc;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringReader;
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
@@ -12,6 +16,7 @@ import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.jdbc.CallableStatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
+import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockStruct;
@@ -722,5 +727,62 @@ public class MockCallableStatementTest extends BaseTestCase
         assertEquals(0, callableStatement.getIndexedParameterMap().size());
         assertEquals(0, callableStatement.getNamedParameterMap().size());
         assertEquals(0, callableStatement.getParameterMap().size());
+    }
+    
+    public void testSetStreamParameters() throws Exception
+    {
+        MockCallableStatement callableStatement = (MockCallableStatement)connection.prepareCall("call");
+        ByteArrayInputStream updateStream = new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5});
+        callableStatement.setAsciiStream("column", updateStream, (long)2);
+        InputStream inputStream = (InputStream)callableStatement.getParameterMap().get("column");
+        assertEquals(1, inputStream.read());
+        assertEquals(2, inputStream.read());
+        assertEquals(-1, inputStream.read());
+        updateStream = new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5});
+        callableStatement.setAsciiStream(1, updateStream);
+        inputStream = (InputStream)callableStatement.getParameterMap().get(new Integer(1));
+        assertEquals(1, inputStream.read());
+        assertEquals(2, inputStream.read());
+        assertEquals(3, inputStream.read());
+        assertEquals(4, inputStream.read());
+        assertEquals(5, inputStream.read());
+        assertEquals(-1, inputStream.read());
+        updateStream = new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5});
+        callableStatement.setBinaryStream("column", updateStream, (long)3);
+        inputStream = (InputStream)callableStatement.getParameterMap().get("column");
+        assertEquals(1, inputStream.read());
+        assertEquals(2, inputStream.read());
+        assertEquals(3, inputStream.read());
+        assertEquals(-1, inputStream.read());
+        StringReader updateReader = new StringReader("test");
+        callableStatement.setCharacterStream(1, updateReader);
+        Reader inputReader = (Reader)callableStatement.getParameterMap().get(new Integer(1));
+        assertEquals('t', (char)inputReader.read());
+        assertEquals('e', (char)inputReader.read());
+        assertEquals('s', (char)inputReader.read());
+        assertEquals('t', (char)inputReader.read());
+        assertEquals(-1, inputReader.read());
+        updateReader = new StringReader("test");
+        callableStatement.setCharacterStream("column", updateReader, 1);
+        inputReader = (Reader)callableStatement.getParameterMap().get("column");
+        assertEquals('t', (char)inputReader.read());
+        assertEquals(-1, inputReader.read());
+    }
+    
+    public void testSetBlobAndClobParameters() throws Exception
+    {
+        MockCallableStatement callableStatement = (MockCallableStatement)connection.prepareCall("call");
+        callableStatement.setBlob(1, new MockBlob(new byte[] {1, 2, 3}));
+        assertEquals(new MockBlob(new byte[] {1, 2, 3}), callableStatement.getParameterMap().get(new Integer(1)));
+        callableStatement.setBlob("column", new ByteArrayInputStream(new byte[] {1, 2, 3}));
+        assertEquals(new MockBlob(new byte[] {1, 2, 3}), callableStatement.getParameterMap().get("column"));
+        callableStatement.setBlob(1, new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5}), 3);
+        assertEquals(new MockBlob(new byte[] {1, 2, 3}), callableStatement.getParameterMap().get(new Integer(1)));
+        callableStatement.setClob("column", new MockClob("test"));
+        assertEquals(new MockClob("test"), callableStatement.getParameterMap().get("column"));
+        callableStatement.setClob(2, new StringReader("test"));
+        assertEquals(new MockClob("test"), callableStatement.getParameterMap().get(new Integer(2)));
+        callableStatement.setClob("column", new StringReader("testxyz"), 4);
+        assertEquals(new MockClob("test"), callableStatement.getParameterMap().get("column"));
     }
 }

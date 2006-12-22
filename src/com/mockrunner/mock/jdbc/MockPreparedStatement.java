@@ -1,7 +1,9 @@
 package com.mockrunner.mock.jdbc;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Array;
@@ -29,6 +31,7 @@ import java.util.Map;
 import com.mockrunner.jdbc.AbstractParameterResultSetHandler;
 import com.mockrunner.jdbc.ParameterUtil;
 import com.mockrunner.util.common.ArrayUtil;
+import com.mockrunner.util.common.StreamUtil;
 import com.mockrunner.util.common.StringUtil;
 
 /**
@@ -343,10 +346,54 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     {
         setObject(parameterIndex, array);
     }
+    
+    public void setAsciiStream(int parameterIndex, InputStream stream) throws SQLException
+    {
+        setBinaryStream(parameterIndex, stream);
+    }
 
     public void setAsciiStream(int parameterIndex, InputStream stream, int length) throws SQLException
     {
-        setObject(parameterIndex, stream);
+        setBinaryStream(parameterIndex, stream, length);
+    }
+    
+    public void setAsciiStream(int parameterIndex, InputStream stream, long length) throws SQLException
+    {
+        setBinaryStream(parameterIndex, stream, length);
+    }
+   
+    public void setBinaryStream(int parameterIndex, InputStream stream) throws SQLException
+    {
+        byte[] data = StreamUtil.getStreamAsByteArray(stream);
+        setObject(parameterIndex, new ByteArrayInputStream(data));
+    }
+
+    public void setBinaryStream(int parameterIndex, InputStream stream, int length) throws SQLException
+    {
+        byte[] data = StreamUtil.getStreamAsByteArray(stream, length);
+        setObject(parameterIndex, new ByteArrayInputStream(data));
+    }
+
+    public void setBinaryStream(int parameterIndex, InputStream stream, long length) throws SQLException
+    {
+        setBinaryStream(parameterIndex, stream, (int)length);  
+    }
+    
+    public void setCharacterStream(int parameterIndex, Reader reader) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader);
+        setObject(parameterIndex, new StringReader(data));
+    }
+    
+    public void setCharacterStream(int parameterIndex, Reader reader, int length) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader, (int)length);
+        setObject(parameterIndex, new StringReader(data));
+    }
+
+    public void setCharacterStream(int parameterIndex, Reader reader, long length) throws SQLException
+    {
+        setCharacterStream(parameterIndex, reader, (int)length);
     }
 
     public void setBigDecimal(int parameterIndex, BigDecimal bigDecimal) throws SQLException
@@ -354,14 +401,21 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         setObject(parameterIndex, bigDecimal);
     }
 
-    public void setBinaryStream(int parameterIndex, InputStream stream, int length) throws SQLException
-    {
-        setObject(parameterIndex, stream);
-    }
-
     public void setBlob(int parameterIndex, Blob blob) throws SQLException
     {
         setObject(parameterIndex, blob);
+    }
+
+    public void setBlob(int parameterIndex, InputStream inputStream) throws SQLException
+    {
+        byte[] data = StreamUtil.getStreamAsByteArray(inputStream);
+        setBlob(parameterIndex, new MockBlob(data));
+    }
+    
+    public void setBlob(int parameterIndex, InputStream inputStream, long length) throws SQLException
+    {
+        byte[] data = StreamUtil.getStreamAsByteArray(inputStream, (int)length);
+        setBlob(parameterIndex, new MockBlob(data));
     }
 
     public void setBoolean(int parameterIndex, boolean bool) throws SQLException
@@ -379,14 +433,21 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         setObject(parameterIndex, byteArray);
     }
 
-    public void setCharacterStream(int parameterIndex, Reader reader, int length) throws SQLException
-    {
-        setObject(parameterIndex, reader);
-    }
-
     public void setClob(int parameterIndex, Clob clob) throws SQLException
     {
         setObject(parameterIndex, clob);
+    }
+    
+    public void setClob(int parameterIndex, Reader reader) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader);
+        setClob(parameterIndex, new MockClob(data));
+    }
+
+    public void setClob(int parameterIndex, Reader reader, long length) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader, (int)length);
+        setClob(parameterIndex, new MockClob(data));
     }
 
     public void setDate(int parameterIndex, Date date, Calendar calendar) throws SQLException
