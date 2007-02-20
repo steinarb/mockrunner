@@ -5,9 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.util.common.ArrayUtil;
 
 /**
@@ -15,7 +13,6 @@ import com.mockrunner.util.common.ArrayUtil;
  */
 public class MockArray implements Array, Cloneable
 {
-    private final static Log log = LogFactory.getLog(MockArray.class);
     private String sqlTypeName = "";
     private int baseType = 0;
     private Object array;
@@ -127,6 +124,11 @@ public class MockArray implements Array, Cloneable
         wasFreeCalled = true;
     }
 
+    /**
+     * Returns if {@link #free} has been called.
+     * @return <code>true</code> if {@link #free} has been called,
+     *         <code>false</code> otherwise
+     */
     public boolean wasFreeCalled()
     {
         return wasFreeCalled;
@@ -140,6 +142,7 @@ public class MockArray implements Array, Cloneable
         if(baseType != other.baseType) return false;
         if(null == sqlTypeName && null != other.sqlTypeName) return false;
         if(null != sqlTypeName && !sqlTypeName.equals(other.sqlTypeName)) return false;
+        if(wasFreeCalled != other.wasFreeCalled()) return false;
         return ArrayUtil.areArraysEqual(array, other.array);
     }
 
@@ -148,17 +151,23 @@ public class MockArray implements Array, Cloneable
         int hashCode = ArrayUtil.computeHashCode(array);
         hashCode = (31 * hashCode) + baseType;
         if(null != sqlTypeName) hashCode = (31 * hashCode) + sqlTypeName.hashCode();
+        hashCode = (31 * hashCode) + (wasFreeCalled ? 31 : 62);
         return hashCode;
     }
 
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer("Array data: ");
+        StringBuffer buffer = new StringBuffer("Array data: [");
         Object[] arrayData = ArrayUtil.convertToObjectArray(array);
         for(int ii = 0; ii < arrayData.length; ii++)
         {
-            buffer.append("[" + arrayData[ii].toString() + "] ");
+            buffer.append(arrayData[ii]);
+            if(ii < arrayData.length - 1)
+            {
+                buffer.append(", ");
+            }
         }
+        buffer.append("]");
         return buffer.toString();
     }
     
@@ -172,8 +181,7 @@ public class MockArray implements Array, Cloneable
         }
         catch(CloneNotSupportedException exc)
         {
-            log.error(exc.getMessage(), exc);
+            throw new NestedApplicationException(exc);
         }
-        return null;
     }
 }

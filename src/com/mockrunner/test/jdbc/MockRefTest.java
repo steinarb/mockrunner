@@ -50,4 +50,10 @@ public class MockRefTest extends TestCase
         assertTrue(other.equals(ref));
         assertEquals(ref.hashCode(), other.hashCode());
     }
+    
+    public void testToString() throws Exception
+    {
+        MockRef ref = new MockRef("abc");
+        assertEquals("Ref data: abc", ref.toString());
+    }
 }

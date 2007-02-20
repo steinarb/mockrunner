@@ -2,9 +2,9 @@ package com.mockrunner.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.mockrunner.mock.jdbc.MockCallableStatement;
 
@@ -19,7 +19,7 @@ public class CallableStatementResultSetHandler extends AbstractOutParameterResul
     public CallableStatementResultSetHandler()
     {
         callableStatements = new ArrayList();
-        callbaleStatementMap = new HashMap();
+        callbaleStatementMap = new TreeMap();
     }
 
     /**

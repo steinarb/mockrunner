@@ -9,9 +9,6 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.mock.web.MockJspWriter;
@@ -24,7 +21,6 @@ import com.mockrunner.mock.web.WebMockObjectFactory;
  */
 public class TagTestModule extends HTMLOutputModule
 {
-    private final static Log log = LogFactory.getLog(TagTestModule.class);
     private WebMockObjectFactory mockFactory;
     private NestedTag tag;
 
@@ -164,7 +160,6 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -209,7 +204,6 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -260,7 +254,6 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }*/
@@ -398,7 +391,6 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }*/
@@ -425,7 +417,6 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(JspException exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -452,7 +443,6 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(JspException exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -480,7 +470,6 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(JspException exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -507,7 +496,6 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(JspException exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -547,7 +535,6 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(JspException exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -564,7 +551,6 @@ public class TagTestModule extends HTMLOutputModule
         }
         catch(IOException exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }

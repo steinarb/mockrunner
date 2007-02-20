@@ -16,8 +16,6 @@ import javax.servlet.jsp.tagext.TryCatchFinally;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.util.common.StringUtil;
@@ -31,9 +29,7 @@ import com.mockrunner.util.common.StringUtil;
  * usable with J2EE 1.3 and J2EE 1.4.
  */
 public class TagUtil
-{
-    private final static Log log = LogFactory.getLog(TagUtil.class);
-    
+{   
     /**
      * Creates an {@link com.mockrunner.tag.NestedTag} instance wrapping the
      * specified tag. Returns an instance of {@link com.mockrunner.tag.NestedStandardTag}
@@ -55,7 +51,6 @@ public class TagUtil
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
         return createNestedTagInstance(tagObject, pageContext, attributes);
@@ -192,7 +187,6 @@ public class TagUtil
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -260,7 +254,6 @@ public class TagUtil
                 }
                 catch(IOException exc)
                 {
-                    log.error(exc.getMessage(), exc);
                     throw new NestedApplicationException(exc);
                 }	
             }

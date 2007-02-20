@@ -65,8 +65,8 @@ public class ParameterUtil
      * <code>InputStream</code> and <code>Reader</code> this method handles 
      * these types of objects. All other objects are compared using the 
      * <code>equals</code> method. The mock versions of <code>Ref</code>,
-     * <code>Array</code>, <code>Blob</code>, <code>Clob</code> and
-     * <code>Struct</code> all provide a suitable <code>equals</code>
+     * <code>Array</code>, <code>Blob</code>, <code>Clob</code>,
+     * <code>Struct</code> etc. all provide a suitable <code>equals</code>
      * implementation.
      * @param source the first parameter
      * @param target the second parameter

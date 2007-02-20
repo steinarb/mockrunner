@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.mockrunner.base.NestedApplicationException;
+
 /**
  * Mock implementation of <code>Struct</code>.
  */
@@ -96,20 +98,21 @@ public class MockStruct implements Struct, Cloneable
 
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer("Struct data:\n");
-        buffer.append("SQLTypeName: " + sqlTypeName + "\n");
-        for(int ii = 0; ii < attributes.size(); ii++)
-        {
-            buffer.append("Attribute " + ii + ": " + attributes.get(ii)+ "\n");
-        }
-        buffer.append("\n");
-        return buffer.toString();
+        return "Struct data: " + attributes.toString();
     }
     
     public Object clone()
     {
-        MockStruct struct = new MockStruct(sqlTypeName);
-        struct.addAttributes(attributes.toArray());
-        return struct;
+        try
+        {
+            MockStruct copy = (MockStruct)super.clone();
+            copy.attributes = new ArrayList();
+            copy.addAttributes(attributes.toArray());
+            return copy;
+        } 
+        catch(CloneNotSupportedException exc)
+        {
+            throw new NestedApplicationException(exc);
+        }
     }
 }

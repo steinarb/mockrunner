@@ -3,6 +3,7 @@ package com.mockrunner.mock.jdbc;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
+import java.sql.RowIdLifetime;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -46,8 +47,9 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     private int maxTableNameLength = 0;
     private int maxTablesInSelect = 0;
     private int maxUserNameLength = 0;
-    private int resultSetHoldability = ResultSet.CONCUR_READ_ONLY;
+    private int resultSetHoldability = 1; // 1 == ResultSet.HOLD_CURSORS_OVER_COMMIT
     private int sqlStateType = sqlStateSQL99;
+    private RowIdLifetime rowIdLifetime = RowIdLifetime.ROWID_VALID_TRANSACTION;
     private boolean autoCommitFailureClosesAllResultSets = false;
     private boolean allProceduresAreCallable = true;
     private boolean allTablesAreSelectable = true;
@@ -489,6 +491,16 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         this.sqlStateType = sqlStateType;
     }
     
+    public RowIdLifetime getRowIdLifetime() throws SQLException
+    {
+        return rowIdLifetime;
+    }
+    
+    public void setRowIdLifetime(RowIdLifetime rowIdLifetime)
+    {
+        this.rowIdLifetime = rowIdLifetime;
+    }
+
     public boolean autoCommitFailureClosesAllResultSets() throws SQLException
     {
         return autoCommitFailureClosesAllResultSets;

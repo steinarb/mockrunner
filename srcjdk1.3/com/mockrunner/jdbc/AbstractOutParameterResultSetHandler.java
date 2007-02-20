@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Abstract base class for all statement types
@@ -14,8 +15,8 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
 {
     private boolean mustRegisterOutParameters = false;
     private Map globalOutParameter = null;
-    private Map outParameterForStatement = new HashMap();
-    private Map outParameterForStatementParameters = new HashMap();
+    private Map outParameterForStatement = new TreeMap();
+    private Map outParameterForStatementParameters = new TreeMap();
     
     /**
      * Set if out parameters must be registered to be returned.

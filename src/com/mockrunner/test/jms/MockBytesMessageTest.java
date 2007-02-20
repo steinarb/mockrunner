@@ -241,6 +241,5 @@ public class MockBytesMessageTest extends TestCase
         assertEquals(MockBytesMessage.class.getName() + ": [1]", message.toString());
         message.writeBytes(new byte[] {1 , 2, 3});
         assertEquals(MockBytesMessage.class.getName() + ": [1, 1, 2, 3]", message.toString());
-        message.writeUTF("abc");
     }
 }

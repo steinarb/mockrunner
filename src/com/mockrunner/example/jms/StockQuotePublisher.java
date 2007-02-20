@@ -46,7 +46,7 @@ public class StockQuotePublisher
         try
         {   
             InitialContext initialContext = new InitialContext();
-            TopicConnectionFactory topicFactory = (TopicConnectionFactory)initialContext.lookup("java:ConnectionFactory");
+            TopicConnectionFactory topicFactory = (TopicConnectionFactory)initialContext.lookup("java:/ConnectionFactory");
             topicConnection = topicFactory.createTopicConnection();
             topicSession = topicConnection.createTopicSession(true, Session.AUTO_ACKNOWLEDGE);
             Topic topic = (Topic)initialContext.lookup("topic/quoteTopic");

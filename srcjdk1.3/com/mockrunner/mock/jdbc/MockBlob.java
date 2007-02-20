@@ -9,9 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.util.common.ArrayUtil;
 import com.mockrunner.util.common.CollectionUtil;
 
@@ -20,13 +18,13 @@ import com.mockrunner.util.common.CollectionUtil;
  */
 public class MockBlob implements Blob, Cloneable
 {
-    private final static Log log = LogFactory.getLog(MockBlob.class);
     private List blobData;
-    private boolean wasFreeCalled = false;
+    private boolean wasFreeCalled;
     
     public MockBlob(byte[] data)
     {
         blobData = ArrayUtil.getListFromByteArray(data);
+        wasFreeCalled = false;
     }
     
     public long length() throws SQLException
@@ -127,6 +125,11 @@ public class MockBlob implements Blob, Cloneable
         wasFreeCalled = true;
     }
 
+    /**
+     * Returns if {@link #free} has been called.
+     * @return <code>true</code> if {@link #free} has been called,
+     *         <code>false</code> otherwise
+     */
     public boolean wasFreeCalled()
     {
         return wasFreeCalled;
@@ -137,22 +140,20 @@ public class MockBlob implements Blob, Cloneable
         if(null == obj) return false;
         if(!obj.getClass().equals(this.getClass())) return false;
         MockBlob other = (MockBlob)obj;
+        if(wasFreeCalled != other.wasFreeCalled()) return false;
         return blobData.equals(other.blobData);
     }
 
     public int hashCode()
     {
-        return blobData.hashCode();
+        int hashCode = blobData.hashCode();
+        hashCode = (31 * hashCode) + (wasFreeCalled ? 31 : 62);
+        return hashCode;
     }
 
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer("Blob data: ");
-        for(int ii = 0; ii < blobData.size(); ii++)
-        {
-            buffer.append("[" + blobData.get(ii).toString() + "] ");
-        }
-        return buffer.toString();
+        return "Blob data: " + blobData.toString();     
     }
     
     public Object clone()
@@ -165,9 +166,8 @@ public class MockBlob implements Blob, Cloneable
         }
         catch(CloneNotSupportedException exc)
         {
-            log.error(exc.getMessage(), exc);
+            throw new NestedApplicationException(exc);
         }
-        return null;
     }
     
     private int verifyAndFixLength(long pos, int length)

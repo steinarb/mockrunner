@@ -6,10 +6,12 @@ import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+import java.sql.NClob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Struct;
@@ -216,6 +218,16 @@ public class MockConnection implements Connection
     public Clob createClob() throws SQLException
     {
         return new MockClob("");
+    }
+
+    public NClob createNClob() throws SQLException
+    {
+        return new MockNClob("");
+    }
+
+    public SQLXML createSQLXML() throws SQLException
+    {
+        return new MockSQLXML();
     }
 
     public Array createArrayOf(String typeName, Object[] elements) throws SQLException

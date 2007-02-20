@@ -37,7 +37,7 @@ public class PrintMessageServletTest extends JMSTestCaseAdapter
     {
         super.setUp();
         ejbModule = createEJBTestModule();
-        ejbModule.bindToContext("java:ConnectionFactory", getJMSMockObjectFactory().getMockQueueConnectionFactory());
+        ejbModule.bindToContext("java:/ConnectionFactory", getJMSMockObjectFactory().getMockQueueConnectionFactory());
         queue = getDestinationManager().createQueue("testQueue");
         ejbModule.bindToContext("queue/testQueue", queue);
         servletModule = createServletTestModule();

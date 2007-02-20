@@ -157,6 +157,9 @@ public class MockBlobTest extends TestCase
         assertTrue(blob1.equals(blob2));
         assertTrue(blob2.equals(blob1));
         assertEquals(blob1.hashCode(), blob2.hashCode());
+        blob2.free();
+        assertFalse(blob1.equals(blob2));
+        assertFalse(blob2.equals(blob1));
     }
     
     public void testClone() throws Exception
@@ -168,5 +171,13 @@ public class MockBlobTest extends TestCase
         assertTrue(Arrays.equals(data, new byte[] {2, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}));
         data = cloneBlob.getBytes(1, 11);
         assertTrue(Arrays.equals(data, new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}));
+    }
+    
+    public void testToString() throws Exception
+    {
+        MockBlob blob = new MockBlob(new byte[0]);
+        assertEquals("Blob data: []", blob.toString());
+        blob = new MockBlob(new byte[] {1, 2, 3});
+        assertEquals("Blob data: [1, 2, 3]", blob.toString());
     }
 }

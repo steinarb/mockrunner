@@ -123,7 +123,7 @@ public class HTMLOutputModuleTest extends TestCase
         {
             module.verifyOutput("<HTml><body><tAg></body></html>");
             fail();
-        } 
+        }
         catch(VerifyFailedException exc)
         {
             //should throw exception

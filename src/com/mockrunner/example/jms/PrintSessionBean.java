@@ -43,7 +43,7 @@ public class PrintSessionBean implements SessionBean
         try
         {   
             InitialContext initialContext = new InitialContext();
-            QueueConnectionFactory queueFactory = (QueueConnectionFactory)initialContext.lookup("java:ConnectionFactory");
+            QueueConnectionFactory queueFactory = (QueueConnectionFactory)initialContext.lookup("java:/ConnectionFactory");
             queueConnection = queueFactory.createQueueConnection();
             queueSession = queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
             Queue queue = (Queue)initialContext.lookup("queue/testQueue");

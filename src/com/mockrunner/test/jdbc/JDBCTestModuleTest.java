@@ -1243,4 +1243,14 @@ public class JDBCTestModuleTest extends TestCase
         testMap.put(new Integer(1), "test2");
         module.verifySQLStatementParameter("call getData", 1, testMap);
     }
+    
+    public void testPreparedStatementsAndCallableStatementsSQLOrdered() throws Exception
+    {
+        preparePreparedStatements();
+        MockPreparedStatement preparedStatement = module.getPreparedStatement("insert");
+        assertSame(module.getPreparedStatementResultSetHandler().getPreparedStatements().get(0), preparedStatement);
+        prepareCallableStatements();
+        MockPreparedStatement callableStatement = module.getCallableStatement("call");
+        assertSame(module.getCallableStatementResultSetHandler().getCallableStatements().get(0), callableStatement);
+    }
 }

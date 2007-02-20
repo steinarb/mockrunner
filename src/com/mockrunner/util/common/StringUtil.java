@@ -7,8 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.oro.text.regex.MalformedPatternException;
 import org.apache.oro.text.regex.Pattern;
 import org.apache.oro.text.regex.Perl5Compiler;
@@ -21,8 +19,6 @@ import com.mockrunner.base.NestedApplicationException;
  */
 public class StringUtil
 {
-    private final static Log log = LogFactory.getLog(StringUtil.class);
-    
     /**
      * Replaces all occurrences of <code>match</code> in
      * <code>source</code> with <code>replacement</code>.
@@ -362,7 +358,6 @@ public class StringUtil
         } 
         catch(MalformedPatternException exc)
         {
-            log.error("Malformed pattern", exc);
             throw new NestedApplicationException(exc);
         }
     }

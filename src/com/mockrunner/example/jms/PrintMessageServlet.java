@@ -33,7 +33,7 @@ public class PrintMessageServlet extends HttpServlet
         try
         {
             InitialContext initialContext = new InitialContext();
-            QueueConnectionFactory queueFactory = (QueueConnectionFactory)initialContext.lookup("java:ConnectionFactory");
+            QueueConnectionFactory queueFactory = (QueueConnectionFactory)initialContext.lookup("java:/ConnectionFactory");
             QueueConnection queueConnection = queueFactory.createQueueConnection();
             QueueSession queueSession = queueConnection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
             Queue queue = (Queue)initialContext.lookup("queue/testQueue");
@@ -61,7 +61,7 @@ public class PrintMessageServlet extends HttpServlet
         try
         {   
             InitialContext initialContext = new InitialContext();
-            QueueConnectionFactory queueFactory = (QueueConnectionFactory)initialContext.lookup("java:ConnectionFactory");
+            QueueConnectionFactory queueFactory = (QueueConnectionFactory)initialContext.lookup("java:/ConnectionFactory");
             queueConnection = queueFactory.createQueueConnection();
             queueSession = queueConnection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
             Queue queue = (Queue)initialContext.lookup("queue/testQueue");

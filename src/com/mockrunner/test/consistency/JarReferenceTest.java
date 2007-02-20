@@ -2,9 +2,8 @@ package com.mockrunner.test.consistency;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.gen.jar.MockrunnerJarTestConfiguration;
 import com.mockrunner.gen.jar.TestConfigurationClassLoader;
-import com.mockrunner.gen.jar.MockrunnerJarTestConfiguration.Mapping;
+import com.mockrunner.test.consistency.MockrunnerJarTestConfiguration.Mapping;
 import com.mockrunner.util.common.MethodUtil;
 
 public class JarReferenceTest extends TestCase

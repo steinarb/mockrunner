@@ -16,7 +16,6 @@ import junit.framework.TestCase;
 import com.kirkk.analyzer.Analyzer;
 import com.kirkk.analyzer.framework.Jar;
 import com.mockrunner.gen.jar.JarFileExtractor;
-import com.mockrunner.gen.jar.MockrunnerJarTestConfiguration;
 import com.mockrunner.gen.jar.MockrunnerJars;
 import com.mockrunner.gen.jar.MockrunnerJars.Permission;
 
@@ -38,7 +37,24 @@ public class JarFileDependenciesTest extends TestCase
     
     public void testAllJarsReleased()
     {
-        List jarFiles = configuration.getReleasedJars();
+        List jdk13j2ee13Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK13_DIR, MockrunnerJarTestConfiguration.J2EE13_DIR);
+        List jdk14j2ee13Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK14_DIR, MockrunnerJarTestConfiguration.J2EE13_DIR);
+        List jdk14j2ee14Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK14_DIR, MockrunnerJarTestConfiguration.J2EE14_DIR);
+        List jdk15j2ee13Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK15_DIR, MockrunnerJarTestConfiguration.J2EE13_DIR);
+        List jdk15j2ee14Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK15_DIR, MockrunnerJarTestConfiguration.J2EE14_DIR);
+        List jdk16j2ee13Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK16_DIR, MockrunnerJarTestConfiguration.J2EE13_DIR);
+        List jdk16j2ee14Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK16_DIR, MockrunnerJarTestConfiguration.J2EE14_DIR);
+        doTestAllJarsReleased(jdk13j2ee13Jars, "JDK1.3, J2EE1.3");
+        doTestAllJarsReleased(jdk14j2ee13Jars, "JDK1.4, J2EE1.3");
+        doTestAllJarsReleased(jdk14j2ee14Jars, "JDK1.4, J2EE1.4");
+        doTestAllJarsReleased(jdk15j2ee13Jars, "JDK1.5, J2EE1.3");
+        doTestAllJarsReleased(jdk15j2ee14Jars, "JDK1.5, J2EE1.4");
+        doTestAllJarsReleased(jdk16j2ee13Jars, "JDK1.6, J2EE1.3");
+        doTestAllJarsReleased(jdk16j2ee14Jars, "JDK1.6, J2EE1.4");
+    }
+    
+    private void doTestAllJarsReleased(List jarFiles, String message)
+    {
         List mockrunnerJars = MockrunnerJars.getMockrunnerJars();
         List jarFileNames = new ArrayList();
         for(int ii = 0; ii < jarFiles.size(); ii++)
@@ -50,40 +66,53 @@ public class JarFileDependenciesTest extends TestCase
         {
             if(!jarFileNames.contains(mockrunnerJars.get(ii)))
             {
-                System.out.println("Missing jar in release: " + mockrunnerJars.get(ii));
+                System.out.println("Missing jar in release " + message + ": " + mockrunnerJars.get(ii));
                 ok = false;
             }
         }
-        assertEquals(jarFileNames.size(), mockrunnerJars.size());
         assertTrue("There are missing jars in the release", ok);
     }
     
-    public void testJarFileDependenciesJ2EE14() throws Exception
-    {  
-        File tempDir = new File("temp");
-        delete(tempDir);
-        tempDir.mkdir();
-        List allJars = new ArrayList();
-        allJars.addAll(configuration.getJ2EE14Jars());
-        allJars.addAll(configuration.getThirdPartyJarsJ2EE14());
-        copyFiles(tempDir, allJars);
-        boolean failure = doFilesContainIllegalDependencies(tempDir);
-        delete(tempDir);
-        assertFalse("There are illegal dependencies", failure);
+    public void testJarFileDependencies() throws Exception
+    {
+        List jdk13j2ee13Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK13_DIR, MockrunnerJarTestConfiguration.J2EE13_DIR);
+        List jdk14j2ee13Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK14_DIR, MockrunnerJarTestConfiguration.J2EE13_DIR);
+        List jdk14j2ee14Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK14_DIR, MockrunnerJarTestConfiguration.J2EE14_DIR);
+        List jdk15j2ee13Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK15_DIR, MockrunnerJarTestConfiguration.J2EE13_DIR);
+        List jdk15j2ee14Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK15_DIR, MockrunnerJarTestConfiguration.J2EE14_DIR);
+        List jdk16j2ee13Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK16_DIR, MockrunnerJarTestConfiguration.J2EE13_DIR);
+        List jdk16j2ee14Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK16_DIR, MockrunnerJarTestConfiguration.J2EE14_DIR);
+        List thirdPartyJ2EE13Jars = configuration.getThirdPartyJarsJ2EE13();
+        List thirdPartyJ2EE14Jars = configuration.getThirdPartyJarsJ2EE14();
+        doTestJarFileDependencies(jdk13j2ee13Jars, thirdPartyJ2EE13Jars, "JDK1.3, J2EE1.3");
+        doTestJarFileDependencies(jdk14j2ee13Jars, thirdPartyJ2EE13Jars, "JDK1.4, J2EE1.3");
+        doTestJarFileDependencies(jdk14j2ee14Jars, thirdPartyJ2EE14Jars, "JDK1.4, J2EE1.4");
+        doTestJarFileDependencies(jdk15j2ee13Jars, thirdPartyJ2EE13Jars, "JDK1.5, J2EE1.3");
+        doTestJarFileDependencies(jdk15j2ee14Jars, thirdPartyJ2EE14Jars, "JDK1.5, J2EE1.4");
+        doTestJarFileDependencies(jdk16j2ee13Jars, thirdPartyJ2EE13Jars, "JDK1.6, J2EE1.3");
+        doTestJarFileDependencies(jdk16j2ee14Jars, thirdPartyJ2EE14Jars, "JDK1.6, J2EE1.4");
     }
     
-    public void testJarFileDependenciesJ2EE13() throws Exception
+    private void doTestJarFileDependencies(List releasedJars, List thirdpartyJars, String message) throws Exception
     {  
         File tempDir = new File("temp");
         delete(tempDir);
         tempDir.mkdir();
         List allJars = new ArrayList();
-        allJars.addAll(configuration.getJ2EE13Jars());
-        allJars.addAll(configuration.getThirdPartyJarsJ2EE13());
+        allJars.addAll(releasedJars);
+        allJars.addAll(thirdpartyJars);
         copyFiles(tempDir, allJars);
         boolean failure = doFilesContainIllegalDependencies(tempDir);
         delete(tempDir);
-        assertFalse("There are illegal dependencies", failure);
+        if(failure)
+        {
+            System.out.println("There are illegal dependencies in release " + message);
+            fail("There are illegal dependencies");
+        }
+        else
+        {
+            System.out.println("Dependencies for " + message + " ok");
+        }
     }
     
     private boolean doFilesContainIllegalDependencies(File srcDir) throws Exception
@@ -112,7 +141,7 @@ public class JarFileDependenciesTest extends TestCase
                 System.out.println("Unidentifiable dependencies for " + currentJar.getJarFileName());
                 for(int yy = 0; yy < extRefList.size(); yy++)
                 {
-                    System.out.println(extRefList.get(yy));
+                    System.out.println("Unidentifiable dependency: " + extRefList.get(yy));
                 }
                 System.out.println();
                 failure = true;
@@ -132,7 +161,7 @@ public class JarFileDependenciesTest extends TestCase
             Iterator iterator = prohibited.iterator();
             while(iterator.hasNext())
             {
-                System.out.println(iterator.next());
+                System.out.println("Illegal dependency: " + iterator.next());
             }
             System.out.println();
             return false;

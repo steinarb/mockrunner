@@ -14,6 +14,7 @@ import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockDatabaseMetaData;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
+import com.mockrunner.mock.jdbc.MockSQLXML;
 import com.mockrunner.mock.jdbc.MockStruct;
 
 public class MockConnectionTest extends TestCase
@@ -101,5 +102,7 @@ public class MockConnectionTest extends TestCase
         assertEquals("1", attributes[0]);
         assertEquals("2", attributes[1]);
         assertEquals("3", attributes[2]);
+        MockSQLXML sqlXML = (MockSQLXML)connection.createSQLXML();
+        assertNull(sqlXML.getContentAsString());
     }
 }

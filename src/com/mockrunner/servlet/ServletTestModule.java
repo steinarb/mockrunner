@@ -6,9 +6,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.mock.web.WebMockObjectFactory;
@@ -20,7 +17,6 @@ import com.mockrunner.mock.web.WebMockObjectFactory;
  */
 public class ServletTestModule extends HTMLOutputModule
 {
-    private final static Log log = LogFactory.getLog(ServletTestModule.class);
     private WebMockObjectFactory mockFactory;
     private HttpServlet servlet;
     private boolean doChain;
@@ -57,7 +53,6 @@ public class ServletTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -93,7 +88,6 @@ public class ServletTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -135,7 +129,6 @@ public class ServletTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -169,7 +162,6 @@ public class ServletTestModule extends HTMLOutputModule
             }
             catch(Exception exc)
             {
-                log.error(exc.getMessage(), exc);
                 throw new NestedApplicationException(exc);
             }
         }
@@ -217,7 +209,6 @@ public class ServletTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -234,7 +225,6 @@ public class ServletTestModule extends HTMLOutputModule
         }
         catch(ServletException exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -367,7 +357,7 @@ public class ServletTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
+            
         }
         return mockFactory.getMockResponse().getOutputStreamContent();
     }
@@ -395,7 +385,6 @@ public class ServletTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }  

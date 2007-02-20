@@ -137,6 +137,9 @@ public class MockClobTest extends TestCase
         assertTrue(clob1.equals(clob2));
         assertTrue(clob2.equals(clob1));
         assertEquals(clob1.hashCode(), clob2.hashCode());
+        clob1.free();
+        assertFalse(clob1.equals(clob2));
+        assertFalse(clob2.equals(clob1));
     }
     
     public void testClone() throws Exception
@@ -145,5 +148,13 @@ public class MockClobTest extends TestCase
         clob.setString(1, "Test");
         assertEquals("Test is a Test Clob", clob.getSubString(1, 19));
         assertEquals("This is a Test Clob", cloneClob.getSubString(1, 19));
+    }
+    
+    public void testToString() throws Exception
+    {
+        MockClob clob = new MockClob("");
+        assertEquals("Clob data: ", clob.toString());
+        clob = new MockClob("test");
+        assertEquals("Clob data: test", clob.toString());
     }
 }

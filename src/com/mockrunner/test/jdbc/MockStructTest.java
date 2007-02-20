@@ -61,14 +61,7 @@ public class MockStructTest extends TestCase
     public void testToString() throws Exception
     {
         MockStruct struct = prepareTestStruct();
-        String structString = struct.toString();
-        assertContains(structString, "1");
-        assertContains(structString, "anAttribute2");
-        assertContains(structString, "myAttribute3");
-        assertContains(structString, "4");
-        assertContains(structString, "anAttribute5");
-        assertContains(structString, "myAttribute6");
-        assertContains(structString, "myAttribute7");
+        assertEquals("Struct data: [1, anAttribute2, myAttribute3, 4, anAttribute5, myAttribute6, myAttribute7]", struct.toString());
     }
     
     public void testClone() throws Exception
@@ -90,10 +83,5 @@ public class MockStructTest extends TestCase
         assertEquals("anAttribute5", attributes[4]);
         assertEquals("myAttribute6", attributes[5]);
         assertEquals("myAttribute7", attributes[6]);
-    }
-    
-    private void assertContains(String structString, String expected)
-    {
-        assertTrue(-1 != structString.indexOf(expected));
     }
 }

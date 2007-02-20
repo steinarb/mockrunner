@@ -35,6 +35,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         MockResultSet result0 = new MockResultSet("id0");
         MockResultSet result1 = new MockResultSet("id1");
         MockResultSet[] results = new MockResultSet[] {result0, result1};
+        statementHandler.clearResultSets();
         statementHandler.prepareResultSets("select abc", results);
         assertSame(result0, statementHandler.getResultSet("select abc"));
     }
@@ -231,5 +232,25 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertFalse(statementHandler.getThrowsSQLException("select"));
         assertNull(statementHandler.getReturnsResultSet("select"));
         assertNull(statementHandler.getGeneratedKeys("select"));
+    }
+    
+    public void testPreparedSQLOrdered()
+    {
+        MockResultSet result1 = new MockResultSet("id1");
+        MockResultSet result2 = new MockResultSet("id2");
+        statementHandler.prepareResultSet("select", result1);
+        statementHandler.prepareResultSet("SelecT", result2);
+        statementHandler.prepareUpdateCount("SelecT", 3);
+        statementHandler.prepareUpdateCount("select2", 2);
+        statementHandler.prepareReturnsResultSet("select", false);
+        statementHandler.prepareReturnsResultSet("selecT", true);
+        statementHandler.prepareGeneratedKeys("seLECT", result1);
+        statementHandler.prepareGeneratedKeys("select", result2);
+        assertSame(result2, statementHandler.getResultSet("select"));
+        assertSame(result2, statementHandler.getResultSets("select")[0]);
+        assertEquals(new Integer(3), statementHandler.getUpdateCount("SELECT"));
+        assertEquals(new Integer(3), statementHandler.getUpdateCounts("selecT")[0]);
+        assertTrue(statementHandler.getReturnsResultSet("select").booleanValue());
+        assertSame(result1, statementHandler.getGeneratedKeys("select"));
     }
 }

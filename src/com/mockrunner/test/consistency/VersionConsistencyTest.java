@@ -16,6 +16,7 @@ public class VersionConsistencyTest extends TestCase
     public void testFileConsistency() throws Exception
     {
         compareDirTrees("srcjdk1.3", "src");
+        compareDirTrees("srcjdk1.4", "src");
         compareDirTrees("srcj2ee1.3", "src");
     }
     
