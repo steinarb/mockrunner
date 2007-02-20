@@ -12,12 +12,15 @@ import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.NClob;
 import java.sql.ParameterMetaData;
 import java.sql.PreparedStatement;
 import java.sql.Ref;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.RowId;
 import java.sql.SQLException;
+import java.sql.SQLXML;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -460,6 +463,28 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         setClob(parameterIndex, new MockClob(data));
     }
 
+    public void setNClob(int parameterIndex, NClob nClob) throws SQLException
+    {
+        setObject(parameterIndex, nClob);
+    }
+    
+    public void setNClob(int parameterIndex, Reader reader) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader);
+        setNClob(parameterIndex, new MockNClob(data));
+    }
+
+    public void setNClob(int parameterIndex, Reader reader, long length) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader, (int)length);
+        setNClob(parameterIndex, new MockNClob(data));
+    }
+
+    public void setSQLXML(int parameterIndex, SQLXML xmlObject) throws SQLException
+    {
+        setObject(parameterIndex, xmlObject);
+    }
+
     public void setDate(int parameterIndex, Date date, Calendar calendar) throws SQLException
     {
         setObject(parameterIndex, date);
@@ -503,6 +528,11 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     public void setRef(int parameterIndex, Ref ref) throws SQLException
     {
         setObject(parameterIndex, ref);
+    }
+
+    public void setRowId(int parameterIndex, RowId rowId) throws SQLException
+    {
+        setObject(parameterIndex, rowId);
     }
 
     public void setShort(int parameterIndex, short shortValue) throws SQLException

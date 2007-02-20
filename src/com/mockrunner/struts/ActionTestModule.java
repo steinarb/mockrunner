@@ -11,8 +11,6 @@ import javax.servlet.ServletException;
 import javax.sql.DataSource;
 
 import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.validator.ValidatorResources;
 import org.apache.struts.Globals;
 import org.apache.struts.action.Action;
@@ -52,7 +50,6 @@ import com.mockrunner.util.common.StreamUtil;
  */
 public class ActionTestModule extends HTMLOutputModule
 {
-    private final static Log log = LogFactory.getLog(ActionTestModule.class);
     private ActionMockObjectFactory mockFactory;
     private MockActionForward forward;
     private ActionForm formObj;
@@ -296,7 +293,6 @@ public class ActionTestModule extends HTMLOutputModule
         }
         catch(ServletException exc)
         {
-            log.error("Error initializing ValidatorPlugIn", exc);
             throw new RuntimeException("Error initializing ValidatorPlugIn: " + exc.getMessage());
         }
         String key = ValidatorPlugIn.VALIDATOR_KEY + mockFactory.getMockModuleConfig().getPrefix();
@@ -986,7 +982,6 @@ public class ActionTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -1011,7 +1006,6 @@ public class ActionTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -1032,7 +1026,6 @@ public class ActionTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -1214,7 +1207,7 @@ public class ActionTestModule extends HTMLOutputModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
+            
         }
         return mockFactory.getMockResponse().getOutputStreamContent();
     }

@@ -34,6 +34,8 @@ public class AllJDBCTests
         suite.addTest(new TestSuite(MockResultSetMetaDataTest.class));
         suite.addTest(new TestSuite(MockParameterMetaDataTest.class));
         suite.addTest(new TestSuite(MockRefTest.class));
+        suite.addTest(new TestSuite(MockRowIdTest.class));
+        suite.addTest(new TestSuite(MockSQLXMLTest.class));
         suite.addTest(new TestSuite(ArrayResultSetFactoryTest.class));
         suite.addTest(new TestSuite(StringValuesTableTest.class));
         //$JUnit-END$

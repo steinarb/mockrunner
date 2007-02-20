@@ -2,9 +2,9 @@ package com.mockrunner.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 
@@ -19,7 +19,7 @@ public class PreparedStatementResultSetHandler extends AbstractParameterResultSe
     public PreparedStatementResultSetHandler()
     {
         preparedStatements = new ArrayList();
-        preparedStatementMap = new HashMap();
+        preparedStatementMap = new TreeMap();
     }
     
     /**

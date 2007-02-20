@@ -25,7 +25,7 @@ public class StockQuotePublisherTest extends JMSTestCaseAdapter
     {
         super.setUp();
         ejbModule = createEJBTestModule();
-        ejbModule.bindToContext("java:ConnectionFactory", getJMSMockObjectFactory().getMockTopicConnectionFactory());
+        ejbModule.bindToContext("java:/ConnectionFactory", getJMSMockObjectFactory().getMockTopicConnectionFactory());
         topic = getDestinationManager().createTopic("testTopic");
         ejbModule.bindToContext("topic/quoteTopic", topic);
         sender = new StockQuotePublisher();

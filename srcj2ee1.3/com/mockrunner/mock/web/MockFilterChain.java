@@ -13,9 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.mockrunner.base.NestedApplicationException;
 
 /**
@@ -23,7 +20,6 @@ import com.mockrunner.base.NestedApplicationException;
  */
 public class MockFilterChain implements FilterChain
 {
-    private final static Log log = LogFactory.getLog(MockFilterChain.class);
     private List filters = new ArrayList();
     private Servlet servlet;
     private Iterator iterator;
@@ -87,7 +83,6 @@ public class MockFilterChain implements FilterChain
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }

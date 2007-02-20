@@ -5,39 +5,39 @@ import java.util.Map;
 
 import com.mockrunner.gen.proc.JavaLineProcessor;
 
-public class J2EEVersionGenerator extends AbstractVersionGenerator
+public class J2EEVersionGenerator
 {
     public static void main(String[] args) throws Exception
     {
-        J2EEVersionGenerator synchVersionUtil = new J2EEVersionGenerator();
-        synchVersionUtil.doSynchronize();
+        VersionGenerator generator = new VersionGenerator(prepareProcessorMap(), getGeneratorName(), getRootTargetDir(), getRootSourceDir(), getProcessedPackages());
+        generator.doSynchronize();
     }
     
-    protected String getGeneratorName()
+    private static String getGeneratorName()
     {
         return "Web J2EE1.3";
     }
     
-    protected String getRootTargetDir()
+    private static String getRootTargetDir()
     {
         return "srcj2ee1.3";
     }
     
-    protected String getRootSourceDir()
+    private static String getRootSourceDir()
     {
         return "src";
     }
     
-    protected String[] getProcessedPackages()
+    private static String[] getProcessedPackages()
     {
         return new String[] {"com/mockrunner/tag", "com/mockrunner/mock/web"};
     }
     
-    protected Map prepareProcessorMap()
+    private static Map prepareProcessorMap()
     {
         Map webFiles = new HashMap();
         
-        JavaLineProcessor mockPageContextProc = new JavaLineProcessor();
+        JavaLineProcessor mockPageContextProc = getProcessorForClass("com.mockrunner.mock.web.MockPageContext", webFiles);
         mockPageContextProc.addLine("import javax.servlet.jsp.el.ExpressionEvaluator;");
         mockPageContextProc.addLine("import javax.servlet.jsp.el.VariableResolver;");
         mockPageContextProc.addLine("private ExpressionEvaluator evaluator;");
@@ -48,9 +48,8 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
         mockPageContextProc.addBlock("public void setVariableResolver(VariableResolver resolver)");
         mockPageContextProc.addBlock("public ExpressionEvaluator getExpressionEvaluator()");
         mockPageContextProc.addBlock("public VariableResolver getVariableResolver()");
-        webFiles.put("com.mockrunner.mock.web.MockPageContext", mockPageContextProc);
         
-        JavaLineProcessor mockRequestProc = new JavaLineProcessor();
+        JavaLineProcessor mockRequestProc = getProcessorForClass("com.mockrunner.mock.web.MockHttpServletRequest", webFiles);
         mockRequestProc.addLine("import javax.servlet.ServletRequestAttributeEvent;");
         mockRequestProc.addLine("import javax.servlet.ServletRequestAttributeListener;");
         mockRequestProc.addLine("private List attributeListener;");
@@ -63,16 +62,14 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
         mockRequestProc.addBlock("private void callAttributeListenersReplacedMethod(String key, Object value)");
         mockRequestProc.addBlock("private void callAttributeListenersRemovedMethod(String key, Object value)");
         mockRequestProc.addBlock("private ServletContext getServletContext()");
-        webFiles.put("com.mockrunner.mock.web.MockHttpServletRequest", mockRequestProc);
         
-        JavaLineProcessor nestedTagProc = new JavaLineProcessor();
+        JavaLineProcessor nestedTagProc = getProcessorForClass("com.mockrunner.tag.NestedTag", webFiles);
         nestedTagProc.addLine("import javax.servlet.jsp.tagext.JspTag;");
         nestedTagProc.addLine("public JspTag getWrappedTag();");
         nestedTagProc.addLine("public NestedTag addTagChild(JspTag tag);");
         nestedTagProc.addLine("public NestedTag addTagChild(JspTag tag, Map attributeMap);");
-        webFiles.put("com.mockrunner.tag.NestedTag", nestedTagProc);
         
-        JavaLineProcessor nestedStandardTagProc = new JavaLineProcessor();
+        JavaLineProcessor nestedStandardTagProc = getProcessorForClass("com.mockrunner.tag.NestedStandardTag", webFiles);
         nestedStandardTagProc.addLine("import javax.servlet.jsp.tagext.JspTag;");
         nestedStandardTagProc.addLine("import javax.servlet.jsp.tagext.SimpleTag;");
         nestedStandardTagProc.addBlock("public JspTag getWrappedTag()");
@@ -80,9 +77,8 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
         nestedStandardTagProc.addBlock("public NestedTag addTagChild(JspTag tag, Map attributeMap)");
         nestedStandardTagProc.addBlock("else if(child instanceof SimpleTag)");
         nestedStandardTagProc.addBlock("else if(childTag instanceof SimpleTag)");
-        webFiles.put("com.mockrunner.tag.NestedStandardTag", nestedStandardTagProc);
         
-        JavaLineProcessor nestedBodyTagProc = new JavaLineProcessor();
+        JavaLineProcessor nestedBodyTagProc = getProcessorForClass("com.mockrunner.tag.NestedBodyTag", webFiles);
         nestedBodyTagProc.addLine("import javax.servlet.jsp.tagext.JspTag;");
         nestedBodyTagProc.addLine("import javax.servlet.jsp.tagext.SimpleTag;");
         nestedBodyTagProc.addBlock("public JspTag getWrappedTag()");
@@ -90,9 +86,8 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
         nestedBodyTagProc.addBlock("public NestedTag addTagChild(JspTag tag, Map attributeMap)");
         nestedBodyTagProc.addBlock("else if(child instanceof SimpleTag)");
         nestedBodyTagProc.addBlock("else if(childTag instanceof SimpleTag)");
-        webFiles.put("com.mockrunner.tag.NestedBodyTag", nestedBodyTagProc);
         
-        JavaLineProcessor tagTestModuleProc = new JavaLineProcessor();
+        JavaLineProcessor tagTestModuleProc = getProcessorForClass("com.mockrunner.tag.TagTestModule", webFiles);
         tagTestModuleProc.addLine("import javax.servlet.jsp.tagext.JspTag;");
         tagTestModuleProc.addBlock("public JspTag createWrappedTag(Class tagClass)");
         tagTestModuleProc.addBlock("public JspTag createWrappedTag(Class tagClass, Map attributes)");
@@ -102,9 +97,8 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
         tagTestModuleProc.addBlock("public void doTag()");
         tagTestModuleProc.addBlock("if(isSimpleTag())");
         tagTestModuleProc.addBlock("private boolean isSimpleTag()");
-        webFiles.put("com.mockrunner.tag.TagTestModule", tagTestModuleProc);
         
-        JavaLineProcessor tagTestAdapterProc = new JavaLineProcessor();
+        JavaLineProcessor tagTestAdapterProc = getProcessorForClass("com.mockrunner.tag.TagTestCaseAdapter", webFiles);
         tagTestAdapterProc.addLine("import javax.servlet.jsp.tagext.JspTag;");
         tagTestAdapterProc.addBlock("protected JspTag createWrappedTag(Class tagClass)");
         tagTestAdapterProc.addBlock("protected JspTag createWrappedTag(Class tagClass, Map attributes)");
@@ -112,10 +106,9 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
         tagTestAdapterProc.addBlock("protected NestedTag setTag(JspTag tag)");
         tagTestAdapterProc.addBlock("protected NestedTag setTag(JspTag tag, Map attributes)");
         tagTestAdapterProc.addBlock("protected void doTag()");
-        webFiles.put("com.mockrunner.tag.TagTestCaseAdapter", tagTestAdapterProc);
         webFiles.put("com.mockrunner.tag.BasicTagTestCaseAdapter", tagTestAdapterProc);
         
-        JavaLineProcessor tagUtilProc = new JavaLineProcessor();
+        JavaLineProcessor tagUtilProc = getProcessorForClass("com.mockrunner.tag.TagUtil", webFiles);
         tagUtilProc.addLine("import javax.servlet.jsp.JspContext;");
         tagUtilProc.addLine("import javax.servlet.jsp.tagext.DynamicAttributes;");
         tagUtilProc.addLine("import javax.servlet.jsp.tagext.SimpleTag;");
@@ -126,7 +119,6 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
         tagUtilProc.addBlock("private static void populateDynamicAttribute(Object tag, String name, DynamicAttribute attribute) throws JspException");
         tagUtilProc.addBlock("else if(nextChild instanceof NestedSimpleTag)");
         tagUtilProc.addBlock("else if(pageContext instanceof JspContext)");
-        webFiles.put("com.mockrunner.tag.TagUtil", tagUtilProc);
         
         webFiles.put("com.mockrunner.tag.DynamicAttribute", Boolean.FALSE);
         webFiles.put("com.mockrunner.tag.NestedSimpleTag", Boolean.FALSE);
@@ -138,5 +130,16 @@ public class J2EEVersionGenerator extends AbstractVersionGenerator
         webFiles.put("com.mockrunner.mock.web.MockExpressionEvaluator", Boolean.FALSE);
         
         return webFiles;
+    }
+    
+    private static JavaLineProcessor getProcessorForClass(String className, Map jdbcFiles)
+    {
+        JavaLineProcessor processor = (JavaLineProcessor)jdbcFiles.get(className);
+        if(null == processor)
+        {
+            processor = new JavaLineProcessor();
+            jdbcFiles.put(className, processor);
+        }
+        return processor;
     }
 }

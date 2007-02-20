@@ -6,7 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -34,7 +33,7 @@ public abstract class AbstractAdapterGenerator
         System.out.println("Writing output file " + processor.getName());
         File currentFile = new File(getSrcDir() + "/" + processor.getName());
         FileOutputStream currentStream = new FileOutputStream(currentFile);
-        Writer currentWriter = new OutputStreamWriter(currentStream, Charset.forName("ISO-8859-1"));
+        Writer currentWriter = new OutputStreamWriter(currentStream, "ISO-8859-1");
         currentWriter.write(processor.getOutput());
         currentWriter.flush();
         currentWriter.close();

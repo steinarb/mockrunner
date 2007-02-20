@@ -36,7 +36,7 @@ import javax.sql.DataSource;
  *                   res-auth="Container"
  *                   res-sharing-scope="Shareable"
  * 
- * @jboss:resource-manager res-man-name="jdbc/MySQLDB" res-man-jndi-name="java:MySQLDB"
+ * @jboss:resource-manager res-man-name="jdbc/MySQLDB" res-man-jndi-name="java:/MySQLDB"
  **/
 /**
  * Implementation of a BMP entity bean representing

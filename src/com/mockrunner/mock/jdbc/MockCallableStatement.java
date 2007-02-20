@@ -14,9 +14,12 @@ import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.NClob;
 import java.sql.Ref;
 import java.sql.ResultSet;
+import java.sql.RowId;
 import java.sql.SQLException;
+import java.sql.SQLXML;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -366,6 +369,29 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         return null;
     }
 
+    public NClob getNClob(int parameterIndex) throws SQLException
+    {
+        Object value = getObject(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof NClob) return (NClob)value;
+            if(value instanceof Clob) return getNClobFromClob((Clob)value);
+            return new MockNClob(getString(parameterIndex));
+        }
+        return null;
+    }
+
+    public SQLXML getSQLXML(int parameterIndex) throws SQLException
+    {
+        Object value = getObject(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof SQLXML) return (SQLXML)value;
+            return new MockSQLXML(getString(parameterIndex));
+        }
+        return null;
+    }
+
     public Reader getCharacterStream(int parameterIndex) throws SQLException
     {
         Object value = getObject(parameterIndex);
@@ -439,6 +465,17 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     public Timestamp getTimestamp(int parameterIndex, Calendar calendar) throws SQLException
     {
         return getTimestamp(parameterIndex);
+    }
+    
+    public RowId getRowId(int parameterIndex) throws SQLException
+    {
+        Object value = getObject(parameterIndex);
+        if(null != value)
+        {
+            if(value instanceof RowId) return (RowId)value;
+            return new MockRowId(getBytes(parameterIndex));
+        }
+        return null;
     }
     
     public Object getObject(String parameterName) throws SQLException
@@ -627,6 +664,29 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         return null;
     }
 
+    public NClob getNClob(String parameterName) throws SQLException
+    {
+        Object value = getObject(parameterName);
+        if(null != value)
+        {
+            if(value instanceof NClob) return (NClob)value;
+            if(value instanceof Clob) return getNClobFromClob((Clob)value);
+            return new MockNClob(getString(parameterName));
+        }
+        return null;
+    }
+
+    public SQLXML getSQLXML(String parameterName) throws SQLException
+    {
+        Object value = getObject(parameterName);
+        if(null != value)
+        {
+            if(value instanceof SQLXML) return (SQLXML)value;
+            return new MockSQLXML(getString(parameterName));
+        }
+        return null;
+    }
+
     public Reader getCharacterStream(String parameterName) throws SQLException
     {
         Object value = getObject(parameterName);
@@ -701,6 +761,17 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     {
         return getTimestamp(parameterName);
     }
+    
+    public RowId getRowId(String parameterName) throws SQLException
+    {
+        Object value = getObject(parameterName);
+        if(null != value)
+        {
+            if(value instanceof RowId) return (RowId)value;
+            return new MockRowId(getBytes(parameterName));
+        }
+        return null;
+    }
 
     public void setByte(String parameterName, byte byteValue) throws SQLException
     {
@@ -725,6 +796,11 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     public void setNull(String parameterName, int sqlType) throws SQLException
     {
         setObject(parameterName, null);
+    }
+    
+    public void setNull(String parameterName, int sqlType, String typeName) throws SQLException
+    {
+        setNull(parameterName, sqlType);
     }
 
     public void setLong(String parameterName, long longValue) throws SQLException
@@ -833,16 +909,33 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         String data = StreamUtil.getReaderAsString(reader);
         setClob(parameterName, new MockClob(data));
     }
-
+    
     public void setClob(String parameterName, Reader reader, long length) throws SQLException
     {
         String data = StreamUtil.getReaderAsString(reader, (int)length);
         setClob(parameterName, new MockClob(data));
     }
 
-    public void setNull(String parameterName, int sqlType, String typeName) throws SQLException
+    public void setNClob(String parameterName, NClob nClob) throws SQLException
     {
-        setNull(parameterName, sqlType);
+        setObject(parameterName, nClob);
+    }
+
+    public void setNClob(String parameterName, Reader reader) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader);
+        setNClob(parameterName, new MockNClob(data));
+    }
+    
+    public void setNClob(String parameterName, Reader reader, long length) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader, (int)length);
+        setNClob(parameterName, new MockNClob(data));
+    }
+
+    public void setSQLXML(String parameterName, SQLXML xmlObject) throws SQLException
+    {
+        setObject(parameterName, xmlObject);
     }
 
     public void setString(String parameterName, String string) throws SQLException
@@ -895,6 +988,11 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         setTimestamp(parameterName, timestamp);
     }
     
+    public void setRowId(String parameterName, RowId rowId) throws SQLException
+    {
+        setObject(parameterName, rowId);
+    }
+
     public void setObject(String parameterName, Object object) throws SQLException
     {
         paramObjects.put(parameterName, object);
@@ -941,5 +1039,10 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
             }
         }
         return Collections.unmodifiableMap(filteredMap);
+    }
+    
+    private NClob getNClobFromClob(Clob clobValue) throws SQLException
+    {
+        return new MockNClob(clobValue.getSubString(1, (int)clobValue.length()));
     }
 }

@@ -616,7 +616,7 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
         }
         catch(Exception exc)
         {
-            throw new RuntimeException(exc.getMessage());
+            throw new NestedApplicationException(exc);
         }
     }
 

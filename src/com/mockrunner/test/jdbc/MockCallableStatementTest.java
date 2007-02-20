@@ -18,6 +18,7 @@ import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockConnection;
+import com.mockrunner.mock.jdbc.MockNClob;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockStruct;
 
@@ -524,6 +525,7 @@ public class MockCallableStatementTest extends BaseTestCase
         outParams.put(new Integer(3), new byte[] {1, 2, 3});
         callableStatementHandler.prepareOutParameter("doGetParam", outParams);
         outParams.put(new Integer(1), new Integer(5));
+        outParams.put("anotherParam", new MockClob("test"));
         callableStatementHandler.prepareOutParameter("doGetParam", outParams, new Object[] {"1", "2"});
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doGetParam()}");
         statement.execute();
@@ -543,12 +545,15 @@ public class MockCallableStatementTest extends BaseTestCase
         assertEquals("xyz", statement.getNString("TestParam"));
         assertEquals(5, statement.getInt(1));
         assertTrue(Arrays.equals(new byte[] {1, 2, 3}, statement.getBytes(3)));
+        assertEquals(new MockNClob("test"), statement.getNClob("anotherParam"));
+        assertEquals(new MockClob("test"), statement.getClob("anotherParam"));
         assertNull(statement.getString("1"));
         statement.setString(3, "3");
         callableStatementHandler.setExactMatchParameter(true);
         statement.executeQuery();
         assertEquals(2, statement.getInt(1));
         assertNull(statement.getString("1"));
+        assertNull(statement.getNClob("anotherParam"));
         callableStatementHandler.setExactMatch(true);
         statement.executeUpdate();
         assertEquals("test", statement.getString("1"));
@@ -792,5 +797,11 @@ public class MockCallableStatementTest extends BaseTestCase
         assertEquals(new MockClob("test"), callableStatement.getParameterMap().get(new Integer(2)));
         callableStatement.setClob("column", new StringReader("testxyz"), 4);
         assertEquals(new MockClob("test"), callableStatement.getParameterMap().get("column"));
+        callableStatement.setNClob(3, new MockNClob("test"));
+        assertEquals(new MockNClob("test"), callableStatement.getParameterMap().get(new Integer(3)));
+        callableStatement.setNClob(3, new StringReader("test"));
+        assertEquals(new MockNClob("test"), callableStatement.getParameterMap().get(new Integer(3)));
+        callableStatement.setNClob(3, new StringReader("testxyz"), 4);
+        assertEquals(new MockNClob("test"), callableStatement.getParameterMap().get(new Integer(3)));
     }
 }

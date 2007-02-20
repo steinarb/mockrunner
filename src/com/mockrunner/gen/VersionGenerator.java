@@ -13,22 +13,53 @@ import com.mockrunner.gen.proc.GeneratorUtil;
 import com.mockrunner.gen.proc.JavaLineProcessor;
 import com.mockrunner.util.common.StreamUtil;
 
-public abstract class AbstractVersionGenerator
+public class VersionGenerator
 {
-    protected void doSynchronize() throws Exception
+    private Map processorMap;
+    private String generatorName;
+    private String rootTargetDir;
+    private String rootSourceDir;
+    private String[] processedPackages;
+    
+    public VersionGenerator(Map processorMap, String generatorName, String rootTargetDir, String rootSourceDir, String[] processedPackages)
     {
-        System.out.println("Start processing for " + getGeneratorName());
-        Map procMap = prepareProcessorMap();
+        this.processorMap = processorMap;
+        this.generatorName = generatorName;
+        this.rootTargetDir = rootTargetDir;
+        this.rootSourceDir = rootSourceDir;
+        this.processedPackages = processedPackages;
+    }
+
+    public void doSynchronize() throws Exception
+    {
+        System.out.println("Start processing for " + generatorName);
         GeneratorUtil util = new GeneratorUtil();
+        deleteContent(new File(rootTargetDir));
         Map srcMap = new HashMap();
-        String[] packages = getProcessedPackages();
-        for(int ii = 0; ii < packages.length; ii++)
+        for(int ii = 0; ii < processedPackages.length; ii++)
         {
-            File currentFile = new File(getRootSourceDir() + "/" + packages[ii]);
-            util.addJavaSrcFiles(getRootSourceDir(), currentFile, srcMap);
+            File currentFile = new File(rootSourceDir + "/" + processedPackages[ii]);
+            util.addJavaSrcFiles(rootSourceDir, currentFile, srcMap);
         }
-        processFiles(procMap, srcMap, getRootTargetDir());
-        System.out.println("Sucessfully finished processing for " + getGeneratorName());
+        processFiles(processorMap, srcMap, rootTargetDir);
+        System.out.println("Sucessfully finished processing for " + generatorName);
+    }
+    
+    private void deleteContent(File file)
+    {
+        if(!file.isDirectory())
+        {
+            file.delete();
+        }
+        else
+        {
+            File[] files = file.listFiles();
+            for(int ii = 0; ii < files.length; ii++)
+            {
+                deleteContent(files[ii]);
+            }
+            file.delete();
+        }
     }
     
     private void processFiles(Map procMap, Map map, String targetDir) throws FileNotFoundException, IOException
@@ -90,14 +121,4 @@ public abstract class AbstractVersionGenerator
         currentDestFileWriter.flush();
         currentDestFileWriter.close();
     }
-    
-    protected abstract Map prepareProcessorMap();
-    
-    protected abstract String getGeneratorName();
-    
-    protected abstract String getRootTargetDir();
-    
-    protected abstract String getRootSourceDir();
-    
-    protected abstract String[] getProcessedPackages();
 }

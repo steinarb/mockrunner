@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.util.common.ArrayUtil;
@@ -20,11 +21,11 @@ import com.mockrunner.util.common.ArrayUtil;
 public abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandler
 {
     private boolean exactMatchParameter = false;
-    private Map resultSetsForStatement = new HashMap();
-    private Map updateCountForStatement = new HashMap();
-    private Map throwsSQLException = new HashMap();
-    private Map generatedKeysForStatement = new HashMap();
-	private Map executedStatementParameters = new HashMap();
+    private Map resultSetsForStatement = new TreeMap();
+    private Map updateCountForStatement = new TreeMap();
+    private Map throwsSQLException = new TreeMap();
+    private Map generatedKeysForStatement = new TreeMap();
+	private Map executedStatementParameters = new TreeMap();
     
 	/**
 	 * Collects all SQL strings that were executed.

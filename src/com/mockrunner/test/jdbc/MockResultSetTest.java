@@ -6,20 +6,26 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.Blob;
 import java.sql.Clob;
+import java.sql.Ref;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockClob;
+import com.mockrunner.mock.jdbc.MockNClob;
+import com.mockrunner.mock.jdbc.MockRef;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockResultSetMetaData;
+import com.mockrunner.mock.jdbc.MockRowId;
+import com.mockrunner.mock.jdbc.MockSQLXML;
 import com.mockrunner.mock.jdbc.MockStruct;
-
-import junit.framework.TestCase;
 
 public class MockResultSetTest extends TestCase
 {
@@ -246,6 +252,8 @@ public class MockResultSetTest extends TestCase
         assertEquals(2, inputStream.read());
         assertEquals(3, inputStream.read());
         assertEquals(-1, inputStream.read());
+        resultSet.updateRowId(1, new MockRowId(new byte[] {1, 2, 3}));
+        assertEquals(new MockRowId(new byte[] {1, 2, 3}), resultSet.getRowId(1));
     }
     
     public void testUpdateStreams() throws Exception
@@ -313,6 +321,25 @@ public class MockResultSetTest extends TestCase
         assertEquals(new MockClob("test"), resultSet.getClob(1));
         resultSet.updateClob("column", new StringReader("testxyz"), 4);
         assertEquals(new MockClob("test"), resultSet.getClob(1));
+        resultSet.updateNClob("column", new MockNClob("test"));
+        assertEquals(new MockNClob("test"), resultSet.getNClob("column"));
+        resultSet.updateClob(1, new MockClob("test"));
+        assertEquals(new MockNClob("test"), resultSet.getNClob(1));
+        resultSet.updateNClob("column", new StringReader("test"));
+        assertEquals(new MockNClob("test"), resultSet.getNClob("column"));
+        resultSet.updateNClob(1, new StringReader("test"), 4);
+        assertEquals(new MockNClob("test"), resultSet.getNClob(1));
+    }
+    
+    public void testUpdateSQLXML() throws Exception
+    {
+        resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
+        resultSet.addColumn("column", new Object[] { "value" });
+        resultSet.next();
+        resultSet.updateSQLXML(1, new MockSQLXML("<abc></abc>"));
+        assertEquals(new MockSQLXML("<abc></abc>"), resultSet.getSQLXML("column"));
+        resultSet.updateSQLXML("column", new MockSQLXML("<abc>abc</abc>"));
+        assertEquals(new MockSQLXML("<abc>abc</abc>"), resultSet.getSQLXML(1));
     }
     
     public void testError() throws Exception
@@ -426,6 +453,20 @@ public class MockResultSetTest extends TestCase
         {
             //should throw SQLException
         }
+    }
+    
+    public void testInsertOnEmptyResultSet() throws Exception
+    {
+        resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
+        resultSet.addColumn("test");
+        resultSet.moveToInsertRow();
+        resultSet.updateString("test", "value");
+        resultSet.insertRow();
+        resultSet.moveToCurrentRow();
+        assertEquals("value", resultSet.getString("test"));
+        assertEquals(1, resultSet.getRowCount());
+        assertTrue(resultSet.isFirst());
+        assertTrue(resultSet.isLast());
     }
     
     public void testCursorPosition() throws Exception
@@ -712,6 +753,50 @@ public class MockResultSetTest extends TestCase
         }
     }
     
+    public void testCloneOnUpdateRow() throws Exception
+    {
+        resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
+        resultSet.setResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
+        resultSet.addRow(new Object[] {new MockBlob(new byte[] {1, 2, 3}), new MockClob("test")});
+        resultSet.next();
+        Blob blob = resultSet.getBlob(1);
+        Clob clob = resultSet.getClob(2);
+        blob.setBytes(1, new byte[] {4, 5, 6});
+        clob.setString(1, "anothertest");
+        assertEquals(new MockBlob(new byte[] {4, 5, 6}), resultSet.getBlob(1));
+        assertEquals(new MockClob("anothertest"), resultSet.getClob(2));
+        resultSet.setDatabaseView(true);
+        assertEquals(new MockBlob(new byte[] {1, 2, 3}), resultSet.getBlob(1));
+        assertEquals(new MockClob("test"), resultSet.getClob(2));
+        resultSet.updateRow();
+        assertEquals(new MockBlob(new byte[] {4, 5, 6}), resultSet.getBlob(1));
+        assertEquals(new MockClob("anothertest"), resultSet.getClob(2));
+        resultSet.setDatabaseView(false);
+        assertEquals(new MockBlob(new byte[] {4, 5, 6}), resultSet.getBlob(1));
+        assertEquals(new MockClob("anothertest"), resultSet.getClob(2));
+    }
+    
+    public void testCloneOnInsertRow() throws Exception
+    {
+        resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
+        resultSet.setResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
+        resultSet.addColumn("column", new Object[] {"1"});
+        resultSet.next();
+        resultSet.moveToInsertRow();
+        resultSet.updateRef("column", new MockRef("test"));
+        resultSet.insertRow();
+        resultSet.moveToCurrentRow();
+        assertEquals(new MockRef("test"), resultSet.getRef("column"));
+        resultSet.setDatabaseView(true);
+        assertEquals(new MockRef("test"), resultSet.getRef("column"));
+        resultSet.setDatabaseView(false);
+        Ref ref = resultSet.getRef("column");
+        ref.setObject("anothertest");
+        assertEquals(new MockRef("anothertest"), resultSet.getRef("column"));
+        resultSet.setDatabaseView(true);
+        assertEquals(new MockRef("test"), resultSet.getRef("column"));
+    }
+    
     public void testDatabaseView() throws Exception
     {
         resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
@@ -843,6 +928,30 @@ public class MockResultSetTest extends TestCase
         resultSet.addRow(new String[] {"test1", "test2"});
         resultSet.addRow(new String[] {"test3", "test4"});
         resultSet.addRow(new Object[] {new MockClob("test5"), new MockStruct("test6")});
+    }
+    
+    public void testIsEqualNotAssignableAndNull() throws Exception
+    {
+        resultSet.addColumn("col1");
+        resultSet.addColumn("col2");
+        resultSet.addRow(new Object[] {new Integer(1), null});
+        List rowList = new ArrayList();
+        rowList.add("1");
+        rowList.add(null);
+        assertTrue(resultSet.isRowEqual(1, rowList));
+        List columnList1 = new ArrayList();
+        columnList1.add("1");
+        List columnList2 = new ArrayList();
+        columnList2.add(null);
+        assertTrue(resultSet.isColumnEqual(1, columnList1));
+        assertTrue(resultSet.isColumnEqual(2, columnList2));
+        assertTrue(resultSet.isColumnEqual("col1", columnList1));
+        assertTrue(resultSet.isColumnEqual("col2", columnList2));
+        MockResultSet otherResult = new MockResultSet("");
+        otherResult.addColumn("col1");
+        otherResult.addColumn("col2");
+        otherResult.addRow(new String[] {"1", null});
+        assertTrue(resultSet.isEqual(otherResult));
     }
     
     public void testRowsInsertedDeletedUpdated() throws Exception

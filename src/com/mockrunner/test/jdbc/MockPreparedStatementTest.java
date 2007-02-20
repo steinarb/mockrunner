@@ -18,8 +18,10 @@ import com.mockrunner.jdbc.PreparedStatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockConnection;
+import com.mockrunner.mock.jdbc.MockNClob;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
+import com.mockrunner.mock.jdbc.MockSQLXML;
 
 public class MockPreparedStatementTest extends BaseTestCase
 {
@@ -857,5 +859,18 @@ public class MockPreparedStatementTest extends BaseTestCase
         assertEquals(new MockClob("test"), preparedStatement.getParameterMap().get(new Integer(2)));
         preparedStatement.setClob(2, new StringReader("testxyz"), 4);
         assertEquals(new MockClob("test"), preparedStatement.getParameterMap().get(new Integer(2)));
+        preparedStatement.setNClob(3, new MockNClob("test"));
+        assertEquals(new MockNClob("test"), preparedStatement.getParameterMap().get(new Integer(3)));
+        preparedStatement.setNClob(3, new StringReader("test"));
+        assertEquals(new MockNClob("test"), preparedStatement.getParameterMap().get(new Integer(3)));
+        preparedStatement.setNClob(3, new StringReader("testxyz"), 4);
+        assertEquals(new MockNClob("test"), preparedStatement.getParameterMap().get(new Integer(3)));
+    }
+    
+    public void testSetSQLXMLParameter() throws Exception
+    {
+        MockPreparedStatement preparedStatement = (MockPreparedStatement)connection.prepareStatement("insert");
+        preparedStatement.setSQLXML(1, new MockSQLXML("<test>abc</test>"));
+        assertEquals(new MockSQLXML("<test>abc</test>"), preparedStatement.getParameterMap().get(new Integer(1)));
     }
 }

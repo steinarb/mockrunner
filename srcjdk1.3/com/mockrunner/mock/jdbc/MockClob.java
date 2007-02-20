@@ -11,9 +11,6 @@ import java.io.Writer;
 import java.sql.Clob;
 import java.sql.SQLException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import com.mockrunner.base.NestedApplicationException;
 
 /**
@@ -21,13 +18,13 @@ import com.mockrunner.base.NestedApplicationException;
  */
 public class MockClob implements Clob, Cloneable
 {
-    private final static Log log = LogFactory.getLog(MockClob.class);
     private StringBuffer clobData;
-    private boolean wasFreeCalled = false;
+    private boolean wasFreeCalled;
     
     public MockClob(String data)
     {
         clobData = new StringBuffer(data);
+        wasFreeCalled = false;
     }
 
     public long length() throws SQLException
@@ -144,6 +141,11 @@ public class MockClob implements Clob, Cloneable
         wasFreeCalled = true;
     }
 
+    /**
+     * Returns if {@link #free} has been called.
+     * @return <code>true</code> if {@link #free} has been called,
+     *         <code>false</code> otherwise
+     */
     public boolean wasFreeCalled()
     {
         return wasFreeCalled;
@@ -154,12 +156,15 @@ public class MockClob implements Clob, Cloneable
         if(null == obj) return false;
         if(!obj.getClass().equals(this.getClass())) return false;
         MockClob other = (MockClob)obj;
+        if(wasFreeCalled != other.wasFreeCalled()) return false;
         return clobData.toString().equals(other.clobData.toString());
     }
 
     public int hashCode()
     {
-        return clobData.toString().hashCode();
+        int hashCode = clobData.toString().hashCode();
+        hashCode = (31 * hashCode) + (wasFreeCalled ? 31 : 62);
+        return hashCode;
     }
 
     public String toString()
@@ -177,9 +182,8 @@ public class MockClob implements Clob, Cloneable
         }
         catch(CloneNotSupportedException exc)
         {
-            log.error(exc.getMessage(), exc);
+            throw new NestedApplicationException(exc);
         }
-        return null;
     }
     
     private int verifyAndFixLength(long pos, int length)

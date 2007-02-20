@@ -3,9 +3,9 @@ package com.mockrunner.jdbc;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.util.common.ArrayUtil;
@@ -32,13 +32,13 @@ public abstract class AbstractResultSetHandler
     private boolean useRegularExpressions = false;
     private boolean continueProcessingOnBatchFailure = false;
     private Object globalResultSets;
-    private Map resultSetsForStatement = new HashMap();
+    private Map resultSetsForStatement = new TreeMap();
     private Object globalUpdateCounts;
-    private Map updateCountForStatement = new HashMap();
+    private Map updateCountForStatement = new TreeMap();
     private MockResultSet globalGeneratedKeys;
-    private Map generatedKeysForStatement = new HashMap();
-    private Map returnsResultSetMap = new HashMap();
-    private Map throwsSQLException = new HashMap();
+    private Map generatedKeysForStatement = new TreeMap();
+    private Map returnsResultSetMap = new TreeMap();
+    private Map throwsSQLException = new TreeMap();
     private List executedStatements = new ArrayList();
     private List returnedResultSets = new ArrayList();
     

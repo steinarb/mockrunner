@@ -9,8 +9,6 @@ import javax.naming.Context;
 import javax.naming.NamingException;
 
 import org.apache.commons.beanutils.MethodUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.mockejb.BasicEjbDescriptor;
 import org.mockejb.EntityBeanDescriptor;
 import org.mockejb.MDBDescriptor;
@@ -20,6 +18,7 @@ import org.mockejb.TransactionPolicy;
 import org.mockejb.interceptor.AspectSystemFactory;
 import org.mockejb.interceptor.ClassPointcut;
 
+import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 import com.mockrunner.mock.ejb.MockUserTransaction;
@@ -30,7 +29,6 @@ import com.mockrunner.util.common.ClassUtil;
  */
 public class EJBTestModule
 {
-    private final static Log log = LogFactory.getLog(EJBTestModule.class);
     private EJBMockObjectFactory mockFactory;
     private String impSuffix;
     private String homeInterfaceSuffix;
@@ -162,7 +160,7 @@ public class EJBTestModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
+            throw new NestedApplicationException(exc);
         } 
     }
     
@@ -710,7 +708,6 @@ public class EJBTestModule
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             return null;
         }
     }

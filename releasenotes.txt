@@ -1,9 +1,15 @@
 
 mockrunner-0.3.9:
 
+- Mockrunner is now compatible to Java 1.6 and supports JDBC 4.0. The lib directory
+  contains versions for all supported Java and J2EE versions
+- introduced and implemented all JDBC 4.0 types and methods, e.g. MockSQLXML
 - added some constructors to MockStruct
 - MockResultSet now throws an exception, if a get()-method is called and the cursor
   is in an invalid row
+- column values are now cloned on updateRow(). This prevents problems with mutable
+  types like Clob and Blob
+- fixed bug 1658666 reported by Nigel Charman
 
 mockrunner-0.3.8:
 

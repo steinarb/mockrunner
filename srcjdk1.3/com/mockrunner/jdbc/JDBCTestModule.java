@@ -5,10 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
@@ -193,7 +193,7 @@ public class JDBCTestModule
      */
     public Map getExecutedSQLStatementParameterMap()
     {
-        Map map = new HashMap();
+        Map map = new TreeMap();
         map.putAll(mockFactory.getMockConnection().getPreparedStatementResultSetHandler().getExecutedStatementParameterMap());
         map.putAll(mockFactory.getMockConnection().getCallableStatementResultSetHandler().getExecutedStatementParameterMap());
         return map;

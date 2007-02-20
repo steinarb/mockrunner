@@ -26,7 +26,7 @@ import javax.ejb.RemoveException;
  * 
  * @ejb:finder signature="java.util.Collection findAll()"
  *             
- * @jboss:persistence datasource="java:MySQLDB"
+ * @jboss:persistence datasource="java:/MySQLDB"
  *                    table-name="BillEntity"
  *                    create-table="true"
  *                    remove-table="false"

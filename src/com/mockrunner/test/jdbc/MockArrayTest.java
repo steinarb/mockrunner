@@ -3,10 +3,10 @@ package com.mockrunner.test.jdbc;
 import java.sql.SQLException;
 import java.util.Arrays;
 
+import junit.framework.TestCase;
+
 import com.mockrunner.mock.jdbc.MockArray;
 import com.mockrunner.mock.jdbc.MockResultSet;
-
-import junit.framework.TestCase;
 
 public class MockArrayTest extends TestCase
 {
@@ -135,6 +135,9 @@ public class MockArrayTest extends TestCase
         assertTrue(stringArray1.equals(stringArray2));
         assertTrue(stringArray2.equals(stringArray1));
         assertEquals(stringArray1.hashCode(), stringArray2.hashCode());
+        stringArray1.free();
+        assertFalse(stringArray1.equals(stringArray2));
+        assertFalse(stringArray2.equals(stringArray1));
     }
     
     public void testClone() throws Exception
@@ -144,5 +147,15 @@ public class MockArrayTest extends TestCase
         String[] array = (String[])stringArray.getArray();
         array[0] = "Test";
         assertFalse(Arrays.equals((Object[])stringArray.getArray(), (Object[])copy.getArray()));
+    }
+    
+    public void testToString() throws Exception
+    {
+        MockArray array = new MockArray(new Object[0]);
+        assertEquals("Array data: []", array.toString());
+        array = new MockArray(new Object[] {"1"});
+        assertEquals("Array data: [1]", array.toString());
+        array = new MockArray(new Object[] {"1", new Integer(1)});
+        assertEquals("Array data: [1, 1]", array.toString());
     }
 }

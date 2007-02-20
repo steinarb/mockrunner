@@ -12,11 +12,14 @@ import java.sql.Array;
 import java.sql.Blob;
 import java.sql.Clob;
 import java.sql.Date;
+import java.sql.NClob;
 import java.sql.Ref;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.RowId;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.SQLXML;
 import java.sql.Statement;
 import java.sql.Time;
 import java.sql.Timestamp;
@@ -67,6 +70,7 @@ public class MockResultSet implements ResultSet, Cloneable
     private int fetchDirection = ResultSet.FETCH_FORWARD;
     private int resultSetType = ResultSet.TYPE_SCROLL_INSENSITIVE;
     private int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
+    private int resultSetHoldability = ResultSet.HOLD_CURSORS_OVER_COMMIT;
     private boolean isDatabaseView;
     private ResultSetMetaData resultSetMetaData;
     private boolean closed;
@@ -197,6 +201,7 @@ public class MockResultSet implements ResultSet, Cloneable
             fetchDirection = statement.getFetchDirection();
             resultSetType = statement.getResultSetType();
             resultSetConcurrency = statement.getResultSetConcurrency();
+            resultSetHoldability = statement.getResultSetHoldability();
             fetchSize = statement.getFetchSize();
             cursorName = ((MockStatement)statement).getCursorName();
         }
@@ -238,6 +243,17 @@ public class MockResultSet implements ResultSet, Cloneable
         this.resultSetConcurrency = resultSetConcurrency;
     }
     
+    /**
+     * Sets the result set holdability. It's not possible to set
+     * this in a real <code>ResultSet</code>, but in tests
+     * it can make sense to change it.
+     * @param resultSetHoldability the result set holdability
+     */
+    public void setResultSetHoldability(int resultSetHoldability)
+    {
+        this.resultSetHoldability = resultSetHoldability;
+    }
+
     /**
      * The <code>MockResultSet</code> keeps the data that's
      * stored in the simulated database and a copy of the data
@@ -493,10 +509,13 @@ public class MockResultSet implements ResultSet, Cloneable
         {
             Object source = currentRow.get(ii);
             Object target = rowData.get(ii);
-            if(!source.getClass().isAssignableFrom(target.getClass()) && !target.getClass().isAssignableFrom(source.getClass()))
+            if(null != source && null != target)
             {
-                source = source.toString();
-                target = target.toString();
+                if(!source.getClass().isAssignableFrom(target.getClass()) && !target.getClass().isAssignableFrom(source.getClass()))
+                {
+                    source = source.toString();
+                    target = target.toString();
+                }
             }
             if(!ParameterUtil.compareParameter(source, target))
             {
@@ -528,10 +547,13 @@ public class MockResultSet implements ResultSet, Cloneable
         {
             Object source = currentColumn.get(ii);
             Object target = columnData.get(ii);
-            if(!source.getClass().isAssignableFrom(target.getClass()) && !target.getClass().isAssignableFrom(source.getClass()))
+            if(null != source && null != target)
             {
-                source = source.toString();
-                target = target.toString();
+                if(!source.getClass().isAssignableFrom(target.getClass()) && !target.getClass().isAssignableFrom(source.getClass()))
+                {
+                    source = source.toString();
+                    target = target.toString();
+                }
             }
             if(!ParameterUtil.compareParameter(source, target))
             {
@@ -563,10 +585,13 @@ public class MockResultSet implements ResultSet, Cloneable
         {
             Object source = currentColumn.get(ii);
             Object target = columnData.get(ii);
-            if(!source.getClass().isAssignableFrom(target.getClass()) && !target.getClass().isAssignableFrom(source.getClass()))
+            if(null != source && null != target)
             {
-                source = source.toString();
-                target = target.toString();
+                if(!source.getClass().isAssignableFrom(target.getClass()) && !target.getClass().isAssignableFrom(source.getClass()))
+                {
+                    source = source.toString();
+                    target = target.toString();
+                }
             }
             if(!ParameterUtil.compareParameter(source, target))
             {
@@ -619,10 +644,13 @@ public class MockResultSet implements ResultSet, Cloneable
             {
                 Object source = thisList.get(ii);
                 Object target = otherList.get(ii);
-                if(!source.getClass().isAssignableFrom(target.getClass()) && !target.getClass().isAssignableFrom(source.getClass()))
+                if(null != source && null != target)
                 {
-                    source = source.toString();
-                    target = target.toString();
+                    if(!source.getClass().isAssignableFrom(target.getClass()) && !target.getClass().isAssignableFrom(source.getClass()))
+                    {
+                        source = source.toString();
+                        target = target.toString();
+                    }
                 }
                 if(!ParameterUtil.compareParameter(source, target))
                 {
@@ -1188,6 +1216,52 @@ public class MockResultSet implements ResultSet, Cloneable
         return null;
     }
     
+    public NClob getNClob(int columnIndex) throws SQLException
+    {
+        Object value = getObject(columnIndex);
+        if(null != value)
+        {
+            if(value instanceof NClob) return (NClob)value;
+            if(value instanceof Clob) return getNClobFromClob((Clob)value);
+            return new MockNClob(getString(columnIndex));
+        }
+        return null;
+    }
+
+    public NClob getNClob(String columnName) throws SQLException
+    {
+        Object value = getObject(columnName);
+        if(null != value)
+        {
+            if(value instanceof NClob) return (NClob)value;
+            if(value instanceof Clob) return getNClobFromClob((Clob)value);
+            return new MockNClob(getString(columnName));
+        }
+        return null;
+    }
+
+    public SQLXML getSQLXML(int columnIndex) throws SQLException
+    {
+        Object value = getObject(columnIndex);
+        if(null != value)
+        {
+            if(value instanceof SQLXML) return (SQLXML)value;
+            return new MockSQLXML(getString(columnIndex));
+        }
+        return null;
+    }
+
+    public SQLXML getSQLXML(String columnName) throws SQLException
+    {
+        Object value = getObject(columnName);
+        if(null != value)
+        {
+            if(value instanceof SQLXML) return (SQLXML)value;
+            return new MockSQLXML(getString(columnName));
+        }
+        return null;
+    }
+
     public Array getArray(int columnIndex) throws SQLException
     {
         Object value = getObject(columnIndex);
@@ -1228,6 +1302,28 @@ public class MockResultSet implements ResultSet, Cloneable
         {
             if(value instanceof Ref) return (Ref)value;
             return new MockRef(value);
+        }
+        return null;
+    }
+
+    public RowId getRowId(int columnIndex) throws SQLException
+    {
+        Object value = getObject(columnIndex);
+        if(null != value)
+        {
+            if(value instanceof RowId) return (RowId)value;
+            return new MockRowId(getBytes(columnIndex));
+        }
+        return null;
+    }
+
+    public RowId getRowId(String columnName) throws SQLException
+    {
+        Object value = getObject(columnName);
+        if(null != value)
+        {
+            if(value instanceof RowId) return (RowId)value;
+            return new MockRowId(getBytes(columnName));
         }
         return null;
     }
@@ -1509,6 +1605,11 @@ public class MockResultSet implements ResultSet, Cloneable
         return resultSetConcurrency;
     }
     
+    public int getHoldability() throws SQLException
+    {
+        return resultSetHoldability;
+    }
+
     public int findColumn(String columnName) throws SQLException
     {
         for(int ii = 0; ii < columnNameList.size(); ii++)
@@ -1521,8 +1622,11 @@ public class MockResultSet implements ResultSet, Cloneable
     public void updateObject(int columnIndex, Object value) throws SQLException
     {
         checkColumnBounds(columnIndex);
-        checkRowBounds();
-        if(rowDeleted()) throw new SQLException("row was deleted");
+        if(!isCursorInInsertRow)
+        {
+            checkRowBounds();
+            if(rowDeleted()) throw new SQLException("row was deleted");
+        }
         String columnName = (String)columnNameList.get(columnIndex - 1);
         updateObject(columnName, value);
     }
@@ -1540,9 +1644,12 @@ public class MockResultSet implements ResultSet, Cloneable
     public void updateObject(String columnName, Object value) throws SQLException
     {
         checkColumnName(columnName);
-        checkRowBounds();
         checkResultSetConcurrency();
-        if(rowDeleted()) throw new SQLException("row was deleted");
+        if(!isCursorInInsertRow)
+        {
+            checkRowBounds();
+            if(rowDeleted()) throw new SQLException("row was deleted");
+        }
         if(isCursorInInsertRow)
         {
             List column = (List)insertRow.get(columnName);
@@ -1833,6 +1940,16 @@ public class MockResultSet implements ResultSet, Cloneable
         updateObject(columnName, ref);
     }
 
+    public void updateRowId(int columnIndex, RowId rowId) throws SQLException
+    {
+        updateObject(columnIndex, rowId);
+    }
+
+    public void updateRowId(String columnName, RowId rowId) throws SQLException
+    {
+        updateObject(columnName, rowId);
+    }
+
     public void updateBlob(int columnIndex, Blob blob) throws SQLException
     {
         updateObject(columnIndex, blob);
@@ -1899,6 +2016,50 @@ public class MockResultSet implements ResultSet, Cloneable
     {
         String data = StreamUtil.getReaderAsString(reader);
         updateClob(columnName, new MockClob(data));
+    }
+
+    public void updateNClob(int columnIndex, NClob nClob) throws SQLException
+    {
+        updateObject(columnIndex, nClob);
+    }
+    
+    public void updateNClob(String columnName, NClob nClob) throws SQLException
+    {
+        updateObject(columnName, nClob);
+    }
+
+    public void updateNClob(int columnIndex, Reader reader, long length) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader, (int)length);
+        updateNClob(columnIndex, new MockNClob(data));
+    }
+    
+    public void updateNClob(String columnName, Reader reader, long length) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader, (int)length);
+        updateNClob(columnName, new MockNClob(data));
+    }
+
+    public void updateNClob(int columnIndex, Reader reader) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader);
+        updateNClob(columnIndex, new MockNClob(data));
+    }
+
+    public void updateNClob(String columnName, Reader reader) throws SQLException
+    {
+        String data = StreamUtil.getReaderAsString(reader);
+        updateNClob(columnName, new MockNClob(data));
+    }
+
+    public void updateSQLXML(int columnIndex, SQLXML xmlObject) throws SQLException
+    {
+        updateObject(columnIndex, xmlObject);
+    }
+
+    public void updateSQLXML(String columnName, SQLXML xmlObject) throws SQLException
+    {
+        updateObject(columnName, xmlObject);
     }
 
     public void updateArray(int columnIndex, Array array) throws SQLException
@@ -1971,6 +2132,7 @@ public class MockResultSet implements ResultSet, Cloneable
 
     public void moveToInsertRow() throws SQLException
     {
+        adjustCursorForInsert();
         isCursorInInsertRow = true;
     }
 
@@ -2052,8 +2214,8 @@ public class MockResultSet implements ResultSet, Cloneable
             List copyColumn = (List)columnMapCopy.get(currentColumnName);
             List databaseColumn = (List)columnMap.get(currentColumnName);
             List sourceColumn = (List)insertRow.get(currentColumnName);
-            copyColumn.add(index, sourceColumn.get(0));
-            databaseColumn.add(index, sourceColumn.get(0));  
+            copyColumn.add(index, ParameterUtil.copyParameter(sourceColumn.get(0)));
+            databaseColumn.add(index, ParameterUtil.copyParameter(sourceColumn.get(0)));  
         }
         updatedRows.add(index, new Boolean(false));
         deletedRows.add(index, new Boolean(false));
@@ -2091,8 +2253,14 @@ public class MockResultSet implements ResultSet, Cloneable
                 sourceColumn = (List)columnMap.get(currentColumnName);
                 targetColumn = (List)columnMapCopy.get(currentColumnName);
             } 
-            targetColumn.set(index, sourceColumn.get(index));
+            targetColumn.set(index, ParameterUtil.copyParameter(sourceColumn.get(index)));
         }
+    }
+    
+    private void adjustCursorForInsert()
+    {
+        if(cursor >= getRowCount()) cursor = getRowCount() - 1;
+        if(cursor < 0) cursor = 0;
     }
     
     private void adjustCursor()
@@ -2184,6 +2352,11 @@ public class MockResultSet implements ResultSet, Cloneable
     private Map createCaseAwareMap()
     {
         return new CaseAwareMap(columnsCaseSensitive);
+    }
+    
+    private NClob getNClobFromClob(Clob clobValue) throws SQLException
+    {
+        return new MockNClob(clobValue.getSubString(1, (int)clobValue.length()));
     }
     
     public String toString()

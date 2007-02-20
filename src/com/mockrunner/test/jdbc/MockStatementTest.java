@@ -8,6 +8,7 @@ import java.sql.Statement;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.jdbc.StatementResultSetHandler;
+import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
@@ -576,19 +577,28 @@ public class MockStatementTest extends BaseTestCase
         statement1.setFetchDirection(ResultSet.FETCH_REVERSE);
         statement1.setFetchSize(3);
         MockPreparedStatement statement2 = (MockPreparedStatement)connection.prepareStatement("select2", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        MockResultSet resultSet1 = new MockResultSet("id1");
-        resultSet1.setResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
-        MockResultSet resultSet2 = new MockResultSet("id1");
-        resultSet2.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
-        connection.getStatementResultSetHandler().prepareResultSet("select1", resultSet1);
-        connection.getPreparedStatementResultSetHandler().prepareResultSet("select2", resultSet1);
+        MockCallableStatement statement3 = (MockCallableStatement)connection.prepareCall("select3", ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE, ResultSet.CLOSE_CURSORS_AT_COMMIT);
+        MockResultSet resultSet = new MockResultSet("id1");
+        resultSet.setResultSetType(ResultSet.TYPE_SCROLL_SENSITIVE);
+        resultSet.setResultSetHoldability(ResultSet.HOLD_CURSORS_OVER_COMMIT);
+        connection.getStatementResultSetHandler().prepareResultSet("select1", resultSet);
+        connection.getPreparedStatementResultSetHandler().prepareResultSet("select2", resultSet);
+        connection.getCallableStatementResultSetHandler().prepareResultSet("select3", resultSet);
         MockResultSet returnedResultSet1 = (MockResultSet)statement1.executeQuery("select1");
         MockResultSet returnedResultSet2 = (MockResultSet)statement2.executeQuery("select2");
+        MockResultSet returnedResultSet3 = (MockResultSet)statement3.executeQuery("select3");
         assertEquals(ResultSet.TYPE_FORWARD_ONLY, returnedResultSet1.getType());
         assertEquals(ResultSet.CONCUR_READ_ONLY, returnedResultSet1.getConcurrency());
         assertEquals(ResultSet.FETCH_REVERSE, returnedResultSet1.getFetchDirection());
+        assertEquals(ResultSet.HOLD_CURSORS_OVER_COMMIT, returnedResultSet1.getHoldability());
         assertEquals(3, returnedResultSet1.getFetchSize());
         assertEquals(ResultSet.TYPE_SCROLL_INSENSITIVE, returnedResultSet2.getType());
         assertEquals(ResultSet.CONCUR_UPDATABLE, returnedResultSet2.getConcurrency());
+        assertEquals(ResultSet.FETCH_FORWARD, returnedResultSet2.getFetchDirection());
+        assertEquals(ResultSet.HOLD_CURSORS_OVER_COMMIT, returnedResultSet2.getHoldability());
+        assertEquals(ResultSet.TYPE_SCROLL_SENSITIVE, returnedResultSet3.getType());
+        assertEquals(ResultSet.CONCUR_UPDATABLE, returnedResultSet3.getConcurrency());
+        assertEquals(ResultSet.FETCH_FORWARD, returnedResultSet3.getFetchDirection());
+        assertEquals(ResultSet.CLOSE_CURSORS_AT_COMMIT, returnedResultSet3.getHoldability());
     }
 }

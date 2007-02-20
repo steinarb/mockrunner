@@ -65,9 +65,4 @@ public class MockTextMessage extends MockMessage implements TextMessage
         if(null == text) return 0;
         return text.hashCode();
     }
-    
-    public Object clone()
-    {
-        return super.clone();
-    }
 }

@@ -5,8 +5,6 @@ import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 import javax.transaction.UserTransaction;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.mockejb.MockContainer;
 
 import com.mockrunner.ejb.Configuration;
@@ -30,7 +28,6 @@ import com.mockrunner.ejb.JNDIUtil;
  */
 public class EJBMockObjectFactory
 {
-    private final static Log log = LogFactory.getLog(EJBMockObjectFactory.class);
     private Configuration configuration;
     private UserTransaction transaction;
     private MockContainer container;
@@ -76,7 +73,6 @@ public class EJBMockObjectFactory
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             transaction = createMockUserTransaction();
         }
         if(transaction instanceof MockUserTransaction)

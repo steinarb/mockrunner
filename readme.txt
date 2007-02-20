@@ -61,25 +61,18 @@ or as parsed XML.
 It is planned to include support for other frameworks in the J2EE
 environment in future releases.
 
-Mockrunner requires at least Java 1.3 to run. If you are using Java 1.3
-you have to use the jar files with "-jdk1.3" in their name. If a jar
-file doesn't have a corresponding "-jdk1.3"-version, it can be used with
-Java 1.3, 1.4 and 1.5.
-Mockrunner supports J2EE 1.3 and J2EE 1.4. For J2EE 1.3 you have to use
-the jar files with "-j2ee1.3" in their name (these files are in lib/j2ee1.3
-directory). If a jar file doesn't have a corresponding "-j2ee1.3"-version, 
-it can be used with J2EE 1.3 and J2EE 1.4. Older J2EE versions, e.g. Servlet API
-2.2, are not supported.
-Mockrunner supports Struts versions 1.1, 1.2 and 1.3. It's not possible to use Mockrunner 
-with Struts 1.0.
+Mockrunner supports the Java versions 1.3 to 1.6 and the J2EE version 1.3
+and 1.4. The lib directory contains the jar files for all Java and J2EE
+versions in the respective subdirectory. 
 Each jar file contains a jarversion.txt which lists the JDK and J2EE version
-this jar supports. Please check out this file, if you are in doubt which jar
-to use.
+this jar supports.
+Mockrunner supports the Struts versions 1.1, 1.2 and 1.3. It's not possible 
+to use Mockrunner with Struts 1.0 or J2EE 1.2.
 
 To start with Mockrunner check out the JavaDoc and the examples
 in the com.mockrunner.example packages. Most methods are self-explanatory.
 
-Mockrunner uses some classes from ActiveMQ project (http://incubator.apache.org/activemq/)
+Mockrunner uses some classes from ActiveMQ project (http://activemq.apache.org)
 for JMS message selector parsing. The classes are modified in order to
 fit the needs of Mockrunner. The corresponding classes are in a different package
 than the original ActiveMQ classes, so you should not face classloading problems
@@ -91,11 +84,10 @@ which extend BaseTestCase. BaseTestCase provides easy access to all test modules
 mock object factories. BaseTestCase depends on all third-party libraries but you don't
 have to add all the jar files to the classpath, just those that are related to the 
 test module you use, because the factories are lazy initialized when necessary.
-In addition to the "all-in-one"-files (mockrunner.jar, mockrunner-jdk1.3.jar,
-mockrunner-j2ee1.3.jar and mockrunner-jdk1.3-j2ee1.3.jar), separate jars for the 
+In addition to the "all-in-one"-file mockrunner.jar, separate jars for the 
 different technologies are provided. These additional jar files contain only the classes 
 necessary to test the corresponding technology. If you only need one technology it's 
-recommended to use the corresponding jar file instead of the "all-in-one" jar files. 
+recommended to use the corresponding jar file instead of the "all-in-one" jar file. 
 E.g. if you only want to use the JDBC test framework, you can use mockrunner-jdbc.jar.
 You have to to subclass the basic adapter versions (e.g. BasicJDBCTestCaseAdapter) in 
 this case, which do not extend BaseTestCase and do not depend on all third-party libraries.

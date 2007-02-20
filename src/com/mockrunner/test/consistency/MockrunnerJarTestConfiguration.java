@@ -1,4 +1,4 @@
-package com.mockrunner.gen.jar;
+package com.mockrunner.test.consistency;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -17,13 +17,19 @@ import com.mockrunner.example.jms.StockQuotePublisherTest;
 import com.mockrunner.example.servlet.RedirectServletTest;
 import com.mockrunner.example.struts.AuthenticationActionTest;
 import com.mockrunner.example.tag.TableEnumTagTest;
+import com.mockrunner.gen.jar.MockrunnerJars;
 
 public class MockrunnerJarTestConfiguration
 {
     public final static String RELEASE_DIR = "bin";
-    public final static String BUILD_DIR = "build";
+    public final static String BUILD_DIR = "buildjdk1.6j2ee1.4";
     public final static String LIB_DIR = "lib";
+    public final static String JDK13_DIR = "jdk1.3";
+    public final static String JDK14_DIR = "jdk1.4";
+    public final static String JDK15_DIR = "jdk1.5";
+    public final static String JDK16_DIR = "jdk1.6";
     public final static String J2EE13_DIR = "j2ee1.3";
+    public final static String J2EE14_DIR = "j2ee1.4";
     public final static String THIRD_PARTY_DIR = "jar";
     
     public final static String ALL_REFERENCE_TEST = AllReferenceTests.class.getName();
@@ -39,15 +45,30 @@ public class MockrunnerJarTestConfiguration
     {
         try
         {
-            List j2ee14Jars = getJ2EE14Jars();
-            List j2ee13Jars = getJ2EE13Jars();
+            List jdk13j2ee13Jars = getReleasedJars(JDK13_DIR, J2EE13_DIR);
+            List jdk14j2ee13Jars = getReleasedJars(JDK14_DIR, J2EE13_DIR);
+            List jdk14j2ee14Jars = getReleasedJars(JDK14_DIR, J2EE14_DIR);
+            List jdk15j2ee13Jars = getReleasedJars(JDK15_DIR, J2EE13_DIR);
+            List jdk15j2ee14Jars = getReleasedJars(JDK15_DIR, J2EE14_DIR);
+            List jdk16j2ee13Jars = getReleasedJars(JDK16_DIR, J2EE13_DIR);
+            List jdk16j2ee14Jars = getReleasedJars(JDK16_DIR, J2EE14_DIR);
             List j2ee14ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJ2EE14());
             List j2ee13ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJ2EE13());
-            List j2ee14mappings = createMappings(j2ee14Jars, j2ee14ThirdPartyJarURLs);
-            List j2ee13mappings = createMappings(j2ee13Jars, j2ee13ThirdPartyJarURLs);
+            List jdk13j2ee13mappings = createMappings(jdk13j2ee13Jars, j2ee13ThirdPartyJarURLs);
+            List jdk14j2ee13mappings = createMappings(jdk14j2ee13Jars, j2ee13ThirdPartyJarURLs);
+            List jdk14j2ee14mappings = createMappings(jdk14j2ee14Jars, j2ee14ThirdPartyJarURLs);
+            List jdk15j2ee13mappings = createMappings(jdk15j2ee13Jars, j2ee13ThirdPartyJarURLs);
+            List jdk15j2ee14mappings = createMappings(jdk15j2ee14Jars, j2ee14ThirdPartyJarURLs);
+            List jdk16j2ee13mappings = createMappings(jdk16j2ee13Jars, j2ee13ThirdPartyJarURLs);
+            List jdk16j2ee14mappings = createMappings(jdk16j2ee14Jars, j2ee14ThirdPartyJarURLs);
             List resultList = new ArrayList();
-            resultList.addAll(j2ee14mappings);
-            resultList.addAll(j2ee13mappings);
+            resultList.addAll(jdk13j2ee13mappings);
+            resultList.addAll(jdk14j2ee13mappings);
+            resultList.addAll(jdk14j2ee14mappings);
+            resultList.addAll(jdk15j2ee13mappings);
+            resultList.addAll(jdk15j2ee14mappings);
+            resultList.addAll(jdk16j2ee13mappings);
+            resultList.addAll(jdk16j2ee14mappings);
             return (Mapping[])resultList.toArray(new Mapping[resultList.size()]);
         } 
         catch (Exception exc)
@@ -65,8 +86,8 @@ public class MockrunnerJarTestConfiguration
             String name = currentFile.getName();
             String referenceTest = getReferenceTest(name);
             List urls = new ArrayList();
-            urls.add(currentFile.toURL());
-            urls.add(new File(BUILD_DIR).toURL());
+            urls.add(currentFile.toURI().toURL());
+            urls.add(new File(BUILD_DIR).toURI().toURL());
             urls.addAll(thirdpartyJarURLs);
             Mapping currentMapping = new Mapping(referenceTest, (URL[])urls.toArray(new URL[urls.size()]));
             mappings.add(currentMapping);
@@ -113,7 +134,7 @@ public class MockrunnerJarTestConfiguration
         for(int ii = 0; ii < list.size(); ii++)
         {
             File currentFile = (File)list.get(ii);
-            urlList.add(currentFile.toURL());
+            urlList.add(currentFile.toURI().toURL());
         }
         return urlList;
     }
@@ -164,24 +185,10 @@ public class MockrunnerJarTestConfiguration
         resultList.addAll(Arrays.asList(new File(jarDirName).listFiles(new JarFileFilter())));
         return resultList;
     }
-    
-    public List getReleasedJars()
+
+    public List getReleasedJars(String jdkDir, String j2eeDir)
     {
-        List jarFiles = new ArrayList();
-        jarFiles.addAll(getJ2EE13Jars());
-        jarFiles.addAll(getJ2EE14Jars());
-        return jarFiles;
-    }
-    
-    public List getJ2EE13Jars()
-    {
-        String jarDirName = getBaseDir() + LIB_DIR + File.separator + J2EE13_DIR;
-        return listFiles(jarDirName);
-    }
-    
-    public List getJ2EE14Jars()
-    {
-        String jarDirName = getBaseDir() + LIB_DIR;
+        String jarDirName = getBaseDir() + LIB_DIR + File.separator + jdkDir + File.separator + j2eeDir;
         return listFiles(jarDirName);
     }
     

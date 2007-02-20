@@ -1,11 +1,8 @@
 package com.mockrunner.util.web;
 
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.xerces.parsers.DOMParser;
 import org.cyberneko.html.HTMLConfiguration;
 import org.jdom.Element;
@@ -19,9 +16,7 @@ import com.mockrunner.base.NestedApplicationException;
  * Util class for HTML and XML parsing.
  */
 public class XmlUtil
-{
-    private final static Log log = LogFactory.getLog(XmlUtil.class);
-    
+{ 
     /**
      * Convinience method for HTML fragments. Returns the body
      * as JDOM <code>Element</code>.
@@ -74,15 +69,10 @@ public class XmlUtil
     {
         try
         {
-            XMLOutputter outputter = new XMLOutputter();
-            StringWriter writer = new StringWriter();
-            outputter.output(document, writer);
-            writer.flush();
-            return writer.toString();
+            return new XMLOutputter().outputString(document);
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -118,7 +108,6 @@ public class XmlUtil
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -139,7 +128,6 @@ public class XmlUtil
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }
@@ -165,7 +153,6 @@ public class XmlUtil
         }
         catch(Exception exc)
         {
-            log.error(exc.getMessage(), exc);
             throw new NestedApplicationException(exc);
         }
     }

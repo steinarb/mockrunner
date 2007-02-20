@@ -4,15 +4,13 @@ import java.sql.Ref;
 import java.sql.SQLException;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.mockrunner.base.NestedApplicationException;
 
 /**
  * Mock implementation of <code>Ref</code>.
  */
 public class MockRef implements Ref, Cloneable
 {
-    private final static Log log = LogFactory.getLog(MockRef.class);
     private Object object;
     private String baseTypeName;
     
@@ -84,8 +82,7 @@ public class MockRef implements Ref, Cloneable
         } 
         catch(CloneNotSupportedException exc)
         {
-            log.error(exc.getMessage(), exc);
+            throw new NestedApplicationException(exc);
         }
-        return null;
     }
 }
