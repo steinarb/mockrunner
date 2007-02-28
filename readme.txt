@@ -132,7 +132,7 @@ http://www.jboss.org
 jboss-j2ee.jar
 
 J2EE 1.3:
-Tomcat 4.1.31:
+Tomcat 4.1.34:
 http://tomcat.apache.org
 servlet.jar
 JBoss 3.2.3:
