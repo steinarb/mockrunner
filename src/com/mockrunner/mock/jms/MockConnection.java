@@ -101,19 +101,39 @@ public class MockConnection implements Connection
 
     /**
      * Throws a <code>JMSException</code> if one is set with
-     * {@link #setJMSException}. Informs the <code>ExceptionListener</code>
-     * and deletes the exception after throwing it.
+     * {@link #setJMSException}. Deletes the exception.
      */
     public void throwJMSException() throws JMSException
     {
         if(null == exception) return;
         JMSException tempException = exception;
         exception = null;
-        if(listener != null)
-        {
-            listener.onException(tempException);
-        }
         throw tempException;
+    }
+    
+    /**
+     * Calls the <code>ExceptionListener</code>
+     * if an exception is set {@link #setJMSException}.
+     * Deletes the exception after calling the <code>ExceptionListener</code>.
+     */
+    public void callExceptionListener()
+    {
+        JMSException tempException = exception;
+        exception = null;
+        callExceptionListener(tempException);
+    }
+    
+    /**
+     * Calls the <code>ExceptionListener</code>
+     * using the specified exception.
+     * @param exception the exception
+     */
+    public void callExceptionListener(JMSException exception)
+    {
+        if(listener != null && exception != null)
+        {
+            listener.onException(exception);
+        }
     }
     
     /**
