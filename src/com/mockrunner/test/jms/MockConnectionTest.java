@@ -325,12 +325,10 @@ public class MockConnectionTest extends TestCase
         assertEquals(2, connection.getSessionList().size());
     }
 
-    public void testException() throws Exception
+    public void testThrowJMSException() throws Exception
     {
         queueConnection.createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
         JMSException exception = new JMSException("MyReason");
-        TestExceptionListener listener = new TestExceptionListener();
-        queueConnection.setExceptionListener(listener);
         queueConnection.setJMSException(exception);
         try
         {
@@ -339,8 +337,7 @@ public class MockConnectionTest extends TestCase
         }
         catch(JMSException exc)
         {
-            assertTrue(exception == exc);
-            assertTrue(exception == listener.getException());
+            assertSame(exception, exc);
         }
         queueConnection.start();
         ConnectionConsumer consumer = queueConnection.createConnectionConsumer(null, null, null, 0);
@@ -354,10 +351,34 @@ public class MockConnectionTest extends TestCase
         }
         catch(JMSException exc)
         {
-            assertTrue(exception == exc);
-            assertTrue(exception == listener.getException());
+            assertSame(exception, exc);
         }
         consumer.getServerSessionPool();
+    }
+    
+    public void testCallExceptionListener() throws Exception
+    {
+        topicConnection.createTopicSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
+        JMSException exception = new JMSException("MyReason");
+        topicConnection.setJMSException(exception);
+        topicConnection.callExceptionListener();
+        TestExceptionListener listener = new TestExceptionListener();
+        topicConnection.setExceptionListener(listener);
+        topicConnection.callExceptionListener();
+        assertNull(listener.getException());
+        listener.reset();
+        topicConnection.setJMSException(exception);
+        topicConnection.callExceptionListener();
+        assertSame(exception, listener.getException());
+        listener.reset();
+        topicConnection.callExceptionListener();
+        assertNull(listener.getException());
+        listener.reset();
+        topicConnection.callExceptionListener(exception);
+        assertSame(exception, listener.getException());
+        listener.reset();
+        topicConnection.callExceptionListener(null);
+        assertNull(listener.getException());
     }
     
     private static class TestExceptionListener implements ExceptionListener
@@ -367,6 +388,11 @@ public class MockConnectionTest extends TestCase
         public void onException(JMSException exception)
         {
             this.exception = exception;
+        }
+        
+        public void reset()
+        {
+            exception = null;
         }
         
         public JMSException getException()
