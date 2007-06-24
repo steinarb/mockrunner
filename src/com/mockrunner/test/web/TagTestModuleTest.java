@@ -18,6 +18,7 @@ import com.mockrunner.tag.NestedBodyTag;
 import com.mockrunner.tag.NestedSimpleTag;
 import com.mockrunner.tag.NestedStandardTag;
 import com.mockrunner.tag.NestedTag;
+import com.mockrunner.tag.RuntimeAttribute;
 import com.mockrunner.tag.TagTestModule;
 
 public class TagTestModuleTest extends BaseTestCase
@@ -57,6 +58,7 @@ public class TagTestModuleTest extends BaseTestCase
         HashMap testMap = new HashMap();
         testMap.put("testString", "test");
         testMap.put("dynamicAttribute", "dynamicAttributeValue");
+        testMap.put("stringProperty", new TestRuntimeAttribute("stringPropertyValue"));
         module.createWrappedTag(TestSimpleTag.class, testMap);
         TestSimpleTag simpleTag = (TestSimpleTag)module.getWrappedTag();
         assertNull(simpleTag.getTestString());
@@ -66,6 +68,7 @@ public class TagTestModuleTest extends BaseTestCase
         assertEquals(1, simpleTag.getDynamicAttributesMap().size());
         assertEquals("dynamicAttributeValue", ((DynamicAttribute)simpleTag.getDynamicAttributesMap().get("dynamicAttribute")).getValue());
         assertNull(((DynamicAttribute)simpleTag.getDynamicAttributesMap().get("dynamicAttribute")).getUri());
+        assertEquals("stringPropertyValue", simpleTag.getStringProperty());
         module.createTag(TestTag.class, testMap);
         module.populateAttributes();
         TestTag tag = (TestTag)module.getWrappedTag();
@@ -75,7 +78,7 @@ public class TagTestModuleTest extends BaseTestCase
         TestBodyTag bodyTag = (TestBodyTag)module.getWrappedTag();
         assertEquals("test", bodyTag.getTestString());
     }
-    
+
     public void testSetTagWithAttributes()
     {
         HashMap testMap = new HashMap();
@@ -91,12 +94,24 @@ public class TagTestModuleTest extends BaseTestCase
         module.populateAttributes();
         assertEquals(new Integer(5), testTag.getTestInteger());
         assertEquals("test", testTag.getTestString());
+        testMap.put("testString", new TestRuntimeAttribute("anothervalue"));
         TestSimpleTag simpleTag = new TestSimpleTag();
         module.setTag(simpleTag, testMap);
         module.populateAttributes();
-        assertEquals("test", simpleTag.getTestString());
+        assertEquals("anothervalue", simpleTag.getTestString());
         assertEquals(1, simpleTag.getDynamicAttributesMap().size());
         assertEquals(new Integer(5), ((DynamicAttribute)simpleTag.getDynamicAttributesMap().get("testInteger")).getValue());
+    }
+    
+    public void testTagWithJspFragmentAttribute()
+    {
+        HashMap testMap = new HashMap();
+        MockJspFragment fragment = new MockJspFragment(getWebMockObjectFactory().getMockPageContext());
+        fragment.addTextChild("AFragmentText");
+        testMap.put("testFragment", fragment);
+        module.createWrappedTag(TestFragmentTag.class, testMap);
+        module.processTagLifecycle();
+        module.verifyOutput("AFragmentText");
     }
 
     public void testVerifyOutput()
@@ -516,6 +531,21 @@ public class TagTestModuleTest extends BaseTestCase
         TestTag tag = (TestTag)module.createWrappedTag(TestTag.class);
         module.release();
         assertTrue(tag.wasReleaseCalled());
+    }
+    
+    private class TestRuntimeAttribute implements RuntimeAttribute
+    {
+        private Object value;
+
+        public TestRuntimeAttribute(Object value)
+        {
+            this.value = value;
+        }
+
+        public Object evaluate()
+        {
+            return value;
+        }
     }
     
     public static class AnotherTag implements Tag

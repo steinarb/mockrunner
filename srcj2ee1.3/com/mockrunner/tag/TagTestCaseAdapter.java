@@ -109,19 +109,19 @@ public abstract class TagTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.tag.TagTestModule#createWrappedTag(Class, Map)}
-     */
-    /*protected JspTag createWrappedTag(Class tagClass, Map attributes)
-    {
-        return tagTestModule.createWrappedTag(tagClass, attributes);
-    }*/
-
-    /**
      * Delegates to {@link com.mockrunner.tag.TagTestModule#createWrappedTag(Class)}
      */
     /*protected JspTag createWrappedTag(Class tagClass)
     {
         return tagTestModule.createWrappedTag(tagClass);
+    }*/
+
+    /**
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#createWrappedTag(Class, Map)}
+     */
+    /*protected JspTag createWrappedTag(Class tagClass, Map attributes)
+    {
+        return tagTestModule.createWrappedTag(tagClass, attributes);
     }*/
 
     /**
@@ -133,20 +133,20 @@ public abstract class TagTestCaseAdapter extends HTMLOutputTestCase
     }*/
 
     /**
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(JspTag)}
+     */
+    /*protected NestedTag setTag(JspTag tag)
+    {
+        return tagTestModule.setTag(tag);
+    }*/
+
+    /**
      * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(JspTag, Map)}
      */
     /*protected NestedTag setTag(JspTag tag, Map attributes)
     {
         return tagTestModule.setTag(tag, attributes);
     }*/
-
-    /**
-     * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(TagSupport)}
-     */
-    protected NestedTag setTag(TagSupport tag)
-    {
-        return tagTestModule.setTag(tag);
-    }
 
     /**
      * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(TagSupport, Map)}
@@ -157,12 +157,12 @@ public abstract class TagTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(JspTag)}
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#setTag(TagSupport)}
      */
-    /*protected NestedTag setTag(JspTag tag)
+    protected NestedTag setTag(TagSupport tag)
     {
         return tagTestModule.setTag(tag);
-    }*/
+    }
 
     /**
      * Delegates to {@link com.mockrunner.tag.TagTestModule#setDoRelease(boolean)}
@@ -261,19 +261,19 @@ public abstract class TagTestCaseAdapter extends HTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.tag.TagTestModule#createTag(Class, Map)}
-     */
-    protected TagSupport createTag(Class tagClass, Map attributes)
-    {
-        return tagTestModule.createTag(tagClass, attributes);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.tag.TagTestModule#createTag(Class)}
      */
     protected TagSupport createTag(Class tagClass)
     {
         return tagTestModule.createTag(tagClass);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.tag.TagTestModule#createTag(Class, Map)}
+     */
+    protected TagSupport createTag(Class tagClass, Map attributes)
+    {
+        return tagTestModule.createTag(tagClass, attributes);
     }
 
     /**

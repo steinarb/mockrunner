@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.el.ValueExpression;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.DynamicAttributes;
@@ -17,6 +18,8 @@ public class TestSimpleTag extends SimpleTagSupport implements DynamicAttributes
     private float floatProperty;
     private String stringProperty;
     private String testString;
+    private ValueExpression valueExpressionProperty;
+    private Object valueExpressionResult; 
     private boolean doTagCalled = false;
     private Map dynamicAttributes = new HashMap();
     
@@ -38,6 +41,10 @@ public class TestSimpleTag extends SimpleTagSupport implements DynamicAttributes
     public void doTag() throws JspException, IOException
     {
         getJspContext().getOut().print("TestSimpleTag");
+        if(null != valueExpressionProperty)
+        {
+            valueExpressionResult = valueExpressionProperty.getValue(getJspContext().getELContext());
+        }
         doTagCalled = true;
     }
     
@@ -89,5 +96,20 @@ public class TestSimpleTag extends SimpleTagSupport implements DynamicAttributes
     public void setTestString(String testString)
     {
         this.testString = testString;
+    }
+
+    public ValueExpression getValueExpressionProperty()
+    {
+        return valueExpressionProperty;
+    }
+
+    public void setValueExpressionProperty(ValueExpression valueExpressionProperty)
+    {
+        this.valueExpressionProperty = valueExpressionProperty;
+    }
+    
+    public Object getValueExpressionResult()
+    {
+        return valueExpressionResult;
     }
 }

@@ -221,7 +221,7 @@ public class ServletTestModule extends HTMLOutputModule
     {
         try
         {
-            servlet.init();
+            servlet.init(mockFactory.getMockServletConfig());
         }
         catch(ServletException exc)
         {

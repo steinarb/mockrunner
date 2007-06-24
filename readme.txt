@@ -61,8 +61,8 @@ or as parsed XML.
 It is planned to include support for other frameworks in the J2EE
 environment in future releases.
 
-Mockrunner supports the Java versions 1.3 to 1.6 and the J2EE version 1.3
-and 1.4. The lib directory contains the jar files for all Java and J2EE
+Mockrunner supports the Java versions 1.3 to 1.6 and the J2EE version 1.3, 
+1.4 and 5. The lib directory contains the jar files for all Java and J2EE
 versions in the respective subdirectory. 
 Each jar file contains a jarversion.txt which lists the JDK and J2EE version
 this jar supports.
@@ -108,11 +108,11 @@ http://xml.apache.org/xerces2-j/index.html
 xml-apis.jar
 xercesImpl.jar
 
-Struts 1.3.5:
+Struts 1.3.8:
 http://struts.apache.org
-struts-core-1.3.5.jar
-struts-extras-1.3.5.jar
-struts-taglib-1.3.5.jar
+struts-core-1.3.8.jar
+struts-extras-1.3.8.jar
+struts-taglib-1.3.8.jar
 
 Struts 1.2.9:
 http://struts.apache.org
@@ -122,8 +122,20 @@ JUnit 3.8.1:
 http://www.junit.org
 junit.jar
 
+JavaEE 5:
+Tomcat 6.0.13
+http://tomcat.apache.org
+servlet-api.jar
+jsp-api.jar
+el-api.jar
+jasper.jar
+jasper-api.jar
+JBoss 4.2.0:
+jboss-j2ee.jar (modified, added the org/jboss/util/id classes, because jboss-j2ee.jar
+                contains references to these classes)
+
 J2EE 1.4:
-Tomcat 5.5.20:
+Tomcat 5.5.23:
 http://tomcat.apache.org
 servlet-api.jar
 jsp-api.jar
@@ -132,7 +144,7 @@ http://www.jboss.org
 jboss-j2ee.jar
 
 J2EE 1.3:
-Tomcat 4.1.34:
+Tomcat 4.1.36:
 http://tomcat.apache.org
 servlet.jar
 JBoss 3.2.3:
@@ -142,10 +154,10 @@ jboss-jaas.jar
 
 Commons:
 http://jakarta.apache.org/commons       
-commons-logging-1.0.4.jar (from Struts 1.3.5 release)
-commons-beanutils-1.7.0.jar (from Struts 1.3.5 release)
-commons-digester-1.6.jar (from Struts 1.3.5 release)
-commons-validator-1.3.0.jar (from Struts 1.3.5 release)
+commons-logging-1.0.4.jar (from Struts 1.3.8 release)
+commons-beanutils-1.7.0.jar (from Struts 1.3.8 release)
+commons-digester-1.8.jar (from Struts 1.3.8 release)
+commons-validator-1.3.1.jar (from Struts 1.3.8 release)
 
 MockEJB 0.6 beta2:
 http://mockejb.sourceforge.net
@@ -185,7 +197,7 @@ jaranalyzer-1.1.jar
 
 regexp 1.3:
 http://jakarta.apache.org/regexp
-jakarta-regexp-1.3.jar (from JarAnalyzer 0.9.3 release)
+jakarta-regexp-1.3.jar (from JarAnalyzer 1.1 release)
 
 Ant 1.6.5:
 http://ant.apache.org

@@ -22,7 +22,7 @@ import com.mockrunner.gen.jar.MockrunnerJars;
 public class MockrunnerJarTestConfiguration
 {
     public final static String RELEASE_DIR = "bin";
-    public final static String BUILD_DIR = "buildjdk1.6j2ee1.4";
+    public final static String BUILD_DIR = "buildjdk1.6jee5";
     public final static String LIB_DIR = "lib";
     public final static String JDK13_DIR = "jdk1.3";
     public final static String JDK14_DIR = "jdk1.4";
@@ -30,6 +30,7 @@ public class MockrunnerJarTestConfiguration
     public final static String JDK16_DIR = "jdk1.6";
     public final static String J2EE13_DIR = "j2ee1.3";
     public final static String J2EE14_DIR = "j2ee1.4";
+    public final static String JEE5_DIR = "jee5";
     public final static String THIRD_PARTY_DIR = "jar";
     
     public final static String ALL_REFERENCE_TEST = AllReferenceTests.class.getName();
@@ -50,8 +51,11 @@ public class MockrunnerJarTestConfiguration
             List jdk14j2ee14Jars = getReleasedJars(JDK14_DIR, J2EE14_DIR);
             List jdk15j2ee13Jars = getReleasedJars(JDK15_DIR, J2EE13_DIR);
             List jdk15j2ee14Jars = getReleasedJars(JDK15_DIR, J2EE14_DIR);
+            List jdk15jee5Jars = getReleasedJars(JDK15_DIR, JEE5_DIR);
             List jdk16j2ee13Jars = getReleasedJars(JDK16_DIR, J2EE13_DIR);
             List jdk16j2ee14Jars = getReleasedJars(JDK16_DIR, J2EE14_DIR);
+            List jdk16jee5Jars = getReleasedJars(JDK16_DIR, JEE5_DIR);
+            List jee5ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJEE5());
             List j2ee14ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJ2EE14());
             List j2ee13ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJ2EE13());
             List jdk13j2ee13mappings = createMappings(jdk13j2ee13Jars, j2ee13ThirdPartyJarURLs);
@@ -59,16 +63,20 @@ public class MockrunnerJarTestConfiguration
             List jdk14j2ee14mappings = createMappings(jdk14j2ee14Jars, j2ee14ThirdPartyJarURLs);
             List jdk15j2ee13mappings = createMappings(jdk15j2ee13Jars, j2ee13ThirdPartyJarURLs);
             List jdk15j2ee14mappings = createMappings(jdk15j2ee14Jars, j2ee14ThirdPartyJarURLs);
+            List jdk15jee5mappings = createMappings(jdk15jee5Jars, jee5ThirdPartyJarURLs);
             List jdk16j2ee13mappings = createMappings(jdk16j2ee13Jars, j2ee13ThirdPartyJarURLs);
             List jdk16j2ee14mappings = createMappings(jdk16j2ee14Jars, j2ee14ThirdPartyJarURLs);
+            List jdk16jee5mappings = createMappings(jdk16jee5Jars, jee5ThirdPartyJarURLs);
             List resultList = new ArrayList();
             resultList.addAll(jdk13j2ee13mappings);
             resultList.addAll(jdk14j2ee13mappings);
             resultList.addAll(jdk14j2ee14mappings);
             resultList.addAll(jdk15j2ee13mappings);
             resultList.addAll(jdk15j2ee14mappings);
+            resultList.addAll(jdk15jee5mappings);
             resultList.addAll(jdk16j2ee13mappings);
             resultList.addAll(jdk16j2ee14mappings);
+            resultList.addAll(jdk16jee5mappings);
             return (Mapping[])resultList.toArray(new Mapping[resultList.size()]);
         } 
         catch (Exception exc)
@@ -139,51 +147,48 @@ public class MockrunnerJarTestConfiguration
         return urlList;
     }
     
-    public List getThirdPartyStandardJarsJ2EE14()
-    {
-        String jarDirName = getBaseDir() + THIRD_PARTY_DIR;
-        List resultList = new ArrayList();
-        File[] files = new File(jarDirName).listFiles(new JarFileFilter());
-        for(int ii = 0; ii < files.length; ii++)
-        {
-            File currentFile = files[ii];
-            if(MockrunnerJars.getStandardInterfaceJ2EE14Jars().contains(currentFile.getName()))
-            {
-                resultList.add(currentFile);
-            }
-        }
-        return resultList;
-    }
-    
-    public List getThirdPartyStandardJarsJ2EE13()
-    {
-        List resultList = new ArrayList();
-        String jarDirName = getBaseDir() + THIRD_PARTY_DIR + File.separator + J2EE13_DIR;
-        resultList.addAll(Arrays.asList(new File(jarDirName).listFiles(new JarFileFilter())));
-        return resultList;
-    }
-    
-    public List getThirdPartyJarsJ2EE14()
+    public List getThirdPartyJarsJEE5()
     {
         String jarDirName = getBaseDir() + THIRD_PARTY_DIR;
         return new ArrayList(Arrays.asList(new File(jarDirName).listFiles(new JarFileFilter())));
     }
     
+    public List getThirdPartyJarsJ2EE14()
+    {
+        List resultList = getThirdPartyJarsWithoutJEE5Jars();
+        String jarDirName = getBaseDir() + THIRD_PARTY_DIR + File.separator + J2EE14_DIR;
+        resultList.addAll(Arrays.asList(new File(jarDirName).listFiles(new JarFileFilter())));
+        return resultList;
+    }
+    
     public List getThirdPartyJarsJ2EE13()
     {
-        List fileList = getThirdPartyJarsJ2EE14();
+        List resultList = getThirdPartyJarsWithoutJEE5Jars();
+        String jarDirName = getBaseDir() + THIRD_PARTY_DIR + File.separator + J2EE13_DIR;
+        resultList.addAll(Arrays.asList(new File(jarDirName).listFiles(new JarFileFilter())));
+        return resultList;
+    }
+    
+    private List getThirdPartyJarsWithoutJEE5Jars()
+    {
+        List fileList = getThirdPartyJarsJEE5();
         List resultList = new ArrayList();
         for(int ii = 0; ii < fileList.size(); ii++)
         {
             File currentFile = (File)fileList.get(ii);
-            if(!MockrunnerJars.getStandardInterfaceJ2EE14Jars().contains(currentFile.getName()))
+            if(!isJEE5StandardInterfaceOrJEE5OnlyJar(currentFile))
             {
                 resultList.add(currentFile);
             }
         }
-        String jarDirName = getBaseDir() + THIRD_PARTY_DIR + File.separator + J2EE13_DIR;
-        resultList.addAll(Arrays.asList(new File(jarDirName).listFiles(new JarFileFilter())));
         return resultList;
+    }
+    
+    private boolean isJEE5StandardInterfaceOrJEE5OnlyJar(File currentFile)
+    {
+        if(MockrunnerJars.getStandardInterfaceJars().contains(currentFile.getName())) return true;
+        if(MockrunnerJars.getJEE5OnlyJars().contains(currentFile.getName())) return true;
+        return false;
     }
 
     public List getReleasedJars(String jdkDir, String j2eeDir)
@@ -192,13 +197,13 @@ public class MockrunnerJarTestConfiguration
         return listFiles(jarDirName);
     }
     
-    public List listFiles(String jarDirName)
+    private List listFiles(String jarDirName)
     {
         File[] jarFiles = new File(jarDirName).listFiles(new JarFileFilter());
         return Arrays.asList(jarFiles);
     }
 
-    public String getBaseDir()
+    private String getBaseDir()
     {
         File releaseDir = new File(RELEASE_DIR);
         String jarDirName = releaseDir.getAbsolutePath() + File.separator;

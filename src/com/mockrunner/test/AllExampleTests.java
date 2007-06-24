@@ -32,6 +32,7 @@ import com.mockrunner.example.struts.ShoppingCartActionTest;
 import com.mockrunner.example.struts.StoreDataActionTest;
 import com.mockrunner.example.tag.ConstrainedNumericTextTagTest;
 import com.mockrunner.example.tag.FilterImagesTagTest;
+import com.mockrunner.example.tag.HtmlTextTagTest;
 import com.mockrunner.example.tag.TableEnumTagTest;
 
 public class AllExampleTests
@@ -44,6 +45,7 @@ public class AllExampleTests
         suite.addTest(new TestSuite(ConstrainedNumericTextTagTest.class));
         suite.addTest(new TestSuite(TableEnumTagTest.class));
         suite.addTest(new TestSuite(FilterImagesTagTest.class));
+        suite.addTest(new TestSuite(HtmlTextTagTest.class));
         suite.addTest(new TestSuite(LogoutServletTest.class));
         suite.addTest(new TestSuite(RedirectServletTest.class));
         suite.addTest(new TestSuite(AuthenticationActionTest.class));

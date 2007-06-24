@@ -164,19 +164,19 @@ public abstract class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCas
     }
 
     /**
-     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#setServlet(HttpServlet, boolean)}
-     */
-    protected void setServlet(HttpServlet servlet, boolean doInit)
-    {
-        servletTestModule.setServlet(servlet, doInit);
-    }
-
-    /**
      * Delegates to {@link com.mockrunner.servlet.ServletTestModule#setServlet(HttpServlet)}
      */
     protected void setServlet(HttpServlet servlet)
     {
         servletTestModule.setServlet(servlet);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.servlet.ServletTestModule#setServlet(HttpServlet, boolean)}
+     */
+    protected void setServlet(HttpServlet servlet, boolean doInit)
+    {
+        servletTestModule.setServlet(servlet, doInit);
     }
 
     /**

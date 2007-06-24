@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.el.ELContext;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
@@ -25,6 +26,7 @@ import com.mockrunner.tag.NestedBodyTag;
 import com.mockrunner.tag.NestedSimpleTag;
 import com.mockrunner.tag.NestedStandardTag;
 import com.mockrunner.tag.NestedTag;
+import com.mockrunner.tag.RuntimeAttribute;
 import com.mockrunner.tag.TagUtil;
 
 public class TagUtilTest extends BaseTestCase
@@ -161,7 +163,7 @@ public class TagUtilTest extends BaseTestCase
         assertSame(this, tag.getTagUtilTest());
     }
     
-    public void testPopulateDynamicAttributesWithNonDynamicBean()
+    public void testPopulateDynamicAttributesWithNonDynamicTag()
     {
         Object object = new Object(); 
         testMap.put("object", new DynamicAttribute("uri", object));
@@ -180,7 +182,7 @@ public class TagUtilTest extends BaseTestCase
         TagUtil.populateTag(tag, testMap);
     }
     
-    public void testPopulateDynamicAttributesWithDynamicBean()
+    public void testPopulateDynamicAttributesWithDynamicTag()
     {
         Object object = new Object(); 
         testMap.put("object", new DynamicAttribute("uri", object));
@@ -200,6 +202,24 @@ public class TagUtilTest extends BaseTestCase
         attribute = (DynamicAttribute)tag.getDynamicAttributesMap().get("testobject");
         assertNull(attribute.getUri());
         assertSame(object, attribute.getValue());
+    }
+    
+    public void testPopulateRuntimeAttribute()
+    {
+        TestRuntimeAttribute runtimeAttribute = new TestRuntimeAttribute("runtimevalue");
+        testMap.put("test", new DynamicAttribute("uri", runtimeAttribute));
+        testMap.put("object", runtimeAttribute);
+        testMap.put("xyz", runtimeAttribute);
+        DynamicTag tag = new DynamicTag();
+        TagUtil.populateTag(tag, testMap);
+        assertEquals("runtimevalue", tag.getObject());
+        assertEquals(2, tag.getDynamicAttributesMap().size());
+        DynamicAttribute attribute = (DynamicAttribute)tag.getDynamicAttributesMap().get("test");
+        assertEquals("uri", attribute.getUri());
+        assertSame("runtimevalue", attribute.getValue());
+        attribute = (DynamicAttribute)tag.getDynamicAttributesMap().get("xyz");
+        assertNull(attribute.getUri());
+        assertSame("runtimevalue", attribute.getValue());
     }
     
     public void testEvalBody() throws Exception
@@ -317,6 +337,21 @@ public class TagUtilTest extends BaseTestCase
         assertTrue(testTag.wasDoFinallyCalled());
     }
     
+    private class TestRuntimeAttribute implements RuntimeAttribute
+    {
+        private Object value;
+
+        public TestRuntimeAttribute(Object value)
+        {
+            this.value = value;
+        }
+
+        public Object evaluate()
+        {
+            return value;
+        }
+    }
+    
     public class ArbitraryTag extends TagSupport
     {
         private TagUtilTest tagUtilTest;
@@ -416,6 +451,11 @@ public class TagUtilTest extends BaseTestCase
             return null;
         }
         
+        public ELContext getELContext()
+        {
+            return null;
+        }
+
         public void removeAttribute(String name, int scope)
         {
 

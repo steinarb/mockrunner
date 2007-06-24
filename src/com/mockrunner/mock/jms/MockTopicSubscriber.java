@@ -51,9 +51,8 @@ public class MockTopicSubscriber extends MockMessageConsumer implements TopicSub
     }
 
     /**
-     * Returns the name of this subscriber. Usually only durable
-     * subscribers have a name. If no name is specified, this
-     * method returns <code>null</code>.
+     * Returns the name of the subscription if the subscription
+     * is durable. Otherwise, this method returns <code>null</code>.
      * @return the name of this subscriber
      */
     public String getName()
@@ -62,7 +61,7 @@ public class MockTopicSubscriber extends MockMessageConsumer implements TopicSub
     }
 
     /**
-     * Set the name of this subscriber.
+     * Set the name of the subscription.
      * @param name the name of this subscriber
      */
     public void setName(String name)

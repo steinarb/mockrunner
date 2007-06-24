@@ -52,6 +52,10 @@ public class MockHttpSession implements HttpSession
         attributeListener.add(listener);
     }
 
+    /**
+     * Set the <code>ServletContext</code>.
+     * @param servletContext the <code>ServletContext</code>
+     */
     public synchronized void setupServletContext(ServletContext servletContext)
     {
         this.servletContext = servletContext;

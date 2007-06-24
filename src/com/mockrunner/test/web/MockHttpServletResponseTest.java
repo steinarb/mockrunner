@@ -1,21 +1,16 @@
 package com.mockrunner.test.web;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletResponse;
 
+import junit.framework.TestCase;
+
 import com.mockrunner.mock.web.MockHttpServletResponse;
 import com.mockrunner.mock.web.MockServletOutputStream;
-import com.mockrunner.mock.web.WebConstants;
-
-import junit.framework.TestCase;
 
 public class MockHttpServletResponseTest extends TestCase
 {

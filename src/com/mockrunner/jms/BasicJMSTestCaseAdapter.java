@@ -1067,9 +1067,9 @@ public abstract class BasicJMSTestCaseAdapter extends TestCase
     /**
      * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyDurableTopicSubscriberPresent(int, String)}
      */
-    protected void verifyDurableTopicSubscriberPresent(int indexOfSession, String nameOfSubscriber)
+    protected void verifyDurableTopicSubscriberPresent(int indexOfSession, String name)
     {
-        jmsTestModule.verifyDurableTopicSubscriberPresent(indexOfSession, nameOfSubscriber);
+        jmsTestModule.verifyDurableTopicSubscriberPresent(indexOfSession, name);
     }
 
     /**
@@ -1091,9 +1091,9 @@ public abstract class BasicJMSTestCaseAdapter extends TestCase
     /**
      * Delegates to {@link com.mockrunner.jms.JMSTestModule#verifyDurableTopicSubscriberClosed(int, String)}
      */
-    protected void verifyDurableTopicSubscriberClosed(int indexOfSession, String subscriberName)
+    protected void verifyDurableTopicSubscriberClosed(int indexOfSession, String name)
     {
-        jmsTestModule.verifyDurableTopicSubscriberClosed(indexOfSession, subscriberName);
+        jmsTestModule.verifyDurableTopicSubscriberClosed(indexOfSession, name);
     }
 
     /**

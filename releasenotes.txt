@@ -1,17 +1,28 @@
 
 mockrunner-0.3.9:
 
-- Mockrunner is now compatible to Java 1.6 and supports JDBC 4.0. The lib directory
+- Mockrunner is now compatible with Java 1.6 and supports JDBC 4.0. The lib directory
   contains versions for all supported Java and J2EE versions
+- Mockrunner is now compatible with JavaEE 5. All Servlet 2.5 and JSP 2.1
+  features are supported. EJB 3 is not supported yet. EL support
+  using the Unified Expression Language is availabe using the JasperJspFactory 
 - introduced and implemented all JDBC 4.0 types and methods, e.g. MockSQLXML
 - added some constructors to MockStruct
 - MockResultSet now throws an exception, if a get()-method is called and the cursor
   is in an invalid row
 - column values are now cloned on updateRow(). This prevents problems with mutable
   types like Clob and Blob
+- introduced RuntimeAttribute to simulate scriptlets and EL expressions as tag attributes
 - refactored JMS ExceptionListener handling
+- fixed bug in TagUtil when populating dynamic attributes
 - fixed bug 1658666 reported by Nigel Charman
-- updated servlet.jar from Tomcat 4.1.31 to 4.1.34
+- fixed bug 1681771
+- updated servlet.jar from Tomcat 4.1.31 to 4.1.36
+- updated servlet-api.jar and jsp-api.jar from Tomcat 5.5.20 to 5.5.23
+- added the JavaEE 5 web related jars servlet-api.jar, jsp-api.jar, el-api.jar,
+  jasper.jar and jasper-el.jar from Tomcat 6.0.13
+- added the JavaEE 5 jar jboss-j2ee.jar from JBoss 4.2.0
+- updated Struts from 1.3.5 to 1.3.8
 
 mockrunner-0.3.8:
 

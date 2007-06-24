@@ -8,6 +8,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Stack;
 
+import javax.el.ELContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
@@ -25,6 +26,11 @@ import javax.servlet.jsp.tagext.BodyContent;
 
 /**
  * Mock implementation of <code>PageContext</code>.
+ * Please note that EL support using the
+ * the <b>Unified Expression Language</b> API is only available,
+ * if the {@link JasperJspFactory} is configured as the default
+ * <code>JspFactory</code>. By default, {@link #getELContext}
+ * returns <code>null</code>.
  */
 //Some methods of this class were copied from org.apache.struts.mock.MockPageContext
 //and modified
@@ -40,6 +46,7 @@ public class MockPageContext extends PageContext
     private HashMap attributes;
     private ExpressionEvaluator evaluator;
     private VariableResolver resolver;
+    private ELContext elContext;
     
     public MockPageContext()
     {
@@ -74,16 +81,28 @@ public class MockPageContext extends PageContext
         this.page = page;
     }
     
+    /**
+     * Sets the <code>ServletConfig</code>.
+     * @param config the <code>ServletConfig</code>
+     */
     public void setServletConfig(ServletConfig config)
     {
         this.config = config;
     }
     
+    /**
+     * Sets the <code>ServletRequest</code>.
+     * @param request the <code>ServletRequest</code>
+     */
     public void setServletRequest(ServletRequest request)
     {
         this.request = request;
     }
     
+    /**
+     * Sets the <code>ServletResponse</code>.
+     * @param response the <code>ServletResponse</code>
+     */
     public void setServletResponse(ServletResponse response)
     {
         this.response = response;
@@ -315,7 +334,7 @@ public class MockPageContext extends PageContext
         if(null == request) return null;
         return ((HttpServletRequest)request).getSession();
     }
-    
+
     public void handlePageException(Exception exc) 
     {
         
@@ -418,6 +437,17 @@ public class MockPageContext extends PageContext
         this.resolver = resolver;
     }
     
+    /**
+     * Sets the <code>ELContext</code>. There is no default
+     * <code>ELContext</code>. Configure the {@link JasperJspFactory}
+     * to set one. 
+     * @param elContext the <code>ELContext</code>
+     */
+    public void setELContext(ELContext elContext)
+    {
+        this.elContext = elContext;
+    }
+    
     public ExpressionEvaluator getExpressionEvaluator()
     {
         return evaluator;
@@ -428,6 +458,11 @@ public class MockPageContext extends PageContext
         return resolver;
     }
     
+    public ELContext getELContext()
+    {
+        return elContext;
+    }
+
     private class NullEnumeration implements Enumeration 
     {
         public boolean hasMoreElements() 

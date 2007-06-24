@@ -5,8 +5,11 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.el.ValueExpression;
+import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspFactory;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTag;
@@ -17,12 +20,14 @@ import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.mock.web.JasperJspFactory;
 import com.mockrunner.mock.web.MockPageContext;
 import com.mockrunner.tag.DynamicAttribute;
 import com.mockrunner.tag.NestedBodyTag;
 import com.mockrunner.tag.NestedSimpleTag;
 import com.mockrunner.tag.NestedStandardTag;
 import com.mockrunner.tag.NestedTag;
+import com.mockrunner.tag.RuntimeAttribute;
 
 public class NestedTagTest extends BaseTestCase
 {
@@ -180,25 +185,37 @@ public class NestedTagTest extends BaseTestCase
         assertEquals(1, ((TestSimpleTag)rootSimpleTag).getFloatProperty(), 0.0);
     }
     
-    public void testPopulateDynamicAttributes()
+    public void testPopulateDynamicAndRuntimeAttributes()
     {
         Map map = new HashMap();
         map.put("dynamicAttribute1", "test");
         map.put("dynamicAttribute2", new Integer(1));
+        map.put("dynamicAttribute3", new TestRuntimeAttribute(new Long(3)));
+        map.put("dynamicAttribute4", new DynamicAttribute(null, new TestRuntimeAttribute(new Byte((byte)4))));
         TestSimpleTag simpleTag = new TestSimpleTag();
         NestedTag nestedTag = new NestedSimpleTag(simpleTag, context, map);
         nestedTag.populateAttributes();
-        assertEquals(2, simpleTag.getDynamicAttributesMap().size());
+        assertEquals(4, simpleTag.getDynamicAttributesMap().size());
         DynamicAttribute attribute1 = (DynamicAttribute)simpleTag.getDynamicAttributesMap().get("dynamicAttribute1");
         DynamicAttribute attribute2 = (DynamicAttribute)simpleTag.getDynamicAttributesMap().get("dynamicAttribute2");
+        DynamicAttribute attribute3 = (DynamicAttribute)simpleTag.getDynamicAttributesMap().get("dynamicAttribute3");
+        DynamicAttribute attribute4 = (DynamicAttribute)simpleTag.getDynamicAttributesMap().get("dynamicAttribute4");
         assertNull(attribute1.getUri());
         assertEquals("test", attribute1.getValue());
         assertNull(attribute2.getUri());
         assertEquals(new Integer(1), attribute2.getValue());
+        assertNull(attribute3.getUri());
+        assertEquals(new Long(3), attribute3.getValue());
+        assertNull(attribute4.getUri());
+        assertEquals(new Byte((byte)4), attribute4.getValue());
+        map = new HashMap();
+        map.put("dynamicAttribute1", "test");
+        map.put("dynamicAttribute2", new Integer(1));
+        map.put("dynamicAttribute3", new TestRuntimeAttribute(new Long(3)));
         TestBodyTag bodyTag = new TestBodyTag();
         nestedTag = new NestedBodyTag(bodyTag, context, map);
         nestedTag.populateAttributes();
-        map.put("dynamicAttribute3", new DynamicAttribute("test", "test"));
+        map.put("dynamicAttribute4", new DynamicAttribute("test", "test"));
         try
         {
             nestedTag.populateAttributes();
@@ -210,6 +227,21 @@ public class NestedTagTest extends BaseTestCase
         }
     }
     
+    public void testPopulateValueExpressionAttribute() throws Exception
+    {
+        getWebMockObjectFactory().setDefaultJspFactory(new JasperJspFactory().configure(getWebMockObjectFactory()));
+        JspApplicationContext applicationContext = JspFactory.getDefaultFactory().getJspApplicationContext(getWebMockObjectFactory().getMockPageContext().getServletContext());
+        ValueExpression valueExpression = applicationContext.getExpressionFactory().createValueExpression(getWebMockObjectFactory().getMockPageContext().getELContext(), "#{sessionScope.test}", String.class);
+        Map map = new HashMap();
+        map.put("valueExpressionProperty", valueExpression);
+        TestSimpleTag simpleTag = new TestSimpleTag();
+        NestedTag nestedTag = new NestedSimpleTag(simpleTag, context, map);
+        nestedTag.populateAttributes();
+        assertSame(valueExpression, simpleTag.getValueExpressionProperty());
+        getWebMockObjectFactory().getMockSession().setAttribute("test", "testValue");
+        nestedTag.doLifecycle();
+        assertEquals("testValue", simpleTag.getValueExpressionResult());
+    }
 
     public void testSetPageContextStandard()
     {
@@ -440,6 +472,21 @@ public class NestedTagTest extends BaseTestCase
             assertTrue(testTag.wasDoFinallyCalled());
             assertSame(excToBeThrown, testTag.getCaughtException());
             assertSame(excToBeRethrown, exc);
+        }
+    }
+    
+    private class TestRuntimeAttribute implements RuntimeAttribute
+    {
+        private Object value;
+
+        public TestRuntimeAttribute(Object value)
+        {
+            this.value = value;
+        }
+
+        public Object evaluate()
+        {
+            return value;
         }
     }
     

@@ -9,9 +9,9 @@ public class JDKVersionGenerator
 {
     public static void main(String[] args) throws Exception
     {
-        VersionGenerator generator = new VersionGenerator(prepareProcessorMapJDK13(), getGeneratorNameJDK13(), getRootTargetDirJDK13(), getRootSourceDir(), getProcessedPackages());
+        VersionGenerator generator = new VersionGenerator(prepareProcessorMapJDK13(), getGeneratorNameJDK13(), getRootTargetDirJDK13(), getRootSourceDir(), getProcessedPackagesJDK13());
         generator.doSynchronize();
-        generator = new VersionGenerator(prepareProcessorMapJDK14(), getGeneratorNameJDK14(), getRootTargetDirJDK14(), getRootSourceDir(), getProcessedPackages());
+        generator = new VersionGenerator(prepareProcessorMapJDK14(), getGeneratorNameJDK14(), getRootTargetDirJDK14(), getRootSourceDir(), getProcessedPackagesJDK14());
         generator.doSynchronize();
     }
     
@@ -40,9 +40,14 @@ public class JDKVersionGenerator
         return "src";
     }
     
-    private static String[] getProcessedPackages()
+    private static String[] getProcessedPackagesJDK13()
     {
         return new String[] {"com/mockrunner/jdbc", "com/mockrunner/mock/jdbc"};
+    }
+    
+    private static String[] getProcessedPackagesJDK14()
+    {
+        return new String[] {"com/mockrunner/mock/jdbc"};
     }
     
     private static Map prepareProcessorMapJDK13()

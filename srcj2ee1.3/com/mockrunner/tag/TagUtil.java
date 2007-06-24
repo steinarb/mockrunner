@@ -169,11 +169,11 @@ public class TagUtil
                 if(currentValue instanceof DynamicAttribute)
                 {
                     populateDynamicAttribute(tag, currentName, (DynamicAttribute)currentValue);
-                    return;
+                    continue;
                 }*/
                 if(PropertyUtils.isWriteable(tag, currentName)) 
                 {
-                    BeanUtils.copyProperty(tag, currentName, attributes.get(currentName));
+                    BeanUtils.copyProperty(tag, currentName, evaluateValue(attributes.get(currentName)));
                 }
                 /*else if(tag instanceof DynamicAttributes)
                 {
@@ -199,8 +199,17 @@ public class TagUtil
             message += "is not an instance of " + DynamicAttributes.class.getName();
             throw new IllegalArgumentException(message);
         }
-        ((DynamicAttributes)tag).setDynamicAttribute(attribute.getUri(), name, attribute.getValue());
+        ((DynamicAttributes)tag).setDynamicAttribute(attribute.getUri(), name, evaluateValue(attribute.getValue()));
     }*/
+    
+    private static Object evaluateValue(Object value)
+    {
+        if(value instanceof RuntimeAttribute)
+        {
+            value = ((RuntimeAttribute)value).evaluate();
+        }
+        return value;
+    }
     
     /**
      * Handles body evaluation of a tag. Iterated through the childs.

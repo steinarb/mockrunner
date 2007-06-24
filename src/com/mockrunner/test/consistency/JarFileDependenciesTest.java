@@ -42,15 +42,19 @@ public class JarFileDependenciesTest extends TestCase
         List jdk14j2ee14Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK14_DIR, MockrunnerJarTestConfiguration.J2EE14_DIR);
         List jdk15j2ee13Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK15_DIR, MockrunnerJarTestConfiguration.J2EE13_DIR);
         List jdk15j2ee14Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK15_DIR, MockrunnerJarTestConfiguration.J2EE14_DIR);
+        List jdk15jee5Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK15_DIR, MockrunnerJarTestConfiguration.JEE5_DIR);
         List jdk16j2ee13Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK16_DIR, MockrunnerJarTestConfiguration.J2EE13_DIR);
         List jdk16j2ee14Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK16_DIR, MockrunnerJarTestConfiguration.J2EE14_DIR);
+        List jdk16jee5Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK16_DIR, MockrunnerJarTestConfiguration.JEE5_DIR);
         doTestAllJarsReleased(jdk13j2ee13Jars, "JDK1.3, J2EE1.3");
         doTestAllJarsReleased(jdk14j2ee13Jars, "JDK1.4, J2EE1.3");
         doTestAllJarsReleased(jdk14j2ee14Jars, "JDK1.4, J2EE1.4");
         doTestAllJarsReleased(jdk15j2ee13Jars, "JDK1.5, J2EE1.3");
         doTestAllJarsReleased(jdk15j2ee14Jars, "JDK1.5, J2EE1.4");
+        doTestAllJarsReleased(jdk15jee5Jars, "JDK1.5, JEE5");
         doTestAllJarsReleased(jdk16j2ee13Jars, "JDK1.6, J2EE1.3");
         doTestAllJarsReleased(jdk16j2ee14Jars, "JDK1.6, J2EE1.4");
+        doTestAllJarsReleased(jdk16jee5Jars, "JDK1.6, JEE5");
     }
     
     private void doTestAllJarsReleased(List jarFiles, String message)
@@ -80,17 +84,22 @@ public class JarFileDependenciesTest extends TestCase
         List jdk14j2ee14Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK14_DIR, MockrunnerJarTestConfiguration.J2EE14_DIR);
         List jdk15j2ee13Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK15_DIR, MockrunnerJarTestConfiguration.J2EE13_DIR);
         List jdk15j2ee14Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK15_DIR, MockrunnerJarTestConfiguration.J2EE14_DIR);
+        List jdk15jee5Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK15_DIR, MockrunnerJarTestConfiguration.JEE5_DIR);
         List jdk16j2ee13Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK16_DIR, MockrunnerJarTestConfiguration.J2EE13_DIR);
         List jdk16j2ee14Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK16_DIR, MockrunnerJarTestConfiguration.J2EE14_DIR);
+        List jdk16jee5Jars = configuration.getReleasedJars(MockrunnerJarTestConfiguration.JDK16_DIR, MockrunnerJarTestConfiguration.JEE5_DIR);
         List thirdPartyJ2EE13Jars = configuration.getThirdPartyJarsJ2EE13();
         List thirdPartyJ2EE14Jars = configuration.getThirdPartyJarsJ2EE14();
+        List thirdPartyJEE5Jars = configuration.getThirdPartyJarsJEE5();
         doTestJarFileDependencies(jdk13j2ee13Jars, thirdPartyJ2EE13Jars, "JDK1.3, J2EE1.3");
         doTestJarFileDependencies(jdk14j2ee13Jars, thirdPartyJ2EE13Jars, "JDK1.4, J2EE1.3");
         doTestJarFileDependencies(jdk14j2ee14Jars, thirdPartyJ2EE14Jars, "JDK1.4, J2EE1.4");
         doTestJarFileDependencies(jdk15j2ee13Jars, thirdPartyJ2EE13Jars, "JDK1.5, J2EE1.3");
         doTestJarFileDependencies(jdk15j2ee14Jars, thirdPartyJ2EE14Jars, "JDK1.5, J2EE1.4");
+        doTestJarFileDependencies(jdk15jee5Jars, thirdPartyJEE5Jars, "JDK1.5, JEE5");
         doTestJarFileDependencies(jdk16j2ee13Jars, thirdPartyJ2EE13Jars, "JDK1.6, J2EE1.3");
         doTestJarFileDependencies(jdk16j2ee14Jars, thirdPartyJ2EE14Jars, "JDK1.6, J2EE1.4");
+        doTestJarFileDependencies(jdk16jee5Jars, thirdPartyJEE5Jars, "JDK1.6, JEE5");
     }
     
     private void doTestJarFileDependencies(List releasedJars, List thirdpartyJars, String message) throws Exception

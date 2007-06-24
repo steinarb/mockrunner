@@ -11,7 +11,7 @@ public class MockrunnerJars
 {
     private static List mockrunnerJars;
     private static List standardInterfaceJars;
-    private static List standardInterfaceJ2EE14Jars;
+    private static List jee5OnlyJars;
     private static Map permissions;
     private static Set strutsJars;
     private static Set webJ2EEJars;
@@ -42,19 +42,25 @@ public class MockrunnerJars
         permissions.put("mockrunner-struts.jar", new Permission(true, true, false, false, true));
     
         standardInterfaceJars = new ArrayList();
-        standardInterfaceJ2EE14Jars = new ArrayList();
-        standardInterfaceJ2EE14Jars.add("servlet-api.jar");
-        standardInterfaceJ2EE14Jars.add("jsp-api.jar");
-        standardInterfaceJ2EE14Jars.add("jboss-j2ee.jar");
+        standardInterfaceJars.add("servlet-api.jar");
+        standardInterfaceJars.add("jsp-api.jar");
+        standardInterfaceJars.add("el-api.jar");
+        standardInterfaceJars.add("jboss-j2ee.jar");
         standardInterfaceJars.add("servlet.jar");
-        standardInterfaceJars.addAll(standardInterfaceJ2EE14Jars);
+        
+        jee5OnlyJars = new ArrayList();
+        jee5OnlyJars.add("jasper.jar");
+        jee5OnlyJars.add("jasper-el.jar");
         
         strutsJars = new HashSet();
-        strutsJars.add("struts-core-1.3.5.jar");
+        strutsJars.add("struts-core-1.3.8.jar");
         
         webJ2EEJars = new HashSet();
         webJ2EEJars.add("servlet-api.jar");
         webJ2EEJars.add("jsp-api.jar");
+        webJ2EEJars.add("el-api.jar");
+        webJ2EEJars.add("jasper.jar");
+        webJ2EEJars.add("jasper-el.jar");
         webJ2EEJars.add("servlet.jar");
         
         otherJ2EEJars = new HashSet();
@@ -80,9 +86,9 @@ public class MockrunnerJars
         return standardInterfaceJars;
     }
     
-    public static List getStandardInterfaceJ2EE14Jars()
+    public static List getJEE5OnlyJars()
     {
-        return standardInterfaceJ2EE14Jars;
+        return jee5OnlyJars;
     }
     
     public static Permission getPermission(String jar)
