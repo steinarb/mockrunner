@@ -39,6 +39,7 @@ public class MockServletContext implements ServletContext
     private Map resourcePaths;
     private Map resourceStreams;
     private String servletContextName;
+    private String contextPath;
     private List attributeListener;
     
     public MockServletContext()
@@ -166,11 +167,20 @@ public class MockServletContext implements ServletContext
         return (ServletContext)contexts.get(url);
     }
     
+    /**
+     * Sets a <code>ServletContext</code> that will be returned 
+     * when calling {@link #getContext}
+     * @param url the URL
+     * @param context the <code>ServletContext</code>
+     */
     public synchronized void setContext(String url, ServletContext context)
     {
         contexts.put(url, context);
     }
     
+    /**
+     * Clears the init parameters.
+     */
     public synchronized void clearInitParameters()
     {
         initParameters.clear();
@@ -181,11 +191,20 @@ public class MockServletContext implements ServletContext
         return (String)initParameters.get(name);
     }
     
+    /**
+     * Sets an init parameter.
+     * @param name the name
+     * @param value the value
+     */
     public synchronized void setInitParameter(String name, String value) 
     {
         initParameters.put(name, value);
     }
     
+    /**
+     * Sets several init parameters.
+     * @param parameters the parameter map
+     */
     public synchronized void setInitParameters(Map parameters) 
     {
         initParameters.putAll(parameters);
@@ -297,6 +316,16 @@ public class MockServletContext implements ServletContext
     public synchronized void setServletContextName(String servletContextName)
     {
         this.servletContextName = servletContextName;
+    }
+
+    public String getContextPath()
+    {
+        return contextPath;
+    }
+
+    public void setContextPath(String contextPath)
+    {
+        this.contextPath = contextPath;
     }
 
     public synchronized Enumeration getServletNames()

@@ -658,9 +658,41 @@ public abstract class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, Class)}
+     */
+    protected ActionForward actionPerform(Class action, Class form)
+    {
+        return actionTestModule.actionPerform(action, form);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class)}
+     */
+    protected ActionForward actionPerform(Class action)
+    {
+        return actionTestModule.actionPerform(action);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action)}
+     */
+    protected ActionForward actionPerform(Action action)
+    {
+        return actionTestModule.actionPerform(action);
+    }
+
+    /**
      * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, ActionForm)}
      */
     protected ActionForward actionPerform(Action action, ActionForm form)
+    {
+        return actionTestModule.actionPerform(action, form);
+    }
+
+    /**
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, Class)}
+     */
+    protected ActionForward actionPerform(Action action, Class form)
     {
         return actionTestModule.actionPerform(action, form);
     }
@@ -674,35 +706,11 @@ public abstract class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action)}
+     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setLocale(Locale)}
      */
-    protected ActionForward actionPerform(Action action)
+    protected void setLocale(Locale locale)
     {
-        return actionTestModule.actionPerform(action);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class)}
-     */
-    protected ActionForward actionPerform(Class action)
-    {
-        return actionTestModule.actionPerform(action);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Action, Class)}
-     */
-    protected ActionForward actionPerform(Action action, Class form)
-    {
-        return actionTestModule.actionPerform(action, form);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#actionPerform(Class, Class)}
-     */
-    protected ActionForward actionPerform(Class action, Class form)
-    {
-        return actionTestModule.actionPerform(action, form);
+        actionTestModule.setLocale(locale);
     }
 
     /**
@@ -711,14 +719,6 @@ public abstract class BasicActionTestCaseAdapter extends BasicHTMLOutputTestCase
     protected void setInput(String input)
     {
         actionTestModule.setInput(input);
-    }
-
-    /**
-     * Delegates to {@link com.mockrunner.struts.ActionTestModule#setLocale(Locale)}
-     */
-    protected void setLocale(Locale locale)
-    {
-        actionTestModule.setLocale(locale);
     }
 
     /**

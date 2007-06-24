@@ -22,6 +22,10 @@ public class MockFilterConfig implements FilterConfig
         initParameters = new HashMap();
     }
 
+    /**
+     * Sets the <code>ServletContext</code>.
+     * @param context the <code>ServletContext</code>
+     */
     public synchronized void setupServletContext(ServletContext context)
     {
         this.context = context;
@@ -47,16 +51,28 @@ public class MockFilterConfig implements FilterConfig
         initParameters.clear();
     }
 
+    /**
+     * Clears the init parameters.
+     */
     public synchronized String getInitParameter(String name)
     {
         return (String)initParameters.get(name);
     }
     
+    /**
+     * Sets an init parameter.
+     * @param name the name
+     * @param value the value
+     */
     public synchronized void setInitParameter(String name, String value) 
     {
         initParameters.put(name, value);
     }
     
+    /**
+     * Sets several init parameters.
+     * @param parameters the parameter map
+     */
     public synchronized void setInitParameters(Map parameters) 
     {
         initParameters.putAll(parameters);

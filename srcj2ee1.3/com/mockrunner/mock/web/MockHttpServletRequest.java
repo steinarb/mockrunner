@@ -121,6 +121,9 @@ public class MockHttpServletRequest implements HttpServletRequest
         return null;
     }
     
+    /**
+     * Clears the parameters.
+     */
     public void clearParameters()
     {
         parameters.clear();
@@ -131,11 +134,21 @@ public class MockHttpServletRequest implements HttpServletRequest
         return (String[])parameters.get(key);
     }
 
+    /**
+     * Adds a request multivalue parameter.
+     * @param key the parameter key
+     * @param values the parameters values
+     */
     public void setupAddParameter(String key, String[] values)
     {
         parameters.put(key, values);
     }
 
+    /**
+     * Adds a request parameter.
+     * @param key the parameter key
+     * @param value the parameters value
+     */
     public void setupAddParameter(String key, String value)
     {
         setupAddParameter(key, new String[] { value });
@@ -204,6 +217,10 @@ public class MockHttpServletRequest implements HttpServletRequest
         return getSession();
     }
 
+    /**
+     * Sets the <code>HttpSession</code>.
+     * @param session the <code>HttpSession</code>
+     */
     public void setSession(HttpSession session) 
     {
         this.session = session;   

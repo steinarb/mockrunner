@@ -59,16 +59,6 @@ public abstract class BaseTestCase extends TestCase
     }
 
     /**
-     * Creates the mock object factories. If you
-     * overwrite this method, you must call 
-     * <code>super.setUp()</code>.
-     */
-    protected void setUp() throws Exception
-    {
-        super.setUp();
-    } 
-
-    /**
      * Creates a {@link WebMockObjectFactory}. 
      * @return the created {@link WebMockObjectFactory}
      */

@@ -2048,16 +2048,16 @@ public class JMSTestModule
      * Verifies that a durable subscriber exists.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
-     * @param nameOfSubscriber the name of the durable subscriber
+     * @param name the name of the subscription
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyDurableTopicSubscriberPresent(int indexOfSession, String nameOfSubscriber)
+    public void verifyDurableTopicSubscriberPresent(int indexOfSession, String name)
     {
         checkAndGetTopicSessionByIndex(indexOfSession);
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
-        if(null == manager.getDurableTopicSubscriber(nameOfSubscriber))
+        if(null == manager.getDurableTopicSubscriber(name))
         {
-            throw new VerifyFailedException("Durable subscriber with name " + nameOfSubscriber + " not present.");
+            throw new VerifyFailedException("Durable subscriber with subscription name " + name + " not present.");
         }
     }
     
@@ -2102,21 +2102,21 @@ public class JMSTestModule
      * Verifies that the specified durable subscriber is closed.
      * The session has to be created using the current {@link MockTopicConnection}.
      * @param indexOfSession the index of the session
-     * @param subscriberName the name of the durable subscriber
+     * @param name the name of the subscription
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyDurableTopicSubscriberClosed(int indexOfSession, String subscriberName)
+    public void verifyDurableTopicSubscriberClosed(int indexOfSession, String name)
     {
         checkAndGetTopicSessionByIndex(indexOfSession);
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
-        MockTopicSubscriber subscriber = (MockTopicSubscriber)manager.getDurableTopicSubscriber(subscriberName);
+        MockTopicSubscriber subscriber = (MockTopicSubscriber)manager.getDurableTopicSubscriber(name);
         if(null == subscriber)
         {
-            throw new VerifyFailedException("Durable TopicSubscriber with name " + subscriberName + " not present.");
+            throw new VerifyFailedException("Durable TopicSubscriber with subscription name " + name + " not present.");
         }
         if(!subscriber.isClosed())
         {
-            throw new VerifyFailedException("Durable TopicSubscriber with name " + subscriberName + " not closed.");
+            throw new VerifyFailedException("Durable TopicSubscriber with subscription name " + name + " not closed.");
         }
     }
     

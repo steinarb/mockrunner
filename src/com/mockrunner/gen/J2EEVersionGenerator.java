@@ -9,18 +9,30 @@ public class J2EEVersionGenerator
 {
     public static void main(String[] args) throws Exception
     {
-        VersionGenerator generator = new VersionGenerator(prepareProcessorMap(), getGeneratorName(), getRootTargetDir(), getRootSourceDir(), getProcessedPackages());
+        VersionGenerator generator = new VersionGenerator(prepareProcessorMapJ2EE13(), getGeneratorNameJ2EE13(), getRootTargetDirJ2EE13(), getRootSourceDir(), getProcessedPackagesJ2EE13());
+        generator.doSynchronize();
+        generator = new VersionGenerator(prepareProcessorMapJ2EE14(), getGeneratorNameJ2EE14(), getRootTargetDirJ2EE14(), getRootSourceDir(), getProcessedPackagesJ2EE14());
         generator.doSynchronize();
     }
     
-    private static String getGeneratorName()
+    private static String getGeneratorNameJ2EE13()
     {
         return "Web J2EE1.3";
     }
     
-    private static String getRootTargetDir()
+    private static String getGeneratorNameJ2EE14()
+    {
+        return "Web J2EE1.4";
+    }
+    
+    private static String getRootTargetDirJ2EE13()
     {
         return "srcj2ee1.3";
+    }
+    
+    private static String getRootTargetDirJ2EE14()
+    {
+        return "srcj2ee1.4";
     }
     
     private static String getRootSourceDir()
@@ -28,14 +40,21 @@ public class J2EEVersionGenerator
         return "src";
     }
     
-    private static String[] getProcessedPackages()
+    private static String[] getProcessedPackagesJ2EE13()
     {
         return new String[] {"com/mockrunner/tag", "com/mockrunner/mock/web"};
     }
     
-    private static Map prepareProcessorMap()
+    private static String[] getProcessedPackagesJ2EE14()
+    {
+        return new String[] {"com/mockrunner/mock/web"};
+    }
+    
+    private static Map prepareProcessorMapJ2EE13()
     {
         Map webFiles = new HashMap();
+        
+        webFiles.putAll(prepareProcessorMapJ2EE14());
         
         JavaLineProcessor mockPageContextProc = getProcessorForClass("com.mockrunner.mock.web.MockPageContext", webFiles);
         mockPageContextProc.addLine("import javax.servlet.jsp.el.ExpressionEvaluator;");
@@ -131,6 +150,27 @@ public class J2EEVersionGenerator
         
         return webFiles;
     }
+    
+    private static Map prepareProcessorMapJ2EE14()
+    {
+        Map webFiles = new HashMap();
+        
+        JavaLineProcessor mockPageContextProc = getProcessorForClass("com.mockrunner.mock.web.MockPageContext", webFiles);
+        mockPageContextProc.addLine("import javax.el.ELContext;");
+        mockPageContextProc.addLine("private ELContext elContext;");
+        mockPageContextProc.addBlock("public void setELContext(ELContext elContext)");
+        mockPageContextProc.addBlock("public ELContext getELContext()");
+        
+        JavaLineProcessor mockJspFactoryProc = getProcessorForClass("com.mockrunner.mock.web.MockJspFactory", webFiles);
+        mockJspFactoryProc.addLine("import javax.servlet.jsp.JspApplicationContext;");
+        mockJspFactoryProc.addLine("private JspApplicationContext applicationContext;");
+        mockJspFactoryProc.addBlock("public void setJspApplicationContext(JspApplicationContext applicationContext)");
+        mockJspFactoryProc.addBlock("public JspApplicationContext getJspApplicationContext(ServletContext context)");
+        
+        webFiles.put("com.mockrunner.mock.web.JasperJspFactory", Boolean.FALSE);
+        
+        return webFiles;
+    } 
     
     private static JavaLineProcessor getProcessorForClass(String className, Map jdbcFiles)
     {

@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.JspFactory;
 
 import com.mockrunner.base.NestedApplicationException;
 
@@ -26,6 +27,7 @@ public class WebMockObjectFactory
     private MockPageContext pageContext;
     private MockFilterConfig filterConfig;
     private MockFilterChain filterChain;
+    private JspFactory jspFactory;
 
     /**
      * Creates a new set of mock objects.
@@ -68,6 +70,7 @@ public class WebMockObjectFactory
         createNewMockObjects(true);
         context = createMockServletContext();
         setUpDependencies();
+        JspFactory.setDefaultFactory(jspFactory);
     }
 
     private void createMockObjectsBasedOn(WebMockObjectFactory factory)
@@ -81,6 +84,7 @@ public class WebMockObjectFactory
         if(!createNewSession) session = factory.getMockSession();
         context = factory.getMockServletContext();
         setUpDependencies();
+        JspFactory.setDefaultFactory(jspFactory);
     }
 
     private void createNewMockObjects(boolean createNewSession)
@@ -93,6 +97,7 @@ public class WebMockObjectFactory
         config = createMockServletConfig();
         filterChain = createMockFilterChain();
         filterConfig = createMockFilterConfig();
+        jspFactory = createMockJspFactory();
     }
 
     private void setUpDependencies()
@@ -105,6 +110,27 @@ public class WebMockObjectFactory
         pageContext.setServletRequest(request);
         pageContext.setServletResponse(response);
         filterConfig.setupServletContext(context);
+        setUpJspFactory();
+    }
+
+    private void setUpJspFactory()
+    {
+        if(jspFactory instanceof MockJspFactory)
+        {
+            ((MockJspFactory)jspFactory).setPageContext(pageContext);
+        }
+    }
+    
+    /**
+     * Sets the default <code>JspFactory</code> by calling
+     * <code>JspFactory.setDefaultFactory()</code>.
+     * @param jspFactory the <code>JspFactory</code>
+     */
+    public void setDefaultJspFactory(JspFactory jspFactory)
+    {
+        JspFactory.setDefaultFactory(jspFactory);
+        this.jspFactory = jspFactory;
+        setUpJspFactory();
     }
     
     /**
@@ -114,6 +140,7 @@ public class WebMockObjectFactory
     public void refresh()
     {
         pageContext = new MockPageContext(config, wrappedRequest, wrappedResponse);
+        setUpJspFactory();
     }
     
     /**
@@ -194,6 +221,16 @@ public class WebMockObjectFactory
     public MockFilterChain createMockFilterChain()
     {
         return new MockFilterChain();
+    }
+    
+    /**
+     * Creates the {@link com.mockrunner.mock.web.MockJspFactory} using <code>new</code>.
+     * This method can be overridden to return a subclass of {@link com.mockrunner.mock.web.MockJspFactory}.
+     * @return the {@link com.mockrunner.mock.web.MockJspFactory}
+     */
+    public MockJspFactory createMockJspFactory()
+    {
+        return new MockJspFactory();
     }
     
     /**
@@ -296,6 +333,31 @@ public class WebMockObjectFactory
     public MockFilterChain getMockFilterChain()
     {
         return filterChain;
+    }
+    
+    /**
+     * Returns the {@link com.mockrunner.mock.web.MockJspFactory}.
+     * If the current <code>JspFactory</code> is not an instance
+     * of {@link com.mockrunner.mock.web.MockJspFactory}, <code>null</code>
+     * will be returned.
+     * @return the {@link com.mockrunner.mock.web.MockJspFactory}
+     */
+    public MockJspFactory getMockJspFactory()
+    {
+        if(jspFactory instanceof MockJspFactory)
+        {
+            return (MockJspFactory)jspFactory;
+        }
+        return null;
+    }
+    
+    /**
+     * Returns the <code>JspFactory</code>.
+     * @return the <code>JspFactory</code>
+     */
+    public JspFactory getJspFactory()
+    {
+        return jspFactory;
     }
  
     /**

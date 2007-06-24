@@ -270,7 +270,7 @@ public class TopicTransmissionManager
      * <code>Topic</code>. Usually this method is called
      * by {@link com.mockrunner.mock.jms.MockTopicSession#createDurableSubscriber}.
      * @param topic the <code>Topic</code>
-     * @param name the name of the <code>TopicSubscriber</code>
+     * @param name the name of the subscription
      * @param messageSelector the message selector
      * @param noLocal the no local flag
      * @return the created <code>TopicSubscriber</code>
@@ -288,7 +288,7 @@ public class TopicTransmissionManager
      * Returns a durable <code>TopicSubscriber</code> by its name or
      * <code>null</code>, if no such durable <code>TopicSubscriber</code> is
      * present.
-     * @param name the name of the <code>TopicSubscriber</code>
+     * @param name the name of the subscription
      * @return the <code>TopicSubscriber</code>
      */
     public MockTopicSubscriber getDurableTopicSubscriber(String name)
@@ -298,7 +298,7 @@ public class TopicTransmissionManager
     
     /**
      * Deletes a durable <code>TopicSubscriber</code>.
-     * @param name the name of the <code>TopicSubscriber</code>
+     * @param name the name of the subscription
      */
     public void removeTopicDurableSubscriber(String name)
     {

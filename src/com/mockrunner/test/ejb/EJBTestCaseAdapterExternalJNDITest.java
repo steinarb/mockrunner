@@ -33,7 +33,7 @@ public class EJBTestCaseAdapterExternalJNDITest extends EJBTestCaseAdapter
         assertEquals("TestObject", lookup("testName"));
         bindToContext("testName", "testValue");
         assertEquals("TestObject", lookup("testName"));
-        deploySessionBean("TestObject", TestSessionBean.class);
+        deploySessionBean("testName", TestSessionBean.class);
         assertEquals("TestObject", lookup("testName"));
     }
     

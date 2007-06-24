@@ -37,12 +37,20 @@ public class ServletTestModuleTest extends BaseTestCase
         servlet = new TestServlet();
         module.setServlet(servlet);
         assertFalse(servlet.wasInitCalled());
+        assertNull(servlet.getPassedServletConfig());
         servlet = new TestServlet();
         module.setServlet(servlet, false);
         assertFalse(servlet.wasInitCalled());
+        assertNull(servlet.getPassedServletConfig());
         servlet = new TestServlet();
         module.setServlet(servlet, true);
         assertTrue(servlet.wasInitCalled());
+        assertSame(getWebMockObjectFactory().getMockServletConfig(), servlet.getPassedServletConfig());
+        servlet = new TestServlet();
+        module.setServlet(servlet, false);
+        module.init();
+        assertTrue(servlet.wasInitCalled());
+        assertSame(getWebMockObjectFactory().getMockServletConfig(), servlet.getPassedServletConfig());
     }
     
     public void testFilterInitCalls() throws Exception
@@ -319,10 +327,12 @@ public class ServletTestModuleTest extends BaseTestCase
         private boolean doPutCalled = false;
         private boolean doTraceCalled = false;
         private boolean doHeadCalled = false;
+        private ServletConfig passedServletConfig;
         
         public void init(ServletConfig config) throws ServletException
         {
             initCalled = true;
+            passedServletConfig = config;
         }
     
         protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -400,6 +410,11 @@ public class ServletTestModuleTest extends BaseTestCase
             return doHeadCalled;
         }
         
+        public ServletConfig getPassedServletConfig()
+        {
+            return passedServletConfig;
+        }
+
         public void reset()
         {
             initCalled = false;

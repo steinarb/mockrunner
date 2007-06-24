@@ -1,15 +1,24 @@
 package com.mockrunner.test.web;
 
+import javax.servlet.Servlet;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import javax.servlet.jsp.JspApplicationContext;
+import javax.servlet.jsp.JspEngineInfo;
+import javax.servlet.jsp.JspFactory;
+import javax.servlet.jsp.PageContext;
 
 import com.mockrunner.mock.web.MockFilterChain;
 import com.mockrunner.mock.web.MockFilterConfig;
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.MockHttpServletResponse;
 import com.mockrunner.mock.web.MockHttpSession;
+import com.mockrunner.mock.web.MockJspFactory;
 import com.mockrunner.mock.web.MockPageContext;
 import com.mockrunner.mock.web.MockServletConfig;
 import com.mockrunner.mock.web.MockServletContext;
@@ -56,6 +65,28 @@ public class WebMockObjectFactoryTest extends TestCase
         assertNotSame(factory1.getMockSession(), factory2.getMockSession());
         assertNotSame(factory1.getMockServletConfig(), factory2.getMockServletConfig());
         assertSame(factory1.getMockServletContext(), factory2.getMockServletContext());
+    }
+    
+    public void testSetDefaultJspFactory()
+    {
+        WebMockObjectFactory factory = new WebMockObjectFactory();
+        assertSame(factory.getMockJspFactory(), JspFactory.getDefaultFactory());
+        assertSame(factory.getJspFactory(), JspFactory.getDefaultFactory());
+        assertSame(factory.getMockPageContext(), factory.getMockJspFactory().getPageContext());
+        TestJspFactory testJspFactory = new TestJspFactory();
+        factory.setDefaultJspFactory(testJspFactory);
+        assertNull(factory.getMockJspFactory());
+        assertSame(testJspFactory, JspFactory.getDefaultFactory());
+        assertSame(factory.getJspFactory(), JspFactory.getDefaultFactory());
+        MockJspFactory testMockJspFactory = new MockJspFactory(){};
+        factory.setDefaultJspFactory(testMockJspFactory);
+        assertSame(testMockJspFactory, JspFactory.getDefaultFactory());
+        assertSame(factory.getMockJspFactory(), JspFactory.getDefaultFactory());
+        assertSame(factory.getJspFactory(), JspFactory.getDefaultFactory());
+        assertSame(factory.getMockPageContext(), factory.getMockJspFactory().getPageContext());
+        factory.setDefaultJspFactory(null);
+        assertNull(factory.getMockJspFactory());
+        assertNull(factory.getJspFactory());
     }
     
     public void testAddRequestWrapper()
@@ -108,6 +139,7 @@ public class WebMockObjectFactoryTest extends TestCase
         pageContext = factory.getMockPageContext();
         assertSame(requestWrapper, pageContext.getRequest());
         assertSame(responseWrapper, pageContext.getResponse());
+        assertSame(pageContext, factory.getMockJspFactory().getPageContext());
     }
     
     public void testOverrideCreate()
@@ -195,5 +227,28 @@ public class WebMockObjectFactoryTest extends TestCase
         {
             return new MockHttpSession() {};
         }
+    }
+    
+    public static class TestJspFactory extends JspFactory
+    {
+        public JspEngineInfo getEngineInfo()
+        {
+            return null;
+        }
+
+        public JspApplicationContext getJspApplicationContext(ServletContext context)
+        {
+            return null;
+        }
+
+        public PageContext getPageContext(Servlet servlet, ServletRequest request, ServletResponse response, String errorPageURL, boolean needsSession, int buffer, boolean autoflush)
+        {
+            return null;
+        }
+
+        public void releasePageContext(PageContext pageContext)
+        {
+            
+        }     
     }
 }

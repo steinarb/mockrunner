@@ -44,6 +44,15 @@
          compatible jars.
         </echo>
     </target>
+    
+    <target name="checkBuildJ2EE1.4" unless="dobuild.j2ee1.4">
+        <echo>
+         Property "build.j2ee1.4" not set or set to false. Please 
+         create a file ".ant.properties" in this directory and set 
+         "build.j2ee1.4" to true if you would like build the J2EE 1.4
+         compatible jars.
+        </echo>
+    </target>
 
     <target name="checkJava2HTML" unless="java2html.home">
 	    <echo>
@@ -61,11 +70,18 @@
                 <istrue value="${build.j2ee1.3}" />
             </and>
         </condition>
+        <condition property="dobuild.j2ee1.4">
+            <and>
+                <isset property="build.j2ee1.4" />
+                <istrue value="${build.j2ee1.4}" />
+            </and>
+        </condition>
         <antcall target="checkJDK1.3" />
         <antcall target="checkJDK1.4" />
         <antcall target="checkJDK1.5" />
         <antcall target="checkJDK1.6" />
         <antcall target="checkBuildJ2EE1.3" />
+        <antcall target="checkBuildJ2EE1.4" />
         <antcall target="checkJava2HTML" />
         <condition property="dobuild.jdk1.3.j2ee1.3">
             <and>
@@ -91,6 +107,24 @@
                 <isset property="java1.6.home" />
             </and>
         </condition>
+        <condition property="dobuild.jdk1.4.j2ee1.4">
+            <and>
+                <isset property="dobuild.j2ee1.4" />
+                <isset property="java1.4.home" />
+            </and>
+        </condition>
+        <condition property="dobuild.jdk1.5.j2ee1.4">
+            <and>
+                <isset property="dobuild.j2ee1.4" />
+                <isset property="java1.5.home" />
+            </and>
+        </condition>
+        <condition property="dobuild.jdk1.6.j2ee1.4">
+            <and>
+                <isset property="dobuild.j2ee1.4" />
+                <isset property="java1.6.home" />
+            </and>
+        </condition>
     </target>
 
     <target name="init" depends="prepareenvironment">
@@ -105,9 +139,12 @@
         <property name="srcjdk1.3" value="srcjdk1.3" />
         <property name="srcjdk1.4" value="srcjdk1.4" />
         <property name="srcj2ee1.3" value="srcj2ee1.3" />
+        <property name="srcj2ee1.4" value="srcj2ee1.4" />
         <property name="lib" value="lib" />
         <property name="config" value="config" />
-            
+        
+        <property name="buildjdk1.5jee5" value="buildjdk1.5jee5" />
+        <property name="buildjdk1.6jee5" value="buildjdk1.6jee5" />
         <property name="buildjdk1.4j2ee1.4" value="buildjdk1.4j2ee1.4" />
         <property name="buildjdk1.5j2ee1.4" value="buildjdk1.5j2ee1.4" />
         <property name="buildjdk1.6j2ee1.4" value="buildjdk1.6j2ee1.4" />
@@ -115,6 +152,8 @@
         <property name="buildjdk1.4j2ee1.3" value="buildjdk1.4j2ee1.3" />
         <property name="buildjdk1.5j2ee1.3" value="buildjdk1.5j2ee1.3" />
         <property name="buildjdk1.6j2ee1.3" value="buildjdk1.6j2ee1.3" />
+        <property name="dependenciesjdk1.5jee5" value="dependenciesjdk1.5jee5" />
+        <property name="dependenciesjdk1.6jee5" value="dependenciesjdk1.6jee5" />
         <property name="dependenciesjdk1.4j2ee1.4" value="dependenciesjdk1.4j2ee1.4" />
         <property name="dependenciesjdk1.5j2ee1.4" value="dependenciesjdk1.5j2ee1.4" />
         <property name="dependenciesjdk1.6j2ee1.4" value="dependenciesjdk1.6j2ee1.4" />
@@ -134,9 +173,28 @@
         <property name="release.srcjdk1.3" value="srcjdk1.3" />
         <property name="release.srcjdk1.4" value="srcjdk1.4" />
         <property name="release.srcj2ee1.3" value="srcj2ee1.3" />
+        <property name="release.srcj2ee1.4" value="srcj2ee1.4" />
         
         <path id="classpath.jar">
             <fileset dir="${lib}">
+                <include name="*.jar" />
+                <exclude name="j2ee1.3/**" />
+                <exclude name="j2ee1.4/**" />
+                <exclude name="struts1.2/**" />
+            </fileset>
+        </path>
+        
+        <path id="classpathj2ee1.4.jar">
+            <fileset dir="${lib}">
+                <include name="*.jar" />
+                <exclude name="servlet-api.jar" />
+                <exclude name="jsp-api.jar" />
+                <exclude name="el-api.jar" />
+                <exclude name="jasper.jar" />
+                <exclude name="jasper-el.jar" />
+                <exclude name="jboss-j2ee.jar" />
+            </fileset>
+            <fileset dir="${lib}/j2ee1.4">
                 <include name="*.jar" />
             </fileset>
         </path>
@@ -144,9 +202,12 @@
         <path id="classpathj2ee1.3.jar">
             <fileset dir="${lib}">
                 <include name="*.jar" />
-                <exclude name="jboss-j2ee.jar" />
                 <exclude name="servlet-api.jar" />
                 <exclude name="jsp-api.jar" />
+                <exclude name="el-api.jar" />
+                <exclude name="jasper.jar" />
+                <exclude name="jasper-el.jar" />
+                <exclude name="jboss-j2ee.jar" />
             </fileset>
             <fileset dir="${lib}/j2ee1.3">
                 <include name="*.jar" />
@@ -156,10 +217,13 @@
         <path id="classpathjdk1.3j2ee1.3.jar">
             <fileset dir="${lib}">
                 <include name="*.jar" />
-                <exclude name="struts*.jar" />
-                <exclude name="jboss-j2ee.jar" />
+                <exclude name="struts-*.jar" />
                 <exclude name="servlet-api.jar" />
                 <exclude name="jsp-api.jar" />
+                <exclude name="el-api.jar" />
+                <exclude name="jasper.jar" />
+                <exclude name="jasper-el.jar" />
+                <exclude name="jboss-j2ee.jar" />
             </fileset>
             <fileset dir="${lib}/struts1.2">
                 <include name="struts.jar" />
@@ -239,7 +303,6 @@
             <exclude name="com/mockrunner/mock/web/MockActionServlet.*" />
             <exclude name="com/mockrunner/mock/web/MockForwardConfig.*" />
             <exclude name="com/mockrunner/mock/web/MockModuleConfig.*" />
-            <exclude name="com/mockrunner/mock/web/ActionMappingProxy.*" />
         </patternset>
         
         <patternset id="servlet.jar.classes">
@@ -248,7 +311,6 @@
             <include name="com/mockrunner/servlet/**" />
             <include name="com/mockrunner/util/web/**" />
             <include name="com/mockrunner/util/common/**" />
-            <exclude name="com/mockrunner/mock/web/MockJspFragment.*" />
             <exclude name="com/mockrunner/servlet/ServletTestCaseAdapter.*" />
         </patternset>
         
@@ -267,13 +329,14 @@
             <include name="com/mockrunner/mock/web/**" />
             <include name="com/mockrunner/util/web/**" />
             <include name="com/mockrunner/util/common/**" />
-            <exclude name="com/mockrunner/mock/web/MockJspFragment.*" />
             <exclude name="com/mockrunner/servlet/ActionTestCaseAdapter.*" />
         </patternset>
         
     </target>
     
     <target name="compile" depends="init">
+        <antcall target="compilejdk1.5jee5" />
+        <antcall target="compilejdk1.6jee5" />
         <antcall target="compilejdk1.4j2ee1.4" />
         <antcall target="compilejdk1.5j2ee1.4" />
         <antcall target="compilejdk1.6j2ee1.4" />
@@ -282,63 +345,117 @@
         <antcall target="compilejdk1.5j2ee1.3" />
         <antcall target="compilejdk1.6j2ee1.3" />
     </target>
+    
+    <target name="compilejdk1.5jee5" if="java1.5.home">
+        <mkdir dir="${buildjdk1.5jee5}" />
+        <javac destdir="${buildjdk1.5jee5}" compiler="javac1.5" source="1.5" target="1.5" executable="${java1.5.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+            <classpath>
+                <path refid="classpath.jar" />
+            </classpath>
+            <src path="${src}/com/mockrunner/base" />
+            <src path="${src}/com/mockrunner/servlet" />
+            <src path="${src}/com/mockrunner/struts" />
+            <src path="${src}/com/mockrunner/tag" />
+            <src path="${src}/com/mockrunner/mock/web" />
+            <src path="${src}/com/mockrunner/ejb" />
+            <src path="${src}/com/mockrunner/connector" />
+            <src path="${src}/com/mockrunner/mock/ejb" />
+            <src path="${src}/com/mockrunner/jms" />
+            <src path="${src}/com/mockrunner/mock/jms" />
+            <src path="${src}/com/mockrunner/jdbc" />
+            <src path="${src}/com/mockrunner/mock/connector/cci" />
+            <src path="${src}/com/mockrunner/mock/connector/spi" />
+            <src path="${src}/com/mockrunner/util/common" />
+            <src path="${src}/com/mockrunner/util/web" />
+            <src path="${src}/org/activemq" />
+            <src path="${srcjdk1.4}" />
+        </javac>
+    </target>
+    
+    <target name="compilejdk1.6jee5" if="java1.6.home">
+        <mkdir dir="${buildjdk1.6jee5}" />
+        <javac srcdir="${src}" destdir="${buildjdk1.6jee5}" source="1.6" target="1.6" executable="${java1.6.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+            <classpath>
+                <path refid="classpath.jar" />
+            </classpath>
+        </javac>
+    </target>
 
-    <target name="compilejdk1.4j2ee1.4" if="java1.4.home">
+    <target name="compilejdk1.4j2ee1.4" if="dobuild.jdk1.4.j2ee1.4">
         <mkdir dir="${buildjdk1.4j2ee1.4}" />
         <javac destdir="${buildjdk1.4j2ee1.4}" compiler="javac1.4" source="1.4" target="1.4" executable="${java1.4.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
-                <path refid="classpath.jar" />
+                <path refid="classpathj2ee1.4.jar" />
             </classpath>
             <src path="${src}/com/mockrunner/base" />
             <src path="${src}/com/mockrunner/servlet" />
             <src path="${src}/com/mockrunner/struts" />
             <src path="${src}/com/mockrunner/tag" />
-            <src path="${src}/com/mockrunner/mock/web" />
             <src path="${src}/com/mockrunner/ejb" />
             <src path="${src}/com/mockrunner/connector" />
             <src path="${src}/com/mockrunner/mock/ejb" />
             <src path="${src}/com/mockrunner/jms" />
             <src path="${src}/com/mockrunner/mock/jms" />
+            <src path="${src}/com/mockrunner/jdbc" />
             <src path="${src}/com/mockrunner/mock/connector/cci" />
             <src path="${src}/com/mockrunner/mock/connector/spi" />
             <src path="${src}/com/mockrunner/util/common" />
             <src path="${src}/com/mockrunner/util/web" />
             <src path="${src}/org/activemq" />
             <src path="${srcjdk1.4}" />
+            <src path="${srcj2ee1.4}" />
         </javac>
     </target>
     
-    <target name="compilejdk1.5j2ee1.4" if="java1.5.home">
+    <target name="compilejdk1.5j2ee1.4" if="dobuild.jdk1.5.j2ee1.4">
         <mkdir dir="${buildjdk1.5j2ee1.4}" />
         <javac destdir="${buildjdk1.5j2ee1.4}" compiler="javac1.5" source="1.5" target="1.5" executable="${java1.5.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
-                <path refid="classpath.jar" />
+                <path refid="classpathj2ee1.4.jar" />
             </classpath>
             <src path="${src}/com/mockrunner/base" />
             <src path="${src}/com/mockrunner/servlet" />
             <src path="${src}/com/mockrunner/struts" />
             <src path="${src}/com/mockrunner/tag" />
-            <src path="${src}/com/mockrunner/mock/web" />
             <src path="${src}/com/mockrunner/ejb" />
             <src path="${src}/com/mockrunner/connector" />
             <src path="${src}/com/mockrunner/mock/ejb" />
             <src path="${src}/com/mockrunner/jms" />
             <src path="${src}/com/mockrunner/mock/jms" />
+            <src path="${src}/com/mockrunner/jdbc" />
             <src path="${src}/com/mockrunner/mock/connector/cci" />
             <src path="${src}/com/mockrunner/mock/connector/spi" />
             <src path="${src}/com/mockrunner/util/common" />
             <src path="${src}/com/mockrunner/util/web" />
             <src path="${src}/org/activemq" />
             <src path="${srcjdk1.4}" />
+            <src path="${srcj2ee1.4}" />
         </javac>
     </target>
     
-    <target name="compilejdk1.6j2ee1.4" if="java1.6.home">
+    <target name="compilejdk1.6j2ee1.4" if="dobuild.jdk1.6.j2ee1.4">
         <mkdir dir="${buildjdk1.6j2ee1.4}" />
-        <javac srcdir="${src}" destdir="${buildjdk1.6j2ee1.4}" source="1.6" target="1.6" executable="${java1.6.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+        <javac destdir="${buildjdk1.6j2ee1.4}" source="1.6" target="1.6" executable="${java1.6.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
-                <path refid="classpath.jar" />
+                <path refid="classpathj2ee1.4.jar" />
             </classpath>
+            <src path="${src}/com/mockrunner/base" />
+            <src path="${src}/com/mockrunner/servlet" />
+            <src path="${src}/com/mockrunner/struts" />
+            <src path="${src}/com/mockrunner/tag" />
+            <src path="${src}/com/mockrunner/ejb" />
+            <src path="${src}/com/mockrunner/connector" />
+            <src path="${src}/com/mockrunner/mock/ejb" />
+            <src path="${src}/com/mockrunner/jms" />
+            <src path="${src}/com/mockrunner/mock/jms" />
+            <src path="${src}/com/mockrunner/jdbc" />
+            <src path="${src}/com/mockrunner/mock/jdbc" />
+            <src path="${src}/com/mockrunner/mock/connector/cci" />
+            <src path="${src}/com/mockrunner/mock/connector/spi" />
+            <src path="${src}/com/mockrunner/util/common" />
+            <src path="${src}/com/mockrunner/util/web" />
+            <src path="${src}/org/activemq" />
+            <src path="${srcj2ee1.4}" />
         </javac>
     </target>
     
@@ -380,6 +497,7 @@
             <src path="${src}/com/mockrunner/mock/ejb" />
             <src path="${src}/com/mockrunner/jms" />
             <src path="${src}/com/mockrunner/mock/jms" />
+            <src path="${src}/com/mockrunner/jdbc" />
             <src path="${src}/com/mockrunner/mock/connector/cci" />
             <src path="${src}/com/mockrunner/mock/connector/spi" />
             <src path="${src}/com/mockrunner/util/common" />
@@ -404,6 +522,7 @@
             <src path="${src}/com/mockrunner/mock/ejb" />
             <src path="${src}/com/mockrunner/jms" />
             <src path="${src}/com/mockrunner/mock/jms" />
+            <src path="${src}/com/mockrunner/jdbc" />
             <src path="${src}/com/mockrunner/mock/connector/cci" />
             <src path="${src}/com/mockrunner/mock/connector/spi" />
             <src path="${src}/com/mockrunner/util/common" />
@@ -440,6 +559,8 @@
     </target>
     
     <target name="jars" depends="compile">
+        <antcall target="jarsjdk1.5jee5" />
+        <antcall target="jarsjdk1.6jee5" />
         <antcall target="jarsjdk1.4j2ee1.4" />
         <antcall target="jarsjdk1.5j2ee1.4" />
         <antcall target="jarsjdk1.6j2ee1.4" />
@@ -449,7 +570,125 @@
         <antcall target="jarsjdk1.6j2ee1.3" />
     </target>
     
-    <target name="jarsjdk1.4j2ee1.4" if="java1.4.home">
+    <target name="jarsjdk1.5jee5" if="java1.5.home">
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner.jar" />
+            <param name="jdkver" value="1.5" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.5jee5}" />
+            <param name="jarpattern" value="full.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-jms.jar" />
+            <param name="jdkver" value="1.5" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.5jee5}" />
+            <param name="jarpattern" value="jms.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-ejb.jar" />
+            <param name="jdkver" value="1.5" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.5jee5}" />
+            <param name="jarpattern" value="ejb.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-jdbc.jar" />
+            <param name="jdkver" value="1.5" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.5jee5}" />
+            <param name="jarpattern" value="jdbc.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-jca.jar" />
+            <param name="jdkver" value="1.5" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.5jee5}" />
+            <param name="jarpattern" value="connector.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-servlet.jar" />
+            <param name="jdkver" value="1.5" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.5jee5}" />
+            <param name="jarpattern" value="servlet.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-tag.jar" />
+            <param name="jdkver" value="1.5" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.5jee5}" />
+            <param name="jarpattern" value="tag.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-struts.jar" />
+            <param name="jdkver" value="1.5" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.5jee5}" />
+            <param name="jarpattern" value="struts.jar.classes" />
+        </antcall>
+    </target>
+    
+    <target name="jarsjdk1.6jee5" if="java1.6.home">
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner.jar" />
+            <param name="jdkver" value="1.6" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.6jee5}" />
+            <param name="jarpattern" value="full.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-jms.jar" />
+            <param name="jdkver" value="1.6" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.6jee5}" />
+            <param name="jarpattern" value="jms.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-ejb.jar" />
+            <param name="jdkver" value="1.6" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.6jee5}" />
+            <param name="jarpattern" value="ejb.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-jdbc.jar" />
+            <param name="jdkver" value="1.6" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.6jee5}" />
+            <param name="jarpattern" value="jdbc.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-jca.jar" />
+            <param name="jdkver" value="1.6" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.6jee5}" />
+            <param name="jarpattern" value="connector.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-servlet.jar" />
+            <param name="jdkver" value="1.6" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.6jee5}" />
+            <param name="jarpattern" value="servlet.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-tag.jar" />
+            <param name="jdkver" value="1.6" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.6jee5}" />
+            <param name="jarpattern" value="tag.jar.classes" />
+        </antcall>
+        <antcall target="jar">
+            <param name="jarname" value="mockrunner-struts.jar" />
+            <param name="jdkver" value="1.6" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.6jee5}" />
+            <param name="jarpattern" value="struts.jar.classes" />
+        </antcall>
+    </target>
+    
+    <target name="jarsjdk1.4j2ee1.4" if="dobuild.jdk1.4.j2ee1.4">
         <antcall target="jar">
             <param name="jarname" value="mockrunner.jar" />
             <param name="jdkver" value="1.4" />
@@ -508,7 +747,7 @@
         </antcall>
     </target>
     
-    <target name="jarsjdk1.5j2ee1.4" if="java1.5.home">
+    <target name="jarsjdk1.5j2ee1.4" if="dobuild.jdk1.5.j2ee1.4">
         <antcall target="jar">
             <param name="jarname" value="mockrunner.jar" />
             <param name="jdkver" value="1.5" />
@@ -567,7 +806,7 @@
         </antcall>
     </target>
     
-    <target name="jarsjdk1.6j2ee1.4" if="java1.6.home">
+    <target name="jarsjdk1.6j2ee1.4" if="dobuild.jdk1.6.j2ee1.4">
         <antcall target="jar">
             <param name="jarname" value="mockrunner.jar" />
             <param name="jdkver" value="1.6" />
@@ -892,6 +1131,8 @@
     </target>
     
     <target name="dependencies" depends="jars" if="java1.6.home">
+        <antcall target="dependenciesjdk1.5jee5" />
+        <antcall target="dependenciesjdk1.6jee5" />
         <antcall target="dependenciesjdk1.4j2ee1.4" />
         <antcall target="dependenciesjdk1.5j2ee1.4" />
         <antcall target="dependenciesjdk1.6j2ee1.4" />
@@ -901,11 +1142,71 @@
         <antcall target="dependenciesjdk1.6j2ee1.3" />
     </target>
     
-    <target name="dependenciesjdk1.4j2ee1.4" if="java1.4.home">
+    <target name="dependenciesjdk1.5jee5" if="java1.5.home">
+        <mkdir dir="${dependenciesjdk1.5jee5}" />
+        <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
+            <classpath>
+                <pathelement location="${buildjdk1.6jee5}" />
+                <pathelement location="${config}" />
+                <path refid="classpath.jar" />
+            </classpath>
+        </taskdef>
+        <copy todir="${dependenciesjdk1.5jee5}">
+            <fileset dir="${lib}">
+                <patternset refid="runtime.jars" />
+                <exclude name="j2ee1.3/**" />
+                <exclude name="j2ee1.4/**" />
+                <exclude name="struts1.2/**" />
+            </fileset>
+        </copy>
+        
+        <copy todir="${dependenciesjdk1.5jee5}">
+             <fileset dir="${buildjdk1.5jee5}">
+                 <include name="*.jar" />
+             </fileset>
+        </copy>
+
+        <jaranalyzer srcdir="${dependenciesjdk1.5jee5}" 
+                     destfile="${dependenciesjdk1.5jee5}/dependencies.txt"
+                     summaryclass="com.mockrunner.gen.jar.MockrunnerTextSummary"/>
+        
+    </target>
+    
+    <target name="dependenciesjdk1.6jee5" if="java1.6.home">
+        <mkdir dir="${dependenciesjdk1.6jee5}" />
+        <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
+            <classpath>
+                <pathelement location="${buildjdk1.6jee5}" />
+                <pathelement location="${config}" />
+                <path refid="classpath.jar" />
+            </classpath>
+        </taskdef>
+        <copy todir="${dependenciesjdk1.6jee5}">
+            <fileset dir="${lib}">
+                <patternset refid="runtime.jars" />
+                <exclude name="j2ee1.3/**" />
+                <exclude name="j2ee1.4/**" />
+                <exclude name="struts1.2/**" />
+            </fileset>
+        </copy>
+        
+        <copy todir="${dependenciesjdk1.6jee5}">
+             <fileset dir="${buildjdk1.6jee5}">
+                 <include name="*.jar" />
+             </fileset>
+        </copy>
+
+        <jaranalyzer srcdir="${dependenciesjdk1.6jee5}" 
+                     destfile="${dependenciesjdk1.6jee5}/dependencies.txt"
+                     summaryclass="com.mockrunner.gen.jar.MockrunnerTextSummary"/>
+        
+    </target>
+    
+    <target name="dependenciesjdk1.4j2ee1.4" if="dobuild.jdk1.4.j2ee1.4">
         <mkdir dir="${dependenciesjdk1.4j2ee1.4}" />
         <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
             <classpath>
-                <pathelement location="${buildjdk1.6j2ee1.4}" />
+                <pathelement location="${buildjdk1.6jee5}" />
                 <pathelement location="${config}" />
                 <path refid="classpath.jar" />
             </classpath>
@@ -914,7 +1215,17 @@
             <fileset dir="${lib}">
                 <patternset refid="runtime.jars" />
                 <exclude name="j2ee1.3/**" />
+                <exclude name="j2ee1.4/**" />
                 <exclude name="struts1.2/**" />
+                <exclude name="servlet-api.jar" />
+                <exclude name="jsp-api.jar" />
+                <exclude name="el-api.jar" />
+                <exclude name="jasper.jar" />
+                <exclude name="jasper-el.jar" />
+                <exclude name="jboss-j2ee.jar" />
+            </fileset>
+            <fileset dir="${lib}/j2ee1.4">
+                <include name="*.jar" />
             </fileset>
         </copy>
         
@@ -930,11 +1241,11 @@
         
     </target>
     
-    <target name="dependenciesjdk1.5j2ee1.4" if="java1.5.home">
+    <target name="dependenciesjdk1.5j2ee1.4" if="dobuild.jdk1.5.j2ee1.4">
         <mkdir dir="${dependenciesjdk1.5j2ee1.4}" />
         <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
             <classpath>
-                <pathelement location="${buildjdk1.6j2ee1.4}" />
+                <pathelement location="${buildjdk1.6jee5}" />
                 <pathelement location="${config}" />
                 <path refid="classpath.jar" />
             </classpath>
@@ -943,7 +1254,17 @@
             <fileset dir="${lib}">
                 <patternset refid="runtime.jars" />
                 <exclude name="j2ee1.3/**" />
+                <exclude name="j2ee1.4/**" />
                 <exclude name="struts1.2/**" />
+                <exclude name="servlet-api.jar" />
+                <exclude name="jsp-api.jar" />
+                <exclude name="el-api.jar" />
+                <exclude name="jasper.jar" />
+                <exclude name="jasper-el.jar" />
+                <exclude name="jboss-j2ee.jar" />
+            </fileset>
+            <fileset dir="${lib}/j2ee1.4">
+                <include name="*.jar" />
             </fileset>
         </copy>
         
@@ -959,11 +1280,11 @@
         
     </target>
     
-    <target name="dependenciesjdk1.6j2ee1.4" if="java1.6.home">
+    <target name="dependenciesjdk1.6j2ee1.4" if="dobuild.jdk1.6.j2ee1.4">
         <mkdir dir="${dependenciesjdk1.6j2ee1.4}" />
         <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
             <classpath>
-                <pathelement location="${buildjdk1.6j2ee1.4}" />
+                <pathelement location="${buildjdk1.6jee5}" />
                 <pathelement location="${config}" />
                 <path refid="classpath.jar" />
             </classpath>
@@ -972,7 +1293,17 @@
             <fileset dir="${lib}">
                 <patternset refid="runtime.jars" />
                 <exclude name="j2ee1.3/**" />
+                <exclude name="j2ee1.4/**" />
                 <exclude name="struts1.2/**" />
+                <exclude name="servlet-api.jar" />
+                <exclude name="jsp-api.jar" />
+                <exclude name="el-api.jar" />
+                <exclude name="jasper.jar" />
+                <exclude name="jasper-el.jar" />
+                <exclude name="jboss-j2ee.jar" />
+            </fileset>
+            <fileset dir="${lib}/j2ee1.4">
+                <include name="*.jar" />
             </fileset>
         </copy>
         
@@ -992,7 +1323,7 @@
         <mkdir dir="${dependenciesjdk1.3j2ee1.3}" />
         <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
             <classpath>
-                <pathelement location="${buildjdk1.6j2ee1.4}" />
+                <pathelement location="${buildjdk1.6jee5}" />
                 <pathelement location="${config}" />
                 <path refid="classpathjdk1.3j2ee1.3.jar" />
             </classpath>
@@ -1001,10 +1332,18 @@
             <fileset dir="${lib}">
                 <patternset refid="runtime.jars" />
                 <exclude name="j2ee1.3/**" />
+                <exclude name="j2ee1.4/**" />
                 <exclude name="struts1.2/**" />
+                <exclude name="struts-*.jar" />
                 <exclude name="servlet-api.jar" />
                 <exclude name="jsp-api.jar" />
+                <exclude name="el-api.jar" />
+                <exclude name="jasper.jar" />
+                <exclude name="jasper-el.jar" />
                 <exclude name="jboss-j2ee.jar" />
+            </fileset>
+            <fileset dir="${lib}/struts1.2">
+                <include name="*.jar" />
             </fileset>
             <fileset dir="${lib}/j2ee1.3">
                 <include name="*.jar" />
@@ -1027,7 +1366,7 @@
         <mkdir dir="${dependenciesjdk1.4j2ee1.3}" />
         <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
             <classpath>
-                <pathelement location="${buildjdk1.6j2ee1.4}" />
+                <pathelement location="${buildjdk1.6jee5}" />
                 <pathelement location="${config}" />
                 <path refid="classpathj2ee1.3.jar" />
             </classpath>
@@ -1036,10 +1375,18 @@
             <fileset dir="${lib}">
                 <patternset refid="runtime.jars" />
                 <exclude name="j2ee1.3/**" />
+                <exclude name="j2ee1.4/**" />
                 <exclude name="struts1.2/**" />
+                <exclude name="struts-*.jar" />
                 <exclude name="servlet-api.jar" />
                 <exclude name="jsp-api.jar" />
+                <exclude name="el-api.jar" />
+                <exclude name="jasper.jar" />
+                <exclude name="jasper-el.jar" />
                 <exclude name="jboss-j2ee.jar" />
+            </fileset>
+            <fileset dir="${lib}/struts1.2">
+                <include name="*.jar" />
             </fileset>
             <fileset dir="${lib}/j2ee1.3">
                 <include name="*.jar" />
@@ -1062,7 +1409,7 @@
         <mkdir dir="${dependenciesjdk1.5j2ee1.3}" />
         <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
             <classpath>
-                <pathelement location="${buildjdk1.6j2ee1.4}" />
+                <pathelement location="${buildjdk1.6jee5}" />
                 <pathelement location="${config}" />
                 <path refid="classpathj2ee1.3.jar" />
             </classpath>
@@ -1071,10 +1418,18 @@
             <fileset dir="${lib}">
                 <patternset refid="runtime.jars" />
                 <exclude name="j2ee1.3/**" />
+                <exclude name="j2ee1.4/**" />
                 <exclude name="struts1.2/**" />
+                <exclude name="struts-*.jar" />
                 <exclude name="servlet-api.jar" />
                 <exclude name="jsp-api.jar" />
+                <exclude name="el-api.jar" />
+                <exclude name="jasper.jar" />
+                <exclude name="jasper-el.jar" />
                 <exclude name="jboss-j2ee.jar" />
+            </fileset>
+            <fileset dir="${lib}/struts1.2">
+                <include name="*.jar" />
             </fileset>
             <fileset dir="${lib}/j2ee1.3">
                 <include name="*.jar" />
@@ -1097,7 +1452,7 @@
         <mkdir dir="${dependenciesjdk1.6j2ee1.3}" />
         <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
             <classpath>
-                <pathelement location="${buildjdk1.6j2ee1.4}" />
+                <pathelement location="${buildjdk1.6jee5}" />
                 <pathelement location="${config}" />
                 <path refid="classpathj2ee1.3.jar" />
             </classpath>
@@ -1106,10 +1461,18 @@
             <fileset dir="${lib}">
                 <patternset refid="runtime.jars" />
                 <exclude name="j2ee1.3/**" />
+                <exclude name="j2ee1.4/**" />
                 <exclude name="struts1.2/**" />
+                <exclude name="struts-*.jar" />
                 <exclude name="servlet-api.jar" />
                 <exclude name="jsp-api.jar" />
+                <exclude name="el-api.jar" />
+                <exclude name="jasper.jar" />
+                <exclude name="jasper-el.jar" />
                 <exclude name="jboss-j2ee.jar" />
+            </fileset>
+            <fileset dir="${lib}/struts1.2">
+                <include name="*.jar" />
             </fileset>
             <fileset dir="${lib}/j2ee1.3">
                 <include name="*.jar" />
@@ -1181,7 +1544,9 @@
 	    </copy>
         <antcall target="copydoc" />
         <antcall target="copyjar" />   
-        <antcall target="copysrc" />
+        <antcall target="copysrc" />  
+        <antcall target="copylibjdk1.5jee5" />
+        <antcall target="copylibjdk1.6jee5" />   
         <antcall target="copylibjdk1.4j2ee1.4" />
         <antcall target="copylibjdk1.5j2ee1.4" />
         <antcall target="copylibjdk1.6j2ee1.4" />
@@ -1237,7 +1602,43 @@
         </copy>
     </target>
     
-    <target name="copylibjdk1.4j2ee1.4" if="java1.4.home">
+    <target name="copylibjdk1.5jee5" if="java1.5.home">
+        <mkdir dir="${release.root}/${release.lib}/jdk1.5/jee5" />
+        <copy todir="${release.root}/${release.lib}/jdk1.5/jee5">
+            <fileset dir="${buildjdk1.5jee5}">
+                <include name="*.jar" />
+            </fileset>
+        </copy>
+        <antcall target="copydependenciesjdk1.5jee5" />
+    </target>
+    
+    <target name="copydependenciesjdk1.5jee5" if="java1.6.home">
+        <copy todir="${release.root}/${release.lib}/jdk1.5/jee5">
+            <fileset dir="${dependenciesjdk1.5jee5}">
+                <include name="*.txt" />
+            </fileset>
+        </copy>
+    </target>
+    
+    <target name="copylibjdk1.6jee5" if="java1.6.home">
+        <mkdir dir="${release.root}/${release.lib}/jdk1.6/jee5" />
+        <copy todir="${release.root}/${release.lib}/jdk1.6/jee5">
+            <fileset dir="${buildjdk1.6jee5}">
+                <include name="*.jar" />
+            </fileset>
+        </copy>
+        <antcall target="copydependenciesjdk1.6jee5" />
+    </target>
+    
+    <target name="copydependenciesjdk1.6jee5" if="java1.6.home">
+        <copy todir="${release.root}/${release.lib}/jdk1.6/jee5">
+            <fileset dir="${dependenciesjdk1.6jee5}">
+                <include name="*.txt" />
+            </fileset>
+        </copy>
+    </target>
+    
+    <target name="copylibjdk1.4j2ee1.4" if="dobuild.jdk1.4.j2ee1.4">
         <mkdir dir="${release.root}/${release.lib}/jdk1.4/j2ee1.4" />
         <copy todir="${release.root}/${release.lib}/jdk1.4/j2ee1.4">
             <fileset dir="${buildjdk1.4j2ee1.4}">
@@ -1255,7 +1656,7 @@
         </copy>
     </target>
     
-    <target name="copylibjdk1.5j2ee1.4" if="java1.5.home">
+    <target name="copylibjdk1.5j2ee1.4" if="dobuild.jdk1.5.j2ee1.4">
         <mkdir dir="${release.root}/${release.lib}/jdk1.5/j2ee1.4" />
         <copy todir="${release.root}/${release.lib}/jdk1.5/j2ee1.4">
             <fileset dir="${buildjdk1.5j2ee1.4}">
@@ -1273,7 +1674,7 @@
         </copy>
     </target>
     
-    <target name="copylibjdk1.6j2ee1.4" if="java1.6.home">
+    <target name="copylibjdk1.6j2ee1.4" if="dobuild.jdk1.6.j2ee1.4">
         <mkdir dir="${release.root}/${release.lib}/jdk1.6/j2ee1.4" />
         <copy todir="${release.root}/${release.lib}/jdk1.6/j2ee1.4">
             <fileset dir="${buildjdk1.6j2ee1.4}">
@@ -1366,6 +1767,8 @@
     <target name="clean" depends="init">
         <delete dir="${bin}" />
         <delete dir="${doc}" />
+        <delete dir="${buildjdk1.5jee5}" />
+        <delete dir="${buildjdk1.6jee5}" />
         <delete dir="${buildjdk1.4j2ee1.4}" />
         <delete dir="${buildjdk1.5j2ee1.4}" />
         <delete dir="${buildjdk1.6j2ee1.4}" />
@@ -1373,6 +1776,8 @@
         <delete dir="${buildjdk1.4j2ee1.3}" />
         <delete dir="${buildjdk1.5j2ee1.3}" />
         <delete dir="${buildjdk1.6j2ee1.3}" />
+        <delete dir="${dependenciesjdk1.5jee5}" />
+        <delete dir="${dependenciesjdk1.6jee5}" />
         <delete dir="${dependenciesjdk1.4j2ee1.4}" />
         <delete dir="${dependenciesjdk1.5j2ee1.4}" />
         <delete dir="${dependenciesjdk1.6j2ee1.4}" />

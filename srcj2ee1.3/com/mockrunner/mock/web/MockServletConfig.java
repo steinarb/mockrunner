@@ -37,11 +37,18 @@ public class MockServletConfig implements ServletConfig
         return servletContext;
     }
     
+    /**
+     * Sets the <code>ServletContext</code>.
+     * @param servletContext the <code>ServletContext</code>
+     */
     public synchronized void setServletContext(ServletContext servletContext)
     {
         this.servletContext = servletContext;
     }
     
+    /**
+     * Clears the init parameters.
+     */
     public synchronized void clearInitParameters()
     {
         initParameters.clear();
@@ -52,11 +59,20 @@ public class MockServletConfig implements ServletConfig
         return (String)initParameters.get(name);
     }
     
+    /**
+     * Sets an init parameter.
+     * @param name the name
+     * @param value the value
+     */
     public synchronized void setInitParameter(String name, String value) 
     {
         initParameters.put(name, value);
     }
     
+    /**
+     * Sets several init parameters.
+     * @param parameters the parameter map
+     */
     public synchronized void setInitParameters(Map parameters) 
     {
         initParameters.putAll(parameters);
