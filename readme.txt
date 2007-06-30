@@ -118,7 +118,7 @@ Struts 1.2.9:
 http://struts.apache.org
 struts.jar
 
-JUnit 3.8.1:
+JUnit 3.8.2:
 http://www.junit.org
 junit.jar
 
@@ -199,7 +199,7 @@ regexp 1.3:
 http://jakarta.apache.org/regexp
 jakarta-regexp-1.3.jar (from JarAnalyzer 1.1 release)
 
-Ant 1.6.5:
+Ant 1.7.0:
 http://ant.apache.org
 ant.jar
 
