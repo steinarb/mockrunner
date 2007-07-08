@@ -1,6 +1,6 @@
-mockrunner-0.3.9:
+mockrunner-0.4:
 
-In 0.3.9 MockStruct has some more constructors which may cause ambiguity errors
+In 0.4 MockStruct has some more constructors which may cause ambiguity errors
 if you use "new MockStruct(null)".
 If a JMS exception is declared to be thrown, the ExceptionListener will
 not be called when the exception is thrown on a method call. Instead there are
