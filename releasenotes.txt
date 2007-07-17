@@ -1,6 +1,8 @@
 
 mockrunner-0.4.1:
 
+- updated jboss-j2ee.jar from JBoss 4.2.0 to from JBoss 4.2.1
+
 mockrunner-0.4:
 
 - Mockrunner is now compatible with Java 1.6 and supports JDBC 4.0. The lib directory
