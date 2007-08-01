@@ -314,7 +314,7 @@ public class MockConnection implements Connection
     
     public boolean isValid(int timeout) throws SQLException
     {
-        return isClosed();
+        return !isClosed();
     }
 
     public String nativeSQL(String sql) throws SQLException
