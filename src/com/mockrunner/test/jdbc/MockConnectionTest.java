@@ -105,4 +105,13 @@ public class MockConnectionTest extends TestCase
         MockSQLXML sqlXML = (MockSQLXML)connection.createSQLXML();
         assertNull(sqlXML.getContentAsString());
     }
+    
+    public void testDisconnect() throws SQLException
+    {
+        assertFalse(connection.isClosed());
+        assertTrue(connection.isValid(5));
+        connection.close();
+        assertFalse(connection.isValid(5));
+        assertTrue(connection.isClosed());
+    }
 }

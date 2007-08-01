@@ -1,6 +1,7 @@
 
 mockrunner-0.4.1:
 
+- fixed bug 1765621 reported by Dan Katzel
 - updated jboss-j2ee.jar from JBoss 4.2.0 to from JBoss 4.2.1
 
 mockrunner-0.4:
