@@ -96,7 +96,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         remoteAddr = "127.0.0.1";
         roles = new HashMap();
         contentLength = -1;
-        cookies = new ArrayList();
+        cookies = null;
         localAddr = "127.0.0.1";
         localName = "localhost";
         localPort = 8080;
@@ -469,11 +469,16 @@ public class MockHttpServletRequest implements HttpServletRequest
 
     public Cookie[] getCookies()
     {
+        if(null == cookies) return null;
         return (Cookie[])cookies.toArray(new Cookie[cookies.size()]);
     }
     
     public void addCookie(Cookie cookie)
     {
+        if(null == cookies)
+        {
+            cookies = new ArrayList();
+        }
         cookies.add(cookie);
     }
 

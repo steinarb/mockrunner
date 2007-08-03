@@ -237,6 +237,7 @@ public class MockHttpServletRequestTest extends TestCase
     
     public void testCookies()
     {
+        assertNull(request.getCookies());
         request.addCookie(new Cookie("name1", "value1"));
         request.addCookie(new Cookie("name2", "value2"));
         request.addCookie(new Cookie("name3", "value3"));
