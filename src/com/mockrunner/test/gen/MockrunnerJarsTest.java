@@ -12,7 +12,7 @@ public class MockrunnerJarsTest extends TestCase
     private Set getTestDependencies()
     {
         Set dependencies = new HashSet();
-        dependencies.add("struts-core-1.3.8.jar");
+        dependencies.add("struts-core-1.3.9.jar");
         dependencies.add("servlet-api.jar");
         dependencies.add("jboss-j2ee.jar");
         dependencies.add("nekohtml.jar");
@@ -26,17 +26,17 @@ public class MockrunnerJarsTest extends TestCase
         Permission permission = new Permission(false, true, true, false, true);
         Set prohibited = permission.getProhibited(getTestDependencies());
         assertEquals(1, prohibited.size());
-        assertTrue(prohibited.contains("struts-core-1.3.8.jar"));
+        assertTrue(prohibited.contains("struts-core-1.3.9.jar"));
         permission = new Permission(false, true, true, false, false);
         prohibited = permission.getProhibited(getTestDependencies());
         assertEquals(3, prohibited.size());
-        assertTrue(prohibited.contains("struts-core-1.3.8.jar"));
+        assertTrue(prohibited.contains("struts-core-1.3.9.jar"));
         assertTrue(prohibited.contains("nekohtml.jar"));
         assertTrue(prohibited.contains("xercesImpl.jar"));
         permission = new Permission(false, false, true, false, false);
         prohibited = permission.getProhibited(getTestDependencies());
         assertEquals(4, prohibited.size());
-        assertTrue(prohibited.contains("struts-core-1.3.8.jar"));
+        assertTrue(prohibited.contains("struts-core-1.3.9.jar"));
         assertTrue(prohibited.contains("servlet-api.jar"));
         assertTrue(prohibited.contains("nekohtml.jar"));
         assertTrue(prohibited.contains("xercesImpl.jar"));
