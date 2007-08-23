@@ -191,13 +191,13 @@ BCEL 5.2:
 http://jakarta.apache.org/bcel
 bcel-5.2.jar
 
-JarAnalyzer 1.1:
+JarAnalyzer 1.2:
 http://www.kirkk.com/main/Main/JarAnalyzer
-jaranalyzer-1.1.jar
+jaranalyzer-1.2.jar
 
 regexp 1.3:
 http://jakarta.apache.org/regexp
-jakarta-regexp-1.3.jar (from JarAnalyzer 1.1 release)
+jakarta-regexp-1.3.jar (from JarAnalyzer 1.2 release)
 
 Ant 1.7.0:
 http://ant.apache.org
