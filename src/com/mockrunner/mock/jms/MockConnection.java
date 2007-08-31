@@ -35,8 +35,15 @@ public class MockConnection implements Connection
     private JMSException exception;
     private DestinationManager destinationManager;
     private ConfigurationManager configurationManager;
+    private String userName;
+    private String password;
     
     public MockConnection(DestinationManager destinationManager, ConfigurationManager configurationManager)
+    { 
+        this(destinationManager, configurationManager, null, null);
+    }
+    
+    public MockConnection(DestinationManager destinationManager, ConfigurationManager configurationManager, String userName, String password)
     { 
         metaData = new MockConnectionMetaData();
         started = false;
@@ -45,8 +52,28 @@ public class MockConnection implements Connection
         this.destinationManager = destinationManager;
         this.configurationManager = configurationManager;
         sessions = new ArrayList();
+        this.userName = userName;
+        this.password = password;
     }
     
+    /**
+     * Returns the user name.
+     * @return the user name
+     */
+    public String getUserName()
+    {
+        return userName;
+    }
+
+    /**
+     * Returns the password.
+     * @return the password
+     */
+    public String getPassword()
+    {
+        return password;
+    }
+
     /**
      * Returns the {@link com.mockrunner.jms.DestinationManager}.
      * @return the {@link com.mockrunner.jms.DestinationManager}

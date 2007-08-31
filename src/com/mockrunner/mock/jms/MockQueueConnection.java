@@ -27,6 +27,11 @@ public class MockQueueConnection extends MockConnection implements QueueConnecti
         super(destinationManager, configurationManager);
     }
     
+    public MockQueueConnection(DestinationManager destinationManager, ConfigurationManager configurationManager, String userName, String password)
+    {
+        super(destinationManager, configurationManager, userName, password);
+    }
+
     /**
      * Returns the list of {@link MockQueueSession} objects that were created 
      * with {@link #createQueueSession}.
