@@ -45,41 +45,41 @@ public class MockConnectionFactory implements QueueConnectionFactory, TopicConne
     
     public Connection createConnection() throws JMSException
     {
-        MockConnection connection = new MockConnection(destinationManager, configurationManager);
-        connection.setJMSException(exception);
-        connections.add(connection);
-        return connection;
+        return createConnection(null, null);
     }
 
     public Connection createConnection(String name, String password) throws JMSException
     {
-        return createConnection();
+        MockConnection connection = new MockConnection(destinationManager, configurationManager, name, password);
+        connection.setJMSException(exception);
+        connections.add(connection);
+        return connection;
     }
     
     public QueueConnection createQueueConnection() throws JMSException
     {
-        MockQueueConnection connection = new MockQueueConnection(destinationManager(), configurationManager());
-        connection.setJMSException(exception());
-        connections().add(connection);
-        return connection;
+        return createQueueConnection(null, null);
     }
 
     public QueueConnection createQueueConnection(String name, String password) throws JMSException
     {
-        return createQueueConnection();
-    }
-    
-    public TopicConnection createTopicConnection() throws JMSException
-    {
-        MockTopicConnection connection = new MockTopicConnection(destinationManager(), configurationManager());
+        MockQueueConnection connection = new MockQueueConnection(destinationManager(), configurationManager(), name, password);
         connection.setJMSException(exception());
         connections().add(connection);
         return connection;
     }
+    
+    public TopicConnection createTopicConnection() throws JMSException
+    {
+        return createTopicConnection(null, null);
+    }
 
     public TopicConnection createTopicConnection(String name, String password) throws JMSException
     {
-        return createTopicConnection();
+        MockTopicConnection connection = new MockTopicConnection(destinationManager(), configurationManager(), name, password);
+        connection.setJMSException(exception());
+        connections().add(connection);
+        return connection;
     }
     
     /**

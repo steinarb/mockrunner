@@ -148,6 +148,31 @@ public class MockConnectionTest extends TestCase
         connection3.throwJMSException();
     }
     
+    public void testUserNameAndPassword() throws Exception
+    {
+        MockConnectionFactory factory = new MockConnectionFactory(new DestinationManager(), new ConfigurationManager());
+        MockConnection connection1 = (MockConnection)factory.createConnection("userName1", "password1");
+        MockConnection connection2 = (MockConnection)factory.createQueueConnection("userName2", "password2");
+        assertEquals("userName1", connection1.getUserName());
+        assertEquals("password1", connection1.getPassword());
+        assertEquals("userName2", connection2.getUserName());
+        assertEquals("password2", connection2.getPassword());
+        MockQueueConnectionFactory queueFactory = new MockQueueConnectionFactory(new DestinationManager(), new ConfigurationManager());
+        MockQueueConnection queueConnection1 = (MockQueueConnection)queueFactory.createConnection("userName1", "password1");
+        MockQueueConnection queueConnection2 = (MockQueueConnection)queueFactory.createQueueConnection("userName2", "password2");
+        assertEquals("userName1", queueConnection1.getUserName());
+        assertEquals("password1", queueConnection1.getPassword());
+        assertEquals("userName2", queueConnection2.getUserName());
+        assertEquals("password2", queueConnection2.getPassword());
+        MockTopicConnectionFactory topicFactory = new MockTopicConnectionFactory(new DestinationManager(), new ConfigurationManager());
+        MockTopicConnection topicConnection1 = (MockTopicConnection)topicFactory.createTopicConnection("userName1", "password1");
+        MockTopicConnection topicConnection2 = (MockTopicConnection)topicFactory.createConnection("userName2", "password2");
+        assertEquals("userName1", topicConnection1.getUserName());
+        assertEquals("password1", topicConnection1.getPassword());
+        assertEquals("userName2", topicConnection2.getUserName());
+        assertEquals("password2", topicConnection2.getPassword());
+    }
+    
     public void testFactoriesCreateConnectionType() throws Exception
     {
         MockQueueConnectionFactory queueFactory = new MockQueueConnectionFactory(new DestinationManager(), new ConfigurationManager());

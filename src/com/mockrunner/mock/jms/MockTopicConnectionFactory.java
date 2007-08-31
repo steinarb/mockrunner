@@ -23,7 +23,7 @@ public class MockTopicConnectionFactory extends MockConnectionFactory
 
     public Connection createConnection(String name, String password) throws JMSException
     {
-        return createTopicConnection();
+        return createTopicConnection(name, password);
     }
 
     /**

@@ -27,6 +27,11 @@ public class MockTopicConnection extends MockConnection implements TopicConnecti
         super(destinationManager, configurationManager);
     }
     
+    public MockTopicConnection(DestinationManager destinationManager, ConfigurationManager configurationManager, String userName, String password)
+    {
+        super(destinationManager, configurationManager, userName, password);
+    }
+
     /**
      * Returns the list of {@link MockTopicSession} objects that were created 
      * with {@link #createTopicSession}.
