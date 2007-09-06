@@ -20,10 +20,12 @@ import com.mockrunner.util.common.ArrayUtil;
 public class MockStreamMessage extends MockMessage implements StreamMessage
 {
     private Stack data;
+    private boolean remainingBytesPushed;
     
     public MockStreamMessage()
     {
         data = new Stack();
+        remainingBytesPushed = false;
     }
     
     public boolean readBoolean() throws JMSException
@@ -238,20 +240,48 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageEOFException("No more data");
         }
-        if(null == byteData) return -1;
-        if(0 == byteData.length) return 0;
-        Object value = readObject();
-        if(null == value)
+        if(null == byteData)
         {
             throw new NullPointerException();
         }
+        Object value = readObject();
+        if(null == value)
+        {
+            remainingBytesPushed = false;
+            return -1;
+        }
         if(!(value instanceof byte[]))
         {
+            remainingBytesPushed = false;
             throw new MessageFormatException(value.getClass().getName() + " cannot be converted to byte[]");
         }
-        int length = Math.min(byteData.length, ((byte[])value).length);
-        System.arraycopy(value, 0, byteData, 0, length);
-        return length;
+        int fieldLength = ((byte[])value).length;
+        if(0 == fieldLength)
+        {
+            if(remainingBytesPushed)
+            {
+                remainingBytesPushed = false;
+                return -1;
+            }
+            return 0;
+        }
+        if(0 == byteData.length && remainingBytesPushed)
+        {
+            remainingBytesPushed = false;
+            return -1;
+        }
+        remainingBytesPushed = false;
+        if(fieldLength < byteData.length)
+        {
+            System.arraycopy(value, 0, byteData, 0, fieldLength);
+            return fieldLength;
+        }
+        System.arraycopy(value, 0, byteData, 0, byteData.length);
+        byte[] remaining = new byte[fieldLength - byteData.length];
+        System.arraycopy(value, byteData.length, remaining, 0, remaining.length);
+        data.push(remaining);
+        remainingBytesPushed = true;
+        return byteData.length;
     }
 
     public Object readObject() throws JMSException
@@ -400,12 +430,14 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
     {
         setReadOnly(true);
         Collections.reverse(data);
+        remainingBytesPushed = false;
     }
 
     public void clearBody() throws JMSException
     {
         super.clearBody();
         data = new Stack();
+        remainingBytesPushed = false;
     }
     
     /**

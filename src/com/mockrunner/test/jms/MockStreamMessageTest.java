@@ -139,6 +139,7 @@ public class MockStreamMessageTest extends TestCase
         int number = message.readBytes(data);
         assertEquals(4, number);
         assertTrue(Arrays.equals(data, new byte[] {1, 2, 3, 4}));
+        message.readBytes(data);
         data = (byte[])message.readObject();
         assertTrue(Arrays.equals(data, new byte[] {1, 2, 3, 4}));
         message = new MockStreamMessage();
@@ -175,9 +176,7 @@ public class MockStreamMessageTest extends TestCase
         data = new byte[] {1, 2, 3, 4};
         message.clearBody();
         message.writeBytes(data);
-        message.reset();
-        number = message.readBytes(null);
-        assertEquals(-1, number);
+        message.reset(); 
         message = new MockStreamMessage();
         message.writeObject(null);
         message.writeObject(null);
@@ -216,13 +215,130 @@ public class MockStreamMessageTest extends TestCase
         {
             //should throw exception
         }
-        
         try
         {
             message.readFloat();
             fail();
         }
         catch(MessageEOFException exc)
+        {
+            //should throw exception
+        }
+    }
+    
+    public void testReadBytes() throws Exception
+    {
+        MockStreamMessage message = new MockStreamMessage();
+        message.writeBytes(new byte[] {1, 2, 3, 4, 5, 6, 7});
+        byte[] buffer = new byte[10];
+        message.reset();
+        int number = message.readBytes(buffer);
+        assertEquals(7, number);
+        assertTrue(Arrays.equals(buffer, new byte[] {1, 2, 3, 4, 5, 6, 7, 0, 0, 0}));
+        try
+        {
+            message.readBytes(buffer);
+            fail();
+        }
+        catch(MessageEOFException exc)
+        {
+            //should throw exception
+        }
+        message.clearBody();
+        message.writeBytes(new byte[] {1, 2, 3, 4, 5, 6, 7});
+        buffer = new byte[5];
+        message.reset();
+        number = message.readBytes(buffer);
+        assertEquals(5, number);
+        assertTrue(Arrays.equals(buffer, new byte[] {1, 2, 3, 4, 5}));
+        number = message.readBytes(buffer);
+        assertEquals(2, number);
+        assertTrue(Arrays.equals(buffer, new byte[] {6, 7, 3, 4, 5}));
+        try
+        {
+            message.readBytes(buffer);
+            fail();
+        }
+        catch(MessageEOFException exc)
+        {
+            //should throw exception
+        }
+        message.clearBody();
+        message.writeBytes(new byte[] {1, 2, 3, 4, 5, 6, 7});
+        buffer = new byte[3];
+        message.reset();
+        number = message.readBytes(buffer);
+        assertEquals(3, number);
+        assertTrue(Arrays.equals(buffer, new byte[] {1, 2, 3}));
+        number = message.readBytes(buffer);
+        assertEquals(3, number);
+        assertTrue(Arrays.equals(buffer, new byte[] {4, 5, 6}));
+        number = message.readBytes(buffer);
+        assertEquals(1, number);
+        assertTrue(Arrays.equals(buffer, new byte[] {7, 5, 6}));
+        try
+        {
+            message.readBytes(buffer);
+            fail();
+        }
+        catch(MessageEOFException exc)
+        {
+            //should throw exception
+        }
+        message.clearBody();
+        message.writeBytes(new byte[] {1, 2, 3, 4, 5, 6, 7});
+        buffer = new byte[0];
+        message.reset();
+        number = message.readBytes(buffer);
+        assertEquals(0, number);
+        number = message.readBytes(buffer);
+        assertEquals(-1, number);
+        message.clearBody();
+        message.writeBytes(new byte[] {1, 2, 3, 4, 5, 6, 7});
+        buffer = new byte[7];
+        message.reset();
+        number = message.readBytes(buffer);
+        assertEquals(7, number);
+        assertTrue(Arrays.equals(buffer, new byte[] {1, 2, 3, 4, 5, 6, 7}));
+        number = message.readBytes(buffer);
+        assertEquals(-1, number);
+        message.clearBody();
+        message.writeBytes(new byte[] {1, 2, 3, 4, 5, 6, 7});
+        message.reset();
+        try
+        {
+            number = message.readBytes(null);
+            fail();
+        }
+        catch(NullPointerException exc)
+        {
+            //should throw exception
+        }
+        message.clearBody();
+        message.writeBytes(new byte[0]);
+        message.reset();
+        number = message.readBytes(new byte[1]);
+        assertEquals(0, number);
+        try
+        {
+            message.readBytes(new byte[1]);
+            fail();
+        }
+        catch(MessageEOFException exc)
+        {
+            //should throw exception
+        }
+        message.clearBody();
+        message.writeBytes(new byte[] {1, 2, 3, 4, 5, 6, 7});
+        buffer = new byte[7];
+        message.reset();
+        number = message.readBytes(buffer);
+        try
+        {
+            message.readByte();
+            fail();
+        }
+        catch(MessageFormatException exc)
         {
             //should throw exception
         }
@@ -295,9 +411,9 @@ public class MockStreamMessageTest extends TestCase
         }
         newMessage.reset();
         assertEquals(1, newMessage.readByte());
-        byte[] myArray = new byte[5];
+        byte[] myArray = new byte[6];
         newMessage.readBytes(myArray);
-        assertTrue(Arrays.equals(new byte[]{1, 2, 3, 4, 5}, myArray));
+        assertTrue(Arrays.equals(new byte[]{1, 2, 3, 4, 5, 0}, myArray));
         assertTrue(newMessage.readBoolean());
         message = new MockStreamMessage();
         message.writeString("test1");
