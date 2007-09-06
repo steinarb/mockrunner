@@ -3,6 +3,7 @@ mockrunner-0.4.1:
 
 - fixed bug 1765621 reported by Dan Katzel
 - fixed bug 1766429
+- fixed bug 1789040 reported by David Dossot
 - implemented feature 1785907 requested by David Dossot
 - updated jboss-j2ee.jar from JBoss 4.2.0 to from JBoss 4.2.1
 - updated servlet-api.jar, jsp-api.jar, el-api.jar, jasper.jar and jasper-el.jar
