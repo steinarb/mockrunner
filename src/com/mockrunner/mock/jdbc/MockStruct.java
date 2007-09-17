@@ -92,7 +92,7 @@ public class MockStruct implements Struct, Cloneable
     {
         int hashCode = 17;
         if(null != sqlTypeName) hashCode = (31 * hashCode) + sqlTypeName.hashCode();
-        if(null != attributes)hashCode = (31 * hashCode) + attributes.hashCode();
+        if(null != attributes) hashCode = (31 * hashCode) + attributes.hashCode();
         return hashCode;
     }
 
