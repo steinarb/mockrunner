@@ -536,6 +536,7 @@ public class ActionTestModuleTest extends BaseTestCase
             //should throw exception
         }
     }
+    
     public void testVerifyActionMessages()
     {
         module.setActionMessages(createTestActionMessages());
