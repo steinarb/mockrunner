@@ -20,6 +20,30 @@ import com.mockrunner.base.NestedApplicationException;
 public class StringUtil
 {
     /**
+     * Returns if the specified string is <code>null</code> or
+     * the empty string.
+     * @param string the string
+     * @return <code>true</code> if the specified string is <code>null</code> or
+     *         the empty string, <code>false</code> otherwise
+     */
+    public static boolean isEmptyOrNull(String string)
+    {
+        return (null == string) || (0 >= string.length());
+    }
+    
+    /**
+     * Returns <code>null</code>, if the specified string is <code>null</code> or
+     * the empty string. Returns the specified string otherwise.
+     * @param string the string
+     * @return <code>null</code> if the specified string is <code>null</code> or
+     *         the empty string, the specified string otherwise
+     */
+    public static String emptyStringToNull(String string)
+    {
+        return isEmptyOrNull(string) ? null : string;
+    }
+    
+    /**
      * Replaces all occurrences of <code>match</code> in
      * <code>source</code> with <code>replacement</code>.
      * @param source the source string
