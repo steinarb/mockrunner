@@ -12,6 +12,24 @@ import com.mockrunner.util.common.StringUtil;
 
 public class StringUtilTest extends TestCase
 {
+    public void testIsEmptyOrNull()
+    {
+        assertTrue(StringUtil.isEmptyOrNull(null));
+        assertTrue(StringUtil.isEmptyOrNull(""));
+        assertFalse(StringUtil.isEmptyOrNull("x"));
+        assertFalse(StringUtil.isEmptyOrNull(" "));
+        assertFalse(StringUtil.isEmptyOrNull("abc"));
+    }
+    
+    public void testEmptyStringToNull()
+    {
+        assertNull(StringUtil.emptyStringToNull(null));
+        assertNull(StringUtil.emptyStringToNull(""));
+        assertEquals("x", StringUtil.emptyStringToNull("x"));
+        assertEquals(" ", StringUtil.emptyStringToNull(" "));
+        assertEquals("abc", StringUtil.emptyStringToNull("abc"));
+    }
+    
     public void testReplaceAll()
     {
         try
