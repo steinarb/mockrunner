@@ -525,7 +525,7 @@ public class ActionTestModule extends HTMLOutputModule
 
     /**
      * Verifies that the specified action errors are present.
-     * Regards number and order of action errors.
+     * Respects number and order of action errors.
      * @param errorKeys the array of expected error keys
      * @throws VerifyFailedException if verification fails
      */
@@ -536,7 +536,7 @@ public class ActionTestModule extends HTMLOutputModule
     
     /**
      * Verifies that the specified action messages are present.
-     * Regards number and order of action messages.
+     * Respects number and order of action messages.
      * @param messageKeys the array of expected message keys
      * @throws VerifyFailedException if verification fails
      */
@@ -562,7 +562,7 @@ public class ActionTestModule extends HTMLOutputModule
     
     /**
      * Verifies the values of the action error with the
-     * specified key. Regards number and order of values.
+     * specified key. Respects number and order of values.
      * @param errorKey the error key
      * @param values the exepcted values
      * @throws VerifyFailedException if verification fails
@@ -576,7 +576,7 @@ public class ActionTestModule extends HTMLOutputModule
     
     /**
      * Verifies the values of the action message with the
-     * specified key. Regards number and order of values.
+     * specified key. Respects number and order of values.
      * @param messageKey the message key
      * @param values the exepcted values
      * @throws VerifyFailedException if verification fails
@@ -592,7 +592,7 @@ public class ActionTestModule extends HTMLOutputModule
     {
         Object[] actualValues = message.getValues();
         if(null == actualValues) throw new VerifyFailedException("action message/error " + message.getKey() + " has no values");
-        if(values.length != actualValues.length) throw new VerifyFailedException("action message/error " + message.getKey() + " has " + actualValues + " values");
+        if(values.length != actualValues.length) throw new VerifyFailedException("action message/error " + message.getKey() + " has " + actualValues.length + " values");
         for(int ii = 0; ii < actualValues.length; ii++)
         {
             if(!values[ii].equals(actualValues[ii]))
