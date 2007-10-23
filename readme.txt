@@ -130,7 +130,7 @@ jsp-api.jar
 el-api.jar
 jasper.jar
 jasper-api.jar
-JBoss 4.2.1:
+JBoss 4.2.2:
 jboss-j2ee.jar (modified, added the org/jboss/util/id classes because jboss-j2ee.jar
                 contains references to these classes)
 
