@@ -1,7 +1,6 @@
 package com.mockrunner.test.jms;
 
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
 
 import javax.jms.BytesMessage;
@@ -27,7 +26,6 @@ import com.mockrunner.jms.MessageManager;
 import com.mockrunner.jms.QueueTransmissionManager;
 import com.mockrunner.jms.TransmissionManagerWrapper;
 import com.mockrunner.mock.jms.MockBytesMessage;
-import com.mockrunner.mock.jms.MockMapMessage;
 import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockQueueBrowser;
@@ -446,41 +444,6 @@ public class MockQueueSessionTest extends TestCase
         assertEquals(3, listener.getMessageList().size());
         Object object = listener.getMessageList().get(2);
         assertEquals(new Integer(1), ((MockObjectMessage)object).getObject());
-    }
-    
-    public void testQueueBrowser() throws Exception
-    {
-        DestinationManager manager = connection.getDestinationManager();
-        manager.createQueue("Queue1");
-        MockQueue queue = (MockQueue)session.createQueue("Queue1");
-        QueueSender sender = session.createSender(queue);
-        sender.send(new MockTextMessage("Text"));
-        sender.send(new MockObjectMessage("Object"));
-        sender.send(new MockMapMessage());
-        sender.send(new MockStreamMessage());
-        sender.send(new MockBytesMessage());
-        QueueBrowser browser = session.createBrowser(queue);
-        Enumeration messages = browser.getEnumeration();
-        TextMessage message1 = (TextMessage)messages.nextElement();
-        assertEquals("Text", message1.getText());
-        ObjectMessage message2 = (ObjectMessage)messages.nextElement();
-        assertEquals("Object", message2.getObject());
-        assertTrue(messages.nextElement() instanceof MockMapMessage);
-        assertTrue(messages.nextElement() instanceof MockStreamMessage);
-        assertTrue(messages.nextElement() instanceof MockBytesMessage);
-        assertFalse(messages.hasMoreElements());
-        sender.send(new MockTextMessage("Text"));
-        sender.send(new MockObjectMessage("Object"));
-        browser.close();
-        try
-        {
-            browser.getEnumeration();
-            fail();
-        }
-        catch(JMSException exc)
-        {
-            //should throw exception
-        }     
     }
     
     public void testCloseSession() throws Exception

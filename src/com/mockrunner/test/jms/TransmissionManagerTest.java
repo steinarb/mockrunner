@@ -123,9 +123,12 @@ public class TransmissionManagerTest extends TestCase
         receiver1 = manager.createQueueReceiver(new MockQueue("Queue1"), "");
         receiver2 = manager.createQueueReceiver(new MockQueue("Queue1"), "");
         browser = manager.createQueueBrowser(new MockQueue("Queue1"), "");
-        manager.closeAll(); assertTrue(sender1.isClosed());
-        assertTrue(sender2.isClosed()); assertTrue(receiver1.isClosed());
-        assertTrue(receiver2.isClosed()); assertTrue(browser.isClosed());
+        manager.closeAll(); 
+        assertTrue(sender1.isClosed());
+        assertTrue(sender2.isClosed()); 
+        assertTrue(receiver1.isClosed());
+        assertTrue(receiver2.isClosed()); 
+        assertTrue(browser.isClosed());
     }
 
     public void testTopicTransmissionManagerClose()

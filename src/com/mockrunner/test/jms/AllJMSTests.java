@@ -29,6 +29,7 @@ public class AllJMSTests
         suite.addTest(new TestSuite(MockDestinationTest.class));
         suite.addTest(new TestSuite(BasicJMSTestCaseAdapterTest.class));
         suite.addTest(new TestSuite(JMSMockObjectFactoryTest.class));
+        suite.addTest(new TestSuite(MockQueueBrowserTest.class));
         //$JUnit-END$
         return suite;
     }
