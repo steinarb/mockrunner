@@ -4,6 +4,7 @@ mockrunner-0.4.1:
 - fixed bug 1765621 reported by Dan Katzel
 - fixed bug 1766429
 - fixed bug 1789040 reported by David Dossot
+- fixed bug 1837020
 - implemented feature 1785907 requested by David Dossot
 - added messager selector support for MockQueueBrowser requested by Maciek Falski
 - updated jboss-j2ee.jar from JBoss 4.2.0 to from JBoss 4.2.2
