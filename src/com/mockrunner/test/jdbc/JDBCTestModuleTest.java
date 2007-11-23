@@ -155,6 +155,24 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyPreparedStatementParameter(statement, 1, new Integer(3));
         module.verifyPreparedStatementParameter(2, 2, new Long(10000));
         module.verifyPreparedStatementParameter(statement, 3, null);
+        try
+        {
+            module.verifyPreparedStatementParameter(2, 2, null);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw Exception
+        }
+        try
+        {
+            module.verifyPreparedStatementParameter(statement, 1, null);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw Exception
+        }
         statement = module.getPreparedStatement("INSERT INTO TEST (COL1, COL2) VALUES(?, ?)");  
         statement.setString(1, "test1");
         statement.setString(2, "test2");
@@ -243,6 +261,24 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyCallableStatementParameter("{call setData(?, ?, ?, ?)}", "xyz", new Integer(1));
         module.verifyCallableStatementParameter(1, 1, "xyz");
         module.verifyCallableStatementParameter(1, "3", null);
+        try
+        {
+            module.verifyCallableStatementParameter("{call setData(?, ?, ?, ?)}", "xyz", null);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw Exception
+        }
+        try
+        {
+            module.verifyCallableStatementParameter(1, 1, null);
+            fail();
+        }
+        catch(VerifyFailedException exc)
+        {
+            //should throw Exception
+        }
         try
         {
             module.verifyCallableStatementParameter(1, 1, "zzz");

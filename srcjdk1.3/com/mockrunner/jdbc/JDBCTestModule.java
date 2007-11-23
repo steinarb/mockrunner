@@ -1989,7 +1989,8 @@ public class JDBCTestModule
         if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " has the value " +
-                                             actualObject.toString() + ", expected " + object.toString());
+                                            ((null == actualObject) ? "null" : actualObject.toString()) + ", expected " + 
+                                            ((null == object) ? "null" : object.toString()));
         }
     }
     
@@ -2010,7 +2011,8 @@ public class JDBCTestModule
         if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " has the value " +
-                                             actualObject.toString() + ", expected " + object.toString());
+                                            ((null == actualObject) ? "null" : actualObject.toString()) + ", expected " + 
+                                            ((null == object) ? "null" : object.toString()));
         }
     }
     
@@ -2030,7 +2032,8 @@ public class JDBCTestModule
         if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Prepared statement parameter with index " + indexOfParameter + " has the value " +
-                                             actualObject.toString() + ", expected " + object.toString());
+                                            ((null == actualObject) ? "null" : actualObject.toString()) + ", expected " + 
+                                            ((null == object) ? "null" : object.toString()));
         }
     }
     
@@ -2050,7 +2053,8 @@ public class JDBCTestModule
         if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " has the value " +
-                                             actualObject.toString() + ", expected " + object.toString());
+                                            ((null == actualObject) ? "null" : actualObject.toString()) + ", expected " + 
+                                            ((null == object) ? "null" : object.toString()));
         }
     }
     
@@ -2071,7 +2075,8 @@ public class JDBCTestModule
         if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " has the value " +
-                                             actualObject.toString() + ", expected " + object.toString());
+                                            ((null == actualObject) ? "null" : actualObject.toString()) + ", expected " + 
+                                            ((null == object) ? "null" : object.toString()));
         }
     }
     
@@ -2091,7 +2096,8 @@ public class JDBCTestModule
         if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Callable statement parameter with index " + indexOfParameter + " has the value " +
-                                             actualObject.toString() + ", expected " + object.toString());
+                                            ((null == actualObject) ? "null" : actualObject.toString()) + ", expected " + 
+                                            ((null == object) ? "null" : object.toString()));
         }
     }
     
@@ -2111,7 +2117,8 @@ public class JDBCTestModule
         if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Callable statement parameter with name " + nameOfParameter + " has the value " +
-                                             actualObject.toString() + ", expected " + object.toString());
+                                            ((null == actualObject) ? "null" : actualObject.toString()) + ", expected " + 
+                                            ((null == object) ? "null" : object.toString()));
         }
     }
     
@@ -2132,7 +2139,8 @@ public class JDBCTestModule
         if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Callable statement parameter with name " + nameOfParameter + " has the value " +
-                                             actualObject.toString() + ", expected " + object.toString());
+                                            ((null == actualObject) ? "null" : actualObject.toString()) + ", expected " + 
+                                            ((null == object) ? "null" : object.toString()));
         }
     }
     
@@ -2152,7 +2160,8 @@ public class JDBCTestModule
         if(!ParameterUtil.compareParameter(actualObject, object))
         {
             throw new VerifyFailedException("Callable statement parameter with name " + nameOfParameter + " has the value " +
-                                             actualObject.toString() + ", expected " + object.toString());
+                                            ((null == actualObject) ? "null" : actualObject.toString()) + ", expected " + 
+                                            ((null == object) ? "null" : object.toString()));
         }
     }
     
