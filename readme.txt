@@ -171,7 +171,7 @@ cglib 2.1_3:
 http://cglib.sourceforge.net
 cglib-nodep-2.1_3.jar
 
-JDOM 1.0:
+JDOM 1.1:
 http://www.jdom.org
 jdom.jar
 
