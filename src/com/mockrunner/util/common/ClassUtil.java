@@ -1,8 +1,11 @@
 package com.mockrunner.util.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ClassUtil
 {
@@ -61,6 +64,27 @@ public class ClassUtil
         {
             return clazz.getName().substring(classPackage.length() + 1) + dimensions;
         }
+    }
+    
+    /**
+     * Returns all interfaces implemented by the specified class
+     * including all interfaces implemented by super classes.
+     * If the specified class is itself an interfaces or the
+     * specified class does not implement any interfaces, this
+     * method returns an empty array.
+     * @param clazz the Class
+     * @return all interfaces implemented by the specified class
+     */
+    public static Class[] getImplementedInterfaces(Class clazz)
+    {
+        if(clazz.isInterface()) return new Class[0];
+        Class[] classes = getInheritanceHierarchy(clazz);
+        Set interfaceSet = new HashSet();
+        for(int ii = 0; ii < classes.length; ii++)
+        {
+            interfaceSet.addAll(Arrays.asList(classes[ii].getInterfaces()));
+        }
+        return (Class[])interfaceSet.toArray(new Class[interfaceSet.size()]);
     }
     
     /**
