@@ -4,11 +4,13 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import junit.framework.TestCase;
 
 import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.util.common.ClassUtil;
-
-import junit.framework.TestCase;
 
 public class ClassUtilTest extends TestCase
 {
@@ -53,6 +55,23 @@ public class ClassUtilTest extends TestCase
         assertEquals("doubleValues", ClassUtil.getArgumentName(Double[][].class));
     }
     
+    public void testGetImplementedInterfaces()
+    {
+        Class[] interfaces = ClassUtil.getImplementedInterfaces(TestInterface.class);
+        assertEquals(0, interfaces.length);
+        interfaces = ClassUtil.getImplementedInterfaces(TestClass.class);
+        assertEquals(0, interfaces.length);
+        interfaces = ClassUtil.getImplementedInterfaces(Sub2.class);
+        assertEquals(3, interfaces.length);
+        Set interfaceSet = new HashSet();
+        interfaceSet.add(interfaces[0]);
+        interfaceSet.add(interfaces[1]);
+        interfaceSet.add(interfaces[2]);
+        assertTrue(interfaceSet.contains(TestInterface.class));
+        assertTrue(interfaceSet.contains(Serializable.class));
+        assertTrue(interfaceSet.contains(Cloneable.class));
+    }
+    
     public void testGetInheritanceHierarchy()
     {
         Class[] classes = ClassUtil.getInheritanceHierarchy(Object.class);
@@ -63,12 +82,17 @@ public class ClassUtilTest extends TestCase
         assertTrue(Arrays.equals(classes, new Class[] { Object.class, Super.class, Sub1.class, Sub2.class }));
     }
     
+    public static interface TestInterface
+    {
+        
+    }
+    
     public static class TestClass
     {
     
     }
     
-    public static class Super
+    public static class Super implements Serializable, Cloneable
     {
         
     }
@@ -77,7 +101,8 @@ public class ClassUtilTest extends TestCase
     {
         
     }
-    public static class Sub2 extends Sub1 implements Cloneable
+    
+    public static class Sub2 extends Sub1 implements Cloneable, TestInterface
     {
         
     }
