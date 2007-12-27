@@ -175,8 +175,8 @@ JDOM 1.1:
 http://www.jdom.org
 jdom.jar
 
-NekoHTML Parser 0.9.5:
-http://www.apache.org/~andyc/neko/doc/html/index.html
+NekoHTML Parser 1.9.6:
+http://nekohtml.sourceforge.net
 nekohtml.jar
 
 The above libraries are necessary at runtime. If you try to build Mockrunner
