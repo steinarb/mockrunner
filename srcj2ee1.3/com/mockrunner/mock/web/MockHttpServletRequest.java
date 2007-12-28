@@ -518,6 +518,7 @@ public class MockHttpServletRequest implements HttpServletRequest
 
     public boolean isUserInRole(String role)
     {
+        if(!roles.containsKey(role)) return false;
         return ((Boolean)roles.get(role)).booleanValue();
     }
     

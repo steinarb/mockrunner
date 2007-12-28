@@ -322,6 +322,15 @@ public class MockHttpServletRequestTest extends TestCase
         assertNotNull(request.getSession(false));
     }
     
+    public void testIsUserInRole()
+    {
+        request.setUserInRole("role1", true);
+        request.setUserInRole("role2", false);
+        assertTrue(request.isUserInRole("role1"));
+        assertFalse(request.isUserInRole("role2"));
+        assertFalse(request.isUserInRole("role3"));
+    }
+    
     private class TestAttributeListener implements ServletRequestAttributeListener
     {
         private boolean wasAttributeAddedCalled = false;
