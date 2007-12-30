@@ -87,6 +87,8 @@ public class MethodUtil
     public static boolean overrides(Method method1, Method method2)
     {
         if(method1.equals(method2)) return false;
+        if(Modifier.isPrivate(method1.getModifiers())) return false;
+        if(Modifier.isPrivate(method2.getModifiers())) return false;
         if(!method1.getDeclaringClass().isAssignableFrom(method2.getDeclaringClass())) return false;
         if(!method2.getName().equals(method1.getName())) return false;
         if(method1.getDeclaringClass().isInterface()) return false;

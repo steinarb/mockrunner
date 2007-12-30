@@ -139,10 +139,12 @@ public class MethodUtilTest extends TestCase
     {
         Method method1Super = TestSuper.class.getDeclaredMethod("testMethod1", null);
         Method method2Super = TestSuper.class.getDeclaredMethod("testMethod2", new Class[] { int[].class, String.class});
+        Method method4Super = TestSuper.class.getDeclaredMethod("testMethod4", null);
         Method method1SubOverride = TestSub.class.getDeclaredMethod("testMethod1", null);
         Method method2SubOverride = TestSub.class.getDeclaredMethod("testMethod2", new Class[] { int[].class, String.class});
         Method method1SubNotOverride = TestSub.class.getDeclaredMethod("testMethod1", new Class[] { String.class });
         Method method2SubNotOverride = TestSub.class.getDeclaredMethod("testMethod2", new Class[] { int[].class});
+        Method method4SubNotOverride = TestSub.class.getDeclaredMethod("testMethod4", null);
         Method methodInterface = TestInterface.class.getDeclaredMethod("testInterface", null);
         Method methodSubInterface = TestSub.class.getDeclaredMethod("testInterface", null);
         assertFalse(MethodUtil.overrides(method1Super, method1Super));
@@ -150,6 +152,8 @@ public class MethodUtilTest extends TestCase
         assertFalse(MethodUtil.overrides(method1Super, method1SubNotOverride));
         assertFalse(MethodUtil.overrides(method2Super, method2SubNotOverride));
         assertFalse(MethodUtil.overrides(method1SubOverride, method1Super));
+        assertFalse(MethodUtil.overrides(method4Super, method4SubNotOverride));
+        assertFalse(MethodUtil.overrides(method4SubNotOverride, method4Super));
         assertFalse(MethodUtil.overrides(methodInterface, methodSubInterface));
         assertTrue(MethodUtil.overrides(method1Super, method1SubOverride));
         assertTrue(MethodUtil.overrides(method2Super, method2SubOverride));
@@ -159,8 +163,8 @@ public class MethodUtilTest extends TestCase
     {
         Method[][] methods = MethodUtil.getMethodsSortedByInheritanceHierarchy(TestSub3.class);
         assertEquals(5, methods.length);
-        assertEquals(2, methods[1].length);
-        assertEquals(6, methods[2].length);
+        assertEquals(3, methods[1].length);
+        assertEquals(7, methods[2].length);
         assertEquals(3, methods[3].length);
         Method method1Super = TestSuper.class.getDeclaredMethod("testMethod1", null);
         Method method2Super = TestSuper.class.getDeclaredMethod("testMethod2", new Class[] { int[].class, String.class});
@@ -300,12 +304,17 @@ public class MethodUtilTest extends TestCase
     
     public static class TestSuper
     {
-        public String testMethod1()
+        String testMethod1()
         {
             return null;
         }
         
         public void testMethod2(int[] param, String param2)
+        {
+            
+        }
+        
+        private void testMethod4()
         {
             
         }
@@ -323,7 +332,7 @@ public class MethodUtilTest extends TestCase
             return super.testMethod1();
         }
 
-        public String testMethod1()
+        protected String testMethod1()
         {
             return super.testMethod1();
         }
@@ -339,6 +348,11 @@ public class MethodUtilTest extends TestCase
         }
         
         public static void testMethod3(String param)
+        {
+            
+        }
+        
+        private void testMethod4()
         {
             
         }
