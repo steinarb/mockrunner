@@ -1580,6 +1580,7 @@
         <mkdir dir="${release.root}/${release.srcjdk1.3}" />
         <mkdir dir="${release.root}/${release.srcjdk1.4}" />
         <mkdir dir="${release.root}/${release.srcj2ee1.3}" />
+        <mkdir dir="${release.root}/${release.srcj2ee1.4}" />
         <copy todir="${release.root}/${release.src}">
             <fileset dir="${src}">
                 <include name="**/*" />
@@ -1597,6 +1598,11 @@
         </copy>
         <copy todir="${release.root}/${release.srcj2ee1.3}">
             <fileset dir="${srcj2ee1.3}">
+                <include name="**/*" />
+            </fileset>
+        </copy>
+        <copy todir="${release.root}/${release.srcj2ee1.4}">
+            <fileset dir="${srcj2ee1.4}">
                 <include name="**/*" />
             </fileset>
         </copy>
