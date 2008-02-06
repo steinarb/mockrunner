@@ -15,6 +15,7 @@ mockrunner-0.4.1:
 - updated xercesImpl.jar and xml-apis.jar from Xerces 2.9.0 to 2.9.1
 - updated jdom.jar from 1.0 to 1.1
 - updated nekohtml.jar from 0.9.5 to 1.9.6.1
+- updated servlet-api.jar and jsp-api.jar from Tomcat 5.5.23 to 5.5.26
 
 mockrunner-0.4:
 
