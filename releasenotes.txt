@@ -10,7 +10,7 @@ mockrunner-0.4.1:
 - added messager selector support for MockQueueBrowser requested by Maciek Falski
 - updated jboss-j2ee.jar from JBoss 4.2.0 to from JBoss 4.2.2
 - updated servlet-api.jar, jsp-api.jar, el-api.jar, jasper.jar and jasper-el.jar
-  from Tomcat 6.0.13 to Tomcat 6.0.14
+  from Tomcat 6.0.13 to Tomcat 6.0.16
 - updated Struts jars from 1.3.8 to 1.3.9
 - updated xercesImpl.jar and xml-apis.jar from Xerces 2.9.0 to 2.9.1
 - updated jdom.jar from 1.0 to 1.1
