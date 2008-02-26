@@ -656,7 +656,7 @@ public class JDBCTestModule
      * If more than one SQL statement is found, this method uses the
      * first one. The parameter map must match in size and the
      * parameters must be equal (by comparing them with
-     * {de.lv1871.util.ParameterUtil#compareParameter}).
+     * {com.mockrunner.jdbc.ParameterUtil#compareParameter}).
      * You can specify the index of the parameter set. If
      * if a <code>PreparedStatement</code> or <code>CallableStatement</code> 
      * is executed N times, it has N parameter sets. Each parameter set
