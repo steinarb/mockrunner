@@ -175,7 +175,7 @@ JDOM 1.1:
 http://www.jdom.org
 jdom.jar
 
-NekoHTML Parser 1.9.6.1:
+NekoHTML Parser 1.9.7:
 http://nekohtml.sourceforge.net
 nekohtml.jar
 
