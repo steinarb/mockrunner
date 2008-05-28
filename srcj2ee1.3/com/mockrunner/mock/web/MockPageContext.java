@@ -17,12 +17,15 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 //import javax.servlet.jsp.el.ExpressionEvaluator;
 //import javax.servlet.jsp.el.VariableResolver;
 import javax.servlet.jsp.tagext.BodyContent;
+
+import com.mockrunner.base.NestedApplicationException;
 
 /**
  * Mock implementation of <code>PageContext</code>.
@@ -57,12 +60,28 @@ public class MockPageContext extends PageContext
     {
         this.config = config;
         this.request = request;
-        this.response = response;
         jspWriter = new MockJspWriter();
+        initJspWriterWithResponse(response);
         outStack = new Stack();
         attributes = new HashMap();
         //evaluator = new MockExpressionEvaluator();
         //resolver = new MockVariableResolver();
+    }
+
+    private void initJspWriterWithResponse(ServletResponse response)
+    {
+        this.response = response;
+        if((null != response) && (response instanceof HttpServletResponse))
+        {
+            try
+            {
+                jspWriter = new MockJspWriter((HttpServletResponse)response);
+            } 
+            catch(IOException exc)
+            {
+                throw new NestedApplicationException(exc);
+            }
+        }
     }
     
     /**
@@ -106,6 +125,7 @@ public class MockPageContext extends PageContext
     public void setServletResponse(ServletResponse response)
     {
         this.response = response;
+        initJspWriterWithResponse(response);
     }
     
     public void setException(Exception exception) 
