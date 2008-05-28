@@ -5,29 +5,37 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspWriter;
 
 import com.mockrunner.base.NestedApplicationException;
 
 /**
  * Mock implementation of <code>JspWriter</code>.
- * Collects the output data. If you provide a <code>Writer</code>
- * in the constructor, the output data is written to this
- * provided <code>Writer</code>. The method {@link #getOutputAsString}
- * returns an empty string in this case. Otherwise it returns the
- * collected data.
+ * Collects the output data.
  */
 public class MockJspWriter extends JspWriter
 {
     private PrintWriter printWriter;
     private Writer writer;
+    private HttpServletResponse response;
     private boolean providedWriter;
 
     public MockJspWriter()
     {
         super(0, true);
         this.writer = new StringWriter();
-        initWriter();
+        printWriter = new PrintWriter(writer);
+        response = null;
+        providedWriter = false;
+    }
+    
+    public MockJspWriter(HttpServletResponse response) throws IOException
+    {
+        super(0, true);
+        this.writer = response.getWriter();
+        this.response = response;
+        printWriter = new PrintWriter(writer);
         providedWriter = false;
     }
     
@@ -35,15 +43,14 @@ public class MockJspWriter extends JspWriter
     {
         super(0, true);
         this.writer = writer;
-        initWriter();
+        printWriter = new PrintWriter(writer);
+        response = null;
         providedWriter = true;
     }
 
     /**
-     * Returns the output or an empty string, if
-     * an output <code>Writer</code> was provided
-     * in the constructor.
-     * @return the output or an empty string
+     * Returns the output.
+     * @return the output
      */
     public String getOutputAsString()
     {
@@ -52,7 +59,14 @@ public class MockJspWriter extends JspWriter
             flush();
             if(!providedWriter)
             {
-                return ((StringWriter)writer).toString();
+                if(null == response)
+                {
+                    return ((StringWriter)writer).toString();
+                }
+                if(response instanceof MockHttpServletResponse)
+                {
+                    return ((MockHttpServletResponse)response).getOutputStreamContent();
+                }
             }
             return "";
         }
@@ -78,8 +92,7 @@ public class MockJspWriter extends JspWriter
     {
         if(!providedWriter)
         {
-            this.writer = new StringWriter();
-            initWriter();
+            clearWriter();
         }
         else
         {
@@ -95,8 +108,21 @@ public class MockJspWriter extends JspWriter
     {
         if(!providedWriter)
         {
+            clearWriter();
+        }
+    }
+    
+    private void clearWriter() throws IOException
+    {
+        if(null == response)
+        { 
             this.writer = new StringWriter();
-            initWriter();
+            printWriter = new PrintWriter(writer);
+        }
+        else
+        {
+            flush();
+            response.resetBuffer();
         }
     }
 
@@ -219,10 +245,5 @@ public class MockJspWriter extends JspWriter
     public void write(char[] cbuf, int off, int len) throws IOException
     {
         printWriter.write(cbuf, off, len);
-    }
-
-    private void initWriter()
-    {
-        printWriter = new PrintWriter(writer);
     }
 }

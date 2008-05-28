@@ -327,6 +327,25 @@ public class MockPageContextTest extends BaseTestCase
         assertSame(resolver, pageContext.getVariableResolver());
     }
     
+    public void testInitJspWriterWithResponse() throws Exception
+    {
+        pageContext.getOut().print("123");
+        pageContext.getOut().flush();
+        assertEquals("123", ((MockJspWriter)pageContext.getOut()).getOutputAsString());
+        assertEquals("123", getWebMockObjectFactory().getMockResponse().getOutputStreamContent());
+        pageContext = new MockPageContext();
+        pageContext.getOut().print("456");
+        pageContext.getOut().flush();
+        assertEquals("456", ((MockJspWriter)pageContext.getOut()).getOutputAsString());
+        assertEquals("123", getWebMockObjectFactory().getMockResponse().getOutputStreamContent());
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        pageContext.setServletResponse(response);
+        pageContext.getOut().print("789");
+        pageContext.getOut().flush();
+        assertEquals("789", ((MockJspWriter)pageContext.getOut()).getOutputAsString());
+        assertEquals("789", response.getOutputStreamContent());
+    }
+    
     private class TestJspWriter extends MockJspWriter
     {
         private boolean flushed = false;

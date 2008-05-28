@@ -3,6 +3,7 @@ package com.mockrunner.test.web;
 import java.io.IOException;
 import java.io.StringWriter;
 
+import com.mockrunner.mock.web.MockHttpServletResponse;
 import com.mockrunner.mock.web.MockJspWriter;
 
 import junit.framework.TestCase;
@@ -40,5 +41,24 @@ public class MockJspWriterTest extends TestCase
         assertEquals("", writer.getOutputAsString());
         writer.flush();
         assertEquals("test1test2test3", providedWriter.toString());
+    }
+    
+    public void testWithProvidedResponse() throws Exception
+    {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        MockJspWriter writer = new MockJspWriter(response);
+        writer.print("test1");
+        assertEquals("test1", writer.getOutputAsString());
+        assertEquals("test1", response.getOutputStreamContent());
+        response.getWriter().print("test2");
+        assertEquals("test1test2", writer.getOutputAsString());
+        assertEquals("test1test2", response.getOutputStreamContent());
+        writer.clear();
+        assertEquals("", writer.getOutputAsString());
+        assertEquals("", response.getOutputStreamContent());
+        writer.print("test1");
+        writer.clearBuffer();
+        assertEquals("", writer.getOutputAsString());
+        assertEquals("", response.getOutputStreamContent());
     }
 }
