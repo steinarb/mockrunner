@@ -1,4 +1,6 @@
 
+mockrunner-0.4.2:
+
 mockrunner-0.4.1:
 
 - fixed bug 1765621 reported by Dan Katzel

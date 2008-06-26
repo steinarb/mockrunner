@@ -129,7 +129,7 @@
 
     <target name="init" depends="prepareenvironment">
 
-        <property name="version" value="0.4.1" />
+        <property name="version" value="0.4.2" />
         
         <tstamp>
             <format property="timestamp" pattern="MM/dd/yyyy hh:mm aa"/>
@@ -295,7 +295,8 @@
             <exclude name="com/mockrunner/base/HTMLOutputTestCase.*" />
         </patternset>
         
-        <patternset id="basic.jar.web.mock.classes">
+        <patternset id="servlet.jar.classes">
+            <patternset refid="basic.jar.web.base.classes"/>
             <include name="com/mockrunner/mock/web/**" />
             <exclude name="com/mockrunner/mock/web/ActionMockObjectFactory.*" />
             <exclude name="com/mockrunner/mock/web/MockActionForward.*" />
@@ -303,11 +304,7 @@
             <exclude name="com/mockrunner/mock/web/MockActionServlet.*" />
             <exclude name="com/mockrunner/mock/web/MockForwardConfig.*" />
             <exclude name="com/mockrunner/mock/web/MockModuleConfig.*" />
-        </patternset>
-        
-        <patternset id="servlet.jar.classes">
-            <patternset refid="basic.jar.web.base.classes"/>
-            <patternset refid="basic.jar.web.mock.classes"/>
+            <exclude name="com/mockrunner/mock/web/MockJspFragment.*" />
             <include name="com/mockrunner/servlet/**" />
             <include name="com/mockrunner/util/web/**" />
             <include name="com/mockrunner/util/common/**" />
@@ -316,7 +313,13 @@
         
         <patternset id="tag.jar.classes">
             <patternset refid="basic.jar.web.base.classes"/>
-            <patternset refid="basic.jar.web.mock.classes"/>
+            <include name="com/mockrunner/mock/web/**" />
+            <exclude name="com/mockrunner/mock/web/ActionMockObjectFactory.*" />
+            <exclude name="com/mockrunner/mock/web/MockActionForward.*" />
+            <exclude name="com/mockrunner/mock/web/MockActionMapping.*" />
+            <exclude name="com/mockrunner/mock/web/MockActionServlet.*" />
+            <exclude name="com/mockrunner/mock/web/MockForwardConfig.*" />
+            <exclude name="com/mockrunner/mock/web/MockModuleConfig.*" />
             <include name="com/mockrunner/tag/**" />
             <include name="com/mockrunner/util/web/**" />
             <include name="com/mockrunner/util/common/**" />
@@ -325,8 +328,9 @@
         
         <patternset id="struts.jar.classes">
             <patternset refid="basic.jar.web.base.classes"/>
-            <include name="com/mockrunner/struts/**" />
             <include name="com/mockrunner/mock/web/**" />
+            <exclude name="com/mockrunner/mock/web/MockJspFragment.*" />
+            <include name="com/mockrunner/struts/**" />
             <include name="com/mockrunner/util/web/**" />
             <include name="com/mockrunner/util/common/**" />
             <exclude name="com/mockrunner/servlet/ActionTestCaseAdapter.*" />
