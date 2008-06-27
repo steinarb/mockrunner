@@ -428,7 +428,7 @@ public class EJBTestModule
      * you can cast to the remote interface. This method only works
      * with <code>create</code> methods that have an empty parameter list.
      * The <code>create</code> method must have the name <code>create</code>
-     * with no postfix.
+     * with no suffix.
      * It works with the mock container but may fail with a real remote container.
      * This method throws a <code>RuntimeException</code> if no object with the 
      * specified name can be found. If the found object is no EJB home interface,
@@ -456,7 +456,7 @@ public class EJBTestModule
      * the <code>create</code> method with the specified parameters
      * and returns the result, which you can cast to the remote interface.
      * The <code>create</code> method must have the name <code>create</code>
-     * with no postfix.
+     * with no suffix.
      * This method works with the mock container but may fail with
      * a real remote container.
      * This method throws a <code>RuntimeException</code> if no object with the 
@@ -539,7 +539,7 @@ public class EJBTestModule
      * you can cast to the remote interface. This method only works
      * with <code>create</code> methods that have an empty parameter list.
      * The <code>create</code> method must have the name <code>create</code>
-     * with no postfix.
+     * with no suffix.
      * It works with the mock container but may fail with a real remote container.
      * This method throws a <code>RuntimeException</code> if no object with the 
      * specified name can be found. If the found object is no EJB home interface,
@@ -562,7 +562,7 @@ public class EJBTestModule
      * the <code>create</code> method with the specified parameters
      * and returns the result, which you can cast to the remote interface.
      * The <code>create</code> method must have the name <code>create</code>
-     * with no postfix.
+     * with no suffix.
      * This method works with the mock container but may fail with
      * a real remote container.
      * This method throws a <code>RuntimeException</code> if no object with the 

@@ -81,7 +81,7 @@ public class EJBTestModuleTest extends TestCase
         assertTrue(bean instanceof TestSession);
         bean = ejbModule.createBean("com/MyLookupTest", new Object[] {new Integer(1), Boolean.TRUE});
         assertTrue(bean instanceof TestSession);
-        bean = ejbModule.createBean("com/MyLookupTest", "createWithPostfix", new Object[] {new Integer(1), Boolean.TRUE});
+        bean = ejbModule.createBean("com/MyLookupTest", "createWithSuffix", new Object[] {new Integer(1), Boolean.TRUE});
         assertTrue(bean instanceof TestSession);
         assertNull(ejbModule.createBean("com/MyLookupTest", "createWithPostfiy", new Object[] {new Integer(1), Boolean.TRUE}));
         try
@@ -528,7 +528,7 @@ public class EJBTestModuleTest extends TestCase
 
         }
         
-        public void ejbCreateWithPostfix(int testInt, Boolean testBoolean) throws CreateException
+        public void ejbCreateWithSuffix(int testInt, Boolean testBoolean) throws CreateException
         {
 
         }
@@ -569,7 +569,7 @@ public class EJBTestModuleTest extends TestCase
         
         public TestSession create(int testInt, Boolean testBoolean) throws CreateException, RemoteException;
     
-        public TestSession createWithPostfix(int testInt, Boolean testBoolean) throws CreateException, RemoteException;
+        public TestSession createWithSuffix(int testInt, Boolean testBoolean) throws CreateException, RemoteException;
     }
     
 	public static abstract class TestEntityEJB implements EntityBean

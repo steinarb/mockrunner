@@ -59,7 +59,7 @@ public class EJBTestCaseAdapterExternalJNDITest extends EJBTestCaseAdapter
 
         }
         
-        public void ejbCreateWithPostfix(int testInt, Boolean testBoolean) throws CreateException
+        public void ejbCreateWithSuffix(int testInt, Boolean testBoolean) throws CreateException
         {
 
         }
