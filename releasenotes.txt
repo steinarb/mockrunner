@@ -5,6 +5,7 @@ mockrunner-0.4.2:
   from Tomcat 6.0.16 to Tomcat 6.0.18
 - updated jboss-j2ee.jar from JBoss 4.2.2 to from JBoss 4.2.3
 - updated nekohtml.jar from 1.9.7 to 1.9.8
+- updated servlet-api.jar and jsp-api.jar from Tomcat 5.5.26 to 5.5.27
   
 mockrunner-0.4.1:
 
