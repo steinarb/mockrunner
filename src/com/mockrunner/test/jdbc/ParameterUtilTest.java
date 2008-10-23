@@ -49,6 +49,9 @@ public class ParameterUtilTest extends TestCase
         assertTrue(ParameterUtil.compareParameter(new MockStruct(""), new MockStruct("")));
         assertTrue(ParameterUtil.compareParameter(new MockStruct("123"), new MockStruct("123")));
         assertFalse(ParameterUtil.compareParameter(new MockStruct("123"), new MockStruct("")));
+        assertFalse(ParameterUtil.compareParameter(new String[] {"1", "2", "4"}, new String[] {"1", "2", "3"}));
+        assertTrue(ParameterUtil.compareParameter(new String[] {"1", "2", "3"}, new String[] {"1", "2", "3"}));
+        assertTrue(ParameterUtil.compareParameter(new int[] {1}, new int[] {1}));
         MockStruct struct = new MockStruct("123");
         struct.addAttribute("test");
         assertTrue(ParameterUtil.compareParameter(struct, struct));

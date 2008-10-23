@@ -2,7 +2,6 @@ package com.mockrunner.jdbc;
 
 import java.io.InputStream;
 import java.io.Reader;
-import java.util.Arrays;
 
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.util.common.ArrayUtil;
@@ -77,10 +76,6 @@ public class ParameterUtil
     {
         if(null == source && null == target) return true;
         if(null == source || null == target) return false;
-        if(source instanceof byte[] && target instanceof byte[])
-        {
-            return Arrays.equals((byte[])source, (byte[])target);
-        }
         if(source instanceof InputStream && target instanceof InputStream)
         {
             return StreamUtil.compareStreams((InputStream)source, (InputStream)target);
@@ -92,6 +87,10 @@ public class ParameterUtil
         if(source instanceof MockResultSet && target instanceof MockResultSet)
         {
             return ((MockResultSet)source).isEqual((MockResultSet)target);
+        }
+        if(source.getClass().isArray() && target.getClass().isArray())
+        {
+            return ArrayUtil.areArraysEqual(source, target);
         }
         return source.equals(target);
     }

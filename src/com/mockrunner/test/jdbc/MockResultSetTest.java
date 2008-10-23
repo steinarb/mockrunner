@@ -925,9 +925,11 @@ public class MockResultSetTest extends TestCase
         testList.add("8");
         testList.add("9");
         assertTrue(otherResult.isRowEqual(3, testList));
-        resultSet.addRow(new String[] {"test1", "test2"});
-        resultSet.addRow(new String[] {"test3", "test4"});
-        resultSet.addRow(new Object[] {new MockClob("test5"), new MockStruct("test6")});
+        otherResult = new MockResultSet("");
+        otherResult.addRow(new Object[] {new Integer[] {new Integer(1), new Integer(2)}});
+        testList = new ArrayList();
+        testList.add(new Integer[] {new Integer(1), new Integer(2)});
+        assertTrue(otherResult.isRowEqual(1, testList));    
     }
     
     public void testIsEqualNotAssignableAndNull() throws Exception
