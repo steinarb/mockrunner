@@ -131,6 +131,7 @@ el-api.jar
 jasper.jar
 jasper-el.jar
 JBoss 4.2.3:
+http://www.jboss.org
 jboss-j2ee.jar (modified, added the org/jboss/util/id classes because jboss-j2ee.jar
                 contains references to these classes)
 
