@@ -46,6 +46,7 @@ public class MockrunnerJars
         standardInterfaceJars.add("jsp-api.jar");
         standardInterfaceJars.add("el-api.jar");
         standardInterfaceJars.add("jboss-j2ee.jar");
+        standardInterfaceJars.add("jboss-javaee-modified.jar");
         standardInterfaceJars.add("servlet.jar");
         
         jee5OnlyJars = new ArrayList();
@@ -65,6 +66,7 @@ public class MockrunnerJars
         
         otherJ2EEJars = new HashSet();
         otherJ2EEJars.add("jboss-j2ee.jar");
+        otherJ2EEJars.add("jboss-javaee-modified.jar");
         
         mockEJBJars = new HashSet();
         mockEJBJars.add("mockejb.jar");

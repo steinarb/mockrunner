@@ -192,7 +192,7 @@
                 <exclude name="el-api.jar" />
                 <exclude name="jasper.jar" />
                 <exclude name="jasper-el.jar" />
-                <exclude name="jboss-j2ee.jar" />
+                <exclude name="jboss-javaee-modified.jar" />
             </fileset>
             <fileset dir="${lib}/j2ee1.4">
                 <include name="*.jar" />
@@ -207,7 +207,7 @@
                 <exclude name="el-api.jar" />
                 <exclude name="jasper.jar" />
                 <exclude name="jasper-el.jar" />
-                <exclude name="jboss-j2ee.jar" />
+                <exclude name="jboss-javaee-modified.jar" />
             </fileset>
             <fileset dir="${lib}/j2ee1.3">
                 <include name="*.jar" />
@@ -223,7 +223,7 @@
                 <exclude name="el-api.jar" />
                 <exclude name="jasper.jar" />
                 <exclude name="jasper-el.jar" />
-                <exclude name="jboss-j2ee.jar" />
+                <exclude name="jboss-javaee-modified.jar" />
             </fileset>
             <fileset dir="${lib}/struts1.2">
                 <include name="struts.jar" />
@@ -1226,7 +1226,7 @@
                 <exclude name="el-api.jar" />
                 <exclude name="jasper.jar" />
                 <exclude name="jasper-el.jar" />
-                <exclude name="jboss-j2ee.jar" />
+                <exclude name="jboss-javaee-modified.jar" />
             </fileset>
             <fileset dir="${lib}/j2ee1.4">
                 <include name="*.jar" />
@@ -1265,7 +1265,7 @@
                 <exclude name="el-api.jar" />
                 <exclude name="jasper.jar" />
                 <exclude name="jasper-el.jar" />
-                <exclude name="jboss-j2ee.jar" />
+                <exclude name="jboss-javaee-modified.jar" />
             </fileset>
             <fileset dir="${lib}/j2ee1.4">
                 <include name="*.jar" />
@@ -1304,7 +1304,7 @@
                 <exclude name="el-api.jar" />
                 <exclude name="jasper.jar" />
                 <exclude name="jasper-el.jar" />
-                <exclude name="jboss-j2ee.jar" />
+                <exclude name="jboss-javaee-modified.jar" />
             </fileset>
             <fileset dir="${lib}/j2ee1.4">
                 <include name="*.jar" />
@@ -1344,7 +1344,7 @@
                 <exclude name="el-api.jar" />
                 <exclude name="jasper.jar" />
                 <exclude name="jasper-el.jar" />
-                <exclude name="jboss-j2ee.jar" />
+                <exclude name="jboss-javaee-modified.jar" />
             </fileset>
             <fileset dir="${lib}/struts1.2">
                 <include name="*.jar" />
@@ -1387,7 +1387,7 @@
                 <exclude name="el-api.jar" />
                 <exclude name="jasper.jar" />
                 <exclude name="jasper-el.jar" />
-                <exclude name="jboss-j2ee.jar" />
+                <exclude name="jboss-javaee-modified.jar" />
             </fileset>
             <fileset dir="${lib}/struts1.2">
                 <include name="*.jar" />
@@ -1430,7 +1430,7 @@
                 <exclude name="el-api.jar" />
                 <exclude name="jasper.jar" />
                 <exclude name="jasper-el.jar" />
-                <exclude name="jboss-j2ee.jar" />
+                <exclude name="jboss-javaee-modified.jar" />
             </fileset>
             <fileset dir="${lib}/struts1.2">
                 <include name="*.jar" />
@@ -1473,7 +1473,7 @@
                 <exclude name="el-api.jar" />
                 <exclude name="jasper.jar" />
                 <exclude name="jasper-el.jar" />
-                <exclude name="jboss-j2ee.jar" />
+                <exclude name="jboss-javaee-modified.jar" />
             </fileset>
             <fileset dir="${lib}/struts1.2">
                 <include name="*.jar" />
