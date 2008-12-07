@@ -69,7 +69,6 @@ public abstract class MockMessageConsumer implements MessageConsumer
         if(isClosed()) return false;
         return matchesMessageSelector(message);
     }
-
     
     /**
      * Adds a message that is immediately propagated to the
