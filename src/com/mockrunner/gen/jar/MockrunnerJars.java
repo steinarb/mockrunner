@@ -54,7 +54,7 @@ public class MockrunnerJars
         jee5OnlyJars.add("jasper-el.jar");
         
         strutsJars = new HashSet();
-        strutsJars.add("struts-core-1.3.9.jar");
+        strutsJars.add("struts-core-1.3.10.jar");
         
         webJ2EEJars = new HashSet();
         webJ2EEJars.add("servlet-api.jar");
