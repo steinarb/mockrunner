@@ -183,8 +183,8 @@ nekohtml.jar
 
 The above libraries are necessary at runtime. If you try to build Mockrunner
 you will probably recognize that some libraries are missing. The com.mockrunner.gen
-packages contain tools to generate Java 1.3 and J2EE 1.3 versions and adapter classes 
-and to analyze dependencies. If you just want to make small modifications to Mockrunner,
+packages contain tools to generate code for older Java and J2EE versions and to analyze 
+dependencies. If you just want to make small modifications to Mockrunner,
 you probably won't need these tools. In this case, simply delete the com.mockrunner.gen
 packages and the corresponding tests. If you want to use these tools, you need
 the following libaries:
