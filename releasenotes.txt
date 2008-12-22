@@ -6,6 +6,7 @@ mockrunner-0.4.2:
 - replaced jboss-j2ee.jar from JBoss 4.2.2 with jboss-javaee-modified.jar (based on JBoss 5.0.0)
 - updated nekohtml.jar from 1.9.7 to 1.9.9
 - updated servlet-api.jar and jsp-api.jar from Tomcat 5.5.26 to 5.5.27
+- updated servlet.jar from Tomcat 4.1.37 to 4.1.39
 - updated Struts jars from 1.3.9 to 1.3.10
   
 mockrunner-0.4.1:
