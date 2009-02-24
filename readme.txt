@@ -130,11 +130,10 @@ jsp-api.jar
 el-api.jar
 jasper.jar
 jasper-el.jar
-JBoss 5.0.0:
+JBoss 5.0.1:
 http://www.jboss.org
 jboss-javaee-modified.jar (modified version of jboss-javaee.jar, 
-                           added the org/jboss/util/id classes because jboss-javaee.jar contains references to these classes,
-                           removed the javax/servlet classses because they are in servlet-api.jar)
+                           added the org/jboss/util/id classes because jboss-javaee.jar contains references to these classes)
 
 J2EE 1.4:
 Tomcat 5.5.27:
