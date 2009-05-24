@@ -130,7 +130,7 @@ jsp-api.jar
 el-api.jar
 jasper.jar
 jasper-el.jar
-JBoss 5.0.1:
+JBoss 5.1.0:
 http://www.jboss.org
 jboss-javaee-modified.jar (modified version of jboss-javaee.jar, 
                            added the org/jboss/util/id classes because jboss-javaee.jar contains references to these classes)
