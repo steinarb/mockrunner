@@ -123,7 +123,7 @@ http://www.junit.org
 junit.jar
 
 JavaEE 5:
-Tomcat 6.0.18
+Tomcat 6.0.20
 http://tomcat.apache.org
 servlet-api.jar
 jsp-api.jar
