@@ -14,7 +14,7 @@ public class MockRowId implements RowId, Cloneable
     
     public MockRowId(byte[] data)
     {
-        rowIdData = data.clone();
+        rowIdData = (byte[])data.clone();
     }
     
     public byte[] getBytes()
@@ -61,7 +61,7 @@ public class MockRowId implements RowId, Cloneable
         try
         {
             MockRowId copy = (MockRowId)super.clone();
-            copy.rowIdData = rowIdData.clone();
+            copy.rowIdData = (byte[])rowIdData.clone();
             return copy;
         } 
         catch(CloneNotSupportedException exc)
