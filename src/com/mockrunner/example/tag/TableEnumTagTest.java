@@ -77,7 +77,7 @@ public class TableEnumTagTest extends BasicTagTestCaseAdapter
         nestedTag.addTextChild("myStaticValue");
         processTagLifecycle();
         Element table = XmlUtil.getBodyFragmentFromJDOMDocument(getOutputAsJDOMDocument());
-        Element tr = table.getChild("tr");
+        Element tr = table.getChild("TBODY").getChild("tr");
         assertEquals("myLabel", tr.getChildTextTrim("td"));
         Element secondTd = (Element)tr.getChildren().get(1);
         assertEquals("myStaticValue", secondTd.getTextTrim());
