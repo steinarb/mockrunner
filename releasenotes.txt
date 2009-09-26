@@ -8,6 +8,7 @@ mockrunner-0.4.2:
 - updated servlet-api.jar and jsp-api.jar from Tomcat 5.5.26 to 5.5.27
 - updated servlet.jar from Tomcat 4.1.37 to 4.1.39
 - updated Struts jars from 1.3.9 to 1.3.10
+- updated jdom.jar from 1.1 to 1.1.1
   
 mockrunner-0.4.1:
 

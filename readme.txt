@@ -172,11 +172,11 @@ cglib 2.2:
 http://cglib.sourceforge.net
 cglib-nodep-2.2.jar
 
-JDOM 1.1:
+JDOM 1.1.1:
 http://www.jdom.org
 jdom.jar
 
-NekoHTML Parser 1.9.12:
+NekoHTML Parser 1.9.13:
 http://nekohtml.sourceforge.net
 nekohtml.jar
 
