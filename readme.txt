@@ -110,9 +110,9 @@ xercesImpl.jar
 
 Struts 1.3.10:
 http://struts.apache.org
-struts-core-1.3.9.jar
-struts-extras-1.3.9.jar
-struts-taglib-1.3.9.jar
+struts-core-1.3.10.jar
+struts-extras-1.3.10.jar
+struts-taglib-1.3.10.jar
 
 Struts 1.2.9:
 http://struts.apache.org
