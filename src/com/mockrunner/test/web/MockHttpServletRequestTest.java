@@ -311,15 +311,31 @@ public class MockHttpServletRequestTest extends TestCase
     
     public void testSessionCreation() throws Exception
     {
-        request.setSession(new MockHttpSession());
+        request.setSession(null);
+        assertNull(request.getSession(false));
+        assertNull(request.getSession(true));
+        assertNull(request.getSession());
+        request = new MockHttpServletRequest();
+        MockHttpSession session = new MockHttpSession(); 
+        request.setSession(session);
         assertNull(request.getSession(false));
         assertNotNull(request.getSession());
         assertNotNull(request.getSession(false));
+        assertSame(session, request.getSession(false));
         assertNotNull(request.getSession(true));
+        assertSame(session, request.getSession(true));
         request = new MockHttpServletRequest();
         request.setSession(new MockHttpSession());
         assertNotNull(request.getSession(true));
         assertNotNull(request.getSession(false));
+    }
+    
+    public void testSessionInvalidate() throws Exception
+    {
+        request.setSession(new MockHttpSession());
+        request.getSession().invalidate();
+        assertFalse(((MockHttpSession)request.getSession(false)).isValid());
+        assertTrue(((MockHttpSession)request.getSession(true)).isValid());
     }
     
     public void testIsUserInRole()

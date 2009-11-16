@@ -207,14 +207,24 @@ public class MockHttpServletRequest implements HttpServletRequest
     
     public HttpSession getSession()
     {
-        sessionCreated = true;
-        return session; 
+        return getSession(true);
     }
     
     public HttpSession getSession(boolean create)
     {
         if(!create && !sessionCreated) return null;
-        return getSession();
+        if(create)
+        {
+            sessionCreated = true;
+            if(session instanceof MockHttpSession)
+            {
+                if(!((MockHttpSession)session).isValid())
+                {
+                    ((MockHttpSession)session).resetAll();
+                }
+            }
+        }
+        return session;
     }
 
     /**

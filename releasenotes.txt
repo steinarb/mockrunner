@@ -1,6 +1,7 @@
 
 mockrunner-0.4.2:
 
+- refactored MockHttpServletRequest to handle session invalidation as suggested by Pratyoosh Sharma and Gábor Lipták
 - updated servlet-api.jar, jsp-api.jar, el-api.jar, jasper.jar and jasper-el.jar
   from Tomcat 6.0.16 to Tomcat 6.0.20
 - replaced jboss-j2ee.jar from JBoss 4.2.2 with jboss-javaee-modified.jar (based on JBoss 5.0.1)
