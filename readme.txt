@@ -154,7 +154,7 @@ jboss-j2ee.jar
 jboss-jaas.jar
 
 Commons:
-http://jakarta.apache.org/commons       
+http://commons.apache.org
 commons-logging-1.0.4.jar (from Struts 1.3.10 release)
 commons-beanutils-1.8.0.jar (from Struts 1.3.10 release)
 commons-digester-1.8.jar (from Struts 1.3.10 release)
