@@ -200,10 +200,6 @@ regexp 1.3:
 http://jakarta.apache.org/regexp
 jakarta-regexp-1.3.jar (from JarAnalyzer 1.2 release)
 
-Ant 1.7.0:
-http://ant.apache.org
-ant.jar
-
 You can also get Mockrunner from CVS to have everything in place including
 a build script:
 cvs -d:pserver:anonymous@mockrunner.cvs.sourceforge.net:/cvsroot/mockrunner

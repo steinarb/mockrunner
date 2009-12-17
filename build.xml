@@ -178,6 +178,7 @@
         <path id="classpath.jar">
             <fileset dir="${lib}">
                 <include name="*.jar" />
+                <exclude name="ant.jar" />
                 <exclude name="j2ee1.3/**" />
                 <exclude name="j2ee1.4/**" />
                 <exclude name="struts1.2/**" />
