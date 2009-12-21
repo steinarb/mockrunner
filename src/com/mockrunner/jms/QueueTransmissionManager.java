@@ -1,5 +1,6 @@
 package com.mockrunner.jms;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +21,7 @@ import com.mockrunner.mock.jms.MockSession;
  * This class is used to create queue senders and receivers.
  * It can be also used to access all created classes in tests.
  */
-public class QueueTransmissionManager
+public class QueueTransmissionManager implements Serializable
 {
     private MockConnection connection;
     private MockSession session;

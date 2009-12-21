@@ -1,5 +1,6 @@
 package com.mockrunner.jms;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +25,7 @@ import com.mockrunner.mock.jms.MockTopicPublisher;
  * you'll get a <code>TopicPublisher</code>. For a generic session,
  * you'll get a generic instance of <code>MessageProducer</code>.
  */
-public class GenericTransmissionManager
+public class GenericTransmissionManager implements Serializable
 {
     private MockConnection connection;
     private MockSession session;

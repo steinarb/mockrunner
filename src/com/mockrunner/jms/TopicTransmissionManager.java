@@ -1,5 +1,6 @@
 package com.mockrunner.jms;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -21,7 +22,7 @@ import com.mockrunner.mock.jms.MockTopicSubscriber;
  * This class is used to create topic publishers and subscribers. 
  * It can be also used to access all created classes in tests.
  */
-public class TopicTransmissionManager
+public class TopicTransmissionManager implements Serializable
 {
     private MockConnection connection;
     private MockSession session;

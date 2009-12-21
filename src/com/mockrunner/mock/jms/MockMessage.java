@@ -1,5 +1,6 @@
 package com.mockrunner.mock.jms;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import com.mockrunner.base.NestedApplicationException;
 /**
  * Mock implementation of JMS <code>Message</code>.
  */
-public class MockMessage implements Message, Cloneable
+public class MockMessage implements Message, Cloneable, Serializable
 {
     private String messageId;
     private long timestamp;

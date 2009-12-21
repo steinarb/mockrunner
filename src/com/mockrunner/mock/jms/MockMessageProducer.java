@@ -1,5 +1,7 @@
 package com.mockrunner.mock.jms;
 
+import java.io.Serializable;
+
 import javax.jms.BytesMessage;
 import javax.jms.DeliveryMode;
 import javax.jms.Destination;
@@ -12,7 +14,7 @@ import javax.jms.StreamMessage;
 /**
  * Mock implementation of JMS <code>MessageProducer</code>.
  */
-public class MockMessageProducer implements MessageProducer
+public class MockMessageProducer implements MessageProducer, Serializable
 {
     private MockConnection connection;
     private MockDestination destination;

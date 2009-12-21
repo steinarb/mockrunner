@@ -60,7 +60,7 @@ import com.mockrunner.jms.TransmissionManagerWrapper;
  * distinguished <code>MessageListener</code>, if such 
  * a <code>MessageListener</code> is registered.
  */
-public class MockSession implements Session
+public class MockSession implements Session, Serializable
 {
     private MockConnection connection;
     private QueueTransmissionManager queueTransManager;

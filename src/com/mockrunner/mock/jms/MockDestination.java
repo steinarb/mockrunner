@@ -1,5 +1,6 @@
 package com.mockrunner.mock.jms;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -18,7 +19,7 @@ import com.mockrunner.base.NestedApplicationException;
 /**
  * Mock implementation of JMS <code>Destination</code>.
  */
-public abstract class MockDestination implements Destination
+public abstract class MockDestination implements Destination, Serializable
 {
     private Set sessions;
     private List currentMessages;

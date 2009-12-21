@@ -1,5 +1,7 @@
 package com.mockrunner.mock.jms;
 
+import java.io.Serializable;
+
 import javax.jms.InvalidSelectorException;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -12,7 +14,7 @@ import org.activemq.selector.mockrunner.SelectorParser;
 /**
  * Mock implementation of JMS <code>MessageConsumer</code>.
  */
-public abstract class MockMessageConsumer implements MessageConsumer
+public abstract class MockMessageConsumer implements MessageConsumer, Serializable
 {
     private MockConnection connection;
     private String messageSelector;

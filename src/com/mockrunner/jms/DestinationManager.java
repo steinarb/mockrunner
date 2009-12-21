@@ -1,5 +1,6 @@
 package com.mockrunner.jms;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import com.mockrunner.mock.jms.MockTopic;
  * the created objects to the mock context with the help
  * of {@link com.mockrunner.ejb.EJBTestModule#bindToContext}.
  */
-public class DestinationManager
+public class DestinationManager implements Serializable
 {
     private Map queues;
     private Map topics;

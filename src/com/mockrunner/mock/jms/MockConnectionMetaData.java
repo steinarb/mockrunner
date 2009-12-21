@@ -1,5 +1,6 @@
 package com.mockrunner.mock.jms;
 
+import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -9,7 +10,7 @@ import javax.jms.JMSException;
 /**
  * Mock implementation of JMS <code>ConnectionMetaData</code>.
  */
-public class MockConnectionMetaData implements ConnectionMetaData
+public class MockConnectionMetaData implements ConnectionMetaData, Serializable
 {
     private Vector properties;
     private int jmsMajorVersion;

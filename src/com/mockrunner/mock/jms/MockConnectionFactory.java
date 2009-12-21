@@ -1,5 +1,6 @@
 package com.mockrunner.mock.jms;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ import com.mockrunner.jms.DestinationManager;
  * but can also be used, if a server provides one implementation
  * for both domains (which is not portable).
  */
-public class MockConnectionFactory implements QueueConnectionFactory, TopicConnectionFactory
+public class MockConnectionFactory implements QueueConnectionFactory, TopicConnectionFactory, Serializable
 {
     private DestinationManager destinationManager;
     private ConfigurationManager configurationManager;

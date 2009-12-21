@@ -1,5 +1,7 @@
 package com.mockrunner.mock.jms;
 
+import java.io.Serializable;
+
 import javax.jms.JMSException;
 import javax.jms.QueueSession;
 import javax.jms.ServerSession;
@@ -10,7 +12,7 @@ import javax.jms.Session;
  * The <code>ServerSession</code> is not meant for application
  * use.
  */
-public class MockServerSession implements ServerSession
+public class MockServerSession implements ServerSession, Serializable
 {
     private MockConnection connection;
     private Session session;

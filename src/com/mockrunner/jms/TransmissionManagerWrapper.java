@@ -1,5 +1,6 @@
 package com.mockrunner.jms;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import com.mockrunner.mock.jms.MockTopicPublisher;
  * Can be used to access all senders, publishers, receivers and subscribers
  * transparently.
  */
-public class TransmissionManagerWrapper
+public class TransmissionManagerWrapper implements Serializable
 { 
     private QueueTransmissionManager queueManager;
     private TopicTransmissionManager topicManager;

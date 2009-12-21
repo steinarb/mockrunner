@@ -1,5 +1,6 @@
 package com.mockrunner.mock.jms;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -17,7 +18,7 @@ import org.activemq.selector.mockrunner.SelectorParser;
 /**
  * Mock implementation of JMS <code>QueueBrowser</code>.
  */
-public class MockQueueBrowser implements QueueBrowser
+public class MockQueueBrowser implements QueueBrowser, Serializable
 {
     private MockConnection connection;
     private MockQueue queue;

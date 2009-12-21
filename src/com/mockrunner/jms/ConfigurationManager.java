@@ -1,10 +1,12 @@
 package com.mockrunner.jms;
 
+import java.io.Serializable;
+
 /**
  * The <code>ConfigurationManager</code> is used
  * for global settings of the JMS test framework.
  */
-public class ConfigurationManager
+public class ConfigurationManager implements Serializable
 {
     private boolean doCloneOnSend;
     private boolean useMessageSelectors;

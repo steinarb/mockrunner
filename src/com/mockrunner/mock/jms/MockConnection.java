@@ -1,5 +1,6 @@
 package com.mockrunner.mock.jms;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,7 +25,7 @@ import com.mockrunner.jms.DestinationManager;
  * are not meant for application use. Mockrunner provides very
  * simple mock implementations but usually you won't need them.
  */
-public class MockConnection implements Connection
+public class MockConnection implements Connection, Serializable
 {
     private ConnectionMetaData metaData;
     private List sessions;
