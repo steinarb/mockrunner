@@ -1,6 +1,9 @@
 
 mockrunner-0.4.3:
 
+- updated servlet-api.jar and jsp-api.jar from Tomcat 5.5.27 to 5.5.28
+- updated servlet.jar from Tomcat 4.1.39 to 4.1.40
+
 mockrunner-0.4.2:
 
 - refactored MockHttpServletRequest to handle session invalidation as suggested by Pratyoosh Sharma and Gábor Lipták
