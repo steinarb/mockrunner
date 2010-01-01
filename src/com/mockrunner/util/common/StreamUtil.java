@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,35 +31,14 @@ public class StreamUtil
      */
     public static byte[] getStreamAsByteArray(InputStream stream)
     {
-        return getStreamAsByteArray(stream, -1);
-    }
-    
-    /**
-     * Returns the contents of the input stream as byte array.
-     * @param stream the <code>InputStream</code>
-     * @param length the number of bytes to copy, if length < 0,
-     *        the number is unlimited
-     * @return the stream content as byte array
-     */
-    public static byte[] getStreamAsByteArray(InputStream stream, int length)
-    {
-        if(length == 0) return new byte[0];
-        boolean checkLength = true;
-        if(length < 0)
-        {
-            length = Integer.MAX_VALUE;
-            checkLength = false;
-        }
         ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
         try
         {
-            int nextValue = stream.read();
-            if(checkLength) length--;
-            while(-1 != nextValue && length >= 0)
+            byte[] bytes = new byte[256];
+            int read = 0;
+            while(0 <= (read = stream.read(bytes)))
             {
-                byteStream.write(nextValue);
-                nextValue = stream.read();
-                if(checkLength) length--;
+                byteStream.write(bytes, 0, read);
             }
             byteStream.flush();
         }
@@ -70,13 +50,54 @@ public class StreamUtil
     }
     
     /**
+     * Returns the contents of the input stream as byte array.
+     * @param stream the <code>InputStream</code>
+     * @param length the number of bytes to copy, if length < 0,
+     *        the number is unlimited
+     * @return the stream content as byte array
+     */
+    public static byte[] getStreamAsByteArray(InputStream stream, int length)
+    {
+        byte[] bytes = new byte[length];
+        int offset = 0;
+        int read = 0;
+        try
+        {
+            while (offset < bytes.length && 0 <= (read = stream.read(bytes, offset, bytes.length - offset))) 
+            {
+                offset += read;
+            }
+        } 
+        catch(IOException exc)
+        {
+            log.error("Exception while reading from stream", exc);
+        }
+        return bytes;
+    }
+    
+    /**
      * Returns the contents of the reader as a string.
      * @param reader the <code>Reader</code>
      * @return the reader content as <code>String</code>
      */
     public static String getReaderAsString(Reader reader)
     {
-        return getReaderAsString(reader, -1);
+        StringWriter writer = new StringWriter();
+        try
+        {
+            char[] chars = new char[256];
+            int read = 0;
+            while(0 <= (read = reader.read(chars)))
+            {
+                writer.write(chars, 0, read);
+            }
+            writer.flush();
+        }
+        catch(IOException exc)
+        {
+            log.error("Exception while reading from reader", exc);
+        }
+        return writer.toString();
     }
     
     /**
@@ -88,30 +109,21 @@ public class StreamUtil
      */
     public static String getReaderAsString(Reader reader, int length)
     {
-        if(length == 0) return "";
-        boolean checkLength = true;
-        if(length < 0)
-        {
-            length = Integer.MAX_VALUE;
-            checkLength = false;
-        }
-        StringBuffer buffer = new StringBuffer();
+        char[] chars = new char[length];
+        int offset = 0;
+        int read = 0;
         try
         {
-            int nextValue = reader.read();
-            if(checkLength) length--;
-            while(-1 != nextValue && length >= 0)
+            while (offset < chars.length && 0 <= (read = reader.read(chars, offset, chars.length - offset))) 
             {
-                buffer.append((char)nextValue);
-                nextValue = reader.read();
-                if(checkLength) length--;
+                offset += read;
             }
-        }
+        } 
         catch(IOException exc)
         {
             log.error("Exception while reading from reader", exc);
         }
-        return buffer.toString();
+        return String.valueOf(chars);
     }
     
     /**

@@ -1,6 +1,7 @@
 
 mockrunner-0.4.3:
 
+- minor refactoring to make stream handling more efficient
 - updated servlet-api.jar and jsp-api.jar from Tomcat 5.5.27 to 5.5.28
 - updated servlet.jar from Tomcat 4.1.39 to 4.1.40
 
