@@ -74,7 +74,7 @@ public class MockMapMessageTest extends TestCase
         }
         assertTrue(Arrays.equals((byte[])message.getObject("bytes1"), new byte[] {1, 2, 3}));
         message.setObject("null", null);
-        assertFalse(message.itemExists("null"));
+        assertTrue(message.itemExists("null"));
         try
         {
             message.getInt("null");
@@ -187,7 +187,7 @@ public class MockMapMessageTest extends TestCase
         message2.setString("name4", null);
         assertFalse(message1.equals(message2));
         assertFalse(message2.equals(message1));
-        message1.setString("name4", "text");
+        message1.setString("name4", null);
         assertTrue(message1.equals(message2));
         assertTrue(message2.equals(message1));
         assertEquals(message1.hashCode(), message2.hashCode());

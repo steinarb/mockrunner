@@ -275,8 +275,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         {
             throw new IllegalArgumentException("Property names must not be null or empty strings");
         }
-        if(null == object) return;
-        if((object instanceof Number) || (object instanceof Boolean) || (object instanceof Character) || (object instanceof String) || (object instanceof byte[]))
+        if((null == object) || (object instanceof Number) || (object instanceof Boolean) || (object instanceof Character) || (object instanceof String) || (object instanceof byte[]))
         {
             data.put(name, object);
             return;
