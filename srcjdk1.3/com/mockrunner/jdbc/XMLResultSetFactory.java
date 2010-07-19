@@ -2,8 +2,10 @@ package com.mockrunner.jdbc;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -29,6 +31,7 @@ import com.mockrunner.util.common.FileUtil;
 public class XMLResultSetFactory implements ResultSetFactory 
 {
     public final static int SYBASE_DIALECT = 0;
+    public final static int SQUIRREL_DIALECT = 1;
     
     private File file = null;
     private String fileName = null;
@@ -62,6 +65,9 @@ public class XMLResultSetFactory implements ResultSetFactory
         	case SYBASE_DIALECT:
         	    resultSet = createSybaseResultSet(id);
         	    break;
+        	case SQUIRREL_DIALECT:
+        	     resultSet = createSquirrelResultSet(id);
+        	     break;
         	default:
         	    resultSet = createSybaseResultSet(id);
         	    break;
@@ -126,8 +132,7 @@ public class XMLResultSetFactory implements ResultSetFactory
      */
     public void setDialect(int dialect) 
     {
-        //this.dialect = dialect;
-        this.dialect = SYBASE_DIALECT;
+        this.dialect = dialect;
     }
     
     /**
@@ -190,6 +195,88 @@ public class XMLResultSetFactory implements ResultSetFactory
                    String value = trim ? crValue.getTextTrim() : crValue.getText();
                    cRowValues[curCol] = value;
                    curCol++;
+               }
+               resultSet.addRow(cRowValues);
+           }
+       } 
+       catch(Exception exc) 
+       {
+           throw new NestedApplicationException("Failure while reading from XML file", exc);
+       }
+       return resultSet;
+    }
+    
+    /**
+     * Return a MockResultSet with proper column names and 
+     * rows based on the XML <code>Document</code>.
+     * @return MockResultSet Results read from XML 
+     * <code>Document</code>.
+     */
+    public MockResultSet createSquirrelResultSet(String id) 
+    {
+       MockResultSet resultSet = new MockResultSet(id);
+       SAXBuilder builder = new SAXBuilder();
+       Document doc = null;
+       File fileToParse = getXMLFile();
+       if(null == fileToParse)
+       {
+           throw new RuntimeException("File " + fileName + " not found.");
+       }
+       try 
+       {
+           doc = builder.build(fileToParse);
+           int offset;
+           int maxColumnNumber; // first column is 0 (unlike JDBC)
+           
+           Map columnNameMap = new HashMap();
+           Element root = doc.getRootElement();
+           List columns = root.getChild("columns").getChildren("column");
+           Iterator ci = columns.iterator();
+           maxColumnNumber = 0;
+           while (ci.hasNext()) 
+           {
+               Element cColumn = (Element)ci.next();
+               int columnNumber = cColumn.getAttribute("number").getIntValue();
+               if (columnNumber>maxColumnNumber)
+               {
+               	    maxColumnNumber = columnNumber;
+               }
+               String columnName = cColumn.getChildText("name");
+               columnNameMap.put(new Integer(columnNumber), columnName);
+           }
+           offset = 0;
+           for (int ii=0; ii<columnNameMap.size(); ii++)
+           {
+               while (true) {
+                   String name = (String)columnNameMap.get(new Integer(ii + offset));
+                   if (name==null) {
+                       offset++;
+                       resultSet.addColumn("unknown."+offset);
+                       continue;
+                   }
+                   else 
+                   {
+                       resultSet.addColumn(name);
+                       break;
+                   }
+               }
+               
+           }
+           
+           List rows = root.getChild("rows").getChildren("row");
+           Iterator ri = rows.iterator();
+           while (ri.hasNext())
+           {
+               Element cRow = (Element)ri.next();
+               List cRowChildren = cRow.getChildren();
+               Iterator cri = cRowChildren.iterator();
+               String[] cRowValues = new String[maxColumnNumber + 1];
+               while (cri.hasNext())
+               {
+                   Element crValue = (Element)cri.next();
+                   String value = trim ? crValue.getTextTrim() : crValue.getText();
+                   int curCol = crValue.getAttribute("columnNumber").getIntValue();
+                   cRowValues[curCol] = value;
                }
                resultSet.addRow(cRowValues);
            }

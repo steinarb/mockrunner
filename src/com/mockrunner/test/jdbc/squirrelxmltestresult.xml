@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<table>
+<columns>
+<column number="0">
+<name>pub_id</name>
+</column>
+<column number="1">
+<name>pub_name</name>
+</column>
+</columns>
+<rows>
+<row rowNumber="0">
+<value columnNumber="0">0736</value>
+<value columnNumber="1">New Age Books</value>
+</row>
+<row rowNumber="1">
+<value columnNumber="0">0877</value>
+<value columnNumber="1">Binnet &amp; Hardley</value>
+</row>
+<row rowNumber="2">
+<value columnNumber="0">1389</value>
+<value columnNumber="1">Algodata Infosystems</value>
+</row>
+</rows>
+</table>
+

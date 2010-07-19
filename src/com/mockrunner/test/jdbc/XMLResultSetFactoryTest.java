@@ -24,15 +24,30 @@ public class XMLResultSetFactoryTest extends TestCase
         assertNotNull(goodSybaseXMLRSF.getXMLFile());
         doTestGoodResultSet(goodSybaseXMLRSF, goodMRS);
         
-        goodSybaseXMLRSF = new XMLResultSetFactory(new File("src/com/mockrunner/test/jdbc/xmltestresult.xml"));
-        goodMRS = goodSybaseXMLRSF.create("Good-ResultSet-ID");
-        assertNotNull(goodSybaseXMLRSF.getXMLFile());
-        doTestGoodResultSet(goodSybaseXMLRSF, goodMRS);
     }
     
     private void doTestGoodResultSet(XMLResultSetFactory goodSybaseXMLRSF, MockResultSet goodMRS)
     {
         assertEquals("Dialects should be equal!", XMLResultSetFactory.SYBASE_DIALECT, goodSybaseXMLRSF.getDialect());
+        assertEquals("There should be 2 columns!", 2, goodMRS.getColumnCount());
+        assertEquals("There should be 3 rows!", 3, goodMRS.getRowCount());
+    }
+    
+    /**
+     * Test for the SquirrelSQL Dialect of the XMLResultSetFactory
+     */
+    public void testSquirrelCreate() 
+    {
+        XMLResultSetFactory goodSquirrelXMLRSF = new XMLResultSetFactory("src/com/mockrunner/test/jdbc/squirrelxmltestresult.xml");
+        goodSquirrelXMLRSF.setDialect(XMLResultSetFactory.SQUIRREL_DIALECT);
+        MockResultSet goodMRS = goodSquirrelXMLRSF.create("Good-ResultSet-ID");
+        assertNotNull(goodSquirrelXMLRSF.getXMLFile());
+        doTestGoodSquirrelResultSet(goodSquirrelXMLRSF, goodMRS);
+    }
+    
+    private void doTestGoodSquirrelResultSet(XMLResultSetFactory goodSquirrelXMLRSF, MockResultSet goodMRS)
+    {
+        assertEquals("Dialects should be equal!", XMLResultSetFactory.SQUIRREL_DIALECT, goodSquirrelXMLRSF.getDialect());
         assertEquals("There should be 2 columns!", 2, goodMRS.getColumnCount());
         assertEquals("There should be 3 rows!", 3, goodMRS.getRowCount());
     }

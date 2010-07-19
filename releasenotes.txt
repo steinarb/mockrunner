@@ -1,6 +1,8 @@
 
 mockrunner-0.4.3:
 
+- XMLResultSetFactory now supports Squirrel dialect. Thanks to Bradley Kliewer for
+  implementing this
 - minor refactoring to make stream handling more efficient
 - fixed bug in MockMapMessage allowing null values
 - updated nekohtml.jar from 1.9.13 to 1.9.14
