@@ -1,9 +1,7 @@
 package com.mockrunner.test.web;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.Collection;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -52,8 +50,8 @@ public class MockHttpServletResponseTest extends TestCase
         response.addIntHeader("intHeader", 0);
         assertEquals("0", response.getHeader("intHeader"));
         response.clearHeaders();
-        Enumeration headers = response.getHeaderNames();
-        assertFalse(headers.hasMoreElements());
+        Collection headers = response.getHeaderNames();
+        assertTrue(headers.isEmpty());
     }
     
     public void testGetHeaderNames()
@@ -62,16 +60,22 @@ public class MockHttpServletResponseTest extends TestCase
         response.addHeader("testHeader1", "abc");
         response.addHeader("testHeader2", "xyz2");
         response.addHeader("testHeader3", "xyz3");
-        Enumeration headerNamesEnum = response.getHeaderNames();
-        List headerNames = new ArrayList();
-        while(headerNamesEnum.hasMoreElements())
-        {
-            headerNames.add(headerNamesEnum.nextElement());
-        }
+        Collection headerNames= response.getHeaderNames();
         assertEquals(3, headerNames.size());
         assertTrue(headerNames.contains("testHeader1"));
         assertTrue(headerNames.contains("testHeader2"));
         assertTrue(headerNames.contains("testHeader3"));
+    }
+    
+    public void testGetHeaders()
+    {
+        response.addHeader("testHeader1", "xyz1");
+        response.addHeader("testHeader1", "abc");
+        response.addHeader("testHeader2", "xyz2");
+        Collection headers = response.getHeaders("testHeader1");
+        assertEquals(2, headers.size());
+        assertTrue(headers.contains("xyz1"));
+        assertTrue(headers.contains("abc"));
     }
     
     public void testHeadersCaseInsensitive()
@@ -82,12 +86,7 @@ public class MockHttpServletResponseTest extends TestCase
         response.addHeader("myHeader2", "abc");
         assertEquals("xyz", response.getHeader("myheader1"));
         assertEquals("abc", response.getHeader("MYHEADER2"));
-        Enumeration headers = response.getHeaderNames();
-        List headerNames = new ArrayList();
-        while(headers.hasMoreElements())
-        {
-            headerNames.add(headers.nextElement());
-        }
+        Collection headerNames = response.getHeaderNames();
         assertEquals(3, headerNames.size());
         assertTrue(headerNames.contains("testHeader"));
         assertTrue(headerNames.contains("MYHEADER1"));

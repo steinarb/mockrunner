@@ -1,3 +1,11 @@
+mockrunner-0.4.3
+
+From Mockrunner 0.4.3 on the method MockHttpServletResponse#getHeaderNames()
+returns a Collection instead of an Enumeration to make it comaptible with future
+versions of the interface HttpServletResponse.
+
+Older API changes:
+
 mockrunner-0.4:
 
 In 0.4 MockStruct has some more constructors which may cause ambiguity errors
@@ -6,8 +14,6 @@ If a JMS exception is declared to be thrown, the ExceptionListener will
 not be called when the exception is thrown on a method call. Instead there are
 two methods MockConnection.callExceptionListener() to simulate ExceptionListener
 calls. The old behaviour was a violation of the JMS spec.
-
-Older API changes:
 
 mockrunner-0.3.7:
 

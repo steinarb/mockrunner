@@ -6,13 +6,12 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.Vector;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -255,9 +254,16 @@ public class MockHttpServletResponse implements HttpServletResponse
         setHeader("Content-Type", type);
     }
     
-    public Enumeration getHeaderNames()
+    public Collection getHeaderNames()
     {
-        return new Vector(headers.keySet()).elements();
+        return headers.keySet();
+    }
+    
+    public Collection getHeaders(String name)
+    {
+        List headerList = (List)headers.get(name);
+        if(null == headerList) return null;
+        return headerList;
     }
     
     public List getHeaderList(String key)
