@@ -41,6 +41,8 @@ public class MockServletContext implements ServletContext
     private String servletContextName;
     private String contextPath;
     private List attributeListener;
+    private int majorVersion;
+    private int minorVersion;
     
     public MockServletContext()
     {
@@ -62,6 +64,8 @@ public class MockServletContext implements ServletContext
         resourcePaths = new HashMap();
         resourceStreams = new HashMap();
         attributeListener = new ArrayList();
+        majorVersion = 2;
+        minorVersion = 5;
     }
 
     public synchronized void addAttributeListener(ServletContextAttributeListener listener)
@@ -217,14 +221,24 @@ public class MockServletContext implements ServletContext
 
     public synchronized int getMajorVersion()
     {
-        return 2;
+        return majorVersion;
     }
     
-    public synchronized int getMinorVersion()
+    public synchronized void setMajorVersion(int majorVersion)
     {
-        return 3;
+        this.majorVersion = majorVersion;
     }
 
+    public synchronized int getMinorVersion()
+    {
+        return minorVersion;
+    }
+
+    public synchronized void setMinorVersion(int minorVersion)
+    {
+        this.minorVersion = minorVersion;
+    }
+    
     public synchronized String getMimeType(String file)
     {
         return (String)mimeTypes.get(file);

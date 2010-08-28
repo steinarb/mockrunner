@@ -271,6 +271,14 @@ public class MockServletContextTest extends TestCase
         assertFalse(params.hasMoreElements());
     }
     
+    public void testVersion()
+    {
+        context.setMajorVersion(5);
+        context.setMinorVersion(1);
+        assertEquals(5, context.getMajorVersion());
+        assertEquals(1, context.getMinorVersion());
+    }
+    
     private class TestAttributeListener implements ServletContextAttributeListener
     {
         private boolean wasAttributeAddedCalled = false;
