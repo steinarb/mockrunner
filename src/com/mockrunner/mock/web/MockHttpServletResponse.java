@@ -277,6 +277,11 @@ public class MockHttpServletResponse implements HttpServletResponse
         return statusCode;
     }
     
+    public int getStatus()
+    {
+        return getStatusCode();
+    }
+    
     public int getErrorCode()
     {
         return errorCode;
