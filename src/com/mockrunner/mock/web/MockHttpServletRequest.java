@@ -70,6 +70,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     private int remotePort;
     private boolean sessionCreated;
     private List attributeListener;
+    private boolean isAsyncSupported;
     
     public MockHttpServletRequest()
     {
@@ -104,6 +105,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         sessionCreated = false;
         attributeListener = new ArrayList();
         bodyContent = new MockServletInputStream(new byte[0]);
+        isAsyncSupported = false;
     }
 
     public void addAttributeListener(ServletRequestAttributeListener listener)
@@ -709,6 +711,16 @@ public class MockHttpServletRequest implements HttpServletRequest
         this.remotePort = remotePort;
     }
     
+    public boolean isAsyncSupported()
+    {
+        return isAsyncSupported;
+    }
+
+    public void setAsyncSupported(boolean isAsyncSupported)
+    {
+        this.isAsyncSupported = isAsyncSupported;
+    }
+
     private void handleAttributeListenerCalls(String key, Object value, Object oldValue)
     {
         if(null != oldValue)

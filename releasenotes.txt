@@ -5,6 +5,7 @@ mockrunner-0.4.3:
   implementing this
 - MockHttpServletResponse#getHeaderNames() returns Collection from now on instead of Enumeration
   (incompatible change)
+- MockServletContext#setInitParameter() does not overwrite init parameters (incompatible change)
 - minor refactoring to make stream handling more efficient
 - fixed bug in MockMapMessage allowing null values
 - updated nekohtml.jar from 1.9.13 to 1.9.14

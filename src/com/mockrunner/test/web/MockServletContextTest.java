@@ -271,6 +271,18 @@ public class MockServletContextTest extends TestCase
         assertFalse(params.hasMoreElements());
     }
     
+    public void testInitParametersOverwrite()
+    {
+        assertTrue(context.setInitParameter("key1", "value1"));
+        assertEquals("value1", context.getInitParameter("key1"));
+        assertFalse(context.setInitParameter("key1", "value2"));
+        assertEquals("value1", context.getInitParameter("key1"));
+        Map parameters = new HashMap();
+        parameters.put("key1", "value2");
+        context.setInitParameters(parameters);
+        assertEquals("value2", context.getInitParameter("key1"));
+    }
+    
     public void testVersion()
     {
         context.setMajorVersion(5);

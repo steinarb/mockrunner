@@ -43,6 +43,8 @@ public class MockServletContext implements ServletContext
     private List attributeListener;
     private int majorVersion;
     private int minorVersion;
+    private int effectiveMajorVersion;
+    private int effectiveMinorVersion;
     
     public MockServletContext()
     {
@@ -197,16 +199,22 @@ public class MockServletContext implements ServletContext
     
     /**
      * Sets an init parameter.
+     * This method does not overwrite existing init parameters.
      * @param name the name
      * @param value the value
+     * @return <code>false</code> if the parameter was not set
+     *         <code>true</code> otherwise
      */
-    public synchronized void setInitParameter(String name, String value) 
+    public synchronized boolean setInitParameter(String name, String value) 
     {
+        if(initParameters.containsKey(name)) return false;
         initParameters.put(name, value);
+        return true;
     }
     
     /**
      * Sets several init parameters.
+     * This method does overwrite existing init parameters.
      * @param parameters the parameter map
      */
     public synchronized void setInitParameters(Map parameters) 
@@ -239,6 +247,26 @@ public class MockServletContext implements ServletContext
         this.minorVersion = minorVersion;
     }
     
+    public synchronized int getEffectiveMajorVersion()
+    {
+        return effectiveMajorVersion;
+    }
+
+    public synchronized void setEffectiveMajorVersion(int effectiveMajorVersion)
+    {
+        this.effectiveMajorVersion = effectiveMajorVersion;
+    }
+
+    public synchronized int getEffectiveMinorVersion()
+    {
+        return effectiveMinorVersion;
+    }
+
+    public synchronized void setEffectiveMinorVersion(int effectiveMinorVersion)
+    {
+        this.effectiveMinorVersion = effectiveMinorVersion;
+    }
+
     public synchronized String getMimeType(String file)
     {
         return (String)mimeTypes.get(file);

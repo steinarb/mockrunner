@@ -3,6 +3,8 @@ mockrunner-0.4.3
 From Mockrunner 0.4.3 on the method MockHttpServletResponse#getHeaderNames()
 returns a Collection instead of an Enumeration to make it comaptible with future
 versions of the interface HttpServletResponse.
+The method MockServletContext#setInitParameter() does not overwrite init parameters
+any longer to make it compatible with container behaviour.
 
 Older API changes:
 
