@@ -43,6 +43,9 @@ public class AllWebTests
         suite.addTest(new TestSuite(DefaultExceptionHandlerConfigTest.class));
         suite.addTest(new TestSuite(MockVariableResolverTest.class));
         suite.addTest(new TestSuite(JasperJspFactoryTest.class));
+//        suite.addTest(new TestSuite(MockRegistrationTest.class));
+//        suite.addTest(new TestSuite(MockServletRegistrationTest.class));
+//        suite.addTest(new TestSuite(MockFilterRegistrationTest.class));
         //$JUnit-END$
         return suite;
     }

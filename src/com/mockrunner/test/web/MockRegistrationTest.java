@@ -1,16 +1,10 @@
 package com.mockrunner.test.web;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import junit.framework.TestCase;
-
-import com.mockrunner.mock.web.MockRegistration;
 
 public class MockRegistrationTest extends TestCase
 {
-    private MockRegistration registration;
+    /*private MockRegistration registration;
     
     protected void setUp() throws Exception
     {
@@ -26,6 +20,10 @@ public class MockRegistrationTest extends TestCase
     {
         assertEquals("name", registration.getName());
         assertEquals("class", registration.getClassName());
+        registration.setName("anotherName");
+        registration.setClassName("anotherClassName");
+        assertEquals("anotherName", registration.getName());
+        assertEquals("anotherClassName", registration.getClassName());
     }
     
     public void testInitParamters()
@@ -73,4 +71,30 @@ public class MockRegistrationTest extends TestCase
         assertEquals("value4", registration.getInitParameter("name4"));
         assertEquals("value5", registration.getInitParameter("name5"));
     }
+    
+    public void testInitParamtersMapIllegalArgument()
+    {
+        Map paramters = new HashMap();
+        paramters.put("name1", null);
+        try
+        {
+            registration.setInitParameters(paramters);
+            fail();
+        } 
+        catch (IllegalArgumentException exc)
+        {
+            //expected exception
+        }
+        paramters = new HashMap();
+        paramters.put(null, "value1");
+        try
+        {
+            registration.setInitParameters(paramters);
+            fail();
+        } 
+        catch (IllegalArgumentException exc)
+        {
+            //expected exception
+        }
+    }*/
 }
