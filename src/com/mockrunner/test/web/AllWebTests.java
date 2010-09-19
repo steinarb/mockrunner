@@ -46,6 +46,7 @@ public class AllWebTests
 //        suite.addTest(new TestSuite(MockRegistrationTest.class));
 //        suite.addTest(new TestSuite(MockServletRegistrationTest.class));
 //        suite.addTest(new TestSuite(MockFilterRegistrationTest.class));
+//        suite.addTest(new TestSuite(MockJspPropertyGroupDescriptorTest.class));
         //$JUnit-END$
         return suite;
     }
