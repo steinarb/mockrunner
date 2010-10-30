@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Mock implementation of <code>JspPropertyGroupDescriptor</code>.
  */
-public class MockJspPropertyGroupDescriptor //implements JspPropertyGroupDescriptor
+public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescriptor
 {
     private String buffer;
     private String defaultContentType;
@@ -70,12 +70,12 @@ public class MockJspPropertyGroupDescriptor //implements JspPropertyGroupDescrip
 
     public Collection getIncludeCodas()
     {
-        return includeCodas;
+        return new ArrayList(includeCodas);
     }
 
     public Collection getIncludePreludes()
     {
-        return includePreludes;
+        return new ArrayList(includePreludes);
     }
 
     public String getIsXml()
@@ -100,7 +100,7 @@ public class MockJspPropertyGroupDescriptor //implements JspPropertyGroupDescrip
 
     public Collection getUrlPatterns()
     {
-        return urlPatterns;
+        return new ArrayList(urlPatterns);
     }
 
     /**

@@ -1,5 +1,7 @@
 package com.mockrunner.test.web;
 
+import java.util.Iterator;
+
 import junit.framework.TestCase;
 
 import com.mockrunner.mock.web.MockJspPropertyGroupDescriptor;
@@ -79,5 +81,27 @@ public class MockJspPropertyGroupDescriptorTest extends TestCase
         assertTrue(descriptor.getIncludeCodas().isEmpty());
         assertTrue(descriptor.getIncludePreludes().isEmpty());
         assertTrue(descriptor.getUrlPatterns().isEmpty());
+    }
+    
+    public void testIncludeAndURLPatternsListChange()
+    {
+        descriptor.addIncludeCoda("coda1");
+        descriptor.addIncludePrelude("prelude1");
+        descriptor.addUrlPattern("urlPattern1");
+        assertEquals(1, descriptor.getIncludeCodas().size());
+        assertEquals(1, descriptor.getIncludePreludes().size());
+        assertEquals(1, descriptor.getUrlPatterns().size());
+        descriptor.getIncludeCodas().add("coda2");
+        descriptor.getIncludePreludes().add("prelude2");
+        descriptor.getUrlPatterns().add("urlPattern2");
+        assertEquals(1, descriptor.getIncludeCodas().size());
+        assertEquals(1, descriptor.getIncludePreludes().size());
+        assertEquals(1, descriptor.getUrlPatterns().size());
+        Iterator codas = descriptor.getIncludeCodas().iterator();
+        Iterator preludes = descriptor.getIncludePreludes().iterator();
+        Iterator urlPatterns = descriptor.getUrlPatterns().iterator();
+        assertEquals("coda1", codas.next());
+        assertEquals("prelude1", preludes.next());
+        assertEquals("urlPattern1", urlPatterns.next());
     }
 }

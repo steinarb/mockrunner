@@ -172,13 +172,13 @@ public class J2EEVersionGenerator
         return webFiles;
     } 
     
-    private static JavaLineProcessor getProcessorForClass(String className, Map jdbcFiles)
+    private static JavaLineProcessor getProcessorForClass(String className, Map files)
     {
-        JavaLineProcessor processor = (JavaLineProcessor)jdbcFiles.get(className);
+        JavaLineProcessor processor = (JavaLineProcessor)files.get(className);
         if(null == processor)
         {
             processor = new JavaLineProcessor();
-            jdbcFiles.put(className, processor);
+            files.put(className, processor);
         }
         return processor;
     }

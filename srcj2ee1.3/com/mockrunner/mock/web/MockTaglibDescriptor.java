@@ -1,10 +1,11 @@
 package com.mockrunner.mock.web;
 
 
+
 /**
  * Mock implementation of <code>TaglibDescriptor</code>.
  */
-public class MockTaglibDescriptor //implements TaglibDescriptor
+public class MockTaglibDescriptor // implements TaglibDescriptor
 {
     private String taglibLocation;
     private String taglibURI;

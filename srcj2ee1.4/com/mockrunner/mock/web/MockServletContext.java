@@ -40,6 +40,7 @@ public class MockServletContext implements ServletContext
     private Map resourceStreams;
     private String servletContextName;
     private String contextPath;
+    //private JspConfigDescriptor jspConfigDescriptor;
     private List attributeListener;
     private int majorVersion;
     private int minorVersion;
@@ -65,9 +66,12 @@ public class MockServletContext implements ServletContext
         resources = new HashMap();
         resourcePaths = new HashMap();
         resourceStreams = new HashMap();
+        //jspConfigDescriptor = new MockJspConfigDescriptor();
         attributeListener = new ArrayList();
         majorVersion = 2;
         minorVersion = 5;
+        effectiveMajorVersion = 2;
+        effectiveMinorVersion = 5;
     }
 
     public synchronized void addAttributeListener(ServletContextAttributeListener listener)
@@ -226,6 +230,16 @@ public class MockServletContext implements ServletContext
     {
         return new Vector(initParameters.keySet()).elements();
     }
+
+    /*public synchronized JspConfigDescriptor getJspConfigDescriptor()
+    {
+        return jspConfigDescriptor;
+    }
+
+    public synchronized void setJspConfigDescriptor(JspConfigDescriptor jspConfigDescriptor)
+    {
+        this.jspConfigDescriptor = jspConfigDescriptor;
+    }*/
 
     public synchronized int getMajorVersion()
     {
