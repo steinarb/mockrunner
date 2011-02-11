@@ -123,7 +123,7 @@ http://www.junit.org
 junit.jar
 
 JavaEE 5:
-Tomcat 6.0.30
+Tomcat 6.0.32
 http://tomcat.apache.org
 servlet-api.jar
 jsp-api.jar
@@ -136,7 +136,7 @@ jboss-javaee-modified.jar (modified version of jboss-javaee.jar,
                            added the org/jboss/util/id classes because jboss-javaee.jar contains references to these classes)
 
 J2EE 1.4:
-Tomcat 5.5.31:
+Tomcat 5.5.32:
 http://tomcat.apache.org
 servlet-api.jar
 jsp-api.jar
