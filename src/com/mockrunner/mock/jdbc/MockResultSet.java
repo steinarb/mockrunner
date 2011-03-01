@@ -987,6 +987,7 @@ public class MockResultSet implements ResultSet, Cloneable
         Object value = getObject(columnIndex);
         if(null != value)
         {
+            if(value instanceof BigDecimal) return (BigDecimal)value;
             if(value instanceof Number) return new BigDecimal(((Number)value).doubleValue());
             return new BigDecimal(value.toString());
         }
@@ -998,6 +999,7 @@ public class MockResultSet implements ResultSet, Cloneable
         Object value = getObject(columnName);
         if(null != value)
         {
+            if(value instanceof BigDecimal) return (BigDecimal)value;
             if(value instanceof Number) return new BigDecimal(((Number)value).doubleValue());
             return new BigDecimal(value.toString());
         }

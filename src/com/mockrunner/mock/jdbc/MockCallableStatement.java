@@ -307,6 +307,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         Object value = getObject(parameterIndex);
         if(null != value)
         {
+            if(value instanceof BigDecimal) return (BigDecimal)value;
             if(value instanceof Number) return new BigDecimal(((Number)value).doubleValue());
             return new BigDecimal(value.toString());
         }
@@ -315,7 +316,12 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
 
     public BigDecimal getBigDecimal(int parameterIndex, int scale) throws SQLException
     {
-        return getBigDecimal(parameterIndex);
+        BigDecimal value = getBigDecimal(parameterIndex);
+        if(null != value)
+        {
+            return value.setScale(scale);
+        }
+        return null;
     }
 
     public URL getURL(int parameterIndex) throws SQLException
@@ -607,6 +613,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         Object value = getObject(parameterName);
         if(null != value)
         {
+            if(value instanceof BigDecimal) return (BigDecimal)value;
             if(value instanceof Number) return new BigDecimal(((Number)value).doubleValue());
             return new BigDecimal(value.toString());
         }

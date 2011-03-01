@@ -150,6 +150,7 @@ public class MockResultSetTest extends TestCase
         column.add("value");
         column.add(null);
         column.add("value");
+        column.add(new BigDecimal(new BigInteger("234"), 2));
         resultSet.addColumn("column", column);
         try
         {
@@ -196,6 +197,9 @@ public class MockResultSetTest extends TestCase
         Clob clob = resultSet.getClob("column");
         assertEquals("value", clob.getSubString(1, 5));
         assertFalse(resultSet.wasNull());
+        resultSet.next();
+        assertEquals(new BigDecimal(new BigInteger("234"), 2), resultSet.getBigDecimal("column"));
+        assertEquals(new BigDecimal(new BigInteger("234"), 2), resultSet.getBigDecimal(1));
         resultSet.next();
         try
         {
