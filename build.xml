@@ -340,15 +340,15 @@
     </target>
     
     <target name="compile" depends="init">
-        <antcall target="compilejdk1.5jee5" />
-        <antcall target="compilejdk1.6jee5" />
-        <antcall target="compilejdk1.4j2ee1.4" />
-        <antcall target="compilejdk1.5j2ee1.4" />
-        <antcall target="compilejdk1.6j2ee1.4" />
-        <antcall target="compilejdk1.3j2ee1.3" />
-        <antcall target="compilejdk1.4j2ee1.3" />
-        <antcall target="compilejdk1.5j2ee1.3" />
-        <antcall target="compilejdk1.6j2ee1.3" />
+        <antcall target="compilejdk1.5jee5" inheritRefs="true" />
+        <antcall target="compilejdk1.6jee5" inheritRefs="true" />
+        <antcall target="compilejdk1.4j2ee1.4" inheritRefs="true" />
+        <antcall target="compilejdk1.5j2ee1.4" inheritRefs="true" />
+        <antcall target="compilejdk1.6j2ee1.4" inheritRefs="true" />
+        <antcall target="compilejdk1.3j2ee1.3" inheritRefs="true" />
+        <antcall target="compilejdk1.4j2ee1.3" inheritRefs="true" />
+        <antcall target="compilejdk1.5j2ee1.3" inheritRefs="true" />
+        <antcall target="compilejdk1.6j2ee1.3" inheritRefs="true" />
     </target>
     
     <target name="compilejdk1.5jee5" if="java1.5.home">
@@ -564,68 +564,68 @@
     </target>
     
     <target name="jars" depends="compile">
-        <antcall target="jarsjdk1.5jee5" />
-        <antcall target="jarsjdk1.6jee5" />
-        <antcall target="jarsjdk1.4j2ee1.4" />
-        <antcall target="jarsjdk1.5j2ee1.4" />
-        <antcall target="jarsjdk1.6j2ee1.4" />
-        <antcall target="jarsjdk1.3j2ee1.3" />
-        <antcall target="jarsjdk1.4j2ee1.3" />
-        <antcall target="jarsjdk1.5j2ee1.3" />
-        <antcall target="jarsjdk1.6j2ee1.3" />
+        <antcall target="jarsjdk1.5jee5" inheritRefs="true" />
+        <antcall target="jarsjdk1.6jee5" inheritRefs="true" />
+        <antcall target="jarsjdk1.4j2ee1.4" inheritRefs="true" />
+        <antcall target="jarsjdk1.5j2ee1.4" inheritRefs="true" />
+        <antcall target="jarsjdk1.6j2ee1.4" inheritRefs="true" />
+        <antcall target="jarsjdk1.3j2ee1.3" inheritRefs="true" />
+        <antcall target="jarsjdk1.4j2ee1.3" inheritRefs="true" />
+        <antcall target="jarsjdk1.5j2ee1.3" inheritRefs="true" />
+        <antcall target="jarsjdk1.6j2ee1.3" inheritRefs="true" />
     </target>
     
     <target name="jarsjdk1.5jee5" if="java1.5.home">
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.5jee5}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jms.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.5jee5}" />
             <param name="jarpattern" value="jms.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-ejb.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.5jee5}" />
             <param name="jarpattern" value="ejb.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jdbc.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.5jee5}" />
             <param name="jarpattern" value="jdbc.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jca.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.5jee5}" />
             <param name="jarpattern" value="connector.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-servlet.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.5jee5}" />
             <param name="jarpattern" value="servlet.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-tag.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.5jee5}" />
             <param name="jarpattern" value="tag.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-struts.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="5" />
@@ -635,56 +635,56 @@
     </target>
     
     <target name="jarsjdk1.6jee5" if="java1.6.home">
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.6jee5}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jms.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.6jee5}" />
             <param name="jarpattern" value="jms.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-ejb.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.6jee5}" />
             <param name="jarpattern" value="ejb.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jdbc.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.6jee5}" />
             <param name="jarpattern" value="jdbc.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jca.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.6jee5}" />
             <param name="jarpattern" value="connector.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-servlet.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.6jee5}" />
             <param name="jarpattern" value="servlet.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-tag.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.6jee5}" />
             <param name="jarpattern" value="tag.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-struts.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="5" />
@@ -694,56 +694,56 @@
     </target>
     
     <target name="jarsjdk1.4j2ee1.4" if="dobuild.jdk1.4.j2ee1.4">
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.4j2ee1.4}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jms.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.4j2ee1.4}" />
             <param name="jarpattern" value="jms.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-ejb.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.4j2ee1.4}" />
             <param name="jarpattern" value="ejb.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jdbc.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.4j2ee1.4}" />
             <param name="jarpattern" value="jdbc.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jca.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.4j2ee1.4}" />
             <param name="jarpattern" value="connector.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-servlet.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.4j2ee1.4}" />
             <param name="jarpattern" value="servlet.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-tag.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.4j2ee1.4}" />
             <param name="jarpattern" value="tag.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-struts.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.4" />
@@ -753,56 +753,56 @@
     </target>
     
     <target name="jarsjdk1.5j2ee1.4" if="dobuild.jdk1.5.j2ee1.4">
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.5j2ee1.4}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jms.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.5j2ee1.4}" />
             <param name="jarpattern" value="jms.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-ejb.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.5j2ee1.4}" />
             <param name="jarpattern" value="ejb.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jdbc.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.5j2ee1.4}" />
             <param name="jarpattern" value="jdbc.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jca.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.5j2ee1.4}" />
             <param name="jarpattern" value="connector.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-servlet.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.5j2ee1.4}" />
             <param name="jarpattern" value="servlet.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-tag.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.5j2ee1.4}" />
             <param name="jarpattern" value="tag.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-struts.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.4" />
@@ -812,56 +812,56 @@
     </target>
     
     <target name="jarsjdk1.6j2ee1.4" if="dobuild.jdk1.6.j2ee1.4">
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.6j2ee1.4}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jms.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.6j2ee1.4}" />
             <param name="jarpattern" value="jms.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-ejb.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.6j2ee1.4}" />
             <param name="jarpattern" value="ejb.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jdbc.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.6j2ee1.4}" />
             <param name="jarpattern" value="jdbc.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jca.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.6j2ee1.4}" />
             <param name="jarpattern" value="connector.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-servlet.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.6j2ee1.4}" />
             <param name="jarpattern" value="servlet.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-tag.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.6j2ee1.4}" />
             <param name="jarpattern" value="tag.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-struts.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.4" />
@@ -871,56 +871,56 @@
     </target>
     
     <target name="jarsjdk1.3j2ee1.3" if="dobuild.jdk1.3.j2ee1.3">
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner.jar" />
             <param name="jdkver" value="1.3" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.3j2ee1.3}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jms.jar" />
             <param name="jdkver" value="1.3" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.3j2ee1.3}" />
             <param name="jarpattern" value="jms.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-ejb.jar" />
             <param name="jdkver" value="1.3" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.3j2ee1.3}" />
             <param name="jarpattern" value="ejb.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jdbc.jar" />
             <param name="jdkver" value="1.3" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.3j2ee1.3}" />
             <param name="jarpattern" value="jdbc.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jca.jar" />
             <param name="jdkver" value="1.3" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.3j2ee1.3}" />
             <param name="jarpattern" value="connector.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-servlet.jar" />
             <param name="jdkver" value="1.3" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.3j2ee1.3}" />
             <param name="jarpattern" value="servlet.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-tag.jar" />
             <param name="jdkver" value="1.3" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.3j2ee1.3}" />
             <param name="jarpattern" value="tag.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-struts.jar" />
             <param name="jdkver" value="1.3" />
             <param name="j2eever" value="1.3" />
@@ -930,56 +930,56 @@
     </target>
     
     <target name="jarsjdk1.4j2ee1.3" if="dobuild.jdk1.4.j2ee1.3">
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.4j2ee1.3}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jms.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.4j2ee1.3}" />
             <param name="jarpattern" value="jms.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-ejb.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.4j2ee1.3}" />
             <param name="jarpattern" value="ejb.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jdbc.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.4j2ee1.3}" />
             <param name="jarpattern" value="jdbc.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jca.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.4j2ee1.3}" />
             <param name="jarpattern" value="connector.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-servlet.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.4j2ee1.3}" />
             <param name="jarpattern" value="servlet.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-tag.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.4j2ee1.3}" />
             <param name="jarpattern" value="tag.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-struts.jar" />
             <param name="jdkver" value="1.4" />
             <param name="j2eever" value="1.3" />
@@ -989,56 +989,56 @@
     </target>
     
     <target name="jarsjdk1.5j2ee1.3" if="dobuild.jdk1.5.j2ee1.3">
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.5j2ee1.3}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jms.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.5j2ee1.3}" />
             <param name="jarpattern" value="jms.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-ejb.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.5j2ee1.3}" />
             <param name="jarpattern" value="ejb.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jdbc.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.5j2ee1.3}" />
             <param name="jarpattern" value="jdbc.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jca.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.5j2ee1.3}" />
             <param name="jarpattern" value="connector.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-servlet.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.5j2ee1.3}" />
             <param name="jarpattern" value="servlet.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-tag.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.5j2ee1.3}" />
             <param name="jarpattern" value="tag.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-struts.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.3" />
@@ -1048,56 +1048,56 @@
     </target>
     
     <target name="jarsjdk1.6j2ee1.3" if="dobuild.jdk1.6.j2ee1.3">
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.6j2ee1.3}" />
             <param name="jarpattern" value="full.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jms.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.6j2ee1.3}" />
             <param name="jarpattern" value="jms.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-ejb.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.6j2ee1.3}" />
             <param name="jarpattern" value="ejb.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jdbc.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.6j2ee1.3}" />
             <param name="jarpattern" value="jdbc.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-jca.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.6j2ee1.3}" />
             <param name="jarpattern" value="connector.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-servlet.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.6j2ee1.3}" />
             <param name="jarpattern" value="servlet.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-tag.jar" />
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.6j2ee1.3}" />
             <param name="jarpattern" value="tag.jar.classes" />
         </antcall>
-        <antcall target="jar">
+        <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-struts.jar" />
             <param name="jdkver" value="1.5" />
             <param name="j2eever" value="1.3" />
@@ -1136,15 +1136,15 @@
     </target>
     
     <target name="dependencies" depends="jars" if="java1.6.home">
-        <antcall target="dependenciesjdk1.5jee5" />
-        <antcall target="dependenciesjdk1.6jee5" />
-        <antcall target="dependenciesjdk1.4j2ee1.4" />
-        <antcall target="dependenciesjdk1.5j2ee1.4" />
-        <antcall target="dependenciesjdk1.6j2ee1.4" />
-        <antcall target="dependenciesjdk1.3j2ee1.3" />
-        <antcall target="dependenciesjdk1.4j2ee1.3" />
-        <antcall target="dependenciesjdk1.5j2ee1.3" />
-        <antcall target="dependenciesjdk1.6j2ee1.3" />
+        <antcall target="dependenciesjdk1.5jee5" inheritRefs="true" />
+        <antcall target="dependenciesjdk1.6jee5" inheritRefs="true" />
+        <antcall target="dependenciesjdk1.4j2ee1.4" inheritRefs="true" />
+        <antcall target="dependenciesjdk1.5j2ee1.4" inheritRefs="true" />
+        <antcall target="dependenciesjdk1.6j2ee1.4" inheritRefs="true" />
+        <antcall target="dependenciesjdk1.3j2ee1.3" inheritRefs="true" />
+        <antcall target="dependenciesjdk1.4j2ee1.3" inheritRefs="true" />
+        <antcall target="dependenciesjdk1.5j2ee1.3" inheritRefs="true" />
+        <antcall target="dependenciesjdk1.6j2ee1.3" inheritRefs="true" />
     </target>
     
     <target name="dependenciesjdk1.5jee5" if="java1.5.home">
@@ -1547,18 +1547,18 @@
                 <exclude name="jarversion.txt" />
             </fileset>
 	    </copy>
-        <antcall target="copydoc" />
-        <antcall target="copyjar" />   
-        <antcall target="copysrc" />  
-        <antcall target="copylibjdk1.5jee5" />
-        <antcall target="copylibjdk1.6jee5" />   
-        <antcall target="copylibjdk1.4j2ee1.4" />
-        <antcall target="copylibjdk1.5j2ee1.4" />
-        <antcall target="copylibjdk1.6j2ee1.4" />
-        <antcall target="copylibjdk1.3j2ee1.3" />
-        <antcall target="copylibjdk1.4j2ee1.3" />
-        <antcall target="copylibjdk1.5j2ee1.3" />
-        <antcall target="copylibjdk1.6j2ee1.3" />
+        <antcall target="copydoc" inheritRefs="true" />
+        <antcall target="copyjar" inheritRefs="true" />   
+        <antcall target="copysrc" inheritRefs="true" />  
+        <antcall target="copylibjdk1.5jee5" inheritRefs="true" />
+        <antcall target="copylibjdk1.6jee5" inheritRefs="true" />   
+        <antcall target="copylibjdk1.4j2ee1.4" inheritRefs="true" />
+        <antcall target="copylibjdk1.5j2ee1.4" inheritRefs="true" />
+        <antcall target="copylibjdk1.6j2ee1.4" inheritRefs="true" />
+        <antcall target="copylibjdk1.3j2ee1.3" inheritRefs="true" />
+        <antcall target="copylibjdk1.4j2ee1.3" inheritRefs="true" />
+        <antcall target="copylibjdk1.5j2ee1.3" inheritRefs="true" />
+        <antcall target="copylibjdk1.6j2ee1.3" inheritRefs="true" />
         <zip destfile="${release.file}" basedir="${bin}" />
 	</target>
     
