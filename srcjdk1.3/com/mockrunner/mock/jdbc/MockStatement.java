@@ -37,6 +37,7 @@ public class MockStatement implements Statement
     private MockResultSet lastGeneratedKeys = null;
     private boolean closed = false;
     private boolean poolable = false;
+    private boolean closeOnCompletition = false;
     private Connection connection;
     
     public MockStatement(Connection connection)
@@ -568,6 +569,17 @@ public class MockStatement implements Statement
         throw new SQLException("No object found for " + iface);
     }
     
+    public void closeOnCompletion() throws SQLException
+    {
+        closeOnCompletition = true;
+        
+    }
+
+    public boolean isCloseOnCompletion() throws SQLException
+    {
+        return closeOnCompletition;
+    }
+
     protected MockResultSet cloneResultSet(MockResultSet resultSet)
     {
         if(null == resultSet) return null;

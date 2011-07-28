@@ -125,7 +125,7 @@ public class MockResultSetTest extends TestCase
         assertFalse(resultSet.rowInserted());
         assertEquals(3, resultSet.getInt(1));
         assertEquals("value3", resultSet.getString(2));
-        assertEquals(null, resultSet.getObject(3));
+        assertEquals(null, resultSet.getObject(3, String.class));
         assertEquals(3, resultSet.getInt("intColumn"));
         assertEquals("value3", resultSet.getString("stringColumn"));
         assertEquals(null, resultSet.getString("Column3"));
@@ -192,7 +192,7 @@ public class MockResultSetTest extends TestCase
         assertEquals(null, resultSet.getString(1));
         assertTrue(resultSet.wasNull());
         resultSet.next();
-        assertEquals("value", resultSet.getObject("column"));
+        assertEquals("value", resultSet.getObject("column", Integer.class));
         assertEquals("value", resultSet.getNString("column"));
         Clob clob = resultSet.getClob("column");
         assertEquals("value", clob.getSubString(1, 5));

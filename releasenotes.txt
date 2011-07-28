@@ -1,6 +1,8 @@
 
 mockrunner-0.4.3:
 
+- Mockrunner is now compatible with Java 1.7 and supports JDBC 4.1. The lib directory
+  contains versions for all supported Java and J2EE versions
 - XMLResultSetFactory now supports Squirrel dialect. Thanks to Bradley Kliewer for
   implementing this
 - MockHttpServletResponse#getHeaderNames() returns Collection from now on instead of Enumeration

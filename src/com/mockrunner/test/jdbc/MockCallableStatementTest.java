@@ -531,7 +531,7 @@ public class MockCallableStatementTest extends BaseTestCase
         statement.execute();
         assertEquals("xyz", statement.getString("TestParam"));
         assertEquals("xyz", statement.getNString("TestParam"));
-        assertEquals("xyz", statement.getObject("TestParam"));
+        assertEquals("xyz", statement.getObject("TestParam", Integer.class));
         assertEquals(2, statement.getInt(1));
         assertTrue(Arrays.equals(new byte[] {1, 2, 3}, statement.getBytes(3)));
         assertNull(statement.getString("1"));

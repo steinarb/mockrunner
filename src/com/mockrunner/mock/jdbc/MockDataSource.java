@@ -3,6 +3,8 @@ package com.mockrunner.mock.jdbc;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
+import java.util.logging.Logger;
 
 import javax.sql.DataSource;
 
@@ -14,6 +16,7 @@ public class MockDataSource implements DataSource
     private Connection connection = null;
     private int loginTimeout = 0;
     private PrintWriter logWriter = null;
+    private Logger parentLogger = null;
     
     /**
      * Set up the connection.
@@ -78,5 +81,15 @@ public class MockDataSource implements DataSource
     public Object unwrap(Class iface) throws SQLException
     {
         throw new SQLException("No object found for " + iface);
+    }
+
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException
+    {
+        return parentLogger;
+    }
+
+    public void setParentLogger(Logger parentLogger)
+    {
+        this.parentLogger = parentLogger;
     }
 }

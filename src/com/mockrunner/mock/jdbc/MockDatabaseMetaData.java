@@ -128,7 +128,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     private boolean supportsSubqueriesInIns = true;
     private boolean supportsSubqueriesInQuantifieds = true;
     private boolean supportsTableCorrelationNames = true;
-    private boolean supportsTransactions = true;;
+    private boolean supportsTransactions = true;
     private boolean supportsUnion = true;
     private boolean supportsUnionAll = true;
     private boolean usesLocalFilePerTable = false;
@@ -147,6 +147,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     private boolean updatesAreDetected = true;
     private boolean supportsResultSetConcurrency = true;
     private boolean supportsStoredFunctionsUsingCallSyntax = true;
+    private boolean generatedKeysAlwaysReturned = false;
     private String catalogSeparator = ".";
     private String catalogTerm = "database";
     private String databaseProductName = "MockDatabase";
@@ -190,6 +191,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     private Map functionColumnsMap = new HashMap();
     private Map tablesMap = new HashMap();
     private Map crossReferenceMap = new HashMap();
+    private Map pseudoColumnsMap = new HashMap();
     
     /**
      * Set if matching of catalogs, schemas, tables and columns
@@ -1331,6 +1333,16 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         this.usesLocalFiles = usesLocalFiles;
     }
     
+    public boolean generatedKeyAlwaysReturned() throws SQLException
+    {
+        return generatedKeysAlwaysReturned;
+    }
+
+    public void setGeneratedKeysAlwaysReturned(boolean generatedKeysAlwaysReturned)
+    {
+        this.generatedKeysAlwaysReturned = generatedKeysAlwaysReturned;
+    }
+
     public boolean deletesAreDetected(int type) throws SQLException
     {
         return deletesAreDetected;
@@ -1990,6 +2002,22 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         return findMatchingDatabaseIdentifier(expected, attributesMap);
     }
     
+    public ResultSet getPseudoColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern) throws SQLException
+    {
+        DatabaseIdentifier expected = new ColumnDatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern, columnNamePattern);
+        return findMatchingDatabaseIdentifier(expected, pseudoColumnsMap);
+    }
+    
+    public void setPseudoColumns(ResultSet pseudoColumns)
+    {
+        pseudoColumnsMap.put(new ColumnDatabaseIdentifierImpl(), pseudoColumns);
+    }
+    
+    public void setPseudoColumns(String catalog, String schemaPattern, String tableNamePattern, String columnNamePattern, ResultSet pseudoColumns)
+    {
+        pseudoColumnsMap.put(new ColumnDatabaseIdentifierImpl(catalog, schemaPattern, tableNamePattern, columnNamePattern), pseudoColumns);
+    }
+
     public void setAttributes(ResultSet attributes)
     {
         attributesMap.put(new AttributesDatabaseIdentifierImpl(), attributes);

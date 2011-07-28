@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+//import java.util.concurrent.Executor;
 
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.jdbc.CallableStatementResultSetHandler;
@@ -42,10 +43,12 @@ public class MockConnection implements Connection
     //private int holdability;
     private int level;
     private Map typeMap;
-    private String catalog ;
+    private String catalog;
+    private String schema;
     private int numberCommits;
     private int numberRollbacks;
     private Properties clientInfo;
+    private int networkTimeout;
     
     public MockConnection()
     {
@@ -75,6 +78,21 @@ public class MockConnection implements Connection
         clientInfo = new Properties();
     }
     
+    /*public void abort(Executor executor) throws SQLException
+    {
+      
+    }*/
+
+    /*public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException
+    {
+        this.networkTimeout = milliseconds;
+    }*/
+
+    public int getNetworkTimeout() throws SQLException
+    {
+        return networkTimeout;
+    }
+
     public void setMetaData(DatabaseMetaData metaData) throws SQLException
     {
         if(metaData != null && metaData instanceof MockDatabaseMetaData)
@@ -374,6 +392,16 @@ public class MockConnection implements Connection
     public void setClientInfo(String name, String value)
     {
         clientInfo.setProperty(name, value);
+    }
+
+    public String getSchema()
+    {
+        return schema;
+    }
+
+    public void setSchema(String schema)
+    {
+        this.schema = schema;
     }
 
     /*public void releaseSavepoint(Savepoint savepoint) throws SQLException

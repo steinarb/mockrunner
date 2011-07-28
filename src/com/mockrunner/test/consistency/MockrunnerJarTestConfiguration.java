@@ -28,6 +28,7 @@ public class MockrunnerJarTestConfiguration
     public final static String JDK14_DIR = "jdk1.4";
     public final static String JDK15_DIR = "jdk1.5";
     public final static String JDK16_DIR = "jdk1.6";
+    public final static String JDK17_DIR = "jdk1.7";
     public final static String J2EE13_DIR = "j2ee1.3";
     public final static String J2EE14_DIR = "j2ee1.4";
     public final static String JEE5_DIR = "jee5";
@@ -55,6 +56,9 @@ public class MockrunnerJarTestConfiguration
             List jdk16j2ee13Jars = getReleasedJars(JDK16_DIR, J2EE13_DIR);
             List jdk16j2ee14Jars = getReleasedJars(JDK16_DIR, J2EE14_DIR);
             List jdk16jee5Jars = getReleasedJars(JDK16_DIR, JEE5_DIR);
+            List jdk17j2ee13Jars = getReleasedJars(JDK17_DIR, J2EE13_DIR);
+            List jdk17j2ee14Jars = getReleasedJars(JDK17_DIR, J2EE14_DIR);
+            List jdk17jee5Jars = getReleasedJars(JDK17_DIR, JEE5_DIR);
             List jee5ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJEE5());
             List j2ee14ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJ2EE14());
             List j2ee13ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJ2EE13());
@@ -67,6 +71,9 @@ public class MockrunnerJarTestConfiguration
             List jdk16j2ee13mappings = createMappings(jdk16j2ee13Jars, j2ee13ThirdPartyJarURLs);
             List jdk16j2ee14mappings = createMappings(jdk16j2ee14Jars, j2ee14ThirdPartyJarURLs);
             List jdk16jee5mappings = createMappings(jdk16jee5Jars, jee5ThirdPartyJarURLs);
+            List jdk17j2ee13mappings = createMappings(jdk17j2ee13Jars, j2ee13ThirdPartyJarURLs);
+            List jdk17j2ee14mappings = createMappings(jdk17j2ee14Jars, j2ee14ThirdPartyJarURLs);
+            List jdk17jee5mappings = createMappings(jdk17jee5Jars, jee5ThirdPartyJarURLs);
             List resultList = new ArrayList();
             resultList.addAll(jdk13j2ee13mappings);
             resultList.addAll(jdk14j2ee13mappings);
@@ -77,6 +84,9 @@ public class MockrunnerJarTestConfiguration
             resultList.addAll(jdk16j2ee13mappings);
             resultList.addAll(jdk16j2ee14mappings);
             resultList.addAll(jdk16jee5mappings);
+            resultList.addAll(jdk17j2ee13mappings);
+            resultList.addAll(jdk17j2ee14mappings);
+            resultList.addAll(jdk17jee5mappings);
             return (Mapping[])resultList.toArray(new Mapping[resultList.size()]);
         } 
         catch (Exception exc)

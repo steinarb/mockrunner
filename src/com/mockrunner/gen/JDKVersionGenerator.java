@@ -171,9 +171,26 @@ public class JDKVersionGenerator
     {
         Map jdbcFiles = new HashMap();
         
+        JavaLineProcessor mockDriverProc = getProcessorForClass("com.mockrunner.mock.jdbc.MockDriver", jdbcFiles);
+        mockDriverProc.addLine("import java.sql.SQLFeatureNotSupportedException;");
+        mockDriverProc.addLine("import java.util.logging.Logger;");
+        mockDriverProc.addLine("private Logger parentLogger = null;");
+        mockDriverProc.addBlock("public Logger getParentLogger()");
+        mockDriverProc.addBlock("public void setParentLogger(Logger parentLogger)");
+        
+        JavaLineProcessor mockDataSourceProc = getProcessorForClass("com.mockrunner.mock.jdbc.MockDataSource", jdbcFiles);
+        mockDataSourceProc.addLine("import java.sql.SQLFeatureNotSupportedException;");
+        mockDataSourceProc.addLine("import java.util.logging.Logger;");
+        mockDataSourceProc.addLine("private Logger parentLogger = null;");
+        mockDataSourceProc.addBlock("public Logger getParentLogger()");
+        mockDataSourceProc.addBlock("public void setParentLogger(Logger parentLogger)");
+        
         JavaLineProcessor mockConnectionProc = getProcessorForClass("com.mockrunner.mock.jdbc.MockConnection", jdbcFiles);
         mockConnectionProc.addLine("import java.sql.NClob;");
         mockConnectionProc.addLine("import java.sql.SQLXML;");
+        mockConnectionProc.addLine("import java.util.concurrent.Executor;");
+        mockConnectionProc.addBlock("public void abort(Executor executor)");
+        mockConnectionProc.addBlock("public void setNetworkTimeout(Executor executor, int milliseconds)");
         mockConnectionProc.addBlock("public NClob createNClob()");
         mockConnectionProc.addBlock("public SQLXML createSQLXML()");
         

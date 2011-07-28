@@ -195,6 +195,16 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         return getObject(parameterIndex);
     }
 
+    public Object getObject(int parameterIndex, Class type) throws SQLException
+    {
+        return getObject(parameterIndex);
+    }
+
+    public Object getObject(String parameterName, Class type) throws SQLException
+    {
+        return getObject(parameterName);
+    }
+
     public byte getByte(int parameterIndex) throws SQLException
     {
         Object value = getObject(parameterIndex);

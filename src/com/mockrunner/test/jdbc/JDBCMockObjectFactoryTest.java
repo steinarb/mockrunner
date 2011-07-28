@@ -5,9 +5,11 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 import junit.framework.TestCase;
 
@@ -126,6 +128,11 @@ public class JDBCMockObjectFactoryTest extends TestCase
         public boolean jdbcCompliant()
         {
             return false;
+        }
+
+        public Logger getParentLogger() throws SQLFeatureNotSupportedException
+        {
+            return null;
         }
     }
     

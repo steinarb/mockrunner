@@ -36,6 +36,14 @@
         </echo>
     </target>
     
+    <target name="checkJDK1.7" unless="java1.7.home">
+        <echo>
+         Property "java1.7.home" not set. Please create a file
+         ".ant.properties" in this directory and set "java1.7.home"
+         to your JDK1.7 installation.
+        </echo>
+    </target>
+    
     <target name="checkBuildJ2EE1.3" unless="dobuild.j2ee1.3">
         <echo>
          Property "build.j2ee1.3" not set or set to false. Please 
@@ -80,6 +88,7 @@
         <antcall target="checkJDK1.4" />
         <antcall target="checkJDK1.5" />
         <antcall target="checkJDK1.6" />
+        <antcall target="checkJDK1.7" />
         <antcall target="checkBuildJ2EE1.3" />
         <antcall target="checkBuildJ2EE1.4" />
         <antcall target="checkJava2HTML" />
@@ -107,6 +116,12 @@
                 <isset property="java1.6.home" />
             </and>
         </condition>
+        <condition property="dobuild.jdk1.7.j2ee1.3">
+             <and>
+                 <isset property="dobuild.j2ee1.3" />
+                 <isset property="java1.7.home" />
+             </and>
+         </condition>
         <condition property="dobuild.jdk1.4.j2ee1.4">
             <and>
                 <isset property="dobuild.j2ee1.4" />
@@ -123,6 +138,12 @@
             <and>
                 <isset property="dobuild.j2ee1.4" />
                 <isset property="java1.6.home" />
+            </and>
+        </condition>
+        <condition property="dobuild.jdk1.7.j2ee1.4">
+            <and>
+                <isset property="dobuild.j2ee1.4" />
+                <isset property="java1.7.home" />
             </and>
         </condition>
     </target>
@@ -145,22 +166,28 @@
         
         <property name="buildjdk1.5jee5" value="buildjdk1.5jee5" />
         <property name="buildjdk1.6jee5" value="buildjdk1.6jee5" />
+        <property name="buildjdk1.7jee5" value="buildjdk1.7jee5" />
         <property name="buildjdk1.4j2ee1.4" value="buildjdk1.4j2ee1.4" />
         <property name="buildjdk1.5j2ee1.4" value="buildjdk1.5j2ee1.4" />
         <property name="buildjdk1.6j2ee1.4" value="buildjdk1.6j2ee1.4" />
+        <property name="buildjdk1.7j2ee1.4" value="buildjdk1.7j2ee1.4" />
         <property name="buildjdk1.3j2ee1.3" value="buildjdk1.3j2ee1.3" />
         <property name="buildjdk1.4j2ee1.3" value="buildjdk1.4j2ee1.3" />
         <property name="buildjdk1.5j2ee1.3" value="buildjdk1.5j2ee1.3" />
         <property name="buildjdk1.6j2ee1.3" value="buildjdk1.6j2ee1.3" />
+        <property name="buildjdk1.7j2ee1.3" value="buildjdk1.7j2ee1.3" />
         <property name="dependenciesjdk1.5jee5" value="dependenciesjdk1.5jee5" />
         <property name="dependenciesjdk1.6jee5" value="dependenciesjdk1.6jee5" />
+        <property name="dependenciesjdk1.7jee5" value="dependenciesjdk1.7jee5" />
         <property name="dependenciesjdk1.4j2ee1.4" value="dependenciesjdk1.4j2ee1.4" />
         <property name="dependenciesjdk1.5j2ee1.4" value="dependenciesjdk1.5j2ee1.4" />
         <property name="dependenciesjdk1.6j2ee1.4" value="dependenciesjdk1.6j2ee1.4" />
+        <property name="dependenciesjdk1.7j2ee1.4" value="dependenciesjdk1.7j2ee1.4" />
         <property name="dependenciesjdk1.3j2ee1.3" value="dependenciesjdk1.3j2ee1.3" />
         <property name="dependenciesjdk1.4j2ee1.3" value="dependenciesjdk1.4j2ee1.3" />
         <property name="dependenciesjdk1.5j2ee1.3" value="dependenciesjdk1.5j2ee1.3" />
         <property name="dependenciesjdk1.6j2ee1.3" value="dependenciesjdk1.6j2ee1.3" />
+        <property name="dependenciesjdk1.7j2ee1.3" value="dependenciesjdk1.7j2ee1.3" />
         <property name="doc" value="doc" />
         <property name="bin" value="bin" />
         
@@ -342,13 +369,16 @@
     <target name="compile" depends="init">
         <antcall target="compilejdk1.5jee5" inheritRefs="true" />
         <antcall target="compilejdk1.6jee5" inheritRefs="true" />
+        <antcall target="compilejdk1.7jee5" inheritRefs="true" />
         <antcall target="compilejdk1.4j2ee1.4" inheritRefs="true" />
         <antcall target="compilejdk1.5j2ee1.4" inheritRefs="true" />
         <antcall target="compilejdk1.6j2ee1.4" inheritRefs="true" />
+        <antcall target="compilejdk1.7j2ee1.4" inheritRefs="true" />
         <antcall target="compilejdk1.3j2ee1.3" inheritRefs="true" />
         <antcall target="compilejdk1.4j2ee1.3" inheritRefs="true" />
         <antcall target="compilejdk1.5j2ee1.3" inheritRefs="true" />
         <antcall target="compilejdk1.6j2ee1.3" inheritRefs="true" />
+        <antcall target="compilejdk1.7j2ee1.3" inheritRefs="true" />
     </target>
     
     <target name="compilejdk1.5jee5" if="java1.5.home">
@@ -379,7 +409,16 @@
     
     <target name="compilejdk1.6jee5" if="java1.6.home">
         <mkdir dir="${buildjdk1.6jee5}" />
-        <javac srcdir="${src}" destdir="${buildjdk1.6jee5}" source="1.6" target="1.6" executable="${java1.6.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+        <javac srcdir="${src}" compiler="javac1.6" destdir="${buildjdk1.6jee5}" source="1.6" target="1.6" executable="${java1.6.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+            <classpath>
+                <path refid="classpath.jar" />
+            </classpath>
+        </javac>
+    </target>
+    
+    <target name="compilejdk1.7jee5" if="java1.7.home">
+        <mkdir dir="${buildjdk1.7jee5}" />
+        <javac srcdir="${src}" destdir="${buildjdk1.7jee5}" source="1.7" target="1.7" executable="${java1.7.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
                 <path refid="classpath.jar" />
             </classpath>
@@ -440,7 +479,33 @@
     
     <target name="compilejdk1.6j2ee1.4" if="dobuild.jdk1.6.j2ee1.4">
         <mkdir dir="${buildjdk1.6j2ee1.4}" />
-        <javac destdir="${buildjdk1.6j2ee1.4}" source="1.6" target="1.6" executable="${java1.6.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+        <javac destdir="${buildjdk1.6j2ee1.4}" compiler="javac1.6" source="1.6" target="1.6" executable="${java1.6.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+            <classpath>
+                <path refid="classpathj2ee1.4.jar" />
+            </classpath>
+            <src path="${src}/com/mockrunner/base" />
+            <src path="${src}/com/mockrunner/servlet" />
+            <src path="${src}/com/mockrunner/struts" />
+            <src path="${src}/com/mockrunner/tag" />
+            <src path="${src}/com/mockrunner/ejb" />
+            <src path="${src}/com/mockrunner/connector" />
+            <src path="${src}/com/mockrunner/mock/ejb" />
+            <src path="${src}/com/mockrunner/jms" />
+            <src path="${src}/com/mockrunner/mock/jms" />
+            <src path="${src}/com/mockrunner/jdbc" />
+            <src path="${src}/com/mockrunner/mock/jdbc" />
+            <src path="${src}/com/mockrunner/mock/connector/cci" />
+            <src path="${src}/com/mockrunner/mock/connector/spi" />
+            <src path="${src}/com/mockrunner/util/common" />
+            <src path="${src}/com/mockrunner/util/web" />
+            <src path="${src}/org/activemq" />
+            <src path="${srcj2ee1.4}" />
+        </javac>
+    </target>
+    
+    <target name="compilejdk1.7j2ee1.4" if="dobuild.jdk1.7.j2ee1.4">
+        <mkdir dir="${buildjdk1.7j2ee1.4}" />
+        <javac destdir="${buildjdk1.7j2ee1.4}" source="1.7" target="1.7" executable="${java1.7.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
                 <path refid="classpathj2ee1.4.jar" />
             </classpath>
@@ -540,7 +605,32 @@
     
     <target name="compilejdk1.6j2ee1.3" if="dobuild.jdk1.6.j2ee1.3">
         <mkdir dir="${buildjdk1.6j2ee1.3}" />
-        <javac destdir="${buildjdk1.6j2ee1.3}" source="1.6" target="1.6" executable="${java1.6.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+        <javac destdir="${buildjdk1.6j2ee1.3}" compiler="javac1.7" source="1.6" target="1.6" executable="${java1.6.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
+            <classpath>
+                <path refid="classpathj2ee1.3.jar" />
+            </classpath>
+            <src path="${src}/com/mockrunner/base" />
+            <src path="${src}/com/mockrunner/servlet" />
+            <src path="${src}/com/mockrunner/struts" />
+            <src path="${src}/com/mockrunner/ejb" />
+            <src path="${src}/com/mockrunner/connector" />
+            <src path="${src}/com/mockrunner/mock/ejb" />
+            <src path="${src}/com/mockrunner/jms" />
+            <src path="${src}/com/mockrunner/mock/jms" />
+            <src path="${src}/com/mockrunner/jdbc" />
+            <src path="${src}/com/mockrunner/mock/jdbc" />
+            <src path="${src}/com/mockrunner/mock/connector/cci" />
+            <src path="${src}/com/mockrunner/mock/connector/spi" />
+            <src path="${src}/com/mockrunner/util/common" />
+            <src path="${src}/com/mockrunner/util/web" />
+            <src path="${src}/org/activemq" />
+            <src path="${srcj2ee1.3}" />
+        </javac>
+    </target>
+    
+    <target name="compilejdk1.7j2ee1.3" if="dobuild.jdk1.7.j2ee1.3">
+        <mkdir dir="${buildjdk1.7j2ee1.3}" />
+        <javac destdir="${buildjdk1.7j2ee1.3}" source="1.7" target="1.7" executable="${java1.7.home}/bin/javac" debug="true" debuglevel="source,lines" fork="true" nowarn="true">
             <classpath>
                 <path refid="classpathj2ee1.3.jar" />
             </classpath>
@@ -566,13 +656,16 @@
     <target name="jars" depends="compile">
         <antcall target="jarsjdk1.5jee5" inheritRefs="true" />
         <antcall target="jarsjdk1.6jee5" inheritRefs="true" />
+        <antcall target="jarsjdk1.7jee5" inheritRefs="true" />
         <antcall target="jarsjdk1.4j2ee1.4" inheritRefs="true" />
         <antcall target="jarsjdk1.5j2ee1.4" inheritRefs="true" />
         <antcall target="jarsjdk1.6j2ee1.4" inheritRefs="true" />
+        <antcall target="jarsjdk1.7j2ee1.4" inheritRefs="true" />
         <antcall target="jarsjdk1.3j2ee1.3" inheritRefs="true" />
         <antcall target="jarsjdk1.4j2ee1.3" inheritRefs="true" />
         <antcall target="jarsjdk1.5j2ee1.3" inheritRefs="true" />
         <antcall target="jarsjdk1.6j2ee1.3" inheritRefs="true" />
+        <antcall target="jarsjdk1.7j2ee1.3" inheritRefs="true" />
     </target>
     
     <target name="jarsjdk1.5jee5" if="java1.5.home">
@@ -689,6 +782,65 @@
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="5" />
             <param name="builddir" value="${buildjdk1.6jee5}" />
+            <param name="jarpattern" value="struts.jar.classes" />
+        </antcall>
+    </target>
+    
+    <target name="jarsjdk1.7jee5" if="java1.7.home">
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.7jee5}" />
+            <param name="jarpattern" value="full.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-jms.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.7jee5}" />
+            <param name="jarpattern" value="jms.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-ejb.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.7jee5}" />
+            <param name="jarpattern" value="ejb.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-jdbc.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.7jee5}" />
+            <param name="jarpattern" value="jdbc.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-jca.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.7jee5}" />
+            <param name="jarpattern" value="connector.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-servlet.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.7jee5}" />
+            <param name="jarpattern" value="servlet.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-tag.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.7jee5}" />
+            <param name="jarpattern" value="tag.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-struts.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="5" />
+            <param name="builddir" value="${buildjdk1.7jee5}" />
             <param name="jarpattern" value="struts.jar.classes" />
         </antcall>
     </target>
@@ -866,6 +1018,65 @@
             <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.4" />
             <param name="builddir" value="${buildjdk1.6j2ee1.4}" />
+            <param name="jarpattern" value="struts.jar.classes" />
+        </antcall>
+    </target>
+    
+    <target name="jarsjdk1.7j2ee1.4" if="dobuild.jdk1.7.j2ee1.4">
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.4" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.4}" />
+            <param name="jarpattern" value="full.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-jms.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.4" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.4}" />
+            <param name="jarpattern" value="jms.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-ejb.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.4" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.4}" />
+            <param name="jarpattern" value="ejb.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-jdbc.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.4" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.4}" />
+            <param name="jarpattern" value="jdbc.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-jca.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.4" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.4}" />
+            <param name="jarpattern" value="connector.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-servlet.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.4" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.4}" />
+            <param name="jarpattern" value="servlet.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-tag.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.4" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.4}" />
+            <param name="jarpattern" value="tag.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-struts.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.4" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.4}" />
             <param name="jarpattern" value="struts.jar.classes" />
         </antcall>
     </target>
@@ -1099,9 +1310,68 @@
         </antcall>
         <antcall target="jar" inheritRefs="true" >
             <param name="jarname" value="mockrunner-struts.jar" />
-            <param name="jdkver" value="1.5" />
+            <param name="jdkver" value="1.6" />
             <param name="j2eever" value="1.3" />
             <param name="builddir" value="${buildjdk1.6j2ee1.3}" />
+            <param name="jarpattern" value="struts.jar.classes" />
+        </antcall>
+    </target>
+    
+    <target name="jarsjdk1.7j2ee1.3" if="dobuild.jdk1.7.j2ee1.3">
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.3}" />
+            <param name="jarpattern" value="full.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-jms.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.3}" />
+            <param name="jarpattern" value="jms.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-ejb.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.3}" />
+            <param name="jarpattern" value="ejb.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-jdbc.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.3}" />
+            <param name="jarpattern" value="jdbc.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-jca.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.3}" />
+            <param name="jarpattern" value="connector.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-servlet.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.3}" />
+            <param name="jarpattern" value="servlet.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-tag.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.3}" />
+            <param name="jarpattern" value="tag.jar.classes" />
+        </antcall>
+        <antcall target="jar" inheritRefs="true" >
+            <param name="jarname" value="mockrunner-struts.jar" />
+            <param name="jdkver" value="1.7" />
+            <param name="j2eever" value="1.3" />
+            <param name="builddir" value="${buildjdk1.7j2ee1.3}" />
             <param name="jarpattern" value="struts.jar.classes" />
         </antcall>
     </target>
@@ -1138,13 +1408,16 @@
     <target name="dependencies" depends="jars" if="java1.6.home">
         <antcall target="dependenciesjdk1.5jee5" inheritRefs="true" />
         <antcall target="dependenciesjdk1.6jee5" inheritRefs="true" />
+        <antcall target="dependenciesjdk1.7jee5" inheritRefs="true" />
         <antcall target="dependenciesjdk1.4j2ee1.4" inheritRefs="true" />
         <antcall target="dependenciesjdk1.5j2ee1.4" inheritRefs="true" />
         <antcall target="dependenciesjdk1.6j2ee1.4" inheritRefs="true" />
+        <antcall target="dependenciesjdk1.7j2ee1.4" inheritRefs="true" />
         <antcall target="dependenciesjdk1.3j2ee1.3" inheritRefs="true" />
         <antcall target="dependenciesjdk1.4j2ee1.3" inheritRefs="true" />
         <antcall target="dependenciesjdk1.5j2ee1.3" inheritRefs="true" />
         <antcall target="dependenciesjdk1.6j2ee1.3" inheritRefs="true" />
+        <antcall target="dependenciesjdk1.7j2ee1.3" inheritRefs="true" />
     </target>
     
     <target name="dependenciesjdk1.5jee5" if="java1.5.home">
@@ -1203,6 +1476,36 @@
 
         <jaranalyzer srcdir="${dependenciesjdk1.6jee5}" 
                      destfile="${dependenciesjdk1.6jee5}/dependencies.txt"
+                     summaryclass="com.mockrunner.gen.jar.MockrunnerTextSummary"/>
+        
+    </target>
+    
+    <target name="dependenciesjdk1.7jee5" if="java1.7.home">
+        <mkdir dir="${dependenciesjdk1.7jee5}" />
+        <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
+            <classpath>
+                <pathelement location="${buildjdk1.7jee5}" />
+                <pathelement location="${config}" />
+                <path refid="classpath.jar" />
+            </classpath>
+        </taskdef>
+        <copy todir="${dependenciesjdk1.7jee5}">
+            <fileset dir="${lib}">
+                <patternset refid="runtime.jars" />
+                <exclude name="j2ee1.3/**" />
+                <exclude name="j2ee1.4/**" />
+                <exclude name="struts1.2/**" />
+            </fileset>
+        </copy>
+        
+        <copy todir="${dependenciesjdk1.7jee5}">
+             <fileset dir="${buildjdk1.7jee5}">
+                 <include name="*.jar" />
+             </fileset>
+        </copy>
+
+        <jaranalyzer srcdir="${dependenciesjdk1.7jee5}" 
+                     destfile="${dependenciesjdk1.7jee5}/dependencies.txt"
                      summaryclass="com.mockrunner.gen.jar.MockrunnerTextSummary"/>
         
     </target>
@@ -1320,6 +1623,45 @@
 
         <jaranalyzer srcdir="${dependenciesjdk1.6j2ee1.4}" 
                      destfile="${dependenciesjdk1.6j2ee1.4}/dependencies.txt"
+                     summaryclass="com.mockrunner.gen.jar.MockrunnerTextSummary"/>
+        
+    </target>
+    
+    <target name="dependenciesjdk1.7j2ee1.4" if="dobuild.jdk1.7.j2ee1.4">
+        <mkdir dir="${dependenciesjdk1.7j2ee1.4}" />
+        <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
+            <classpath>
+                <pathelement location="${buildjdk1.7jee5}" />
+                <pathelement location="${config}" />
+                <path refid="classpath.jar" />
+            </classpath>
+        </taskdef>
+        <copy todir="${dependenciesjdk1.7j2ee1.4}">
+            <fileset dir="${lib}">
+                <patternset refid="runtime.jars" />
+                <exclude name="j2ee1.3/**" />
+                <exclude name="j2ee1.4/**" />
+                <exclude name="struts1.2/**" />
+                <exclude name="servlet-api.jar" />
+                <exclude name="jsp-api.jar" />
+                <exclude name="el-api.jar" />
+                <exclude name="jasper.jar" />
+                <exclude name="jasper-el.jar" />
+                <exclude name="jboss-javaee-modified.jar" />
+            </fileset>
+            <fileset dir="${lib}/j2ee1.4">
+                <include name="*.jar" />
+            </fileset>
+        </copy>
+        
+        <copy todir="${dependenciesjdk1.7j2ee1.4}">
+             <fileset dir="${buildjdk1.7j2ee1.4}">
+                 <include name="*.jar" />
+             </fileset>
+        </copy>
+
+        <jaranalyzer srcdir="${dependenciesjdk1.7j2ee1.4}" 
+                     destfile="${dependenciesjdk1.7j2ee1.4}/dependencies.txt"
                      summaryclass="com.mockrunner.gen.jar.MockrunnerTextSummary"/>
         
     </target>
@@ -1495,8 +1837,51 @@
                      summaryclass="com.mockrunner.gen.jar.MockrunnerTextSummary"/>
         
     </target>
+    
+    <target name="dependenciesjdk1.7j2ee1.3" if="dobuild.jdk1.7.j2ee1.3">
+        <mkdir dir="${dependenciesjdk1.7j2ee1.3}" />
+        <taskdef name="jaranalyzer" classname="com.kirkk.analyzer.textui.JarAnalyzerTask">
+            <classpath>
+                <pathelement location="${buildjdk1.7jee5}" />
+                <pathelement location="${config}" />
+                <path refid="classpathj2ee1.3.jar" />
+            </classpath>
+        </taskdef>
+        <copy todir="${dependenciesjdk1.7j2ee1.3}">
+            <fileset dir="${lib}">
+                <patternset refid="runtime.jars" />
+                <exclude name="j2ee1.3/**" />
+                <exclude name="j2ee1.4/**" />
+                <exclude name="struts1.2/**" />
+                <exclude name="struts-*.jar" />
+                <exclude name="servlet-api.jar" />
+                <exclude name="jsp-api.jar" />
+                <exclude name="el-api.jar" />
+                <exclude name="jasper.jar" />
+                <exclude name="jasper-el.jar" />
+                <exclude name="jboss-javaee-modified.jar" />
+            </fileset>
+            <fileset dir="${lib}/struts1.2">
+                <include name="*.jar" />
+            </fileset>
+            <fileset dir="${lib}/j2ee1.3">
+                <include name="*.jar" />
+            </fileset>
+        </copy>
+        
+        <copy todir="${dependenciesjdk1.7j2ee1.3}">
+             <fileset dir="${buildjdk1.7j2ee1.3}">
+                 <include name="*.jar" />
+             </fileset>
+        </copy>
 
-    <target name="javadoc" depends="init" if="java1.6.home">
+        <jaranalyzer srcdir="${dependenciesjdk1.7j2ee1.3}" 
+                     destfile="${dependenciesjdk1.7j2ee1.3}/dependencies.txt"
+                     summaryclass="com.mockrunner.gen.jar.MockrunnerTextSummary"/>
+        
+    </target>
+
+    <target name="javadoc" depends="init" if="java1.7.home">
         <mkdir dir="${doc}/api" />
         <javadoc destdir="${doc}/api" 
                  source="1.5" 
@@ -1507,7 +1892,7 @@
                  windowtitle="Mockrunner">
 
             <classpath>
-                <pathelement location="${buildjdk1.6j2ee1.4}" />
+                <pathelement location="${buildjdk1.7j2ee1.4}" />
                 <path refid="classpath.jar" />
             </classpath>
 
@@ -1551,14 +1936,17 @@
         <antcall target="copyjar" inheritRefs="true" />   
         <antcall target="copysrc" inheritRefs="true" />  
         <antcall target="copylibjdk1.5jee5" inheritRefs="true" />
-        <antcall target="copylibjdk1.6jee5" inheritRefs="true" />   
+        <antcall target="copylibjdk1.6jee5" inheritRefs="true" />
+	    <antcall target="copylibjdk1.7jee5" inheritRefs="true" />
         <antcall target="copylibjdk1.4j2ee1.4" inheritRefs="true" />
         <antcall target="copylibjdk1.5j2ee1.4" inheritRefs="true" />
         <antcall target="copylibjdk1.6j2ee1.4" inheritRefs="true" />
+	    <antcall target="copylibjdk1.7j2ee1.4" inheritRefs="true" />
         <antcall target="copylibjdk1.3j2ee1.3" inheritRefs="true" />
         <antcall target="copylibjdk1.4j2ee1.3" inheritRefs="true" />
         <antcall target="copylibjdk1.5j2ee1.3" inheritRefs="true" />
         <antcall target="copylibjdk1.6j2ee1.3" inheritRefs="true" />
+	    <antcall target="copylibjdk1.7j2ee1.3" inheritRefs="true" />
         <zip destfile="${release.file}" basedir="${bin}" />
 	</target>
     
@@ -1649,6 +2037,24 @@
         </copy>
     </target>
     
+    <target name="copylibjdk1.7jee5" if="java1.7.home">
+        <mkdir dir="${release.root}/${release.lib}/jdk1.7/jee5" />
+        <copy todir="${release.root}/${release.lib}/jdk1.7/jee5">
+            <fileset dir="${buildjdk1.7jee5}">
+                <include name="*.jar" />
+            </fileset>
+        </copy>
+        <antcall target="copydependenciesjdk1.7jee5" />
+    </target>
+    
+    <target name="copydependenciesjdk1.7jee5" if="java1.7.home">
+        <copy todir="${release.root}/${release.lib}/jdk1.7/jee5">
+            <fileset dir="${dependenciesjdk1.7jee5}">
+                <include name="*.txt" />
+            </fileset>
+        </copy>
+    </target>
+    
     <target name="copylibjdk1.4j2ee1.4" if="dobuild.jdk1.4.j2ee1.4">
         <mkdir dir="${release.root}/${release.lib}/jdk1.4/j2ee1.4" />
         <copy todir="${release.root}/${release.lib}/jdk1.4/j2ee1.4">
@@ -1698,6 +2104,24 @@
     <target name="copydependenciesjdk1.6j2ee1.4" if="java1.6.home">
         <copy todir="${release.root}/${release.lib}/jdk1.6/j2ee1.4">
             <fileset dir="${dependenciesjdk1.6j2ee1.4}">
+                <include name="*.txt" />
+            </fileset>
+        </copy>
+    </target>
+    
+    <target name="copylibjdk1.7j2ee1.4" if="dobuild.jdk1.7.j2ee1.4">
+        <mkdir dir="${release.root}/${release.lib}/jdk1.7/j2ee1.4" />
+        <copy todir="${release.root}/${release.lib}/jdk1.7/j2ee1.4">
+            <fileset dir="${buildjdk1.7j2ee1.4}">
+                <include name="*.jar" />
+            </fileset>
+        </copy>
+        <antcall target="copydependenciesjdk1.7j2ee1.4" />
+    </target>
+    
+    <target name="copydependenciesjdk1.7j2ee1.4" if="java1.7.home">
+        <copy todir="${release.root}/${release.lib}/jdk1.7/j2ee1.4">
+            <fileset dir="${dependenciesjdk1.7j2ee1.4}">
                 <include name="*.txt" />
             </fileset>
         </copy>
@@ -1774,28 +2198,52 @@
            </fileset>
        </copy>
    </target>
+    
+    <target name="copylibjdk1.7j2ee1.3" if="dobuild.jdk1.7.j2ee1.3">
+        <mkdir dir="${release.root}/${release.lib}/jdk1.7/j2ee1.3" />
+        <copy todir="${release.root}/${release.lib}/jdk1.7/j2ee1.3">
+            <fileset dir="${buildjdk1.7j2ee1.3}">
+                <include name="*.jar" />
+            </fileset>
+        </copy>
+        <antcall target="copydependenciesjdk1.7j2ee1.3" />
+    </target>
+    
+    <target name="copydependenciesjdk1.7j2ee1.3" if="java1.7.home">
+        <copy todir="${release.root}/${release.lib}/jdk1.7/j2ee1.3">
+           <fileset dir="${dependenciesjdk1.7j2ee1.3}">
+               <include name="*.txt" />
+           </fileset>
+       </copy>
+   </target>
 
     <target name="clean" depends="init">
         <delete dir="${bin}" />
         <delete dir="${doc}" />
         <delete dir="${buildjdk1.5jee5}" />
         <delete dir="${buildjdk1.6jee5}" />
+        <delete dir="${buildjdk1.7jee5}" />
         <delete dir="${buildjdk1.4j2ee1.4}" />
         <delete dir="${buildjdk1.5j2ee1.4}" />
         <delete dir="${buildjdk1.6j2ee1.4}" />
+        <delete dir="${buildjdk1.7j2ee1.4}" />
         <delete dir="${buildjdk1.3j2ee1.3}" />
         <delete dir="${buildjdk1.4j2ee1.3}" />
         <delete dir="${buildjdk1.5j2ee1.3}" />
         <delete dir="${buildjdk1.6j2ee1.3}" />
+        <delete dir="${buildjdk1.7j2ee1.3}" />
         <delete dir="${dependenciesjdk1.5jee5}" />
         <delete dir="${dependenciesjdk1.6jee5}" />
+        <delete dir="${dependenciesjdk1.7jee5}" />
         <delete dir="${dependenciesjdk1.4j2ee1.4}" />
         <delete dir="${dependenciesjdk1.5j2ee1.4}" />
         <delete dir="${dependenciesjdk1.6j2ee1.4}" />
+        <delete dir="${dependenciesjdk1.7j2ee1.4}" />
         <delete dir="${dependenciesjdk1.3j2ee1.3}" />
         <delete dir="${dependenciesjdk1.4j2ee1.3}" />
         <delete dir="${dependenciesjdk1.5j2ee1.3}" />
         <delete dir="${dependenciesjdk1.6j2ee1.3}" />
+        <delete dir="${dependenciesjdk1.7j2ee1.3}" />
     </target>
 
 </project>

@@ -774,6 +774,16 @@ public class MockResultSet implements ResultSet, Cloneable
         return value;
     }
     
+    public Object getObject(int columnIndex, Class type) throws SQLException
+    {
+        return getObject(columnIndex);
+    }
+
+    public Object getObject(String columnLabel, Class type) throws SQLException
+    {
+        return getObject(columnLabel);
+    }
+
     public Object getObject(int columnIndex, Map map) throws SQLException
     {
         return getObject(columnIndex);

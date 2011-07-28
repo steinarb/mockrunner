@@ -4,7 +4,9 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  * Mock implementation of a JDBC <code>Driver</code>.
@@ -12,6 +14,7 @@ import java.util.Properties;
 public class MockDriver implements Driver
 {
     private Connection connection;
+    private Logger parentLogger = null;
     
     public void setupConnection(Connection connection)
     {
@@ -46,5 +49,15 @@ public class MockDriver implements Driver
     public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) throws SQLException
     {
         return new DriverPropertyInfo[0];
+    }
+    
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException
+    {
+        return parentLogger;
+    }
+
+    public void setParentLogger(Logger parentLogger)
+    {
+        this.parentLogger = parentLogger;
     }
 }
