@@ -11,6 +11,7 @@ mockrunner-0.4.3:
 - minor refactoring to make stream handling more efficient
 - fixed bug in MockMapMessage allowing null values
 - fixed bug 3196109
+- fixed character encoding bug in MockHttpServletResponse reported by Are Meisfjord
 - updated nekohtml.jar from 1.9.13 to 1.9.14
 - updated servlet-api.jar and jsp-api.jar from Tomcat 5.5.27 to 5.5.33
 - updated servlet.jar from Tomcat 4.1.39 to 4.1.40

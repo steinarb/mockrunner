@@ -1,6 +1,7 @@
 package com.mockrunner.test.web;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletResponse;
@@ -139,5 +140,13 @@ public class MockHttpServletResponseTest extends TestCase
         assertFalse(response.getOutputStreamContent().startsWith("הה"));
         response.setCharacterEncoding("ISO-8859-1");
         assertTrue(response.getOutputStreamContent().startsWith("הה"));
+        response.resetAll();
+        response.setCharacterEncoding("UTF-8"); 
+        String input = "\u00F8";
+        PrintWriter writer = response.getWriter(); 
+        writer.write(input);
+        response.flushBuffer(); 
+        String output = response.getOutputStreamContent();
+        assertTrue(output.equals(input));
     }
 }

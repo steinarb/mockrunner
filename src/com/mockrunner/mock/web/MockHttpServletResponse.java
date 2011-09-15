@@ -199,6 +199,14 @@ public class MockHttpServletResponse implements HttpServletResponse
     {
         characterEncoding = encoding;
         outputStream.setEncoding(encoding);
+        try
+        {
+            writer = new PrintWriter(new OutputStreamWriter(outputStream, characterEncoding), true);
+        } 
+        catch(UnsupportedEncodingException exc)
+        {
+            throw new NestedApplicationException(exc);
+        }
     }
 
     public Locale getLocale()
