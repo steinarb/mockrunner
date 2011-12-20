@@ -172,8 +172,8 @@ cglib 2.2:
 http://cglib.sourceforge.net
 cglib-nodep-2.2.2.jar
 
-JDOM 1.1.1:
-http://www.jdom.org
+JDOM 1.1.2:
+http://www.jdom-1.1.2.org
 jdom.jar
 
 NekoHTML Parser 1.9.15:
