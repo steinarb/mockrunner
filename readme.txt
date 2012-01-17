@@ -136,7 +136,7 @@ jboss-javaee-modified.jar (modified version of jboss-javaee.jar,
                            added the org/jboss/util/id classes because jboss-javaee.jar contains references to these classes)
 
 J2EE 1.4:
-Tomcat 5.5.34:
+Tomcat 5.5.35:
 http://tomcat.apache.org
 servlet-api.jar
 jsp-api.jar
