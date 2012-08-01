@@ -128,7 +128,13 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     {
         batchParameters.add(new HashMap(paramObjects));
     }
-
+    
+    public void clearBatch() throws SQLException
+    {
+        super.clearBatch();
+        batchParameters.clear();
+    }
+    
     public void clearParameters() throws SQLException
     {
         paramObjects.clear();

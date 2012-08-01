@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.base.BaseTestCase;
+import com.mockrunner.jdbc.ParameterSets;
 import com.mockrunner.jdbc.PreparedStatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockClob;
@@ -412,6 +413,36 @@ public class MockPreparedStatementTest extends BaseTestCase
         preparedStatementHandler.setExactMatchParameter(true);
         testUpdateCount = statement.executeUpdate();
         assertEquals(0, testUpdateCount);
+    }
+    
+    public void testClearBatch() throws Exception
+    {
+        preparedStatementHandler.prepareGlobalUpdateCount(2);
+        MockPreparedStatement statement = (MockPreparedStatement)connection.prepareStatement("insert into x(y) values(?)");
+        statement.setString(1, "1");
+        statement.setString(2, "2");
+        statement.addBatch();
+        statement.addBatch();
+        statement.executeBatch();
+        ParameterSets parameterSets = (ParameterSets)preparedStatementHandler.getExecutedStatementParameterMap().get("insert into x(y) values(?)");
+        assertEquals(2, parameterSets.getNumberParameterSets());
+        assertEquals(2, parameterSets.getParameterSet(0).size());
+        assertEquals(2, parameterSets.getParameterSet(1).size());
+        statement.clearBatch();
+        statement.addBatch();
+        statement.executeBatch();
+        assertEquals(3, parameterSets.getNumberParameterSets());
+        assertEquals(2, parameterSets.getParameterSet(0).size());
+        assertEquals(2, parameterSets.getParameterSet(1).size());
+        assertEquals(2, parameterSets.getParameterSet(2).size());
+        statement.clearBatch();
+        statement.clearParameters();
+        statement.addBatch();
+        statement.executeBatch();
+        assertEquals(2, parameterSets.getParameterSet(0).size());
+        assertEquals(2, parameterSets.getParameterSet(1).size());
+        assertEquals(2, parameterSets.getParameterSet(2).size());
+        assertEquals(0, parameterSets.getParameterSet(3).size());
     }
         
     public void testPrepareUpdateCountBatch() throws Exception
