@@ -13,7 +13,7 @@ mockrunner-0.4.3:
 - fixed bug 3196109
 - fixed character encoding bug in MockHttpServletResponse reported by Are Meisfjord
 - fixed MockPreparedStatement.clearBatch bug reported by Omri Spector
-- updated nekohtml.jar from 1.9.13 to 1.9.15
+- updated nekohtml.jar from 1.9.13 to 1.9.16
 - updated servlet-api.jar and jsp-api.jar from Tomcat 5.5.27 to 5.5.35
 - updated servlet.jar from Tomcat 4.1.39 to 4.1.40
 - updated servlet-api.jar, jsp-api.jar, el-api.jar, jasper.jar and jasper-el.jar
