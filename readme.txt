@@ -170,7 +170,7 @@ jakarta-oro-2.0.8.jar (from MockEJB 0.6 beta2 release)
 
 cglib 2.2:
 http://cglib.sourceforge.net
-cglib-nodep-2.2.2.jar
+cglib-nodep-2.2.3.jar
 
 JDOM 1.1.2:
 http://www.jdom-1.1.2.org
