@@ -355,7 +355,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     public Enumeration getHeaders(String key)
     {
         List headerList = (List)headers.get(key);
-        if(null == headerList) return null;
+        if(null == headerList) return new Vector().elements();;
         return new Vector(headerList).elements();
     }
 

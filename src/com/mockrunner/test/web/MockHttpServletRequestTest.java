@@ -206,6 +206,7 @@ public class MockHttpServletRequestTest extends TestCase
         request.clearHeaders();
         headers = request.getHeaderNames();
         assertFalse(headers.hasMoreElements());
+        assertFalse(request.getHeaders("doesnotexist").hasMoreElements());
     }
     
     public void testHeadersCaseInsensitive()
