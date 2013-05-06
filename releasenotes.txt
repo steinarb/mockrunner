@@ -17,7 +17,7 @@ mockrunner-0.4.3:
 - updated servlet-api.jar and jsp-api.jar from Tomcat 5.5.27 to 5.5.36
 - updated servlet.jar from Tomcat 4.1.39 to 4.1.40
 - updated servlet-api.jar, jsp-api.jar, el-api.jar, jasper.jar and jasper-el.jar
-  from Tomcat 6.0.20 to Tomcat 6.0.36
+  from Tomcat 6.0.20 to Tomcat 6.0.37
 - updated xercesImpl.jar and xml-apis.jar from Xerces 2.9.1 to 2.11.0
 - updated cglib from 2.2 to 2.2.3
 - updated jdom.jar from 1.1.1 to 1.1.3
