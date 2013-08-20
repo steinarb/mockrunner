@@ -7,7 +7,7 @@
  <modelVersion>4.0.0</modelVersion>
  <groupId>com.mockrunner</groupId>
  <artifactId>mockrunner</artifactId>
- <version>0.4.2</version>
+ <version>0.4.3</version>
  <name>MockRunner</name>
  <url>http://mockrunner.sourceforge.net/</url>
  <description>Mockrunner is a lightweight framework for unit testing applications in the J2EE environment. It supports servlets, filters, tag classes and Struts actions. It includes a JDBC a JMS and a JCA test framework and can be used to test EJB based applications.</description>
