@@ -9,7 +9,7 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.jms.JMSTestModule;
+//import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.util.common.ClassUtil;
 
 public class ClassUtilTest extends TestCase
@@ -46,10 +46,10 @@ public class ClassUtilTest extends TestCase
         assertEquals("booleanValue", ClassUtil.getArgumentName(Boolean.TYPE));
         assertEquals("string", ClassUtil.getArgumentName(String.class));
         assertEquals("classUtilTest", ClassUtil.getArgumentName(ClassUtilTest.class));
-        assertEquals("jmsTestModule", ClassUtil.getArgumentName(JMSTestModule.class));
+//        assertEquals("jmsTestModule", ClassUtil.getArgumentName(JMSTestModule.class));
         assertEquals("url", ClassUtil.getArgumentName(URL.class));
         assertEquals("urls", ClassUtil.getArgumentName(URL[].class));
-        assertEquals("jmsTestModules", ClassUtil.getArgumentName(JMSTestModule[].class));
+//        assertEquals("jmsTestModules", ClassUtil.getArgumentName(JMSTestModule[].class));
         assertEquals("strings", ClassUtil.getArgumentName(String[].class));
         assertEquals("intValues", ClassUtil.getArgumentName(int[][][].class));
         assertEquals("doubleValues", ClassUtil.getArgumentName(Double[][].class));

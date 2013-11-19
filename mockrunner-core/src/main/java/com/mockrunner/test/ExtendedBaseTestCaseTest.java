@@ -4,7 +4,7 @@ import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.connector.cci.ConnectorMockObjectFactory;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
-import com.mockrunner.mock.jms.JMSMockObjectFactory;
+//import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.web.ActionMockObjectFactory;
 import com.mockrunner.mock.web.WebMockObjectFactory;
 
@@ -14,7 +14,7 @@ public class ExtendedBaseTestCaseTest extends BaseTestCase
     private JDBCMockObjectFactory jdbcMockFactory;
     private EJBMockObjectFactory ejbMockFactory;
     private ConnectorMockObjectFactory connectorMockFactory;
-    private JMSMockObjectFactory jmsMockFactory;
+//    private JMSMockObjectFactory jmsMockFactory;
 
     protected void setUp() throws Exception
     {
@@ -23,7 +23,7 @@ public class ExtendedBaseTestCaseTest extends BaseTestCase
         jdbcMockFactory = new JDBCMockObjectFactory() {};
         ejbMockFactory = new EJBMockObjectFactory() {};
         connectorMockFactory = new ConnectorMockObjectFactory() {};
-        jmsMockFactory = new JMSMockObjectFactory() {};
+//        jmsMockFactory = new JMSMockObjectFactory() {};
     }
 
     protected void tearDown() throws Exception
@@ -33,7 +33,7 @@ public class ExtendedBaseTestCaseTest extends BaseTestCase
         jdbcMockFactory = null;
         ejbMockFactory = null;
         connectorMockFactory = null;
-        jmsMockFactory = null;
+//        jmsMockFactory = null;
     }
     
     public void testGetFactories()
@@ -43,7 +43,7 @@ public class ExtendedBaseTestCaseTest extends BaseTestCase
         assertSame(jdbcMockFactory, getJDBCMockObjectFactory());
         assertSame(ejbMockFactory, getEJBMockObjectFactory());
         assertSame(connectorMockFactory, getConnectorMockObjectFactory());
-        assertSame(jmsMockFactory, getJMSMockObjectFactory());
+//        assertSame(jmsMockFactory, getJMSMockObjectFactory());
     }
 
     protected ActionMockObjectFactory createActionMockObjectFactory()
@@ -66,10 +66,12 @@ public class ExtendedBaseTestCaseTest extends BaseTestCase
         return jdbcMockFactory;
     }
 
+    /*
     protected JMSMockObjectFactory createJMSMockObjectFactory()
     {
         return jmsMockFactory;
     }
+    */
 
     protected WebMockObjectFactory createWebMockObjectFactory()
     {

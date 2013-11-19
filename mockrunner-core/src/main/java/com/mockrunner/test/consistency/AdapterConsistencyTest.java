@@ -26,9 +26,9 @@ import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.JDBCTestCaseAdapter;
 import com.mockrunner.jdbc.JDBCTestModule;
-import com.mockrunner.jms.BasicJMSTestCaseAdapter;
-import com.mockrunner.jms.JMSTestCaseAdapter;
-import com.mockrunner.jms.JMSTestModule;
+//import com.mockrunner.jms.BasicJMSTestCaseAdapter;
+//import com.mockrunner.jms.JMSTestCaseAdapter;
+//import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 import com.mockrunner.servlet.ServletTestCaseAdapter;
 import com.mockrunner.servlet.ServletTestModule;
@@ -74,8 +74,8 @@ public class AdapterConsistencyTest extends TestCase
         addAdapter(JDBCTestModule.class, JDBCTestCaseAdapter.class);
         addAdapter(JDBCTestModule.class, BasicJDBCTestCaseAdapter.class);
         
-        addAdapter(JMSTestModule.class, JMSTestCaseAdapter.class);
-        addAdapter(JMSTestModule.class, BasicJMSTestCaseAdapter.class);
+//        addAdapter(JMSTestModule.class, JMSTestCaseAdapter.class);
+//        addAdapter(JMSTestModule.class, BasicJMSTestCaseAdapter.class);
         
         addAdapter(ConnectorTestModule.class, ConnectorTestCaseAdapter.class);
         addAdapter(ConnectorTestModule.class, BasicConnectorTestCaseAdapter.class);

@@ -30,31 +30,31 @@ import org.mockejb.TransactionPolicy;
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 import com.mockrunner.mock.ejb.MockUserTransaction;
-import com.mockrunner.mock.jms.JMSMockObjectFactory;
-import com.mockrunner.mock.jms.MockQueue;
-import com.mockrunner.mock.jms.MockQueueConnection;
-import com.mockrunner.mock.jms.MockQueueConnectionFactory;
-import com.mockrunner.mock.jms.MockQueueReceiver;
-import com.mockrunner.mock.jms.MockQueueSession;
-import com.mockrunner.mock.jms.MockTextMessage;
-import com.mockrunner.mock.jms.MockTopic;
-import com.mockrunner.mock.jms.MockTopicConnection;
-import com.mockrunner.mock.jms.MockTopicConnectionFactory;
-import com.mockrunner.mock.jms.MockTopicSession;
-import com.mockrunner.mock.jms.MockTopicSubscriber;
+//import com.mockrunner.mock.jms.JMSMockObjectFactory;
+//import com.mockrunner.mock.jms.MockQueue;
+//import com.mockrunner.mock.jms.MockQueueConnection;
+//import com.mockrunner.mock.jms.MockQueueConnectionFactory;
+//import com.mockrunner.mock.jms.MockQueueReceiver;
+//import com.mockrunner.mock.jms.MockQueueSession;
+//import com.mockrunner.mock.jms.MockTextMessage;
+//import com.mockrunner.mock.jms.MockTopic;
+//import com.mockrunner.mock.jms.MockTopicConnection;
+//import com.mockrunner.mock.jms.MockTopicConnectionFactory;
+//import com.mockrunner.mock.jms.MockTopicSession;
+//import com.mockrunner.mock.jms.MockTopicSubscriber;
 
 public class EJBTestModuleTest extends TestCase
 {
     private EJBMockObjectFactory ejbMockFactory;
     private EJBTestModule ejbModule;
-    private JMSMockObjectFactory jmsMockFactory;
+//    private JMSMockObjectFactory jmsMockFactory;
     
     protected void setUp() throws Exception
     {
         super.setUp();
         ejbMockFactory = new EJBMockObjectFactory();
         ejbModule = new EJBTestModule(ejbMockFactory);
-        jmsMockFactory = new JMSMockObjectFactory();
+//        jmsMockFactory = new JMSMockObjectFactory();
     }
     
 	protected void tearDown() throws Exception
@@ -349,6 +349,7 @@ public class EJBTestModuleTest extends TestCase
 		assertTrue(home instanceof TestEntityHome);
 	}
 	
+	/*
 	public void testDeployMessageBeanBoundToContext() throws Exception
 	{
 		MockQueueConnectionFactory queueFactory = jmsMockFactory.getMockQueueConnectionFactory();
@@ -362,7 +363,9 @@ public class EJBTestModuleTest extends TestCase
 		assertSame(topicFactory, ejbModule.lookup("factoryJNDITopicFactory"));
 		assertSame(topic, ejbModule.lookup("destinationJNDITopic"));
 	}
+	*/
 	
+	/*
 	public void testDeployMessageBeanQueueConnectionCreated() throws Exception
 	{
 		MockQueueConnectionFactory queueFactory = jmsMockFactory.getMockQueueConnectionFactory();
@@ -379,7 +382,9 @@ public class EJBTestModuleTest extends TestCase
 		assertNotNull(queueReceiver);
 		assertNotNull(queueReceiver.getMessageListener());
 	}
+	*/
 	
+	/*
 	public void testDeployMessageBeanTopicConnectionCreated() throws Exception
 	{
 		MockTopicConnectionFactory topicFactory = jmsMockFactory.getMockTopicConnectionFactory();
@@ -396,7 +401,9 @@ public class EJBTestModuleTest extends TestCase
 		assertNotNull(topicSubscriber);
 		assertNotNull(topicSubscriber.getMessageListener());
 	}
+	*/
 	
+	/*
 	public void testDeployMessageBeanSendMessage() throws Exception
 	{
 		MockQueueConnectionFactory queueFactory = jmsMockFactory.getMockQueueConnectionFactory();
@@ -409,6 +416,7 @@ public class EJBTestModuleTest extends TestCase
 		sender.send(message);
 		assertSame(message, messageBean.getMessage());
 	}
+	*/
 		
     public void testTransaction() throws Exception
     {
@@ -463,6 +471,7 @@ public class EJBTestModuleTest extends TestCase
         ejbModule.verifyRolledBack();
     }
     
+    /*
 	public void testTransactionMessageBean() throws Exception
 	{
 		MockTopicConnectionFactory topicFactory = jmsMockFactory.getMockTopicConnectionFactory();
@@ -483,6 +492,7 @@ public class EJBTestModuleTest extends TestCase
 		ejbModule.verifyMarkedForRollback();
 		ejbModule.verifyRolledBack();
 	}
+	*/
     
     public static class TestSessionBean implements SessionBean
     {

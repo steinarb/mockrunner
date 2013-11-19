@@ -19,7 +19,7 @@ import com.mockrunner.mock.connector.cci.ConnectorMockObjectFactory;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jdbc.MockDriver;
-import com.mockrunner.mock.jms.JMSMockObjectFactory;
+//import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.web.ActionMockObjectFactory;
 import com.mockrunner.mock.web.WebMockObjectFactory;
 
@@ -51,7 +51,7 @@ public class BaseTestCaseTest extends BaseTestCase
     public void testLazyFactoriesInstance()
     {
         assertSame(getJDBCMockObjectFactory(), getJDBCMockObjectFactory());
-        assertSame(getJMSMockObjectFactory(), getJMSMockObjectFactory());
+//        assertSame(getJMSMockObjectFactory(), getJMSMockObjectFactory());
         assertSame(getEJBMockObjectFactory(), getEJBMockObjectFactory());
         assertSame(getWebMockObjectFactory(), getWebMockObjectFactory());
         assertSame(getActionMockObjectFactory(), getActionMockObjectFactory());
@@ -70,7 +70,8 @@ public class BaseTestCaseTest extends BaseTestCase
         setWebMockObjectFactory(null);
         assertSame(actionFactory, getWebMockObjectFactory());
     }
-    
+
+    /*
     public void testSetJMSFactory()
     {
         JMSMockObjectFactory jmsFactory = new JMSMockObjectFactory();
@@ -80,6 +81,7 @@ public class BaseTestCaseTest extends BaseTestCase
         assertNotNull(getJMSMockObjectFactory());
         assertNotSame(jmsFactory, getJMSMockObjectFactory());
     }
+    */
     
     public void testSetJDBCFactory()
     {

@@ -13,7 +13,7 @@ import junit.framework.TestSuite;
 import com.mockrunner.example.connector.AccountDAOTest;
 import com.mockrunner.example.ejb.UserLoginSessionTest;
 import com.mockrunner.example.jdbc.BookstoreTest;
-import com.mockrunner.example.jms.StockQuotePublisherTest;
+//import com.mockrunner.example.jms.StockQuotePublisherTest;
 import com.mockrunner.example.servlet.RedirectServletTest;
 import com.mockrunner.example.struts.AuthenticationActionTest;
 import com.mockrunner.example.tag.TableEnumTagTest;
@@ -37,7 +37,7 @@ public class MockrunnerJarTestConfiguration
     public final static String ALL_REFERENCE_TEST = AllReferenceTests.class.getName();
     public final static String JDBC_REFERENCE_TEST = BookstoreTest.class.getName();
     public final static String EJB_REFERENCE_TEST = UserLoginSessionTest.class.getName();
-    public final static String JMS_REFERENCE_TEST = StockQuotePublisherTest.class.getName();
+//    public final static String JMS_REFERENCE_TEST = StockQuotePublisherTest.class.getName();
     public final static String SERVLET_REFERENCE_TEST = RedirectServletTest.class.getName();
     public final static String STRUTS_REFERENCE_TEST = AuthenticationActionTest.class.getName();
     public final static String TAG_REFERENCE_TEST = TableEnumTagTest.class.getName();
@@ -127,10 +127,10 @@ public class MockrunnerJarTestConfiguration
         {
             return STRUTS_REFERENCE_TEST;
         }
-        else if(jarName.indexOf("jms") > -1)
-        {
-            return JMS_REFERENCE_TEST;
-        }
+//        else if(jarName.indexOf("jms") > -1)
+//        {
+//            return JMS_REFERENCE_TEST;
+//        }
         else if(jarName.indexOf("ejb") > -1)
         {
             return EJB_REFERENCE_TEST;
@@ -258,7 +258,7 @@ public class MockrunnerJarTestConfiguration
             TestSuite suite = new TestSuite("AllReferenceTests");
             suite.addTest(new TestSuite(BookstoreTest.class));
             suite.addTest(new TestSuite(UserLoginSessionTest.class));
-            suite.addTest(new TestSuite(StockQuotePublisherTest.class));
+//            suite.addTest(new TestSuite(StockQuotePublisherTest.class));
             suite.addTest(new TestSuite(RedirectServletTest.class));
             suite.addTest(new TestSuite(AuthenticationActionTest.class));
             suite.addTest(new TestSuite(TableEnumTagTest.class));

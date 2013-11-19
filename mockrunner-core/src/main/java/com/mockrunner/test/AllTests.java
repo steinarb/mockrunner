@@ -10,7 +10,7 @@ import com.mockrunner.test.consistency.AllConsistencyTests;
 import com.mockrunner.test.ejb.AllEJBTests;
 import com.mockrunner.test.gen.AllGenTests;
 import com.mockrunner.test.jdbc.AllJDBCTests;
-import com.mockrunner.test.jms.AllJMSTests;
+//import com.mockrunner.test.jms.AllJMSTests;
 import com.mockrunner.test.util.AllUtilTests;
 import com.mockrunner.test.web.AllWebTests;
 
@@ -23,7 +23,7 @@ public class AllTests
         suite.addTest(AllWebTests.suite());
         suite.addTest(AllJDBCTests.suite());
         suite.addTest(AllEJBTests.suite());
-        suite.addTest(AllJMSTests.suite());
+//        suite.addTest(AllJMSTests.suite());
         suite.addTest(AllConnectorTests.suite());
         suite.addTest(AllUtilTests.suite());
         suite.addTest(AllActiveMQMockrunnerTests.suite());

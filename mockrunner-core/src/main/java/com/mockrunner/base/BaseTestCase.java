@@ -5,12 +5,10 @@ import junit.framework.TestCase;
 import com.mockrunner.connector.ConnectorTestModule;
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.jdbc.JDBCTestModule;
-import com.mockrunner.jms.JMSTestModule;
 import com.mockrunner.mock.connector.cci.ConnectorMockObjectFactory;
 import com.mockrunner.mock.connector.cci.MockConnectionFactory;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
-import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.web.ActionMockObjectFactory;
 import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.servlet.ServletTestModule;
@@ -27,7 +25,6 @@ public abstract class BaseTestCase extends TestCase
     private JDBCMockObjectFactory jdbcMockFactory;
     private EJBMockObjectFactory ejbMockFactory;
     private ConnectorMockObjectFactory connectorMockFactory;
-    private JMSMockObjectFactory jmsMockFactory;
     
     public BaseTestCase()
     {
@@ -54,7 +51,6 @@ public abstract class BaseTestCase extends TestCase
         }
         webMockFactory = null;
         actionMockFactory = null;
-        jmsMockFactory  = null;
         connectorMockFactory = null;
     }
 
@@ -276,39 +272,6 @@ public abstract class BaseTestCase extends TestCase
 	    this.connectorMockFactory = mockFactory;
 	}
     
-    /**
-     * Creates a {@link JMSMockObjectFactory}. 
-     * @return the created {@link JMSMockObjectFactory}
-     */
-    protected JMSMockObjectFactory createJMSMockObjectFactory()
-    {
-        return new JMSMockObjectFactory();
-    }
-
-    /**
-     * Gets the current {@link JMSMockObjectFactory}.
-     * @return the {@link JMSMockObjectFactory}
-     */
-    protected JMSMockObjectFactory getJMSMockObjectFactory()
-    {
-        synchronized(JMSMockObjectFactory.class) 
-        {
-            if(jmsMockFactory == null)
-            {
-                jmsMockFactory = createJMSMockObjectFactory();
-            }
-        }
-        return jmsMockFactory;
-    }
-
-    /**
-     * Sets the current {@link JMSMockObjectFactory}.
-     * @param mockFactory the {@link JMSMockObjectFactory}
-     */
-    protected void setJMSMockObjectFactory(JMSMockObjectFactory mockFactory)
-    {
-        this.jmsMockFactory = mockFactory;
-    }
     
     /**
      * Creates an {@link com.mockrunner.struts.ActionTestModule} with the specified
@@ -437,25 +400,5 @@ public abstract class BaseTestCase extends TestCase
 	    return new ConnectorTestModule(getConnectorMockObjectFactory());
 	}
     
-    /**
-     * Creates a {@link com.mockrunner.jms.JMSTestModule} with the specified
-     * {@link JMSMockObjectFactory}.
-     * @return the created {@link com.mockrunner.jms.JMSTestModule}
-     */
-    protected JMSTestModule createJMSTestModule(JMSMockObjectFactory mockFactory)
-    {
-        return new JMSTestModule(mockFactory);
-    }
-
-    /**
-     * Creates a {@link com.mockrunner.jms.JMSTestModule} based on the current
-     * {@link JMSMockObjectFactory}.
-     * Same as <code>createJMSTestModule(getJMSMockObjectFactory())</code>.
-     * @return the created {@link com.mockrunner.jms.JMSTestModule}
-     */
-    protected JMSTestModule createJMSTestModule()
-    {
-        return new JMSTestModule(getJMSMockObjectFactory());
-    }
 }
 
