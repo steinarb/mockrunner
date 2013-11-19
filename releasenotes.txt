@@ -1,3 +1,4 @@
+mockrunner-0.4.4:
 
 mockrunner-0.4.3:
 
@@ -24,7 +25,7 @@ mockrunner-0.4.3:
 
 mockrunner-0.4.2:
 
-- refactored MockHttpServletRequest to handle session invalidation as suggested by Pratyoosh Sharma and Gábor Lipták
+- refactored MockHttpServletRequest to handle session invalidation as suggested by Pratyoosh Sharma and Gï¿½bor Liptï¿½k
 - JMS connection factories are serializable now by request
 - updated servlet-api.jar, jsp-api.jar, el-api.jar, jasper.jar and jasper-el.jar
   from Tomcat 6.0.16 to Tomcat 6.0.20
@@ -127,7 +128,7 @@ mockrunner-0.3.7:
 mockrunner-0.3.6:
 
 - Introduced new JCA test module (developed and donated to Mockrunner
-  by Gábor Lipták). The framework can be used simulate backend systems that are 
+  by Gï¿½bor Liptï¿½k). The framework can be used simulate backend systems that are 
   accessed through the use of the JCA Common Client Interface API. Check out
   the ConnectorTestModule and the corresponding examples in the 
   com.mockrunner.example.connector package.
@@ -165,7 +166,7 @@ mockrunner-0.3.6:
 - added loadMessage() method to MockDestination to preload test messages
 - added proper toString() method to all JMS MockMessage implementations
 - improved version of NestedApplicationException, now displays root stacktrace
-- ít's now possible to set a null transaction policy in EJBTestModule
+- ï¿½t's now possible to set a null transaction policy in EJBTestModule
 - refactored EJBMockObjectFactory, MockContextFactory.setAsInitial is only called
   if necessary, preventing mock settings of being saved and restored later
 - added getHeaderNames() method to MockHttpServletResponse
@@ -187,7 +188,7 @@ mockrunner-0.3.6:
 mockrunner-0.3.5:
 
 - lazy initializing mock object factories in BaseTestCase as
-  suggested by Gábor Lipták. This makes the standard adapters
+  suggested by Gï¿½bor Liptï¿½k. This makes the standard adapters
   useable without all the third party dependencies.
 - added XMLResultSetFactory to createMockResultSets based on
   XML files (contribution by Jeremy Whitlock)
@@ -211,7 +212,7 @@ mockrunner-0.3.5:
 - all test modules now use the wrapped request and response whenever possible
 - added refresh method to WebMockObjectFactory to recreate mock objects
   dependencies after adding request and response wrappers
-- added getMockConnection method to MockDataSource (patch by Gábor Lipták)
+- added getMockConnection method to MockDataSource (patch by Gï¿½bor Liptï¿½k)
 - JMS MockConnectionFactory now implements MockQueueConnectionFactory and
   MockTopicConnectionFactory to provide one factory with one JNDI name
   for both domains
