@@ -188,6 +188,16 @@
 					<version>3.1</version>
 				</plugin>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>2.4</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.16</version>
+				</plugin>
+				<plugin>
 					<!-- Configuration for the realease plugin -->
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-release-plugin</artifactId>
@@ -211,6 +221,34 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		
+		<plugins>
+			<plugin>
+				<!-- Also generate a jar for the test binaries when packaging a jar module -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+							<addDefaultSpecificationEntries>false</addDefaultSpecificationEntries>
+						</manifest>
+						<manifestEntries>
+							<Implementation-Title>${project.name}</Implementation-Title>
+							<Sunset-Version>${project.version}</Sunset-Version>
+							<Sunset-BuiltOn>${maven.build.timestamp}</Sunset-BuiltOn>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 	<profiles>
@@ -262,14 +300,39 @@
 				</plugins>
 			</build>
 		</profile>
+		<profile>
+			<!-- Profile automatically triggered when release:perform is executed -->
+			<id>release</id>
+			<activation>
+				<property>
+					<name>performRelease</name>
+				</property>
+			</activation>
+			<properties>
+				<do-not-distrib>provided</do-not-distrib>
+			</properties>
+			<build>
+				<plugins>
+					<!-- Skip tests during release perform -->
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<modules>
 		<module>mockrunner-core</module>
+		<!-- These modules are not supported at the moment 
 		<module>mockrunner-j2ee_1_3</module>
 		<module>mockrunner-j2ee_1_4</module>
 		<module>mockrunner-jdk_1_3</module>
 		<module>mockrunner-jdk_1_4</module>
+		 -->
 		<module>mockrunner-jms</module>
 		<module>mockrunner-ejb</module>
 		<module>mockrunner-jdbc</module>
@@ -277,5 +340,6 @@
 		<module>mockrunner-servlet</module>
 		<module>mockrunner-tag</module>
 		<module>mockrunner-struts</module>
+		<module>mockrunner-all</module>
 	</modules>
 </project>
