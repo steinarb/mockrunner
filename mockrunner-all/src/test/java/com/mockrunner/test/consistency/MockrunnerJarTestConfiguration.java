@@ -47,6 +47,7 @@ public class MockrunnerJarTestConfiguration
     {
         try
         {
+        	/*
             List jdk13j2ee13Jars = getReleasedJars(JDK13_DIR, J2EE13_DIR);
             List jdk14j2ee13Jars = getReleasedJars(JDK14_DIR, J2EE13_DIR);
             List jdk14j2ee14Jars = getReleasedJars(JDK14_DIR, J2EE14_DIR);
@@ -59,9 +60,11 @@ public class MockrunnerJarTestConfiguration
             List jdk17j2ee13Jars = getReleasedJars(JDK17_DIR, J2EE13_DIR);
             List jdk17j2ee14Jars = getReleasedJars(JDK17_DIR, J2EE14_DIR);
             List jdk17jee5Jars = getReleasedJars(JDK17_DIR, JEE5_DIR);
+            */
             List jee5ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJEE5());
             List j2ee14ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJ2EE14());
             List j2ee13ThirdPartyJarURLs = getURLFromFileList(getThirdPartyJarsJ2EE13());
+            /*
             List jdk13j2ee13mappings = createMappings(jdk13j2ee13Jars, j2ee13ThirdPartyJarURLs);
             List jdk14j2ee13mappings = createMappings(jdk14j2ee13Jars, j2ee13ThirdPartyJarURLs);
             List jdk14j2ee14mappings = createMappings(jdk14j2ee14Jars, j2ee14ThirdPartyJarURLs);
@@ -74,7 +77,9 @@ public class MockrunnerJarTestConfiguration
             List jdk17j2ee13mappings = createMappings(jdk17j2ee13Jars, j2ee13ThirdPartyJarURLs);
             List jdk17j2ee14mappings = createMappings(jdk17j2ee14Jars, j2ee14ThirdPartyJarURLs);
             List jdk17jee5mappings = createMappings(jdk17jee5Jars, jee5ThirdPartyJarURLs);
+            */
             List resultList = new ArrayList();
+            /*
             resultList.addAll(jdk13j2ee13mappings);
             resultList.addAll(jdk14j2ee13mappings);
             resultList.addAll(jdk14j2ee14mappings);
@@ -87,6 +92,7 @@ public class MockrunnerJarTestConfiguration
             resultList.addAll(jdk17j2ee13mappings);
             resultList.addAll(jdk17j2ee14mappings);
             resultList.addAll(jdk17jee5mappings);
+            */
             return (Mapping[])resultList.toArray(new Mapping[resultList.size()]);
         } 
         catch (Exception exc)

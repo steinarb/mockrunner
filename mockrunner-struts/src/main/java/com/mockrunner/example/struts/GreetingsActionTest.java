@@ -21,13 +21,13 @@ public class GreetingsActionTest extends BasicActionTestCaseAdapter
         if(null == validatorRes)
         {
             String[] files = new String[2];
-            files[0] = "src/com/mockrunner/example/struts/validator-rules.xml";
-            files[1] = "src/com/mockrunner/example/struts/validation.xml";
+            files[0] = "target/test-classes/com/mockrunner/example/struts/validator-rules.xml";
+            files[1] = "target/test-classes/com/mockrunner/example/struts/validation.xml";
             validatorRes = createValidatorResources(files);
         }
         setValidatorResources(validatorRes);
         MapMessageResources resources = new MapMessageResources();
-        resources.putMessages("src/com/mockrunner/example/struts/Application.properties");
+        resources.putMessages("target/test-classes/com/mockrunner/example/struts/Application.properties");
         setResources(resources);
         setValidate(true);
     }

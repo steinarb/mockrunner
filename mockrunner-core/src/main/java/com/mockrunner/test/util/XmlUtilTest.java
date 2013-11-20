@@ -16,7 +16,7 @@ public class XmlUtilTest extends TestCase
     
     private void prepareHTMLFile() throws Exception
     {
-        FileInputStream stream = new FileInputStream("src/com/mockrunner/test/util/test.html");
+        FileInputStream stream = new FileInputStream("target/test-classes/com/mockrunner/test/util/test.html");
         StringBuffer output = new StringBuffer();
         int nextChar = stream.read();
         while(-1 != nextChar)

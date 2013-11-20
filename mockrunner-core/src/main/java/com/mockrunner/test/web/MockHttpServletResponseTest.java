@@ -133,13 +133,13 @@ public class MockHttpServletResponseTest extends TestCase
     public void testSetCharacterEncoding() throws IOException
     {
         response.setCharacterEncoding("ISO-8859-1");
-        response.getWriter().write("ה");
+        response.getWriter().write("?");
         response.getWriter().flush();
-        response.getOutputStream().println("ה");
+        response.getOutputStream().println("?");
         response.setCharacterEncoding("US-ASCII");
-        assertFalse(response.getOutputStreamContent().startsWith("הה"));
+        assertFalse(response.getOutputStreamContent().startsWith("ֲ÷ֲ÷"));
         response.setCharacterEncoding("ISO-8859-1");
-        assertTrue(response.getOutputStreamContent().startsWith("הה"));
+        assertTrue(response.getOutputStreamContent().startsWith("??"));
         response.resetAll();
         response.setCharacterEncoding("UTF-8"); 
         String input = "\u00F8";

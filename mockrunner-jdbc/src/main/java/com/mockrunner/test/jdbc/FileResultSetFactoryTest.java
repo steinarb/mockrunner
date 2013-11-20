@@ -14,7 +14,7 @@ public class FileResultSetFactoryTest extends TestCase
 {
     public void testGoodCreate() throws Exception
     {
-        FileResultSetFactory factory = new FileResultSetFactory("src/com/mockrunner/test/jdbc/testresult.txt");
+        FileResultSetFactory factory = new FileResultSetFactory("target/test-classes/com/mockrunner/test/jdbc/testresult.txt");
         MockResultSet resultSet = factory.create("");
         doTestResultSet(factory, resultSet);
         factory = new FileResultSetFactory("/com/mockrunner/test/jdbc/testresult.txt");
@@ -23,7 +23,7 @@ public class FileResultSetFactoryTest extends TestCase
         factory = new FileResultSetFactory("com/mockrunner/test/jdbc/testresult.txt");
         resultSet = factory.create("");
         doTestResultSet(factory, resultSet);
-        factory = new FileResultSetFactory(new File("src/com/mockrunner/test/jdbc/testresult.txt"));
+        factory = new FileResultSetFactory(new File("target/test-classes/com/mockrunner/test/jdbc/testresult.txt"));
         resultSet = factory.create("");
         doTestResultSet(factory, resultSet);
     }
@@ -92,7 +92,7 @@ public class FileResultSetFactoryTest extends TestCase
     
     public void testCreateWithTemplates() throws Exception
     {
-        FileResultSetFactory factory = new FileResultSetFactory("src/com/mockrunner/test/jdbc/testtemplateresult.txt");
+        FileResultSetFactory factory = new FileResultSetFactory("target/test-classes/com/mockrunner/test/jdbc/testtemplateresult.txt");
         factory.setFirstLineContainsColumnNames(true);
         MockResultSet resultSet = factory.create("");
         doTestResultSetTemplatesDisabled(resultSet);
@@ -154,10 +154,10 @@ public class FileResultSetFactoryTest extends TestCase
     
     public void testGetFile()
     {
-        FileResultSetFactory factory = new FileResultSetFactory("src/com/mockrunner/test/jdbc/testresult.txt");
-        assertEquals(new File("src/com/mockrunner/test/jdbc/testresult.txt"), factory.getFile());
-        factory = new FileResultSetFactory(new File("src/com/mockrunner/test/jdbc/testresult.txt"));
-        assertEquals(new File("src/com/mockrunner/test/jdbc/testresult.txt"), factory.getFile());
+        FileResultSetFactory factory = new FileResultSetFactory("target/test-classes/com/mockrunner/test/jdbc/testresult.txt");
+        assertEquals(new File("target/test-classes/com/mockrunner/test/jdbc/testresult.txt"), factory.getFile());
+        factory = new FileResultSetFactory(new File("target/test-classes/com/mockrunner/test/jdbc/testresult.txt"));
+        assertEquals(new File("target/test-classes/com/mockrunner/test/jdbc/testresult.txt"), factory.getFile());
         factory = new FileResultSetFactory("badfile");
         try
         {

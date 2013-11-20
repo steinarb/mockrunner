@@ -14,7 +14,7 @@ public class XMLResultSetFactoryTest extends TestCase
      */
     public void testSybaseCreate() 
     {
-        XMLResultSetFactory goodSybaseXMLRSF = new XMLResultSetFactory("src/com/mockrunner/test/jdbc/xmltestresult.xml");
+        XMLResultSetFactory goodSybaseXMLRSF = new XMLResultSetFactory("target/test-classes/com/mockrunner/test/jdbc/xmltestresult.xml");
         MockResultSet goodMRS = goodSybaseXMLRSF.create("Good-ResultSet-ID");
         assertNotNull(goodSybaseXMLRSF.getXMLFile());
         doTestGoodResultSet(goodSybaseXMLRSF, goodMRS);
@@ -38,7 +38,7 @@ public class XMLResultSetFactoryTest extends TestCase
      */
     public void testSquirrelCreate() 
     {
-        XMLResultSetFactory goodSquirrelXMLRSF = new XMLResultSetFactory("src/com/mockrunner/test/jdbc/squirrelxmltestresult.xml");
+        XMLResultSetFactory goodSquirrelXMLRSF = new XMLResultSetFactory("target/test-classes/com/mockrunner/test/jdbc/squirrelxmltestresult.xml");
         goodSquirrelXMLRSF.setDialect(XMLResultSetFactory.SQUIRREL_DIALECT);
         MockResultSet goodMRS = goodSquirrelXMLRSF.create("Good-ResultSet-ID");
         assertNotNull(goodSquirrelXMLRSF.getXMLFile());
@@ -60,7 +60,7 @@ public class XMLResultSetFactoryTest extends TestCase
     {
         try
         {
-            XMLResultSetFactory badXMLRSF = new XMLResultSetFactory("src/com/mockrunner/test/jdbc/nonexisting.xml");
+            XMLResultSetFactory badXMLRSF = new XMLResultSetFactory("target/test-classes/com/mockrunner/test/jdbc/nonexisting.xml");
             assertNull(badXMLRSF.getXMLFile());
             badXMLRSF.create("Bad-ResultSet-ID");
             fail();
@@ -71,7 +71,7 @@ public class XMLResultSetFactoryTest extends TestCase
         }
         try
         {
-            XMLResultSetFactory badXMLRSF = new XMLResultSetFactory(new File("src/com/mockrunner/test/jdbc/nonexisting.xml"));
+            XMLResultSetFactory badXMLRSF = new XMLResultSetFactory(new File("target/test-classes/com/mockrunner/test/jdbc/nonexisting.xml"));
             assertNull(badXMLRSF.getXMLFile());
             badXMLRSF.create("Bad-ResultSet-ID");
             fail();
@@ -84,10 +84,10 @@ public class XMLResultSetFactoryTest extends TestCase
     
     public void testGetXMLFile()
     {
-        XMLResultSetFactory factory = new XMLResultSetFactory("src/com/mockrunner/test/jdbc/xmltestresult.xml");
-        assertEquals(new File("src/com/mockrunner/test/jdbc/xmltestresult.xml"), factory.getXMLFile());
-        factory = new XMLResultSetFactory(new File("src/com/mockrunner/test/jdbc/xmltestresult.xml"));
-        assertEquals(new File("src/com/mockrunner/test/jdbc/xmltestresult.xml"), factory.getXMLFile());
+        XMLResultSetFactory factory = new XMLResultSetFactory("target/test-classes/com/mockrunner/test/jdbc/xmltestresult.xml");
+        assertEquals(new File("target/test-classes/com/mockrunner/test/jdbc/xmltestresult.xml"), factory.getXMLFile());
+        factory = new XMLResultSetFactory(new File("target/test-classes/com/mockrunner/test/jdbc/xmltestresult.xml"));
+        assertEquals(new File("target/test-classes/com/mockrunner/test/jdbc/xmltestresult.xml"), factory.getXMLFile());
         factory = new XMLResultSetFactory("badfile");
         try
         {

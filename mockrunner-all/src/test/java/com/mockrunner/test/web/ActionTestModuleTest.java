@@ -921,8 +921,8 @@ public class ActionTestModuleTest extends BaseTestCase
     public void testCreateValidatorResources()
     {
         String[] files = new String[2];
-        files[0] = "src/com/mockrunner/test/web/validator-rules.xml";
-        files[1] = "src/com/mockrunner/test/web/validation.xml";
+        files[0] = "target/test-classes/com/mockrunner/test/web/validator-rules.xml";
+        files[1] = "target/test-classes/com/mockrunner/test/web/validation.xml";
         module.createValidatorResources(files);
         module.setResources(new MapMessageResources());
         TestValidatorForm form = new TestValidatorForm();

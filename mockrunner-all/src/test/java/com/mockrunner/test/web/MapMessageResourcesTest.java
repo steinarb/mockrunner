@@ -70,7 +70,7 @@ public class MapMessageResourcesTest extends TestCase
     
     public void testLoadFromFile()
     {
-        resources.putMessages("src/com/mockrunner/test/web/test.properties");
+        resources.putMessages("target/test-classes/com/mockrunner/test/web/test.properties");
         assertEquals("test1", resources.getMessage("test.property1"));
         assertEquals("test2", resources.getMessage("test.property2"));
         assertEquals("test3", resources.getMessage("test.property3"));

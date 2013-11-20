@@ -66,7 +66,7 @@ public class FileResultSetFactory implements ResultSetFactory
             } 
             catch (FileNotFoundException exc)
             {
-                throw new RuntimeException("Could not find: " + file.getPath());
+                throw new RuntimeException("Could not find: " + file.getPath() + ". Current dir = " + System.getProperty("user.dir"));
             }
         }
     }

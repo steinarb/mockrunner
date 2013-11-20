@@ -49,7 +49,7 @@ public class BookstoreTest extends BasicJDBCTestCaseAdapter
     
     public void testSuccessfulOrder() throws Exception
     {
-        FileResultSetFactory factory = new FileResultSetFactory("src/com/mockrunner/example/jdbc/bookstore.txt");
+        FileResultSetFactory factory = new FileResultSetFactory("target/test-classes/com/mockrunner/example/jdbc/bookstore.txt");
         factory.setFirstLineContainsColumnNames(true);
         MockResultSet result = getStatementResultSetHandler().createResultSet("bookresult", factory);    
         //System.out.println(result.toString());

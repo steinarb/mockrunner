@@ -1,7 +1,6 @@
 package com.mockrunner.example.connector;
 
 import java.io.FileInputStream;
-import java.io.InputStream;
 
 import com.mockrunner.connector.ConnectorTestCaseAdapter;
 import com.mockrunner.connector.StreamableRecordByteArrayInteraction;
@@ -40,8 +39,8 @@ public class PersonSearchDAOTest extends ConnectorTestCaseAdapter
     private void prepareInteraction() throws Exception
     {
         StreamableRecordByteArrayInteraction interaction = new StreamableRecordByteArrayInteraction();
-        InputStream request = this.getClass().getResourceAsStream("com/mockrunner/example/connector/personin.bin");
-        InputStream response = this.getClass().getResourceAsStream("com/mockrunner/example/connector/personout.bin");
+        FileInputStream request = new FileInputStream("target/test-classes/com/mockrunner/example/connector/personin.bin");
+        FileInputStream response = new FileInputStream("target/test-classes/com/mockrunner/example/connector/personout.bin");
         interaction.setExpectedRequest(request);
         interaction.setResponse(response);
         getInteractionHandler().addImplementor(interaction);

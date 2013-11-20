@@ -13,14 +13,14 @@ public class FileUtilTest extends TestCase
 {
     public void testGetLinesFromFile()
     {
-        File file = new File("src/com/mockrunner/test/util/testlines.txt");
+        File file = new File("target/test-classes/com/mockrunner/test/util/testlines.txt");
         List lineList = FileUtil.getLinesFromFile(file);
         doTestLines(lineList);
     }
     
     public void testFindFile() throws IOException
     {
-        File file = FileUtil.findFile("src/com/mockrunner/test/util/testlines.txt");
+        File file = FileUtil.findFile("target/test-classes/com/mockrunner/test/util/testlines.txt");
         assertNotNull(file);
         List lineList = FileUtil.getLinesFromFile(file);
         doTestLines(lineList);

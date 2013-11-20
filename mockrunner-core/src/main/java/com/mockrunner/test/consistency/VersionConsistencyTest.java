@@ -15,10 +15,12 @@ public class VersionConsistencyTest extends TestCase
 {
     public void testFileConsistency() throws Exception
     {
+    	/* Not supported for now
         compareDirTrees("srcjdk1.3", "src");
         compareDirTrees("srcjdk1.4", "src");
         compareDirTrees("srcj2ee1.3", "src");
         compareDirTrees("srcj2ee1.4", "src");
+        */
     }
     
     private void compareDirTrees(String sourceDir, String destinationDir) throws Exception
