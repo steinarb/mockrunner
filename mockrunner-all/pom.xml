@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                              http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.mockrunner</groupId>
 		<artifactId>mockrunner</artifactId>
-		<version>0.4.4</version>
+		<version>0.4.4-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -16,49 +18,49 @@
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-core</artifactId>
-			<version>0.4.4</version>
+			<version>0.4.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-jms</artifactId>
-			<version>0.4.4</version>
+			<version>0.4.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-jms</artifactId>
-			<version>0.4.4</version>
+			<version>0.4.4-SNAPSHOT</version>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-ejb</artifactId>
-			<version>0.4.4</version>
+			<version>0.4.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-jdbc</artifactId>
-			<version>0.4.4</version>
+			<version>0.4.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-jca</artifactId>
-			<version>0.4.4</version>
+			<version>0.4.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-servlet</artifactId>
-			<version>0.4.4</version>
+			<version>0.4.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-tag</artifactId>
-			<version>0.4.4</version>
+			<version>0.4.4-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-struts</artifactId>
-			<version>0.4.4</version>
+			<version>0.4.4-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
