@@ -14,20 +14,53 @@
 	<version>0.4.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>MockRunner</name>
-	<url>http://mockrunner.sourceforge.net/</url>
+	<url>http://${repository.domain}/${repository.user}/${repository.name}</url>
 	<description>Mockrunner is a lightweight framework for unit testing applications in the J2EE environment. It supports servlets, filters, tag classes and Struts actions. It includes a JDBC a JMS and a JCA test framework and can be used to test EJB based applications.</description>
 	<inceptionYear>2003</inceptionYear>
 
+	<developers>
+		<developer>
+			<name>Alwin Ibba</name>
+			<email>alwin.ibba@mockrunner.com</email>
+			<timezone>Europe/Berlin</timezone>
+            <roles>
+                <role>Principal Developer</role>
+            </roles>
+		</developer>
+		<developer>
+			<name>Jeremy Whitlock</name>
+			<email>jeremy.whitlock@mockrunner.com</email>
+			<timezone>Europe/Berlin</timezone>
+		</developer>
+		<developer>
+			<name>Gábor Lipták</name>
+			<email>gabor.liptak@mockrunner.com</email>
+			<timezone>Europe/Berlin</timezone>
+		</developer>
+	</developers>
+	
+	<contributors>
+		<contributor>
+			<name>Steinar Bang</name>
+			<timezone>Europe/Berlin</timezone>
+		</contributor>
+		<contributor>
+			<name>Carlos Martins</name>
+			<email>carlos.mfa.martins@gmail.com</email>
+			<timezone>Europe/Lisbon</timezone>
+		</contributor>
+	</contributors>
+
 	<scm>
-		<connection>scm:git:https://github.com/cemartins/mockrunner.git</connection>
-		<developerConnection>scm:git:https://github.com/cemartins/mockrunner.git</developerConnection>
-		<url>https://github.com/cemartins/mockrunner</url>
-	  <tag>HEAD</tag>
-  </scm>
+        <connection>scm:git:https://${repository.domain}/${repository.user}/${repository.name}.git</connection>
+        <url>https://${repository.domain}/${repository.user}/${repository.name}</url>
+        <developerConnection>scm:git:https://${repository.domain}/${repository.user}/${repository.name}.git</developerConnection>
+        <tag>HEAD</tag>
+	</scm>
 
 	<issueManagement>
-		<system>GitHub Issues</system>
-		<url>https://github.com/cemartins/mockrunner/issues</url>
+        <url>https://www.github.com/${repository.user}/${repository.name}/issues</url>
+        <system>Github Issues</system>
 	</issueManagement>
 
 	<distributionManagement>
@@ -41,13 +74,11 @@
 			<name>Nexus Snaphots Repository</name>
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
-		<!-- 
 		<site>
-			<id>juffrou.sf.net</id>
+			<id>site-docs</id>
 			<name>Mockrunner</name>
-			<url>scp://shell.sourceforge.net/home/project-web/mockrunner/htdocs</url>
+			<url>file://${site-docs.url}</url>
 		</site>
-		 -->
 	</distributionManagement>
 
 	<licenses>
@@ -61,6 +92,14 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<repository.domain>github.com</repository.domain>
+		<repository.user>cemartins</repository.user>
+		<repository.name>mockrunner</repository.name>
+		<site-docs.url>/${env.HOME}/sitedocs/${project.artifactId}</site-docs.url>
+		<scmPublish.checkoutDirectory>${project.build.directory}/scmpublish</scmPublish.checkoutDirectory>
+		<scm-publish.siteDocOuputDirectory>${project.reporting.outputDirectory}</scm-publish.siteDocOuputDirectory>
+		<scm-publish.pubScmUrl>scm:git:git@github.com:cemartins/mockrunner.git</scm-publish.pubScmUrl>
 	</properties>
 
 	<dependencyManagement>
@@ -219,6 +258,50 @@
 					<artifactId>maven-gpg-plugin</artifactId>
 					<version>1.4</version>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-scm-publish-plugin</artifactId>
+					<version>1.0-beta-2</version>
+					<extensions>true</extensions>
+					<inherited>true</inherited>
+                    <configuration>
+                        <checkoutDirectory>${scmPublish.checkoutDirectory}</checkoutDirectory>
+                        <checkinComment>Publishing Site Docs for ${project.artifactId}:${project.version}</checkinComment>
+                        <!-- Plugins defaults to "target/staging" and since the distributionManagement section is a pain in the ass for site docs, this is easier -->
+                        <content>${scm-publish.siteDocOuputDirectory}</content>
+                        <skipDeletedFiles>true</skipDeletedFiles>
+                        <pubScmUrl>${scm-publish.pubScmUrl}</pubScmUrl>
+                        <scmBranch>${scm-publish.scmBranch}</scmBranch>
+                    </configuration>
+				 </plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.3</version>
+					<inherited>true</inherited>
+					<configuration>
+						<chmod>true</chmod>
+						<inputEncoding>${project.build.sourceEncoding}</inputEncoding>
+						<outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.apache.maven.doxia</groupId>
+							<artifactId>doxia-module-xhtml</artifactId>
+							<version>1.4</version>
+						</dependency>
+						<dependency><!-- add support for ssh/scp -->
+							<groupId>org.apache.maven.wagon</groupId>
+							<artifactId>wagon-ssh</artifactId>
+							<version>2.4</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>2.7</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 		
@@ -250,6 +333,52 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.7</version>
+				<configuration>
+					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+				</configuration>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<!-- <report>cim</report> generate the Project Continuous Integration 
+								System report. -->
+							<!-- <report>dependencies</report> generate the Project Dependencies 
+								report. -->
+							<!-- <report>dependency-convergence</report> generate the Project 
+								Dependency Convergence report for reactor builds. -->
+							<!-- <report>dependency-info</report> to generate code snippets to 
+								be added to build tools. -->
+							<!-- <report>dependency-management</report> generate the Project 
+								DependencyManagement report. -->
+							<!-- generate the Project Distribution Management report.
+							 -->
+							<report>distribution-management</report>
+							<report>index</report> <!-- generate the Project index page. -->
+							<report>issue-tracking</report> <!-- generate the Project Issue Tracking report. -->
+							<report>license</report> <!-- generate the Project License report. -->
+							<!-- <report>mailing-list</report> generate the Project Mailing List 
+								report. -->
+							<!--  generate the Project Modules report. -->
+							<report>modules</report>
+							<!-- <report>plugin-management</report> generate the Project PluginManagement 
+								report. -->
+							<!-- <report>plugins</report> generate the Project Plugins report. -->
+							<report>project-team</report> <!-- generate the Project Team report. -->
+							<report>scm</report> <!-- generate the Project Source Code Management report. -->
+							<report>summary</report> <!-- generate the Project information reports summary. -->
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
 
 	<profiles>
 		<profile>

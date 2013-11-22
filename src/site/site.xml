@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/DECORATION/1.4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/DECORATION/1.4.0 http://maven.apache.org/xsd/decoration-1.4.0.xsd"
+  name="Juffrou">
+  	<!-- 
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-classic-skin</artifactId>
+		<version>1.1</version>
+	</skin>
+	 -->
+	<!-- 
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-default-skin</artifactId>
+		<version>1.1</version>
+	</skin>
+	 -->
+	<!-- 
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-application-skin</artifactId>
+		<version>1.0</version>
+	</skin>
+	 -->
+	<!-- 
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-stylus-skin</artifactId>
+		<version>1.5</version>
+	</skin>
+	 -->
+	<skin>
+		<groupId>org.apache.maven.skins</groupId>
+		<artifactId>maven-fluido-skin</artifactId>
+		<version>1.3.0</version>
+	</skin>
+	<bannerLeft>
+		<name>Mockrunner</name>
+		<!-- 
+		<src>images/juffrou_extense.jpg</src>
+		<href>http://juffrou.sourceforge.net/</href>
+		<width>334</width>
+		<height>73</height>
+		 -->
+	</bannerLeft>
+	<!-- 
+	<bannerRight>
+		<src>images/juffrou_text_new.jpg</src>
+		<width>140</width>
+		<height>73</height>
+	</bannerRight>
+	 -->
+	<publishDate position="right" />
+	<version position="right" />
+	<poweredBy>
+		<logo name="Powered by sourceforge (click for project page)" href="https://sourceforge.net/p/juffrou" img="https://a.fsdn.com/con/img/sftheme/logo.png?1345149519" />
+	</poweredBy>
+	<custom>
+		<fluidoSkin>
+			<navBarStyle>navbar-inverse</navBarStyle>
+			<twitter>
+				<user>ceamartins</user>
+				<showUser>true</showUser>
+				<showFollowers>true</showFollowers>
+			</twitter>
+			<googlePlusOne />
+		</fluidoSkin>
+	</custom>
+	<body>
+		<head>
+			<link rel="shortcut icon" href="http://juffrou.sourceforge.net/favicon.ico" />
+			<!-- Google Analytics -->
+			<script type="text/javascript">
+			  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+			  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+			  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+			  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+			
+			  ga('create', 'UA-36088259-2', 'sourceforge.net');
+			  ga('send', 'pageview');
+			</script>
+		</head>
+		<!-- 
+		<links>
+			<item name="Sourceforge" href="http://sourceforge.net/p/juffrou/wiki/Home" />
+			<item name="Releases" href="https://oss.sonatype.org/content/groups/public/net/sf/juffrou" />
+		</links>
+		 -->
+		<breadcrumbs>
+			<item name="Home" href="http://juffrou.sourceforge.net/index.html"/>
+		</breadcrumbs>
+		<menu name="Mockrunner">
+			<item name="Introduction" href="index.html" />
+			<item name="HTML Reference" href="juffrou-assemble/reference-manual.html" target="_blank" />
+			<item name="PDF Reference" href="juffrou-assemble/reference-manual.pdf" target="_blank" />
+			<item name="Downloads" href="downloads.html" />
+			<item name="Release Notes" href="release-notes.html" />
+		</menu>
+
+		<menu ref="reports" />
+
+		<menu ref="modules" />
+
+
+		<footer>Powered by Powered by Sourceforge.net</footer>
+	</body>
+</project>

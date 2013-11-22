@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<body>
+		<div id="content">
+			<div id="contentitem">
+				<p>
+					Mockrunner is a lightweight framework for unit testing applications in
+					the J2EE environment. It supports servlets, filters, tag classes and <a href="http://struts.apache.org/">Struts</a>
+					actions and forms. Furthermore it includes a JDBC, a JMS and a JCA test 
+					framework and can be used in conjunction with <a href="http://mockejb.sourceforge.net/">MockEJB</a>
+					to test EJB based applications.
+				</p>
+				<p>
+					Mockrunner extends <a href="http://www.junit.org/">JUnit</a> and simulates 
+					the necessary behaviour without calling the real infrastructure. It does not need a running 
+					application server or a database. Furthermore it does not call the webcontainer or the
+					Struts ActionServlet. It is very fast and enables the user to manipulate all involved classes 
+					and mock objects in all steps of the test. 
+					It can be used to write very sophisticated unit-tests for J2EE based 
+					applications without any overhead. Mockrunner does not support
+					any type of in-container testing.
+				</p>
+				<p>
+					Mockrunner does not read any configuration file like web.xml or struts-config.xml. 
+					You can specify all parameters using the  Mockrunner API. So it is possible to 
+					test servlets, filters, tags and <a href="http://struts.apache.org/">Struts</a>
+					actions as reusable components regardless of the settings you use in one or another application. 
+					It is not possible to test the definitions in the configuration files. If you want to do that you can
+					use <a href="http://strutstestcase.sourceforge.net/">StrutsTestCase</a>
+					for <a href="http://struts.apache.org/">Struts</a> based applications 
+					or <a href="http://jakarta.apache.org/cactus/">Cactus</a>.
+				</p>
+				<p>
+					The JDBC test framework simulates a database but it does not execute any
+					SQL statements. You can use the Mockrunner API to specify the results the 
+					database would provide when executing different SQL statements. The
+					framework is meant for testing the Java part of JDBC based applications.
+					If you want to test SQL code you can use <a href="http://sqlunit.sourceforge.net/">SQLUnit</a>
+					or <a href="http://dbunit.sourceforge.net/">dbUnit</a> 
+					which runs against a real database. The JDBC test framework can be combined
+					with any other Mockrunner test module.
+				</p>
+				<p>
+					The JMS test framework implements all JMS interfaces and can be used to test JMS 
+					based code. The JMS test framework is able to send and receive messages and to keep
+					track of everything that happens while delivering the message.
+					Receivers can be plain Java classes or message driven beans.
+				</p>
+				<p>
+				The JCA test framework can be used to simulate backend systems that are accessed 
+				through the use of the JCA Common Client Interface API. Application code that uses 
+				the Common Client Interface can be executed against a simulated connector. The test 
+				framework intercepts the backend call and provides a suitable response.
+				</p>
+				<p>
+					Mockrunner supports the Java versions from 1.3 to 1.6 and J2EE 1.3, J2EE 1.4 and JavaEE 5.
+					EJB 3.0 is not supported yet. Mockrunner supports the Struts versions 1.1, 1.2 and 1.3.
+				</p>
+				<p>
+					To start with Mockrunner check out the <a href="doc/api/index.html">JavaDoc</a> 
+					and the examples on this page and in the release. Mockrunner is hosted on 
+					<a href="http://sourceforge.net/projects/mockrunner/">Sourceforge</a>.
+				</p>
+				<div class="article-footer">
+					Copyright &copy; 2013 <a href="index.html">Mockrunner project</a> and Alwin Ibba<br/>
+					Web Design by Jeremy Whitlock and Nick Myers
+				</div>
+			</div>
+		</div>
+</body>
+</html>
