@@ -99,7 +99,9 @@
 		<site-docs.url>/${env.HOME}/sitedocs/${project.artifactId}</site-docs.url>
 		<scmPublish.checkoutDirectory>${project.build.directory}/scmpublish</scmPublish.checkoutDirectory>
 		<scm-publish.siteDocOuputDirectory>${project.reporting.outputDirectory}</scm-publish.siteDocOuputDirectory>
-		<scm-publish.pubScmUrl>scm:git:git@github.com:cemartins/mockrunner.git</scm-publish.pubScmUrl>
+		<!-- <scm-publish.pubScmUrl>scm:git:cemartins@github.com:cemartins/mockrunner.git</scm-publish.pubScmUrl> -->
+		<scm-publish.pubScmUrl>scm:git:https://github.com/cemartins/mockrunner.git</scm-publish.pubScmUrl>
+		<scm-publish.scmBranch>gh-pages</scm-publish.scmBranch>
 	</properties>
 
 	<dependencyManagement>
