@@ -1,0 +1,242 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<body>
+		<div id="content">
+			<div id="contentitem">
+				<p>
+					Mockrunner contains a simulated JMS environment. It implements all
+					JMS interfaces and can be used to test JMS based code. The JMS
+					test framework is able to send and receive messages and to keep
+					track of everything that happens while delivering the message.
+					Receivers can be plain Java classes or message driven beans.
+				</p>
+				<p>
+					This page provides a simple example how to use the JMS test module.
+					Although this example does not use EJBs, the <i>EJBTestModule</i> is used
+					because the tested code relies on JNDI. The <i>EJBTestModule</i> utilizes
+					the JNDI implementation of
+					<a href="http://mockejb.sourceforge.net/">MockEJB</a>.
+					The release contains more detailed examples, especially an example
+					with a session bean as sender and a message driven bean as a receiver.
+				</p>
+				<p>
+					The following servlet registers a message listener in its <i>init()</i> method.
+					On each request it sends a message with a customer id. The example
+					simulates an online bank where the customer can request a printout of 
+					his account data. This is done in an asynchronous manner.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class PrintMessageServlet extends HttpServlet
+{
+    public void init() throws ServletException
+    {
+        try
+        {
+            InitialContext initialContext = new InitialContext();
+            QueueConnectionFactory queueFactory = 
+                   (QueueConnectionFactory)initialContext.
+                                 lookup("java:ConnectionFactory");
+            QueueConnection queueConnection = 
+                              queueFactory.createQueueConnection();
+            QueueSession queueSession = queueConnection.
+                    createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
+            Queue queue = (Queue)initialContext.lookup("queue/testQueue");
+            QueueReceiver receiver = queueSession.createReceiver(queue);
+            receiver.setMessageListener(new PrintMessageListener());
+            queueConnection.start();
+        }
+        catch(Exception exc)
+        {
+            exc.printStackTrace();
+        }
+    }
+
+    public void doPost(HttpServletRequest request, 
+                       HttpServletResponse response) 
+                       throws ServletException, IOException
+    {
+        String customerId = request.getParameter("customerId");
+        QueueConnection queueConnection = null;
+        QueueSession queueSession = null;
+        QueueSender queueSender = null;
+        try
+        {   
+            InitialContext initialContext = new InitialContext();
+            QueueConnectionFactory queueFactory = 
+                  (QueueConnectionFactory)initialContext.
+                               lookup("java:ConnectionFactory");
+            queueConnection = queueFactory.createQueueConnection();
+            queueSession = queueConnection.createQueueSession
+                                (false, Session.CLIENT_ACKNOWLEDGE);
+            Queue queue = (Queue)initialContext.lookup("queue/testQueue");
+            TextMessage message = queueSession.createTextMessage(customerId);
+            queueSender = queueSession.createSender(queue);
+            queueSender.send(message);
+            response.getWriter().
+                       write("Print request for " + customerId + 
+                             " successfully sent");
+        }
+        catch(Exception exc)
+        {
+            response.getWriter().
+            write("Error sending print request for " + customerId);
+        }
+        finally
+        {
+            try
+            {
+                if(null != queueSender) queueSender.close();
+                if(null != queueSession) queueSession.close();
+                if(null != queueConnection) queueConnection.close();
+            }
+            catch(JMSException exc)
+            {
+                exc.printStackTrace();
+            }
+        }
+    }
+}
+]]>
+				</pre>
+				<p>
+					Here's the code of the <i>PrintMessageListener</i>. The print 
+					code is omitted for simplicity.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class PrintMessageListener implements MessageListener
+{
+    public void onMessage(Message message)
+    {
+        if(message instanceof TextMessage)
+        {
+            //do print
+        }
+        try
+        {
+            message.acknowledge();
+        }
+        catch(JMSException exc)
+        {
+            exc.printStackTrace();
+        }
+    }
+}
+]]>
+				</pre>
+				<p>
+					Here's the test for the above example.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class PrintMessageServletTest extends JMSTestCaseAdapter
+{
+    private EJBTestModule ejbModule;
+    private ServletTestModule servletModule;
+    private MockQueue queue;
+    
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        ejbModule = createEJBTestModule();
+        ejbModule.bindToContext("java:ConnectionFactory", 
+          getJMSMockObjectFactory().getMockQueueConnectionFactory());
+        queue = getDestinationManager().createQueue("testQueue");
+        ejbModule.bindToContext("queue/testQueue", queue);
+        servletModule = createServletTestModule();
+        servletModule.createServlet(PrintMessageServlet.class);
+    }
+
+    public void testInitPrintMessageReceiver() throws Exception
+    {
+        verifyQueueConnectionStarted();
+        verifyNumberQueueSessions(1);
+        verifyNumberQueueReceivers(0, "testQueue", 1);
+        QueueReceiver receiver = getQueueTransmissionManager(0).
+                                      getQueueReceiver("testQueue");
+        assertTrue(receiver.getMessageListener() instanceof 
+                                              PrintMessageListener);
+    }
+    
+    public void testSendAndReceive() throws Exception
+    {
+        servletModule.addRequestParameter("customerId", "1");
+        servletModule.doGet();
+        servletModule.addRequestParameter("customerId", "2");
+        servletModule.doGet();
+        servletModule.addRequestParameter("customerId", "3");
+        servletModule.doGet();
+        verifyNumberOfReceivedQueueMessages("testQueue", 3);
+        verifyAllReceivedQueueMessagesAcknowledged("testQueue");
+        verifyReceivedQueueMessageEquals("testQueue", 0, 
+                                     new MockTextMessage("1"));
+        verifyReceivedQueueMessageEquals("testQueue", 1, 
+                                     new MockTextMessage("2"));
+        verifyReceivedQueueMessageEquals("testQueue", 2, 
+                                     new MockTextMessage("3"));
+        QueueSender sender = getQueueTransmissionManager(0).
+                                      createQueueSender(queue);
+        sender.send(new MockObjectMessage(new Integer(3)));
+        verifyNumberOfReceivedQueueMessages("testQueue", 4);
+        verifyReceivedQueueMessageAcknowledged("testQueue", 3);
+        verifyNumberOfCurrentQueueMessages("testQueue", 0);
+    }
+    
+    public void testServletResponse() throws Exception
+    {
+        servletModule.setCaseSensitive(false);
+        servletModule.addRequestParameter("customerId", "1");
+        servletModule.doGet();
+        servletModule.verifyOutputContains("successfully");
+        servletModule.clearOutput();
+        getJMSMockObjectFactory().getMockQueueConnectionFactory().
+               setJMSException(new JMSException("TestException"));
+        servletModule.doGet();
+        servletModule.verifyOutputContains("error");
+    }
+}
+]]>
+			</pre>
+				<p>
+				    The <i>setUp()</i> method creates the servlet and binds the
+				    factory and the queue to JNDI. Please note, that the
+				    <i>ServletTestModule</i> assures that the servlets <i>init()</i>
+				    is called once. In the first test, we simply check that a 
+				    queue connection is started and the message listener is ready 
+				    and waiting for incoming messages. In the second test we send a 
+				    few messages and check that they were all received and acknowledged. 
+				    We only check the text of the text messages. It is also possible 
+				    to query the message properties and the message content for all 
+				    types of JMS messages. The example is not transacted, so we do not 
+				    check any transaction states. In the third test we simulate a server
+				    error. The message cannot be sent and the servlet generates an
+				    error output.
+				</p>
+				<p>
+					A few notes on the JMS implementation:<br /><br />
+					The JMS test module is not a full blown message server, but
+					it supports all necessary functionality to test JMS code.
+					The implementation breaks the JMS specification in some cases.
+					Messages are immediately forwarded to a proper receiver, if
+					possible. Otherwise they're stored for later examination.
+					There's no real transaction support, i.e. the framework keeps
+					track if a transaction is committed or rolled back, but does
+					not guarantee transaction atomicity. If you send a message in a 
+					transaction, it will be forwarded to the receiver, even if you
+					rollback the transaction. The transaction can be a built in
+					JMS transaction or a JTA transaction. Both cases are covered
+					by an example in the release.<br />
+					The framework never tries to redeliver any messages. It keeps track
+					of everything that happens. You can check that a message was not
+					acknowledged (either by your code or by the mock container) but
+					it does not try to redeliver the unacknowledged message.<br />
+					Everything executes within a single thread. The JMS implementation
+					is not thread safe at the moment.	
+				</p>
+			</div>
+		</div>
+
+</body>
+</html>

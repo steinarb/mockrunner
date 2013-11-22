@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Mockrunner JMS">
+	<body>
+
+		<breadcrumbs>
+			<item name="Juffrou" href="http://juffrou.sourceforge.net/index.html"/>
+			<item name="XML" href="http://juffrou.sourceforge.net/juffrou-xml/index.html"/>
+		</breadcrumbs>
+
+		<menu ref="parent" />
+		<!-- 
+		<menu name="My Inherited Menu" inherit="top" />
+		 -->
+
+		<menu name="Project Documentation">
+			<item name="Javadocs" href="apidocs/index.html" />
+		</menu>
+
+	</body>
+</project>

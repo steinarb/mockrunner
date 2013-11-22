@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<body>
+		<div id="content">
+			<div id="contentitem">
+				<p>
+					The JCA test framework can be used to simulate backend systems that are accessed through the use of the
+					JCA Common Client Interface API. Application code that uses the Common Client Interface
+					can be executed against a simulated connector. The test framework intercepts the backend
+					call and provides a suitable response.
+				</p>
+				<p>
+					The JCA test module consists of the <i>ConnectorTestModule</i> and the corresponding
+					<i>ConnectorTestCaseAdapter</i> and <i>BasicConnectorTestCaseAdapter</i>. The backend
+					call is handled by an implementation of the interface <i>InteractionImplementor</i>.
+					Mockrunner provides several implementations of this interface for interactions that are based on indexed
+					and mapped records, on binary byte data and an implementation for applications that
+					use the WSIF framework in IBM environments. It is also possible to plug in custom
+					implementations.
+				</p>
+				<p>
+					This page provides a simple example of a DAO that calls a CICS backend. The release contains
+					additional examples. The <i>PersonSearchDAO</i> contains one method <i>findPersonById</i> that
+					takes an id and returns the corresponding person data as a <i>Person</i> object.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class PersonSearchDAO
+{
+    private ConnectionFactory connectionFactory;
+
+    public PersonSearchDAO()
+    {
+        try
+        {
+            InitialContext context = new InitialContext();
+            connectionFactory = 
+               (ConnectionFactory)context.lookup("java:ra/cics/ConnectionFactory");
+        } 
+        catch(NamingException exc)
+        {
+            throw new RuntimeException("Failed to create ConnectionFactory");
+        }
+    }
+
+    public Person findPersonById(String id)
+    {
+        Connection connection = null;
+        Person request = new Person();
+        request.setId(id);
+        Person response = new Person();
+        try
+        {
+            connection = connectionFactory.getConnection();
+            Interaction interaction = connection.createInteraction();
+            ECIInteractionSpec interactionSpec = new ECIInteractionSpec();
+            interactionSpec.setFunctionName("PER3AC");
+            interactionSpec.setInteractionVerb(ECIInteractionSpec.SYNC_SEND_RECEIVE);
+            interactionSpec.setCommareaLength(32);
+            interaction.execute(interactionSpec, request, response);
+        } 
+        catch(ResourceException exc)
+        {
+            exc.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if(null != connection) connection.close();
+            } 
+            catch(ResourceException exc)
+            {
+                exc.printStackTrace();
+            }
+        }
+        return response;
+    }
+}
+]]>
+				</pre>
+				<p>
+					The corresponding test uses two files <i>personin.bin</i> and <i>personout.bin</i>.
+					These files are snapshots of a real mainframe communication. Once created, the snapshot
+                    files can be used to simulate mainframe access in tests.
+                    The <i>personin.bin</i> file represents an empty person with an id of 
+                    <i>1</i>, which is the request. The <i>personout.bin</i> contains the 
+                    user data for the person with id <i>1</i>. If we search for a user with id 
+                    <i>1</i>, the framework recognizes that the actual request matches the expected
+                   request and returns the actual response (the <i>personout.bin</i> data).
+				</p>
+				<pre class="code">
+<![CDATA[
+public class PersonSearchDAOTest extends ConnectorTestCaseAdapter
+{
+    private EJBTestModule ejbModule;
+    private PersonSearchDAO dao;
+    
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        ejbModule = createEJBTestModule();
+        ejbModule.bindToContext("java:ra/cics/ConnectionFactory", 
+                      getConnectorMockObjectFactory().getMockConnectionFactory());
+        dao = new PersonSearchDAO();
+    }
+    
+    private void prepareInteraction() throws Exception
+    {
+        StreamableRecordByteArrayInteraction interaction = 
+                                         new StreamableRecordByteArrayInteraction();
+        FileInputStream request = 
+           new FileInputStream("src/com/mockrunner/example/connector/personin.bin");
+        FileInputStream response = 
+           new FileInputStream("src/com/mockrunner/example/connector/personout.bin");
+        interaction.setExpectedRequest(request);
+        interaction.setResponse(response);
+        getInteractionHandler().addImplementor(interaction);
+        request.close();
+        response.close();
+    }
+
+    public void testFindPersonById() throws Exception
+    {
+        prepareInteraction();
+        Person response = dao.findPersonById("1");
+        assertEquals("1", response.getId());
+        assertEquals("Jane", response.getFirstName());
+        assertEquals("Doe", response.getLastName());
+        assertEquals(30, response.getAge());
+        verifyConnectionClosed();
+        verifyAllInteractionsClosed();
+    }
+}
+]]>
+				</pre>
+				<p>
+					This example uses the <i>StreamableRecordByteArrayInteraction</i> which
+					can always be used when the involved <i>Record</i> classes implement
+					<i>Streamable</i> and if you are able to create binary snapshots of
+					a real interaction. If you don't want to deal with binary data you may consider
+					using <i>WSIFInteraction</i> or to provide your own implementation of
+					<i>InteractionImplementor</i>.
+				</p>
+			</div>
+		</div>
+</body>
+</html>

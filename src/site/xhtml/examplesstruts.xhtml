@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<body>
+		<div id="content">
+			<div id="contentitem">
+				<p>
+					This page provides a quick overview of what can be done with Mockrunner when testing 
+					<a href="http://struts.apache.org/">Struts</a> applications. 
+					The release comes with more detailed examples. 
+					They also cover mutithread action testing.
+				</p>
+				<p>
+					This simple action fulfils the order for some type of product.
+					If there's not enough in the stock, an error is returned.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class OrderAction extends Action
+{
+    public ActionForward execute(ActionMapping mapping,
+                                 ActionForm form,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response) 
+                                 throws Exception
+    {
+        OrderForm orderForm = (OrderForm)form;
+        String id = orderForm.getId();
+        int amount = orderForm.getAmount();
+        OrderManager orderManager = 
+        	OrderManager.instance(request.getSession().getServletContext());
+        if(orderManager.getStock(id) < amount)
+        {
+            ActionMessages errors = new ActionMessages();
+            ActionMessage error = new ActionMessage("not.enough.in.stock", id);
+            errors.add(ActionMessages.GLOBAL_MESSAGE, error);
+            saveErrors(request, errors);
+            return mapping.findForward("failure");
+        }
+        orderManager.order(id, amount);
+        return mapping.findForward("success");
+    }
+}
+]]>
+				</pre>
+				<p>
+					Now we want to write a test in case of success. Assumed
+					we are working with a mock implementation of the <i>OrderManager</i>,
+					the test may look like this.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class OrderActionTest extends BasicActionTestCaseAdapter
+{
+    private MockOrderManager orderManager;
+    private OrderForm form;
+
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        orderManager = new MockOrderManager();
+        ServletContext context = getActionMockObjectFactory().
+                                                 getMockServletContext();
+        context.setAttribute(OrderManager.class.getName(), orderManager);
+        form = (OrderForm)createActionForm(OrderForm.class);
+        setValidate(true);
+    }
+
+    public void testSuccessfulOrder()
+    {
+        form.setId("testProduct");
+        form.setAmount(10);
+        orderManager.setStock("testProduct", 20);
+        actionPerform(OrderAction.class, form);
+        verifyNoActionErrors();
+        verifyNoActionMessages();
+        verifyForward("success");
+    }
+}
+]]>
+				</pre>
+				<p>
+					Simply extend your test class from <i>BasicActionTestCaseAdapter</i> or <i>ActionTestCaseAdapter</i> 
+					instead of <a href="http://www.junit.org/">JUnits</a> <i>TestCase</i>. The method names are self-explanatory.
+					If you have your own base class for your tests, 
+					there's also a delegator solution. It is used in the next example 
+					which tests the error case.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class OrderActionTest extends MyTestCase
+{
+    private ActionMockObjectFactory mockFactory;
+    private ActionTestModule module;
+    private MockOrderManager orderManager;
+    private OrderForm form;
+
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        orderManager = new MockOrderManager();
+        mockFactory = new ActionMockObjectFactory();
+        module = new ActionTestModule(mockFactory);
+        ServletContext context = mockFactory.getMockServletContext();
+        context.setAttribute(OrderManager.class.getName(), orderManager);
+        form = (OrderForm)module.createActionForm(OrderForm.class);
+        module.setValidate(true);
+    }
+
+    public void testFailureOrder()
+    {
+        module.addRequestParameter("id", "testProduct");
+        module.addRequestParameter("amount", "10");
+        orderManager.setStock("testProduct", 5);
+        module.actionPerform(OrderAction.class, form);
+        module.verifyNumberActionErrors(1);
+        module.verifyActionErrorPresent("not.enough.in.stock");
+        module.verifyActionErrorValue("not.enough.in.stock", "testProduct");
+        module.verifyNoActionMessages();
+        module.verifyForward("failure");
+    }
+}
+]]>
+				</pre>
+				<p>
+					It's nearly the same but you can extend your test from your
+					base class <i>MyTestCase</i>. You have to create the <i>ActionMockObjectFactory</i>
+					and the <i>ActionTestModule</i> on your own. In this test we added the
+					parameters to the request instead of setting them directly.
+					The framework does the necessary populating. You can use
+					this mechanism just like in the real 
+					<a href="http://struts.apache.org/">Struts</a> environment
+					or you can turn it off for special tests.
+				</p>
+				<p>
+					Of course there are a lot of more methods and features. Just
+					download the release, read the <i>readme.txt</i> and check out the
+					examples.
+				</p>
+			</div>
+		</div>
+
+</body>
+</html>

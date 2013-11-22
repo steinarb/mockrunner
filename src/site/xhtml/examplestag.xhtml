@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<body>
+		<div id="content">
+			<div id="contentitem">
+				<p>
+					This page demonstrates the usage of the tag test framework. The
+					<i>TagTestModule</i> and the corresponding adapters, 
+					<i>BasicTagTestCaseAdapter</i> and <i>TagTestCaseAdapter</i>,
+					can simulate simple tags or complex interactions 
+					of nested body tags without the need of a running server and without embedding 
+					the tags in test JSP pages.
+				</p>
+				<p>
+					The following example shows the implementation of a body tag
+					that manipulates its body content. It takes a <i>Collection</i>
+					from the session and iterates through the elements. For each
+					element it creates an HTML table row with a label and the 
+					current body content. It stores the current element in the
+					request. A nested Struts &lt;bean:write&gt; or JSTL &lt;c:out&gt; 
+					tag can be used to write the element as a string to the page.
+				</p>
+				<p>
+					If you store a <i>List</i> with one entry <i>Entry1</i> in the session 
+	                and specify the following JSP code
+				</p>
+				<pre class="code">
+&lt;mytags:enumtag label="myLabel"&gt;
+  &lt;bean:write scope="request" name="currentObject"/&gt;
+&lt;/mytags:enumtag&gt;
+				</pre>
+				<p>
+					then you'll get the following HTML output:
+				</p>
+				<pre class="code">
+&lt;table&gt;
+ &lt;tr&gt;
+   &lt;td&gt;
+       myLabel
+   &lt;/td&gt;
+   &lt;td&gt;
+       Entry1
+   &lt;/td&gt;
+ &lt;/tr&gt;
+&lt;/table&gt;
+				</pre>
+				<p>
+					Here's the code of the tag.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class TableEnumTag extends BodyTagSupport
+{
+    private String label;
+    private Iterator iterator;
+    
+    public void setLabel(String label)
+    {
+        this.label = label;
+    }
+    
+    public void release()
+    {       
+        super.release();
+        label = null;
+        iterator = null;
+    }
+    
+    private void copyNextObjectToRequest()
+    {
+        Object nextAttribute = iterator.next();
+        pageContext.setAttribute("currentObject", 
+                                 nextAttribute, 
+                                 PageContext.REQUEST_SCOPE);
+    }
+    
+    public int doStartTag() throws JspException
+    {
+        try
+        {
+            Collection col = 
+            (Collection)pageContext.getAttribute("currentCollection", 
+                                                 PageContext.SESSION_SCOPE);
+            iterator = col.iterator();
+            if(iterator.hasNext())
+            {
+                pageContext.getOut().println("&lt;table&gt;");
+                copyNextObjectToRequest();
+                return EVAL_BODY_BUFFERED;
+            }
+            return SKIP_BODY;
+        }
+        catch(IOException exc)
+        {
+            throw new JspException(exc.getMessage());
+        }
+    }
+    
+    public int doAfterBody() throws JspException
+    {
+        String bodyString = getBodyContent().getString();
+        JspWriter out = getBodyContent().getEnclosingWriter();
+        try
+        {
+            if(null != bodyString &amp;&amp; bodyString.length() != 0)
+            {
+                out.println("&lt;tr&gt;");
+                out.println("\t&lt;td&gt;");
+                out.println("\t\t" + label);
+                out.println("\t&lt;/td&gt;");
+                out.println("\t&lt;td&gt;");
+                out.println("\t\t" + bodyString);
+                out.println("\t&lt;/td&gt;");
+                out.println("&lt;/tr&gt;");
+            }
+            if(iterator.hasNext())
+            {
+                copyNextObjectToRequest();
+                getBodyContent().clear();
+                return EVAL_BODY_AGAIN;
+            }
+            out.println("&lt;/table&gt;");
+            return SKIP_BODY;
+        }
+        catch(IOException exc)
+        {
+            throw new JspException(exc.getMessage());
+        }  
+    }
+
+    public int doEndTag() throws JspException
+    {
+        return EVAL_PAGE;
+    }
+}
+]]>
+				</pre>
+				<p>
+					Now we want to write a test for this complex tag. We'll use
+					a <i>Collection</i> with three entries and a nested &lt;bean:write&gt;
+					tag. Of course we could test the tag with other body contents as well.
+					Check out the release for more test examples of <i>TableEnumTag</i>.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class TableEnumTagTest extends BasicTagTestCaseAdapter
+{ 
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        ArrayList list = new ArrayList();
+        list.add("Entry1");
+        list.add("Entry2");
+        list.add("Entry3");
+        MockHttpSession session = getWebMockObjectFactory().getMockSession();
+        session.setAttribute("currentCollection", list);
+    }
+
+    public void testBodyContent() throws Exception
+    {
+        Map attributeMap = new HashMap();
+        attributeMap.put("label", "myLabel");
+        NestedTag nestedTag = createNestedTag(TableEnumTag.class, attributeMap);
+        attributeMap = new HashMap();
+        attributeMap.put("scope", "request");
+        attributeMap.put("name", "currentObject");
+        nestedTag.addTagChild(WriteTag.class, attributeMap);
+        
+        processTagLifecycle();
+        
+        BufferedReader reader = getOutputAsBufferedReader();
+        assertEquals("&lt;table&gt;", reader.readLine().trim());
+        for(int ii = 1; ii &lt;= 3; ii++)
+        {
+            assertEquals("&lt;tr&gt;", reader.readLine().trim());
+            assertEquals("&lt;td&gt;", reader.readLine().trim());
+            assertEquals("myLabel", reader.readLine().trim());
+            assertEquals("&lt;/td&gt;", reader.readLine().trim());  
+            assertEquals("&lt;td&gt;", reader.readLine().trim());
+            assertEquals("Entry" + ii, reader.readLine().trim());
+            assertEquals("&lt;/td&gt;", reader.readLine().trim());
+            assertEquals("&lt;/tr&gt;", reader.readLine().trim());
+        }
+        assertEquals("&lt;/table&gt;", reader.readLine().trim());
+    }
+}
+]]>
+				</pre>
+				<p>
+					As you can see we create the tag and add a <i>Map</i>
+					with the attributes. A <i>NestedTag</i> is a wrapper
+					for a normal tag class that is able to maintain
+					child tags and static body content. You only have
+					to deal with <i>NestedTag</i> if you are using
+					child tags. The framework simulates the container
+					behaviour by populating the attributes and performing
+					the tag lifecycle.
+				</p>
+				<p>
+					Tags usually create HTML output. As in the servlet test
+					module, the framework provides this output in different
+					formats, e.g. as String, as Reader or as parsed XML.
+					In this test we use the Reader output.
+				</p>
+				<p>
+					Not all tag tests are as complex as in the previous
+					example. It's also possible to create the tag, call
+					<i>doStartTag()</i> and test the output. It depends
+					on the implementation of the tag and your test
+					requirements. Please check out the release for more
+					examples.
+				</p>
+			</div>
+		</div>
+</body>
+</html>

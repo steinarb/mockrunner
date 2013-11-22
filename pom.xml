@@ -75,18 +75,18 @@
 			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 		<site>
-			<id>site-docs</id>
-			<name>Mockrunner</name>
-			<url>file://${site-docs.url}</url>
+			<id>github-pages-site</id>
+			<name>Deployment through GitHub's site deployment plugin</name>
+			<url>site/${project.version}</url>
 		</site>
 	</distributionManagement>
 
 	<licenses>
 		<license>
 			<name>Mockrunner License, based on Apache Software License, version 1.1</name>
-			<url>http://mockrunner.sourceforge.net/LICENSE.txt</url>
+			<url>LICENSE.txt</url>
 			<distribution>repo</distribution>
-			<comments>OSS license selected by the project founder</comments>
+			<comments>Mockrunner is released under the terms of an Apache style license, i.e. it's free for commercial and non-commercial use. The release comes with complete source code.</comments>
 		</license>
 	</licenses>
 
@@ -96,12 +96,7 @@
 		<repository.domain>github.com</repository.domain>
 		<repository.user>cemartins</repository.user>
 		<repository.name>mockrunner</repository.name>
-		<site-docs.url>/${env.HOME}/sitedocs/${project.artifactId}</site-docs.url>
-		<scmPublish.checkoutDirectory>${project.build.directory}/scmpublish</scmPublish.checkoutDirectory>
-		<scm-publish.siteDocOuputDirectory>${project.reporting.outputDirectory}</scm-publish.siteDocOuputDirectory>
-		<!-- <scm-publish.pubScmUrl>scm:git:cemartins@github.com:cemartins/mockrunner.git</scm-publish.pubScmUrl> -->
-		<scm-publish.pubScmUrl>scm:git:https://github.com/cemartins/mockrunner.git</scm-publish.pubScmUrl>
-		<scm-publish.scmBranch>gh-pages</scm-publish.scmBranch>
+		<github.global.server>github</github.global.server>
 	</properties>
 
 	<dependencyManagement>
@@ -244,7 +239,7 @@
 					<version>2.4.2</version>
 					<configuration>
 						<autoVersionSubmodules>true</autoVersionSubmodules>
-						<releaseProfiles>release</releaseProfiles>
+						<releaseProfiles>performRelease</releaseProfiles>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -261,30 +256,78 @@
 					<version>1.4</version>
 				</plugin>
 				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-scm-publish-plugin</artifactId>
-					<version>1.0-beta-2</version>
-					<extensions>true</extensions>
-					<inherited>true</inherited>
-                    <configuration>
-                        <checkoutDirectory>${scmPublish.checkoutDirectory}</checkoutDirectory>
-                        <checkinComment>Publishing Site Docs for ${project.artifactId}:${project.version}</checkinComment>
-                        <!-- Plugins defaults to "target/staging" and since the distributionManagement section is a pain in the ass for site docs, this is easier -->
-                        <content>${scm-publish.siteDocOuputDirectory}</content>
-                        <skipDeletedFiles>true</skipDeletedFiles>
-                        <pubScmUrl>${scm-publish.pubScmUrl}</pubScmUrl>
-                        <scmBranch>${scm-publish.scmBranch}</scmBranch>
-                    </configuration>
-				 </plugin>
+					<groupId>com.github.github</groupId>
+					<artifactId>site-maven-plugin</artifactId>
+					<version>0.9</version>
+					<configuration>
+						<message>Creating site for ${project.artifactId}, ${project.version}</message>
+						<!-- this does the trick to place every module in the correct subfolder -->
+						<path>${project.distributionManagement.site.url}</path>
+						<merge>true</merge>
+					</configuration>
+				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
 					<version>3.3</version>
 					<inherited>true</inherited>
 					<configuration>
+						<locales>en</locales>
+						<skipDeploy>false</skipDeploy>
+						<attach>true</attach>
 						<chmod>true</chmod>
 						<inputEncoding>${project.build.sourceEncoding}</inputEncoding>
 						<outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
+						<reportPlugins>
+							<plugin>
+								<groupId>org.apache.maven.plugins</groupId>
+								<artifactId>maven-javadoc-plugin</artifactId>
+								<configuration>
+									<javadocExecutable>${javadoc-executable-path}</javadocExecutable>
+									<charset>${project.build.sourceEncoding}</charset>
+									<encoding>${project.build.sourceEncoding}</encoding>
+									<docencoding>${project.build.sourceEncoding}</docencoding>
+									<excludePackageNames>*.internal*</excludePackageNames>
+								</configuration>
+								<reports>
+									<report>javadoc</report>
+								</reports>
+							</plugin>
+							<plugin>
+								<groupId>org.apache.maven.plugins</groupId>
+								<artifactId>maven-project-info-reports-plugin</artifactId>
+								<configuration>
+									<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+									<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+								</configuration>
+								<reports>
+									<!-- <report>cim</report> generate the Project Continuous Integration 
+										System report. -->
+									<!-- <report>dependencies</report> generate the Project Dependencies 
+										report. -->
+									<!-- <report>dependency-convergence</report> generate the Project 
+										Dependency Convergence report for reactor builds. -->
+									<!-- <report>dependency-info</report> to generate code snippets to 
+										be added to build tools. -->
+									<!-- <report>dependency-management</report> generate the Project 
+										DependencyManagement report. -->
+									<report>distribution-management</report> <!-- generate the Project Distribution Management report. -->
+									<report>index</report> <!-- generate the Project index page. -->
+									<report>issue-tracking</report> <!-- generate the Project Issue Tracking report. -->
+									<report>license</report> <!-- generate the Project License report. -->
+									<!-- <report>mailing-list</report> generate the Project Mailing List 
+										report. -->
+									<!--  generate the Project Modules report. -->
+									<report>modules</report>
+									<!-- <report>plugin-management</report> generate the Project PluginManagement 
+										report. -->
+									<!-- <report>plugins</report> generate the Project Plugins report. -->
+									<report>project-team</report> <!-- generate the Project Team report. -->
+									<report>scm</report> <!-- generate the Project Source Code Management report. -->
+									<report>summary</report> <!-- generate the Project information reports summary. -->
+								</reports>
+							</plugin>
+						</reportPlugins>
 					</configuration>
 					<dependencies>
 						<dependency>
@@ -333,54 +376,35 @@
 					</archive>
 				</configuration>
 			</plugin>
-		</plugins>
-	</build>
-
-	<reporting>
-		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>2.7</version>
-				<configuration>
-					<dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-					<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-				</configuration>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<!-- <report>cim</report> generate the Project Continuous Integration 
-								System report. -->
-							<!-- <report>dependencies</report> generate the Project Dependencies 
-								report. -->
-							<!-- <report>dependency-convergence</report> generate the Project 
-								Dependency Convergence report for reactor builds. -->
-							<!-- <report>dependency-info</report> to generate code snippets to 
-								be added to build tools. -->
-							<!-- <report>dependency-management</report> generate the Project 
-								DependencyManagement report. -->
-							<!-- generate the Project Distribution Management report.
-							 -->
-							<report>distribution-management</report>
-							<report>index</report> <!-- generate the Project index page. -->
-							<report>issue-tracking</report> <!-- generate the Project Issue Tracking report. -->
-							<report>license</report> <!-- generate the Project License report. -->
-							<!-- <report>mailing-list</report> generate the Project Mailing List 
-								report. -->
-							<!--  generate the Project Modules report. -->
-							<report>modules</report>
-							<!-- <report>plugin-management</report> generate the Project PluginManagement 
-								report. -->
-							<!-- <report>plugins</report> generate the Project Plugins report. -->
-							<report>project-team</report> <!-- generate the Project Team report. -->
-							<report>scm</report> <!-- generate the Project Source Code Management report. -->
-							<report>summary</report> <!-- generate the Project information reports summary. -->
-						</reports>
-					</reportSet>
-				</reportSets>
+				<artifactId>maven-site-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-descriptor</id>
+						<phase>pre-site</phase>
+						<goals>
+							<!-- <goal>render-books</goal> -->
+							<goal>attach-descriptor</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.github.github</groupId>
+				<artifactId>site-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>github-site</id>
+						<goals>
+							<goal>site</goal>
+						</goals>
+						<phase>release-prepare</phase>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
-	</reporting>
+	</build>
 
 	<profiles>
 		<profile>
@@ -406,7 +430,8 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>release-sign-artifacts</id>
+			<id>release-exclusives</id>
+			<!-- Profile automatically triggered when release:perform is executed -->
 			<activation>
 				<property>
 					<name>performRelease</name>
@@ -415,6 +440,14 @@
 			</activation>
 			<build>
 				<plugins>
+					<!-- Skip tests during release perform -->
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+					<!-- sign jars -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-gpg-plugin</artifactId>
@@ -427,26 +460,6 @@
 								</goals>
 							</execution>
 						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<!-- Profile automatically triggered when release:perform is executed -->
-			<id>release</id>
-			<activation>
-				<property>
-					<name>performRelease</name>
-				</property>
-			</activation>
-			<build>
-				<plugins>
-					<!-- Skip tests during release perform -->
-					<plugin>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<skip>true</skip>
-						</configuration>
 					</plugin>
 				</plugins>
 			</build>

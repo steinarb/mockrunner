@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<body>
+		<div id="content">
+			<div id="contentitem">
+				<p>
+					Mockrunner can be used in conjunction with 
+					<a href="http://mockejb.sourceforge.net/">MockEJB</a>
+					to write tests for EJB based applications.
+					<a href="http://mockejb.sourceforge.net/">MockEJB</a> usually works
+					with a real database. You can use the JDBC framework of Mockrunner instead of a database. 
+					There's an <i>EJBTestModule</i> which utilizes the 
+					<a href="http://mockejb.sourceforge.net/">MockEJB</a>
+					API and provides a few additional methods. You can work without using the
+					<i>EJBTestModule</i>, but it makes life easier, if you use MockEJB in
+					conjunction with Mockrunner.
+				</p>
+				<p >
+					This page provides a very simple example how to use the Struts test framework
+					and the <i>JDBCTestModule</i> of Mockrunner in conjunction with MockEJB and
+					the <i>EJBTestModule</i>.
+					The release comes with a more complex example. 
+				</p>
+				<p >
+					The following action takes a <i>message</i> parameter from the request
+					and writes it to a database using a session bean called <i>LogSessionBean</i>.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class LogAction extends Action
+{
+    public ActionForward execute(ActionMapping mapping,
+                                 ActionForm form,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response) 
+                                 throws Exception
+    {
+        String message = request.getParameter("message");
+        InitialContext initialContext = new InitialContext();
+        Object home = 
+           initialContext.lookup("com/mockrunner/example/LogSession");
+        LogSessionHome logHome = 
+          (LogSessionHome)PortableRemoteObject.narrow(home, 
+                                                      LogSessionHome.class);
+        LogSession log = logHome.create();
+        log.logMessage(message);
+        log.remove();
+        return mapping.findForward("success");
+    }
+}
+]]>
+				</pre>
+				<p >
+					Here's the code of the <i>LogSessionBean</i>. The example
+					only shows the <i>logMessage()</i> method. The complete bean
+					implementation and all the other EJB stuff like the corresponding 
+					interfaces and some
+					<a href="http://xdoclet.sourceforge.net/">XDoclet</a>
+					tags for deploying the bean to
+					<a href="http://www.jboss.org/">JBoss</a>
+					are included in the release.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class LogSessionBean implements SessionBean
+{
+    private SessionContext sessionContext;
+  
+    public void logMessage(String message)
+    {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        try
+        {
+            InitialContext context = new InitialContext();
+            DataSource dataSource = 
+               (DataSource)context.lookup("java:comp/env/jdbc/MySQLDB");
+            connection = dataSource.getConnection();
+            statement = connection.prepareStatement
+                                     ("insert into logtable values(?, ?)");
+            statement.setTimestamp(1, 
+                                   new Timestamp(System.currentTimeMillis()));
+            statement.setString(2, message);
+            statement.executeUpdate();
+        }
+        catch(Exception exc)
+        {
+            sessionContext.setRollbackOnly();
+            throw new EJBException(exc.getMessage());
+        }
+        finally
+        {
+            try
+            {
+                if(null != statement) statement.close();
+                if(null != connection) connection.close();
+            }
+            catch(SQLException sqlExc)
+            {
+            
+            }
+        }
+    }
+}
+]]>
+				</pre>
+				<p>
+					Here's the test for the above example.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class LogActionTest extends ActionTestCaseAdapter
+{
+    private JDBCTestModule jdbcModule;
+    private EJBTestModule ejbModule;
+    
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        jdbcModule = createJDBCTestModule();
+        ejbModule = createEJBTestModule();
+        ejbModule.setInterfacePackage("com.mockrunner.example.ejb.interfaces");
+        ejbModule.deploySessionBean("com/mockrunner/example/LogSession", 
+                                    LogSessionBean.class, 
+                                    TransactionPolicy.REQUIRED);
+        ejbModule.bindToContext("java:comp/env/jdbc/MySQLDB", 
+                  getJDBCMockObjectFactory().getMockDataSource());
+    }
+
+    public void testLogActionSuccess()
+    {
+        addRequestParameter("message", "testmessage");
+        actionPerform(LogAction.class);
+        jdbcModule.verifySQLStatementExecuted("insert into logtable");
+        jdbcModule.verifyPreparedStatementParameter("insert into logtable", 
+                                                    2, "testmessage");
+        ejbModule.verifyNotMarkedForRollback();
+        ejbModule.verifyCommitted();
+        jdbcModule.verifyAllStatementsClosed();
+        jdbcModule.verifyConnectionClosed();
+        verifyNoActionErrors();
+        verifyForward("success");
+    }
+}
+]]>
+				</pre>
+				<p>
+				    The example uses several test modules in conjunction. The easiest way to do this
+                            is to extend <i>ActionTestCaseAdapter</i> instead of <i>BasicActionTestCaseAdapter</i>
+                            and to create the other test modules using <i>createJDBCTestModule()</i> and
+				    <i>createEJBTestModule()</i>.
+				</p>
+				<p>
+				    The <i>EJBTestModule</i> performs the
+				    <a href="http://mockejb.sourceforge.net/">MockEJB</a>
+				    setup. It sets the <i>MockContextFactory</i> as default initial context factory
+				    and creates a <i>MockUserTransaction</i>.
+				    You have to deploy your bean to the mock container. Mockrunner allows
+				    you to set the package with the EJB interfaces, so you do not have to
+				    provide all the interfaces when deploying the beans.
+				    You can also deploy the bean directly to the mock container of 
+				    <a href="http://mockejb.sourceforge.net/">MockEJB</a>.
+				</p>
+				<p >
+					In this example we use the simulated database environment of
+					Mockrunner, so we don't need a real transaction. But we want to keep
+					track if the transaction was committed or rolled back, so we use
+					the <i>MockUserTransaction</i> implementation of Mockrunner.
+					<br /><br />You can use the
+					<a href="http://mockejb.sourceforge.net/">MockEJB</a>
+					feature to work with the remote container and you can get a real
+					transaction from the JTA implementation of your application server.
+					You have to call
+				</p>
+				<pre class="code">
+MockContextFactory.
+    setDelegateEnvironment((new InitialContext()).getEnvironment());
+				</pre>
+				<p>
+					in the <i>setUp()</i> method before calling <i>super.setUp()</i>.
+					<br /><br />Mockrunner will automatically work with a JTA transaction in this
+					case. Refer to the
+					<a class="contentlink" href="http://mockejb.sourceforge.net/">MockEJB</a>
+					documentation for a detailed description how to setup the remote container.
+				</p>
+				<p>
+					Please note that you have to use the <i>verify</i> methods of the <i>EJBTestModule</i>
+					when testing the state of the <i>MockUserTransaction</i>, because
+					the <i>MockUserTransaction</i> is a simulated JTA transaction.
+					If the tested code manages the transaction on its own using JDBC, you have to work with
+					the transaction methods of <i>JDBCTestModule</i>.
+					Refer to the 
+					<a href="examplesjdbc.html">JDBC</a> examples.
+				</p>
+			</div>
+		</div>
+</body>
+</html>

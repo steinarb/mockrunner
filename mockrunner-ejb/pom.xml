@@ -18,17 +18,12 @@
 			<artifactId>mockrunner-core</artifactId>
 			<version>0.4.5-SNAPSHOT</version>
 		</dependency>
-<!--
 		<dependency>
-			<groupId>org.apache.struts</groupId>
-			<artifactId>struts-extras</artifactId>
+			<groupId>org.mockejb</groupId>
+			<artifactId>mockejb</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-		</dependency>
--->
 	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>

@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<body>
+		<div id="content">
+			<div id="contentitem">
+				<p>
+					This page demonstrates the testing of servlets and filters.
+					The release comes with more detailed examples. 
+				</p>
+				<p>
+					This servlet creates a redirect HTML page. The redirect URL
+					can be specified with the request parameter <i>redirecturl</i>.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class RedirectServlet extends HttpServlet
+{
+    public void doGet(HttpServletRequest request, 
+                      HttpServletResponse response) 
+                      throws ServletException, IOException
+    {
+        doPost(request, response);
+    }
+
+    public void doPost(HttpServletRequest request, 
+                       HttpServletResponse response) 
+                       throws ServletException, IOException
+    {
+        String redirectUrl = request.getParameter("redirecturl");
+        StringBuffer output = new StringBuffer();
+        output.append("&lt;html&gt;\n");
+        output.append("&lt;head&gt;\n");
+        output.append("&lt;meta http-equiv=\"refresh\" content=\"");
+        output.append("0;URL=" + redirectUrl + "\"&gt;\n");
+        output.append("&lt;/head&gt;\n");
+        output.append("&lt;body&gt;\n");
+        output.append("&lt;h3&gt;");
+        output.append("You will be redirected to ");
+        output.append("&lt;a href=\"" + redirectUrl + "\"&gt;");
+        output.append(redirectUrl + "&lt;/a&gt;");
+        output.append("&lt;/h3&gt;\n");
+        output.append("&lt;/body&gt;\n");
+        output.append("&lt;/html&gt;\n");
+        response.getWriter().write(output.toString());
+    }
+}
+]]>
+				</pre>
+				<p>
+					Now we want to write a test if the servlet creates the
+					correct HTML code. First we simply go through the output
+					text line by line.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class RedirectServletTest extends BasicServletTestCaseAdapter
+{
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        createServlet(RedirectServlet.class);
+    }
+    
+    public void testServletOutput() throws Exception
+    {
+        addRequestParameter("redirecturl", "http://www.mockrunner.com");
+        doPost();
+        BufferedReader reader = getOutputAsBufferedReader();
+        assertEquals("&lt;html&gt;", reader.readLine().trim());
+        assertEquals("&lt;head&gt;", reader.readLine().trim());
+        reader.readLine();
+        assertEquals("&lt;/head&gt;", reader.readLine().trim());
+        assertEquals("&lt;body&gt;", reader.readLine().trim());
+        reader.readLine();
+        assertEquals("&lt;/body&gt;", reader.readLine().trim());
+        assertEquals("&lt;/html&gt;", reader.readLine().trim());
+        verifyOutputContains("URL=http://www.mockrunner.com");
+    }
+}
+]]>
+				</pre>
+				<p>
+					We only test the overall HTML structure and the redirect URL.
+					The framework provides the generated HTML output in different
+					formats, e.g. as String, as Reader or as parsed XML. The HTML
+					does not necessarily have to be wellformed XML. Mockrunner is using
+					<a href="http://www.apache.org/~andyc/neko/doc/html/index.html">NekoHTML</a>
+					for parsing the HTML output. In the following
+					test method, we test the content of the HTML using 
+					<a href="http://www.jdom.org/">JDOM</a>.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class RedirectServletTest extends BasicServletTestCaseAdapter
+{
+    protected void setUp() throws Exception
+    {
+        super.setUp();
+        createServlet(RedirectServlet.class);
+    }
+    
+    public void testServletOutputAsXML() throws Exception
+    {
+        addRequestParameter("redirecturl", "http://www.mockrunner.com");
+        doPost();
+        Element root = getOutputAsJDOMDocument().getRootElement();
+        assertEquals("html", root.getName());
+        Element head = root.getChild("head");
+        Element meta = head.getChild("meta");
+        assertEquals("refresh", meta.getAttributeValue("http-equiv"));
+        assertEquals("0;URL=http://www.mockrunner.com", 
+                      meta.getAttributeValue("content"));
+    }
+}
+]]>
+				</pre>
+				<p>
+					In the next example we'll test a servlet, that invalidates the session 
+					and redirects to a goodbye page when the user clicks the logout button.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class LogoutServlet extends HttpServlet
+{
+    public void doPost(HttpServletRequest request, 
+                       HttpServletResponse response) 
+                       throws ServletException, IOException
+    {
+        String logout = request.getParameter("logout");
+        if(null != logout)
+        {
+            request.getSession().invalidate();
+            RequestDispatcher dispatcher = 
+                   request.getRequestDispatcher("/html/goodbye.html");
+            dispatcher.forward(request, response);
+        }
+    }
+}
+]]>		
+				</pre>
+				<p>
+					If you use &lt;input type="image"/&gt; instead of &lt;input type="submit"/&gt;
+					on the HTML page for the logout button, you get <i>logout.x</i> and <i>logout.y</i> 
+					as request parameters. We can use a filter in front of the servlet. This filter 
+					changes the request parameters so the servlet only gets one <i>logout</i> parameter. 
+					The following code fragment only shows the <i>Filter</i>, please check out the release 
+					for the complete source code of <i>ImageButtonRequestWrapper</i>.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class ImageButtonFilter implements Filter
+{
+   public void doFilter(ServletRequest request, 
+                        ServletResponse response, 
+                        FilterChain chain) 
+                        throws IOException, ServletException
+   {
+        if(request instanceof HttpServletRequest)
+        {
+            ImageButtonRequestWrapper wrapper = 
+               new ImageButtonRequestWrapper((HttpServletRequest)request);
+            chain.doFilter(wrapper, response);
+        }
+        else
+        {
+            chain.doFilter(request, response);
+        }
+   }
+
+   public void init(FilterConfig filterConfig) {}
+
+   public void destroy() {}
+}
+]]>
+				</pre>
+				<p>
+					Now we want to write a test for the <i>LogoutServlet</i> with
+					the <i>ImageButtonFilter</i> and a simulated image button.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class LogoutServletTest extends BasicServletTestCaseAdapter
+{
+    public void testDoLogoutWithFilteredImageButton() throws Exception
+    {
+        addRequestParameter("logout.x", "11");
+        addRequestParameter("logout.y", "12");
+        createFilter(ImageButtonFilter.class);
+        createServlet(LogoutServlet.class);
+        setDoChain(true);
+        doPost();
+        assertFalse(getWebMockObjectFactory().getMockSession().isValid());
+        HttpServletRequest filteredRequest = 
+                          (HttpServletRequest)getFilteredRequest();
+        assertEquals("11", filteredRequest.getParameter("logout"));
+        assertNull(filteredRequest.getParameter("logout.x"));
+        assertNull(filteredRequest.getParameter("logout.y"));
+    }
+}
+]]>
+				</pre>
+				<p>
+					It's really easy. We simply create the filter
+					and the servlet and call the <i>doPost()</i> method. The framework
+					processes the filter chain as in the real webcontainer.
+				</p>
+				<p>
+					You can extend your test from <i>BasicServletTestCaseAdapter</i> or <i>ServletTestCaseAdapter</i> or 
+					delegate to <i>ServletTestModule</i>, like with the other test modules of Mockrunner.
+				</p>
+			</div>
+		</div>
+</body>
+</html>

@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<body>
+		<div id="content">
+			<div id="contentitem">
+				<p>
+					This page provides a quick overview over the JDBC test framework. There
+					are more examples in the release, especially one that demonstrates
+					how to combine the JDBC test module with the other test modules of
+					Mockrunner.
+				</p>
+				<p>
+					The JDBC test framework simulates a database but it does not execute any
+					SQL statements. You can use the Mockrunner API to specify the results the 
+					database would provide when executing different SQL statements. The
+					framework is meant for testing the Java part of JDBC based applications.
+				</p>
+				<p>
+					This example class simulates a bank. It can be used to
+					transfer an amount of money from one account to another.
+					It uses a table with the name <i>account</i>. The first column
+					is the account <i>id</i>, the second stores the current <i>balance</i>.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class Bank
+{
+    private Connection connection;
+    
+    public void connect() throws SQLException
+    {
+        disconnect();
+        connection = 
+           DriverManager.getConnection("jdbc:mysql://localhost:3306/test");
+        connection.setAutoCommit(false);
+    }
+    
+    public void disconnect() throws SQLException
+    {
+        if(null != connection)
+        {
+            connection.close();
+            connection = null;
+        }        
+    }
+    
+    public void transfer(int sourceId, int targetId, int amount) 
+                         throws SQLException
+    {  
+        PreparedStatement preparedStatement = null;
+        try
+        {
+            if(!isValid(sourceId, amount)) return;
+            preparedStatement = 
+              connection.prepareStatement("update account set " +
+                                          "balance=balance+? where id=?");
+            preparedStatement.setInt(1, -amount);
+            preparedStatement.setInt(2, sourceId);
+            preparedStatement.executeUpdate();
+            preparedStatement.setInt(1, amount);
+            preparedStatement.setInt(2, targetId);
+            preparedStatement.executeUpdate();
+            connection.commit();
+        }
+        catch(SQLException exc)
+        {
+            connection.rollback();
+        }
+        finally
+        {
+            if(null != preparedStatement) preparedStatement.close();
+        }
+    }
+    
+    private boolean isValid(int sourceId, int amount) throws SQLException
+    {
+        Statement statement = null;
+        ResultSet result = null;
+        try
+        {
+            statement = connection.createStatement();
+            result = statement.executeQuery("select balance from account "
+                                            + "where id=" + sourceId);
+            if(!result.next())
+            {
+                connection.rollback();
+                return false;
+            }
+            int balance = result.getInt(1);
+            if(balance &lt; amount)
+            {
+                connection.rollback();
+                return false;
+            }
+            return true;
+        }
+        catch(SQLException exc)
+        {
+            connection.rollback();
+            return false;
+        }
+        finally
+        {
+            if(null != result) result.close();
+            if(null != statement) statement.close();
+        }
+    }
+}
+]]>
+				</pre>
+				<p>
+					In the first test we simulate the case that the account id does not
+					exist, i.e. the database returns an empty <i>ResultSet</i>. We
+					have to prepare an empty <i>ResultSet</i> and set it as the response
+					for the <i>select</i> statement. Since there's only one <i>select</i>
+					in this example, we can set the corresponding <i>ResultSet</i> as
+					a global one, i.e. it will be returned on every test query.
+					Mockrunner keeps track on every executed SQL statement. When
+					preparing or verifying results you don't have to provide the complete
+					statement string. Usually it's enough to declare just the beginning
+					of the statement string. In this example <i>select balance</i> 
+					unambiguously identifies the single <i>select</i> statement of 
+					the application. You can also use regular expressions in more
+					complex examples.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class BankTest extends BasicJDBCTestCaseAdapter
+{
+    private void prepareEmptyResultSet()
+    {
+        MockConnection connection = 
+            getJDBCMockObjectFactory().getMockConnection();
+        StatementResultSetHandler statementHandler = 
+            connection.getStatementResultSetHandler();
+        MockResultSet result = statementHandler.createResultSet();
+        statementHandler.prepareGlobalResultSet(result);
+    }
+    
+    public void testWrongId() throws SQLException
+    {
+        prepareEmptyResultSet();
+        Bank bank = new Bank();
+        bank.connect();
+        bank.transfer(1, 2, 5000);
+        bank.disconnect();
+        verifySQLStatementExecuted("select balance");
+        verifySQLStatementNotExecuted("update account");
+        verifyNotCommitted();
+        verifyRolledBack();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed();
+    }
+}
+]]>
+				</pre>
+				<p>
+					In the next test we simulate a valid transaction. We prepare
+					a <i>ResultSet</i> with an amount of 10000, so everything
+					is ok and the transfer can be completed. Simple responses
+					like in this example can be easily specified using the Java API.
+					Large response tables can be specified in text files. Check out
+					the release for an example.
+				</p>
+				<pre class="code">
+<![CDATA[
+public class BankTest extends BasicJDBCTestCaseAdapter
+{
+    private void prepareResultSet()
+    {
+        MockConnection connection = 
+            getJDBCMockObjectFactory().getMockConnection();
+        StatementResultSetHandler statementHandler = 
+            connection.getStatementResultSetHandler();
+        MockResultSet result = statementHandler.createResultSet();
+        result.addRow(new Integer[] {new Integer(10000)});
+        statementHandler.prepareGlobalResultSet(result);
+    }
+    
+    public void testTransferOk() throws SQLException
+    {
+        prepareResultSet();
+        Bank bank = new Bank();
+        bank.connect();
+        bank.transfer(1, 2, 5000);
+        bank.disconnect();
+        verifySQLStatementExecuted("select balance");
+        verifySQLStatementExecuted("update account");
+        verifySQLStatementParameter("update account", 0, 1, new Integer(-5000));
+        verifySQLStatementParameter("update account", 0, 2, new Integer(1));
+        verifySQLStatementParameter("update account", 1, 1, new Integer(5000));
+        verifySQLStatementParameter("update account", 1, 2, new Integer(2));
+        verifyCommitted();
+        verifyNotRolledBack();
+        verifyAllResultSetsClosed();
+        verifyAllStatementsClosed();
+        verifyConnectionClosed(); 
+    }
+}
+]]>
+				</pre>
+				<p>
+					Of course there are much more things that can be done. The JDBC
+					test framework is a test module named <i>JDBCTestModule</i>
+					and works like the other test modules in Mockrunner. It provides
+					two adapters called <i>BasicJDBCTestCaseAdapter</i> and 
+                    <i>JDBCTestCaseAdapter</i>. We used the <i>BasicJDBCTestCaseAdapter</i> in
+					the above example.
+				</p>
+			</div>
+		</div>
+
+</body>
+</html>
