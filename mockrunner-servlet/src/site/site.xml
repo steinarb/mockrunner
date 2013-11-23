@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Mockrunner JMS">
+<project name="Mockrunner Servlets">
 	<body>
 
 		<breadcrumbs>
 			<item name="Home" href="/index.html"/>
-			<item name="JMS" href="/mockrunner-jms/index.html"/>
+			<item name="Servlets" href="/mockrunner-servlet/index.html"/>
 		</breadcrumbs>
 
 		<menu ref="parent" />

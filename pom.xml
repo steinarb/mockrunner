@@ -14,7 +14,7 @@
 	<version>0.4.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>MockRunner</name>
-	<url>http://${repository.user}.github.io/${repository.name}/site/${project.version}</url>
+	<url>http://${repository.user}.github.io/${repository.name}</url>
 	<description>Mockrunner is a lightweight framework for unit testing applications in the J2EE environment. It supports servlets, filters, tag classes and Struts actions. It includes a JDBC a JMS and a JCA test framework and can be used to test EJB based applications.</description>
 	<inceptionYear>2003</inceptionYear>
 
@@ -77,7 +77,7 @@
 		<site>
 			<id>github-pages-site</id>
 			<name>Deployment through GitHub's site deployment plugin</name>
-			<url>site/${project.version}</url>
+			<url>http://${repository.user}.github.io/${repository.name}</url>
 		</site>
 	</distributionManagement>
 
@@ -262,7 +262,6 @@
 					<configuration>
 						<message>Creating site for ${project.artifactId}, ${project.version}</message>
 						<!-- this does the trick to place every module in the correct subfolder -->
-						<path>${project.distributionManagement.site.url}</path>
 						<merge>true</merge>
 					</configuration>
 				</plugin>
@@ -379,6 +378,9 @@
 			<plugin>
 				<groupId>com.github.github</groupId>
 				<artifactId>site-maven-plugin</artifactId>
+				<configuration>
+					<path>${project.artifactId}</path>
+				</configuration>
 				<executions>
 					<execution>
 						<id>github-site</id>
