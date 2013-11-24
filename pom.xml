@@ -378,9 +378,6 @@
 			<plugin>
 				<groupId>com.github.github</groupId>
 				<artifactId>site-maven-plugin</artifactId>
-				<configuration>
-					<path>${project.artifactId}</path>
-				</configuration>
 				<executions>
 					<execution>
 						<id>github-site</id>
