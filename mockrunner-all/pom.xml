@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.mockrunner</groupId>
 		<artifactId>mockrunner</artifactId>
-		<version>0.4.5</version>
+		<version>0.4.5-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -16,49 +16,49 @@
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-core</artifactId>
-			<version>0.4.5</version>
+			<version>0.4.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-jms</artifactId>
-			<version>0.4.5</version>
+			<version>0.4.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-jms</artifactId>
-			<version>0.4.5</version>
+			<version>0.4.5-SNAPSHOT</version>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-ejb</artifactId>
-			<version>0.4.5</version>
+			<version>0.4.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-jdbc</artifactId>
-			<version>0.4.5</version>
+			<version>0.4.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-jca</artifactId>
-			<version>0.4.5</version>
+			<version>0.4.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-servlet</artifactId>
-			<version>0.4.5</version>
+			<version>0.4.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-tag</artifactId>
-			<version>0.4.5</version>
+			<version>0.4.5-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-struts</artifactId>
-			<version>0.4.5</version>
+			<version>0.4.5-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
