@@ -1,13 +1,39 @@
-/*
+body {
+box-sizing: border-box;
+font-size: 16px;
+font-family: 'Myriad Pro', Calibri, Helvetica, Arial, sans-serif;
+line-height: 1.5;
+-webkit-font-smoothing: antialiased;
+}
+p {
+margin: 10px 0 15px 0;
+}
+ 
 #banner {
-  color: #F3B455;
-  background-color: gray;
-  font-family: Courier;
+	height: 56px;
+}
+
+#bannerLeft {
+	display: inline-block;
+	width: 324px;
+	height: 53px;
+}
+
+#bannerRight {
+	display: inline-block;
+	width: 353px;
+	height: 26px;
+	padding-top: 27px;
+	padding-right: 16px;	
 }
 
 #leftColumn {
   width: 200px;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size: 14px;
 }
+/*
+
 #bodyColumn {
 	margin-right: 100px;
 }

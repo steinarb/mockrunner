@@ -38,20 +38,18 @@
 	<bannerLeft>
 		<name>Mockrunner</name>
 		<src>images/mockrunner-header.png</src>
-		<width>609</width>
-		<height>69</height>
+		<width>324</width>
+		<height>53</height>
 	</bannerLeft>
-	<!-- 
 	<bannerRight>
-		<src>images/juffrou_text_new.jpg</src>
-		<width>140</width>
-		<height>73</height>
+		<src>images/mockrunner-tagline.png</src>
+		<width>353</width>
+		<height>24</height>
 	</bannerRight>
-	 -->
 	<publishDate position="right" />
 	<version position="right" />
 	<poweredBy>
-		<logo name="Powered by Github (click for project page)" href="http://github.com/cemartins/mockrunner" img="images/GitHub.png" title="GitHub" />
+		<logo name="Powered by Github (click for project page)" href="http://mockrunner.github.io" img="images/GitHub.png" title="GitHub" />
 	</poweredBy>
 	<!-- 
 	<custom>
@@ -71,21 +69,19 @@
 			<link rel="shortcut icon" href="favicon.ico" />
 			<!-- Google Analytics -->
 			<script type="text/javascript">
-			  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-			  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-			  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-			  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-			
-			  ga('create', 'UA-36088259-2', 'sourceforge.net');
-			  ga('send', 'pageview');
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-36088259-3', 'mockrunner.github.io');
+  ga('send', 'pageview');
 			</script>
 		</head>
-		<!-- 
 		<links>
-			<item name="Sourceforge" href="http://sourceforge.net/p/juffrou/wiki/Home" />
-			<item name="Releases" href="https://oss.sonatype.org/content/groups/public/net/sf/juffrou" />
+			<item name="Github" href="http://mockrunner.github.io" />
+			<item name="Releases" href="https://oss.sonatype.org/content/groups/public/com/mockrunner" />
 		</links>
-		 -->
 		<breadcrumbs>
 			<item name="Home" href="/index.html"/>
 		</breadcrumbs>
@@ -107,9 +103,9 @@
 			 -->
 		</menu>
 
-		<menu ref="reports" />
-
 		<menu ref="modules" />
+
+		<menu ref="reports" />
 
 		<footer>Powered by Github.com</footer>
 	</body>

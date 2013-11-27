@@ -54,17 +54,12 @@
 				framework intercepts the backend call and provides a suitable response.
 				</p>
 				<p>
-					Mockrunner supports the Java versions from 1.3 to 1.6 and J2EE 1.3, J2EE 1.4 and JavaEE 5.
-					EJB 3.0 is not supported yet. Mockrunner supports the Struts versions 1.1, 1.2 and 1.3.
-				</p>
-				<p>
-					To start with Mockrunner check out the <a href="doc/api/index.html">JavaDoc</a> 
+					To start with Mockrunner check out the JavaDoc of each module 
 					and the examples on this page and in the release. Mockrunner is hosted on 
-					<a href="http://sourceforge.net/projects/mockrunner/">Sourceforge</a>.
+					<a href="http://mockrunner.github.io">Github</a>.
 				</p>
 				<div class="article-footer">
-					Copyright &copy; 2013 <a href="index.html">Mockrunner project</a> and Alwin Ibba<br/>
-					Web Design by Jeremy Whitlock and Nick Myers
+					Copyright &copy; 2013 <a href="index.html">Mockrunner project</a> and Alwin Ibba
 				</div>
 			</div>
 		</div>
