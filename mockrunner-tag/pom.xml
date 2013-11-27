@@ -11,6 +11,7 @@
 
 	<artifactId>mockrunner-tag</artifactId>
 	<name>MockRunner-TAG</name>
+	<description>Mock objects for TAG classes</description>
 
 	<dependencies>
 		<dependency>

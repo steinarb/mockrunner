@@ -11,6 +11,7 @@
 
 	<artifactId>mockrunner-ejb</artifactId>
 	<name>MockRunner-EJB</name>
+	<description>Mock classes for enterprise java beans</description>
 
 	<dependencies>
 		<dependency>

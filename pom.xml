@@ -14,7 +14,7 @@
 	<version>0.4.6-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>MockRunner</name>
-	<url>http://${repository.user}.github.io/${repository.name}</url>
+	<url>http://mockrunner.github.io</url>
 	<description>Mockrunner is a lightweight framework for unit testing applications in the J2EE environment. It supports servlets, filters, tag classes and Struts actions. It includes a JDBC a JMS and a JCA test framework and can be used to test EJB based applications.</description>
 	<inceptionYear>2003</inceptionYear>
 
@@ -52,14 +52,14 @@
 	</contributors>
 
 	<scm>
-        <connection>scm:git:https://${repository.domain}/${repository.user}/${repository.name}.git</connection>
-        <url>https://${repository.domain}/${repository.user}/${repository.name}</url>
-        <developerConnection>scm:git:https://${repository.domain}/${repository.user}/${repository.name}.git</developerConnection>
+        <connection>scm:git:https://github.com/mockrunner/mockrunner.git</connection>
+        <url>https://github.com/mockrunner/mockrunner</url>
+        <developerConnection>scm:git:https://github.com/mockrunner/mockrunner.git</developerConnection>
         <tag>HEAD</tag>
 	</scm>
 
 	<issueManagement>
-        <url>https://www.github.com/${repository.user}/${repository.name}/issues</url>
+        <url>https://github.com/mockrunner/mockrunner/issues</url>
         <system>Github Issues</system>
 	</issueManagement>
 
@@ -77,7 +77,7 @@
 		<site>
 			<id>github-pages-site</id>
 			<name>Deployment through GitHub's site deployment plugin</name>
-			<url>http://${repository.user}.github.io/${repository.name}</url>
+			<url>http://mockrunner.github.io/mockrunner</url>
 		</site>
 	</distributionManagement>
 
@@ -93,9 +93,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<repository.domain>github.com</repository.domain>
-		<repository.user>cemartins</repository.user>
-		<repository.name>mockrunner</repository.name>
 		<github.global.server>github</github.global.server>
 	</properties>
 

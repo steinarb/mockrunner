@@ -11,6 +11,7 @@
 
 	<artifactId>mockrunner-struts</artifactId>
 	<name>MockRunner-Struts</name>
+	<description>Mock classes for Struts</description>
 
 	<dependencies>
 		<dependency>

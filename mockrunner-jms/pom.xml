@@ -11,6 +11,7 @@
 
 	<artifactId>mockrunner-jms</artifactId>
 	<name>MockRunner-JMS</name>
+	<description>Mock classes for Java Messaging System</description>
 
 	<dependencies>
 		<dependency>

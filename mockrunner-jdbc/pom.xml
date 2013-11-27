@@ -11,6 +11,7 @@
 
 	<artifactId>mockrunner-jdbc</artifactId>
 	<name>MockRunner-JDBC</name>
+	<description>Mock classes for JDBC</description>
 
 	<dependencies>
 		<dependency>

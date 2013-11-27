@@ -11,6 +11,7 @@
 
 	<artifactId>mockrunner-jca</artifactId>
 	<name>MockRunner-JCA</name>
+	<description>Mock classes for Java Connector Architecture</description>
 
 	<dependencies>
 		<dependency>

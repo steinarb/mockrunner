@@ -11,6 +11,7 @@
 
 	<artifactId>mockrunner-core</artifactId>
 	<name>MockRunner-Core</name>
+	<description>Core classes common to all Mockrunner modules</description>
 
 	<dependencies>
 		<dependency>

@@ -11,6 +11,7 @@
 
 	<artifactId>mockrunner-servlet</artifactId>
 	<name>MockRunner-Servlet</name>
+	<description>Mock classes for servlets</description>
 
 	<dependencies>
 		<dependency>
