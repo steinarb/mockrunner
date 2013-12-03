@@ -15,6 +15,9 @@ import javax.jms.ServerSessionPool;
 import javax.jms.Session;
 import javax.jms.Topic;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
 
@@ -27,6 +30,9 @@ import com.mockrunner.jms.DestinationManager;
  */
 public class MockConnection implements Connection, Serializable
 {
+	
+	private static final Log logger = LogFactory.getLog(MockConnection.class);
+	
     private ConnectionMetaData metaData;
     private List sessions;
     private String clientId;
@@ -55,6 +61,8 @@ public class MockConnection implements Connection, Serializable
         sessions = new ArrayList();
         this.userName = userName;
         this.password = password;
+        if(logger.isDebugEnabled())
+        	logger.debug("Created new mock connection");
     }
     
     /**
@@ -246,6 +254,8 @@ public class MockConnection implements Connection, Serializable
             session.close();
         }
         closed = true;
+        if(logger.isDebugEnabled())
+        	logger.debug("Closed mock connection");
     }
     
     public boolean isStarted()

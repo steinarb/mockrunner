@@ -11,7 +11,7 @@
 
 	<artifactId>mockrunner-all</artifactId>
 	<name>MockRunner-ALL</name>
-	<description>Tests which use all modules</description>
+	<description>Comprehensive mock classes spanning more than one Mockrunner module</description>
 
 	<dependencies>
 		<dependency>

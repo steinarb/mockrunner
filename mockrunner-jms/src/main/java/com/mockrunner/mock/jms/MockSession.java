@@ -29,6 +29,9 @@ import javax.jms.TextMessage;
 import javax.jms.Topic;
 import javax.jms.TopicSubscriber;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.mockrunner.jms.GenericTransmissionManager;
 import com.mockrunner.jms.MessageManager;
 import com.mockrunner.jms.QueueTransmissionManager;
@@ -62,6 +65,9 @@ import com.mockrunner.jms.TransmissionManagerWrapper;
  */
 public class MockSession implements Session, Serializable
 {
+	
+	private static final Log logger = LogFactory.getLog(MockSession.class);
+	
     private MockConnection connection;
     private QueueTransmissionManager queueTransManager;
     private TopicTransmissionManager topicTransManager;
@@ -99,6 +105,8 @@ public class MockSession implements Session, Serializable
         numberRollbacks = 0;
         recovered = false;
         closed = false;
+        if(logger.isDebugEnabled())
+        	logger.debug("Created new mock session");
     }
     
     /**
@@ -354,6 +362,9 @@ public class MockSession implements Session, Serializable
     {
         connection.throwJMSException();
         numberCommits++;
+        if(logger.isDebugEnabled())
+        	logger.debug("Mock session commit");
+
     }
 
     public void rollback() throws JMSException
@@ -361,6 +372,8 @@ public class MockSession implements Session, Serializable
         connection.throwJMSException();
         recover();
         numberRollbacks++;
+        if(logger.isDebugEnabled())
+        	logger.debug("Mock session rollback");
     }
 
     public void close() throws JMSException
@@ -380,6 +393,8 @@ public class MockSession implements Session, Serializable
         queues.clear();
         topics.clear();
         closed = true;
+        if(logger.isDebugEnabled())
+        	logger.debug("Mock session closed");
     }
     
     private void removeSessionFromDestinations(Collection destinations)
