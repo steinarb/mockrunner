@@ -16,7 +16,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
-			<artifactId>mockrunner-core</artifactId>
+			<artifactId>mockrunner-servlet</artifactId>
 			<version>0.4.7-SNAPSHOT</version>
 		</dependency>
 		<dependency>

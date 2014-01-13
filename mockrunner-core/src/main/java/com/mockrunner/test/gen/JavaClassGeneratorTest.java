@@ -5,8 +5,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServlet;
-
 import junit.framework.TestCase;
 
 import com.mockrunner.gen.proc.JavaClassGenerator;
@@ -39,7 +37,6 @@ public class JavaClassGeneratorTest extends TestCase
         generator.addInterfaceImplementation(Map.class);
         generator.addInterfaceImplementation(List.class);
         generator.addImport(XmlUtil.class);
-        generator.addImport(HttpServlet.class);
         generator.addImport(TestCase.class);
         generator.addMemberDeclaration(XmlUtil.class, "util");
         generator.addMemberDeclaration(String.class, "name");
@@ -84,7 +81,6 @@ public class JavaClassGeneratorTest extends TestCase
                "import java.net.URL;" + NL +
                "import java.util.List;" + NL +
                "import java.util.Map;" + NL + NL +
-               "import javax.servlet.http.HttpServlet;" + NL + NL +
                "import junit.framework.TestCase;" + NL + NL +
                "import com.mockrunner.util.common.ClassUtil;" + NL +
                "import com.mockrunner.util.common.CollectionUtil;" + NL +

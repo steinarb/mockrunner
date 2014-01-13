@@ -27,25 +27,12 @@
 			<artifactId>jdom</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.tomcat</groupId>
-			<artifactId>jasper</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.struts</groupId>
-			<artifactId>struts-extras</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>jboss</groupId>
-			<artifactId>jboss-j2ee</artifactId>
-			<optional>true</optional>
+			<groupId>oro</groupId>
+			<artifactId>oro</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.kirkk</groupId>
 			<artifactId>jaranalyzer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>xerces</groupId>
-			<artifactId>xercesImpl</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>nekohtml</groupId>
