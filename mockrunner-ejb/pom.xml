@@ -23,6 +23,11 @@
 			<groupId>org.mockejb</groupId>
 			<artifactId>mockejb</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>jboss</groupId>
+			<artifactId>jboss-j2ee</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 
 	<build>

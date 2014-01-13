@@ -126,7 +126,7 @@
 			<dependency>
 				<groupId>jboss</groupId>
 				<artifactId>jboss-j2ee</artifactId>
-				<version>4.2.0.GA</version>
+				<version>4.2.2.GA</version>
 			</dependency>
 			<dependency>
 				<groupId>oro</groupId>

@@ -68,6 +68,11 @@
 			<version>2.2.11.GA</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>jboss</groupId>
+			<artifactId>jboss-j2ee</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

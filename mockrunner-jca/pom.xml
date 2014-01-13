@@ -19,6 +19,11 @@
 			<artifactId>mockrunner-core</artifactId>
 			<version>0.4.6-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>jboss</groupId>
+			<artifactId>jboss-j2ee</artifactId>
+			<optional>true</optional>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
