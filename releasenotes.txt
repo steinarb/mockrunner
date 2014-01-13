@@ -1,3 +1,6 @@
+mockrunner-0.4.7:
+- Reorganization of the modules and shift dependencies from the core module.
+
 mockrunner-0.4.4:
 
 mockrunner-0.4.3:
