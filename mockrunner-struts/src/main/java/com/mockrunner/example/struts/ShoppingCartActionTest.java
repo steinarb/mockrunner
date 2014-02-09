@@ -1,5 +1,8 @@
 package com.mockrunner.example.struts;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.mockrunner.struts.BasicActionTestCaseAdapter;
 import com.mockrunner.struts.MapMessageResources;
 
@@ -8,7 +11,8 @@ import com.mockrunner.struts.MapMessageResources;
  */
 public class ShoppingCartActionTest extends BasicActionTestCaseAdapter
 {
-    protected void setUp() throws Exception
+	@Before
+    public void setUp() throws Exception
     {
         super.setUp();
         MapMessageResources resources = new MapMessageResources();
@@ -17,6 +21,7 @@ public class ShoppingCartActionTest extends BasicActionTestCaseAdapter
         setResources("test", resources);
     }
     
+	@Test
     public void testForward()
     {
         getActionMockObjectFactory().getMockActionMapping().setParameter("method");

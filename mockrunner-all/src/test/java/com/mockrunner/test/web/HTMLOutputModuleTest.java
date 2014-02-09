@@ -1,5 +1,9 @@
 package com.mockrunner.test.web;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -9,13 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import junit.framework.TestCase;
-
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.jdom.Element;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.base.VerifyFailedException;
@@ -27,18 +31,18 @@ import com.mockrunner.struts.ActionTestModule;
 import com.mockrunner.tag.TagTestModule;
 import com.mockrunner.util.common.StreamUtil;
 
-public class HTMLOutputModuleTest extends TestCase
+public class HTMLOutputModuleTest
 {
     private final static String testHTML = "<html><body><tag></body></html>";
     private ActionMockObjectFactory actionWebFactory;
     
-     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         actionWebFactory = new ActionMockObjectFactory();
     }
-    
+
+    @Test
     public void testActionTestModuleOutput()
     {
         ActionTestModule module = new ActionTestModule(actionWebFactory);
@@ -51,12 +55,14 @@ public class HTMLOutputModuleTest extends TestCase
         doTestVerifyOutputRegularExpression(module);
     }
     
+    @Test
     public void testActionTestModuleAttributes()
     {
         ActionTestModule module = new ActionTestModule(actionWebFactory);
         doTestAttributes(module);
     }
 
+    @Test
     public void testServletTestModuleOutput()
     {
         ServletTestModule module = new ServletTestModule(actionWebFactory);
@@ -70,12 +76,14 @@ public class HTMLOutputModuleTest extends TestCase
         doTestVerifyOutputRegularExpression(module);
     }
     
+    @Test
     public void testServletTestModuleAttributes()
     {
         ServletTestModule module = new ServletTestModule(actionWebFactory);
         doTestAttributes(module);
     }
     
+    @Test
     public void testTagTestModuleOutput()
     {
         TagTestModule module = new TagTestModule(actionWebFactory);
@@ -89,6 +97,7 @@ public class HTMLOutputModuleTest extends TestCase
         doTestVerifyOutputRegularExpression(module);
     }
     
+    @Test
     public void testTagTestModuleAttributes()
     {
         TagTestModule module = new TagTestModule(actionWebFactory);

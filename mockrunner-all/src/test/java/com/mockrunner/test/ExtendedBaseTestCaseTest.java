@@ -1,5 +1,11 @@
 package com.mockrunner.test;
 
+import static org.junit.Assert.assertSame;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.connector.cci.ConnectorMockObjectFactory;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
@@ -16,9 +22,9 @@ public class ExtendedBaseTestCaseTest extends BaseTestCase
     private ConnectorMockObjectFactory connectorMockFactory;
     private JMSMockObjectFactory jmsMockFactory;
 
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         actionMockFactory = new ActionMockObjectFactory() {};
         jdbcMockFactory = new JDBCMockObjectFactory() {};
         ejbMockFactory = new EJBMockObjectFactory() {};
@@ -26,7 +32,8 @@ public class ExtendedBaseTestCaseTest extends BaseTestCase
         jmsMockFactory = new JMSMockObjectFactory() {};
     }
 
-    protected void tearDown() throws Exception
+    @After
+    public void tearDown() throws Exception
     {
         super.tearDown();
         actionMockFactory = null;
@@ -36,6 +43,7 @@ public class ExtendedBaseTestCaseTest extends BaseTestCase
         jmsMockFactory = null;
     }
     
+    @Test
     public void testGetFactories()
     {
         assertSame(actionMockFactory, getActionMockObjectFactory());

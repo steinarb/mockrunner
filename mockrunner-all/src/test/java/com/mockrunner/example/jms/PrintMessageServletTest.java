@@ -1,8 +1,13 @@
 package com.mockrunner.example.jms;
 
+import static org.junit.Assert.assertTrue;
+
 import javax.jms.JMSException;
 import javax.jms.QueueReceiver;
 import javax.jms.QueueSender;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.jms.JMSTestCaseAdapter;
@@ -33,7 +38,8 @@ public class PrintMessageServletTest extends JMSTestCaseAdapter
     private ServletTestModule servletModule;
     private MockQueue queue;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         ejbModule = createEJBTestModule();
@@ -44,6 +50,7 @@ public class PrintMessageServletTest extends JMSTestCaseAdapter
         servletModule.createServlet(PrintMessageServlet.class);
     }
 
+    @Test
     public void testInitPrintMessageReceiver() throws Exception
     {
         verifyQueueConnectionStarted();
@@ -53,6 +60,7 @@ public class PrintMessageServletTest extends JMSTestCaseAdapter
         assertTrue(receiver.getMessageListener() instanceof PrintMessageListener);
     }
     
+    @Test
     public void testSuccessfulDelivery() throws Exception
     {
         servletModule.addRequestParameter("customerId", "1");
@@ -69,6 +77,7 @@ public class PrintMessageServletTest extends JMSTestCaseAdapter
         verifyNumberOfCurrentQueueMessages("testQueue", 0);
     }
     
+    @Test
     public void testDeliveryMoreMessages() throws Exception
     {
         servletModule.addRequestParameter("customerId", "1");
@@ -89,6 +98,7 @@ public class PrintMessageServletTest extends JMSTestCaseAdapter
         verifyNumberOfCurrentQueueMessages("testQueue", 0);
     }
     
+    @Test
     public void testServletResponse() throws Exception
     {
         servletModule.setCaseSensitive(false);

@@ -1,16 +1,24 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Arrays;
 
 import javax.jms.MessageFormatException;
 import javax.jms.MessageNotWriteableException;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import com.mockrunner.mock.jms.MockMapMessage;
 
-public class MockMapMessageTest extends TestCase
+public class MockMapMessageTest
 {
+	@Test
     public void testReadWrite() throws Exception
     {
         MockMapMessage message = new MockMapMessage();
@@ -87,6 +95,7 @@ public class MockMapMessageTest extends TestCase
         assertNull(message.getString("null"));
     }
     
+	@Test
     public void testReadOnly() throws Exception
     {
         MockMapMessage message = new MockMapMessage();
@@ -128,6 +137,7 @@ public class MockMapMessageTest extends TestCase
         assertTrue(message.itemExists("int"));
     }
     
+	@Test
     public void testNullName() throws Exception
     {
         MockMapMessage message = new MockMapMessage();
@@ -160,6 +170,7 @@ public class MockMapMessageTest extends TestCase
         }
     }
     
+	@Test
     public void testEquals() throws Exception
     {
         MockMapMessage message1 = new MockMapMessage();
@@ -196,6 +207,7 @@ public class MockMapMessageTest extends TestCase
         assertFalse(message2.equals(message1));
     }
     
+	@Test
     public void testGetMap() throws Exception
     {
         MockMapMessage message = new MockMapMessage();
@@ -215,6 +227,7 @@ public class MockMapMessageTest extends TestCase
         assertTrue(message.equals(otherMessage));
     }
     
+	@Test
     public void testClone() throws Exception
     {
         MockMapMessage message = new MockMapMessage();
@@ -234,6 +247,7 @@ public class MockMapMessageTest extends TestCase
         assertTrue(Arrays.equals(myArray, message.getBytes("bytes")));
     }
     
+	@Test
     public void testToString() throws Exception
     {
         MockMapMessage message = new MockMapMessage();

@@ -1,5 +1,10 @@
 package com.mockrunner.test.jdbc;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -11,15 +16,16 @@ import java.util.Enumeration;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockDataSource;
 import com.mockrunner.mock.jdbc.MockDriver;
 
-public class JDBCMockObjectFactoryTest extends TestCase
+public class JDBCMockObjectFactoryTest
 {
+	@Test
     public void testCreate() throws Exception
     {
         JDBCMockObjectFactory factory = new JDBCMockObjectFactory();
@@ -31,6 +37,7 @@ public class JDBCMockObjectFactoryTest extends TestCase
         assertFalse(drivers.hasMoreElements());
     }
     
+	@Test
     public void testRestoreDivers() throws Exception
     {
         DriverManager.registerDriver(new TestDriver());
@@ -89,6 +96,7 @@ public class JDBCMockObjectFactoryTest extends TestCase
        assertTrue(numberDrivers == newNumberDrivers);
     }
     
+	@Test
     public void testOverrideCreate()
     {
         JDBCMockObjectFactory factory = new TestJDBCMockObjectFactory();

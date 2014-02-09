@@ -5,6 +5,9 @@ import java.util.Map;
 import javax.servlet.jsp.tagext.JspTag;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import org.junit.After;
+import org.junit.Before;
+
 import com.mockrunner.base.BasicHTMLOutputTestCase;
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.mock.web.MockPageContext;
@@ -36,9 +39,9 @@ public abstract class BasicTagTestCaseAdapter extends BasicHTMLOutputTestCase
         super(name);
     }
 
-    protected void tearDown() throws Exception
+    @After
+    public void tearDown() throws Exception
     {
-        super.tearDown();
         tagTestModule = null;
         webMockObjectFactory = null;
     }
@@ -47,9 +50,9 @@ public abstract class BasicTagTestCaseAdapter extends BasicHTMLOutputTestCase
      * Creates the {@link com.mockrunner.tag.TagTestModule}. If you
      * overwrite this method, you must call <code>super.setUp()</code>.
      */
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         tagTestModule = createTagTestModule(getWebMockObjectFactory());
     }
 

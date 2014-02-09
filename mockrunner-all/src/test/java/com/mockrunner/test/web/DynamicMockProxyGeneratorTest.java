@@ -1,27 +1,36 @@
 package com.mockrunner.test.web;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.Serializable;
 import java.lang.reflect.Method;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.struts.DynamicMockProxyGenerator;
 
 import junit.framework.TestCase;
 
-public class DynamicMockProxyGeneratorTest extends TestCase
+public class DynamicMockProxyGeneratorTest
 {
     private Delegator delegator;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         delegator = new Delegator();
     }
-    protected void tearDown() throws Exception
+    
+    @After
+    public void tearDown() throws Exception
     {
-        super.tearDown();
         delegator = null;
     }
-    
+
+    @Test
     public void testProperInstance()
     {
         DynamicMockProxyGenerator generator = new DynamicMockProxyGenerator(DynamicMockProxyGeneratorTest.class, delegator, Delegator.class.getDeclaredMethods(), new Method[0], Serializable.class);
@@ -30,6 +39,7 @@ public class DynamicMockProxyGeneratorTest extends TestCase
         assertTrue(proxy instanceof DynamicMockProxyGeneratorTest);
     }
     
+    @Test
     public void testDelegationAndDuplication()
     {
         DynamicMockProxyGenerator generator = new DynamicMockProxyGenerator(DynamicMockProxyGeneratorTest.class, delegator, Delegator.class.getDeclaredMethods(), Super.class.getDeclaredMethods());

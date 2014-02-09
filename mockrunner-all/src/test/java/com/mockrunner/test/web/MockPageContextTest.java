@@ -1,11 +1,22 @@
 package com.mockrunner.test.web;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Enumeration;
 
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.web.MockBodyContent;
@@ -22,12 +33,13 @@ public class MockPageContextTest extends BaseTestCase
 {
     private MockPageContext pageContext;
         
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         pageContext = getWebMockObjectFactory().getMockPageContext();
     }
 
+    @Test
     public void testPushPopBody() throws Exception
     {
         JspWriter writer = pageContext.getOut();
@@ -51,6 +63,7 @@ public class MockPageContextTest extends BaseTestCase
         assertEquals("TestOut", ((MockJspWriter)writer).getOutputAsString());    
     }
     
+    @Test
     public void testPushBodyWithWriter() throws Exception
     {
         JspWriter writer1 = pageContext.getOut();
@@ -77,6 +90,7 @@ public class MockPageContextTest extends BaseTestCase
         assertEquals("writer3writer3writer3", content3.getString());
     }
     
+    @Test
     public void testGetAttribute() throws Exception
     {
         pageContext.setAttribute("pageKey", "pageValue");
@@ -117,6 +131,7 @@ public class MockPageContextTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testSetAttribute() throws Exception
     {
         pageContext.setAttribute("pageKey", "pageValue");
@@ -149,6 +164,7 @@ public class MockPageContextTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testRemoveAttribute() throws Exception
     {
         pageContext.setAttribute("pageKey", "pageValue");
@@ -199,6 +215,7 @@ public class MockPageContextTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testFindAttribute()
     {
         assertNull(pageContext.findAttribute("attribute"));
@@ -217,6 +234,7 @@ public class MockPageContextTest extends BaseTestCase
         assertNull(pageContext.findAttribute("attribute"));
     }
     
+    @Test
     public void testGetAttributesScope()
     {
         assertEquals(0, pageContext.getAttributesScope("attribute"));
@@ -235,6 +253,7 @@ public class MockPageContextTest extends BaseTestCase
         assertEquals(0, pageContext.getAttributesScope("attribute"));
     }
     
+    @Test
     public void testGetAttributeNamesInScope()
     {
         getWebMockObjectFactory().getMockRequest().clearAttributes();
@@ -274,6 +293,7 @@ public class MockPageContextTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testForward() throws Exception
     {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -286,6 +306,7 @@ public class MockPageContextTest extends BaseTestCase
         assertSame(response, dispatcher.getForwardedResponse());
     }
     
+    @Test
     public void testInclude() throws Exception
     {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -298,6 +319,7 @@ public class MockPageContextTest extends BaseTestCase
         assertSame(response, dispatcher.getIncludedResponse());
     }
     
+    @Test
     public void testIncludeWithFlush() throws Exception
     {
         MockHttpServletRequest request = new MockHttpServletRequest();
@@ -315,6 +337,7 @@ public class MockPageContextTest extends BaseTestCase
         assertTrue(jspWriter.isFlushed());
     }
     
+    @Test
     public void testExpressionEvaluatorAndVariable() throws Exception
     {
         assertTrue(pageContext.getExpressionEvaluator() instanceof MockExpressionEvaluator);
@@ -327,6 +350,7 @@ public class MockPageContextTest extends BaseTestCase
         assertSame(resolver, pageContext.getVariableResolver());
     }
     
+    @Test
     public void testInitJspWriterWithResponse() throws Exception
     {
         pageContext.getOut().print("123");

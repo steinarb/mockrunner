@@ -1,10 +1,7 @@
 package com.mockrunner.test;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 import com.mockrunner.example.connector.AccountDAOTest;
 import com.mockrunner.example.connector.PersonSearchDAOTest;
@@ -21,9 +18,6 @@ import com.mockrunner.example.jms.NewsSubscriberTest;
 import com.mockrunner.example.jms.PrintMessageServletTest;
 import com.mockrunner.example.jms.PrintSessionBeanTest;
 import com.mockrunner.example.jms.StockQuotePublisherTest;
-//import com.mockrunner.example.jms.PrintMessageServletTest;
-//import com.mockrunner.example.jms.PrintSessionBeanTest;
-//import com.mockrunner.example.jms.StockQuotePublisherTest;
 import com.mockrunner.example.servlet.ImageButtonFilterTest;
 import com.mockrunner.example.servlet.LogoutServletTest;
 import com.mockrunner.example.servlet.RedirectServletTest;
@@ -38,42 +32,18 @@ import com.mockrunner.example.tag.FilterImagesTagTest;
 import com.mockrunner.example.tag.HtmlTextTagTest;
 import com.mockrunner.example.tag.TableEnumTagTest;
 
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+	ConstrainedNumericTextTagTest.class, TableEnumTagTest.class, FilterImagesTagTest.class,
+	HtmlTextTagTest.class, LogoutServletTest.class, RedirectServletTest.class,
+	AuthenticationActionTest.class, StoreDataActionTest.class, GreetingsActionTest.class,
+	ShoppingCartActionTest.class, OrderActionTest.class, LogoutActionTest.class,
+	ImageButtonFilterTest.class, BankTest.class, PayActionTest.class, BookstoreTest.class,
+	OrderDBTest.class, LogActionTest.class, PaySessionTest.class, DBStatefulTest.class,
+	BillManagerSessionTest.class, PrintMessageServletTest.class, StockQuotePublisherTest.class,
+	PrintSessionBeanTest.class, NewsSubscriberTest.class, UserLoginSessionTest.class,
+	PersonSearchDAOTest.class, AccountDAOTest.class
+})
 public class AllExampleTests
 {
-    public static Test suite()
-    {
-        Logger.getLogger("").setLevel(Level.OFF);
-        TestSuite suite = new TestSuite("Test for com.mockrunner.test");
-        //$JUnit-BEGIN$ 
-        suite.addTest(new TestSuite(ConstrainedNumericTextTagTest.class));
-        suite.addTest(new TestSuite(TableEnumTagTest.class));
-        suite.addTest(new TestSuite(FilterImagesTagTest.class));
-        suite.addTest(new TestSuite(HtmlTextTagTest.class));
-        suite.addTest(new TestSuite(LogoutServletTest.class));
-        suite.addTest(new TestSuite(RedirectServletTest.class));
-        suite.addTest(new TestSuite(AuthenticationActionTest.class));
-        suite.addTest(new TestSuite(StoreDataActionTest.class));
-        suite.addTest(new TestSuite(GreetingsActionTest.class));
-        suite.addTest(new TestSuite(ShoppingCartActionTest.class));
-        suite.addTest(new TestSuite(OrderActionTest.class));
-        suite.addTest(new TestSuite(LogoutActionTest.class));
-        suite.addTest(new TestSuite(ImageButtonFilterTest.class));
-        suite.addTest(new TestSuite(BankTest.class));
-        suite.addTest(new TestSuite(PayActionTest.class));
-        suite.addTest(new TestSuite(BookstoreTest.class));
-        suite.addTest(new TestSuite(OrderDBTest.class));
-        suite.addTest(new TestSuite(LogActionTest.class));
-        suite.addTest(new TestSuite(PaySessionTest.class));
-        suite.addTest(new TestSuite(DBStatefulTest.class));
-        suite.addTest(new TestSuite(BillManagerSessionTest.class));
-        suite.addTest(new TestSuite(PrintMessageServletTest.class));
-        suite.addTest(new TestSuite(StockQuotePublisherTest.class));
-        suite.addTest(new TestSuite(PrintSessionBeanTest.class));
-        suite.addTest(new TestSuite(NewsSubscriberTest.class));
-        suite.addTest(new TestSuite(UserLoginSessionTest.class));
-        suite.addTest(new TestSuite(PersonSearchDAOTest.class));
-        suite.addTest(new TestSuite(AccountDAOTest.class));
-        //$JUnit-END$
-        return suite;
-    }
 }

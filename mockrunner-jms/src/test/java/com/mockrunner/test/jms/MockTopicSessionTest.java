@@ -1,5 +1,13 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +24,8 @@ import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 import javax.jms.TopicSubscriber;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
@@ -35,7 +44,7 @@ import com.mockrunner.mock.jms.MockTopicPublisher;
 import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
 
-public class MockTopicSessionTest extends TestCase
+public class MockTopicSessionTest
 {
     private MockTopicConnection connection;
     private MockTopicSession session;
@@ -43,16 +52,17 @@ public class MockTopicSessionTest extends TestCase
     private MockTopic topic1;
     private MockTopic topic2;
  
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         DestinationManager destManager = new DestinationManager();
         ConfigurationManager confManager = new ConfigurationManager();
         connection = new MockTopicConnection(destManager, confManager);
         session = (MockTopicSession)connection.createTopicSession(false, TopicSession.CLIENT_ACKNOWLEDGE);
         anotherSession = (MockTopicSession)connection.createTopicSession(false, TopicSession.CLIENT_ACKNOWLEDGE);
     }
-    
+
+    @Test
     public void testCreateMessages() throws Exception
     {
         session.createTextMessage("Text1");
@@ -68,6 +78,7 @@ public class MockTopicSessionTest extends TestCase
         assertNull(manager.getBytesMessage(1));
     }
     
+    @Test
     public void testCreateTopics() throws Exception
     {
         try
@@ -104,6 +115,7 @@ public class MockTopicSessionTest extends TestCase
         assertTrue(tempTopic == session.getTemporaryTopic(1));
     }
     
+    @Test
     public void testCreatePublisherAndSubscriber() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -147,6 +159,7 @@ public class MockTopicSessionTest extends TestCase
         assertEquals(2, transManager.getMessageConsumerList().size());
     }
     
+    @Test
     public void testCreateDurableSubscriber() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -178,6 +191,7 @@ public class MockTopicSessionTest extends TestCase
         assertEquals(0, transManager.getDurableTopicSubscriberMap().size());
     }
     
+    @Test
     public void testTransmissionGlobalListener() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -200,6 +214,7 @@ public class MockTopicSessionTest extends TestCase
         assertNull(listener2.getMessage());
     }
     
+    @Test
     public void testTransmission() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -279,6 +294,7 @@ public class MockTopicSessionTest extends TestCase
         assertNull(topic2.getMessage());
     }
     
+    @Test
     public void testTransmissionDurableSubscriber() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -330,6 +346,7 @@ public class MockTopicSessionTest extends TestCase
         assertEquals("Text2", ((TextMessage)listener2.getMessage()).getText());
     }
                 
+    @Test
     public void testTransmissionResetCalled() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -366,6 +383,7 @@ public class MockTopicSessionTest extends TestCase
         assertEquals(234, streamMessage.readLong());
     }
     
+    @Test
     public void testTransmissionSenderOrReceiverClosed() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -409,6 +427,7 @@ public class MockTopicSessionTest extends TestCase
         }
     }
     
+    @Test
     public void testTransmissionWithMessageSelector() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -441,6 +460,7 @@ public class MockTopicSessionTest extends TestCase
         assertEquals(5, listener1.getMessageList().size());
     }
     
+    @Test
     public void testTransmissionMessageAcknowledged() throws Exception
     {
         MockTopicSession session1 = (MockTopicSession)connection.createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);
@@ -495,6 +515,7 @@ public class MockTopicSessionTest extends TestCase
         assertTrue(message2.isAcknowledged());
     }
     
+    @Test
     public void testTransmissionMultipleSessions() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -542,6 +563,7 @@ public class MockTopicSessionTest extends TestCase
         assertEquals(7, listener.getMessageList().size());
     }
     
+    @Test
     public void testCloseSession() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -575,6 +597,7 @@ public class MockTopicSessionTest extends TestCase
         assertFalse(session.isRolledBack());
     }
     
+    @Test
     public void testCloseSessionRemove() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -592,6 +615,7 @@ public class MockTopicSessionTest extends TestCase
         assertFalse(tempTopic.sessionSet().contains(session));
     }
     
+    @Test
     public void testTransmissionWithNullDestination() throws Exception
     {
         MockTopicSession session = (MockTopicSession)connection.createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);

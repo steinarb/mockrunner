@@ -1,7 +1,13 @@
 package com.mockrunner.example.jdbc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.FileResultSetFactory;
@@ -40,13 +46,15 @@ import com.mockrunner.mock.jdbc.MockResultSet;
  */
 public class BookstoreTest extends BasicJDBCTestCaseAdapter
 {
-    protected void setUp() throws Exception
+	@Before
+    public void setUp() throws Exception
     {
         super.setUp();
         setUseRegularExpressions(true);
         getStatementResultSetHandler().setUseRegularExpressions(true);
     }
-    
+
+	@Test
     public void testSuccessfulOrder() throws Exception
     {
         FileResultSetFactory factory = new FileResultSetFactory("target/test-classes/com/mockrunner/example/jdbc/bookstore.txt");
@@ -70,6 +78,7 @@ public class BookstoreTest extends BasicJDBCTestCaseAdapter
         verifyAllStatementsClosed();
     }
     
+	@Test
     public void testCorrectSQL() throws Exception
     {
         MockResultSet result = getStatementResultSetHandler().createResultSet();    
@@ -81,6 +90,7 @@ public class BookstoreTest extends BasicJDBCTestCaseAdapter
         verifySQLStatementExecuted("select.*isbn,.*quantity.*\\(isbn='1234567890'.*or.*isbn='1111111111'\\)");
     }
     
+	@Test
     public void testException() throws Exception    
     {
         getStatementResultSetHandler().prepareThrowsSQLException("select.*isbn,.*quantity.*");

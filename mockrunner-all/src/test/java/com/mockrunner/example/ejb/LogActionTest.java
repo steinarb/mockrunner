@@ -1,5 +1,7 @@
 package com.mockrunner.example.ejb;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.mockejb.TransactionPolicy;
 
 import com.mockrunner.ejb.EJBTestModule;
@@ -18,7 +20,8 @@ public class LogActionTest extends ActionTestCaseAdapter
     private JDBCTestModule jdbcModule;
     private EJBTestModule ejbModule;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         jdbcModule = createJDBCTestModule();
@@ -28,6 +31,7 @@ public class LogActionTest extends ActionTestCaseAdapter
         ejbModule.bindToContext("java:comp/env/jdbc/MySQLDB", getJDBCMockObjectFactory().getMockDataSource());
     }
 
+    @Test
     public void testLogActionSuccess()
     {
         addRequestParameter("message", "testmessage");

@@ -1,6 +1,6 @@
 package com.mockrunner.base;
 
-import junit.framework.TestCase;
+import org.junit.After;
 
 import com.mockrunner.connector.ConnectorTestModule;
 import com.mockrunner.ejb.EJBTestModule;
@@ -20,7 +20,7 @@ import com.mockrunner.tag.TagTestModule;
 /**
  * Base class for all standard adapters. Not used for basic adapters.
  */
-public abstract class BaseTestCase extends TestCase
+public abstract class BaseTestCase
 {
     private WebMockObjectFactory webMockFactory;
     private ActionMockObjectFactory actionMockFactory;
@@ -36,12 +36,12 @@ public abstract class BaseTestCase extends TestCase
 
     public BaseTestCase(String arg0)
     {
-        super(arg0);
+
     }
     
-    protected void tearDown() throws Exception
+    @After
+    public void tearDown() throws Exception
     {
-        super.tearDown();
         if(null != jdbcMockFactory)
         {
             jdbcMockFactory.restoreDrivers();

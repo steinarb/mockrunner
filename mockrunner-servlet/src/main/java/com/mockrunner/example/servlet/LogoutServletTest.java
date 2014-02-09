@@ -1,6 +1,14 @@
 package com.mockrunner.example.servlet;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import javax.servlet.http.HttpServletRequest;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 
@@ -12,12 +20,14 @@ import com.mockrunner.servlet.BasicServletTestCaseAdapter;
  */
 public class LogoutServletTest extends BasicServletTestCaseAdapter
 {
-    protected void setUp() throws Exception
+	@Before
+    public void setUp() throws Exception
     {
         super.setUp();
         createServlet(LogoutServlet.class);
     }
     
+	@Test
     public void testDoLogout() throws Exception
     {
         addRequestParameter("logout", "true");
@@ -25,6 +35,7 @@ public class LogoutServletTest extends BasicServletTestCaseAdapter
         assertFalse(getWebMockObjectFactory().getMockSession().isValid());
     }
     
+	@Test
     public void testDoLogoutWithFilteredImageButton() throws Exception
     {
         addRequestParameter("logout.x", "11");

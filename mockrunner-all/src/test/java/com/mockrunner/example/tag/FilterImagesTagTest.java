@@ -1,9 +1,13 @@
 package com.mockrunner.example.tag;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+
+import org.junit.Test;
 
 import com.mockrunner.mock.web.WebMockObjectFactory;
 import com.mockrunner.tag.AbstractDynamicChild;
@@ -35,6 +39,7 @@ public class FilterImagesTagTest extends BasicTagTestCaseAdapter
         tag.addDynamicChild(new SessionImageChild(getWebMockObjectFactory()));
     }
     
+    @Test
     public void testDoNotFilter()
     {
         prepareFilterImagesTag("false");
@@ -44,6 +49,7 @@ public class FilterImagesTagTest extends BasicTagTestCaseAdapter
         assertTrue(-1 == getOutput().indexOf("dummy.jpg"));
     }
     
+    @Test
     public void testDoFilter()
     {
         prepareFilterImagesTag("true");

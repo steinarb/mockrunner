@@ -1,9 +1,8 @@
 package com.mockrunner.test;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
 import org.activemq.mockrunner.test.AllActiveMQMockrunnerTests;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 import com.mockrunner.test.connector.AllConnectorTests;
 import com.mockrunner.test.ejb.AllEJBTests;
@@ -13,25 +12,12 @@ import com.mockrunner.test.jms.AllJMSTests;
 import com.mockrunner.test.util.AllUtilTests;
 import com.mockrunner.test.web.AllWebTests;
 
+@RunWith(Suite.class)
+@Suite.SuiteClasses({AllWebTests.class, AllJDBCTests.class,
+	AllEJBTests.class, AllJMSTests.class, AllConnectorTests.class,
+	AllUtilTests.class, AllActiveMQMockrunnerTests.class, AllGenTests.class,
+	AllExampleTests.class, BaseTestCaseTest.class, ExtendedBaseTestCaseTest.class,
+	NestedApplicationExceptionTest.class})
 public class AllTestsWithoutConsistencyTest
 {
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite("Test for com.mockrunner.test");
-        //$JUnit-BEGIN$ 
-        suite.addTest(AllWebTests.suite());
-        suite.addTest(AllJDBCTests.suite());
-        suite.addTest(AllEJBTests.suite());
-        suite.addTest(AllJMSTests.suite());
-        suite.addTest(AllConnectorTests.suite());
-        suite.addTest(AllUtilTests.suite());
-        suite.addTest(AllActiveMQMockrunnerTests.suite());
-        suite.addTest(AllGenTests.suite());
-        suite.addTest(AllExampleTests.suite());
-        suite.addTest(new TestSuite(BaseTestCaseTest.class));
-        suite.addTest(new TestSuite(ExtendedBaseTestCaseTest.class));
-        suite.addTest(new TestSuite(NestedApplicationExceptionTest.class));
-        //$JUnit-END$
-        return suite;
-    }
 }

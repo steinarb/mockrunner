@@ -1,8 +1,12 @@
 package com.mockrunner.example.servlet;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.BufferedReader;
 
 import org.jdom.Element;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 
@@ -16,12 +20,14 @@ import com.mockrunner.servlet.BasicServletTestCaseAdapter;
  */
 public class RedirectServletTest extends BasicServletTestCaseAdapter
 {
-    protected void setUp() throws Exception
+	@Before
+    public void setUp() throws Exception
     {
         super.setUp();
         createServlet(RedirectServlet.class);
     }
     
+	@Test
     public void testServletOutput() throws Exception
     {
         addRequestParameter("redirecturl", "http://www.mockrunner.com");
@@ -38,6 +44,7 @@ public class RedirectServletTest extends BasicServletTestCaseAdapter
         verifyOutputContains("URL=http://www.mockrunner.com");
     }
     
+	@Test
     public void testServletOutputAsXML() throws Exception
     {
         addRequestParameter("redirecturl", "http://www.mockrunner.com");

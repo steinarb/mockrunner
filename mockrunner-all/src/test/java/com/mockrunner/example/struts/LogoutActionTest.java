@@ -1,7 +1,12 @@
 package com.mockrunner.example.struts;
 
+import static org.junit.Assert.assertFalse;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.example.servlet.ImageButtonFilter;
 import com.mockrunner.servlet.ServletTestModule;
@@ -18,13 +23,15 @@ public class LogoutActionTest extends ActionTestCaseAdapter
     private ServletTestModule servletModule;
     private LogoutActionMapping logoutMapping;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         servletModule = createServletTestModule();
         logoutMapping = (LogoutActionMapping)getActionMockObjectFactory().prepareActionMapping(LogoutActionMapping.class);
     }
 
+    @Test
     public void testLogout() throws Exception
     {
         logoutMapping.setRequestParameterName("logout");

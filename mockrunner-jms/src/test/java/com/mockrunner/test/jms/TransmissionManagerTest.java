@@ -1,10 +1,17 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
 import javax.jms.Session;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
@@ -23,20 +30,21 @@ import com.mockrunner.mock.jms.MockTopic;
 import com.mockrunner.mock.jms.MockTopicPublisher;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
 
-public class TransmissionManagerTest extends TestCase
+public class TransmissionManagerTest
 {
     private MockConnection connection;
     private MockSession session;
 
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         DestinationManager destManager = new DestinationManager();
         ConfigurationManager confManager = new ConfigurationManager();
         connection = new MockConnection(destManager, confManager); 
         session = (MockSession)connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
     }
 
+    @Test
     public void testQueueTransmissionManagerCreate()
     {
         QueueTransmissionManager manager = session.getQueueTransmissionManager();
@@ -69,6 +77,7 @@ public class TransmissionManagerTest extends TestCase
         assertNull(manager.getQueueBrowser("Queue3"));
     }
 
+    @Test
     public void testTopicTransmissionManagerCreate()
     {
         TopicTransmissionManager manager = session.getTopicTransmissionManager();
@@ -102,6 +111,7 @@ public class TransmissionManagerTest extends TestCase
         assertNull(manager.getTopicSubscriber("Topic2"));
     }
 
+    @Test
     public void testQueueTransmissionManagerClose()
     {
         QueueTransmissionManager manager = session.getQueueTransmissionManager();
@@ -131,6 +141,7 @@ public class TransmissionManagerTest extends TestCase
         assertTrue(browser.isClosed());
     }
 
+    @Test
     public void testTopicTransmissionManagerClose()
     {
         TopicTransmissionManager manager = session.getTopicTransmissionManager();
@@ -165,6 +176,7 @@ public class TransmissionManagerTest extends TestCase
         assertTrue(durableSubscriber3.isClosed());
     }
 
+    @Test
     public void testGenericTransmissionManager()
     {
         GenericTransmissionManager manager = session.getGenericTransmissionManager();
@@ -184,6 +196,7 @@ public class TransmissionManagerTest extends TestCase
         assertTrue(producer3.isClosed());
     }
 
+    @Test
     public void testTransmissionManagerWrapperProducerAndConsumer()
     {
         QueueTransmissionManager queueManager = session.getQueueTransmissionManager();
@@ -219,6 +232,7 @@ public class TransmissionManagerTest extends TestCase
         assertTrue(manager.getMessageConsumerList().contains(durableSubscriber1));
     }
 
+    @Test
     public void testTransmissionManagerWrapperQueueSender()
     {
         QueueTransmissionManager queueManager = session.getQueueTransmissionManager();
@@ -246,6 +260,7 @@ public class TransmissionManagerTest extends TestCase
         assertTrue(manager.getQueueSenderList().contains(producer3));
     }
 
+    @Test
     public void testTransmissionManagerWrapperTopicPublisher()
     {
         TopicTransmissionManager topicManager = session.getTopicTransmissionManager();

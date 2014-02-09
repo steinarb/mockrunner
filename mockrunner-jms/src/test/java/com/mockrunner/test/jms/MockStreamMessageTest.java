@@ -1,5 +1,12 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Arrays;
 
 import javax.jms.JMSException;
@@ -8,12 +15,13 @@ import javax.jms.MessageFormatException;
 import javax.jms.MessageNotReadableException;
 import javax.jms.MessageNotWriteableException;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import com.mockrunner.mock.jms.MockStreamMessage;
 
-public class MockStreamMessageTest extends TestCase
+public class MockStreamMessageTest
 {
+	@Test
     public void testReadWrite() throws Exception
     {
         MockStreamMessage message = new MockStreamMessage();
@@ -226,6 +234,7 @@ public class MockStreamMessageTest extends TestCase
         }
     }
     
+	@Test
     public void testReadBytes() throws Exception
     {
         MockStreamMessage message = new MockStreamMessage();
@@ -344,6 +353,7 @@ public class MockStreamMessageTest extends TestCase
         }
     }
     
+	@Test
     public void testEquals() throws Exception
     {
         MockStreamMessage message1 = new MockStreamMessage();
@@ -387,6 +397,7 @@ public class MockStreamMessageTest extends TestCase
         assertEquals(message1.hashCode(), message2.hashCode());
     }
     
+	@Test
     public void testClone() throws Exception
     {
         MockStreamMessage message = new MockStreamMessage();
@@ -424,6 +435,7 @@ public class MockStreamMessageTest extends TestCase
         assertEquals("test2", message.readString());
     }
     
+	@Test
     public void testToString() throws Exception
     {
         MockStreamMessage message = new MockStreamMessage();

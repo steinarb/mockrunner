@@ -1,5 +1,13 @@
 package com.mockrunner.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.DriverManager;
@@ -12,6 +20,7 @@ import java.util.logging.Logger;
 
 import javax.naming.Context;
 
+import org.junit.Test;
 import org.mockejb.jndi.MockContextFactory;
 
 import com.mockrunner.base.BaseTestCase;
@@ -25,6 +34,7 @@ import com.mockrunner.mock.web.WebMockObjectFactory;
 
 public class BaseTestCaseTest extends BaseTestCase
 {
+	@Test
     public void testOneDriver() throws Exception
     {
         DriverManager.registerDriver(new TestDriver());
@@ -40,6 +50,7 @@ public class BaseTestCaseTest extends BaseTestCase
         assertTrue(drivers.hasMoreElements());
     }
     
+	@Test
     public void testTearDownRevertSetAsInitialCalled() throws Exception
     {
         getEJBMockObjectFactory();
@@ -48,6 +59,7 @@ public class BaseTestCaseTest extends BaseTestCase
         assertNull(System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
     }
     
+	@Test
     public void testLazyFactoriesInstance()
     {
         assertSame(getJDBCMockObjectFactory(), getJDBCMockObjectFactory());
@@ -58,6 +70,7 @@ public class BaseTestCaseTest extends BaseTestCase
         assertSame(getActionMockObjectFactory(), getWebMockObjectFactory());
     }
     
+	@Test
     public void testSetActionAndWebFactories()
     {
         WebMockObjectFactory webFactory = new WebMockObjectFactory();
@@ -71,6 +84,7 @@ public class BaseTestCaseTest extends BaseTestCase
         assertSame(actionFactory, getWebMockObjectFactory());
     }
 
+	@Test
     public void testSetJMSFactory()
     {
         JMSMockObjectFactory jmsFactory = new JMSMockObjectFactory();
@@ -81,6 +95,7 @@ public class BaseTestCaseTest extends BaseTestCase
         assertNotSame(jmsFactory, getJMSMockObjectFactory());
     }
     
+	@Test
     public void testSetJDBCFactory()
     {
         JDBCMockObjectFactory jdbcFactory = new JDBCMockObjectFactory();
@@ -91,6 +106,7 @@ public class BaseTestCaseTest extends BaseTestCase
         assertNotSame(jdbcFactory, getJDBCMockObjectFactory());
     }
     
+	@Test
     public void testSetEJBFactory()
     {
         EJBMockObjectFactory ejbFactory = new EJBMockObjectFactory();
@@ -101,6 +117,7 @@ public class BaseTestCaseTest extends BaseTestCase
         assertNotSame(ejbFactory, getEJBMockObjectFactory());
     }
     
+	@Test
     public void testSetConnectorFactory()
     {
         ConnectorMockObjectFactory connectorFactory = new ConnectorMockObjectFactory();

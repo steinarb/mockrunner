@@ -1,11 +1,19 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.Session;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
@@ -21,7 +29,7 @@ import com.mockrunner.mock.jms.MockTopicConnection;
 import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
 
-public class MockMessageConsumerTest extends TestCase
+public class MockMessageConsumerTest
 {
     private MockQueue queue;
     private MockTopic topic;
@@ -30,9 +38,9 @@ public class MockMessageConsumerTest extends TestCase
     private MockQueueSession queueSession;
     private MockTopicSession topicSession;
 
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         queue = new MockQueue("Queue");
         topic = new MockTopic("Topic");
         DestinationManager destManager = new DestinationManager();
@@ -42,7 +50,8 @@ public class MockMessageConsumerTest extends TestCase
         queueSession = (MockQueueSession)queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
         topicSession = (MockTopicSession)topicConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
     }
-    
+
+    @Test
     public void testCreateSelector() throws Exception
     {
         MockQueueReceiver receiver = new MockQueueReceiver(queueConnection, queueSession, queue, "");
@@ -69,6 +78,7 @@ public class MockMessageConsumerTest extends TestCase
         }
     }
     
+    @Test
     public void testCanConsumeQueueReceiver() throws Exception
     {
         MockQueueReceiver receiver = new MockQueueReceiver(queueConnection, queueSession, queue);
@@ -80,6 +90,7 @@ public class MockMessageConsumerTest extends TestCase
         doTestCanConsumeWithSelectorDisabled(receiver);
     }
     
+    @Test
     public void testCanConsumeTopicSubscriber() throws Exception
     {
         MockTopicSubscriber subscriber = new MockTopicSubscriber(topicConnection, topicSession, topic);
@@ -91,6 +102,7 @@ public class MockMessageConsumerTest extends TestCase
         doTestCanConsumeWithSelectorDisabled(subscriber);
     }
     
+    @Test
     public void testReceiveQueueReceiver() throws Exception
     {
         MockQueueReceiver receiver = new MockQueueReceiver(queueConnection, queueSession, queue);
@@ -112,6 +124,7 @@ public class MockMessageConsumerTest extends TestCase
         doTestReceiveWithSelectorDisabled(receiver);
     }
     
+    @Test
     public void testReceiveTopicSubscriber() throws Exception
     {
         MockTopicSubscriber subscriber = new MockTopicSubscriber(topicConnection, topicSession, topic);

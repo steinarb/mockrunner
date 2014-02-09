@@ -1,5 +1,8 @@
 package com.mockrunner.example.struts;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.mockrunner.struts.BasicActionTestCaseAdapter;
 
 /**
@@ -12,7 +15,8 @@ public class AuthenticationActionTest extends BasicActionTestCaseAdapter
     private MockAuthenticationStrategy strategy;
     private AuthenticationForm form;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         strategy = new MockAuthenticationStrategy();
@@ -21,6 +25,7 @@ public class AuthenticationActionTest extends BasicActionTestCaseAdapter
         setValidate(true);
     }
 
+    @Test
     public void testSuccessfulLogin()
     {
         addRequestParameter("username", "test");
@@ -33,6 +38,7 @@ public class AuthenticationActionTest extends BasicActionTestCaseAdapter
         verifyForward("success");
     }
     
+    @Test
     public void testEmptyInput()
     {
         form.setUsername("");
@@ -54,6 +60,7 @@ public class AuthenticationActionTest extends BasicActionTestCaseAdapter
         verifyActionErrorNotPresent("auth.username.unknown");
     }
     
+    @Test
     public void testUnknownUser()
     {
         form.setUsername("test");
@@ -67,6 +74,7 @@ public class AuthenticationActionTest extends BasicActionTestCaseAdapter
         verifyForward("failure");
     }
     
+    @Test
     public void testWrongPassword()
     {
         form.setUsername("test");
@@ -80,6 +88,7 @@ public class AuthenticationActionTest extends BasicActionTestCaseAdapter
         verifyForward("failure");
     }
     
+    @Test
     public void testGeneralError()
     {
         form.setUsername("test");

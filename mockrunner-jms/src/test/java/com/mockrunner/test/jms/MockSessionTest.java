@@ -1,5 +1,11 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.List;
 
 import javax.jms.DeliveryMode;
@@ -12,7 +18,7 @@ import javax.jms.MessageProducer;
 import javax.jms.QueueSender;
 import javax.jms.Session;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
@@ -35,8 +41,9 @@ import com.mockrunner.mock.jms.MockTopicPublisher;
 import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
 
-public class MockSessionTest extends TestCase
+public class MockSessionTest
 {
+	@Test
     public void testTransmissionJMSHeaders() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -94,6 +101,7 @@ public class MockSessionTest extends TestCase
         assertEquals(topic, message.getJMSDestination());
     }
     
+	@Test
     public void testGetAcknowledgeMode() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -113,6 +121,7 @@ public class MockSessionTest extends TestCase
         assertEquals(0, session.getAcknowledgeMode());
     }
     
+	@Test
     public void testCreateProducerWithQueueSession() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -122,6 +131,7 @@ public class MockSessionTest extends TestCase
         doTestCreateProducer(session, destManager);
     }
     
+	@Test
     public void testCreateProducerWithTopicSession() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -131,6 +141,7 @@ public class MockSessionTest extends TestCase
         doTestCreateProducer(session, destManager);
     }
     
+	@Test
     public void testCreateProducerWithSession() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -140,6 +151,7 @@ public class MockSessionTest extends TestCase
         doTestCreateProducer(session, destManager);
     }
     
+	@Test
     public void testCreateNullProducer() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -169,6 +181,7 @@ public class MockSessionTest extends TestCase
         assertEquals(3, genericManager.getMessageProducerList().size());
     }
     
+	@Test
     public void testCreateConsumerWithQueueSession() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -178,6 +191,7 @@ public class MockSessionTest extends TestCase
         doTestCreateConsumer(session, destManager);
     }
 
+	@Test
     public void testCreateComsumerWithTopicSession() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -187,6 +201,7 @@ public class MockSessionTest extends TestCase
         doTestCreateConsumer(session, destManager);
     }
     
+	@Test
     public void testCreateComsumerWithSession() throws Exception
     {
         DestinationManager destManager = new DestinationManager();

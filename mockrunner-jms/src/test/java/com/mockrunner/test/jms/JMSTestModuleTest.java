@@ -1,5 +1,13 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
@@ -23,7 +31,8 @@ import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 import javax.jms.TopicSubscriber;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.jms.DestinationManager;
@@ -56,7 +65,7 @@ import com.mockrunner.mock.jms.MockTopicPublisher;
 import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
 
-public class JMSTestModuleTest extends TestCase
+public class JMSTestModuleTest
 {
     private JMSMockObjectFactory mockFactory;
     private JMSTestModule module;
@@ -64,9 +73,9 @@ public class JMSTestModuleTest extends TestCase
     private MockTopicConnection topicConnection;
     private MockConnection connection;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         mockFactory = new JMSMockObjectFactory();
         module = new JMSTestModule(mockFactory);
         queueConnection = (MockQueueConnection)mockFactory.getMockQueueConnectionFactory().createQueueConnection();
@@ -74,6 +83,7 @@ public class JMSTestModuleTest extends TestCase
         connection = (MockConnection)mockFactory.getMockConnectionFactory().createConnection();
     }
     
+    @Test
     public void testSetAndGetCurrentQueueConnection() throws Exception
     {
         assertEquals(queueConnection, module.getCurrentQueueConnection());
@@ -114,6 +124,7 @@ public class JMSTestModuleTest extends TestCase
         assertNull(module.getQueueSession(0));
     }
     
+    @Test
     public void testSetAndGetCurrentTopicConnection() throws Exception
     {
         assertEquals(topicConnection, module.getCurrentTopicConnection());
@@ -140,6 +151,7 @@ public class JMSTestModuleTest extends TestCase
         assertNull(module.getTopicSession(0));
     }
     
+    @Test
     public void testSetAndGetCurrentConnection() throws Exception
     {
         assertEquals(connection, module.getCurrentConnection());
@@ -170,6 +182,7 @@ public class JMSTestModuleTest extends TestCase
         assertNull(module.getTopicSession(0));
     }
     
+    @Test
     public void testRegisterQueueMessageListener() throws Exception
     {
         DestinationManager destManager = mockFactory.getDestinationManager();
@@ -203,6 +216,7 @@ public class JMSTestModuleTest extends TestCase
         assertEquals("number = 1", queueReceiver.getMessageSelector());
     }
     
+    @Test
     public void testRegisterTopicMessageListener() throws Exception
     {
         DestinationManager destManager = mockFactory.getDestinationManager();
@@ -240,6 +254,7 @@ public class JMSTestModuleTest extends TestCase
         assertEquals("number = 2", topicSubscriber.getMessageSelector());
     }
     
+    @Test
     public void testRegisterMessageListener() throws Exception
     {
         DestinationManager manager = mockFactory.getDestinationManager();
@@ -257,7 +272,7 @@ public class JMSTestModuleTest extends TestCase
         assertFalse(module.getSession(0) instanceof QueueSession);
     }
     
-    
+    @Test
     public void testGetQueue() throws Exception
     {
         DestinationManager manager = mockFactory.getDestinationManager();
@@ -281,6 +296,7 @@ public class JMSTestModuleTest extends TestCase
         }
     }
     
+    @Test
     public void testGetTopic() throws Exception
     {
         DestinationManager manager = mockFactory.getDestinationManager();
@@ -304,6 +320,7 @@ public class JMSTestModuleTest extends TestCase
         }
     }
     
+    @Test
     public void testGetQueueAndTopicDifferentSessions() throws Exception
     {
         DestinationManager manager = mockFactory.getDestinationManager();
@@ -340,6 +357,7 @@ public class JMSTestModuleTest extends TestCase
         }
     }
     
+    @Test
     public void testVerifyTemporaryQueue() throws Exception
     {
         queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -401,6 +419,7 @@ public class JMSTestModuleTest extends TestCase
         module.verifyAllTemporaryQueuesDeleted(0);
     }
     
+    @Test
     public void testVerifyTemporaryTopic() throws Exception
     {
         topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -462,6 +481,7 @@ public class JMSTestModuleTest extends TestCase
         module.verifyAllTemporaryTopicsDeleted(0);
     }
     
+    @Test
     public void testTemporaryQueueAndTopicDifferentSessions() throws Exception
     {
         queueConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -489,6 +509,7 @@ public class JMSTestModuleTest extends TestCase
         assertNull(module.getSession(0).getTemporaryQueue(1));
     }
     
+    @Test
     public void testVerifyQueueSender() throws Exception
     {
         queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -543,6 +564,7 @@ public class JMSTestModuleTest extends TestCase
         assertEquals(0, queueManager.getQueueSenderList("otherQueue").size());
     }
     
+    @Test
     public void testVerifyTopicPublishers() throws Exception
     {
         topicConnection.createTopicSession(true, Session.AUTO_ACKNOWLEDGE);
@@ -615,6 +637,7 @@ public class JMSTestModuleTest extends TestCase
         assertEquals(0, topicManager.getTopicPublisherList("myTopic").size());
     }
     
+    @Test
     public void testVerifyMessageProducers() throws Exception
     {
         connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -654,6 +677,7 @@ public class JMSTestModuleTest extends TestCase
         assertTrue(manager1.getMessageProducer(1) instanceof MockTopicPublisher);
     }
     
+    @Test
     public void testVerifyQueueReceiver() throws Exception
     {
         queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -699,6 +723,7 @@ public class JMSTestModuleTest extends TestCase
         assertEquals(1, queueManager.getQueueReceiverList("otherQueue").size());
     }
     
+    @Test
     public void testVerifyTopicSubscriber() throws Exception
     {
         topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -754,6 +779,7 @@ public class JMSTestModuleTest extends TestCase
         assertEquals(0, topicManager.getDurableTopicSubscriberMap("topic1").size());
     }
     
+    @Test
     public void testVerifyDurableTopicSubscriber() throws Exception
     {
         topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -811,6 +837,7 @@ public class JMSTestModuleTest extends TestCase
         assertNotNull(topicManager.getDurableTopicSubscriberMap("topic2").get("anotherDurableSubscriber"));
     }
     
+    @Test
     public void testVerifyMessageConsumer() throws Exception
     {
         connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -851,6 +878,7 @@ public class JMSTestModuleTest extends TestCase
         assertTrue(manager1.getMessageConsumer(1) instanceof MockTopicSubscriber);
     }
         
+    @Test
     public void testVerifyQueueBrowser() throws Exception
     {
         queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -900,6 +928,7 @@ public class JMSTestModuleTest extends TestCase
         module.verifyNumberQueueBrowsers(0, "otherQueue", 0);
     }
     
+    @Test
     public void testVerifyQueueBrowserDifferentSessions() throws Exception
     {
         queueConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -931,6 +960,7 @@ public class JMSTestModuleTest extends TestCase
         assertSame(browser3, transManager.getQueueBrowser(0));
     }
 
+    @Test
     public void testVerifyQueueSession() throws Exception
     {
         assertNull(module.getQueueSession(0));
@@ -952,6 +982,7 @@ public class JMSTestModuleTest extends TestCase
         module.verifyNumberQueueSessions(2);
     }
     
+    @Test
     public void testVerifyTopicSession() throws Exception
     {
         module.verifyNumberTopicSessions(0);
@@ -983,6 +1014,7 @@ public class JMSTestModuleTest extends TestCase
         assertNull(module.getTopicSession(2));
     }
     
+    @Test
     public void testVerifySession() throws Exception
     {
         module.verifyNumberSessions(0);
@@ -1030,6 +1062,7 @@ public class JMSTestModuleTest extends TestCase
         assertEquals(0, module.getQueueSessionList().size());
     }
     
+    @Test
     public void testVerifyNumberQueueMessages() throws Exception
     {
         queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -1099,6 +1132,7 @@ public class JMSTestModuleTest extends TestCase
         }
     }
     
+    @Test
     public void testVerifyNumberTopicMessages() throws Exception
     {
         topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -1168,6 +1202,7 @@ public class JMSTestModuleTest extends TestCase
         }
     }
     
+    @Test
     public void testVerifyNumberMessages() throws Exception
     {
         connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -1226,6 +1261,7 @@ public class JMSTestModuleTest extends TestCase
         assertEquals(2, module.getSession(0).getTemporaryQueue(0).getCurrentMessageList().size());
     }
     
+    @Test
     public void testVerifyNumberMessagesDifferentSessions() throws Exception
     {
         queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -1265,6 +1301,7 @@ public class JMSTestModuleTest extends TestCase
         assertEquals(1, module.getTopicSession(0).getTemporaryQueue(0).getReceivedMessageList().size());
     }
     
+    @Test
     public void testVerifyQueueMessageEquals() throws Exception
     {
         queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -1389,6 +1426,7 @@ public class JMSTestModuleTest extends TestCase
         module.verifyReceivedQueueMessageEquals(0, 0, 2, testMessage);
     }
     
+    @Test
     public void testVerifyTopicMessageEquals() throws Exception
     {
         topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -1521,6 +1559,7 @@ public class JMSTestModuleTest extends TestCase
         module.verifyReceivedTopicMessageEquals(0, 0, 2, testMessage);
     }
     
+    @Test
     public void testVerifyMessageEqualsDifferentSessions() throws Exception
     {
         queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -1558,6 +1597,7 @@ public class JMSTestModuleTest extends TestCase
         assertEquals(1, queue.getReceivedMessageList().size());
     }
     
+    @Test
     public void testVerifyQueueClosed() throws Exception
     {
         MockQueueSession session1 = (MockQueueSession)queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -1636,6 +1676,7 @@ public class JMSTestModuleTest extends TestCase
         module.verifyAllQueueSendersClosed(1);
     }
     
+    @Test
     public void testVerifyTopicClosed() throws Exception
     {
         MockTopicSession session1 = (MockTopicSession)topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -1723,6 +1764,7 @@ public class JMSTestModuleTest extends TestCase
         module.verifyAllDurableTopicSubscribersClosed(2);
     }
     
+    @Test
     public void testVerifyMessageProducersAndConsumersClosed() throws Exception
     {
         MockSession session1 = (MockSession)connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -1781,6 +1823,7 @@ public class JMSTestModuleTest extends TestCase
         module.verifyAllMessageConsumersClosed(2);
     }
     
+    @Test
     public void testVerifyQueueSessionComitted() throws Exception
     {
         MockQueueSession session1 = (MockQueueSession)queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -1857,6 +1900,7 @@ public class JMSTestModuleTest extends TestCase
         } 
     }
     
+    @Test
     public void testVerifyTopicSessionComitted() throws Exception
     {
         MockTopicSession session1 = (MockTopicSession)topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -1935,6 +1979,7 @@ public class JMSTestModuleTest extends TestCase
         } 
     }
     
+    @Test
     public void testVerifySessionComitted() throws Exception
     {
         MockSession session1 = (MockSession)connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -2031,6 +2076,7 @@ public class JMSTestModuleTest extends TestCase
         }
     }
     
+    @Test
     public void testVerifyNumberCommitsAndRollbacks() throws Exception
     {
         MockSession session1 = (MockSession)queueConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -2091,6 +2137,7 @@ public class JMSTestModuleTest extends TestCase
         }
     }
     
+    @Test
     public void testVerifyQueueMessagesAcknowledged() throws Exception
     {
         MockQueueSession session1 = (MockQueueSession)queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -2233,6 +2280,7 @@ public class JMSTestModuleTest extends TestCase
         module.verifyAllReceivedQueueMessagesAcknowledged(1, 0);
     }
     
+    @Test
     public void testVerifyTopicMessagesAcknowledged() throws Exception
     {
         MockTopicSession session1 = (MockTopicSession)topicConnection.createTopicSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -2374,6 +2422,7 @@ public class JMSTestModuleTest extends TestCase
         module.verifyAllReceivedTopicMessagesAcknowledged(1, 0);
     }
     
+    @Test
     public void testVerifyMessagesAcknowledged() throws Exception
     {
         MockSession session1 = (MockSession)connection.createSession(true, Session.AUTO_ACKNOWLEDGE);
@@ -2498,6 +2547,7 @@ public class JMSTestModuleTest extends TestCase
         module.verifyCreatedMessageAcknowledged(2, 0);
     }
     
+    @Test
     public void testGenericFactory() throws Exception
     {
         MockConnectionFactory factory = (MockConnectionFactory)mockFactory.getMockConnectionFactory();
@@ -2519,6 +2569,7 @@ public class JMSTestModuleTest extends TestCase
         module.verifyNumberSessions(0);
     }
     
+    @Test
     public void testVerifyQueueSenderWithGenericProducers() throws Exception
     {
         DestinationManager manager = mockFactory.getDestinationManager();
@@ -2554,6 +2605,7 @@ public class JMSTestModuleTest extends TestCase
         assertTrue(wrapper.getQueueSenderList().contains(sender5));
     }
     
+    @Test
     public void testVerifyTopicPublishersWithGenericProducers() throws Exception
     {
         DestinationManager manager = mockFactory.getDestinationManager();
@@ -2591,6 +2643,7 @@ public class JMSTestModuleTest extends TestCase
         assertTrue(wrapper.getTopicPublisherList().contains(publisher5));
     }
     
+    @Test
     public void testSessionsClosedNoConnection() throws Exception
     {
         JMSMockObjectFactory mockFactory = new JMSMockObjectFactory();

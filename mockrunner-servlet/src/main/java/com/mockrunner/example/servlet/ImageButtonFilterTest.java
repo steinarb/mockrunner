@@ -1,6 +1,12 @@
 package com.mockrunner.example.servlet;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import javax.servlet.http.HttpServletRequest;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 
@@ -14,12 +20,14 @@ public class ImageButtonFilterTest extends BasicServletTestCaseAdapter
 {
     private ImageButtonFilter filter;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         filter = (ImageButtonFilter)createFilter(ImageButtonFilter.class);
     }
 
+    @Test
     public void testImageButtonParameter()
     {
         addRequestParameter("param", "value");

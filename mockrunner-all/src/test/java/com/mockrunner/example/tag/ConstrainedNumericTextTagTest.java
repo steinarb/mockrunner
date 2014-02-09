@@ -1,5 +1,8 @@
 package com.mockrunner.example.tag;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.mockrunner.tag.BasicTagTestCaseAdapter;
 
 /**
@@ -11,7 +14,8 @@ public class ConstrainedNumericTextTagTest extends BasicTagTestCaseAdapter
 {
     private ConstrainedNumericTextTag tag;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         tag = (ConstrainedNumericTextTag)createTag(ConstrainedNumericTextTag.class);
@@ -24,6 +28,7 @@ public class ConstrainedNumericTextTagTest extends BasicTagTestCaseAdapter
         setRequestAttribute("test", "test");
     }
 
+    @Test
     public void testOnBlurHandler() throws Exception
     {
         tag.setMinValue(3);

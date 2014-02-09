@@ -1,13 +1,18 @@
 package com.mockrunner.test.ejb;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import javax.transaction.Status;
+
+import org.junit.Test;
 
 import com.mockrunner.mock.ejb.MockUserTransaction;
 
-import junit.framework.TestCase;
-
-public class MockUserTransactionTest extends TestCase
+public class MockUserTransactionTest
 {
+	@Test
     public void testBegin() throws Exception
     {
         MockUserTransaction transaction = new MockUserTransaction();
@@ -22,6 +27,7 @@ public class MockUserTransactionTest extends TestCase
         assertFalse(transaction.wasRollbackOnlyCalled());
     }
     
+	@Test
     public void testNumberCalls() throws Exception
     {
         MockUserTransaction transaction = new MockUserTransaction();
@@ -39,6 +45,7 @@ public class MockUserTransactionTest extends TestCase
         assertEquals(1, transaction.getNumberRollbackOnlyCalls());
     }
     
+	@Test
     public void testReset() throws Exception
     {
         MockUserTransaction transaction = new MockUserTransaction();
@@ -62,6 +69,7 @@ public class MockUserTransactionTest extends TestCase
         assertEquals(0, transaction.getNumberRollbackOnlyCalls());
     }
     
+	@Test
     public void testGetStatus() throws Exception
     {
         MockUserTransaction transaction = new MockUserTransaction();

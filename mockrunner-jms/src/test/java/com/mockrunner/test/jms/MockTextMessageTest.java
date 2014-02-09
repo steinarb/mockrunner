@@ -1,13 +1,22 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import javax.jms.MessageNotWriteableException;
+
+import org.junit.Test;
 
 import junit.framework.TestCase;
 
 import com.mockrunner.mock.jms.MockTextMessage;
 
-public class MockTextMessageTest extends TestCase
+public class MockTextMessageTest
 {
+	@Test
     public void testEquals()
     {
         MockTextMessage message = new MockTextMessage("test");
@@ -21,6 +30,7 @@ public class MockTextMessageTest extends TestCase
         assertEquals(new MockTextMessage(null).hashCode(), new MockTextMessage(null).hashCode());
     }
     
+	@Test
     public void testReadOnly() throws Exception
     {
         MockTextMessage message = new MockTextMessage("test");
@@ -42,6 +52,7 @@ public class MockTextMessageTest extends TestCase
         assertEquals("test3", message.getText());
     }
     
+	@Test
     public void testClone() throws Exception
     {
         MockTextMessage message = new MockTextMessage();
@@ -56,6 +67,7 @@ public class MockTextMessageTest extends TestCase
         assertEquals(3, newMessage.getJMSPriority());
     }
     
+	@Test
     public void testToString() throws Exception
     {
         MockTextMessage message = new MockTextMessage();

@@ -1,7 +1,12 @@
 package com.mockrunner.example.jdbc;
 
+import static org.junit.Assert.assertEquals;
+
 import java.sql.Date;
 import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.CallableStatementResultSetHandler;
@@ -17,7 +22,8 @@ public class OrderDBTest extends BasicJDBCTestCaseAdapter
 {
     private CallableStatementResultSetHandler statementHandler;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         statementHandler = getJDBCMockObjectFactory().getMockConnection().getCallableStatementResultSetHandler();
@@ -30,6 +36,7 @@ public class OrderDBTest extends BasicJDBCTestCaseAdapter
         statementHandler.prepareResultSet("call getnames", result);
     }
     
+    @Test
     public void testCallStoredProc() throws Exception
     {
         prepareResult();

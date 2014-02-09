@@ -1,5 +1,12 @@
 package com.mockrunner.test.ejb;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.rmi.RemoteException;
 
 import javax.ejb.CreateException;
@@ -14,17 +21,13 @@ import javax.ejb.SessionContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.QueueSender;
-import javax.jms.QueueSession;
-import javax.jms.Session;
 import javax.jms.TextMessage;
-import javax.jms.TopicPublisher;
-import javax.jms.TopicSession;
 import javax.naming.InitialContext;
 import javax.rmi.PortableRemoteObject;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockejb.TransactionPolicy;
 
 import com.mockrunner.ejb.EJBTestModule;
@@ -43,26 +46,27 @@ import com.mockrunner.mock.ejb.MockUserTransaction;
 //import com.mockrunner.mock.jms.MockTopicSession;
 //import com.mockrunner.mock.jms.MockTopicSubscriber;
 
-public class EJBTestModuleTest extends TestCase
+public class EJBTestModuleTest
 {
     private EJBMockObjectFactory ejbMockFactory;
     private EJBTestModule ejbModule;
 //    private JMSMockObjectFactory jmsMockFactory;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         ejbMockFactory = new EJBMockObjectFactory();
         ejbModule = new EJBTestModule(ejbMockFactory);
 //        jmsMockFactory = new JMSMockObjectFactory();
     }
-    
-	protected void tearDown() throws Exception
+
+    @After
+	public void tearDown() throws Exception
 	{
-		super.tearDown();
 		ejbMockFactory.resetMockContextFactory();
 	}
-    
+
+    @Test
     public void testCreateSessionBean() throws Exception
     {
         ejbModule.deploySessionBean("com/MyLookupTest", TestSessionBean.class);
@@ -95,6 +99,7 @@ public class EJBTestModuleTest extends TestCase
         }
     }
     
+    @Test
     public void testCreateEntityBean() throws Exception
     {
         ejbModule.setBusinessInterfaceSuffix("Bean");
@@ -121,6 +126,7 @@ public class EJBTestModuleTest extends TestCase
         assertSame(bean, home.findByPrimaryKey("thirdPk"));
     }
     
+    @Test
     public void testCreateWithNullParameters() throws Exception
     {
         ejbModule.deploySessionBean("com/MyLookupTest", TestSessionBean.class);
@@ -155,6 +161,7 @@ public class EJBTestModuleTest extends TestCase
         assertTrue(bean instanceof TestEntityBean);
     }
     
+    @Test
     public void testFindByPrimaryKey() throws Exception
     {
         ejbModule.setBusinessInterfaceSuffix("Bean");
@@ -184,6 +191,7 @@ public class EJBTestModuleTest extends TestCase
         }
     }
         
+    @Test
     public void testDeploySessionBeanClass() throws Exception
     {
         try
@@ -257,6 +265,7 @@ public class EJBTestModuleTest extends TestCase
         assertTrue(home instanceof TestSessionHome);
     }
     
+    @Test
 	public void testDeploySessionBeanObject() throws Exception
 	{
 		try
@@ -298,6 +307,7 @@ public class EJBTestModuleTest extends TestCase
 		assertTrue(home instanceof TestSessionHome);
 	}
     
+    @Test
 	public void testDeployEntityBean() throws Exception
 	{
 		try
@@ -418,6 +428,7 @@ public class EJBTestModuleTest extends TestCase
 	}
 	*/
 		
+    @Test
     public void testTransaction() throws Exception
     {
         ejbModule.deploySessionBean("mybean", new TestSessionBean(), TransactionPolicy.REQUIRED);
@@ -447,6 +458,7 @@ public class EJBTestModuleTest extends TestCase
 		ejbModule.verifyNotRolledBack();
     }
     
+    @Test
     public void testNoTransactionPolicy() throws Exception
     {
         ejbModule.deploySessionBean("mybean", new TestSessionBean(), null);

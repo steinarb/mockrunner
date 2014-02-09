@@ -1,9 +1,15 @@
 package com.mockrunner.test.ejb;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.mockejb.jndi.MockContextFactory;
 
 import com.mockrunner.ejb.BasicEJBTestCaseAdapter;
@@ -12,7 +18,8 @@ import com.mockrunner.mock.ejb.EJBMockObjectFactory;
 
 public class BasicEJBTestCaseAdapterTest extends BasicEJBTestCaseAdapter
 {
-    protected void setUp() throws Exception
+	@Before
+    public void setUp() throws Exception
     {
         Configuration configuration = new Configuration();
         configuration.setBindMockUserTransactionToJNDI(false);
@@ -20,6 +27,7 @@ public class BasicEJBTestCaseAdapterTest extends BasicEJBTestCaseAdapter
         super.setUp();
     }
     
+	@Test
     public void testTearDownRevertCalled() throws Exception
     {
         assertEquals(MockContextFactory.class.getName(), System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
@@ -27,6 +35,7 @@ public class BasicEJBTestCaseAdapterTest extends BasicEJBTestCaseAdapter
         assertNull(System.getProperty(Context.INITIAL_CONTEXT_FACTORY));
     }
     
+	@Test
     public void testUserTransactionNotBound() throws Exception
     {
         InitialContext context = new InitialContext();

@@ -1,8 +1,12 @@
 package com.mockrunner.example.ejb;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.mockejb.TransactionPolicy;
 import org.mockejb.interceptor.Aspect;
 import org.mockejb.interceptor.AspectSystem;
@@ -27,7 +31,8 @@ public class BillManagerSessionTest extends BasicEJBTestCaseAdapter
 {
     private BillManagerSession bean;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         setInterfacePackage("com.mockrunner.example.ejb.interfaces");
@@ -36,6 +41,7 @@ public class BillManagerSessionTest extends BasicEJBTestCaseAdapter
         deployEntityBean("java:comp/env/ejb/BillEntity", BillEntityBean.class, TransactionPolicy.REQUIRED);  
     }
     
+    @Test
     public void testMarkAsPaid() throws Exception
     {
         AspectSystem aspectSystem =  AspectSystemFactory.getAspectSystem();

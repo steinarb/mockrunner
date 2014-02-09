@@ -7,6 +7,9 @@ import javax.jms.TopicConnection;
 import javax.jms.TopicPublisher;
 import javax.jms.TopicSession;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.jms.JMSTestCaseAdapter;
 import com.mockrunner.mock.jms.MockTextMessage;
@@ -29,7 +32,8 @@ public class NewsSubscriberTest extends JMSTestCaseAdapter
 {
 	private EJBTestModule ejbModule;
 	
-	protected void setUp() throws Exception
+	@Before
+	public void setUp() throws Exception
 	{
 		super.setUp();
 		ejbModule = createEJBTestModule();
@@ -38,6 +42,7 @@ public class NewsSubscriberTest extends JMSTestCaseAdapter
 		ejbModule.bindToContext("topic/newsTopic", topic);
 	}
 	
+	@Test
 	public void testMain() throws Exception
 	{
 		callMain("Java");

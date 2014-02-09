@@ -1,10 +1,18 @@
 package com.mockrunner.test.web;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.jsp.tagext.BodyTagSupport;
 import javax.servlet.jsp.tagext.TagSupport;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.web.MockBodyContent;
@@ -35,9 +43,9 @@ public class TagLifecycleTest extends BaseTestCase
     private TestTag level3child2Tag;
     private TestSimpleTag level3child3Tag;
 
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         Map testMap = new HashMap();
         testMap.put("testString", "test");
         root = new NestedStandardTag(new TestTag(), getWebMockObjectFactory().getMockPageContext(), testMap);
@@ -66,6 +74,7 @@ public class TagLifecycleTest extends BaseTestCase
         level3child3Tag = (TestSimpleTag)level3child3.getWrappedTag();
     }
     
+    @Test
     public void testMethodsCalled() throws Exception
     {
         root.setDoReleaseRecursive(true);
@@ -129,6 +138,7 @@ public class TagLifecycleTest extends BaseTestCase
         assertTrue(level3child3Tag.wasDoTagCalled());
     }
     
+    @Test
     public void testPopulated() throws Exception
     {
         level1child1Tag.setDoStartTagReturnValue(TagSupport.EVAL_BODY_INCLUDE);
@@ -153,6 +163,7 @@ public class TagLifecycleTest extends BaseTestCase
         assertEquals("test", level3child3Tag.getTestString());
     }
     
+    @Test
     public void testOutput() throws Exception
     {
         level1child1Tag.setDoStartTagReturnValue(TagSupport.SKIP_BODY);

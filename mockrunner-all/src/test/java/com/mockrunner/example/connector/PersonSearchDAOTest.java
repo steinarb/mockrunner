@@ -1,6 +1,12 @@
 package com.mockrunner.example.connector;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import java.io.FileInputStream;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.connector.ConnectorTestCaseAdapter;
 import com.mockrunner.connector.StreamableRecordByteArrayInteraction;
@@ -28,7 +34,8 @@ public class PersonSearchDAOTest extends ConnectorTestCaseAdapter
     private EJBTestModule ejbModule;
     private PersonSearchDAO dao;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         ejbModule = createEJBTestModule();
@@ -48,6 +55,7 @@ public class PersonSearchDAOTest extends ConnectorTestCaseAdapter
         response.close();
     }
 
+    @Test
     public void testFindPersonByIdFound() throws Exception
     {
         prepareInteraction();
@@ -60,6 +68,7 @@ public class PersonSearchDAOTest extends ConnectorTestCaseAdapter
         verifyAllInteractionsClosed();
     }
     
+    @Test
     public void testFindPersonByIdNotFound() throws Exception
     {
         prepareInteraction();

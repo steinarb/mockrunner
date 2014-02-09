@@ -1,5 +1,11 @@
 package com.mockrunner.test.web;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -16,6 +22,9 @@ import javax.servlet.jsp.tagext.DynamicAttributes;
 import javax.servlet.jsp.tagext.SimpleTag;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.web.MockJspWriter;
@@ -34,13 +43,14 @@ public class TagUtilTest extends BaseTestCase
     private MockPageContext pageContext;
     private Map testMap;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         pageContext = getWebMockObjectFactory().getMockPageContext();
         testMap = new HashMap();
     }
     
+    @Test
     public void testCreateNestedTagInstanceParameters()
     {
         try
@@ -91,6 +101,7 @@ public class TagUtilTest extends BaseTestCase
         TagUtil.createNestedTagInstance(TestSimpleTag.class, new TestJspContext(), testMap);
     }
 
+    @Test
     public void testCreateNestedTagInstance()
     {
         TagSupport tag = (TagSupport)TagUtil.createNestedTagInstance(TestTag.class, pageContext, testMap);
@@ -117,6 +128,7 @@ public class TagUtilTest extends BaseTestCase
         assertSame(testSimpleTag, ((NestedTag)simpleTag).getWrappedTag());
     }
     
+    @Test
     public void testPopulateTag()
     {
         testMap.put("testString", "test");
@@ -149,6 +161,7 @@ public class TagUtilTest extends BaseTestCase
         assertEquals("aString", testSimpleTag.getStringProperty());
     }
     
+    @Test
     public void testPopulateTagWithArbitraryBeans()
     {
         testMap.put("object", this);
@@ -163,6 +176,7 @@ public class TagUtilTest extends BaseTestCase
         assertSame(this, tag.getTagUtilTest());
     }
     
+    @Test
     public void testPopulateDynamicAttributesWithNonDynamicTag()
     {
         Object object = new Object(); 
@@ -182,6 +196,7 @@ public class TagUtilTest extends BaseTestCase
         TagUtil.populateTag(tag, testMap);
     }
     
+    @Test
     public void testPopulateDynamicAttributesWithDynamicTag()
     {
         Object object = new Object(); 
@@ -204,6 +219,7 @@ public class TagUtilTest extends BaseTestCase
         assertSame(object, attribute.getValue());
     }
     
+    @Test
     public void testPopulateRuntimeAttribute()
     {
         TestRuntimeAttribute runtimeAttribute = new TestRuntimeAttribute("runtimevalue");
@@ -222,6 +238,7 @@ public class TagUtilTest extends BaseTestCase
         assertSame("runtimevalue", attribute.getValue());
     }
     
+    @Test
     public void testEvalBody() throws Exception
     {
         TestTag testStandardTag = new TestTag();
@@ -255,6 +272,7 @@ public class TagUtilTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testHandleException() throws Exception
     {
         Tag tag = new TestTag();
@@ -328,6 +346,7 @@ public class TagUtilTest extends BaseTestCase
         assertSame(excToBeHandled, testTag.getCaughtException());
     }
     
+    @Test
     public void testHandleFinally() throws Exception
     {
         Tag tag = new TestTag();

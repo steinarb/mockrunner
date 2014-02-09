@@ -1,5 +1,12 @@
 package com.mockrunner.test.web;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -15,6 +22,9 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.web.MockFilterChain;
@@ -24,12 +34,13 @@ public class ServletTestModuleTest extends BaseTestCase
 {
     private ServletTestModule module;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         module = new ServletTestModule(getWebMockObjectFactory());
     }
-    
+
+    @Test
     public void testServletInitCalls() throws Exception
     {
         TestServlet servlet = (TestServlet)module.createServlet(TestServlet.class);
@@ -53,6 +64,7 @@ public class ServletTestModuleTest extends BaseTestCase
         assertSame(getWebMockObjectFactory().getMockServletConfig(), servlet.getPassedServletConfig());
     }
     
+    @Test
     public void testFilterInitCalls() throws Exception
     {
         TestFilter filter1 = (TestFilter)module.createFilter(TestFilter.class);
@@ -68,6 +80,7 @@ public class ServletTestModuleTest extends BaseTestCase
         assertTrue(filter4.wasInitCalled());
     }
     
+    @Test
     public void testVerifyOutput() throws Exception
     {
         getWebMockObjectFactory().getMockResponse().getWriter().write("This is a test");
@@ -105,6 +118,7 @@ public class ServletTestModuleTest extends BaseTestCase
         }
     }
 
+    @Test
     public void testServletMethodsCalled()
     {
         TestServlet servlet = (TestServlet)module.createServlet(TestServlet.class);
@@ -124,6 +138,7 @@ public class ServletTestModuleTest extends BaseTestCase
         assertTrue(servlet.wasDoHeadCalled());
     }
     
+    @Test
     public void testFilterChain()
     {
         module.setServlet(new TestServlet(), true);
@@ -157,6 +172,7 @@ public class ServletTestModuleTest extends BaseTestCase
         assertTrue(filter3.wasDoFilterCalled());
     }
     
+    @Test
     public void testFilterChainWithRelease()
     {
         TestServlet servlet = (TestServlet)module.createServlet(TestServlet.class);
@@ -177,6 +193,7 @@ public class ServletTestModuleTest extends BaseTestCase
         assertFalse(filter.wasDoFilterCalled());
     }
     
+    @Test
     public void testFilterChainWithWrapper()
     {
         TestFilter filter1 = new TestFilter();
@@ -204,6 +221,7 @@ public class ServletTestModuleTest extends BaseTestCase
         assertSame(responseWrapper, chain.getResponseList().get(2));
     }
     
+    @Test
     public void testWrappedRequestAndResponse()
     {
         HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(getWebMockObjectFactory().getMockRequest());
@@ -217,6 +235,7 @@ public class ServletTestModuleTest extends BaseTestCase
         assertSame(responseWrapper, getWebMockObjectFactory().getMockFilterChain().getLastResponse());
     }
     
+    @Test
     public void testDoFilterReset()
     {
         TestFilter filter1 = new TestFilter();

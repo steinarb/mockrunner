@@ -1,8 +1,18 @@
 package com.mockrunner.test.web;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.StringWriter;
 
 import javax.servlet.jsp.tagext.TagAdapter;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import junit.framework.TestCase;
 
@@ -13,18 +23,19 @@ import com.mockrunner.tag.NestedBodyTag;
 import com.mockrunner.tag.NestedSimpleTag;
 import com.mockrunner.tag.NestedStandardTag;
 
-public class MockJspFragmentTest extends TestCase
+public class MockJspFragmentTest
 {
     private MockJspFragment fragment;
     private MockPageContext context;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         context = new MockPageContext();
         fragment = new MockJspFragment(context);
     }
     
+    @Test
     public void testTextChilds()
     {
         assertEquals(0, fragment.getChilds().size());
@@ -46,6 +57,7 @@ public class MockJspFragmentTest extends TestCase
         assertEquals(0, fragment.getChilds().size());
     }
     
+    @Test
     public void testAddChildWithNullParent()
     {
         assertNull(fragment.getParent());
@@ -64,6 +76,7 @@ public class MockJspFragmentTest extends TestCase
         assertSame(simpleTag, fragment.getChild(2));
     }
     
+    @Test
     public void testAddChildWithSimpleTagParent()
     {
         TestSimpleTag parent = new TestSimpleTag();
@@ -85,6 +98,7 @@ public class MockJspFragmentTest extends TestCase
         assertSame(simpleTag, fragment.getChild(2));
     }
     
+    @Test
     public void testAddChildWithBodyTagParent()
     {
         TestBodyTag parent = new TestBodyTag();
@@ -104,6 +118,7 @@ public class MockJspFragmentTest extends TestCase
         assertSame(simpleTag, fragment.getChild(2));
     }
     
+    @Test
     public void testInvoke() throws Exception
     {
         fragment.addTextChild("text1");

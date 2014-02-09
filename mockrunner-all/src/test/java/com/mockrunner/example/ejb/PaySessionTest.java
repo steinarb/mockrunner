@@ -1,5 +1,10 @@
 package com.mockrunner.example.ejb;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
+import org.junit.Before;
+import org.junit.Test;
 import org.mockejb.TransactionPolicy;
 
 import com.mockrunner.ejb.EJBTestCaseAdapter;
@@ -22,7 +27,8 @@ public class PaySessionTest extends EJBTestCaseAdapter
     private PaySession bean;
     private StatementResultSetHandler statementHandler;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         jdbcModule = createJDBCTestModule();
@@ -49,6 +55,7 @@ public class PaySessionTest extends EJBTestCaseAdapter
         statementHandler.prepareResultSet("select * from openbills", result);
     }
 
+    @Test
     public void testUnknownCustomer() throws Exception
     {
         MockResultSet result = statementHandler.createResultSet();
@@ -73,6 +80,7 @@ public class PaySessionTest extends EJBTestCaseAdapter
         jdbcModule.verifyConnectionClosed();
     }
     
+    @Test
     public void testUnknownBill() throws Exception
     {
         createValidCustomerResult();
@@ -100,6 +108,7 @@ public class PaySessionTest extends EJBTestCaseAdapter
         jdbcModule.verifyConnectionClosed();
     }
     
+    @Test
     public void testCustomerIdMismatch() throws Exception
     {
         createValidCustomerResult();
@@ -123,6 +132,7 @@ public class PaySessionTest extends EJBTestCaseAdapter
         jdbcModule.verifyConnectionClosed();
     }
     
+    @Test
     public void testAmountMismatch() throws Exception
     {
         createValidCustomerResult();
@@ -146,6 +156,7 @@ public class PaySessionTest extends EJBTestCaseAdapter
         jdbcModule.verifyConnectionClosed();
     }
 
+    @Test
     public void testValidTransaction() throws Exception
     {
         createValidCustomerResult();

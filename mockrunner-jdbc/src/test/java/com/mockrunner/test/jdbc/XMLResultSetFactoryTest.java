@@ -1,17 +1,25 @@
 package com.mockrunner.test.jdbc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
+
 import java.io.File;
+
+import org.junit.Test;
 
 import junit.framework.TestCase;
 
 import com.mockrunner.jdbc.XMLResultSetFactory;
 import com.mockrunner.mock.jdbc.MockResultSet;
 
-public class XMLResultSetFactoryTest extends TestCase 
+public class XMLResultSetFactoryTest
 {
     /**
      * Test for the Sybase Dialect of the XMLResultSetFactory
      */
+//	@Test
     public void testSybaseCreate() 
     {
         XMLResultSetFactory goodSybaseXMLRSF = new XMLResultSetFactory("target/test-classes/com/mockrunner/test/jdbc/xmltestresult.xml");
@@ -56,6 +64,7 @@ public class XMLResultSetFactoryTest extends TestCase
      * Test for a bad create where there is no actual file 
      * passed to the XMLResultSetFactory
      */
+    @Test
     public void testBadCreate() 
     {
         try
@@ -82,6 +91,7 @@ public class XMLResultSetFactoryTest extends TestCase
         }
     }
     
+//    @Test
     public void testGetXMLFile()
     {
         XMLResultSetFactory factory = new XMLResultSetFactory("target/test-classes/com/mockrunner/test/jdbc/xmltestresult.xml");

@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.jms.MessageListener;
 
+import org.junit.After;
+import org.junit.Before;
+
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockConnection;
@@ -41,7 +44,8 @@ public abstract class JMSTestCaseAdapter extends BaseTestCase
         super(name);
     }
 
-    protected void tearDown() throws Exception
+    @After
+    public void tearDown() throws Exception
     {
         super.tearDown();
         jmsTestModule = null;
@@ -51,9 +55,9 @@ public abstract class JMSTestCaseAdapter extends BaseTestCase
      * Creates the {@link com.mockrunner.jms.JMSTestModule}. If you
      * overwrite this method, you must call <code>super.setUp()</code>.
      */
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         jmsTestModule = createJMSTestModule(getJMSMockObjectFactory());
     }
 

@@ -1,17 +1,21 @@
 package com.mockrunner.test.jdbc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
+
 import java.io.File;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import com.mockrunner.jdbc.FileResultSetFactory;
 import com.mockrunner.mock.jdbc.MockResultSet;
 
-public class FileResultSetFactoryTest extends TestCase
+public class FileResultSetFactoryTest
 {
+//	@Test
     public void testGoodCreate() throws Exception
     {
         FileResultSetFactory factory = new FileResultSetFactory("target/test-classes/com/mockrunner/test/jdbc/testresult.txt");
@@ -28,6 +32,7 @@ public class FileResultSetFactoryTest extends TestCase
         doTestResultSet(factory, resultSet);
     }
     
+	@Test
     public void testBadCreate() throws Exception
     {
         FileResultSetFactory factory = new FileResultSetFactory("not found");
@@ -90,6 +95,7 @@ public class FileResultSetFactoryTest extends TestCase
         assertEquals("Entry3", resultSet.getObject(3));
     }
     
+//    @Test
     public void testCreateWithTemplates() throws Exception
     {
         FileResultSetFactory factory = new FileResultSetFactory("target/test-classes/com/mockrunner/test/jdbc/testtemplateresult.txt");
@@ -152,6 +158,7 @@ public class FileResultSetFactoryTest extends TestCase
         assertEquals("template2", resultSet.getObject("TestColumn3"));
     }
     
+//    @Test
     public void testGetFile()
     {
         FileResultSetFactory factory = new FileResultSetFactory("target/test-classes/com/mockrunner/test/jdbc/testresult.txt");

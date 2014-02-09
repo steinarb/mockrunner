@@ -3,8 +3,8 @@ package com.mockrunner.ejb;
 import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Before;
 import org.mockejb.BasicEjbDescriptor;
 import org.mockejb.TransactionPolicy;
 
@@ -21,7 +21,7 @@ import com.mockrunner.mock.ejb.EJBMockObjectFactory;
  * <b>This class is generated from the {@link com.mockrunner.ejb.EJBTestModule}
  * and should not be edited directly</b>.
  */
-public abstract class BasicEJBTestCaseAdapter extends TestCase
+public abstract class BasicEJBTestCaseAdapter
 {
     private EJBTestModule ejbTestModule;
     private EJBMockObjectFactory ejbMockObjectFactory;
@@ -33,12 +33,11 @@ public abstract class BasicEJBTestCaseAdapter extends TestCase
 
     public BasicEJBTestCaseAdapter(String name)
     {
-        super(name);
     }
 
-    protected void tearDown() throws Exception
+    @After
+    public void tearDown() throws Exception
     {
-        super.tearDown();
         if(null != ejbMockObjectFactory)
         {
             ejbMockObjectFactory.resetMockContextFactory();
@@ -51,9 +50,9 @@ public abstract class BasicEJBTestCaseAdapter extends TestCase
      * Creates the {@link com.mockrunner.ejb.EJBTestModule}. If you
      * overwrite this method, you must call <code>super.setUp()</code>.
      */
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         ejbTestModule = createEJBTestModule(getEJBMockObjectFactory());
     }
 

@@ -1,10 +1,23 @@
 package com.mockrunner.test.jdbc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.sql.BatchUpdateException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.jdbc.StatementResultSetHandler;
@@ -22,9 +35,9 @@ public class MockStatementTest extends BaseTestCase
     private MockResultSet resultSet2;
     private MockResultSet resultSet3;
 
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         resultSet1 =  new MockResultSet("");
         resultSet1.addRow(new String[] {"a", "b", "c"});
         resultSet2 =  new MockResultSet("");
@@ -38,7 +51,8 @@ public class MockStatementTest extends BaseTestCase
         statementHandler = connection.getStatementResultSetHandler();
     }
     
-    protected void tearDown() throws Exception
+    @After
+    public void tearDown() throws Exception
     {
         super.tearDown();
         statementHandler = null;
@@ -68,6 +82,7 @@ public class MockStatementTest extends BaseTestCase
         return resultSet.getRowCount() == 3;
     }
 
+    @Test
     public void testPrepareResultSet() throws Exception
     {
         statementHandler.prepareGlobalResultSet(resultSet3);
@@ -97,6 +112,7 @@ public class MockStatementTest extends BaseTestCase
         assertEquals(0, statement.getUpdateCount());
     }
     
+    @Test
     public void testPrepareMultipleResultSets() throws Exception
     {
         statementHandler.prepareGlobalResultSet(resultSet3);
@@ -125,6 +141,7 @@ public class MockStatementTest extends BaseTestCase
         assertEquals(-1, statement.getUpdateCount());
     }
     
+    @Test
     public void testPrepareMultipleResultSetsClose() throws Exception
     {
         statementHandler.prepareResultSets("select test", new MockResultSet[] {resultSet1, resultSet2, resultSet3});
@@ -152,6 +169,7 @@ public class MockStatementTest extends BaseTestCase
         assertTrue(testResultSet3.isClosed());
     }
     
+    @Test
     public void testCurrentResultSetsCloseOnExecute() throws Exception
     {
         statementHandler.prepareResultSets("select test", new MockResultSet[] {resultSet1, resultSet2, resultSet3});
@@ -168,6 +186,7 @@ public class MockStatementTest extends BaseTestCase
         assertTrue(testResultSet3.isClosed());
     }
     
+    @Test
     public void testPrepareResultSetsStatementSet() throws Exception
     {
         MockResultSet resultSet = new MockResultSet("id");
@@ -187,6 +206,7 @@ public class MockStatementTest extends BaseTestCase
         assertSame(statement, testResultSet3.getStatement());
     }
     
+    @Test
     public void testPrepareResultSetsNullValues() throws Exception
     {
         statementHandler.prepareResultSets("select1", new MockResultSet[] {});
@@ -204,6 +224,7 @@ public class MockStatementTest extends BaseTestCase
         assertEquals(-1, statement.getUpdateCount());
     }
     
+    @Test
     public void testPrepareMultipleGlobalResultSets() throws Exception
     {
         statementHandler.prepareGlobalResultSets(new MockResultSet[] {resultSet3, resultSet2, resultSet1});
@@ -231,6 +252,7 @@ public class MockStatementTest extends BaseTestCase
         assertEquals(-1, statement.getUpdateCount());
     }
     
+    @Test
     public void testPrepareMultipleGlobalResultSetsClose() throws Exception
     {
         statementHandler.prepareGlobalResultSets(new MockResultSet[] {resultSet1, resultSet2, resultSet3});
@@ -247,6 +269,8 @@ public class MockStatementTest extends BaseTestCase
         assertFalse(testResultSet3.isClosed());
     }
     
+
+    @Test
     public void testPrepareGeneratedKeys() throws Exception
     {
         statementHandler.prepareGeneratedKeys("insert into othertable", resultSet2);
@@ -283,6 +307,7 @@ public class MockStatementTest extends BaseTestCase
         assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
     }
     
+    @Test
     public void testPrepareGeneratedKeysBatch() throws Exception
     {
         statementHandler.prepareGeneratedKeys("insert into othertable", resultSet2);
@@ -295,6 +320,7 @@ public class MockStatementTest extends BaseTestCase
         assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
     }
     
+    @Test
     public void testPrepareUpdateCount() throws Exception
     {
         statementHandler.prepareGlobalUpdateCount(2);
@@ -319,6 +345,8 @@ public class MockStatementTest extends BaseTestCase
         assertNull(statement.getResultSet());
     }
     
+
+    @Test
     public void testPrepareMultipleUpdateCounts() throws Exception
     {
         statementHandler.prepareGlobalUpdateCount(2);
@@ -354,6 +382,7 @@ public class MockStatementTest extends BaseTestCase
         assertEquals(-1, statement.getUpdateCount());
     }
     
+    @Test
     public void testPrepareUpdateCountBatch() throws Exception
     {
         statementHandler.prepareGlobalUpdateCount(2);
@@ -385,6 +414,7 @@ public class MockStatementTest extends BaseTestCase
         assertTrue(updateCounts.length == 0);
     }
     
+    @Test
     public void testPrepareUpdateCountBatchFailureWithoutContinue() throws Exception
     {
         statementHandler.prepareGlobalUpdateCount(2);
@@ -421,6 +451,7 @@ public class MockStatementTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testPrepareUpdateCountBatchFailureWithContinue() throws Exception
     {
         statementHandler.prepareGlobalUpdateCount(2);
@@ -481,6 +512,7 @@ public class MockStatementTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testPrepareMultipleGlobalUpdateCounts() throws Exception
     {
         statementHandler.prepareGlobalUpdateCounts(new int[] {5, 4});
@@ -505,6 +537,7 @@ public class MockStatementTest extends BaseTestCase
         assertNull(statement.getResultSet());
     }
     
+    @Test
     public void testGetMoreResultsSingleResultSetAndUpdateCount() throws Exception
     {
         statementHandler.prepareGlobalResultSet(resultSet1);
@@ -534,6 +567,7 @@ public class MockStatementTest extends BaseTestCase
         assertEquals(-1, statement.getUpdateCount());
     }
     
+    @Test
     public void testPrepareThrowsSQLException() throws Exception
     {
         SQLException exception = new SQLWarning();
@@ -571,6 +605,7 @@ public class MockStatementTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testResultSetType() throws Exception
     {
         MockStatement statement1 = (MockStatement)connection.createStatement();

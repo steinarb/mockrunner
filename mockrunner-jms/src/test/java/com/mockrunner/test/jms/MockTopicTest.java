@@ -1,10 +1,16 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.Session;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
@@ -15,20 +21,21 @@ import com.mockrunner.mock.jms.MockTopicConnection;
 import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
 
-public class MockTopicTest extends TestCase
+public class MockTopicTest
 {
     private MockTopicConnection connection;
     private MockTopic topic;
 
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         DestinationManager destManager = new DestinationManager();
         ConfigurationManager confManager = new ConfigurationManager();
         connection = new MockTopicConnection(destManager, confManager);
         topic = new MockTopic("TestTopic");
     }
 
+    @Test
     public void testGetMessageList() throws Exception
     {
         assertTrue(topic.isEmpty());
@@ -56,6 +63,7 @@ public class MockTopicTest extends TestCase
         assertNull(topic.getMessage());
     }
     
+    @Test
     public void testLoadMessage() throws Exception
     {
         MockTopicSession session = new MockTopicSession(connection, false, Session.CLIENT_ACKNOWLEDGE);
@@ -66,6 +74,7 @@ public class MockTopicTest extends TestCase
         assertEquals(new MockTextMessage("test"), topic.getCurrentMessageList().get(0));
     }
 
+    @Test
     public void testAddMessage() throws Exception
     {
         MockTopicSession session = new MockTopicSession(connection, false, Session.CLIENT_ACKNOWLEDGE);
@@ -144,12 +153,14 @@ public class MockTopicTest extends TestCase
         assertEquals(2, topic.getReceivedMessageList().size());
     }
     
+    @Test
     public void testAddMessageAutoAcknowledge() throws Exception
     {
         MockTopicSession session = new MockTopicSession(connection, false, Session.AUTO_ACKNOWLEDGE);
         doTestAcknowledge(session);    
     }
     
+    @Test
     public void testAddMessageDupOkAcknowledge() throws Exception
     {
         MockTopicSession session = new MockTopicSession(connection, false, Session.DUPS_OK_ACKNOWLEDGE);

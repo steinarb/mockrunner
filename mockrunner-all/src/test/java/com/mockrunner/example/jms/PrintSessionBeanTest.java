@@ -4,6 +4,8 @@ import javax.jms.JMSException;
 import javax.jms.Queue;
 import javax.jms.QueueConnectionFactory;
 
+import org.junit.Before;
+import org.junit.Test;
 import org.mockejb.TransactionPolicy;
 
 import com.mockrunner.ejb.EJBTestModule;
@@ -24,7 +26,8 @@ public class PrintSessionBeanTest extends JMSTestCaseAdapter
     private EJBTestModule ejbModule;
     private PrintSession bean;
 
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         ejbModule = createEJBTestModule();
@@ -56,6 +59,7 @@ public class PrintSessionBeanTest extends JMSTestCaseAdapter
         bean = (PrintSession)ejbModule.createBean("com/mockrunner/example/PrintSession");
     }*/
     
+    @Test
     public void testSuccessfulDelivery() throws Exception
     {
         bean.sendMessage("123");
@@ -71,6 +75,7 @@ public class PrintSessionBeanTest extends JMSTestCaseAdapter
         verifyReceivedQueueMessageAcknowledged("testQueue", 0);
     }
     
+    @Test
     public void testDeliveryMoreMessages() throws Exception
     {
         bean.sendMessage("1");
@@ -86,6 +91,7 @@ public class PrintSessionBeanTest extends JMSTestCaseAdapter
         verifyReceivedQueueMessageEquals("testQueue", 2, new MockTextMessage("3"));    
     }
     
+    @Test
     public void testFailure() throws Exception
     {
         getJMSMockObjectFactory().getMockQueueConnectionFactory().setJMSException(new JMSException("TestException"));

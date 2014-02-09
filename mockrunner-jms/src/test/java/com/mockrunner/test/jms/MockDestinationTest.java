@@ -1,41 +1,48 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 
-import junit.framework.TestCase;
-
 import org.activemq.filter.mockrunner.Filter;
 import org.activemq.selector.mockrunner.SelectorParser;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.mock.jms.MockDestination;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockTextMessage;
 import com.mockrunner.mock.jms.MockTopic;
 
-public class MockDestinationTest extends TestCase
+public class MockDestinationTest
 {
     private Filter filter;
 
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         SelectorParser parser = new SelectorParser();
         filter = parser.parse("number = 1");
     }
     
+    @Test
     public void testGetMatchingMessagesFromQueue() throws Exception
     {
         MockQueue queue = new MockQueue("Queue");
         doTestGetMatchingMessage(queue);
     }
     
+    @Test
     public void testGetMatchingMessagesFromTopic() throws Exception
     {
         MockTopic topic = new MockTopic("Topic");
         doTestGetMatchingMessage(topic);
     }
-    
+
     private void doTestGetMatchingMessage(MockDestination destination) throws Exception
     {
         MockTextMessage message1 = new MockTextMessage();

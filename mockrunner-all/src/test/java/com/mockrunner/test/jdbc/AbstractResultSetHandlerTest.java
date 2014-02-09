@@ -1,7 +1,17 @@
 package com.mockrunner.test.jdbc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.sql.BatchUpdateException;
 import java.sql.SQLException;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.jdbc.StatementResultSetHandler;
@@ -13,13 +23,14 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
     private MockConnection connection;
     private StatementResultSetHandler statementHandler;
 
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         connection = getJDBCMockObjectFactory().getMockConnection();
         statementHandler = connection.getStatementResultSetHandler();
     }
-    
+
+    @Test
     public void testGetResultSet()
     {
         MockResultSet result = new MockResultSet("id");
@@ -40,6 +51,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertSame(result0, statementHandler.getResultSet("select abc"));
     }
     
+    @Test
     public void testGetResultSets()
     {
         MockResultSet result0 = new MockResultSet("id0");
@@ -58,6 +70,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertSame(result0, returnedResults[0]);
     }
     
+    @Test
     public void testHasMultipleResultSets()
     {
         MockResultSet result0 = new MockResultSet("id0");
@@ -71,6 +84,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertFalse(statementHandler.hasMultipleResultSets("do nothing"));
     }
     
+    @Test
     public void testGetGlobalResultSet()
     {
         MockResultSet result0 = new MockResultSet("id0");
@@ -90,6 +104,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertSame(result1, returnedResults[1]);
     }
     
+    @Test
     public void testHasMutipleGlobalResultSets()
     {
         MockResultSet result0 = new MockResultSet("id0");
@@ -102,6 +117,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertTrue(statementHandler.hasMultipleGlobalResultSets());
     }
     
+    @Test
     public void testGetGeneratedKeys()
     {
         MockResultSet result = new MockResultSet("id");
@@ -117,6 +133,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertNull(statementHandler.getGeneratedKeys("INSERt regular"));
     }
     
+    @Test
     public void testGetUpdateCount()
     {
         statementHandler.prepareUpdateCount(".*", 3);
@@ -133,6 +150,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertEquals(new Integer(1), statementHandler.getUpdateCount("update"));
     }
     
+    @Test
     public void testGetUpdateCounts()
     {
         int[] updateCounts = new int[] {1, 2};
@@ -148,6 +166,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertNull(statementHandler.getUpdateCounts("do nothing"));
     }
     
+    @Test
     public void testHasMultipleUpdateCounts()
     {
         statementHandler.prepareUpdateCount("update", 3);
@@ -159,6 +178,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertTrue(statementHandler.hasMultipleUpdateCounts("insert into abc"));
     }
     
+    @Test
     public void testGetGlobalUpdateCount()
     {
         int[] updateCounts = new int[] {1, 2};
@@ -176,6 +196,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertEquals(2, returnedUpdateCounts[1]);
     }
     
+    @Test
     public void testHasMutipleGlobalUpdateCounts()
     {
         statementHandler.prepareGlobalUpdateCount(4);
@@ -186,6 +207,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertTrue(statementHandler.hasMultipleGlobalUpdateCounts());
     }
     
+    @Test
     public void testGetReturnsResultSet()
     {
         statementHandler.prepareReturnsResultSet("select.*", false);
@@ -194,6 +216,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertEquals(Boolean.FALSE, statementHandler.getReturnsResultSet("select abc"));
     }
     
+    @Test
     public void testGetThrowsSQLException()
     {
         SQLException exc = new BatchUpdateException();
@@ -215,6 +238,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertTrue(message.indexOf("[abc] statementxyz") != -1);
     }
     
+    @Test
     public void testClearMethods()
     {
         statementHandler.prepareResultSet("select", new MockResultSet("id"));
@@ -234,6 +258,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertNull(statementHandler.getGeneratedKeys("select"));
     }
     
+    @Test
     public void testPreparedSQLOrdered()
     {
         MockResultSet result1 = new MockResultSet("id1");

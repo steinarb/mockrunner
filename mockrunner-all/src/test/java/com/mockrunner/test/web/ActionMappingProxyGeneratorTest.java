@@ -1,20 +1,26 @@
 package com.mockrunner.test.web;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import junit.framework.TestCase;
 
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.mock.web.MockActionForward;
 import com.mockrunner.mock.web.MockActionMapping;
 import com.mockrunner.struts.ActionMappingProxyGenerator;
 
-public class ActionMappingProxyGeneratorTest extends TestCase
+public class ActionMappingProxyGeneratorTest
 {
     private MockActionMapping delegate;
     private ActionMappingProxyGenerator generator;
 
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         delegate = new MockActionMapping();
         delegate.addForward("success", "testpath");
@@ -22,6 +28,7 @@ public class ActionMappingProxyGeneratorTest extends TestCase
         generator = new ActionMappingProxyGenerator(delegate);
     }
     
+    @Test
     public void testCreateActionMappingProxy()
     {
         TestMapping proxy = (TestMapping)generator.createActionMappingProxy(TestMapping.class);
@@ -40,6 +47,7 @@ public class ActionMappingProxyGeneratorTest extends TestCase
         assertTrue(proxy.wasFreezeCalled());
     }
     
+    @Test
     public void testDuplicateMethods()
     {
         TestMapping proxy = (TestMapping)generator.createActionMappingProxy(TestMapping.class);

@@ -1,5 +1,7 @@
 package com.mockrunner.example.tag;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.BufferedReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,6 +9,8 @@ import java.util.Map;
 
 import org.apache.struts.taglib.bean.WriteTag;
 import org.jdom.Element;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.tag.BasicTagTestCaseAdapter;
 import com.mockrunner.tag.NestedTag;
@@ -26,7 +30,8 @@ public class TableEnumTagTest extends BasicTagTestCaseAdapter
 {
     private NestedTag nestedTag;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         Map attributeMap = new HashMap();
@@ -44,6 +49,7 @@ public class TableEnumTagTest extends BasicTagTestCaseAdapter
         getWebMockObjectFactory().getMockSession().setAttribute("currentCollection", list);
     }
     
+    @Test
     public void testNoBody() throws Exception
     {
         processTagLifecycle();
@@ -52,6 +58,7 @@ public class TableEnumTagTest extends BasicTagTestCaseAdapter
         assertEquals("</table>", reader.readLine().trim());
     }
     
+    @Test
     public void testStaticBody() throws Exception
     {
         nestedTag.addTextChild("myStaticValue");
@@ -72,6 +79,7 @@ public class TableEnumTagTest extends BasicTagTestCaseAdapter
         assertEquals("</table>", reader.readLine().trim());
     }
     
+    @Test
     public void testStaticBodyAsXML() throws Exception
     {
     	//TODO fix this test case
@@ -86,6 +94,7 @@ public class TableEnumTagTest extends BasicTagTestCaseAdapter
         */
     }
     
+    @Test
     public void testDynamicBody() throws Exception
     {
         Map attributeMap = new HashMap();

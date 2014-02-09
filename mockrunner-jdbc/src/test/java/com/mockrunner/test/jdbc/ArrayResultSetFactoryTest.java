@@ -1,8 +1,14 @@
 package com.mockrunner.test.jdbc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
+
 import java.util.Arrays;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.jdbc.ArrayResultSetFactory;
 import com.mockrunner.jdbc.StringValuesTable;
@@ -14,7 +20,7 @@ import com.mockrunner.mock.jdbc.MockResultSet;
  * 
  * @author Erick G. Reid
  */
-public class ArrayResultSetFactoryTest extends TestCase 
+public class ArrayResultSetFactoryTest
 {
     private ArrayResultSetFactory arrayResultSetFactory;
     private StringValuesTable stringTable;
@@ -24,9 +30,9 @@ public class ArrayResultSetFactoryTest extends TestCase
     /**
      * Set up the test fixture.
      */
+    @Before
     public void setUp() throws Exception
     {
-        super.setUp();
         columnNames = new String[] { "id", "name", "address" };
         stringMatrix = new String[][] { new String[] { "1", "moe", "123 main" }, new String[] { "2", "larry", "123 main" }, new String[] { "3", "curly", "123 main" }, };
         stringTable = new StringValuesTable("table", columnNames, stringMatrix);
@@ -36,9 +42,9 @@ public class ArrayResultSetFactoryTest extends TestCase
     /**
      * Tear down the test fixture.
      */
+    @After
     public void tearDown() throws Exception
     {
-        super.tearDown();
         arrayResultSetFactory = null;
     }
 
@@ -48,6 +54,7 @@ public class ArrayResultSetFactoryTest extends TestCase
      * 
      * @throws Exception is an error occurs during testing.
      */
+    @Test
     public void testConstructors() throws Exception
     {
         try
@@ -141,6 +148,7 @@ public class ArrayResultSetFactoryTest extends TestCase
      *
      * @throws Exception is an error occurs during testing.
      */
+    @Test
     public void testCreate() throws Exception
     {
         MockResultSet mockResultSet = null;

@@ -1,5 +1,14 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import javax.jms.Connection;
 import javax.jms.ConnectionConsumer;
 import javax.jms.Destination;
@@ -12,6 +21,9 @@ import javax.jms.Session;
 import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicSession;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import junit.framework.TestCase;
 
@@ -36,22 +48,23 @@ import com.mockrunner.mock.jms.MockTopicPublisher;
 import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
 
-public class MockConnectionTest extends TestCase
+public class MockConnectionTest
 {
     private MockQueueConnection queueConnection;
     private MockTopicConnection topicConnection;
     private MockConnection connection;
      
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         DestinationManager destManager = new DestinationManager();
         ConfigurationManager confManager = new ConfigurationManager();
         queueConnection = new MockQueueConnection(destManager, confManager);
         topicConnection = new MockTopicConnection(destManager, confManager);
         connection = new MockConnection(destManager, confManager);
     }
-    
+
+    @Test
     public void testQueueFactory() throws Exception
     {
         MockQueueConnectionFactory queueFactory = new MockQueueConnectionFactory(new DestinationManager(), new ConfigurationManager());
@@ -78,6 +91,7 @@ public class MockConnectionTest extends TestCase
         }
     }
     
+    @Test
     public void testTopicFactory() throws Exception
     {
         MockTopicConnectionFactory topicFactory = new MockTopicConnectionFactory(new DestinationManager(), new ConfigurationManager());
@@ -113,6 +127,7 @@ public class MockConnectionTest extends TestCase
         topicConnection3.throwJMSException();
     }
     
+    @Test
     public void testFactory() throws Exception
     {
         MockConnectionFactory factory = new MockConnectionFactory(new DestinationManager(), new ConfigurationManager());
@@ -148,6 +163,7 @@ public class MockConnectionTest extends TestCase
         connection3.throwJMSException();
     }
     
+    @Test
     public void testUserNameAndPassword() throws Exception
     {
         MockConnectionFactory factory = new MockConnectionFactory(new DestinationManager(), new ConfigurationManager());
@@ -173,6 +189,7 @@ public class MockConnectionTest extends TestCase
         assertEquals("password2", topicConnection2.getPassword());
     }
     
+    @Test
     public void testFactoriesCreateConnectionType() throws Exception
     {
         MockQueueConnectionFactory queueFactory = new MockQueueConnectionFactory(new DestinationManager(), new ConfigurationManager());
@@ -192,6 +209,7 @@ public class MockConnectionTest extends TestCase
         assertFalse(factory.createConnection(null, null) instanceof TopicConnection);    
     }
     
+    @Test
     public void testGenericFactoryConnectionType() throws Exception
     {
         MockConnectionFactory factory = new MockConnectionFactory(new DestinationManager(), new ConfigurationManager());
@@ -203,6 +221,7 @@ public class MockConnectionTest extends TestCase
         assertSame(connection, factory.getConnection(2));
     }
     
+    @Test
     public void testDistinctFactoriesButSameDestinationManager() throws Exception
     {
         JMSMockObjectFactory mockFactory = new JMSMockObjectFactory();
@@ -222,6 +241,7 @@ public class MockConnectionTest extends TestCase
         assertSame(connection.getDestinationManager(), topicConnection.getDestinationManager());
     }
     
+    @Test
     public void testQueueConnectionClose() throws Exception
     {
         MockQueueSession queueSession1 = (MockQueueSession)queueConnection.createQueueSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -246,6 +266,7 @@ public class MockConnectionTest extends TestCase
         assertFalse(queueSession3.isRecovered());
     }
     
+    @Test
     public void testTopicConnectionClose() throws Exception
     {
         MockTopicSession topicSession1 = (MockTopicSession)topicConnection.createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);
@@ -266,6 +287,7 @@ public class MockConnectionTest extends TestCase
         assertTrue(topicSession2.isRecovered());
     }
     
+    @Test
     public void testConnectionClose() throws Exception
     {
         MockSession session1 = (MockSession)connection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -290,6 +312,7 @@ public class MockConnectionTest extends TestCase
         assertTrue(session3.isRecovered());
     }
     
+    @Test
     public void testCreateConsumerAndSession() throws Exception
     {
         assertTrue(queueConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE) instanceof QueueSession);
@@ -306,6 +329,7 @@ public class MockConnectionTest extends TestCase
         assertNotNull(connection.createDurableConnectionConsumer(null, null, null, null, 0));
     }
     
+    @Test
     public void testCreateQueueSession() throws Exception
     {
         queueConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -323,6 +347,7 @@ public class MockConnectionTest extends TestCase
         assertEquals(3, queueConnection.getQueueSessionList().size());
     }
     
+    @Test
     public void testCreateTopicSession() throws Exception
     {
         topicConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE);
@@ -340,6 +365,7 @@ public class MockConnectionTest extends TestCase
         assertEquals(3, topicConnection.getTopicSessionList().size());
     }
     
+    @Test
     public void testCreateSession() throws Exception
     {
         connection.createSession(false, Session.CLIENT_ACKNOWLEDGE);
@@ -350,6 +376,7 @@ public class MockConnectionTest extends TestCase
         assertEquals(2, connection.getSessionList().size());
     }
 
+    @Test
     public void testThrowJMSException() throws Exception
     {
         queueConnection.createQueueSession(true, QueueSession.CLIENT_ACKNOWLEDGE);
@@ -381,6 +408,7 @@ public class MockConnectionTest extends TestCase
         consumer.getServerSessionPool();
     }
     
+    @Test
     public void testCallExceptionListener() throws Exception
     {
         topicConnection.createTopicSession(true, QueueSession.CLIENT_ACKNOWLEDGE);

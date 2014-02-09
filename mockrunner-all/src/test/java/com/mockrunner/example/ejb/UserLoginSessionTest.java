@@ -1,5 +1,10 @@
 package com.mockrunner.example.ejb;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.Test;
 import org.mockejb.TransactionPolicy;
 
 import com.mockrunner.ejb.EJBTestCaseAdapter;
@@ -22,7 +27,8 @@ public class UserLoginSessionTest extends EJBTestCaseAdapter
     private UserLoginSession bean;
     private PreparedStatementResultSetHandler handler;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         setInterfacePackage("com.mockrunner.example.ejb.interfaces");
@@ -46,6 +52,7 @@ public class UserLoginSessionTest extends EJBTestCaseAdapter
         handler.prepareThrowsSQLException("insert into usertable");
     }
     
+    @Test
     public void testLoginUser() throws Exception
     {
         prepareFindByPrimaryKeyResult();
@@ -54,6 +61,7 @@ public class UserLoginSessionTest extends EJBTestCaseAdapter
         assertFalse(bean.loginUser("UnknownUser", "APassword"));
     }
     
+    @Test
     public void testCreateUser() throws Exception
     {
         assertTrue(bean.createUser("TestUser", "APassword"));

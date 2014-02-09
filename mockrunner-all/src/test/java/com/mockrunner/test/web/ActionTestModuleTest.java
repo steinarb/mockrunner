@@ -1,5 +1,13 @@
 package com.mockrunner.test.web;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -29,6 +37,8 @@ import org.apache.struts.config.FormBeanConfig;
 import org.apache.struts.config.FormPropertyConfig;
 import org.apache.struts.util.MessageResources;
 import org.apache.struts.validator.ValidatorForm;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.base.NestedApplicationException;
@@ -43,9 +53,9 @@ public class ActionTestModuleTest extends BaseTestCase
 {
     private ActionTestModule module;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         module = new ActionTestModule(getActionMockObjectFactory());
     }
     
@@ -81,6 +91,7 @@ public class ActionTestModuleTest extends BaseTestCase
         return new ActionMessages();
     }
     
+    @Test
     public void testVerifyOutput() throws Exception
     {
         getActionMockObjectFactory().getMockResponse().getWriter().write("This is a test");
@@ -118,6 +129,7 @@ public class ActionTestModuleTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testGetActionErrorByKey()
     {
         assertFalse(module.hasActionErrors());
@@ -127,6 +139,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertEquals("value", error.getValues()[0]);
     }
     
+    @Test
     public void testGetActionMessageByKey()
     {
         assertFalse(module.hasActionMessages());
@@ -136,6 +149,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertEquals("value2", message.getValues()[1]);
     }
     
+    @Test
     public void testGetActionMessages()
     {
         assertFalse(module.hasActionMessages());
@@ -160,6 +174,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertSame(theMessages1, module.getActionMessages());
     }
     
+    @Test
     public void testGetActionErrors()
     {
         assertFalse(module.hasActionErrors());
@@ -184,6 +199,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertSame(theErrors1, module.getActionErrors());
     }
     
+    @Test
     public void testActionMessagesInRequestAndSession()
     {
         ActionMessages theMessages1 = createTestActionMessages();
@@ -210,6 +226,7 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyActionMessageNotPresent("key3");
     }
     
+    @Test
     public void testActionErrorsInRequestAndSession()
     {
         ActionErrors theErrors1 = createTestActionErrors();
@@ -238,6 +255,7 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyActionErrorNotPresent("key4");
     }
     
+    @Test
     public void testActionErrorsInRequestAndSessionInstance()
     {
         module.setActionErrors(createTestActionMessages());
@@ -251,6 +269,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertTrue(module.getActionErrors() instanceof ActionErrors);
     }
     
+    @Test
     public void testSetMessageAttributeKey()
     {
         ActionMessages messages = createTestActionMessages();
@@ -286,6 +305,7 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyActionMessageValues("key2", new String[]{"value1", "value2"});
     }
     
+    @Test
     public void testSetErrorAttributeKey()
     {
         ActionErrors errors = createTestActionErrors();
@@ -323,6 +343,7 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyActionErrorValues("key3", new String[]{"value"});
     }
     
+    @Test
     public void testVerifyHasActionErrors()
     {
         module.setActionErrors(createEmptyTestActionErrors());
@@ -355,6 +376,7 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyNoActionErrors();
     }
     
+    @Test
     public void testVerifyHasActionMessages()
     {
         module.setActionMessages(createEmptyTestActionMessages());
@@ -387,6 +409,7 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyNoActionMessages();
     }
     
+    @Test
     public void testVerifyActionErrorPresent()
     {
         module.setActionErrors(createEmptyTestActionErrors());
@@ -418,6 +441,7 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyActionErrorPresent("key1");
     }
     
+    @Test
     public void testVerifyActionMessagePresent()
     {
         module.setActionMessages(createEmptyTestActionMessages());
@@ -449,6 +473,7 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyActionMessagePresent("key1");
     }
     
+    @Test
     public void testVerifyNumberActionErrors()
     {
         module.setActionErrors(createEmptyTestActionErrors());
@@ -470,6 +495,7 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyNumberActionErrors(3);
     }
     
+    @Test
     public void testVerifyNumberActionMessages()
     {
         module.setActionMessages(createEmptyTestActionMessages());
@@ -491,6 +517,7 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyNumberActionMessages(2);
     }
     
+    @Test
     public void testVerifyActionErrors()
     {
         module.setActionErrors(createTestActionErrors());
@@ -537,6 +564,7 @@ public class ActionTestModuleTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testVerifyActionMessages()
     {
         module.setActionMessages(createTestActionMessages());
@@ -574,6 +602,7 @@ public class ActionTestModuleTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testVerifyActionErrorValues()
     {
         module.setActionErrors(createTestActionErrors());
@@ -630,6 +659,7 @@ public class ActionTestModuleTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testVerifyActionMessageValues()
     {
         module.setActionMessages(createTestActionMessages());
@@ -654,7 +684,8 @@ public class ActionTestModuleTest extends BaseTestCase
         }
     }
     
-    public void testVerifyActionErrorProperty()
+    @Test
+   public void testVerifyActionErrorProperty()
     {
         ActionErrors errors = new ActionErrors();
         ActionMessage error1 = new ActionMessage("error1");
@@ -678,6 +709,7 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyActionErrorProperty("error1", "property");
     }
     
+    @Test
     public void testVerifyActionMessageProperty()
     {
         ActionMessages messages = new ActionMessages();
@@ -702,6 +734,7 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyActionMessageProperty("message1", "property");
     }
     
+    @Test
     public void testCreateActionForm()
     {
         module.createActionForm(null);
@@ -712,6 +745,7 @@ public class ActionTestModuleTest extends BaseTestCase
     }
     
     
+    @Test
     public void testPopulateRequestToForm()
     {
         module.addRequestParameter("value(key1)", "value1");
@@ -730,6 +764,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertEquals(null, form.getValue("key3"));
     }
     
+    @Test
     public void testSetDoPopulateAndReset()
     {
         TestForm form = (TestForm)module.createActionForm(TestForm.class);
@@ -755,6 +790,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertFalse(form.wasResetCalled());
     }
     
+    @Test
     public void testActionPerform()
     {
         module.addRequestParameter("property", "value");
@@ -795,6 +831,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertNull(module.getActionForm());
     }
     
+    @Test
     public void testActionPerformServletSet()
     {
         TestForm form = (TestForm)module.createActionForm(TestForm.class);
@@ -811,6 +848,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertEquals(getActionMockObjectFactory().getMockActionServlet(), ((TestForm)module.getActionForm()).getServlet());
     }
     
+    @Test
     public void testVerifyForwardPathAndName()
     {
         TestForwardAction action = new TestForwardAction();
@@ -837,6 +875,7 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyForwardName("myName");
     }
     
+    @Test
     public void testVerifyForwardWithPresetForward()
     {
         getActionMockObjectFactory().getMockActionMapping().addForward("success", "myPath");
@@ -850,12 +889,14 @@ public class ActionTestModuleTest extends BaseTestCase
         module.verifyForwardName("success");
     }
     
+    @Test
     public void testActionPerformMappingTypeSet()
     {
         module.actionPerform(TestAction.class);
         assertEquals(TestAction.class.getName(), getActionMockObjectFactory().getMockActionMapping().getType());
     }
     
+    @Test
     public void testSetResourcesAndLocale()
     {
         getActionMockObjectFactory().getMockRequest().getSession(true);
@@ -871,6 +912,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertEquals(Locale.TRADITIONAL_CHINESE, testAction.getTestLocale());
     }
     
+    @Test
     public void testSetResourcesAddToModuleConfig()
     {
         MapMessageResources resources1 = new MapMessageResources();
@@ -885,7 +927,8 @@ public class ActionTestModuleTest extends BaseTestCase
         assertNotNull(getActionMockObjectFactory().getMockModuleConfig().findMessageResourcesConfig("test3"));
     }
     
-    public void testDynaActionForm()
+    @Test
+   public void testDynaActionForm()
     {
         FormBeanConfig config = new FormBeanConfig();
         config.setType(TestDynaForm.class.getName());
@@ -918,6 +961,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertEquals(new Integer(123), form.get("property2"));
     }
 
+    @Test
     public void testCreateValidatorResources()
     {
         String[] files = new String[2];
@@ -944,6 +988,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertEquals("errors.minlength", error.getKey());
     }
     
+    @Test
     public void testWrappedRequest()
     {
         HttpServletRequestWrapper requestWrapper = new HttpServletRequestWrapper(getActionMockObjectFactory().getMockRequest());
@@ -956,6 +1001,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertSame(responseWrapper, action.getResponse());
     }
     
+    @Test
     public void testCustomActionMapping()
     {
         TestMapping mapping = (TestMapping)getActionMockObjectFactory().prepareActionMapping(TestMapping.class);
@@ -967,6 +1013,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertSame(mapping, form.getValidateActionMapping());
     }
     
+    @Test
     public void testCustomActionMappingDelegation()
     {
         TestMapping mapping = (TestMapping)getActionMockObjectFactory().prepareActionMapping(TestMapping.class);
@@ -981,6 +1028,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertEquals("testInput", getActionMockObjectFactory().getMockActionMapping().getInput());
     }
     
+    @Test
     public void testExceptionHandler()
     {
         TestExceptionHandler handler1 = new TestExceptionHandler();
@@ -1028,6 +1076,7 @@ public class ActionTestModuleTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testExceptionHandlerActionForward()
     {
         TestExceptionHandlerConfig config1 = new TestExceptionHandlerConfig(true, new MockActionForward("test"));
@@ -1043,6 +1092,7 @@ public class ActionTestModuleTest extends BaseTestCase
         assertNull(module.getActionForward());
     }
     
+    @Test
     public void testNestedException()
     {
         try

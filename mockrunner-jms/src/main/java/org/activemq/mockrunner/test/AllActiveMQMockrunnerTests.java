@@ -1,16 +1,12 @@
 package org.activemq.mockrunner.test;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+	SelectorParserTest.class
+})
 public class AllActiveMQMockrunnerTests
 {
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite("Test for org.codehaus.activemq.mockrunner.test");
-        //$JUnit-BEGIN$
-        suite.addTest(new TestSuite(SelectorParserTest.class));
-        //$JUnit-END$
-        return suite;
-    }
 }

@@ -1,13 +1,20 @@
 package com.mockrunner.test.ejb;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
+
 import java.util.Properties;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameNotFoundException;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.mockejb.jndi.MockContextFactory;
 
 import com.mockrunner.ejb.Configuration;
@@ -15,27 +22,28 @@ import com.mockrunner.ejb.JNDIUtil;
 import com.mockrunner.mock.ejb.MockUserTransaction;
 import com.mockrunner.test.ejb.TestJNDI.NullContext;
 
-public class JNDIUtilTest extends TestCase
+public class JNDIUtilTest
 {
     private Properties savedProperties;
     private Context context;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         savedProperties = new Properties();
         TestJNDI.saveProperties(savedProperties);
         MockContextFactory.setAsInitial();
         context = new InitialContext();
     }
-    
-    protected void tearDown() throws Exception
+
+    @After
+    public void tearDown() throws Exception
     {
-        super.tearDown();
         MockContextFactory.revertSetAsInitial();
         TestJNDI.restoreProperties(savedProperties);
     }
-    
+
+    @Test
     public void testInitMockContextFactory() throws Exception
     {
         System.getProperties().remove(Context.INITIAL_CONTEXT_FACTORY);
@@ -52,6 +60,7 @@ public class JNDIUtilTest extends TestCase
         assertEquals("test", System.getProperty(Context.URL_PKG_PREFIXES));
     }
     
+    @Test
     public void testResetMockContextFactory() throws Exception
     {
         System.getProperties().remove(Context.INITIAL_CONTEXT_FACTORY);
@@ -71,6 +80,7 @@ public class JNDIUtilTest extends TestCase
         assertEquals("testURL", System.getProperty(Context.URL_PKG_PREFIXES));
     }
     
+    @Test
     public void testGetContext() throws Exception
     {
         Configuration configuration = new Configuration();
@@ -83,6 +93,7 @@ public class JNDIUtilTest extends TestCase
         assertNotSame(context, testContext);
     }
     
+    @Test
     public void testBindUserTransaction() throws Exception
     {
         Configuration configuration = new Configuration();

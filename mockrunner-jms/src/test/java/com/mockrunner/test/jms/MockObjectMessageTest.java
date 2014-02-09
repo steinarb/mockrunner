@@ -1,16 +1,23 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.Serializable;
 
 import javax.jms.MessageNotWriteableException;
 
+import org.junit.Test;
+
 import com.mockrunner.mock.jms.MockObjectMessage;
 import com.mockrunner.mock.jms.MockTextMessage;
 
-import junit.framework.TestCase;
-
-public class MockObjectMessageTest extends TestCase
+public class MockObjectMessageTest
 {
+	@Test
     public void testEquals()
     {
         MockObjectMessage message = new MockObjectMessage("test");
@@ -26,6 +33,7 @@ public class MockObjectMessageTest extends TestCase
         assertEquals(new MockObjectMessage(null).hashCode(), new MockObjectMessage(null).hashCode());
     }
     
+	@Test
     public void testReadOnly() throws Exception
     {
         MockObjectMessage message = new MockObjectMessage("test");
@@ -47,6 +55,7 @@ public class MockObjectMessageTest extends TestCase
         assertEquals(new Integer(3), message.getObject());
     }
     
+	@Test
     public void testClone() throws Exception
     {
         MockObjectMessage message = new MockObjectMessage();
@@ -66,6 +75,7 @@ public class MockObjectMessageTest extends TestCase
         assertNotSame(testObject, newMessage.getObject());
     }
     
+	@Test
     public void testToString() throws Exception
     {
         MockObjectMessage message = new MockObjectMessage();

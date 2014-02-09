@@ -1,7 +1,14 @@
 package com.mockrunner.test.jdbc;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.sql.DriverManager;
 import java.util.Enumeration;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
@@ -11,19 +18,22 @@ public class BasicJDBCTestCaseAdapterTest extends BasicJDBCTestCaseAdapter
 {
     private JDBCMockObjectFactory factory;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         factory = new  JDBCMockObjectFactory();
         setJDBCMockObjectFactory(factory);
         super.setUp();
     }
     
+    @Test
     public void testJDBCFactorySet()
     {
         assertSame(factory, getJDBCMockObjectFactory());
         assertSame(getJDBCMockObjectFactory(), getJDBCMockObjectFactory());
     }
     
+    @Test
     public void testDriverDeregistered() throws Exception
     {
         Enumeration drivers = DriverManager.getDrivers();

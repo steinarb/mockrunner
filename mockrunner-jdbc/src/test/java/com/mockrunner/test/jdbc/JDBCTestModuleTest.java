@@ -1,5 +1,13 @@
 package com.mockrunner.test.jdbc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.sql.ResultSet;
 import java.sql.Savepoint;
 import java.sql.Statement;
@@ -10,7 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.jdbc.JDBCTestModule;
@@ -23,14 +32,14 @@ import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockStatement;
 
-public class JDBCTestModuleTest extends TestCase
+public class JDBCTestModuleTest
 {
     private JDBCMockObjectFactory mockfactory;
     private JDBCTestModule module;
 
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         mockfactory = new JDBCMockObjectFactory();
         module = new JDBCTestModule(mockfactory);
     }
@@ -53,7 +62,8 @@ public class JDBCTestModuleTest extends TestCase
         mockfactory.getMockConnection().createStatement();
         mockfactory.getMockConnection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
     }
-    
+
+    @Test
     public void testGetStatements() throws Exception
     {
         List statements = module.getStatements();
@@ -70,6 +80,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyNumberStatements(2);
     }
     
+    @Test
     public void testGetPreparedStatementsByIndex() throws Exception
     {
         List statements = module.getPreparedStatements();
@@ -84,6 +95,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyNumberPreparedStatements(3);  
     }
     
+    @Test
     public void testGetPreparedStatementsBySQL() throws Exception
     {
         preparePreparedStatements();
@@ -121,6 +133,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyPreparedStatementPresent("insert into test (col1, col2, col3) values(?, ?, ?)");
     }
     
+    @Test
     public void testGetPreparedStatementsBySQLRegEx() throws Exception
     {
         module.setUseRegularExpressions(true);
@@ -137,6 +150,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyNumberPreparedStatements(0, "insert (.*) TEST.*");
     }
     
+    @Test
     public void testGetPreparedStatementObjects() throws Exception
     {
         preparePreparedStatements();
@@ -186,6 +200,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyPreparedStatementParameter(0, 4, new byte[] {});
     }
     
+    @Test
     public void testGetCallableStatementsByIndex() throws Exception
     {
         module.verifyNumberCallableStatements(0);
@@ -196,6 +211,7 @@ public class JDBCTestModuleTest extends TestCase
         assertEquals("{call setData(?, ?, ?, ?)}", ((MockCallableStatement)statements.get(1)).getSQL());
     }
     
+    @Test
     public void testGetCallableStatementsBySQL() throws Exception
     {
         prepareCallableStatements();
@@ -219,6 +235,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyCallableStatementNotPresent("call setXYZ");
     }
     
+    @Test
     public void testGetCallableStatementsBySQLRegEx() throws Exception
     {
         module.setUseRegularExpressions(true);
@@ -231,6 +248,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyCallableStatementPresent("{call setData.*}");
     }
     
+    @Test
     public void testGetCallableStatementObjects() throws Exception
     {
         prepareCallableStatements();
@@ -314,6 +332,7 @@ public class JDBCTestModuleTest extends TestCase
         }
     }
     
+    @Test
     public void testVerifyCallableStatementOutParameterRegistered() throws Exception
     {
         prepareCallableStatements();
@@ -345,6 +364,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyCallableStatementOutParameterRegistered(0, "test");
     }
     
+    @Test
     public void testGetExecutedSQLStatements() throws Exception
     {
         prepareStatements();
@@ -378,6 +398,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifySQLStatementExecuted("{CALL getData(?, ?, ?, ?)}");
     }
     
+    @Test
     public void testGetExecutedSQLStatementsRegEx() throws Exception
     {
         module.setUseRegularExpressions(true);
@@ -404,6 +425,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifySQLStatementExecuted("UPDATE");
     }
     
+    @Test
     public void testGetReturnedResultSets() throws Exception
     {
         prepareStatements();
@@ -463,6 +485,7 @@ public class JDBCTestModuleTest extends TestCase
         assertSame(returned1, returned);
     }
     
+    @Test
     public void testReturnedResultSetsClosed() throws Exception
     {
         prepareStatements();
@@ -541,6 +564,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyAllResultSetsClosed();
     }
     
+    @Test
     public void testMultipleReturnedResultSetsClosed() throws Exception
     {
         prepareStatements();
@@ -613,6 +637,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyAllResultSetsClosed();
     }
     
+    @Test
     public void testStatementsClosed() throws Exception
     {
         prepareStatements();
@@ -646,6 +671,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyConnectionClosed();
     }
     
+    @Test
     public void testSavepoints() throws Exception
     {
         mockfactory.getMockConnection().setSavepoint();
@@ -702,6 +728,7 @@ public class JDBCTestModuleTest extends TestCase
         assertTrue(savepoint == savepoint2);
     }
     
+    @Test
     public void testVerifyNumberCommitsAndRollbacks() throws Exception
     {
         try
@@ -732,6 +759,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyNumberRollbacks(2);
     }
     
+    @Test
     public void testVerifyResultSet()
     {
         MockResultSet resultSet1 = module.getStatementResultSetHandler().createResultSet("test");
@@ -814,6 +842,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyResultSetEquals("test2", resultSet1);
     }
     
+    @Test
     public void testVerifyResultSetRowModified() throws Exception
     {  
         MockResultSet resultSet = module.getStatementResultSetHandler().createResultSet("test");
@@ -860,6 +889,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifyResultSetRowNotUpdated(resultSet, 4);
     }
     
+    @Test
     public void testGetExecutedSQLStatementParameter() throws Exception
     {
 		prepareStatements();
@@ -894,6 +924,7 @@ public class JDBCTestModuleTest extends TestCase
 		assertEquals(Boolean.FALSE, callableStatementMap2.get("name"));
     }
     
+    @Test
     public void testGetExecutedSQLStatementParameterSets() throws Exception
     {
 		preparePreparedStatements();
@@ -938,6 +969,7 @@ public class JDBCTestModuleTest extends TestCase
 		assertNull(module.getExecutedSQLStatementParameterSets("{call xyz"));
     }
     
+    @Test
     public void testSQLStatementParameterNoParameterSets() throws Exception
     {
         prepareStatements();
@@ -973,6 +1005,7 @@ public class JDBCTestModuleTest extends TestCase
         }
     }
     
+    @Test
 	public void testSQLStatementParameterNumber() throws Exception
 	{
         preparePreparedStatements();
@@ -1020,6 +1053,7 @@ public class JDBCTestModuleTest extends TestCase
 		}
 	}
 	
+    @Test
 	public void testSQLStatementParameterPreparedStatement() throws Exception
 	{
 		preparePreparedStatements();
@@ -1092,6 +1126,7 @@ public class JDBCTestModuleTest extends TestCase
 		}
 	}
     
+    @Test
     public void testSQLStatementNullParameterPreparedStatement() throws Exception
     {
         preparePreparedStatements();
@@ -1109,6 +1144,7 @@ public class JDBCTestModuleTest extends TestCase
         }
     }
 	
+    @Test
 	public void testSQLStatementParameterCallableStatement() throws Exception
 	{
 		prepareCallableStatements();
@@ -1171,6 +1207,7 @@ public class JDBCTestModuleTest extends TestCase
 		}
 	}
     
+    @Test
     public void testSQLStatementNullParameterCallableStatement() throws Exception
     {
         prepareCallableStatements();
@@ -1188,6 +1225,7 @@ public class JDBCTestModuleTest extends TestCase
         }
     }
 	
+    @Test
 	public void testSQLStatementParameterMultipleParameterSets() throws Exception
 	{
 		prepareCallableStatements();
@@ -1229,6 +1267,7 @@ public class JDBCTestModuleTest extends TestCase
 		}
 	}
     
+    @Test
     public void testSQLStatementParameterPreparedStatementBatchParameterSets() throws Exception
     {
         MockPreparedStatement preparedStatement = (MockPreparedStatement)mockfactory.getMockConnection().prepareStatement("insert into test");
@@ -1253,6 +1292,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifySQLStatementParameter("insert into test", 1, testMap);
     }
     
+    @Test
     public void testSQLStatementParameterCallableStatementBatchParameterSets() throws Exception
     {
         MockCallableStatement callableStatement = (MockCallableStatement)mockfactory.getMockConnection().prepareCall("call getData");
@@ -1280,6 +1320,7 @@ public class JDBCTestModuleTest extends TestCase
         module.verifySQLStatementParameter("call getData", 1, testMap);
     }
     
+    @Test
     public void testPreparedStatementsAndCallableStatementsSQLOrdered() throws Exception
     {
         preparePreparedStatements();

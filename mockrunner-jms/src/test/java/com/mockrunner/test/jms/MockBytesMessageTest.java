@@ -1,5 +1,11 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Arrays;
 
 import javax.jms.JMSException;
@@ -7,12 +13,13 @@ import javax.jms.MessageEOFException;
 import javax.jms.MessageNotReadableException;
 import javax.jms.MessageNotWriteableException;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import com.mockrunner.mock.jms.MockBytesMessage;
 
-public class MockBytesMessageTest extends TestCase
+public class MockBytesMessageTest
 {   
+	@Test
     public void testReadWrite() throws Exception
     {
         MockBytesMessage message = new MockBytesMessage();
@@ -105,6 +112,7 @@ public class MockBytesMessageTest extends TestCase
         assertTrue(Arrays.equals(data, new byte[] { 1 }));
     }
     
+	@Test
     public void testGetBodyLength() throws Exception
     {
         MockBytesMessage message = new MockBytesMessage();
@@ -134,6 +142,7 @@ public class MockBytesMessageTest extends TestCase
         assertEquals(0, message.getBodyLength());
     }
     
+	@Test
     public void testEquals() throws Exception
     {
         MockBytesMessage message1 = new MockBytesMessage();
@@ -166,6 +175,7 @@ public class MockBytesMessageTest extends TestCase
         assertFalse(message1.equals(message2));
     }
     
+	@Test
     public void testClone() throws Exception
     {
         MockBytesMessage message = new MockBytesMessage();
@@ -220,6 +230,7 @@ public class MockBytesMessageTest extends TestCase
         assertEquals(message, newMessage);
     }
     
+	@Test
     public void testGetBytes() throws Exception
     {
         MockBytesMessage message = new MockBytesMessage();
@@ -233,6 +244,7 @@ public class MockBytesMessageTest extends TestCase
         assertTrue(message.equals(otherMessage));
     }
     
+	@Test
     public void testToString() throws Exception
     {
         MockBytesMessage message = new MockBytesMessage();

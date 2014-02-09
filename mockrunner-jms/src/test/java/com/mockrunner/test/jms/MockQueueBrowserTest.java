@@ -1,5 +1,10 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Enumeration;
 
 import javax.jms.JMSException;
@@ -9,7 +14,8 @@ import javax.jms.QueueSender;
 import javax.jms.Session;
 import javax.jms.TextMessage;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
@@ -23,20 +29,22 @@ import com.mockrunner.mock.jms.MockQueueSession;
 import com.mockrunner.mock.jms.MockStreamMessage;
 import com.mockrunner.mock.jms.MockTextMessage;
 
-public class MockQueueBrowserTest extends TestCase
+public class MockQueueBrowserTest
 {
     private MockQueueConnection queueConnection;
     private MockQueueSession queueSession;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         DestinationManager destManager = new DestinationManager();
         ConfigurationManager confManager = new ConfigurationManager();
         queueConnection = new MockQueueConnection(destManager, confManager);
         queueSession = (MockQueueSession)queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
+
     }
     
+    @Test
     public void testGetEnumerationWithoutMessageSelector() throws Exception
     {
         DestinationManager manager = queueConnection.getDestinationManager();
@@ -73,6 +81,7 @@ public class MockQueueBrowserTest extends TestCase
         assertTrue(browser.isClosed());
     }
     
+    @Test
     public void testQueueBrowserWithMessageSelector() throws Exception
     {
         DestinationManager manager = queueConnection.getDestinationManager();

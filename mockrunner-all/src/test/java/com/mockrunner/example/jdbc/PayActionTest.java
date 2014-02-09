@@ -1,5 +1,8 @@
 package com.mockrunner.example.jdbc;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.mockrunner.jdbc.JDBCTestCaseAdapter;
 import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockResultSet;
@@ -17,7 +20,8 @@ public class PayActionTest extends JDBCTestCaseAdapter
     private ActionTestModule actionModule;
     private StatementResultSetHandler statementHandler;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         actionModule = createActionTestModule();
@@ -40,6 +44,7 @@ public class PayActionTest extends JDBCTestCaseAdapter
         statementHandler.prepareResultSet("select * from openbills", result);
     }
     
+    @Test
     public void testUnknownCustomer()
     {
         MockResultSet result = statementHandler.createResultSet();
@@ -58,6 +63,7 @@ public class PayActionTest extends JDBCTestCaseAdapter
         verifyConnectionClosed();
     }
     
+    @Test
     public void testUnknownBill()
     {
         createValidCustomerResult();
@@ -80,6 +86,7 @@ public class PayActionTest extends JDBCTestCaseAdapter
         verifyConnectionClosed();
     }
     
+    @Test
     public void testCustomerIdMismatch()
     {
         createValidCustomerResult();
@@ -98,6 +105,7 @@ public class PayActionTest extends JDBCTestCaseAdapter
         verifyConnectionClosed();
     }
     
+    @Test
     public void testAmountMismatch()
     {
         createValidCustomerResult();
@@ -117,6 +125,7 @@ public class PayActionTest extends JDBCTestCaseAdapter
         verifyConnectionClosed();
     }
     
+    @Test
     public void testValidTransaction()
     {
         createValidCustomerResult();

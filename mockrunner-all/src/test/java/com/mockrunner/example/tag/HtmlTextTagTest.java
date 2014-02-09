@@ -7,6 +7,9 @@ import javax.el.ValueExpression;
 import javax.servlet.jsp.JspApplicationContext;
 import javax.servlet.jsp.JspFactory;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.mockrunner.mock.web.JasperJspFactory;
 import com.mockrunner.tag.BasicTagTestCaseAdapter;
 
@@ -24,7 +27,8 @@ import com.mockrunner.tag.BasicTagTestCaseAdapter;
  */
 public class HtmlTextTagTest extends BasicTagTestCaseAdapter
 {
-    protected void setUp() throws Exception
+	@Before
+    public void setUp() throws Exception
     {
         super.setUp();
         getWebMockObjectFactory().setDefaultJspFactory(new JasperJspFactory().configure(getWebMockObjectFactory()));
@@ -36,6 +40,7 @@ public class HtmlTextTagTest extends BasicTagTestCaseAdapter
         return applicationContext.getExpressionFactory().createValueExpression(getWebMockObjectFactory().getMockPageContext().getELContext(), expression, String.class);
     }
     
+    @Test
     public void testDoTag()
     {
         Map attributeMap = new HashMap();

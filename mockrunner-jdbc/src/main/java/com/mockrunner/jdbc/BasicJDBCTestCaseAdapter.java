@@ -5,7 +5,8 @@ import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
 
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
@@ -25,7 +26,7 @@ import com.mockrunner.mock.jdbc.MockStatement;
  * <b>This class is generated from the {@link com.mockrunner.jdbc.JDBCTestModule}
  * and should not be edited directly</b>.
  */
-public abstract class BasicJDBCTestCaseAdapter extends TestCase
+public abstract class BasicJDBCTestCaseAdapter
 {
     private JDBCTestModule jdbcTestModule;
     private JDBCMockObjectFactory jdbcMockObjectFactory;
@@ -37,12 +38,11 @@ public abstract class BasicJDBCTestCaseAdapter extends TestCase
 
     public BasicJDBCTestCaseAdapter(String name)
     {
-        super(name);
     }
 
-    protected void tearDown() throws Exception
+    @After
+    public void tearDown() throws Exception
     {
-        super.tearDown();
         if(null != jdbcMockObjectFactory)
         {
             jdbcMockObjectFactory.restoreDrivers();
@@ -55,9 +55,9 @@ public abstract class BasicJDBCTestCaseAdapter extends TestCase
      * Creates the {@link com.mockrunner.jdbc.JDBCTestModule}. If you
      * overwrite this method, you must call <code>super.setUp()</code>.
      */
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         jdbcTestModule = createJDBCTestModule(getJDBCMockObjectFactory());
     }
 

@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.After;
+
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
@@ -35,7 +37,8 @@ public abstract class JDBCTestCaseAdapter extends BaseTestCase
         super(name);
     }
 
-    protected void tearDown() throws Exception
+    @After
+    public void tearDown() throws Exception
     {
         super.tearDown();
         jdbcTestModule = null;
@@ -47,7 +50,6 @@ public abstract class JDBCTestCaseAdapter extends BaseTestCase
      */
     protected void setUp() throws Exception
     {
-        super.setUp();
         jdbcTestModule = createJDBCTestModule(getJDBCMockObjectFactory());
     }
 

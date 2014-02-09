@@ -1,5 +1,13 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +26,8 @@ import javax.jms.StreamMessage;
 import javax.jms.TemporaryQueue;
 import javax.jms.TextMessage;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
@@ -37,7 +46,7 @@ import com.mockrunner.mock.jms.MockStreamMessage;
 import com.mockrunner.mock.jms.MockTemporaryQueue;
 import com.mockrunner.mock.jms.MockTextMessage;
 
-public class MockQueueSessionTest extends TestCase
+public class MockQueueSessionTest
 {
     private MockQueueConnection connection;
     private MockQueueSession session;
@@ -45,16 +54,17 @@ public class MockQueueSessionTest extends TestCase
     private MockQueue queue1;
     private MockQueue queue2;
      
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         DestinationManager destManager = new DestinationManager();
         ConfigurationManager confManager = new ConfigurationManager();
         connection = new MockQueueConnection(destManager, confManager);
         session = (MockQueueSession)connection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
         anotherSession = (MockQueueSession)connection.createQueueSession(false, Session.CLIENT_ACKNOWLEDGE);
     }
-    
+
+    @Test
     public void testCreateMessages() throws Exception
     {
         session.createTextMessage("Text1");
@@ -78,6 +88,7 @@ public class MockQueueSessionTest extends TestCase
         assertNull(manager.getStreamMessage(1));
     }
     
+    @Test
     public void testCreateQueues() throws Exception
     {
         try
@@ -118,6 +129,7 @@ public class MockQueueSessionTest extends TestCase
         assertTrue(tempQueue == session.getTemporaryQueue(1));
     }
     
+    @Test
     public void testCreateSenderAndReceiver() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -171,6 +183,7 @@ public class MockQueueSessionTest extends TestCase
         assertEquals(1, queueTransManager.getQueueBrowserList().size());
     }
     
+    @Test
     public void testTransmissionGlobalListener() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -189,6 +202,7 @@ public class MockQueueSessionTest extends TestCase
         assertNull(listener.getMessage());
     }
     
+    @Test
     public void testTransmissionMultipleReceiversWithListener() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -232,6 +246,7 @@ public class MockQueueSessionTest extends TestCase
         assertEquals("Text5", ((TextMessage)listener4.getMessage()).getText());
     }
     
+    @Test
     public void testTransmissionMultipleReceiversWithoutListener() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -269,6 +284,7 @@ public class MockQueueSessionTest extends TestCase
         assertEquals(new MockTextMessage("Text5"), listener.getMessage());
     }
     
+    @Test
     public void testTransmissionResetCalled() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -287,6 +303,7 @@ public class MockQueueSessionTest extends TestCase
         assertEquals(2, streamMessage.readLong());
     }
     
+    @Test
     public void testTransmissionSenderOrReceiverClosed() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -330,6 +347,7 @@ public class MockQueueSessionTest extends TestCase
         }
     }
     
+    @Test
     public void testTransmissionWithMessageSelector() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -356,6 +374,7 @@ public class MockQueueSessionTest extends TestCase
         assertEquals(2, listener1.getMessageList().size());
     }
     
+    @Test
     public void testTransmissionMessageAcknowledged() throws Exception
     {
         MockQueueSession session1 = (MockQueueSession)connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -411,6 +430,7 @@ public class MockQueueSessionTest extends TestCase
         assertTrue(message.isAcknowledged());
     }
     
+    @Test
     public void testTransmissionMultipleSessions() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -446,6 +466,7 @@ public class MockQueueSessionTest extends TestCase
         assertEquals(new Integer(1), ((MockObjectMessage)object).getObject());
     }
     
+    @Test
     public void testCloseSession() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -483,6 +504,7 @@ public class MockQueueSessionTest extends TestCase
         assertFalse(session.isRolledBack());
     }
     
+    @Test
     public void testCloseSessionRemove() throws Exception
     {
         DestinationManager manager = connection.getDestinationManager();
@@ -500,6 +522,7 @@ public class MockQueueSessionTest extends TestCase
         assertFalse(tempQueue.sessionSet().contains(session));
     }
     
+    @Test
     public void testTransmissionWithNullDestination() throws Exception
     {
         MockQueueSession session = (MockQueueSession)connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);

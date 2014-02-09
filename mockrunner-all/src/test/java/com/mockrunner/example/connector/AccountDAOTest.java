@@ -1,7 +1,12 @@
 package com.mockrunner.example.connector;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.connector.ConnectorTestCaseAdapter;
 import com.mockrunner.connector.GenericFailureInteraction;
@@ -28,7 +33,8 @@ public class AccountDAOTest extends ConnectorTestCaseAdapter
     private EJBTestModule ejbModule;
     private AccountDAO dao;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         ejbModule = createEJBTestModule();
@@ -47,6 +53,7 @@ public class AccountDAOTest extends ConnectorTestCaseAdapter
         getInteractionHandler().addImplementor(indexedInteraction);
     }
     
+    @Test
     public void testCreateAccountVariousUsers()
     {
         prepareValidInteraction("John", "Doe", 500);
@@ -60,6 +67,7 @@ public class AccountDAOTest extends ConnectorTestCaseAdapter
         verifyConnectionClosed();
     }
     
+    @Test
     public void testCreateAccountSuccessful()
     {
         prepareValidInteraction("John", "Doe", 500);
@@ -70,6 +78,7 @@ public class AccountDAOTest extends ConnectorTestCaseAdapter
         verifyConnectionClosed();
     }
     
+    @Test
     public void testCreateAccountFailure()
     {
         getInteractionHandler().addImplementor(new GenericFailureInteraction());

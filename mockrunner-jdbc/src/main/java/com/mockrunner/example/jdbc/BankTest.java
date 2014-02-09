@@ -2,6 +2,8 @@ package com.mockrunner.example.jdbc;
 
 import java.sql.SQLException;
 
+import org.junit.Test;
+
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.jdbc.StatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockResultSet;
@@ -42,6 +44,7 @@ public class BankTest extends BasicJDBCTestCaseAdapter
         statementHandler.prepareGlobalResultSet(result);
     }
     
+    @Test
     public void testWrongId() throws SQLException
     {
         prepareEmptyResultSet();
@@ -58,6 +61,7 @@ public class BankTest extends BasicJDBCTestCaseAdapter
         verifyConnectionClosed();
     }
     
+    @Test
     public void testTransferOk() throws SQLException
     {
         prepareResultSet();
@@ -78,6 +82,7 @@ public class BankTest extends BasicJDBCTestCaseAdapter
         verifyConnectionClosed(); 
     }
     
+    @Test
     public void testTransferFailure() throws SQLException
     {
         prepareResultSet();

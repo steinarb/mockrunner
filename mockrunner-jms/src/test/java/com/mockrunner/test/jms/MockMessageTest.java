@@ -1,5 +1,13 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -8,14 +16,15 @@ import javax.jms.DeliveryMode;
 import javax.jms.MessageFormatException;
 import javax.jms.MessageNotWriteableException;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import com.mockrunner.mock.jms.MockMessage;
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockTopic;
 
-public class MockMessageTest extends TestCase
+public class MockMessageTest
 {
+	@Test
     public void testPropertyTypes() throws Exception
     {
         MockMessage message = new MockMessage();
@@ -118,6 +127,7 @@ public class MockMessageTest extends TestCase
         assertTrue(nameList.contains("boolean1"));
     }
     
+	@Test
     public void testNullPropertyName() throws Exception
     {
         MockMessage message = new MockMessage();
@@ -150,6 +160,7 @@ public class MockMessageTest extends TestCase
         }
     }
     
+	@Test
     public void testNullProperties() throws Exception
     {
         MockMessage message = new MockMessage();
@@ -206,6 +217,7 @@ public class MockMessageTest extends TestCase
         assertFalse(message.getBooleanProperty("test"));
     }
     
+	@Test
     public void testReadOnlyProperties() throws Exception
     {
         MockMessage message = new MockMessage();
@@ -251,6 +263,7 @@ public class MockMessageTest extends TestCase
         assertTrue(message.propertyExists("boolean"));
     }
     
+	@Test
     public void testSetAndGetCorrelationID() throws Exception
     {
         MockMessage message = new MockMessage();
@@ -267,6 +280,7 @@ public class MockMessageTest extends TestCase
         assertTrue(Arrays.equals("test".getBytes("ISO-8859-1"), message.getJMSCorrelationIDAsBytes()));
     }
     
+	@Test
     public void testClone() throws Exception
     {
         MockQueue queue = new MockQueue("MyQueue");

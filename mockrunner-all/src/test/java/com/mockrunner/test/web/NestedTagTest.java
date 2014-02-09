@@ -1,5 +1,14 @@
 package com.mockrunner.test.web;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.HashMap;
@@ -18,6 +27,9 @@ import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTag;
 import javax.servlet.jsp.tagext.Tag;
 import javax.servlet.jsp.tagext.TagSupport;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.web.JasperJspFactory;
@@ -43,9 +55,9 @@ public class NestedTagTest extends BaseTestCase
     private SimpleTag rootSimpleTag;
     private Map testMap;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         testMap = new HashMap();
         testMap.put("testString", "test");
         context = getWebMockObjectFactory().getMockPageContext();
@@ -89,6 +101,7 @@ public class NestedTagTest extends BaseTestCase
         testTag111 = (SimpleTag)testTagChild111.getWrappedTag();
     }
     
+    @Test
     public void testGetWrappedTag()
     {
         BodyTag testBodyTag = new TestBodyTag();
@@ -113,6 +126,7 @@ public class NestedTagTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testAddTagChild()
     {
         testTag = new TestBodyTag();
@@ -149,6 +163,7 @@ public class NestedTagTest extends BaseTestCase
         assertTrue(((NestedTag)standardtag.getChild(0)).getWrappedTag() instanceof TestSimpleTag);
     }
     
+    @Test
     public void testFindTag()
     {
         AnotherTestTag anotherTestTag = new AnotherTestTag();
@@ -159,6 +174,7 @@ public class NestedTagTest extends BaseTestCase
         assertNotNull(foundTag);
     }
     
+    @Test
     public void testPopulateAttributesStandard()
     {
         prepareStandardTagTest();
@@ -168,6 +184,7 @@ public class NestedTagTest extends BaseTestCase
         assertNull(((TestTag)testTag11).getTestString());
     }
     
+    @Test
     public void testPopulateAttributesBody()
     {
         prepareBodyTagTest();
@@ -177,6 +194,7 @@ public class NestedTagTest extends BaseTestCase
         assertNull(((TestBodyTag)testTag11).getTestString());
     }
     
+    @Test
     public void testPopulateAttributesSimple()
     {
         prepareSimpleTagTest();
@@ -185,6 +203,7 @@ public class NestedTagTest extends BaseTestCase
         assertEquals(1, ((TestSimpleTag)rootSimpleTag).getFloatProperty(), 0.0);
     }
     
+    @Test
     public void testPopulateDynamicAndRuntimeAttributes()
     {
         Map map = new HashMap();
@@ -227,6 +246,7 @@ public class NestedTagTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testPopulateValueExpressionAttribute() throws Exception
     {
         getWebMockObjectFactory().setDefaultJspFactory(new JasperJspFactory().configure(getWebMockObjectFactory()));
@@ -243,6 +263,7 @@ public class NestedTagTest extends BaseTestCase
         assertEquals("testValue", simpleTag.getValueExpressionResult());
     }
 
+    @Test
     public void testSetPageContextStandard()
     {
         prepareStandardTagTest();
@@ -253,6 +274,7 @@ public class NestedTagTest extends BaseTestCase
         assertTrue(((TestTag)testTag11).getPageContext() == newContext);
     }
     
+    @Test
     public void testSetPageContextBody()
     {
         prepareBodyTagTest();
@@ -263,6 +285,7 @@ public class NestedTagTest extends BaseTestCase
         assertTrue(((TestBodyTag)testTag11).getPageContext() == newContext);
     }
     
+    @Test
     public void testSetJspContextSimple()
     {
         prepareSimpleTagTest();
@@ -274,6 +297,7 @@ public class NestedTagTest extends BaseTestCase
         assertTrue(((TestSimpleTag)testTag111).getJspContext() == newContext);
     }
     
+    @Test
     public void testSetDoReleaseStandard() throws Exception
     {
         prepareStandardTagTest();
@@ -289,6 +313,7 @@ public class NestedTagTest extends BaseTestCase
         assertTrue(((TestTag)testTag11).wasReleaseCalled());
     }
     
+    @Test
     public void testSetDoReleaseBody() throws Exception
     {
         prepareBodyTagTest();
@@ -304,6 +329,7 @@ public class NestedTagTest extends BaseTestCase
         assertTrue(((TestBodyTag)testTag11).wasReleaseCalled());
     }
     
+    @Test
     public void testChildsWithCustomFragmentSimpleTag() throws Exception
     {
         TestSimpleTag testSimpleTag = new TestSimpleTag();
@@ -318,6 +344,7 @@ public class NestedTagTest extends BaseTestCase
         assertNull(nestedSimpleTag.getChild(0));
     }
     
+    @Test
     public void testNotTagSupportInstanceStandard() throws Exception
     {
         MyTestTag myTag = new MyTestTag();
@@ -361,6 +388,7 @@ public class NestedTagTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testNotTagSupportInstanceBody() throws Exception
     {
         MyTestTag myTag = new MyTestTag();
@@ -413,12 +441,14 @@ public class NestedTagTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testNoIterationTag() throws Exception
     {
         NestedStandardTag tag = new NestedStandardTag(new NoIterationTag(), context);
         assertEquals(Tag.EVAL_PAGE, tag.doLifecycle());
     }
     
+    @Test
     public void testTryCatchFinallyHandlingStandardTag() throws Exception
     {
         ExceptionTestTag testTag = new ExceptionTestTag();
@@ -447,6 +477,7 @@ public class NestedTagTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testTryCatchFinallyHandlingBodyTag() throws Exception
     {
         ExceptionTestTag testTag = new ExceptionTestTag();

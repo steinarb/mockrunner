@@ -1,5 +1,8 @@
 package com.mockrunner.example.ejb;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.mockrunner.ejb.EJBTestCaseAdapter;
 import com.mockrunner.example.ejb.interfaces.DBStateful;
 import com.mockrunner.jdbc.JDBCTestModule;
@@ -13,7 +16,8 @@ public class DBStatefulTest extends EJBTestCaseAdapter
     private JDBCTestModule jdbcModule;
     private DBStateful bean;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         jdbcModule = createJDBCTestModule();
@@ -24,6 +28,7 @@ public class DBStatefulTest extends EJBTestCaseAdapter
         bean = (DBStateful)createBean("com/mockrunner/example/DBStateful");
     }
     
+    @Test
     public void testCommit() throws Exception
     {
         bean.beginTransaction();
@@ -36,6 +41,7 @@ public class DBStatefulTest extends EJBTestCaseAdapter
         verifyNotRolledBack();
     }
     
+    @Test
     public void testRollback() throws Exception
     {
         bean.beginTransaction();

@@ -1,10 +1,16 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.Session;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
@@ -15,20 +21,21 @@ import com.mockrunner.mock.jms.MockQueueReceiver;
 import com.mockrunner.mock.jms.MockQueueSession;
 import com.mockrunner.mock.jms.MockTextMessage;
 
-public class MockQueueTest extends TestCase
+public class MockQueueTest
 {
     private MockQueueConnection connection;
     private MockQueue queue;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         DestinationManager destManager = new DestinationManager();
         ConfigurationManager confManager = new ConfigurationManager();
         connection = new MockQueueConnection(destManager, confManager);
         queue = new MockQueue("TestQueue");
     }
 
+    @Test
     public void testGetMessageList() throws Exception
     {
         assertTrue(queue.isEmpty());
@@ -56,6 +63,7 @@ public class MockQueueTest extends TestCase
         assertNull(queue.getMessage());
     }
     
+    @Test
     public void testLoadMessage() throws Exception
     {
         MockQueueSession session = new MockQueueSession(connection, false, Session.CLIENT_ACKNOWLEDGE);
@@ -68,6 +76,7 @@ public class MockQueueTest extends TestCase
         assertEquals(new MockTextMessage("test2"), queue.getCurrentMessageList().get(1));
     }
     
+    @Test
     public void testAddMessage() throws Exception
     {
         MockQueueSession session = new MockQueueSession(connection, false, Session.CLIENT_ACKNOWLEDGE);
@@ -137,12 +146,14 @@ public class MockQueueTest extends TestCase
         assertEquals(new MockTextMessage("test"), queue.getMessage());
     }
     
+    @Test
     public void testAddMessageAutoAcknowledge() throws Exception
     {
         MockQueueSession session = new MockQueueSession(connection, false, Session.AUTO_ACKNOWLEDGE);
         doTestAcknowledge(session);    
     }
 
+    @Test
     public void testAddMessageDupOkAcknowledge() throws Exception
     {
         MockQueueSession session = new MockQueueSession(connection, false, Session.DUPS_OK_ACKNOWLEDGE);

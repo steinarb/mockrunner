@@ -1,5 +1,7 @@
 package com.mockrunner.test.ejb;
 
+import static org.junit.Assert.assertEquals;
+
 import java.rmi.RemoteException;
 import java.util.Hashtable;
 
@@ -10,6 +12,9 @@ import javax.ejb.SessionContext;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import com.mockrunner.ejb.Configuration;
 import com.mockrunner.ejb.EJBTestCaseAdapter;
 import com.mockrunner.mock.ejb.EJBMockObjectFactory;
@@ -17,7 +22,8 @@ import com.mockrunner.test.ejb.TestJNDI.TestContextFactory;
 
 public class EJBTestCaseAdapterExternalJNDITest extends EJBTestCaseAdapter
 {
-    protected void setUp() throws Exception
+	@Before
+    public void setUp() throws Exception
     {
         Hashtable env = new Hashtable();
         env.put(Context.INITIAL_CONTEXT_FACTORY, TestContextFactory.class.getName());
@@ -28,6 +34,7 @@ public class EJBTestCaseAdapterExternalJNDITest extends EJBTestCaseAdapter
         super.setUp();
     }
     
+	@Test
     public void testLookupAndBindToContext()
     {
         assertEquals("TestObject", lookup("testName"));

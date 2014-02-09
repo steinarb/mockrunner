@@ -1,6 +1,10 @@
 package com.mockrunner.example.struts;
 
+import static org.junit.Assert.assertEquals;
+
 import org.apache.commons.validator.ValidatorResources;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.struts.BasicActionTestCaseAdapter;
 import com.mockrunner.struts.MapMessageResources;
@@ -15,7 +19,8 @@ public class GreetingsActionTest extends BasicActionTestCaseAdapter
 {
     private static ValidatorResources validatorRes = null;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         if(null == validatorRes)
@@ -32,6 +37,7 @@ public class GreetingsActionTest extends BasicActionTestCaseAdapter
         setValidate(true);
     }
     
+    @Test
     public void testSuccesfulGreetings()
     {
         getActionMockObjectFactory().getMockServletContext().setAttribute("counter", new Integer(0));
@@ -47,6 +53,7 @@ public class GreetingsActionTest extends BasicActionTestCaseAdapter
         verifyForward("success");
     }
     
+    @Test
     public void testValidationError()
     {
         getActionMockObjectFactory().getMockServletContext().setAttribute("counter", new Integer(0));

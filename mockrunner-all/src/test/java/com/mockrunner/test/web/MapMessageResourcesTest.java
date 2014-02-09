@@ -1,25 +1,31 @@
 package com.mockrunner.test.web;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 import org.apache.struts.util.MessageResourcesFactory;
-
-import junit.framework.TestCase;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.struts.MapMessageResources;
 import com.mockrunner.struts.MapMessageResourcesFactory;
 
-public class MapMessageResourcesTest extends TestCase
+public class MapMessageResourcesTest
 {
     private MapMessageResources resources;
     private Map testMap;
     private String tempFactoryClass;
      
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         tempFactoryClass = MessageResourcesFactory.getFactoryClass();
         testMap = new HashMap();
         testMap.put("test.property.one", "TestOne");
@@ -28,12 +34,13 @@ public class MapMessageResourcesTest extends TestCase
         resources = new MapMessageResources(testMap);
     }
     
-    protected void tearDown() throws Exception
+    @After
+    public void tearDown() throws Exception
     {
-        super.tearDown();
         MessageResourcesFactory.setFactoryClass(tempFactoryClass);
     }
 
+    @Test
     public void testGetMessages()
     {
         assertEquals("TestOne", resources.getMessage("test.property.one"));
@@ -53,6 +60,7 @@ public class MapMessageResourcesTest extends TestCase
         assertFalse(resources.isPresent(Locale.GERMAN, "test.property.one"));
     }
     
+    @Test
     public void testMessageResourcesFactory()
     {
         MessageResourcesFactory.setFactoryClass("com.mockrunner.struts.MapMessageResourcesFactory");
@@ -68,6 +76,7 @@ public class MapMessageResourcesTest extends TestCase
         assertFalse(resources.isPresent("test.property.one"));
     }
     
+    @Test
     public void testLoadFromFile()
     {
         resources.putMessages("target/test-classes/com/mockrunner/test/web/test.properties");

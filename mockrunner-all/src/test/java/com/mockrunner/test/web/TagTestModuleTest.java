@@ -1,5 +1,12 @@
 package com.mockrunner.test.web;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.io.StringWriter;
 import java.util.HashMap;
 
@@ -8,6 +15,9 @@ import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTag;
 import javax.servlet.jsp.tagext.Tag;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.base.NestedApplicationException;
@@ -25,12 +35,13 @@ public class TagTestModuleTest extends BaseTestCase
 {
     private TagTestModule module;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         module = new TagTestModule(getWebMockObjectFactory());
     }
-    
+
+    @Test
     public void testCreateAndSetTag()
     {
         module.createTag(TestTag.class);
@@ -53,6 +64,7 @@ public class TagTestModuleTest extends BaseTestCase
         assertSame(testSimpleTag, module.getWrappedTag());
     }
     
+    @Test
     public void testCreateTagWithAttributes()
     {
         HashMap testMap = new HashMap();
@@ -79,6 +91,7 @@ public class TagTestModuleTest extends BaseTestCase
         assertEquals("test", bodyTag.getTestString());
     }
 
+    @Test
     public void testSetTagWithAttributes()
     {
         HashMap testMap = new HashMap();
@@ -103,6 +116,7 @@ public class TagTestModuleTest extends BaseTestCase
         assertEquals(new Integer(5), ((DynamicAttribute)simpleTag.getDynamicAttributesMap().get("testInteger")).getValue());
     }
     
+    @Test
     public void testTagWithJspFragmentAttribute()
     {
         HashMap testMap = new HashMap();
@@ -114,6 +128,7 @@ public class TagTestModuleTest extends BaseTestCase
         module.verifyOutput("AFragmentText");
     }
 
+    @Test
     public void testVerifyOutput()
     {
         module.createNestedTag(TestTag.class);
@@ -152,6 +167,7 @@ public class TagTestModuleTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testSetDoReleaseCalled()
     {
         try
@@ -182,6 +198,7 @@ public class TagTestModuleTest extends BaseTestCase
         assertTrue(tag.wasReleaseCalled());
     }
     
+    @Test
     public void testSetBody() throws Exception
     {
         try
@@ -209,6 +226,7 @@ public class TagTestModuleTest extends BaseTestCase
         assertEquals("body", writer.toString());
     }
     
+    @Test
     public void testNullTag()
     {
         try
@@ -267,6 +285,7 @@ public class TagTestModuleTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testDoMethodsCalled()
     {
         TestBodyTag bodyTag = (TestBodyTag)module.createTag(TestBodyTag.class);
@@ -289,6 +308,7 @@ public class TagTestModuleTest extends BaseTestCase
         assertTrue(simpleTag.wasDoTagCalled());
     }
     
+    @Test
     public void testCreateInvalidParameter()
     {
         try
@@ -341,6 +361,7 @@ public class TagTestModuleTest extends BaseTestCase
         module.createNestedTag(TestSimpleTag.class, new HashMap());
     }
     
+    @Test
     public void testGetTag()
     {
         assertNull(module.getTag());
@@ -358,6 +379,7 @@ public class TagTestModuleTest extends BaseTestCase
         assertNotNull(module.getWrappedTag());
     }
     
+    @Test
     public void testDoTagInvalidParameter()
     {
         module.createWrappedTag(TestSimpleTag.class);
@@ -466,6 +488,7 @@ public class TagTestModuleTest extends BaseTestCase
         module.doEndTag();
     }
     
+    @Test
     public void testDoTagThrowsException()
     {
         module.createWrappedTag(ErrorTag.class);
@@ -516,6 +539,7 @@ public class TagTestModuleTest extends BaseTestCase
         }
     }
     
+    @Test
     public void testRelease()
     {
         module.createWrappedTag(TestSimpleTag.class);

@@ -1,23 +1,15 @@
 package com.mockrunner.test.ejb;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+	EJBTestModuleTest.class, EJBMockObjectFactoryTest.class, MockUserTransactionTest.class,
+	EJBTestCaseAdapterTest.class, BasicEJBTestCaseAdapterTest.class,
+	EJBTestCaseAdapterDelegateEnvJNDITest.class, EJBTestCaseAdapterExternalJNDITest.class,
+	JNDIUtilTest.class
+})
 public class AllEJBTests
 {
-    public static Test suite()
-    {
-        TestSuite suite = new TestSuite("Test for com.mockrunner.test.ejb");
-        //$JUnit-BEGIN$
-        suite.addTest(new TestSuite(EJBTestModuleTest.class));
-        suite.addTest(new TestSuite(EJBMockObjectFactoryTest.class));
-        suite.addTest(new TestSuite(MockUserTransactionTest.class));
-        suite.addTest(new TestSuite(EJBTestCaseAdapterTest.class));
-        suite.addTest(new TestSuite(BasicEJBTestCaseAdapterTest.class));
-        suite.addTest(new TestSuite(EJBTestCaseAdapterDelegateEnvJNDITest.class));
-        suite.addTest(new TestSuite(EJBTestCaseAdapterExternalJNDITest.class));
-        suite.addTest(new TestSuite(JNDIUtilTest.class));
-        //$JUnit-END$
-        return suite;
-    }
 }

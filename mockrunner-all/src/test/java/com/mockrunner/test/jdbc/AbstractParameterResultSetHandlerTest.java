@@ -1,5 +1,13 @@
 package com.mockrunner.test.jdbc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+
 import java.sql.BatchUpdateException;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -8,6 +16,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.jdbc.CallableStatementResultSetHandler;
@@ -24,14 +35,15 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
     private PreparedStatementResultSetHandler preparedStatementHandler;
     private CallableStatementResultSetHandler callableStatementHandler;
 
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         connection = getJDBCMockObjectFactory().getMockConnection();
         preparedStatementHandler = connection.getPreparedStatementResultSetHandler();
         callableStatementHandler = connection.getCallableStatementResultSetHandler();
     }
     
+    @Test
     public void testGetResultSet() throws Exception
     {
         MockResultSet result = new MockResultSet("id");
@@ -55,6 +67,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertSame(result1, preparedStatementHandler.getResultSet("xyz", parameter));
     }
     
+    @Test
     public void testGetResultSets() throws Exception
     {
         MockResultSet result1 = new MockResultSet("id1");
@@ -89,6 +102,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertSame(result1, returnedResults[0]);
     }
     
+    @Test
     public void testHasMultipleResultSets() throws Exception
     {
         MockResultSet result1 = new MockResultSet("id1");
@@ -112,6 +126,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertFalse(callableStatementHandler.hasMultipleResultSets("select 123", parameterMap));
     }
     
+    @Test
     public void testGetUpdateCount() throws Exception
     {
         callableStatementHandler.prepareUpdateCount("insert.*", 2, new HashMap());
@@ -129,6 +144,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertEquals(new Integer(1), callableStatementHandler.getUpdateCount("update", new HashMap()));
     }
     
+    @Test
     public void testGetUpdateCounts() throws Exception
     {
         Map parameter = new HashMap();
@@ -148,6 +164,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertNull(preparedStatementHandler.getUpdateCounts("insert abc", parameter));
     }
     
+    @Test
     public void testHasMultipleUpdateCounts() throws Exception
     {
         Map parameter = new HashMap();
@@ -167,6 +184,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertFalse(preparedStatementHandler.hasMultipleUpdateCounts("insert 123", parameter));
     }
     
+    @Test
     public void testGetThrowsSQLException()
     {
         SQLException exc = new BatchUpdateException();
@@ -196,6 +214,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertNull(preparedStatementHandler.getSQLException("abcxyz", parameters));
     }
     
+    @Test
     public void testGetGeneratedKeys() throws Exception
     {
         MockResultSet resultSet1 = new MockResultSet("id1");
@@ -225,6 +244,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertSame(resultSet1, preparedStatementHandler.getGeneratedKeys("select * from", actualParameters));
     }
     
+    @Test
     public void testGetParameterMapForExecutedStatementNull() throws Exception
     {
         MockPreparedStatement preparedStatement = (MockPreparedStatement)connection.prepareStatement("select");
@@ -235,6 +255,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertNull(callableStatementHandler.getParametersForExecutedStatement("select abc"));
     }
     
+    @Test
     public void testGetParameterMapForExecutedStatementEmptyMapQuery() throws Exception
     {
         MockPreparedStatement preparedStatement = (MockPreparedStatement)connection.prepareStatement("select");
@@ -255,6 +276,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertEquals(0, parameterMap.size());
     }
     
+    @Test
     public void testGetParameterMapForExecutedStatementEmptyMapUpdate() throws Exception
     {
         MockPreparedStatement preparedStatement = (MockPreparedStatement)connection.prepareStatement("update");
@@ -275,6 +297,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertEquals(0, parameterMap.size());
     }
     
+    @Test
     public void testGetParameterMapForExecutedStatementQuery() throws Exception
     {
         preparedStatementHandler.prepareResultSet("select", new MockResultSet("id"));
@@ -298,6 +321,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertEquals(Boolean.TRUE, parameterMap.get(new Integer(1)));
     }
     
+    @Test
     public void testGetParameterMapForExecutedStatementUpdate() throws Exception
     {
         preparedStatementHandler.prepareResultSet("delete", new MockResultSet("id"));
@@ -319,6 +343,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertEquals("test", parameterMap.get(new Integer(2)));
     }
     
+    @Test
     public void testGetExecutedStatementParameterPreparedStatement() throws Exception
     {
         MockPreparedStatement preparedStatement1 = (MockPreparedStatement)connection.prepareStatement("delete");
@@ -337,6 +362,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertEquals("2", updateParameters.get(new Integer(2)));
     }
     
+    @Test
     public void testGetExecutedStatementParameterCallableStatement() throws Exception
     {
         MockCallableStatement callableStatement1 = (MockCallableStatement)connection.prepareCall("insert");
@@ -367,6 +393,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertEquals(new Integer(3), selectYParameters.get("3"));
     }
     
+    @Test
     public void testGetExecutedStatementParameterMultipleMaps() throws Exception
     {
         MockPreparedStatement preparedStatement1 = (MockPreparedStatement)connection.prepareStatement("select");
@@ -402,6 +429,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertEquals("anothertest", mapFor2.get(new Integer(1)));
     }
     
+    @Test
     public void testPreparedSQLOrdered()
     {
         MockResultSet result1 = new MockResultSet("id1");

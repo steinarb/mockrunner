@@ -1,7 +1,13 @@
 package com.mockrunner.test.jdbc;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.jdbc.CallableStatementResultSetHandler;
@@ -12,13 +18,14 @@ public class AbstractOutParameterResultSetHandlerTest extends BaseTestCase
     private MockConnection connection;
     private CallableStatementResultSetHandler callableStatementHandler;
 
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         connection = getJDBCMockObjectFactory().getMockConnection();
         callableStatementHandler = connection.getCallableStatementResultSetHandler();
     }
 
+    @Test
     public void testGetOutParameter()
     {
         Map outParameter = new HashMap();
@@ -30,6 +37,7 @@ public class AbstractOutParameterResultSetHandlerTest extends BaseTestCase
         assertEquals(outParameter, callableStatementHandler.getOutParameter("mycall"));
     }
     
+    @Test
     public void testGetOutParameterWithParameter()
     {
         Map parameter = new HashMap();
@@ -45,6 +53,7 @@ public class AbstractOutParameterResultSetHandlerTest extends BaseTestCase
         assertNull(callableStatementHandler.getOutParameter("mycall xyz", parameter));
     }
     
+    @Test
     public void testPreparedSQLOrdered()
     {
         Map outParameterMap1 = new HashMap();

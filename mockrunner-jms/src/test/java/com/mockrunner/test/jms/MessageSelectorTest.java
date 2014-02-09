@@ -1,24 +1,28 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.activemq.filter.mockrunner.Filter;
 import org.activemq.selector.mockrunner.SelectorParser;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.mock.jms.MockTextMessage;
 
-import junit.framework.TestCase;
-
-public class MessageSelectorTest extends TestCase
+public class MessageSelectorTest
 {
     private SelectorParser parser;
     private MockTextMessage message;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         parser = new SelectorParser();
         message = new MockTextMessage();
     }
-    
+
+    @Test
     public void testSimpleExpression() throws Exception
     {
         Filter intPropertyFilter = parser.parse("intProperty > 1");
@@ -43,6 +47,7 @@ public class MessageSelectorTest extends TestCase
         assertTrue(stringPropertyFilter.matches(message));
     }
     
+    @Test
     public void testComplexExpression() throws Exception
     {
         Filter complexFilter = parser.parse("((JMSMessageID IS NOT NULL) AND (number BETWEEN 1 AND 8) AND (text IN ('1', '2', '3'))) OR (JMSCorrelationID = '42')");
@@ -65,6 +70,7 @@ public class MessageSelectorTest extends TestCase
         assertFalse(complexFilter.matches(message));
     }
     
+    @Test
     public void testWildcardExpression() throws Exception
     {
         Filter wildcardFilter = parser.parse("stringProperty LIKE '__%XYZ'");

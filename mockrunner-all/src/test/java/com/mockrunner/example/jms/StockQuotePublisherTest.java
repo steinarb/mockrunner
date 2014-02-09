@@ -1,11 +1,16 @@
 package com.mockrunner.example.jms;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.jms.MapMessage;
 import javax.jms.TextMessage;
+
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.ejb.EJBTestModule;
 import com.mockrunner.jms.JMSTestCaseAdapter;
@@ -21,7 +26,8 @@ public class StockQuotePublisherTest extends JMSTestCaseAdapter
     private MockTopic topic;
     private StockQuotePublisher sender;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         ejbModule = createEJBTestModule();
@@ -38,6 +44,7 @@ public class StockQuotePublisherTest extends JMSTestCaseAdapter
         dowRates.put("DowJonesCompany1", "11.5");
     }
 
+    @Test
     public void testClosedAndCommitted()
     {
         sender.send();
@@ -50,6 +57,7 @@ public class StockQuotePublisherTest extends JMSTestCaseAdapter
         verifyNumberOfReceivedTopicMessages("testTopic", 3);
     }
     
+    @Test
     public void testVerifyReceivedMessages() throws Exception
     {
         Map nasdaqRates = new HashMap();

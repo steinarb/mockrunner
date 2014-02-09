@@ -1,5 +1,10 @@
 package com.mockrunner.example.struts;
 
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import com.mockrunner.mock.web.ActionMockObjectFactory;
 import com.mockrunner.struts.ActionTestModule;
 import com.mockrunner.struts.BasicActionTestCaseAdapter;
@@ -25,12 +30,14 @@ public class StoreDataActionTest extends BasicActionTestCaseAdapter
 { 
     private volatile int numberSuccess;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
         super.setUp();
         numberSuccess = 0;
     }
     
+    @Test
     public void testStoreDataAction() throws Exception
     {
         StoreTestThread thread1 = new StoreTestThread("thread1");

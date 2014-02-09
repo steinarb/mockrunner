@@ -1,5 +1,11 @@
 package com.mockrunner.test.jms;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Set;
 
 import javax.jms.DeliveryMode;
@@ -11,7 +17,8 @@ import javax.jms.MessageListener;
 import javax.jms.MessageNotWriteableException;
 import javax.jms.Session;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
@@ -30,18 +37,19 @@ import com.mockrunner.mock.jms.MockTopic;
 import com.mockrunner.mock.jms.MockTopicConnection;
 import com.mockrunner.mock.jms.MockTopicPublisher;
 
-public class MockMessageProducerTest extends TestCase
+public class MockMessageProducerTest
 {
     private MockQueue queue;
     private MockTopic topic;
     
-    protected void setUp() throws Exception
+    @Before
+    public void setUp() throws Exception
     {
-        super.setUp();
         queue = new MockQueue("Queue");
         topic = new MockTopic("Topic");
     }
-    
+
+    @Test
     public void testReadOnly() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -128,6 +136,7 @@ public class MockMessageProducerTest extends TestCase
         textMessage.setStringProperty("test", "test");
     }
     
+    @Test
     public void testReadOnlyDoCloneOnSend() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -154,6 +163,7 @@ public class MockMessageProducerTest extends TestCase
         textMessage.setStringProperty("test", "test");
     }
   
+    @Test
     public void testSendWithQueueSender() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -169,6 +179,7 @@ public class MockMessageProducerTest extends TestCase
         doTestSendWithInvalidParameters(sender);
     }
     
+    @Test
     public void testSendWithTopicPublisher() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -184,6 +195,7 @@ public class MockMessageProducerTest extends TestCase
         doTestSendWithInvalidParameters(publisher);
     }
     
+    @Test
     public void testSendWithMessageProducerToTopic() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -204,6 +216,7 @@ public class MockMessageProducerTest extends TestCase
         assertEquals(2, topic.getReceivedMessageList().size());
     }
     
+    @Test
     public void testSendWithMessageProducerToQueue() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -261,6 +274,7 @@ public class MockMessageProducerTest extends TestCase
         producer.send(new MockTextMessage("aMessage"));
     }
     
+    @Test
     public void testCloneMessageWithSession() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -270,6 +284,7 @@ public class MockMessageProducerTest extends TestCase
         doTestCloneMessage(session, destManager, confManager);
     }
 
+    @Test
     public void testCloneMessageWithQueueSession() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -279,6 +294,7 @@ public class MockMessageProducerTest extends TestCase
         doTestCloneMessage(session, destManager, confManager);
     }
 
+    @Test
     public void testCloneMessageWithTopicSession() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
@@ -329,6 +345,7 @@ public class MockMessageProducerTest extends TestCase
         assertEquals(receivedQueueMessage1, receivedTopicMessage1);
     }
     
+    @Test
     public void testAddSessionOnSend() throws Exception
     {
         DestinationManager destManager = new DestinationManager();
