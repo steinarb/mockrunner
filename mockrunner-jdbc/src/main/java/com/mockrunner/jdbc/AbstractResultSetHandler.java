@@ -848,4 +848,15 @@ public abstract class AbstractResultSetHandler
     {
         return continueProcessingOnBatchFailure;
     }
+
+    /**
+     * Given a SQL string, remove the associated entry from the resultSetsForStatement TreeMap
+     * @param sql The SQL string associated with the resultset
+     * @return The {@link MockResultSet} instance which was removed.
+     */
+    public MockResultSet removeResultSet(String sql) {
+    	MockResultSet removed = (MockResultSet) resultSetsForStatement.get(sql);
+    	resultSetsForStatement.remove(sql);
+    	return removed;
+    }
 }
