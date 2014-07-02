@@ -859,4 +859,32 @@ public abstract class AbstractResultSetHandler
     	resultSetsForStatement.remove(sql);
     	return removed;
     }
+
+    /**
+     * Remove the throws mock for the specified SQL string.
+     * @param sql The SQL string which identifies the conditions under which to throw a SQLException
+     */
+    public void removeThrowsSqlException(String sql) {
+    	throwsSQLException.remove(sql);
+    }
+
+
+    /**
+     * Remove the update count mock for the specified SQL string.
+     * @param sql The SQL string which identifies the conditions under which to return the specified update count
+     */
+    public void removeUpdateCount(String sql) {
+    	updateCountForStatement.remove(sql);
+    }
+
+
+    /**
+     * Remove the generated keys mock for the specified SQL string.
+     * @param sql The SQL string which identifies the conditions under which the generated keys result would be returned.
+     */
+    public void removeGeneratedKeys(String sql) {
+    	generatedKeysForStatement.remove(sql);
+    }
+
+    
 }
