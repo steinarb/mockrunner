@@ -138,6 +138,7 @@ public class MockConnection implements Connection, Serializable
     /**
      * Throws a <code>JMSException</code> if one is set with
      * {@link #setJMSException}. Deletes the exception.
+     * @throws JMSException thrown of JMSException has been set.
      */
     public void throwJMSException() throws JMSException
     {

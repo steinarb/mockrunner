@@ -36,6 +36,7 @@ public abstract class MockDestination implements Destination, Serializable
      * Adds a message and delivers it to the corresponding consumers. 
      * Implemented by {@link MockQueue} and {@link MockTopic}.
      * @param message the message
+     * @throws JMSException os case the message can not be added
      */
     public abstract void addMessage(Message message) throws JMSException;
  

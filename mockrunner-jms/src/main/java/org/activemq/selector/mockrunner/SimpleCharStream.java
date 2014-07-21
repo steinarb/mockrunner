@@ -189,8 +189,9 @@ public final class SimpleCharStream {
     }
 
     /**
+     * @return the column number
      * @see #getEndColumn
-     * @deprecated
+     * @deprecated 
      */
 
     public final int getColumn() {
@@ -198,6 +199,7 @@ public final class SimpleCharStream {
     }
 
     /**
+     * @return the line number
      * @see #getEndLine
      * @deprecated
      */
@@ -338,6 +340,8 @@ public final class SimpleCharStream {
 
     /**
      * Method to adjust line and column numbers for the start of a token.<BR>
+     * @param newLine the new line number
+     * @param newCol the new column number
      */
     public void adjustBeginLineColumn(int newLine, int newCol) {
         int start = tokenBegin;

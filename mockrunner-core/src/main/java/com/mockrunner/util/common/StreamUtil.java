@@ -52,7 +52,7 @@ public class StreamUtil
     /**
      * Returns the contents of the input stream as byte array.
      * @param stream the <code>InputStream</code>
-     * @param length the number of bytes to copy, if length < 0,
+     * @param length the number of bytes to copy, if length is negative,
      *        the number is unlimited
      * @return the stream content as byte array
      */
@@ -103,7 +103,7 @@ public class StreamUtil
     /**
      * Returns the contents of the reader as a string.
      * @param reader the <code>Reader</code>
-     * @param length the number of chars to copy, if length < 0,
+     * @param length the number of chars to copy, if negative,
      *        the number is unlimited
      * @return the reader content as <code>String</code>
      */

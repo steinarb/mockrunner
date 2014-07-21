@@ -32,7 +32,9 @@ import javax.jms.Message;
 public interface Filter {
 
     /**
+     * @param message the message to match
      * @return true if this filter matches the given JMS message
+     * @throws JMSException is the message cannot be macthed
      */
     public boolean matches(Message message) throws JMSException;
 

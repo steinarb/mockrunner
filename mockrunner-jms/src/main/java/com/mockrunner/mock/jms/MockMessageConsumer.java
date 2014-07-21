@@ -62,7 +62,8 @@ public abstract class MockMessageConsumer implements MessageConsumer, Serializab
     /**
      * Returns if this consumer can consume an incoming message,
      * i.e. if a <code>MessageListener</code> is registered,
-     * the receiver isn't closed and has an approriate selector.
+     * the receiver isn't closed and has an appropriate selector.
+     * @param message the message to consume
      * @return <code>true</code> if this receiver can consume the message
      */
     public boolean canConsume(Message message)

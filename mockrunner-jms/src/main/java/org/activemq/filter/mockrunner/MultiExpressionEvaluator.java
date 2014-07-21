@@ -27,14 +27,14 @@ import java.util.Iterator;
 /**
  * A MultiExpressionEvaluator is used to evaluate multiple expressions in
  * single method call.
- * <p/>
+ * <p>
  * Multiple Expression/ExpressionListener pairs can be added to a MultiExpressionEvaluator object.  When
  * the MultiExpressionEvaluator object is evaluated, all the registed Expressions are evaluated and then the
  * associated ExpressionListener is invoked to inform it of the evaluation result.
- * <p/>
+ * <p>
  * By evaluating multiple expressions at one time, some optimizations can be made
  * to reduce the number of computations normally required to evaluate all the expressions.
- * <p/>
+ * <p>
  * When this class adds an Expression it wrapps each node in the Expression's AST with a
  * CacheExpression object.  Then each CacheExpression object (one for each node) is placed
  * in the cachedExpressions map.  The cachedExpressions map allows us to find the sub expressions
@@ -42,24 +42,24 @@ import java.util.Iterator;
  * Expression of the Expression is allready in the cachedExpressions map, then instead of
  * wrapping the sub expression in a new CacheExpression object, we reuse the CacheExpression allready
  * int the map.
- * <p/>
+ * <p>
  * To help illustrate what going on, lets try to give an exmample:
  * If we denote the AST of a Expression as follows: [AST-Node-Type,Left-Node,Right-Node], then
  * A expression like: "3*5+6" would result in "[*,3,[+,5,6]]"
- * <p/>
+ * <p>
  * If the [*,3,[+,5,6]] expression is added to the MultiExpressionEvaluator, it would really
  * be converted to: [c0,[*,3,[c1,[+,5,6]]]] where c0 and c1 represent the CacheExpression expression
  * objects that cache the results of the * and the + operation.  Constants and Property nodes are not
  * cached.
- * <p/>
+ * <p>
  * If later on we add the following expression [=,11,[+,5,6]] ("11=5+6") to the MultiExpressionEvaluator
  * it would be converted to: [c2,[=,11,[c1,[+,5,6]]]], where c2 is a new CacheExpression object
  * but c1 is the same CacheExpression used in the previous expression.
- * <p/>
+ * <p>
  * When the expressions are evaluated, the c1 CacheExpression object will only evaluate the
  * [+,5,6] expression once and cache the resulting value.  Hence evauating the second expression
  * costs less because that [+,5,6] is not done 2 times.
- * <p/>
+ * <p>
  * Problems:
  * - cacheing the values introduces overhead.  It may be possible to be smarter about WHICH
  * nodes in the AST are cached and which are not.
@@ -97,7 +97,10 @@ public class MultiExpressionEvaluator {
         }
 
         /**
-         * @see org.activemq.filter.Expression#evaluate(javax.jms.Message)
+         * Implementation of org.activemq.filter.Expression#evaluate(javax.jms.Message)
+         * @param message the message to evaluate
+         * @return the result of the evaluation
+         * 
          */
         public Object evaluate(Message message) throws JMSException {
             if (view == cview) {
@@ -147,6 +150,8 @@ public class MultiExpressionEvaluator {
      * Adds an ExpressionListener to a given expression.  When evaluate is
      * called, the ExpressionListener will be provided the results of the
      * Expression applied to the evaluated message.
+     * @param selector the selector
+     * @param c the expression listener
      */
     public void addExpressionListner(Expression selector, ExpressionListener c) {
         ExpressionListenerSet data = (ExpressionListenerSet) rootExpressions.get(selector.toString());
@@ -161,6 +166,9 @@ public class MultiExpressionEvaluator {
     /**
      * Removes an ExpressionListener from receiving the results of
      * a given evaluation.
+     * @param selector the selector
+     * @param c the expression listener
+     * @return true if successful.
      */
     public boolean removeEventListner(String selector, ExpressionListener c) {
         String expKey = selector;
@@ -189,9 +197,11 @@ public class MultiExpressionEvaluator {
      * Expression is being added to the Cache, a new
      * CacheExpression is created and associated with
      * the expression.
-     * <p/>
+     * <p>
      * This method updates the reference counters on the
      * CacheExpression to know when it is no longer needed.
+     * @param expr the expression
+     * @return the cached expression
      */
     private CacheExpression addToCache(Expression expr) {
 
@@ -225,7 +235,7 @@ public class MultiExpressionEvaluator {
      * the refernce counter goes to zero, the entry
      * int the Expression to CacheExpression map is removed.
      *
-     * @param cn
+     * @param cn the cache expression
      */
     private void removeFromCache(CacheExpression cn) {
         cn.refCount--;
@@ -248,7 +258,7 @@ public class MultiExpressionEvaluator {
      * this object.  The added ExpressionListeners are notified
      * of the result of the evaluation.
      *
-     * @param message
+     * @param message the message
      */
     public void evaluate(Message message) {
         Collection expressionListeners = rootExpressions.values();

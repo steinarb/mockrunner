@@ -77,19 +77,19 @@ abstract public class BinaryExpression implements Expression {
      * Returns the symbol that represents this binary expression.  For example, addition is
      * represented by "+"
      *
-     * @return
+     * @return a string with the symbol.
      */
     abstract public String getExpressionSymbol();
 
     /**
-     * @param expression
+     * @param expression the expression to set
      */
     public void setRight(Expression expression) {
         right = expression;
     }
 
     /**
-     * @param expression
+     * @param expression the expression to set
      */
     public void setLeft(Expression expression) {
         left = expression;

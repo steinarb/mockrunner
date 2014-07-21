@@ -53,6 +53,8 @@ public class XmlUtil
     }
     
     /**
+     * @param document the document to get the body from
+     * @return the body element
      * @deprecated use {@link #getBodyFragmentFromJDOMDocument}
      */
     public static Element getBodyFragmentJDOMDocument(org.jdom.Document document)

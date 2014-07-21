@@ -38,6 +38,8 @@ public class TokenMgrError extends Error {
     /**
      * Replaces unprintable characters by their espaced (or unicode escaped)
      * equivalents in the given string
+     * @param str the string to add escapes to
+     * @return the escaped string
      */
     protected static final String addEscapes(String str) {
         StringBuffer retval = new StringBuffer();
@@ -108,10 +110,11 @@ public class TokenMgrError extends Error {
      * You can also modify the body of this method to customize your error messages.
      * For example, cases like LOOP_DETECTED and INVALID_LEXICAL_STATE are not
      * of end-users concern, so you can return something like :
-     * <p/>
+     * <p>
      * "Internal Error : Please file a bug report .... "
-     * <p/>
+     * <p>
      * from this method for such cases in the release version of your parser.
+     * @return the message
      */
     public String getMessage() {
         return super.getMessage();

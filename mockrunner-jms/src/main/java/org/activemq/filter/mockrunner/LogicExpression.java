@@ -75,8 +75,8 @@ public abstract class LogicExpression extends BinaryExpression implements Boolea
     }
 
     /**
-     * @param left
-     * @param right
+     * @param left the expression on the left
+     * @param right the expression on the right
      */
     public LogicExpression(BooleanExpression left, BooleanExpression right) {
         super(left, right);

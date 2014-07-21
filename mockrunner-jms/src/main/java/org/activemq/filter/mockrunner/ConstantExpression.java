@@ -127,7 +127,7 @@ public class ConstantExpression implements Expression {
 
     /**
      * TODO: more efficient hashCode()
-     *
+     * @param o object to compare
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public boolean equals(Object o) {
@@ -144,8 +144,8 @@ public class ConstantExpression implements Expression {
      * Encodes the value of string so that it looks like it would look like
      * when it was provided in a selector.
      *
-     * @param string
-     * @return
+     * @param s the string to encode
+     * @return the encoded string
      */
     public static String encodeString(String s) {
         StringBuffer b = new StringBuffer();

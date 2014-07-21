@@ -32,7 +32,9 @@ import javax.jms.Message;
 public interface Expression {
 
     /**
+     * @param message the message to evaluate
      * @return the value of this expression
+     * @throws JMSException in case the message cannot be evaluated 
      */
     public Object evaluate(Message message) throws JMSException;
 

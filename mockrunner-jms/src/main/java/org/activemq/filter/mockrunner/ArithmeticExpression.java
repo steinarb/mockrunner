@@ -35,8 +35,8 @@ public abstract class ArithmeticExpression extends BinaryExpression {
     protected static final int DOUBLE = 3;
 
     /**
-     * @param left
-     * @param right
+     * @param left the left expression
+     * @param right the expression on the right
      */
     public ArithmeticExpression(Expression left, Expression right) {
         super(left, right);
@@ -206,9 +206,9 @@ public abstract class ArithmeticExpression extends BinaryExpression {
 
 
     /**
-     * @param lvalue
-     * @param rvalue
-     * @return
+     * @param lvalue left value
+     * @param rvalue right value
+     * @return the evaluated object
      */
     abstract protected Object evaluate(Object lvalue, Object rvalue);
 

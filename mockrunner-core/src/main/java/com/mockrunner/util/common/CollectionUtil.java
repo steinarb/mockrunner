@@ -26,6 +26,7 @@ public class CollectionUtil
      * equal or lower the <code>List</code> size, nothing happens.
      * @param list the <code>List</code> that should be filled
      * @param size the resulting size of the <code>List</code>
+     * @param object the object to fill the list with
      */
     public static void fillList(List list, int size, Object object)
     {

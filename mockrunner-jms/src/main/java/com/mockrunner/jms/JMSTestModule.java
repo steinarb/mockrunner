@@ -425,6 +425,8 @@ public class JMSTestModule
     }
     
     /**
+     * @param indexOfSession the index of the session
+     * @return the {@link TransmissionManagerWrapper}
      * @deprecated use {@link #getTransmissionManagerWrapper}
      */
     public TransmissionManagerWrapper getTransmissionManager(int indexOfSession)

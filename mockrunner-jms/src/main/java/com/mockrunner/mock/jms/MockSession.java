@@ -137,6 +137,7 @@ public class MockSession implements Session, Serializable
     }
     
     /**
+     * @return a transmission manager wrapper
      * @deprecated use {@link #getTransmissionManagerWrapper}
      */
     public TransmissionManagerWrapper getTransmissionManager()

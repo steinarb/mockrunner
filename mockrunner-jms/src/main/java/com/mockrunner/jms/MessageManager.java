@@ -140,6 +140,7 @@ public class MessageManager
     /**
      * Creates a new <code>TextMessage</code>. Usually this method is called
      * by {@link com.mockrunner.mock.jms.MockSession#createTextMessage}.
+     * @param text the text content of the message
      * @return the created <code>TextMessage</code>
      */
     public MockTextMessage createTextMessage(String text)
@@ -208,6 +209,7 @@ public class MessageManager
     /**
      * Creates a new <code>ObjectMessage</code>. Usually this method is called
      * by {@link com.mockrunner.mock.jms.MockSession#createObjectMessage}.
+     * @param object the object content of the message
      * @return the created <code>ObjectMessage</code>
      */
     public MockObjectMessage createObjectMessage(java.io.Serializable object)

@@ -10,7 +10,7 @@ package org.activemq.selector.mockrunner;
  * You can explicitly create objects of this exception type by
  * calling the method generateParseException in the generated
  * parser.
- * <p/>
+ * <p>
  * You can modify this class to customize your error reporting
  * mechanisms so long as you retain the public fields.
  */
@@ -26,7 +26,10 @@ public class ParseException extends Exception {
      * This constructor calls its super class with the empty string
      * to force the "toString" method of parent class "Throwable" to
      * print the error message in the form:
-     * ParseException: <result of getMessage>
+     * ParseException: &lt;result of getMessage&gt;
+     * @param currentTokenVal currentTokenVal
+     * @param expectedTokenSequencesVal expectedTokenSequencesVal
+     * @param tokenImageVal tokenImageVal
      */
     public ParseException(Token currentTokenVal,
                           int[][] expectedTokenSequencesVal,
@@ -95,6 +98,7 @@ public class ParseException extends Exception {
      * from the parser), then this method is called during the printing
      * of the final stack trace, and hence the correct error message
      * gets displayed.
+     * @return the string
      */
     public String getMessage() {
         if (!specialConstructor) {
@@ -148,6 +152,8 @@ public class ParseException extends Exception {
      * Used to convert raw characters to their escaped version
      * when these raw version cannot be used as part of an ASCII
      * string literal.
+     * @param str the string to process
+     * @return the string passed with the added escape characters.
      */
     protected String add_escapes(String str) {
         StringBuffer retval = new StringBuffer();

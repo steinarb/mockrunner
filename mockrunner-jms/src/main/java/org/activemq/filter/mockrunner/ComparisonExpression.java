@@ -294,9 +294,9 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
     }
 
 	/**
-     * Only Numeric expressions can be used in >, >=, < or <= expressions.s 
+     * Only Numeric expressions can be used in &gt;, &gt;=, &lt; or &lt;= expressions. 
      * 
-	 * @param expr
+	 * @param expr the expression to check
 	 */
 	public static void checkLessThanOperand(Expression expr ) {
 		if( expr instanceof ConstantExpression ) {
@@ -313,10 +313,10 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
 	}
 
 	/**
-     * Validates that the expression can be used in == or <> expression.  
+     * Validates that the expression can be used in == or &lt;&gt; expression.  
      * Cannot not be NULL TRUE or FALSE litterals.
      * 
-	 * @param expr
+	 * @param expr the expression to check
 	 */
 	public static void checkEqualOperand(Expression expr ) {
 		if( expr instanceof ConstantExpression ) {
@@ -328,8 +328,8 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
 
 	/**
 	 * 
-	 * @param left
-	 * @param right
+	 * @param left the expression on the left
+	 * @param right the expression on the right
 	 */
 	private static void checkEqualOperandCompatability(Expression left, Expression right) {
 		if( left instanceof ConstantExpression && right instanceof ConstantExpression ) {
@@ -341,8 +341,8 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
 	
 	
     /**
-     * @param left
-     * @param right
+	 * @param left the expression on the left
+	 * @param right the expression on the right
      */
     public ComparisonExpression(Expression left, Expression right) {
         super(left, right);
