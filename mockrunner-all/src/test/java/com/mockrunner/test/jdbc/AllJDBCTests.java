@@ -7,7 +7,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
 	JDBCTestModuleTest.class, MockArrayTest.class, MockBlobTest.class,
 	MockClobTest.class, MockStructTest.class, MockResultSetTest.class,
-	MockStatementTest.class, MockPreparedStatementTest.class, MockCallableStatementTest.class,
+	MockStatementTest.class, ExecuteQueryTestCase.class, MockCallableStatementTest.class,
 	FileResultSetFactoryTest.class, JDBCMockObjectFactoryTest.class, AbstractResultSetHandlerTest.class,
 	AbstractParameterResultSetHandlerTest.class, AbstractOutParameterResultSetHandlerTest.class,
 	ParameterSetsTest.class, SQLStatementMatcherTest.class, MockConnectionTest.class, MockDatabaseMetaDataTest.class,

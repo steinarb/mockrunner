@@ -177,7 +177,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         {
             return resultSets[0];
         }
-        return null;
+        return new MockResultSet(String.valueOf(Math.random()));
     }
     
     /**
@@ -197,6 +197,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
     public MockResultSet[] getResultSets(String sql, Map parameters)
     {
         ParameterWrapper wrapper = (ParameterWrapper)getMatchingParameterWrapper(sql, parameters, resultSetsForStatement);
+
         if(null != wrapper)
         {
             if(wrapper instanceof MockResultSetWrapper)

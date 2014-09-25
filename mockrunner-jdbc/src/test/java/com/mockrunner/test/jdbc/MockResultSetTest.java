@@ -54,7 +54,7 @@ public class MockResultSetTest extends TestCase
         resultSet.addColumn("firstColumn");
         resultSet.addColumn("secondColumn");
         resultSet.addColumn("thirdColumn");
-        List row = new ArrayList();
+        List<String> row = new ArrayList<String>();
         row.add("value1");
         row.add("value2");
         row.add("value3");
@@ -91,7 +91,7 @@ public class MockResultSetTest extends TestCase
     public void testAddColumn() throws Exception
     {
         resultSet.addColumn("intColumn", new Integer[] {new Integer(1), new Integer(2), new Integer(3)});
-        List column = new ArrayList();
+        List<String> column = new ArrayList<String>();
         column.add("value1");
         column.add("value2");
         column.add("value3");
@@ -143,7 +143,7 @@ public class MockResultSetTest extends TestCase
     
     public void testGetValues() throws Exception
     {
-        List column = new ArrayList();
+        List<Object> column = new ArrayList<Object>();
         column.add("1.2");
         column.add(new Double(3.4));
         column.add("1900-12-12");
@@ -215,12 +215,12 @@ public class MockResultSetTest extends TestCase
     public void testUpdateValues() throws Exception
     {
         resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
-        List column = new ArrayList();
+        List<Object> column = new ArrayList<Object>();
         column.add(null);
         column.add(new Double(3.4));
         column.add("value");
         resultSet.addColumn("column1", column);
-        column = new ArrayList();
+        column = new ArrayList<Object>();
         column.add(new Integer(2));
         column.add("test");
         resultSet.addColumn("column2", column);
@@ -349,7 +349,7 @@ public class MockResultSetTest extends TestCase
     public void testError() throws Exception
     {
         resultSet.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
-        List column = new ArrayList();
+        List<String> column = new ArrayList<String>();
         column.add("test");
         resultSet.addColumn("column1", column);
         try
