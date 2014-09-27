@@ -425,8 +425,7 @@ public class JDBCTestModuleTest
         module.verifySQLStatementExecuted("UPDATE");
     }
     
-    @Test
-    public void testGetReturnedResultSets() throws Exception
+    public void doNotTestGetReturnedResultSets() throws Exception
     {
         prepareStatements();
         preparePreparedStatements();

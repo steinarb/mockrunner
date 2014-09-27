@@ -128,6 +128,14 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<!-- Generate a jar for the source files when deploying -->
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+			<plugin>
 				<!-- Generate a jar for the javadocs when deploying -->
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>

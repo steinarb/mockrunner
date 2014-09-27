@@ -54,21 +54,18 @@ public class FileResultSetFactory implements ResultSetFactory
     public File getFile()
     {
         if (file.exists() && file.isFile())
-        {
             return file;
-        } 
-        else
-        {
+        else  {
             try
             {
                 file = FileUtil.findFile(file.getPath());
-                return file;
             } 
             catch (FileNotFoundException exc)
             {
-                throw new RuntimeException("Could not find: " + file.getPath() + ". Current dir = " + System.getProperty("user.dir"));
+            	throw new RuntimeException("Could not find: " + file.getPath() + ". Current dir = " + System.getProperty("user.dir"));
             }
         }
+        return file;
     }
     
     /**
@@ -156,12 +153,17 @@ public class FileResultSetFactory implements ResultSetFactory
     {
         MockResultSet resultSet = new MockResultSet(id);
         File fileToRead = getFile();
-        List lines = FileUtil.getLinesFromFile(fileToRead);
+        List<String> lines = FileUtil.getLinesFromFile(fileToRead);
 
+        if(lines.size() == 0)
+        	return resultSet; // empty resultset
+        
         int firstLineNumber = 0;
+        
+        // first loop reads the columns names
         if(firstLineContainsColumnNames)
         {
-            String firstLine = (String)lines.get(firstLineNumber);
+            String firstLine = lines.get(firstLineNumber);
             firstLineNumber++;
             String[] names = StringUtil.split(firstLine, delimiter, trim);
             for(int ii = 0; ii < names.length; ii++)
@@ -169,9 +171,11 @@ public class FileResultSetFactory implements ResultSetFactory
                 resultSet.addColumn(names[ii]);
             }
         }
+        
+        // subsequent loops read the values
         for(int ii = firstLineNumber; ii < lines.size(); ii++)
         {
-            String line = (String)lines.get(ii);
+            String line = lines.get(ii);
             String[] values = StringUtil.split(line, delimiter, trim);
             if(useTemplates)
             {

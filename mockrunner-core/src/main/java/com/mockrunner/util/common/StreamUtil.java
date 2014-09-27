@@ -227,9 +227,9 @@ public class StreamUtil
      * @param reader the reader
      * @return the <code>List</code> with the lines
      */
-    public static List getLinesFromReader(Reader reader)
+    public static List<String> getLinesFromReader(Reader reader)
     {
-        List resultList = new ArrayList();
+        List<String> resultList = new ArrayList<String>();
         try
         {
             BufferedReader bufferedReader = new BufferedReader(reader);

@@ -53,19 +53,19 @@ public class UserLoginSessionTest extends EJBTestCaseAdapter
     }
     
     @Test
+    public void testCreateUser() throws Exception
+    {
+        assertTrue(bean.createUser("TestUser", "APassword"));
+        prepareSQLExceptionForCreate();
+        assertFalse(bean.createUser("TestUser", "APassword"));
+    }
+
+    @Test
     public void testLoginUser() throws Exception
     {
         prepareFindByPrimaryKeyResult();
         assertFalse(bean.loginUser("TestUser", "WrongPassword"));
         assertTrue(bean.loginUser("TestUser", "CorrectPassword"));
         assertFalse(bean.loginUser("UnknownUser", "APassword"));
-    }
-    
-    @Test
-    public void testCreateUser() throws Exception
-    {
-        assertTrue(bean.createUser("TestUser", "APassword"));
-        prepareSQLExceptionForCreate();
-        assertFalse(bean.createUser("TestUser", "APassword"));
     }
 }

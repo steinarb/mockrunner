@@ -177,7 +177,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         {
             return resultSets[0];
         }
-        return new MockResultSet(String.valueOf(Math.random()));
+        return null;
     }
     
     /**

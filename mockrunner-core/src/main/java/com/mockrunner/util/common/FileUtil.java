@@ -3,6 +3,7 @@ package com.mockrunner.util.common;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.List;
@@ -16,9 +17,9 @@ public class FileUtil
      * @param file the input file
      * @return the <code>List</code> with the file lines
      */
-    public static List getLinesFromFile(File file)
+    public static List<String> getLinesFromFile(File file)
     {
-        List resultList = null;
+        List<String> resultList = null;
         FileReader reader = null;
         try
         {
@@ -86,5 +87,17 @@ public class FileUtil
     private static boolean isExistingFile(File file)
     {
         return (file.exists() && file.isFile());
+    }
+    
+    /**
+     * Creates a new empty file
+     * @param file
+     */
+    public static void createEmptyFile(File file) {
+    	try {
+			file.createNewFile();
+		} catch (IOException e) {
+			throw new RuntimeException("Could not create file: " + file.getPath(), e);
+		}
     }
 }

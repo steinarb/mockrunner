@@ -1,8 +1,5 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-
-<!DOCTYPE form-validation PUBLIC
-          "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1.3//EN"
-          "http://jakarta.apache.org/commons/dtds/validator_1_1_3.dtd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE form-validation PUBLIC "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.1.3//EN" "http://jakarta.apache.org/commons/dtds/validator_1_1_3.dtd">
 
 <form-validation>
    
@@ -11,7 +8,7 @@
       <form name="/greetings">
          <field property="name" depends="required,minlength">
          	     <arg key="name" resource="false" position="0"/>
-         	     <arg1 name="minlength" key="${var:minlength}" resource="false" position="1"/>
+         	     <arg name="minlength" key="${var:minlength}" resource="false" position="1"/>
                  <var>
                      <var-name>minlength</var-name>
                      <var-value>5</var-value>
