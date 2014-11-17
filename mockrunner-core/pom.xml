@@ -14,26 +14,39 @@
 	<description>Core classes common to all Mockrunner modules</description>
 
 	<dependencies>
+	
+		<!-- needed in multiple classes -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
+		
+		<!-- needed in StreamUtil -->
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
+			<optional>true</optional>
 		</dependency>
+		
+		<!-- needed for XML Util -->
 		<dependency>
 			<groupId>jdom</groupId>
 			<artifactId>jdom</artifactId>
 		</dependency>
+		
+		<!-- needed for StringUtil (Perl5Compiler) -->
 		<dependency>
 			<groupId>oro</groupId>
 			<artifactId>oro</artifactId>
 		</dependency>
+
+		<!-- needed for JarFileExtractor -->
 		<dependency>
 			<groupId>com.kirkk</groupId>
 			<artifactId>jaranalyzer</artifactId>
 		</dependency>
+
+		<!-- needed for XMLUtil -->
 		<dependency>
 			<groupId>nekohtml</groupId>
 			<artifactId>nekohtml</artifactId>
