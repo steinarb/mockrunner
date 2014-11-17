@@ -19,6 +19,12 @@
 			<artifactId>mockrunner-core</artifactId>
 			<version>1.0.5-SNAPSHOT</version>
 		</dependency>
+		<!-- needed in StreamUtil -->
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<optional>true</optional>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.tomcat</groupId>
 			<artifactId>servlet-api</artifactId>
