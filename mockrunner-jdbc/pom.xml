@@ -19,6 +19,11 @@
 			<artifactId>mockrunner-core</artifactId>
 			<version>1.0.5-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
+			<version>1.0.4</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -27,9 +32,9 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.0</version>
 				<configuration>
-					<compilerVersion>1.7</compilerVersion>
-					<source>1.7</source>
-					<target>1.7</target>
+					<compilerVersion>1.5</compilerVersion>
+					<source>1.5</source>
+					<target>1.5</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -64,7 +69,7 @@
 					<charset>${project.build.sourceEncoding}</charset>
 					<encoding>${project.build.sourceEncoding}</encoding>
 					<docencoding>${project.build.sourceEncoding}</docencoding>
-					<additionalparam>-Xdoclint:none</additionalparam> <!-- This prevents javadoc from failing with warnings -->
+					<failOnError>false</failOnError>
 				</configuration>
 			</plugin>
 		</plugins>

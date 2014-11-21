@@ -153,7 +153,7 @@
 					<charset>${project.build.sourceEncoding}</charset>
 					<encoding>${project.build.sourceEncoding}</encoding>
 					<docencoding>${project.build.sourceEncoding}</docencoding>
-					<additionalparam>-Xdoclint:none</additionalparam> <!-- This prevents javadoc from failing with warnings -->
+					<failOnError>false</failOnError>
 				</configuration>
 			</plugin>
 		</plugins>
