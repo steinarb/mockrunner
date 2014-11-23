@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
-        <version>7</version>
+        <version>9</version>
     </parent>
 
     <groupId>com.mockrunner</groupId>
@@ -48,6 +48,9 @@
             <name>Carlos Martins</name>
             <email>carlos.mfa.martins@gmail.com</email>
             <timezone>Europe/Lisbon</timezone>
+        </contributor>
+        <contributor>
+            <name>Deven Phillips</name>
         </contributor>
     </contributors>
 
