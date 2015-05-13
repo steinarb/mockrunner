@@ -1,8 +1,7 @@
 package com.mockrunner.mock.jms;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import com.mockrunner.jms.ConfigurationManager;
+import com.mockrunner.jms.DestinationManager;
 
 import javax.jms.Connection;
 import javax.jms.JMSException;
@@ -10,9 +9,9 @@ import javax.jms.QueueConnection;
 import javax.jms.QueueConnectionFactory;
 import javax.jms.TopicConnection;
 import javax.jms.TopicConnectionFactory;
-
-import com.mockrunner.jms.ConfigurationManager;
-import com.mockrunner.jms.DestinationManager;
+import java.io.Serializable;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Mock implementation of JMS <code>ConnectionFactory</code>.
@@ -33,12 +32,12 @@ public class MockConnectionFactory implements QueueConnectionFactory, TopicConne
 {
     private DestinationManager destinationManager;
     private ConfigurationManager configurationManager;
-    private List connections;
+    private CopyOnWriteArrayList connections;
     private JMSException exception;
 
     public MockConnectionFactory(DestinationManager destinationManager, ConfigurationManager configurationManager)
     {
-        connections = new ArrayList();
+        connections = new CopyOnWriteArrayList();
         this.destinationManager = destinationManager;
         this.configurationManager = configurationManager;
         exception = null;

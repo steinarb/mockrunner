@@ -1,20 +1,18 @@
 package com.mockrunner.mock.jms;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.mockrunner.base.NestedApplicationException;
+import org.activemq.filter.mockrunner.Filter;
 
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Session;
-
-import org.activemq.filter.mockrunner.Filter;
-
-import com.mockrunner.base.NestedApplicationException;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Mock implementation of JMS <code>Destination</code>.
@@ -27,9 +25,9 @@ public abstract class MockDestination implements Destination, Serializable
 
     public MockDestination()
     {
-        sessions = new HashSet();
-        currentMessages = new ArrayList();
-        receivedMessages = new ArrayList();
+        sessions = new CopyOnWriteArraySet();
+        currentMessages = new CopyOnWriteArrayList();
+        receivedMessages = new CopyOnWriteArrayList();
     }
     
     /**
