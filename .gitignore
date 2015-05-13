@@ -1,4 +1,6 @@
 *.class
+.idea
+*.iml
 /classes/
 /target/
 /.classpath
