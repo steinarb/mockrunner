@@ -13,7 +13,7 @@ import org.junit.runners.Suite;
 	MockQueueTest.class, MockTopicTest.class, TransmissionManagerTest.class,
 	JMSTestModuleTest.class, MessageSelectorTest.class, MockMessageConsumerTest.class,
 	MockDestinationTest.class, BasicJMSTestCaseAdapterTest.class,
-	JMSMockObjectFactoryTest.class, MockQueueBrowserTest.class
+	JMSMockObjectFactoryTest.class, MockQueueBrowserTest.class, ConcurrencyTest.class
 })
 public class AllJMSTests
 {
