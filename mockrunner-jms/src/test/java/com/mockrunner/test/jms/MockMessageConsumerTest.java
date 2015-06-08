@@ -186,20 +186,20 @@ public class MockMessageConsumerTest
         assertNotNull(consumer.receive());
         assertNotNull(consumer.receiveNoWait());
         assertNotNull(consumer.receive(1000));
-        assertNull(consumer.receive());
+        assertNull(consumer.receiveNoWait());
     }
 
     private void doTestReceiveWithSelector(MockMessageConsumer consumer) throws JMSException
     {
         assertNotNull(consumer.receiveNoWait());
         assertNotNull(consumer.receive(1000));
-        assertNull(consumer.receive());
+        assertNull(consumer.receiveNoWait());
     }
     
     private void doTestReceiveWithSelectorDisabled(MockMessageConsumer consumer) throws JMSException
     {
         assertNotNull(consumer.receive());
-        assertNull(consumer.receive());
+        assertNull(consumer.receiveNoWait());
     }
   
     public static class TestMessageListener implements MessageListener

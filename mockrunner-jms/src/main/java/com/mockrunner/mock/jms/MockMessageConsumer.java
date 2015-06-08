@@ -1,6 +1,7 @@
 package com.mockrunner.mock.jms;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.jms.InvalidSelectorException;
 import javax.jms.JMSException;
@@ -103,18 +104,54 @@ public abstract class MockMessageConsumer implements MessageConsumer, Serializab
         this.messageListener = messageListener;
     }
 
+    /** 
+     * wait until: 
+     * 
+     * * a message is ready
+     * * the timeout elapses
+     * * some other event happens (@see Object.wait)
+     * 
+     * if the timeout is 0, the function will not timeout.
+     * 
+     * @param timeout - max milliseconds to wait. 
+     */
+    protected abstract void waitOnMessage(long timeout);
+
+    
     public Message receive(long timeout) throws JMSException
     {
-        connection.throwJMSException();
-        return receive();
-    }
+    	if(timeout == 0) return receive();
+    	getConnection().throwJMSException();
+    	Message message=null; 
+    
+    	Date waitTill = new Date((new Date()).getTime()+timeout);
+    	
+   		for(;;){
+    		message = receiveNoWait();
+   			if(message!=null) return message;
+   			timeout= waitTill.getTime()-(new Date()).getTime();
+   			if(timeout>0)
+   			{
+				waitOnMessage(timeout);
+   			}
+   			else
+   			{
+   				return null;
+   			}
+    	}	
+	}
 
-    public Message receiveNoWait() throws JMSException
+    public Message receive() throws JMSException
     {
-        connection.throwJMSException();
-        return receive();
+    	getConnection().throwJMSException();
+    	
+    	Message message = null;
+   		for(;;){
+    		message = receiveNoWait();
+   			if(message!=null) return message;   
+   			waitOnMessage(0);
+    	}	
     }
-
     public void close() throws JMSException
     {
         connection.throwJMSException();

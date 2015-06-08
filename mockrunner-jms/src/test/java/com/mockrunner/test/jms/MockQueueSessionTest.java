@@ -314,7 +314,7 @@ public class MockQueueSessionTest
         receiver1.setMessageListener(listener1);
         QueueSender sender = session.createSender(queue);
         sender.send(new MockTextMessage("Text"));
-        assertNull(receiver1.receive());
+        assertNull(receiver1.receiveNoWait());
         assertEquals(new MockTextMessage("Text"), listener1.getMessage());
         listener1.reset();
         receiver1.close();
@@ -322,7 +322,7 @@ public class MockQueueSessionTest
         assertNull(listener1.getMessage());
         try
         {
-            receiver1.receive();
+            receiver1.receiveNoWait();
             fail();
         }
         catch(JMSException exc)
@@ -364,7 +364,7 @@ public class MockQueueSessionTest
         sender.send(message2);
         assertEquals(1, listener1.getMessageList().size());
         assertSame(message2, listener1.getMessageList().get(0));
-        assertNull(receiver1.receive());
+        assertNull(receiver1.receiveNoWait());
         MockQueueReceiver receiver2 = (MockQueueReceiver)session.createReceiver(queue);
         assertSame(message1, receiver2.receiveNoWait());
         receiver2.setMessageListener(listener1);
