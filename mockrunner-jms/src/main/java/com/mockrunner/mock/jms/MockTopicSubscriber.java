@@ -81,7 +81,7 @@ public class MockTopicSubscriber extends MockMessageConsumer implements TopicSub
         return noLocal;
     }
 
-    public Message receive() throws JMSException
+    public Message receiveNoWait() throws JMSException
     {
         getConnection().throwJMSException();
         if(isClosed())
@@ -101,5 +101,17 @@ public class MockTopicSubscriber extends MockMessageConsumer implements TopicSub
         if(null == message) return null;
         if(session.isAutoAcknowledge()) message.acknowledge();
         return message;
+    }
+    
+    protected void waitOnMessage(long timeout)
+    {
+    	try {
+    		synchronized(topic) {
+        		//TODO: notify on topic, wait on timeout
+    			// this behavior causes a 10 ms poll, as opposed to a wait. 
+    			topic.wait(10);
+    		}
+		} catch (InterruptedException e) {
+		}
     }
 }

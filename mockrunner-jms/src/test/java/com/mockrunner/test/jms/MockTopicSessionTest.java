@@ -394,7 +394,7 @@ public class MockTopicSessionTest
         TestMessageListener listener1 = new TestMessageListener();
         subscriber1.setMessageListener(listener1);
         publisher.publish(new MockTextMessage("Text"));
-        assertNull(subscriber1.receive());
+        assertNull(subscriber1.receiveNoWait());
         assertEquals(new MockTextMessage("Text"), listener1.getMessage());
         listener1.reset();
         subscriber1.close();
@@ -449,7 +449,7 @@ public class MockTopicSessionTest
         assertEquals(2, listener1.getMessageList().size());
         assertSame(message1, listener1.getMessageList().get(0));
         assertSame(message2, listener1.getMessageList().get(1));
-        assertNull(subscriber1.receive());
+        assertNull(subscriber1.receiveNoWait());
         MockTopicSubscriber subscriber2 = (MockTopicSubscriber)session.createSubscriber(topic);
         assertSame(message3, subscriber2.receiveNoWait());
         subscriber2.setMessageListener(listener1);

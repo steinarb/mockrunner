@@ -30,8 +30,8 @@ public class MockQueueReceiver extends MockMessageConsumer implements QueueRecei
         getConnection().throwJMSException();
         return queue;
     }
-    
-    public Message receive() throws JMSException
+ 
+    public Message receiveNoWait() throws JMSException
     {
         getConnection().throwJMSException();
         if(isClosed())
@@ -51,5 +51,16 @@ public class MockQueueReceiver extends MockMessageConsumer implements QueueRecei
         if(null == message) return null;
         if(session.isAutoAcknowledge()) message.acknowledge();
         return message;
+    }
+    
+    protected void waitOnMessage(long timeout)
+    {
+    	try {
+    		//todo, notify on topic. 
+    		synchronized(queue) {
+    			queue.wait(timeout);
+    		}
+		} catch (InterruptedException e) {
+		}
     }
 }

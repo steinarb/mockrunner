@@ -65,6 +65,9 @@ public class MockQueue extends MockDestination implements Queue
         if(!isConsumed)
         {
             addCurrentMessage(message);
+            synchronized (this){	
+            	this.notify();
+            }
         }
     }
 }
