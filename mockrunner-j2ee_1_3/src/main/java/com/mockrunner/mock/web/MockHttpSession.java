@@ -83,6 +83,7 @@ public class MockHttpSession implements HttpSession
 
     public synchronized long getCreationTime()
     {
+        if (!isValid) throw new IllegalStateException("session invalid");
         return creationTime;
     }
 
