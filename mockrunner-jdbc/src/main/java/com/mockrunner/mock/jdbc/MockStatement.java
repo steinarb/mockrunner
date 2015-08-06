@@ -168,16 +168,12 @@ public class MockStatement implements Statement
     {
         if(null != currentResultSets)
         {
-            for(int ii = 0; ii < currentResultSets.length; ii++)
-            {
-                try
-                {
-                    if(null != currentResultSets[ii])
-                    {
-                        currentResultSets[ii].close();
+            for (ResultSet currentResultSet : currentResultSets) {
+                try {
+                    if (null != currentResultSet) {
+                        currentResultSet.close();
                     }
-                } 
-                catch(SQLException exc)
+                }catch(SQLException exc)
                 {
                     throw new NestedApplicationException(exc);
                 }
@@ -195,10 +191,10 @@ public class MockStatement implements Statement
         resultSetHandler.addExecutedStatement(sql);
         if(resultSetHandler.hasMultipleUpdateCounts(sql))
         {
-            Integer[] returnValues = resultSetHandler.getUpdateCounts(sql);
+            int[] returnValues = resultSetHandler.getUpdateCounts(sql);
             if(null != returnValues)
             {
-                return setMultipleUpdateCounts((int[])ArrayUtil.convertToPrimitiveArray(returnValues));
+                return setMultipleUpdateCounts(returnValues);
             }
         }
         else
@@ -206,7 +202,7 @@ public class MockStatement implements Statement
             Integer returnValue = resultSetHandler.getUpdateCount(sql);
             if(null != returnValue)
             {
-                return setSingleUpdateCount(returnValue.intValue());
+                return setSingleUpdateCount(returnValue);
             }
         }
         if(resultSetHandler.hasMultipleGlobalUpdateCounts())
@@ -431,7 +427,7 @@ public class MockStatement implements Statement
         Boolean returnsResultSet = resultSetHandler.getReturnsResultSet(sql);
         if(null != returnsResultSet)
         {
-            isQuery = returnsResultSet.booleanValue();
+            isQuery = returnsResultSet;
         }
         else
         {

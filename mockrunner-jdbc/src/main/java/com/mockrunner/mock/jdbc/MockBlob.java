@@ -135,6 +135,7 @@ public class MockBlob implements Blob, Cloneable
         return wasFreeCalled;
     }
 
+    @Override
     public boolean equals(Object obj)
     {
         if(null == obj) return false;
@@ -144,6 +145,7 @@ public class MockBlob implements Blob, Cloneable
         return blobData.equals(other.blobData);
     }
 
+    @Override
     public int hashCode()
     {
         int hashCode = blobData.hashCode();
@@ -151,11 +153,13 @@ public class MockBlob implements Blob, Cloneable
         return hashCode;
     }
 
+    @Override
     public String toString()
     {
         return "Blob data: " + blobData.toString();     
     }
     
+    @Override
     public Object clone()
     {
         try

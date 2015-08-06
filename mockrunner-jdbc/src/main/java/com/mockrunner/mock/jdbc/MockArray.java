@@ -97,7 +97,7 @@ public class MockArray implements Array, Cloneable
         Integer[] firstColumn = new Integer[count];
         for(int ii = 0; ii < count; ii++)
         {
-            firstColumn[ii] = new Integer(ii + 1);
+            firstColumn[ii] = ii + 1;
         }
         Object[] secondColumn = ArrayUtil.convertToObjectArray(array);
         secondColumn = (Object[])ArrayUtil.truncateArray(secondColumn, (int)(index - 1), count);
@@ -146,6 +146,7 @@ public class MockArray implements Array, Cloneable
         return ArrayUtil.areArraysEqual(array, other.array);
     }
 
+    @Override
     public int hashCode()
     {
         int hashCode = ArrayUtil.computeHashCode(array);
@@ -155,9 +156,10 @@ public class MockArray implements Array, Cloneable
         return hashCode;
     }
 
+    @Override
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer("Array data: [");
+        StringBuilder buffer = new StringBuilder("Array data: [");
         Object[] arrayData = ArrayUtil.convertToObjectArray(array);
         for(int ii = 0; ii < arrayData.length; ii++)
         {
@@ -171,6 +173,7 @@ public class MockArray implements Array, Cloneable
         return buffer.toString();
     }
     
+    @Override
     public Object clone()
     {
         try

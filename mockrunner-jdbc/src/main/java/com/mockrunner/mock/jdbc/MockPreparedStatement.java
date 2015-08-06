@@ -43,8 +43,8 @@ import com.mockrunner.util.common.StringUtil;
 public class MockPreparedStatement extends MockStatement implements PreparedStatement
 {
     private AbstractParameterResultSetHandler resultSetHandler;
-    private Map paramObjects = new HashMap();
-    private List batchParameters = new ArrayList();
+    private final Map<Integer, Object> paramObjects = new HashMap<Integer, Object>();
+    private final List<Map<Integer, Object>> batchParameters = new ArrayList<Map<Integer, Object>>();
     private String sql;
     private MockParameterMetaData parameterMetaData;
     private boolean returnGeneratedKeys = false;
@@ -94,24 +94,24 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return sql;
     }
     
-    public Map getIndexedParameterMap()
+    public Map<Integer, Object> getIndexedParameterMap()
     {
         return Collections.unmodifiableMap(paramObjects);
     }
     
-	public Map getParameterMap()
+	public Map<Integer, Object> getParameterMap()
 	{
 		return getIndexedParameterMap();
 	}
     
     public Object getParameter(int index)
     {
-        return paramObjects.get(new Integer(index));
+        return paramObjects.get(index);
     }
     
     public void setObject(int index, Object object) throws SQLException 
     {
-        paramObjects.put(new Integer(index), object);
+        paramObjects.put(index, object);
     }
     
     public void setObject(int parameterIndex, Object object, int targetSqlType, int scale) throws SQLException
@@ -126,9 +126,10 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     
     public void addBatch() throws SQLException
     {
-        batchParameters.add(new HashMap(paramObjects));
+        batchParameters.add(new HashMap<Integer, Object>(paramObjects));
     }
     
+    @Override
     public void clearBatch() throws SQLException
     {
         super.clearBatch();
@@ -257,7 +258,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             if(null != updateCount)
             {
                 resultSetHandler.addExecutedStatement(getSQL());
-                return setSingleUpdateCount(updateCount.intValue(), params);
+                return setSingleUpdateCount(updateCount, params);
             }
         }
         int superUpdateCount = super.executeUpdate(getSQL());
@@ -283,6 +284,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return 0;
     }
     
+    @Override
     public int[] executeBatch() throws SQLException
     {        
         return executeBatch(this.batchParameters);
@@ -440,12 +442,12 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public void setBoolean(int parameterIndex, boolean bool) throws SQLException
     {
-        setObject(parameterIndex, new Boolean(bool));
+        setObject(parameterIndex, bool);
     }
 
     public void setByte(int parameterIndex, byte byteValue) throws SQLException
     {
-        setObject(parameterIndex, new Byte(byteValue));
+        setObject(parameterIndex, byteValue);
     }
 
     public void setBytes(int parameterIndex, byte[] byteArray) throws SQLException
@@ -504,22 +506,22 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public void setDouble(int parameterIndex, double doubleValue) throws SQLException
     {
-        setObject(parameterIndex, new Double(doubleValue));
+        setObject(parameterIndex, doubleValue);
     }
 
     public void setFloat(int parameterIndex, float floatValue) throws SQLException
     {
-        setObject(parameterIndex, new Float(floatValue));
+        setObject(parameterIndex, floatValue);
     }
 
     public void setInt(int parameterIndex, int intValue) throws SQLException
     {
-        setObject(parameterIndex, new Integer(intValue));
+        setObject(parameterIndex, intValue);
     }
 
     public void setLong(int parameterIndex, long longValue) throws SQLException
     {
-        setObject(parameterIndex, new Long(longValue));
+        setObject(parameterIndex, longValue);
     }
 
     public void setNull(int parameterIndex, int sqlType, String typeName) throws SQLException
@@ -544,7 +546,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public void setShort(int parameterIndex, short shortValue) throws SQLException
     {
-        setObject(parameterIndex, new Short(shortValue));
+        setObject(parameterIndex, shortValue);
     }
 
     public void setString(int parameterIndex, String string) throws SQLException

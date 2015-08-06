@@ -13,104 +13,102 @@ public class SQLStatementMatcherTest extends TestCase
 {
 	public void testGetMatchingObjects()
 	{
-		Map testMap = new HashMap();
+		Map<String, String> testMap = new HashMap<String, String>();
 		testMap.put("Test1", "TestObject1");
 		testMap.put("Test2", "TestObject2");
-		List testList = new ArrayList();
-		testList.add("TestList1");
-		testList.add("TestList2");
-		testList.add("TestList3");
-		testMap.put("Test4", testList);
-		SQLStatementMatcher matcher = new SQLStatementMatcher(true, false);
-		List resultList = matcher.getMatchingObjects(testMap, "Test", false, false);
-		assertEquals(3, resultList.size());
+//		List testList = new ArrayList();
+//		testList.add("TestList1");
+//		testList.add("TestList2");
+//		testList.add("TestList3");
+		SQLStatementMatcher<String> matcher = new SQLStatementMatcher<String>(true, false);
+		List<String> resultList = matcher.getMatchingObjects(testMap, "Test", false);
+		assertEquals(2, resultList.size());
 		assertTrue(resultList.contains("TestObject1"));
 		assertTrue(resultList.contains("TestObject2"));
-		assertTrue(resultList.contains(testList));
 	}
 	
 	public void testGetMatchingObjectsRegEx()
 	{
-		Map testMap = new HashMap();
+		Map<String, String> testMap = new HashMap();
 		testMap.put("Test1", "TestObject1");
 		testMap.put("Test2", "TestObject2");
-		SQLStatementMatcher matcher = new SQLStatementMatcher(true, false, true);
-		List resultList = matcher.getMatchingObjects(testMap, "Test.*", false, false);
+		SQLStatementMatcher<String> matcher = new SQLStatementMatcher<String>(true, false, true);
+		List<String> resultList = matcher.getMatchingObjects(testMap, "Test.*", false);
 		assertEquals(2, resultList.size());
 		assertTrue(resultList.contains("TestObject1"));
 		assertTrue(resultList.contains("TestObject2"));
-		resultList = matcher.getMatchingObjects(testMap, "test.*", false, false);
+		resultList = matcher.getMatchingObjects(testMap, "test.*", false);
 		assertEquals(0, resultList.size());
 	}
     
     public void testGetMatchingObjectsResolveCollection()
     {
-        Map testMap = new HashMap();
-        testMap.put("Test1", "TestObject1");
-        testMap.put("Test2", "TestObject2");
-        testMap.put("Test3", "TestObject3");
-        testMap.put("Test", "TestObject");
-        SQLStatementMatcher matcher = new SQLStatementMatcher(true, true);
-        List resultList = matcher.getMatchingObjects(testMap, "Test", true, false);
-        assertTrue(resultList.size() == 1);
-        assertTrue(resultList.contains("TestObject"));
-        assertFalse(resultList.contains("TestObject1"));
-        assertFalse(resultList.contains("TestObject2"));
-        assertFalse(resultList.contains("TestObject3"));
-        matcher = new SQLStatementMatcher(true, false);
-        resultList = matcher.getMatchingObjects(testMap, "Test", true, false);
-        assertTrue(resultList.size() == 4);
-        assertTrue(resultList.contains("TestObject"));
-        assertTrue(resultList.contains("TestObject1"));
-        assertTrue(resultList.contains("TestObject2"));
-        assertTrue(resultList.contains("TestObject3"));
-        matcher = new SQLStatementMatcher(true, false);
-        resultList = matcher.getMatchingObjects(testMap, "test", true, false);
-        assertTrue(resultList.isEmpty());
-        matcher = new SQLStatementMatcher(false, false);
-        resultList = matcher.getMatchingObjects(testMap, "test", true, false);
-        assertTrue(resultList.size() == 4);
-        assertTrue(resultList.contains("TestObject"));
-        assertTrue(resultList.contains("TestObject1"));
-        assertTrue(resultList.contains("TestObject2"));
-        assertTrue(resultList.contains("TestObject3"));
+        Map<String, List<String>> testMap = new HashMap<String, List<String>>();
+//        testMap.put("Test1", "TestObject1");
+//        testMap.put("Test2", "TestObject2");
+//        testMap.put("Test3", "TestObject3");
+//        testMap.put("Test", "TestObject");
+        SQLStatementMatcher<String> matcher;
+        List<String> resultList;
+//        SQLStatementMatcher<String> matcher = new SQLStatementMatcher<String>(true, true);
+//        List<String> resultList = matcher.getMatchingObjectsFromCollections(testMap, "Test", false);
+//        assertTrue(resultList.size() == 1);
+//        assertTrue(resultList.contains("TestObject"));
+//        assertFalse(resultList.contains("TestObject1"));
+//        assertFalse(resultList.contains("TestObject2"));
+//        assertFalse(resultList.contains("TestObject3"));
+//        matcher = new SQLStatementMatcher<String>(true, false);
+//        resultList = matcher.getMatchingObjectsFromCollections(testMap, "Test", false);
+//        assertTrue(resultList.size() == 4);
+//        assertTrue(resultList.contains("TestObject"));
+//        assertTrue(resultList.contains("TestObject1"));
+//        assertTrue(resultList.contains("TestObject2"));
+//        assertTrue(resultList.contains("TestObject3"));
+//        matcher = new SQLStatementMatcher<String>(true, false);
+//        resultList = matcher.getMatchingObjectsFromCollections(testMap, "test", false);
+//        assertTrue(resultList.isEmpty());
+//        matcher = new SQLStatementMatcher<String>(false, false);
+//        resultList = matcher.getMatchingObjectsFromCollections(testMap, "test", false);
+//        assertTrue(resultList.size() == 4);
+//        assertTrue(resultList.contains("TestObject"));
+//        assertTrue(resultList.contains("TestObject1"));
+//        assertTrue(resultList.contains("TestObject2"));
+//        assertTrue(resultList.contains("TestObject3"));
         List testList = new ArrayList();
         testList.add("TestList1");
         testList.add("TestList2");
         testList.add("TestList3");
         testMap.put("Test4", testList);
-        matcher = new SQLStatementMatcher(true, false);
-        resultList = matcher.getMatchingObjects(testMap, "", true, false);
-        assertTrue(resultList.size() == 7);
-        assertTrue(resultList.contains("TestObject"));
-        assertTrue(resultList.contains("TestObject1"));
-        assertTrue(resultList.contains("TestObject2"));
-        assertTrue(resultList.contains("TestObject3"));
+        matcher = new SQLStatementMatcher<String>(true, false);
+        resultList = matcher.getMatchingObjectsFromCollections(testMap, "", false);
+        assertTrue(resultList.size() == 3);
+//        assertTrue(resultList.contains("TestObject"));
+//        assertTrue(resultList.contains("TestObject1"));
+//        assertTrue(resultList.contains("TestObject2"));
+//        assertTrue(resultList.contains("TestObject3"));
         assertTrue(resultList.contains("TestList1"));
         assertTrue(resultList.contains("TestList2"));
         assertTrue(resultList.contains("TestList3"));
-        matcher = new SQLStatementMatcher(true, false);
-        resultList = matcher.getMatchingObjects(testMap, "", true, true);
+        matcher = new SQLStatementMatcher<String>(true, false);
+        resultList = matcher.getMatchingObjectsFromCollections(testMap, "", true);
         assertTrue(resultList.isEmpty());
-        matcher = new SQLStatementMatcher(true, false);
-        resultList = matcher.getMatchingObjects(testMap, "TestObjectObject", true, true);
-        assertTrue(resultList.size() == 1);
-        assertTrue(resultList.contains("TestObject"));
+        matcher = new SQLStatementMatcher<String>(true, false);
+        resultList = matcher.getMatchingObjectsFromCollections(testMap, "TestObjectObject", true);
+        assertTrue(resultList.isEmpty());
+//        assertTrue(resultList.contains("TestObject"));
     }
     
     public void testGetMatchingObjectsResolveCollectionRegEx()
     {
-        Map testMap = new HashMap();
-		testMap.put("Test1", "TestObject1");
-		testMap.put("Test2", "TestObject2");
+        Map<String, List<String>> testMap = new HashMap();
 		List testList = new ArrayList();
 		testList.add("TestList1");
 		testList.add("TestList2");
 		testList.add("TestList3");
 		testMap.put("Test3", testList);
-		SQLStatementMatcher matcher = new SQLStatementMatcher(true, false, true);
-		List resultList = matcher.getMatchingObjects(testMap, "[T].*", true, false);
-		assertEquals(5, resultList.size());
+		SQLStatementMatcher matcher = new SQLStatementMatcher<String>(true, false, true);
+		List resultList = matcher.getMatchingObjectsFromCollections(testMap, "[T].*", false);
+		assertEquals(3, resultList.size());
     }
     
     public void testContains()

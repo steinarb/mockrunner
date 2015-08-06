@@ -53,7 +53,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     public Map getOutParameter(String sql)
     {
         SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
-        List list = matcher.getMatchingObjects(outParameterForStatement, sql, true, true);
+        List list = matcher.getMatchingObjects(outParameterForStatement, sql, true);
         if(null != list && list.size() > 0)
         {
             return (Map)list.get(0);
@@ -200,7 +200,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     {
         private Map outParameter;
 
-        public MockOutParameterWrapper(Map outParameter, Map parameters)
+        public MockOutParameterWrapper(Map outParameter, Map<Integer, Object> parameters)
         {
             super(parameters);
             this.outParameter = outParameter;

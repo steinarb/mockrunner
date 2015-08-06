@@ -31,16 +31,16 @@ public abstract class AbstractResultSetHandler
     private boolean exactMatch = false;
     private boolean useRegularExpressions = false;
     private boolean continueProcessingOnBatchFailure = false;
-    private Object globalResultSets;
-    private Map resultSetsForStatement = new TreeMap();
-    private Object globalUpdateCounts;
-    private Map updateCountForStatement = new TreeMap();
+    private MockResultSet[] globalResultSets;
+    private final Map<String, MockResultSet[]> resultSetsForStatement = new TreeMap<String, MockResultSet[]>();
+    private int[] globalUpdateCounts;
+    private final Map<String, int[]> updateCountForStatement = new TreeMap<String, int[]>();
     private MockResultSet globalGeneratedKeys;
-    private Map generatedKeysForStatement = new TreeMap();
-    private Map returnsResultSetMap = new TreeMap();
-    private Map throwsSQLException = new TreeMap();
-    private List executedStatements = new ArrayList();
-    private List returnedResultSets = new ArrayList();
+    private final Map<String, MockResultSet> generatedKeysForStatement = new TreeMap<String, MockResultSet>();
+    private final Map<String, Boolean> returnsResultSetMap = new TreeMap<String, Boolean>();
+    private final Map<String, SQLException> throwsSQLException = new TreeMap<String, SQLException>();
+    private final List<String> executedStatements = new ArrayList<String>();
+    private final List<MockResultSet[]> returnedResultSets = new ArrayList<MockResultSet[]>();
     
     /**
      * Creates a new <code>ResultSet</code> with a
@@ -175,7 +175,7 @@ public abstract class AbstractResultSetHandler
     public void addReturnedResultSet(MockResultSet resultSet)
     {
         if(null == resultSet) return;
-        returnedResultSets.add(resultSet);
+        returnedResultSets.add(new MockResultSet[]{resultSet});
     }
     
     /**
@@ -195,7 +195,7 @@ public abstract class AbstractResultSetHandler
      * Returns the <code>List</code> of all executed SQL strings.
      * @return the <code>List</code> of executed SQL strings
      */
-    public List getExecutedStatements()
+    public List<String> getExecutedStatements()
     {
         return Collections.unmodifiableList(executedStatements);
     }
@@ -210,7 +210,7 @@ public abstract class AbstractResultSetHandler
      * not called for all the result sets.
      * @return the <code>List</code> of returned <code>ResultSet</code> or <code>ResultSet[]</code> objects
      */
-    public List getReturnedResultSets()
+    public List<MockResultSet[]> getReturnedResultSets()
     {
         return Collections.unmodifiableList(returnedResultSets);
     }
@@ -286,7 +286,7 @@ public abstract class AbstractResultSetHandler
      * The SQL strings map to the corresponding <code>ResultSet</code>.
      * @return the <code>Map</code> of <code>ResultSet</code> objects
      */
-    public Map getResultSetMap()
+    public Map<String, MockResultSet[]> getResultSetMap()
     {
         return Collections.unmodifiableMap(resultSetsForStatement);
     }
@@ -298,7 +298,7 @@ public abstract class AbstractResultSetHandler
      * <code>Integer</code> object.
      * @return the <code>Map</code> of <code>ResultSet</code> objects
      */
-    public Map getUpdateCountMap()
+    public Map<String, int[]> getUpdateCountMap()
     {
         return Collections.unmodifiableMap(updateCountForStatement);
     }
@@ -309,7 +309,7 @@ public abstract class AbstractResultSetHandler
      * The SQL strings map to the corresponding generated keys <code>ResultSet</code>.
      * @return the <code>Map</code> of generated keys <code>ResultSet</code> objects
      */
-    public Map getGeneratedKeysMap()
+    public Map<String, MockResultSet> getGeneratedKeysMap()
     {
         return Collections.unmodifiableMap(generatedKeysForStatement);
     }
@@ -326,19 +326,11 @@ public abstract class AbstractResultSetHandler
      */
     public MockResultSet getResultSet(String sql)
     {
-        Object resultSets = getMatchingResultSets(sql);
+        MockResultSet[] resultSets = getMatchingResultSets(sql);
         if(null == resultSets) return null;
-        if(resultSets instanceof MockResultSet)
+        if(resultSets.length > 0)
         {
-            return (MockResultSet)resultSets;
-        }
-        else if(resultSets instanceof MockResultSet[])
-        {
-            MockResultSet[] actualResults = (MockResultSet[])resultSets;
-            if(actualResults.length > 0)
-            {
-                return actualResults[0];
-            }
+            return resultSets[0];
         }
         return null;
     }
@@ -355,17 +347,8 @@ public abstract class AbstractResultSetHandler
      */
     public MockResultSet[] getResultSets(String sql)
     {
-        Object resultSets = getMatchingResultSets(sql);
-        if(null == resultSets) return null;
-        if(resultSets instanceof MockResultSet)
-        {
-            return new MockResultSet[] {(MockResultSet)resultSets};
-        }
-        else if(resultSets instanceof MockResultSet[])
-        {
-            return (MockResultSet[])resultSets;
-        }
-        return null;
+        MockResultSet[] resultSets = getMatchingResultSets(sql);
+        return resultSets;
     }
 
     /**
@@ -378,19 +361,19 @@ public abstract class AbstractResultSetHandler
      */
     public boolean hasMultipleResultSets(String sql)
     {
-        Object resultSets = getMatchingResultSets(sql);
-        return (resultSets instanceof MockResultSet[]);
+        MockResultSet[] resultSets = getMatchingResultSets(sql);
+        return (null != resultSets && resultSets.length > 1);
     }
     
-    private Object getMatchingResultSets(String sql)
+    private MockResultSet[] getMatchingResultSets(String sql)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
-        List list = matcher.getMatchingObjects(resultSetsForStatement, sql, true, true);
-        if(null != list && list.size() > 0)
+        SQLStatementMatcher<MockResultSet[]> matcher = new SQLStatementMatcher<MockResultSet[]>(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
+        List<MockResultSet[]> list = matcher.getMatchingObjects(resultSetsForStatement, sql, true);
+        if(null == list || list.isEmpty())
         {
-            return list.get(0);
+            return null;
         }
-        return null;
+        return list.get(0);
     }
     
     /**
@@ -402,10 +385,6 @@ public abstract class AbstractResultSetHandler
     public MockResultSet getGlobalResultSet()
     {
         if(null == globalResultSets) return null;
-        if(globalResultSets instanceof MockResultSet)
-        {
-            return (MockResultSet)globalResultSets;
-        }
         MockResultSet[] resultSets = getGlobalResultSets();
         if(null != resultSets && resultSets.length > 0)
         {
@@ -423,11 +402,7 @@ public abstract class AbstractResultSetHandler
     public MockResultSet[] getGlobalResultSets()
     {
         if(null == globalResultSets) return null;
-        if(globalResultSets instanceof MockResultSet[])
-        {
-            return (MockResultSet[])globalResultSets;
-        }
-        return new MockResultSet[] {(MockResultSet)globalResultSets};
+        return globalResultSets;
     }
     
     /**
@@ -438,7 +413,7 @@ public abstract class AbstractResultSetHandler
      */
     public boolean hasMultipleGlobalResultSets()
     {
-        return (globalResultSets instanceof MockResultSet[]);
+        return (globalResultSets!=null && globalResultSets.length > 1);
     }
     
     /**
@@ -453,19 +428,11 @@ public abstract class AbstractResultSetHandler
      */
     public Integer getUpdateCount(String sql)
     {
-        Object updateCounts = getMatchingUpdateCounts(sql);
+        int[] updateCounts = getMatchingUpdateCounts(sql);
         if(null == updateCounts) return null;
-        if(updateCounts instanceof Integer)
+        if(updateCounts.length > 0)
         {
-            return (Integer)updateCounts;
-        }
-        else if(updateCounts instanceof Integer[])
-        {
-            Integer[] actualUpdateCounts = (Integer[])updateCounts;
-            if(actualUpdateCounts.length > 0)
-            {
-                return actualUpdateCounts[0];
-            }
+            return updateCounts[0];
         }
         return null;
     }
@@ -480,19 +447,10 @@ public abstract class AbstractResultSetHandler
      * @param sql the SQL string
      * @return the corresponding update count array
      */
-    public Integer[] getUpdateCounts(String sql)
+    public int[] getUpdateCounts(String sql)
     {
-        Object updateCounts = getMatchingUpdateCounts(sql);
-        if(null == updateCounts) return null;
-        if(updateCounts instanceof Integer)
-        {
-            return new Integer[] {(Integer)updateCounts};
-        }
-        else if(updateCounts instanceof Integer[])
-        {
-            return (Integer[])updateCounts;
-        }
-        return null;
+        int[] updateCounts = getMatchingUpdateCounts(sql);
+        return updateCounts;
     }
     
     /**
@@ -505,14 +463,14 @@ public abstract class AbstractResultSetHandler
      */
     public boolean hasMultipleUpdateCounts(String sql)
     {
-        Object updateCounts = getMatchingUpdateCounts(sql);
-        return (updateCounts instanceof Integer[]);
+        int[] updateCounts = getMatchingUpdateCounts(sql);
+        return (null != updateCounts && updateCounts.length > 1);
     }
     
-    private Object getMatchingUpdateCounts(String sql)
+    private int[] getMatchingUpdateCounts(String sql)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
-        List list = matcher.getMatchingObjects(updateCountForStatement, sql, true, true);
+        SQLStatementMatcher<int[]> matcher = new SQLStatementMatcher<int[]>(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
+        List<int[]> list = matcher.getMatchingObjects(updateCountForStatement, sql, true);
         if(null != list && list.size() > 0)
         {
             return list.get(0);
@@ -528,15 +486,9 @@ public abstract class AbstractResultSetHandler
      */
     public int getGlobalUpdateCount()
     {
-        if(null == globalUpdateCounts) return 0;
-        if(globalUpdateCounts instanceof Integer)
+        if(null != globalUpdateCounts && globalUpdateCounts.length > 0)
         {
-            return ((Integer)globalUpdateCounts).intValue();
-        }
-        int[] updateCounts = getGlobalUpdateCounts();
-        if(null != updateCounts && updateCounts.length > 0)
-        {
-            return updateCounts[0];
+            return globalUpdateCounts[0];
         }
         return 0;
     }
@@ -550,11 +502,7 @@ public abstract class AbstractResultSetHandler
     public int[] getGlobalUpdateCounts()
     {
         if(null == globalUpdateCounts) return null;
-        if(globalUpdateCounts instanceof int[])
-        {
-            return (int[])globalUpdateCounts;
-        }
-        return new int[] {((Integer)globalUpdateCounts).intValue()};
+        return globalUpdateCounts;
     }
     
     /**
@@ -565,7 +513,7 @@ public abstract class AbstractResultSetHandler
      */
     public boolean hasMultipleGlobalUpdateCounts()
     {
-        return (globalUpdateCounts instanceof int[]);
+        return (null != globalUpdateCounts && globalUpdateCounts.length > 1);
     }
     
     /**
@@ -578,13 +526,13 @@ public abstract class AbstractResultSetHandler
      */
     public MockResultSet getGeneratedKeys(String sql)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
-        List list = matcher.getMatchingObjects(generatedKeysForStatement, sql, true, true);
-        if(null != list && list.size() > 0)
+        SQLStatementMatcher<MockResultSet> matcher = new SQLStatementMatcher<MockResultSet>(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
+        List<MockResultSet> list = matcher.getMatchingObjects(generatedKeysForStatement, sql, true);
+        if(null == list || list.isEmpty())
         {
-            return (MockResultSet)list.get(0);
+            return null;
         }
-        return null;
+        return list.get(0);
     }
     
     /**
@@ -610,13 +558,13 @@ public abstract class AbstractResultSetHandler
      */
     public Boolean getReturnsResultSet(String sql)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
-        List list = matcher.getMatchingObjects(returnsResultSetMap, sql, true, true);
-        if(null != list && list.size() > 0)
+        SQLStatementMatcher<Boolean> matcher = new SQLStatementMatcher<Boolean>(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
+        List<Boolean> list = matcher.getMatchingObjects(returnsResultSetMap, sql, true);
+        if(null == list || list.isEmpty())
         {
-            return (Boolean)list.get(0);
+            return null;
         }
-        return null;
+        return list.get(0);
     }
     
     /**
@@ -647,10 +595,14 @@ public abstract class AbstractResultSetHandler
      */
     public SQLException getSQLException(String sql)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
-        List list = matcher.getMatchingObjects(throwsSQLException, sql, true, true);
-        if(null == list || list.size() == 0) return null;
-        return (SQLException)list.get(0);
+        SQLStatementMatcher<SQLException> matcher = new SQLStatementMatcher<SQLException>(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
+        List<SQLException> list = matcher.getMatchingObjects(throwsSQLException, sql, true);
+        if(null == list || list.isEmpty())
+        {
+            return null;
+        }
+        return list.get(0);
+
     }
     
     /**
@@ -663,7 +615,7 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareResultSet(String sql, MockResultSet resultSet)
     {
-        resultSetsForStatement.put(sql, resultSet);
+        resultSetsForStatement.put(sql, new MockResultSet[]{resultSet});
     }
     
     /**
@@ -686,7 +638,7 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareGlobalResultSet(MockResultSet resultSet)
     {
-        this.globalResultSets = resultSet;
+        this.globalResultSets = new MockResultSet[]{resultSet};
     }
     
     /**
@@ -708,7 +660,7 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareUpdateCount(String sql, int updateCount)
     {
-        updateCountForStatement.put(sql, new Integer(updateCount));
+        updateCountForStatement.put(sql, new int[]{updateCount});
     }
     
     /**
@@ -722,7 +674,7 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareUpdateCounts(String sql, int[] updateCounts)
     {
-        updateCountForStatement.put(sql, ArrayUtil.convertToObjectArray(updateCounts));
+        updateCountForStatement.put(sql, updateCounts.clone());
     }
     
     /**
@@ -731,7 +683,7 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareGlobalUpdateCount(int updateCount)
     {
-        this.globalUpdateCounts = new Integer(updateCount);
+        this.globalUpdateCounts = new int[]{updateCount};
     }
     
     /**
@@ -740,7 +692,7 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareGlobalUpdateCounts(int[] updateCounts)
     {
-        this.globalUpdateCounts = (int[])updateCounts.clone();
+        this.globalUpdateCounts = updateCounts.clone();
     }
     
     /**
@@ -778,7 +730,7 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareReturnsResultSet(String sql, boolean returnsResultSet)
     {
-        returnsResultSetMap.put(sql, new Boolean(returnsResultSet));
+        returnsResultSetMap.put(sql, returnsResultSet);
     }
     
     /**
