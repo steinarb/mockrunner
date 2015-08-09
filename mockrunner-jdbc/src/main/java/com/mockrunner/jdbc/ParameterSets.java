@@ -1,8 +1,8 @@
 package com.mockrunner.jdbc;
 
+import com.mockrunner.mock.jdbc.MockParameterMap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Encapsulates the parameter sets for an executed
@@ -16,12 +16,12 @@ import java.util.Map;
  */
 public class ParameterSets
 {
-	private List parameterSets;
-	private String sql;
+	private final List<MockParameterMap> parameterSets;
+	private final String sql;
 	
 	public ParameterSets(String sql)
 	{
-		parameterSets = new ArrayList();
+		parameterSets = new ArrayList<MockParameterMap>();
 		this.sql = sql;
 	}
 	
@@ -38,7 +38,7 @@ public class ParameterSets
 	 * Adds a parameter set.
 	 * @param parameterSet the parameter set.
 	 */
-	public void addParameterSet(Map parameterSet)
+	public void addParameterSet(MockParameterMap parameterSet)
 	{
 		parameterSets.add(parameterSet);
 	}
@@ -57,9 +57,9 @@ public class ParameterSets
 	 * @param indexOfParameterSet the index
 	 * @return the parameter set
 	 */
-	public Map getParameterSet(int indexOfParameterSet)
+	public MockParameterMap getParameterSet(int indexOfParameterSet)
 	{
 		if(indexOfParameterSet >= getNumberParameterSets()) return null;
-		return (Map)parameterSets.get(indexOfParameterSet);
+		return parameterSets.get(indexOfParameterSet);
 	}
 }

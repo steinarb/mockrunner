@@ -14,7 +14,7 @@ public class MockRowId implements RowId, Cloneable
     
     public MockRowId(byte[] data)
     {
-        rowIdData = (byte[])data.clone();
+        rowIdData = data.clone();
     }
     
     public byte[] getBytes()
@@ -22,6 +22,7 @@ public class MockRowId implements RowId, Cloneable
         return rowIdData;
     }
 
+    @Override
     public boolean equals(Object otherObject)
     {
         if(null == otherObject) return false;
@@ -30,6 +31,7 @@ public class MockRowId implements RowId, Cloneable
         return Arrays.equals(rowIdData, otherRowId.getBytes());
     }
 
+    @Override
     public int hashCode()
     {
         int value = 17;
@@ -40,10 +42,11 @@ public class MockRowId implements RowId, Cloneable
         return value;
     }
 
+    @Override
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(this.getClass().getName() + ": [");
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(this.getClass().getName()).append(": [");
         for(int ii = 0; ii < rowIdData.length; ii++)
         {
             buffer.append(rowIdData[ii]);
@@ -56,12 +59,13 @@ public class MockRowId implements RowId, Cloneable
         return buffer.toString();
     }
 
+    @Override
     public Object clone()
     {
         try
         {
             MockRowId copy = (MockRowId)super.clone();
-            copy.rowIdData = (byte[])rowIdData.clone();
+            copy.rowIdData = rowIdData.clone();
             return copy;
         } 
         catch(CloneNotSupportedException exc)

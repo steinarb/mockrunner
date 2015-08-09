@@ -647,7 +647,7 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareGlobalResultSets(MockResultSet[] resultSets)
     {
-        this.globalResultSets = (MockResultSet[])resultSets.clone();
+        this.globalResultSets = resultSets.clone();
     }
     
     /**

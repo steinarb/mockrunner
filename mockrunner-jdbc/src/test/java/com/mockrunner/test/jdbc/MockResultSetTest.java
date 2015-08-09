@@ -31,6 +31,7 @@ public class MockResultSetTest extends TestCase
 {
     private MockResultSet resultSet;
     
+    @Override
     protected void setUp() throws Exception
     {
         super.setUp();
@@ -54,7 +55,7 @@ public class MockResultSetTest extends TestCase
         resultSet.addColumn("firstColumn");
         resultSet.addColumn("secondColumn");
         resultSet.addColumn("thirdColumn");
-        List<String> row = new ArrayList<String>();
+        List<Object> row = new ArrayList<Object>();
         row.add("value1");
         row.add("value2");
         row.add("value3");
@@ -90,8 +91,8 @@ public class MockResultSetTest extends TestCase
     
     public void testAddColumn() throws Exception
     {
-        resultSet.addColumn("intColumn", new Integer[] {new Integer(1), new Integer(2), new Integer(3)});
-        List<String> column = new ArrayList<String>();
+        resultSet.addColumn("intColumn", new Integer[] {1,2,3});
+        List<Object> column = new ArrayList<Object>();
         column.add("value1");
         column.add("value2");
         column.add("value3");
@@ -145,7 +146,7 @@ public class MockResultSetTest extends TestCase
     {
         List<Object> column = new ArrayList<Object>();
         column.add("1.2");
-        column.add(new Double(3.4));
+        column.add(3.4);
         column.add("1900-12-12");
         column.add("value");
         column.add(null);
@@ -217,11 +218,11 @@ public class MockResultSetTest extends TestCase
         resultSet.setResultSetConcurrency(ResultSet.CONCUR_UPDATABLE);
         List<Object> column = new ArrayList<Object>();
         column.add(null);
-        column.add(new Double(3.4));
+        column.add(3.4);
         column.add("value");
         resultSet.addColumn("column1", column);
         column = new ArrayList<Object>();
-        column.add(new Integer(2));
+        column.add(2);
         column.add("test");
         resultSet.addColumn("column2", column);
         try
@@ -238,11 +239,11 @@ public class MockResultSetTest extends TestCase
         assertNull(resultSet.getObject(1));
         assertNull(resultSet.getObject(2));
         resultSet.updateInt(1, 3);
-        assertEquals(new Integer(3), resultSet.getObject(1));
+        assertEquals(3, resultSet.getObject(1));
         assertNull(resultSet.getObject(2));
         resultSet.next();
         resultSet.updateBytes(2, new byte[] {1, 2, 3});
-        assertEquals(new Double(3.4), resultSet.getObject(1));
+        assertEquals(3.4, resultSet.getObject(1));
         assertTrue(Arrays.equals(new byte[] {1, 2, 3}, resultSet.getBlob("column2").getBytes(1, 3)));
         resultSet.next();
         resultSet.updateObject(1, "3");
@@ -349,7 +350,7 @@ public class MockResultSetTest extends TestCase
     public void testError() throws Exception
     {
         resultSet.setResultSetType(ResultSet.TYPE_FORWARD_ONLY);
-        List<String> column = new ArrayList<String>();
+        List<Object> column = new ArrayList<Object>();
         column.add("test");
         resultSet.addColumn("column1", column);
         try
@@ -850,17 +851,17 @@ public class MockResultSetTest extends TestCase
         resultSet.addRow(new String[] {"test1", "test2"});
         resultSet.addRow(new String[] {"test3", "test4"});
         resultSet.addRow(new String[] {"test5", "test6"});
-        List row1 = resultSet.getRow(1);
+        List<Object> row1 = resultSet.getRow(1);
         assertEquals("test1", row1.get(0));
         assertEquals("test2", row1.get(1));
-        List row3 = resultSet.getRow(3);
+        List<Object> row3 = resultSet.getRow(3);
         assertEquals("test5", row3.get(0));
         assertEquals("test6", row3.get(1));
-        List column2 = resultSet.getColumn(2);
+        List<Object> column2 = resultSet.getColumn(2);
         assertEquals("test2", column2.get(0));
         assertEquals("test4", column2.get(1));
         assertEquals("test6", column2.get(2));
-        List column1 = resultSet.getColumn("col1");
+        List<Object> column1 = resultSet.getColumn("col1");
         assertEquals("test1", column1.get(0));
         assertEquals("test3", column1.get(1));
         assertEquals("test5", column1.get(2));
@@ -871,7 +872,7 @@ public class MockResultSetTest extends TestCase
         otherResult.addRow(new String[] {"test5", "test6"});
         assertFalse(resultSet.isEqual(otherResult));
         assertFalse(otherResult.isEqual(resultSet));
-        List testList = new ArrayList();
+        List<Object> testList = new ArrayList<Object>();
         testList.add("test3");
         testList.add("test4");
         assertTrue(otherResult.isRowEqual(2, testList));
@@ -886,7 +887,7 @@ public class MockResultSetTest extends TestCase
         otherResult.addRow(new String[] {"test5", "test6"});
         assertTrue(resultSet.isEqual(otherResult));
         assertTrue(otherResult.isEqual(resultSet));
-        testList = new ArrayList();
+        testList = new ArrayList<Object>();
         testList.add("test1");
         testList.add("test3");
         testList.add("test5");
@@ -895,7 +896,7 @@ public class MockResultSetTest extends TestCase
         resultSet.next();
         resultSet.next();
         resultSet.updateClob(1, new MockClob("Test"));
-        testList = new ArrayList();
+        testList = new ArrayList<Object>();
         testList.add("test1");
         testList.add(new MockClob("Test"));
         testList.add("test5");
@@ -916,23 +917,23 @@ public class MockResultSetTest extends TestCase
         assertTrue(resultSet.isEqual(otherResult));
         assertTrue(otherResult.isEqual(resultSet));
         otherResult = new MockResultSet("");
-        otherResult.addRow(new Integer[] {new Integer(1), new Integer(2), new Integer(3)});
-        otherResult.addRow(new Integer[] {new Integer(4), new Integer(5), new Integer(6)});
-        otherResult.addRow(new Integer[] {new Integer(7), new Integer(8), new Integer(9)});
-        testList = new ArrayList();
+        otherResult.addRow(new Integer[] {1, 2, 3});
+        otherResult.addRow(new Integer[] {4, 5, 6});
+        otherResult.addRow(new Integer[] {7, 8, 9});
+        testList = new ArrayList<Object>();
         testList.add("1");
         testList.add("4");
         testList.add("7");
         assertTrue(otherResult.isColumnEqual(1, testList));
-        testList = new ArrayList();
+        testList = new ArrayList<Object>();
         testList.add("7");
         testList.add("8");
         testList.add("9");
         assertTrue(otherResult.isRowEqual(3, testList));
         otherResult = new MockResultSet("");
-        otherResult.addRow(new Object[] {new Integer[] {new Integer(1), new Integer(2)}});
-        testList = new ArrayList();
-        testList.add(new Integer[] {new Integer(1), new Integer(2)});
+        otherResult.addRow(new Object[] {new Integer[] {1, 2}});
+        testList = new ArrayList<Object>();
+        testList.add(new Integer[] {1, 2});
         assertTrue(otherResult.isRowEqual(1, testList));    
     }
     
@@ -940,14 +941,14 @@ public class MockResultSetTest extends TestCase
     {
         resultSet.addColumn("col1");
         resultSet.addColumn("col2");
-        resultSet.addRow(new Object[] {new Integer(1), null});
-        List rowList = new ArrayList();
+        resultSet.addRow(new Object[] {1, null});
+        List<Object> rowList = new ArrayList<Object>();
         rowList.add("1");
         rowList.add(null);
         assertTrue(resultSet.isRowEqual(1, rowList));
-        List columnList1 = new ArrayList();
+        List<Object> columnList1 = new ArrayList<Object>();
         columnList1.add("1");
-        List columnList2 = new ArrayList();
+        List<Object> columnList2 = new ArrayList<Object>();
         columnList2.add(null);
         assertTrue(resultSet.isColumnEqual(1, columnList1));
         assertTrue(resultSet.isColumnEqual(2, columnList2));
@@ -1085,12 +1086,12 @@ public class MockResultSetTest extends TestCase
         assertEquals("test", clob.getSubString(1, 4));
         clob.setString(1, "xyzx");
         assertEquals("xyzx", clob.getSubString(1, 4));
-        List list = new ArrayList();
+        List<Object> list = new ArrayList<Object>();
         list.add(new MockClob("xyzx"));
         list.add(new MockStruct("test6"));
         assertTrue(resultSet.isRowEqual(3, list));
         assertFalse(cloneResult.isRowEqual(3, list));
-        list = new ArrayList();
+        list = new ArrayList<Object>();
         list.add(new MockClob("test5"));
         list.add(new MockStruct("test6"));
         assertTrue(cloneResult.isRowEqual(3, list));

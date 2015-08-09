@@ -68,7 +68,7 @@ public class MockArray implements Array, Cloneable
         return array;
     }
     
-    public Object getArray(Map map) throws SQLException
+    public Object getArray(Map<String, Class<?>> map) throws SQLException
     {
         return getArray();
     }
@@ -78,7 +78,7 @@ public class MockArray implements Array, Cloneable
         return ArrayUtil.truncateArray(getArray(), (int)(index - 1), count);
     }
     
-    public Object getArray(long index, int count, Map map) throws SQLException
+    public Object getArray(long index, int count, Map<String,Class<?>> map) throws SQLException
     {
         return getArray(index, count);
     }
@@ -109,12 +109,12 @@ public class MockArray implements Array, Cloneable
         return resultSet;
     }
 
-    public ResultSet getResultSet(long index, int count, Map map) throws SQLException
+    public ResultSet getResultSet(long index, int count, Map<String,Class<?>> map) throws SQLException
     {
         return getResultSet(index, count);
     }
 
-    public ResultSet getResultSet(Map map) throws SQLException
+    public ResultSet getResultSet(Map<String,Class<?>> map) throws SQLException
     {
         return getResultSet();
     }

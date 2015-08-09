@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -14,10 +13,14 @@ import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.base.VerifyFailedException;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
+import com.mockrunner.mock.jdbc.MockParameterMap;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
+import com.mockrunner.mock.jdbc.ParameterIndex;
+import com.mockrunner.mock.jdbc.ParameterName;
+import com.mockrunner.mock.jdbc.ParameterReference;
 import com.mockrunner.util.common.StringUtil;
 
 /**
@@ -25,7 +28,7 @@ import com.mockrunner.util.common.StringUtil;
  */
 public class JDBCTestModule
 {
-    private JDBCMockObjectFactory mockFactory;
+    private final JDBCMockObjectFactory mockFactory;
     private boolean caseSensitive = false;
     private boolean exactMatch = false;
     private boolean useRegularExpressions = false;
@@ -178,6 +181,7 @@ public class JDBCTestModule
     /**
      * @deprecated use {@link #getExecutedSQLStatementParameterMap}
      */
+    @Deprecated
     public Map<String, ParameterSets> getExecutedSQLStatementParameter()
     {
         return getExecutedSQLStatementParameterMap();
@@ -230,10 +234,10 @@ public class JDBCTestModule
      */
     public MockResultSet getReturnedResultSet(String id)
     {
-        List list = getReturnedResultSets(id);
+        List<MockResultSet> list = getReturnedResultSets(id);
         if(list != null && list.size() > 0)
         {
-            return (MockResultSet)list.get(0);
+            return list.get(0);
         }
         return null;
     }
@@ -318,10 +322,10 @@ public class JDBCTestModule
      */
     public MockPreparedStatement getPreparedStatement(String sql)
     {
-        List list = getPreparedStatements(sql);
+        List<MockPreparedStatement> list = getPreparedStatements(sql);
         if(null != list && list.size() > 0)
         {
-            return (MockPreparedStatement)list.get(0);
+            return list.get(0);
         }
         return null;
     }
@@ -534,9 +538,9 @@ public class JDBCTestModule
      * Returns a list of all <code>Savepoint</code> objects.
      * @return the <code>List</code> of {@link com.mockrunner.mock.jdbc.MockSavepoint} objects
      */
-    public List getSavepoints()
+    public List<MockSavepoint> getSavepoints()
     {
-        return new ArrayList(mockFactory.getMockConnection().getSavepointMap().values());
+        return new ArrayList<MockSavepoint>(mockFactory.getMockConnection().getSavepointMap().values());
     }
     
     /**
@@ -548,10 +552,8 @@ public class JDBCTestModule
      */
     public MockSavepoint getSavepoint(int index)
     {
-        List savepoints = getSavepoints();
-        for(int ii = 0; ii < savepoints.size(); ii++)
-        {
-            MockSavepoint currentSavepoint = (MockSavepoint)savepoints.get(ii);
+        List<MockSavepoint> savepoints = getSavepoints();
+        for (MockSavepoint currentSavepoint : savepoints) {
             if(currentSavepoint.getNumber() == index) return currentSavepoint;
         }
         return null;
@@ -565,15 +567,13 @@ public class JDBCTestModule
      */
     public MockSavepoint getSavepoint(String name)
     {
-        List savepoints = getSavepoints();
-        for(int ii = 0; ii < savepoints.size(); ii++)
-        {
-            MockSavepoint currentSavepoint = (MockSavepoint)savepoints.get(ii);
+        List<MockSavepoint> savepoints = getSavepoints();
+        for (MockSavepoint currentSavepoint : savepoints) {
             try
             {
                 if(currentSavepoint.getSavepointName().equals(name)) return currentSavepoint;
             }
-            catch(SQLException exc)
+            catch(SQLException exc) //never thrown
             {
                 throw new NestedApplicationException(exc);
             }
@@ -588,7 +588,7 @@ public class JDBCTestModule
      */
     public void verifySQLStatementExecuted(String sql)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch, useRegularExpressions);
+        SQLStatementMatcher<Object> matcher = new SQLStatementMatcher<Object>(caseSensitive, exactMatch, useRegularExpressions);
         if(!matcher.contains(getExecutedSQLStatements(), sql, false))
         {
             throw new VerifyFailedException("Statement " + sql + " not executed.");
@@ -602,7 +602,7 @@ public class JDBCTestModule
      */
     public void verifySQLStatementNotExecuted(String sql)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch, useRegularExpressions);
+        SQLStatementMatcher<Object> matcher = new SQLStatementMatcher<Object>(caseSensitive, exactMatch, useRegularExpressions);
         if(matcher.contains(getExecutedSQLStatements(), sql, false))
         {
             throw new VerifyFailedException("Statement " + sql + " was executed.");
@@ -626,7 +626,7 @@ public class JDBCTestModule
      */
     public void verifySQLStatementParameterNumber(String sql, int indexOfParameterSet, int number)
     {
-        Map<Integer, Object> actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
+        MockParameterMap actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
         if(actualParameterMap.size() != number)
         {
             throw new VerifyFailedException("Expected " + number + " parameter, actual " + actualParameterMap.size() + " parameter");
@@ -651,23 +651,21 @@ public class JDBCTestModule
      * @param parameterMap the map of expected parameters
      * @throws VerifyFailedException if verification fails
      */
-    public void verifySQLStatementParameter(String sql, int indexOfParameterSet, Map<Object, Object> parameterMap)
+    public void verifySQLStatementParameter(String sql, int indexOfParameterSet, MockParameterMap parameterMap)
     {
         verifySQLStatementParameterNumber(sql, indexOfParameterSet, parameterMap.size());
-        Map<Object, Object> actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
-        Iterator<Object> keys = parameterMap.keySet().iterator();
-        while(keys.hasNext())
-        {
-            Object nextKey = keys.next();
-            Object nextExpectedParameter = parameterMap.get(nextKey);
-            Object nextActualParameter = actualParameterMap.get(nextKey);
+        MockParameterMap actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
+        
+        for(ParameterReference key : parameterMap.keySet()){
+            Object nextExpectedParameter = parameterMap.get(key);
+            Object nextActualParameter = actualParameterMap.get(key);
             if(null == nextActualParameter)
             {
-                throw new VerifyFailedException("No parameter " + nextKey + " found.");
+                throw new VerifyFailedException("No parameter " + key + " found.");
             }
             if(!ParameterUtil.compareParameter(nextExpectedParameter, nextActualParameter))
             {
-                throw new VerifyFailedException("Expected " + nextExpectedParameter + " for parameter " + nextKey + ", but was " + nextActualParameter);
+                throw new VerifyFailedException("Expected " + nextExpectedParameter + " for parameter " + key + ", but was " + nextActualParameter);
             }
         }
     }
@@ -691,8 +689,8 @@ public class JDBCTestModule
      */
     public void verifySQLStatementParameter(String sql, int indexOfParameterSet, int indexOfParameter, Object expectedParameter)
     {
-        Map<Integer, Object> actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
-        Object actualParameter = actualParameterMap.get(new Integer(indexOfParameter));
+        MockParameterMap actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
+        Object actualParameter = actualParameterMap.get(indexOfParameter);
         if(!ParameterUtil.compareParameter(expectedParameter, actualParameter))
         {
             throw new VerifyFailedException("Expected " + expectedParameter + " for parameter " + indexOfParameter + ", but was " + actualParameter);
@@ -718,7 +716,7 @@ public class JDBCTestModule
      */
     public void verifySQLStatementParameter(String sql, int indexOfParameterSet, String nameOfParameter, Object expectedParameter)
     {
-        Map<Integer, Object> actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
+        MockParameterMap actualParameterMap = verifyAndGetParametersForSQL(sql, indexOfParameterSet);
         Object actualParameter = actualParameterMap.get(nameOfParameter);
         if(!ParameterUtil.compareParameter(expectedParameter, actualParameter))
         {
@@ -726,7 +724,7 @@ public class JDBCTestModule
         }
     }
 
-    private Map verifyAndGetParametersForSQL(String sql, int indexOfParameterSet)
+    private MockParameterMap verifyAndGetParametersForSQL(String sql, int indexOfParameterSet)
     {
         verifySQLStatementExecuted(sql);
         SQLStatementMatcher<ParameterSets> matcher = new SQLStatementMatcher<ParameterSets>(caseSensitive, exactMatch, useRegularExpressions);
@@ -806,6 +804,7 @@ public class JDBCTestModule
      * objects that were actually returned when executing a statement
      * and that were explicitly closed. Implicit closed <code>ResultSet</code>
      * objects (when closing a statement) are not recognized.
+     * @param id
      * @throws VerifyFailedException if verification fails
      */
     public void verifyResultSetClosed(String id)
@@ -1024,12 +1023,9 @@ public class JDBCTestModule
     public void verifyAllResultSetsClosed()
     {
         List<MockResultSet[]> allResultSets = getReturnedResultSets();
-        for(int ii = 0; ii < allResultSets.size(); ii++)
-        {
-            MockResultSet[] resultSets = allResultSets.get(ii);
-            for(int yy = 0; yy < resultSets.length; yy++)
-            {
-                throwExceptionIfNotClosed(resultSets[yy]);
+        for (MockResultSet[] resultSets : allResultSets) {
+            for (MockResultSet resultSet : resultSets) {
+                throwExceptionIfNotClosed(resultSet);
             }
         }
     }
@@ -1303,7 +1299,7 @@ public class JDBCTestModule
      * @param rowData the row data
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyResultSetRow(MockResultSet resultSet, int number, List rowData)
+    public void verifyResultSetRow(MockResultSet resultSet, int number, List<Object> rowData)
     {
         if(null == resultSet.getRow(number))
         {
@@ -1332,7 +1328,7 @@ public class JDBCTestModule
      */
     public void verifyResultSetRow(MockResultSet resultSet, int number, Object[] rowData)
     {
-        List dataList = Arrays.asList(rowData);
+        List<Object> dataList = Arrays.asList(rowData);
         verifyResultSetRow(resultSet, number, dataList);
     }
     
@@ -1346,7 +1342,7 @@ public class JDBCTestModule
      * @param rowData the row data
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyResultSetRow(String id, int number, List rowData)
+    public void verifyResultSetRow(String id, int number, List<Object> rowData)
     {
         MockResultSet resultSet = getReturnedResultSet(id);
         if(null == resultSet)
@@ -1368,7 +1364,7 @@ public class JDBCTestModule
      */
     public void verifyResultSetRow(String id, int number, Object[] rowData)
     {
-        List dataList = Arrays.asList(rowData);
+        List<Object> dataList = Arrays.asList(rowData);
         verifyResultSetRow(id, number, dataList);
     }
     
@@ -1382,7 +1378,7 @@ public class JDBCTestModule
      * @param columnData the column data
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyResultSetColumn(MockResultSet resultSet, int number, List columnData)
+    public void verifyResultSetColumn(MockResultSet resultSet, int number, List<Object> columnData)
     {
         if(null == resultSet.getColumn(number))
         {
@@ -1411,7 +1407,7 @@ public class JDBCTestModule
      */
     public void verifyResultSetColumn(MockResultSet resultSet, int number, Object[] columnData)
     {
-        List dataList = Arrays.asList(columnData);
+        List<Object> dataList = Arrays.asList(columnData);
         verifyResultSetColumn(resultSet, number, dataList);
     }
 
@@ -1425,7 +1421,7 @@ public class JDBCTestModule
      * @param columnData the column data
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyResultSetColumn(String id, int number, List columnData)
+    public void verifyResultSetColumn(String id, int number, List<Object> columnData)
     {
         MockResultSet resultSet = getReturnedResultSet(id);
         if(null == resultSet)
@@ -1447,7 +1443,7 @@ public class JDBCTestModule
      */
     public void verifyResultSetColumn(String id, int number, Object[] columnData)
     {
-        List dataList = Arrays.asList(columnData);
+        List<Object> dataList = Arrays.asList(columnData);
         verifyResultSetColumn(id, number, dataList);
     }
     
@@ -1461,7 +1457,7 @@ public class JDBCTestModule
      * @param columnData the column data
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyResultSetColumn(MockResultSet resultSet, String name, List columnData)
+    public void verifyResultSetColumn(MockResultSet resultSet, String name, List<Object> columnData)
     {
         if(null == resultSet.getColumn(name))
         {
@@ -1490,7 +1486,7 @@ public class JDBCTestModule
      */
     public void verifyResultSetColumn(MockResultSet resultSet, String name, Object[] columnData)
     {
-        List dataList = Arrays.asList(columnData);
+        List<Object> dataList = Arrays.asList(columnData);
         verifyResultSetColumn(resultSet, name, dataList);
     }
 
@@ -1504,7 +1500,7 @@ public class JDBCTestModule
      * @param columnData the column data
      * @throws VerifyFailedException if verification fails
      */
-    public void verifyResultSetColumn(String id, String name, List columnData)
+    public void verifyResultSetColumn(String id, String name, List<Object> columnData)
     {
         MockResultSet resultSet = getReturnedResultSet(id);
         if(null == resultSet)
@@ -1526,7 +1522,7 @@ public class JDBCTestModule
      */
     public void verifyResultSetColumn(String id, String name, Object[] columnData)
     {
-        List dataList = Arrays.asList(columnData);
+        List<Object> dataList = Arrays.asList(columnData);
         verifyResultSetColumn(id, name, dataList);
     }
     
@@ -1541,7 +1537,7 @@ public class JDBCTestModule
     {
         if(!source.isEqual(target))
         {
-            StringBuffer buffer = new StringBuffer("Source data:\n");  
+            StringBuilder buffer = new StringBuilder("Source data:\n");  
             buffer.append(source.toString());
             buffer.append("\n");
             buffer.append("Target data:\n");
@@ -1728,7 +1724,7 @@ public class JDBCTestModule
     
     private boolean containsPreparedStatementParameter(PreparedStatement statement, int indexOfParameter)
     {
-        return ((MockPreparedStatement)statement).getParameterMap().containsKey(indexOfParameter);
+        return ((MockPreparedStatement)statement).getParameterMap().containsKey(new ParameterIndex(indexOfParameter));
     }
     
     /**
@@ -1925,7 +1921,7 @@ public class JDBCTestModule
     
     private boolean containsCallableStatementParameter(CallableStatement statement, int indexOfParameter)
     {
-        return ((MockCallableStatement)statement).getParameterMap().containsKey(indexOfParameter);
+        return ((MockCallableStatement)statement).getParameterMap().containsKey(new ParameterIndex(indexOfParameter));
     }
     
     private boolean containsCallableStatementParameter(int indexOfStatement, String nameOfParameter)
@@ -1944,7 +1940,7 @@ public class JDBCTestModule
     
     private boolean containsCallableStatementParameter(CallableStatement statement, String nameOfParameter)
     {
-        return ((MockCallableStatement)statement).getParameterMap().containsKey(nameOfParameter);
+        return ((MockCallableStatement)statement).getParameterMap().containsKey(new ParameterName(nameOfParameter));
     }
     
     /**
@@ -2394,6 +2390,7 @@ public class JDBCTestModule
     /**
      * @deprecated use {@link #verifySavepointRolledBack(int)}
      */
+    @Deprecated
     public void verifySavepointRollbacked(int index)
     {
         verifySavepointRolledBack(index);
@@ -2402,6 +2399,7 @@ public class JDBCTestModule
     /**
      * @deprecated use {@link #verifySavepointRolledBack(String)}
      */
+    @Deprecated
     public void verifySavepointRollbacked(String name)
     {
         verifySavepointRolledBack(name);
@@ -2410,6 +2408,7 @@ public class JDBCTestModule
     /**
      * @deprecated use {@link #verifySavepointNotRolledBack(int)}
      */
+    @Deprecated
     public void verifySavepointNotRollbacked(int index)
     {
         verifySavepointNotRolledBack(index);
@@ -2418,6 +2417,7 @@ public class JDBCTestModule
     /**
      * @deprecated use {@link #verifySavepointNotRolledBack(String)}
      */
+    @Deprecated
     public void verifySavepointNotRollbacked(String name)
     {
         verifySavepointNotRolledBack(name);

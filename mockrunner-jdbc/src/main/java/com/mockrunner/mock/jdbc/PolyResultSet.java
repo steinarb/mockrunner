@@ -32,16 +32,16 @@ import java.util.Map;
  */
 public class PolyResultSet implements ResultSet 
 {
-    private List resultSets;
+    private final List<ResultSet> resultSets;
     private int position;
     private ResultSet current;
 
-    public PolyResultSet(List resultSets) 
+    public PolyResultSet(List<ResultSet> resultSets) 
     {
         this.resultSets = resultSets;
     }
 
-    public List getUnderlyingResultSetList()
+    public List<ResultSet> getUnderlyingResultSetList()
     {
         return Collections.unmodifiableList(resultSets);
     }
@@ -56,7 +56,7 @@ public class PolyResultSet implements ResultSet
         {
             while(position < resultSets.size()) 
             {
-                current = (ResultSet)resultSets.get(position++);
+                current = resultSets.get(position++);
                 if(current.next()) return true;
             }
         }
@@ -126,6 +126,7 @@ public class PolyResultSet implements ResultSet
         return current.getDouble(columnIndex);
     }
     
+    @Deprecated
     public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException
     {
         return current.getBigDecimal(columnIndex);
@@ -181,6 +182,7 @@ public class PolyResultSet implements ResultSet
         return current.getBinaryStream(columnIndex);
     }
     
+    @Deprecated
     public InputStream getUnicodeStream(int columnIndex) throws SQLException
     {
         return current.getUnicodeStream(columnIndex);
@@ -241,14 +243,14 @@ public class PolyResultSet implements ResultSet
         return current.getObject(columnIndex);
     }
     
-    public Object getObject(int columnIndex, Map map) throws SQLException
+    public Object getObject(int columnIndex, Map<String, Class<?>> map) throws SQLException
     {
         return current.getObject(columnIndex, map);
     }
     
-    public Object getObject(int columnIndex, Class type) throws SQLException
+    public <T> T getObject(int columnIndex, Class<T> type) throws SQLException
     {
-        return getObject(columnIndex);
+        return (T)getObject(columnIndex);
     }
 
     public String getString(String columnName) throws SQLException
@@ -296,6 +298,7 @@ public class PolyResultSet implements ResultSet
         return current.getDouble(columnName);
     }
 
+    @Deprecated
     public BigDecimal getBigDecimal(String columnName, int scale) throws SQLException
     {
         return current.getBigDecimal(columnName);
@@ -346,6 +349,7 @@ public class PolyResultSet implements ResultSet
         return current.getAsciiStream(columnName);
     }
     
+    @Deprecated
     public InputStream getUnicodeStream(String columnName) throws SQLException
     {
         return current.getUnicodeStream(columnName);
@@ -411,14 +415,14 @@ public class PolyResultSet implements ResultSet
         return current.getObject(columnName);
     }
     
-    public Object getObject(String columnName, Map map) throws SQLException
+    public Object getObject(String columnName, Map<String, Class<?>> map) throws SQLException
     {
         return current.getObject(columnName, map);
     }
 
-    public Object getObject(String columnName, Class type) throws SQLException
+    public <T> T getObject(String columnName, Class<T> type) throws SQLException
     {
-        return getObject(columnName);
+        return (T)getObject(columnName);
     }
 
     public SQLWarning getWarnings() throws SQLException
@@ -1006,12 +1010,12 @@ public class PolyResultSet implements ResultSet
         throw new SQLException("Not allowed for " + PolyResultSet.class.getName());
     }
 
-    public boolean isWrapperFor(Class iface) throws SQLException
+    public boolean isWrapperFor(Class<?> iface) throws SQLException
     {
         return false;
     }
 
-    public Object unwrap(Class iface) throws SQLException
+    public <T> T unwrap(Class<T> iface) throws SQLException
     {
         throw new SQLException("No object found for " + iface);
     }

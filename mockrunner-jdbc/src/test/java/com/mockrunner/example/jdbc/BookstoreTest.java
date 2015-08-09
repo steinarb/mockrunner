@@ -62,7 +62,7 @@ public class BookstoreTest extends BasicJDBCTestCaseAdapter
         MockResultSet result = getStatementResultSetHandler().createResultSet("bookresult", factory);
         //System.out.println(result.toString());
         getStatementResultSetHandler().prepareResultSet("select.*isbn,.*quantity.*", result);
-        List resultList = Bookstore.order(getJDBCMockObjectFactory().getMockConnection(), new ArrayList());
+        List<String> resultList = Bookstore.order(getJDBCMockObjectFactory().getMockConnection(), new ArrayList<String>());
         assertEquals(4, resultList.size());
         assertTrue(resultList.contains("1234567890"));
         assertTrue(resultList.contains("1111111111"));
@@ -83,7 +83,7 @@ public class BookstoreTest extends BasicJDBCTestCaseAdapter
     {
         MockResultSet result = getStatementResultSetHandler().createResultSet();    
         getStatementResultSetHandler().prepareResultSet("select.*isbn,.*quantity.*", result);
-        List orderList = new ArrayList();
+        List<String> orderList = new ArrayList<String>();
         orderList.add("1234567890");
         orderList.add("1111111111");
         Bookstore.order(getJDBCMockObjectFactory().getMockConnection(), orderList);
@@ -94,7 +94,7 @@ public class BookstoreTest extends BasicJDBCTestCaseAdapter
     public void testException() throws Exception    
     {
         getStatementResultSetHandler().prepareThrowsSQLException("select.*isbn,.*quantity.*");
-        Bookstore.order(getJDBCMockObjectFactory().getMockConnection(), new ArrayList());
+        Bookstore.order(getJDBCMockObjectFactory().getMockConnection(), new ArrayList<String>());
         verifyRolledBack();
         verifyAllResultSetsClosed();
         verifyAllStatementsClosed();

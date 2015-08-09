@@ -9,6 +9,7 @@ import org.junit.After;
 
 import com.mockrunner.base.BaseTestCase;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
+import com.mockrunner.mock.jdbc.MockParameterMap;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockSavepoint;
@@ -425,9 +426,9 @@ public abstract class JDBCTestCaseAdapter extends BaseTestCase
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySQLStatementParameter(String, int, Map)}
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySQLStatementParameter(String, int, MockParameterMap)}
      */
-    protected void verifySQLStatementParameter(String sql, int indexOfParameterSet, Map parameterMap)
+    protected void verifySQLStatementParameter(String sql, int indexOfParameterSet, MockParameterMap parameterMap)
     {
         jdbcTestModule.verifySQLStatementParameter(sql, indexOfParameterSet, parameterMap);
     }

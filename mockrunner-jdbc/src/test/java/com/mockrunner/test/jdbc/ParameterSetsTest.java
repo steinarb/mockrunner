@@ -1,10 +1,9 @@
 package com.mockrunner.test.jdbc;
 
-import java.util.HashMap;
-
 import junit.framework.TestCase;
 
 import com.mockrunner.jdbc.ParameterSets;
+import com.mockrunner.mock.jdbc.MockParameterMap;
 
 public class ParameterSetsTest extends TestCase
 {
@@ -14,7 +13,7 @@ public class ParameterSetsTest extends TestCase
 		assertEquals("testsql", sets.getSQLStatement());
 		assertEquals(0, sets.getNumberParameterSets());
 		assertNull(sets.getParameterSet(0));
-		HashMap parameters = new HashMap();
+		MockParameterMap parameters = new MockParameterMap();
 		sets.addParameterSet(parameters);
 		assertEquals(1, sets.getNumberParameterSets());
 		assertSame(parameters, sets.getParameterSet(0));

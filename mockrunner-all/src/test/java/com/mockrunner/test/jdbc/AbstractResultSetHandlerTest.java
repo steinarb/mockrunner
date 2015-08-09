@@ -156,13 +156,13 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         int[] updateCounts = new int[] {1, 2};
         statementHandler.prepareUpdateCounts(".*", updateCounts);
         statementHandler.prepareUpdateCount("insert xyz", 4);
-        Integer[] returnedUpdateCounts = statementHandler.getUpdateCounts(".*");
+        int[] returnedUpdateCounts = statementHandler.getUpdateCounts(".*");
         assertEquals(2, returnedUpdateCounts.length);
-        assertEquals(new Integer(1), returnedUpdateCounts[0]);
-        assertEquals(new Integer(2), returnedUpdateCounts[1]);
+        assertEquals(1, returnedUpdateCounts[0]);
+        assertEquals(2, returnedUpdateCounts[1]);
         returnedUpdateCounts = statementHandler.getUpdateCounts("insert xyz");
         assertEquals(1, returnedUpdateCounts.length);
-        assertEquals(new Integer(4), returnedUpdateCounts[0]);
+        assertEquals(4, returnedUpdateCounts[0]);
         assertNull(statementHandler.getUpdateCounts("do nothing"));
     }
     
@@ -235,7 +235,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertTrue(statementHandler.getThrowsSQLException("b statementxyz"));
         assertNotSame(exc, statementHandler.getSQLException("b statementxyz"));
         String message = statementHandler.getSQLException("b statementxyz").getMessage();
-        assertTrue(message.indexOf("[abc] statementxyz") != -1);
+        assertTrue(message.contains("[abc] statementxyz"));
     }
     
     @Test
@@ -274,8 +274,8 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertSame(result2, statementHandler.getResultSet("select"));
         assertSame(result2, statementHandler.getResultSets("select")[0]);
         assertEquals(new Integer(3), statementHandler.getUpdateCount("SELECT"));
-        assertEquals(new Integer(3), statementHandler.getUpdateCounts("selecT")[0]);
-        assertTrue(statementHandler.getReturnsResultSet("select").booleanValue());
+        assertEquals(3, statementHandler.getUpdateCounts("selecT")[0]);
+        assertTrue(statementHandler.getReturnsResultSet("select"));
         assertSame(result1, statementHandler.getGeneratedKeys("select"));
     }
 }

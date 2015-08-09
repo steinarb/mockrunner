@@ -29,7 +29,7 @@ public class SQLStatementMatcherTest extends TestCase
 	
 	public void testGetMatchingObjectsRegEx()
 	{
-		Map<String, String> testMap = new HashMap();
+		Map<String, String> testMap = new HashMap<String, String>();
 		testMap.put("Test1", "TestObject1");
 		testMap.put("Test2", "TestObject2");
 		SQLStatementMatcher<String> matcher = new SQLStatementMatcher<String>(true, false, true);
@@ -74,7 +74,7 @@ public class SQLStatementMatcherTest extends TestCase
 //        assertTrue(resultList.contains("TestObject1"));
 //        assertTrue(resultList.contains("TestObject2"));
 //        assertTrue(resultList.contains("TestObject3"));
-        List testList = new ArrayList();
+        List<String> testList = new ArrayList<String>();
         testList.add("TestList1");
         testList.add("TestList2");
         testList.add("TestList3");
@@ -100,56 +100,56 @@ public class SQLStatementMatcherTest extends TestCase
     
     public void testGetMatchingObjectsResolveCollectionRegEx()
     {
-        Map<String, List<String>> testMap = new HashMap();
-		List testList = new ArrayList();
+        Map<String, List<String>> testMap = new HashMap<String, List<String>>();
+		List<String> testList = new ArrayList<String>();
 		testList.add("TestList1");
 		testList.add("TestList2");
 		testList.add("TestList3");
 		testMap.put("Test3", testList);
-		SQLStatementMatcher matcher = new SQLStatementMatcher<String>(true, false, true);
-		List resultList = matcher.getMatchingObjectsFromCollections(testMap, "[T].*", false);
+		SQLStatementMatcher<String> matcher = new SQLStatementMatcher<String>(true, false, true);
+		List<String> resultList = matcher.getMatchingObjectsFromCollections(testMap, "[T].*", false);
 		assertEquals(3, resultList.size());
     }
     
     public void testContains()
     {
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         list.add("TestString1");
         list.add("TestString2");
         list.add("TestString3");
-        SQLStatementMatcher matcher = new SQLStatementMatcher(false, false);
+        SQLStatementMatcher<String> matcher = new SQLStatementMatcher<String>(false, false);
         assertTrue(matcher.contains(list, "TESTSTRING", false));
-        matcher = new SQLStatementMatcher(true, false);
+        matcher = new SQLStatementMatcher<String>(true, false);
         assertFalse(matcher.contains(list, "TESTSTRING", false));
-        matcher = new SQLStatementMatcher(false, true);
+        matcher = new SQLStatementMatcher<String>(false, true);
         assertFalse(matcher.contains(list, "TESTSTRING", false));
-        matcher = new SQLStatementMatcher(true, true);
+        matcher = new SQLStatementMatcher<String>(true, true);
         assertTrue(matcher.contains(list, "TestString3", false));
-        matcher = new SQLStatementMatcher(true, true);
+        matcher = new SQLStatementMatcher<String>(true, true);
         assertFalse(matcher.contains(list, "TestString4", false));
-        matcher = new SQLStatementMatcher(false, false);
+        matcher = new SQLStatementMatcher<String>(false, false);
         assertFalse(matcher.contains(list, "TestString4", false));
-        matcher = new SQLStatementMatcher(false, false);
+        matcher = new SQLStatementMatcher<String>(false, false);
         assertFalse(matcher.contains(list, "TESTSTRING1XYZ", false));
-        matcher = new SQLStatementMatcher(false, false);
+        matcher = new SQLStatementMatcher<String>(false, false);
         assertTrue(matcher.contains(list, "TESTSTRING1XYZ", true));
-        matcher = new SQLStatementMatcher(true, false);
+        matcher = new SQLStatementMatcher<String>(true, false);
         assertFalse(matcher.contains(list, "TEstString3Test", true));
-        matcher = new SQLStatementMatcher(false, false);
+        matcher = new SQLStatementMatcher<String>(false, false);
         assertTrue(matcher.contains(list, "TEstString3Test", true));
     }
     
     public void testContainsRegEx()
     {
-        ArrayList list = new ArrayList();
+        ArrayList<String> list = new ArrayList<String>();
         list.add("TestString1");
         list.add("TestString2");
         list.add("TestString3");
-        SQLStatementMatcher matcher = new SQLStatementMatcher(false, false, true);
+        SQLStatementMatcher<String> matcher = new SQLStatementMatcher<String>(false, false, true);
         assertTrue(matcher.contains(list, "TESTSTRING.", false));
         assertTrue(matcher.contains(list, ".*", false));
         assertFalse(matcher.contains(list, "...", false));
-        list = new ArrayList();
+        list = new ArrayList<String>();
         list.add("TestString..");
         assertTrue(matcher.contains(list, "TESTSTRING11", true));
         assertFalse(matcher.contains(list, "TESTSTRING1", true));
@@ -157,37 +157,37 @@ public class SQLStatementMatcherTest extends TestCase
     
     public void testDoStringsMatch()
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(true, false);
+        SQLStatementMatcher<String> matcher = new SQLStatementMatcher<String>(true, false);
         assertFalse(matcher.doStringsMatch("X", "x"));
-        matcher = new SQLStatementMatcher(false, true);
+        matcher = new SQLStatementMatcher<String>(false, true);
         assertTrue(matcher.doStringsMatch("X", "x"));
-        matcher = new SQLStatementMatcher(false, false);
+        matcher = new SQLStatementMatcher<String>(false, false);
         assertTrue(matcher.doStringsMatch("Test", "tes"));
-        matcher = new SQLStatementMatcher(true, false);
+        matcher = new SQLStatementMatcher<String>(true, false);
         assertFalse(matcher.doStringsMatch("Test", "tes"));
-        matcher = new SQLStatementMatcher(true, false);
+        matcher = new SQLStatementMatcher<String>(true, false);
         assertTrue(matcher.doStringsMatch("Test", ""));
-        matcher = new SQLStatementMatcher(true, false);
+        matcher = new SQLStatementMatcher<String>(true, false);
         assertTrue(matcher.doStringsMatch("Test", null));
-        matcher = new SQLStatementMatcher(false, true);
+        matcher = new SQLStatementMatcher<String>(false, true);
         assertFalse(matcher.doStringsMatch("Test", null));
-        matcher = new SQLStatementMatcher(true, true);
+        matcher = new SQLStatementMatcher<String>(true, true);
         assertTrue(matcher.doStringsMatch(null, null));
-        matcher = new SQLStatementMatcher(true, true);
+        matcher = new SQLStatementMatcher<String>(true, true);
         assertTrue(matcher.doStringsMatch("ThisIsATest", "ThisIsATest"));
     }
     
     public void testDoStringsMatchRegEx()
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(true, false, true);
+        SQLStatementMatcher<String> matcher = new SQLStatementMatcher<String>(true, false, true);
         assertFalse(matcher.doStringsMatch("X", "x"));
         assertTrue(matcher.doStringsMatch("AbcDef", ".*"));
         assertFalse(matcher.doStringsMatch("AbcDef", "a.*"));
-        matcher = new SQLStatementMatcher(false, false, true);
+        matcher = new SQLStatementMatcher<String>(false, false, true);
         assertTrue(matcher.doStringsMatch("AbcDef", "a.*"));
         assertTrue(matcher.doStringsMatch("myTest", "[nmg]ytest"));
         assertFalse(matcher.doStringsMatch("dyTest", "[nmg]ytest"));
-        matcher = new SQLStatementMatcher(true, true, true);
+        matcher = new SQLStatementMatcher<String>(true, true, true);
         assertFalse(matcher.doStringsMatch("myTest", "[nmg]ytest"));
     }
 }

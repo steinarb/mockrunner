@@ -34,7 +34,7 @@ public class MockRef implements Ref, Cloneable
         this.baseTypeName = baseTypeName;
     }
 
-    public Object getObject(Map map) throws SQLException
+    public Object getObject(Map<String,Class<?>> map) throws SQLException
     {
         return object;
     }
@@ -49,6 +49,7 @@ public class MockRef implements Ref, Cloneable
         this.object = object;
     }
     
+    @Override
     public boolean equals(Object obj)
     {
         if(null == obj) return false;
@@ -61,6 +62,7 @@ public class MockRef implements Ref, Cloneable
         return object.equals(other.object);
     }
 
+    @Override
     public int hashCode()
     {
         int hashCode = 0;
@@ -69,11 +71,13 @@ public class MockRef implements Ref, Cloneable
         return hashCode;
     }
     
+    @Override
     public String toString()
     {
         return "Ref data: " + object.toString();
     }
     
+    @Override
     public Object clone()
     {
         try

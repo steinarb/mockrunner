@@ -32,7 +32,7 @@ public class JDBCMockObjectFactoryTest
         assertTrue(factory.getMockDriver().connect("", null) == factory.getMockDataSource().getConnection());
         assertNotNull(DriverManager.getConnection("test"));
         assertTrue(factory.getMockDriver().connect("", null) == DriverManager.getConnection("test"));
-        Enumeration drivers = DriverManager.getDrivers();
+        Enumeration<Driver> drivers = DriverManager.getDrivers();
         drivers.nextElement();
         assertFalse(drivers.hasMoreElements());
     }
@@ -42,8 +42,8 @@ public class JDBCMockObjectFactoryTest
     {
         DriverManager.registerDriver(new TestDriver());
         DriverManager.registerDriver(new TestDriver());
-        ArrayList oldDrivers = new ArrayList();
-        Enumeration drivers = DriverManager.getDrivers();
+        ArrayList<Driver> oldDrivers = new ArrayList<Driver>();
+        Enumeration<Driver> drivers = DriverManager.getDrivers();
         while(drivers.hasMoreElements())
         {
             oldDrivers.add(drivers.nextElement());

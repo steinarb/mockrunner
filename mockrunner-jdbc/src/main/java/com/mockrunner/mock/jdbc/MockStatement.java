@@ -24,7 +24,7 @@ public class MockStatement implements Statement
     private int[] currentUpdateCounts = null;
     private int currentResultSetIndex = 0;
     private int currentUpdateCountIndex = 0;
-    private List batches = new ArrayList();
+    private List<String> batches = new ArrayList<String>();
     private String cursorName = "";
     private int querySeconds = 0;
     private int maxRows = 0;
@@ -250,7 +250,7 @@ public class MockStatement implements Statement
         SQLException exception = null;
         for(int ii = 0; ii < results.length; ii++)
         {
-            String nextSQL = (String)batches.get(ii);
+            String nextSQL = batches.get(ii);
             if(isQuery(nextSQL))
             {
                 exception = prepareFailedResult(results, ii, "SQL " + batches.get(ii) + " in the list of batches returned a ResultSet.", null);
@@ -555,12 +555,12 @@ public class MockStatement implements Statement
         this.poolable = poolable;
     }
 
-    public boolean isWrapperFor(Class iface) throws SQLException
+    public boolean isWrapperFor(Class<?> iface) throws SQLException
     {
         return false;
     }
 
-    public Object unwrap(Class iface) throws SQLException
+    public <T> T unwrap(Class<T> iface) throws SQLException
     {
         throw new SQLException("No object found for " + iface);
     }

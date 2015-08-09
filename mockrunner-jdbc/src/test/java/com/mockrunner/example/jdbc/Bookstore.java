@@ -18,18 +18,18 @@ import java.util.List;
  */
 public class Bookstore
 {
-    public static List order(Connection connection, List isbnNumbers) throws SQLException
+    public static List<String> order(Connection connection, List<String> isbnNumbers) throws SQLException
     {
-        ArrayList resultList = new ArrayList();
+        ArrayList<String> resultList = new ArrayList<String>();
         Statement statement = null;
         ResultSet result = null;
         try
         {
             connection.setAutoCommit(false);
-            StringBuffer query = new StringBuffer("select isbn, quantity from books where (");
+            StringBuilder query = new StringBuilder("select isbn, quantity from books where (");
             for(int ii = 0; ii < isbnNumbers.size(); ii++)
             {
-                query.append("isbn='" + isbnNumbers.get(ii)+ "'");
+                query.append("isbn='").append(isbnNumbers.get(ii)).append("'");
                 if(ii < isbnNumbers.size() - 1)
                 {
                     query.append(" or ");

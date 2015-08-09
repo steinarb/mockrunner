@@ -12,9 +12,9 @@ import junit.framework.TestCase;
 
 public class PolyResultSetTest extends TestCase
 {
-    private List getTestResultSetList()
+    private List<ResultSet> getTestResultSetList()
     {
-        List list = new ArrayList();
+        List<ResultSet> list = new ArrayList<ResultSet>();
         MockResultSet resultSet1 = new MockResultSet("id1");
         resultSet1.addRow(new String[] {"id1row1column1", "id1row1column2"});
         resultSet1.addRow(new String[] {"id1row2column1", "id1row2column2"});
@@ -33,7 +33,7 @@ public class PolyResultSetTest extends TestCase
     public void testGetUnderlyingResultSetList()
     {
         PolyResultSet resultSet = new PolyResultSet(getTestResultSetList());
-        List resultSetList = resultSet.getUnderlyingResultSetList();
+        List<ResultSet> resultSetList = resultSet.getUnderlyingResultSetList();
         assertEquals(3, resultSetList.size());
         MockResultSet resultSet1 = (MockResultSet)resultSetList.get(0);
         MockResultSet resultSet2 = (MockResultSet)resultSetList.get(1);
@@ -45,7 +45,7 @@ public class PolyResultSetTest extends TestCase
     
     public void testNext() throws Exception
     {
-        PolyResultSet resultSet = new PolyResultSet(new ArrayList());
+        PolyResultSet resultSet = new PolyResultSet(new ArrayList<ResultSet>());
         assertFalse(resultSet.next());
         assertFalse(resultSet.next());
         resultSet = new PolyResultSet(getTestResultSetList());

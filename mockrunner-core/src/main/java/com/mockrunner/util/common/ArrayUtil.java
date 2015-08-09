@@ -18,12 +18,12 @@ public class ArrayUtil
      * @param data the byte data
      * @return the <code>List</code> with the <code>Byte</code> objects
      */
-    public static List getListFromByteArray(byte[] data)
+    public static List<Byte> getListFromByteArray(byte[] data)
     {
-        ArrayList list = new ArrayList(data.length);
+        ArrayList<Byte> list = new ArrayList<Byte>(data.length);
         for(int ii = 0; ii < data.length; ii++)
         {
-            list.add(new Byte(data[ii]));
+            list.add(data[ii]);
         }
         return list;
     }
@@ -36,7 +36,7 @@ public class ArrayUtil
      * @param data the <code>List</code>
      * @return the resulting byte array
      */
-    public static byte[] getByteArrayFromList(List data)
+    public static byte[] getByteArrayFromList(List<Byte> data)
     {
         return getByteArrayFromList(data, 0);
     }
@@ -50,7 +50,7 @@ public class ArrayUtil
      * @param index the index at which to start
      * @return the resulting byte array
      */
-    public static byte[] getByteArrayFromList(List data, int index)
+    public static byte[] getByteArrayFromList(List<Byte> data, int index)
     {
         return getByteArrayFromList(data, index, data.size() - index);
     }
@@ -65,7 +65,7 @@ public class ArrayUtil
      * @param len the number of bytes
      * @return the resulting byte array
      */
-    public static byte[] getByteArrayFromList(List data, int index, int len)
+    public static byte[] getByteArrayFromList(List<Byte> data, int index, int len)
     {
         if(data.size() == 0) return new byte[0];
         if(index >= data.size())
@@ -75,10 +75,10 @@ public class ArrayUtil
         byte[] byteData = new byte[len];
         for(int ii = index; ii < data.size() && ii < index + len; ii++)
         {
-            Byte nextValue = (Byte)data.get(ii);
+            Byte nextValue = data.get(ii);
             if(null != nextValue)
             {
-                byteData[ii - index] = nextValue.byteValue();
+                byteData[ii - index] = nextValue;
             }
         }
         return byteData;
@@ -93,7 +93,7 @@ public class ArrayUtil
      * @param list the <code>List</code>
      * @param index the index at which to start copying
      */
-    public static void addBytesToList(byte[] data, List list, int index)
+    public static void addBytesToList(byte[] data, List<Byte> list, int index)
     {
         addBytesToList(data, 0, data.length, list, index);
     }
@@ -109,7 +109,7 @@ public class ArrayUtil
      * @param list the <code>List</code>
      * @param index the index at which to start copying
      */
-    public static void addBytesToList(byte[] data, int offset, int len, List list, int index)
+    public static void addBytesToList(byte[] data, int offset, int len, List<Byte> list, int index)
     {
         int bytesToIncrease = index + len - list.size();
         if(bytesToIncrease > 0)
@@ -121,7 +121,7 @@ public class ArrayUtil
         }
         for(int ii = index; ii < index + len; ii++)
         {
-            list.set(ii, new Byte(data[offset + ii - index]));
+            list.set(ii, data[offset + ii - index]);
         }
     }
 

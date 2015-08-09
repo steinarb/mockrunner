@@ -18,7 +18,7 @@ import com.mockrunner.util.common.CollectionUtil;
  */
 public class MockBlob implements Blob, Cloneable
 {
-    private List blobData;
+    private List<Byte> blobData;
     private boolean wasFreeCalled;
     
     public MockBlob(byte[] data)
@@ -160,12 +160,12 @@ public class MockBlob implements Blob, Cloneable
     }
     
     @Override
-    public Object clone()
+    public Object clone() throws CloneNotSupportedException
     {
         try
         {
             MockBlob blob = (MockBlob)super.clone();
-            blob.blobData = new ArrayList(blobData);
+            blob.blobData = new ArrayList<Byte>(blobData);
             return blob;
         }
         catch(CloneNotSupportedException exc)

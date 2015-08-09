@@ -23,6 +23,7 @@ public class OrderDBTest extends BasicJDBCTestCaseAdapter
     private CallableStatementResultSetHandler statementHandler;
     
     @Before
+    @Override
     public void setUp() throws Exception
     {
         super.setUp();
@@ -39,7 +40,7 @@ public class OrderDBTest extends BasicJDBCTestCaseAdapter
     public void breakingTestCallStoredProc() throws Exception
     {
         prepareResult();
-        List result = OrderDB.getNames(Date.valueOf("2004-01-01"));
+        List<String> result = OrderDB.getNames(Date.valueOf("2004-01-01"));
         assertEquals("MyName1", result.get(0));
         assertEquals("MyName2", result.get(1));
         assertEquals("MyName3", result.get(2));

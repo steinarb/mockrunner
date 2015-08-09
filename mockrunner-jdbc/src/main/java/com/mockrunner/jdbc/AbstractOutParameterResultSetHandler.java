@@ -1,8 +1,8 @@
 package com.mockrunner.jdbc;
 
+import com.mockrunner.mock.jdbc.MockParameterMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -14,9 +14,9 @@ import java.util.TreeMap;
 public abstract class AbstractOutParameterResultSetHandler extends AbstractParameterResultSetHandler
 {
     private boolean mustRegisterOutParameters = false;
-    private Map globalOutParameter = null;
-    private Map outParameterForStatement = new TreeMap();
-    private Map outParameterForStatementParameters = new TreeMap();
+    private MockParameterMap globalOutParameter = null;
+    private final Map<String, MockParameterMap> outParameterForStatement = new TreeMap<String, MockParameterMap>();
+    private final Map<String, List<MockOutParameterWrapper>> outParameterForStatementParameters = new TreeMap<String, List<MockOutParameterWrapper>>();
     
     /**
      * Set if out parameters must be registered to be returned.
@@ -50,13 +50,13 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      * @param sql the SQL string
      * @return the corresponding out parameter <code>Map</code>
      */
-    public Map getOutParameter(String sql)
+    public MockParameterMap getOutParameter(String sql)
     {
-        SQLStatementMatcher matcher = new SQLStatementMatcher(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
-        List list = matcher.getMatchingObjects(outParameterForStatement, sql, true);
+        SQLStatementMatcher<MockParameterMap> matcher = new SQLStatementMatcher<MockParameterMap>(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
+        List<MockParameterMap> list = matcher.getMatchingObjects(outParameterForStatement, sql, true);
         if(null != list && list.size() > 0)
         {
-            return (Map)list.get(0);
+            return list.get(0);
         }
         return null;
     }
@@ -72,9 +72,9 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      * @param parameters the parameters
      * @return the corresponding out parameter <code>Map</code>
      */
-    public Map getOutParameter(String sql, Map parameters)
+    public MockParameterMap getOutParameter(String sql, MockParameterMap parameters)
     {
-        MockOutParameterWrapper wrapper = (MockOutParameterWrapper)getMatchingParameterWrapper(sql, parameters, outParameterForStatementParameters);
+        MockOutParameterWrapper wrapper = getMatchingParameterWrapper(sql, parameters, outParameterForStatementParameters);
         if(null != wrapper)
         {
             return wrapper.getOutParameter();
@@ -95,7 +95,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      * Returns the global out parameter <code>Map</code>.
      * @return the global out parameter <code>Map</code>
      */
-    public Map getGlobalOutParameter()
+    public MockParameterMap getGlobalOutParameter()
     {
         return globalOutParameter;
     }
@@ -104,9 +104,9 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      * Prepares the global out parameter <code>Map</code>.
      * @param outParameters the global out parameter <code>Map</code>
      */
-    public void prepareGlobalOutParameter(Map outParameters)
+    public void prepareGlobalOutParameter(MockParameterMap outParameters)
     {
-        globalOutParameter = new HashMap(outParameters);
+        globalOutParameter = new MockParameterMap(outParameters);
     }
     
     /**
@@ -118,9 +118,9 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      * @param sql the SQL string
      * @param outParameters the out parameter <code>Map</code>
      */
-    public void prepareOutParameter(String sql, Map outParameters)
+    public void prepareOutParameter(String sql, MockParameterMap outParameters)
     {
-        outParameterForStatement.put(sql, new HashMap(outParameters));
+        outParameterForStatement.put(sql, new MockParameterMap(outParameters));
     }
     
     /**
@@ -139,7 +139,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      * @param outParameters the corresponding out parameter <code>Map</code>
      * @param parameters the parameters
      */
-    public void prepareOutParameter(String sql, Map outParameters, Object[] parameters)
+    public void prepareOutParameter(String sql, MockParameterMap outParameters, Object[] parameters)
     {
         prepareOutParameter(sql, outParameters, Arrays.asList(parameters));
     }
@@ -160,12 +160,12 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      * @param outParameters the corresponding out parameter <code>Map</code>
      * @param parameters the parameters
      */
-    public void prepareOutParameter(String sql, Map outParameters, List parameters)
+    public void prepareOutParameter(String sql, MockParameterMap outParameters, List<Object> parameters)
     {
-        Map params = new HashMap();
+        MockParameterMap params = new MockParameterMap();
         for(int ii = 0; ii < parameters.size(); ii++)
         {
-            params.put(new Integer(ii + 1), parameters.get(ii));
+            params.put(ii + 1, parameters.get(ii));
         }
         prepareOutParameter(sql, outParameters,  params);
     }
@@ -185,28 +185,28 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      * @param outParameters the corresponding out parameter <code>Map</code>
      * @param parameters the parameters
      */
-    public void prepareOutParameter(String sql, Map outParameters, Map parameters)
+    public void prepareOutParameter(String sql, MockParameterMap outParameters, MockParameterMap parameters)
     {
-        List list = (List)outParameterForStatementParameters.get(sql);
+        List<MockOutParameterWrapper> list = outParameterForStatementParameters.get(sql);
         if(null == list)
         {
-            list = new ArrayList();
+            list = new ArrayList<MockOutParameterWrapper>();
             outParameterForStatementParameters.put(sql, list);
         }
-        list.add(new MockOutParameterWrapper(new HashMap(outParameters), new HashMap(parameters)));
+        list.add(new MockOutParameterWrapper(new MockParameterMap(outParameters), new MockParameterMap(parameters)));
     }
     
     private class MockOutParameterWrapper extends ParameterWrapper
     {
-        private Map outParameter;
+        private final MockParameterMap outParameter;
 
-        public MockOutParameterWrapper(Map outParameter, Map<Integer, Object> parameters)
+        public MockOutParameterWrapper(MockParameterMap outParameter, MockParameterMap parameters)
         {
             super(parameters);
             this.outParameter = outParameter;
         }
 
-        public Map getOutParameter()
+        public MockParameterMap getOutParameter()
         {
             return outParameter;
         }

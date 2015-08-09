@@ -33,6 +33,7 @@ import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockNClob;
+import com.mockrunner.mock.jdbc.MockParameterMap;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockSQLXML;
@@ -90,8 +91,8 @@ public class MockPreparedStatementTest extends BaseTestCase {
 	public void testPrepareResultSet() throws Exception {
 		preparedStatementHandler.prepareGlobalResultSet(resultSet1);
 		preparedStatementHandler.prepareResultSet("select xyz", resultSet2);
-		List params = new ArrayList();
-		params.add(new Integer(2));
+		List<Object> params = new ArrayList();
+		params.add(2);
 		params.add("Test");
 		preparedStatementHandler.prepareResultSet("select test", resultSet3,
 				params);
@@ -118,7 +119,7 @@ public class MockPreparedStatementTest extends BaseTestCase {
 		testResultSet = (MockResultSet) statement.executeQuery();
 		assertTrue(isResultSet1(testResultSet));
 		preparedStatementHandler.prepareResultSet("select test", resultSet3,
-				new Object[] { "xyz", new Long(1) });
+				new Object[] { "xyz", 1L });
 		statement.clearParameters();
 		statement.setString(1, "ab");
 		statement.setLong(2, 1);
@@ -157,9 +158,9 @@ public class MockPreparedStatementTest extends BaseTestCase {
 		preparedStatementHandler.setExactMatch(false);
 		assertTrue(statement.execute());
 		assertTrue(isResultSet3((MockResultSet) statement.getResultSet()));
-		Map paramMap = new HashMap();
-		paramMap.put(new Integer(1), "Test");
-		paramMap.put(new Integer(2), new MockClob("Test"));
+		MockParameterMap paramMap = new MockParameterMap();
+		paramMap.put(1, "Test");
+		paramMap.put(2, new MockClob("Test"));
 		preparedStatementHandler.prepareResultSet("select xyzxyz", resultSet3,
 				paramMap);
 		statement.clearParameters();
@@ -181,7 +182,7 @@ public class MockPreparedStatementTest extends BaseTestCase {
 		preparedStatementHandler.prepareResultSet("select xyz", resultSet2);
 		preparedStatementHandler.prepareResultSets("select xyz",
 				new MockResultSet[] { resultSet1, resultSet2, resultSet3 },
-				new Object[] { "1", new Integer(2) });
+				new Object[] { "1", 2 });
 		MockPreparedStatement statement = (MockPreparedStatement) connection
 				.prepareStatement("select xyz from x where value = ? and y = ?");
 		statement.setString(1, "1");
@@ -220,9 +221,9 @@ public class MockPreparedStatementTest extends BaseTestCase {
 
     @Test
 	public void testPrepareMultipleResultSetsClose() throws Exception {
-		Map parameters = new HashMap();
-		parameters.put(new Integer(1), new Long(1));
-		parameters.put(new Integer(2), new Long(2));
+		MockParameterMap parameters = new MockParameterMap();
+		parameters.put(1, 1L);
+		parameters.put(2, 2L);
 		preparedStatementHandler.prepareResultSets("select xyz",
 				new MockResultSet[] { resultSet3, resultSet2, resultSet1 },
 				parameters);
@@ -265,9 +266,9 @@ public class MockPreparedStatementTest extends BaseTestCase {
 
     @Test
 	public void testCurrentResultSetCloseOnExecute() throws Exception {
-		Map parameters = new HashMap();
-		parameters.put(new Integer(1), new Long(1));
-		parameters.put(new Integer(2), new Long(2));
+		MockParameterMap parameters = new MockParameterMap();
+		parameters.put(1, 1L);
+		parameters.put(2, 2L);
 		preparedStatementHandler.prepareResultSet("select xyz", resultSet1);
 		MockPreparedStatement statement = (MockPreparedStatement) connection
 				.prepareStatement("select xyz from x where value = ? and y = ?");
@@ -300,7 +301,7 @@ public class MockPreparedStatementTest extends BaseTestCase {
 
     @Test
 	public void testPrepareResultSetsNullValues() throws Exception {
-		List parameters = new ArrayList();
+		List<Object> parameters = new ArrayList<Object>();
 		parameters.add("25");
 		preparedStatementHandler.prepareResultSets("select1",
 				new MockResultSet[] {}, parameters);
@@ -327,8 +328,8 @@ public class MockPreparedStatementTest extends BaseTestCase {
 
     @Test
 	public void testPrepareResultSetNullParameter() throws Exception {
-		List params = new ArrayList();
-		params.add(new Integer(2));
+		List<Object> params = new ArrayList<Object>();
+		params.add(2);
 		params.add(null);
 		preparedStatementHandler.prepareResultSet("select test", resultSet1,
 				params);
@@ -354,8 +355,8 @@ public class MockPreparedStatementTest extends BaseTestCase {
 	public void testPrepareUpdateCount() throws Exception {
 		preparedStatementHandler.prepareGlobalUpdateCount(5);
 		preparedStatementHandler.prepareUpdateCount("delete xyz", 1);
-		List params = new ArrayList();
-		params.add(new Integer(1));
+		List<Object> params = new ArrayList<Object>();
+		params.add(1);
 		preparedStatementHandler.prepareUpdateCount("INSERT INTO", 3, params);
 		preparedStatementHandler.prepareUpdateCount("INSERT INTO", 4,
 				new Object[] { "1", "2" });
@@ -397,9 +398,9 @@ public class MockPreparedStatementTest extends BaseTestCase {
 
     @Test
 	public void testPrepareMultipleUpdateCounts() throws Exception {
-		List parameter = new ArrayList();
+		List<Object> parameter = new ArrayList<Object>();
 		parameter.add("1");
-		parameter.add(new Integer(2));
+		parameter.add(2);
 		preparedStatementHandler.prepareUpdateCount("insert into", 5);
 		preparedStatementHandler.prepareUpdateCounts("insert into", new int[] {
 				1, 2, 3 }, parameter);
@@ -520,9 +521,9 @@ public class MockPreparedStatementTest extends BaseTestCase {
 		updateCounts = statement.executeBatch();
 		assertTrue(updateCounts.length == 1);
 		assertEquals(2, updateCounts[0]);
-		Map paramMap = new HashMap();
-		paramMap.put(new Integer(1), "1");
-		paramMap.put(new Integer(2), "2");
+		MockParameterMap paramMap = new MockParameterMap();
+		paramMap.put(1, "1");
+		paramMap.put(2, "2");
 		preparedStatementHandler.prepareUpdateCount("update", 7, paramMap);
 		updateCounts = statement.executeBatch();
 		assertTrue(updateCounts.length == 1);
@@ -554,9 +555,9 @@ public class MockPreparedStatementTest extends BaseTestCase {
 		statement.setString(1, "5");
 		statement.setInt(2, 3);
 		statement.addBatch();
-		Map paramMap = new HashMap();
-		paramMap.put(new Integer(1), "5");
-		paramMap.put(new Integer(2), new Integer(3));
+		MockParameterMap paramMap = new MockParameterMap();
+		paramMap.put(1, "5");
+		paramMap.put(2, 3);
 		preparedStatementHandler.prepareThrowsSQLException("insert",
 				new SQLException("reason", "code", 25), paramMap);
 		try {
@@ -574,7 +575,7 @@ public class MockPreparedStatementTest extends BaseTestCase {
 			assertEquals(3, exc.getUpdateCounts()[1]);
 		}
 		preparedStatementHandler.prepareThrowsSQLException("insert into",
-				new BatchUpdateException(new int[9]), new HashMap());
+				new BatchUpdateException(new int[9]), new MockParameterMap());
 		try {
 			statement.executeBatch();
 			fail();
@@ -610,7 +611,7 @@ public class MockPreparedStatementTest extends BaseTestCase {
 		statement.setInt(2, 3);
 		statement.addBatch();
 		preparedStatementHandler.prepareThrowsSQLException("insert",
-				new BatchUpdateException(new int[9]), new HashMap());
+				new BatchUpdateException(new int[9]), new MockParameterMap());
 		try {
 			statement.executeBatch();
 			fail();
@@ -657,7 +658,7 @@ public class MockPreparedStatementTest extends BaseTestCase {
 			fail();
 		} catch (SQLException exc) {
 			assertNotSame(exception, exc);
-			assertTrue(exc.getMessage().indexOf("insert into") != -1);
+			assertTrue(exc.getMessage().contains("insert into"));
 		}
 		preparedStatementHandler.setExactMatch(true);
 		statement.execute();
@@ -682,7 +683,7 @@ public class MockPreparedStatementTest extends BaseTestCase {
 			fail();
 		} catch (SQLException exc) {
 			assertNotSame(exception, exc);
-			assertTrue(exc.getMessage().indexOf("UPDATE") != -1);
+			assertTrue(exc.getMessage().contains("UPDATE"));
 		}
 		preparedStatementHandler.setExactMatchParameter(true);
 		statement.execute();
@@ -690,9 +691,9 @@ public class MockPreparedStatementTest extends BaseTestCase {
 
     @Test
 	public void testPrepareGeneratedKeys() throws Exception {
-		List params = new ArrayList();
+		List<Object> params = new ArrayList();
 		params.add("1");
-		params.add(new Long(2));
+		params.add(2L);
 		preparedStatementHandler.prepareGeneratedKeys("delete xyz", resultSet1);
 		preparedStatementHandler
 				.prepareGeneratedKeys("insert into", resultSet2);
@@ -748,9 +749,9 @@ public class MockPreparedStatementTest extends BaseTestCase {
 
     @Test
 	public void testPrepareGeneratedKeysBatch() throws Exception {
-		List params = new ArrayList();
+		List<Object> params = new ArrayList();
 		params.add("1");
-		params.add(new Long(2));
+		params.add(2L);
 		preparedStatementHandler.prepareGeneratedKeys("insert into",
 				resultSet2, new Object[] { "2" });
 		preparedStatementHandler.prepareGeneratedKeys("insert into",
@@ -821,8 +822,7 @@ public class MockPreparedStatementTest extends BaseTestCase {
 		assertTrue(currentResult.isClosed());
 		assertNull(preparedStatement.getResultSet());
 		assertFalse(preparedStatement.getMoreResults());
-		preparedStatement = (MockPreparedStatement) connection
-				.prepareStatement("insert");
+		preparedStatement = (MockPreparedStatement) connection.prepareStatement("insert");
 		assertEquals(-1, preparedStatement.getUpdateCount());
 		preparedStatement.executeUpdate();
 		assertEquals(3, preparedStatement.getUpdateCount());
@@ -841,8 +841,7 @@ public class MockPreparedStatementTest extends BaseTestCase {
 
     @Test
 	public void testGetGeneratedKeysFailure() throws Exception {
-		MockPreparedStatement preparedStatement = (MockPreparedStatement) connection
-				.prepareStatement("insert");
+		MockPreparedStatement preparedStatement = (MockPreparedStatement) connection.prepareStatement("insert");
 		try {
 			preparedStatement.execute("insert", 50000);
 			fail();
@@ -855,10 +854,8 @@ public class MockPreparedStatementTest extends BaseTestCase {
 		} catch (SQLException exc) {
 			// should throw exception
 		}
-		preparedStatement.executeUpdate("insert",
-				Statement.RETURN_GENERATED_KEYS);
-		MockResultSet keys = (MockResultSet) preparedStatement
-				.getGeneratedKeys();
+		preparedStatement.executeUpdate("insert", Statement.RETURN_GENERATED_KEYS);
+		MockResultSet keys = (MockResultSet) preparedStatement.getGeneratedKeys();
 		assertSame(preparedStatement, keys.getStatement());
 		preparedStatementHandler.prepareGlobalGeneratedKeys(resultSet2);
 		preparedStatement.executeUpdate("insert", new int[0]);
@@ -868,8 +865,7 @@ public class MockPreparedStatementTest extends BaseTestCase {
 
     @Test
 	public void testClearParameters() throws Exception {
-		MockPreparedStatement preparedStatement = (MockPreparedStatement) connection
-				.prepareStatement("insert");
+		MockPreparedStatement preparedStatement = (MockPreparedStatement) connection.prepareStatement("insert");
 		preparedStatement.setBoolean(0, true);
 		preparedStatement.setString(1, "abc");
 		preparedStatement.clearParameters();
@@ -879,20 +875,16 @@ public class MockPreparedStatementTest extends BaseTestCase {
 
     @Test
 	public void testSetStreamParameters() throws Exception {
-		MockPreparedStatement preparedStatement = (MockPreparedStatement) connection
-				.prepareStatement("insert");
-		ByteArrayInputStream updateStream = new ByteArrayInputStream(
-				new byte[] { 1, 2, 3, 4, 5 });
+		MockPreparedStatement preparedStatement = (MockPreparedStatement) connection.prepareStatement("insert");
+		ByteArrayInputStream updateStream = new ByteArrayInputStream(new byte[] { 1, 2, 3, 4, 5 });
 		preparedStatement.setAsciiStream(1, updateStream, (long) 2);
-		InputStream inputStream = (InputStream) preparedStatement
-				.getParameterMap().get(new Integer(1));
+		InputStream inputStream = (InputStream) preparedStatement.getParameterMap().get(1);
 		assertEquals(1, inputStream.read());
 		assertEquals(2, inputStream.read());
 		assertEquals(-1, inputStream.read());
 		updateStream = new ByteArrayInputStream(new byte[] { 1, 2, 3, 4, 5 });
 		preparedStatement.setAsciiStream(1, updateStream);
-		inputStream = (InputStream) preparedStatement.getParameterMap().get(
-				new Integer(1));
+		inputStream = (InputStream) preparedStatement.getParameterMap().get(1);
 		assertEquals(1, inputStream.read());
 		assertEquals(2, inputStream.read());
 		assertEquals(3, inputStream.read());
@@ -901,16 +893,14 @@ public class MockPreparedStatementTest extends BaseTestCase {
 		assertEquals(-1, inputStream.read());
 		updateStream = new ByteArrayInputStream(new byte[] { 1, 2, 3, 4, 5 });
 		preparedStatement.setBinaryStream(2, updateStream, (long) 3);
-		inputStream = (InputStream) preparedStatement.getParameterMap().get(
-				new Integer(2));
+		inputStream = (InputStream) preparedStatement.getParameterMap().get(2);
 		assertEquals(1, inputStream.read());
 		assertEquals(2, inputStream.read());
 		assertEquals(3, inputStream.read());
 		assertEquals(-1, inputStream.read());
 		StringReader updateReader = new StringReader("test");
 		preparedStatement.setCharacterStream(1, updateReader);
-		Reader inputReader = (Reader) preparedStatement.getParameterMap().get(
-				new Integer(1));
+		Reader inputReader = (Reader) preparedStatement.getParameterMap().get(1);
 		assertEquals('t', (char) inputReader.read());
 		assertEquals('e', (char) inputReader.read());
 		assertEquals('s', (char) inputReader.read());
@@ -918,14 +908,12 @@ public class MockPreparedStatementTest extends BaseTestCase {
 		assertEquals(-1, inputReader.read());
 		updateReader = new StringReader("test");
 		preparedStatement.setCharacterStream(1, updateReader, 1);
-		inputReader = (Reader) preparedStatement.getParameterMap().get(
-				new Integer(1));
+		inputReader = (Reader) preparedStatement.getParameterMap().get(1);
 		assertEquals('t', (char) inputReader.read());
 		assertEquals(-1, inputReader.read());
 		updateReader = new StringReader("test");
 		preparedStatement.setNCharacterStream(1, updateReader, 2);
-		inputReader = (Reader) preparedStatement.getParameterMap().get(
-				new Integer(1));
+		inputReader = (Reader) preparedStatement.getParameterMap().get(1);
 		assertEquals('t', (char) inputReader.read());
 		assertEquals('e', (char) inputReader.read());
 		assertEquals(-1, inputReader.read());
@@ -933,45 +921,31 @@ public class MockPreparedStatementTest extends BaseTestCase {
 
     @Test
 	public void testSetBlobAndClobParameters() throws Exception {
-		MockPreparedStatement preparedStatement = (MockPreparedStatement) connection
-				.prepareStatement("insert");
+		MockPreparedStatement preparedStatement = (MockPreparedStatement) connection.prepareStatement("insert");
 		preparedStatement.setBlob(1, new MockBlob(new byte[] { 1, 2, 3 }));
-		assertEquals(new MockBlob(new byte[] { 1, 2, 3 }), preparedStatement
-				.getParameterMap().get(new Integer(1)));
-		preparedStatement.setBlob(1, new ByteArrayInputStream(new byte[] { 1,
-				2, 3 }));
-		assertEquals(new MockBlob(new byte[] { 1, 2, 3 }), preparedStatement
-				.getParameterMap().get(new Integer(1)));
-		preparedStatement.setBlob(1, new ByteArrayInputStream(new byte[] { 1,
-				2, 3, 4, 5 }), 3);
-		assertEquals(new MockBlob(new byte[] { 1, 2, 3 }), preparedStatement
-				.getParameterMap().get(new Integer(1)));
+		assertEquals(new MockBlob(new byte[] { 1, 2, 3 }), preparedStatement	.getParameterMap().get(1));
+		preparedStatement.setBlob(1, new ByteArrayInputStream(new byte[] { 1, 2, 3 }));
+		assertEquals(new MockBlob(new byte[] { 1, 2, 3 }), preparedStatement	.getParameterMap().get(1));
+		preparedStatement.setBlob(1, new ByteArrayInputStream(new byte[] { 1, 2, 3, 4, 5 }), 3);
+		assertEquals(new MockBlob(new byte[] { 1, 2, 3 }), preparedStatement	.getParameterMap().get(1));
 		preparedStatement.setClob(2, new MockClob("test"));
-		assertEquals(new MockClob("test"), preparedStatement.getParameterMap()
-				.get(new Integer(2)));
+		assertEquals(new MockClob("test"), preparedStatement.getParameterMap().get(2));
 		preparedStatement.setClob(2, new StringReader("test"));
-		assertEquals(new MockClob("test"), preparedStatement.getParameterMap()
-				.get(new Integer(2)));
+		assertEquals(new MockClob("test"), preparedStatement.getParameterMap().get(2));
 		preparedStatement.setClob(2, new StringReader("testxyz"), 4);
-		assertEquals(new MockClob("test"), preparedStatement.getParameterMap()
-				.get(new Integer(2)));
+		assertEquals(new MockClob("test"), preparedStatement.getParameterMap().get(2));
 		preparedStatement.setNClob(3, new MockNClob("test"));
-		assertEquals(new MockNClob("test"), preparedStatement.getParameterMap()
-				.get(new Integer(3)));
+		assertEquals(new MockNClob("test"), preparedStatement.getParameterMap().get(3));
 		preparedStatement.setNClob(3, new StringReader("test"));
-		assertEquals(new MockNClob("test"), preparedStatement.getParameterMap()
-				.get(new Integer(3)));
+		assertEquals(new MockNClob("test"), preparedStatement.getParameterMap().get(3));
 		preparedStatement.setNClob(3, new StringReader("testxyz"), 4);
-		assertEquals(new MockNClob("test"), preparedStatement.getParameterMap()
-				.get(new Integer(3)));
+		assertEquals(new MockNClob("test"), preparedStatement.getParameterMap().get(3));
 	}
 
     @Test
 	public void testSetSQLXMLParameter() throws Exception {
-		MockPreparedStatement preparedStatement = (MockPreparedStatement) connection
-				.prepareStatement("insert");
+		MockPreparedStatement preparedStatement = (MockPreparedStatement) connection.prepareStatement("insert");
 		preparedStatement.setSQLXML(1, new MockSQLXML("<test>abc</test>"));
-		assertEquals(new MockSQLXML("<test>abc</test>"), preparedStatement
-				.getParameterMap().get(new Integer(1)));
+		assertEquals(new MockSQLXML("<test>abc</test>"), preparedStatement.getParameterMap().get(1));
 	}
 }

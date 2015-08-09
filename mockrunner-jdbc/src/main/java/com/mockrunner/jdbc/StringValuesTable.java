@@ -18,7 +18,7 @@ import java.util.Set;
 public class StringValuesTable 
 {
     private String name; // the table name  
-    private List columnNames = new ArrayList(0); // the columns
+    private List<String> columnNames = new ArrayList<String>(0); // the columns
     private String[][] stringMatrix; // the table data
     
     /**
@@ -125,7 +125,7 @@ public class StringValuesTable
      */
     public String[] getColumnNames()
     {
-        return (String[]) this.columnNames.toArray(new String[this.columnNames.size()]);
+        return  this.columnNames.toArray(new String[this.columnNames.size()]);
     }
 
     /**
@@ -286,10 +286,9 @@ public class StringValuesTable
             if (columnNames.length == stringMatrix[0].length)
             {
                 String name = null;
-                Set names = new HashSet();
-                for (int i = 0; i < columnNames.length; i++)
-                {
-                    name = columnNames[i];
+                Set<String> names = new HashSet<String>();
+                for (String columnName : columnNames) {
+                    name = columnName;
                     if (name == null)
                     {
                         throw new IllegalArgumentException("the column names array must not contain null elements");
@@ -323,21 +322,16 @@ public class StringValuesTable
             {
                 if (stringMatrix[0] != null && stringMatrix[0].length > 0)
                 {
-                    for (int ii = 0; ii < stringMatrix.length; ii++)
-                    {
-                        if (stringMatrix[ii] == null)
-                        {
+                    for (String[] stringMatrix1 : stringMatrix) {
+                        if (stringMatrix1 == null) {
                             throw new IllegalArgumentException("the string matrix cannot contain any null arrays");
                         }
-                        if (stringMatrix[ii].length != stringMatrix[0].length)
-                        {
+                        if (stringMatrix1.length != stringMatrix[0].length) {
                             throw new IllegalArgumentException("arrays in the string matrix must all contain "
-                                                               + stringMatrix[0].length + " elements");
+                                    + stringMatrix[0].length + " elements");
                         }
-                        for (int jj = 0; jj < stringMatrix[ii].length; jj++)
-                        {
-                            if (stringMatrix[ii][jj] == null)
-                            {
+                        for (String stringMatrix11 : stringMatrix1) {
+                            if (stringMatrix11 == null) {
                                 throw new IllegalArgumentException("arrays in the string matrix must not contain null elements");
                             }
                         }

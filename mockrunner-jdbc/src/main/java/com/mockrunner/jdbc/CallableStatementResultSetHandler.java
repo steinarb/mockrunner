@@ -18,8 +18,8 @@ public class CallableStatementResultSetHandler extends AbstractOutParameterResul
 
     public CallableStatementResultSetHandler()
     {
-        callableStatements = new ArrayList();
-        callableStatementMap = new TreeMap();
+        callableStatements = new ArrayList<MockCallableStatement>();
+        callableStatementMap = new TreeMap<String, List<MockCallableStatement>>();
     }
 
     /**
@@ -30,7 +30,7 @@ public class CallableStatementResultSetHandler extends AbstractOutParameterResul
     public void addCallableStatement(MockCallableStatement statement)
     { 
         statement.setCallableStatementResultSetHandler(this);
-        List<MockCallableStatement> list = (List)callableStatementMap.get(statement.getSQL());
+        List<MockCallableStatement> list = callableStatementMap.get(statement.getSQL());
         if(null == list)
         {
             list = new ArrayList<MockCallableStatement>();

@@ -10,6 +10,7 @@ import org.junit.Before;
 
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
+import com.mockrunner.mock.jdbc.MockParameterMap;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockSavepoint;
@@ -225,7 +226,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getStatements}
      */
-    protected List getStatements()
+    protected List<MockStatement> getStatements()
     {
         return jdbcTestModule.getStatements();
     }
@@ -233,7 +234,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getExecutedSQLStatements}
      */
-    protected List getExecutedSQLStatements()
+    protected List<String> getExecutedSQLStatements()
     {
         return jdbcTestModule.getExecutedSQLStatements();
     }
@@ -242,7 +243,8 @@ public abstract class BasicJDBCTestCaseAdapter
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getExecutedSQLStatementParameter}
      * @deprecated
      */
-    protected Map getExecutedSQLStatementParameter()
+    @Deprecated    
+    protected Map<String, ParameterSets> getExecutedSQLStatementParameter()
     {
         return jdbcTestModule.getExecutedSQLStatementParameter();
     }
@@ -250,7 +252,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getExecutedSQLStatementParameterMap}
      */
-    protected Map getExecutedSQLStatementParameterMap()
+    protected Map<String, ParameterSets> getExecutedSQLStatementParameterMap()
     {
         return jdbcTestModule.getExecutedSQLStatementParameterMap();
     }
@@ -274,7 +276,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getReturnedResultSets(String)}
      */
-    protected List getReturnedResultSets(String id)
+    protected List<MockResultSet> getReturnedResultSets(String id)
     {
         return jdbcTestModule.getReturnedResultSets(id);
     }
@@ -282,7 +284,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getReturnedResultSets}
      */
-    protected List getReturnedResultSets()
+    protected List<MockResultSet[]> getReturnedResultSets()
     {
         return jdbcTestModule.getReturnedResultSets();
     }
@@ -306,7 +308,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getPreparedStatements(String)}
      */
-    protected List getPreparedStatements(String sql)
+    protected List<MockPreparedStatement> getPreparedStatements(String sql)
     {
         return jdbcTestModule.getPreparedStatements(sql);
     }
@@ -314,7 +316,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getPreparedStatements}
      */
-    protected List getPreparedStatements()
+    protected List<MockPreparedStatement> getPreparedStatements()
     {
         return jdbcTestModule.getPreparedStatements();
     }
@@ -338,7 +340,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getCallableStatements(String)}
      */
-    protected List getCallableStatements(String sql)
+    protected List<MockCallableStatement> getCallableStatements(String sql)
     {
         return jdbcTestModule.getCallableStatements(sql);
     }
@@ -346,7 +348,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getCallableStatements}
      */
-    protected List getCallableStatements()
+    protected List<MockCallableStatement> getCallableStatements()
     {
         return jdbcTestModule.getCallableStatements();
     }
@@ -426,7 +428,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#getSavepoints}
      */
-    protected List getSavepoints()
+    protected List<MockSavepoint> getSavepoints()
     {
         return jdbcTestModule.getSavepoints();
     }
@@ -490,7 +492,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySQLStatementParameter(String, int, Map)}
      */
-    protected void verifySQLStatementParameter(String sql, int indexOfParameterSet, Map parameterMap)
+    protected void verifySQLStatementParameter(String sql, int indexOfParameterSet, MockParameterMap parameterMap)
     {
         jdbcTestModule.verifySQLStatementParameter(sql, indexOfParameterSet, parameterMap);
     }
@@ -722,7 +724,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetRow(MockResultSet, int, List)}
      */
-    protected void verifyResultSetRow(MockResultSet resultSet, int number, List rowData)
+    protected void verifyResultSetRow(MockResultSet resultSet, int number, List<Object> rowData)
     {
         jdbcTestModule.verifyResultSetRow(resultSet, number, rowData);
     }
@@ -738,7 +740,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetRow(String, int, List)}
      */
-    protected void verifyResultSetRow(String id, int number, List rowData)
+    protected void verifyResultSetRow(String id, int number, List<Object> rowData)
     {
         jdbcTestModule.verifyResultSetRow(id, number, rowData);
     }
@@ -754,7 +756,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetColumn(String, String, List)}
      */
-    protected void verifyResultSetColumn(String id, String name, List columnData)
+    protected void verifyResultSetColumn(String id, String name, List<Object> columnData)
     {
         jdbcTestModule.verifyResultSetColumn(id, name, columnData);
     }
@@ -762,7 +764,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetColumn(MockResultSet, int, List)}
      */
-    protected void verifyResultSetColumn(MockResultSet resultSet, int number, List columnData)
+    protected void verifyResultSetColumn(MockResultSet resultSet, int number, List<Object> columnData)
     {
         jdbcTestModule.verifyResultSetColumn(resultSet, number, columnData);
     }
@@ -778,7 +780,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetColumn(String, int, List)}
      */
-    protected void verifyResultSetColumn(String id, int number, List columnData)
+    protected void verifyResultSetColumn(String id, int number, List<Object> columnData)
     {
         jdbcTestModule.verifyResultSetColumn(id, number, columnData);
     }
@@ -794,7 +796,7 @@ public abstract class BasicJDBCTestCaseAdapter
     /**
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifyResultSetColumn(MockResultSet, String, List)}
      */
-    protected void verifyResultSetColumn(MockResultSet resultSet, String name, List columnData)
+    protected void verifyResultSetColumn(MockResultSet resultSet, String name, List<Object> columnData)
     {
         jdbcTestModule.verifyResultSetColumn(resultSet, name, columnData);
     }
@@ -1211,6 +1213,7 @@ public abstract class BasicJDBCTestCaseAdapter
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointRollbacked(String)}
      * @deprecated
      */
+    @Deprecated
     protected void verifySavepointRollbacked(String name)
     {
         jdbcTestModule.verifySavepointRollbacked(name);
@@ -1220,6 +1223,7 @@ public abstract class BasicJDBCTestCaseAdapter
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointRollbacked(int)}
      * @deprecated
      */
+    @Deprecated
     protected void verifySavepointRollbacked(int index)
     {
         jdbcTestModule.verifySavepointRollbacked(index);
@@ -1229,6 +1233,7 @@ public abstract class BasicJDBCTestCaseAdapter
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointNotRollbacked(String)}
      * @deprecated
      */
+    @Deprecated
     protected void verifySavepointNotRollbacked(String name)
     {
         jdbcTestModule.verifySavepointNotRollbacked(name);
@@ -1238,6 +1243,7 @@ public abstract class BasicJDBCTestCaseAdapter
      * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointNotRollbacked(int)}
      * @deprecated
      */
+    @Deprecated
     protected void verifySavepointNotRollbacked(int index)
     {
         jdbcTestModule.verifySavepointNotRollbacked(index);

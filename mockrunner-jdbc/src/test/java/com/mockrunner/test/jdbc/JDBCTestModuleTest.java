@@ -14,7 +14,6 @@ import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,9 +27,12 @@ import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockClob;
+import com.mockrunner.mock.jdbc.MockParameterMap;
 import com.mockrunner.mock.jdbc.MockPreparedStatement;
 import com.mockrunner.mock.jdbc.MockResultSet;
+import com.mockrunner.mock.jdbc.MockSavepoint;
 import com.mockrunner.mock.jdbc.MockStatement;
+import com.mockrunner.mock.jdbc.ParameterIndex;
 
 public class JDBCTestModuleTest
 {
@@ -66,7 +68,7 @@ public class JDBCTestModuleTest
     @Test
     public void testGetStatements() throws Exception
     {
-        List statements = module.getStatements();
+        List<MockStatement> statements = module.getStatements();
         assertNotNull(statements);
         assertEquals(0, statements.size());
         assertNull(module.getStatement(1));
@@ -83,7 +85,7 @@ public class JDBCTestModuleTest
     @Test
     public void testGetPreparedStatementsByIndex() throws Exception
     {
-        List statements = module.getPreparedStatements();
+        List<MockPreparedStatement> statements = module.getPreparedStatements();
         assertNotNull(statements);
         assertEquals(0, statements.size());
         assertNull(module.getPreparedStatement(1));
@@ -99,7 +101,7 @@ public class JDBCTestModuleTest
     public void testGetPreparedStatementsBySQL() throws Exception
     {
         preparePreparedStatements();
-        List statements = module.getPreparedStatements("insert");
+        List<MockPreparedStatement> statements = module.getPreparedStatements("insert");
         assertNotNull(statements);
         assertEquals(2, statements.size());
         MockPreparedStatement statement = module.getPreparedStatement("insert");
@@ -138,7 +140,7 @@ public class JDBCTestModuleTest
     {
         module.setUseRegularExpressions(true);
         preparePreparedStatements();
-        List statements = module.getPreparedStatements("insert");
+        List<MockPreparedStatement> statements = module.getPreparedStatements("insert");
         assertNotNull(statements);
         assertEquals(0, statements.size());
         statements = module.getPreparedStatements("insert into.*");
@@ -161,7 +163,7 @@ public class JDBCTestModuleTest
         assertEquals(3, statement.getParameter(1));
         assertEquals(10000L, statement.getParameter(2));
         assertNull(statement.getParameter(3));
-        assertTrue(statement.getParameterMap().containsKey(3));
+        assertTrue(statement.getParameterMap().containsKey(new ParameterIndex(3)));
         module.verifyPreparedStatementParameterPresent(statement, 1);
         module.verifyPreparedStatementParameterPresent("update", 3);
         module.verifyPreparedStatementParameterNotPresent("update", 4);
@@ -206,16 +208,16 @@ public class JDBCTestModuleTest
         module.verifyNumberCallableStatements(0);
         prepareCallableStatements();
         module.verifyNumberCallableStatements(2);
-        List statements = module.getCallableStatements();
-        assertEquals("{call getData(?, ?, ?, ?)}", ((MockCallableStatement)statements.get(0)).getSQL());
-        assertEquals("{call setData(?, ?, ?, ?)}", ((MockCallableStatement)statements.get(1)).getSQL());
+        List<MockCallableStatement> statements = module.getCallableStatements();
+        assertEquals("{call getData(?, ?, ?, ?)}", statements.get(0).getSQL());
+        assertEquals("{call setData(?, ?, ?, ?)}", statements.get(1).getSQL());
     }
     
     @Test
     public void testGetCallableStatementsBySQL() throws Exception
     {
         prepareCallableStatements();
-        List statements = module.getCallableStatements("call");
+        List<MockCallableStatement> statements = module.getCallableStatements("call");
         assertTrue(statements.size() == 2);
         MockCallableStatement statement = module.getCallableStatement("CALL");
         assertEquals("{call getData(?, ?, ?, ?)}", statement.getSQL());
@@ -240,7 +242,7 @@ public class JDBCTestModuleTest
     {
         module.setUseRegularExpressions(true);
         prepareCallableStatements();
-        List statements = module.getCallableStatements("call");
+        List<MockCallableStatement> statements = module.getCallableStatements("call");
         assertTrue(statements.isEmpty());
         MockCallableStatement statement = module.getCallableStatement(".*CALL.*");
         assertEquals("{call getData(?, ?, ?, ?)}", statement.getSQL());
@@ -256,8 +258,8 @@ public class JDBCTestModuleTest
         statement.setInt("xyz", 1);
         statement.setString("3", null);
         statement.setString(1, "xyz");
-        Map namedParameter = statement.getNamedParameterMap();
-        Map indexedParameter = statement.getIndexedParameterMap();
+        MockParameterMap namedParameter = statement.getNamedParameterMap();
+        MockParameterMap indexedParameter = statement.getIndexedParameterMap();
         assertTrue(namedParameter.size() == 2);
         assertEquals(1, namedParameter.get("xyz"));
         assertNull(namedParameter.get("3"));
@@ -377,7 +379,7 @@ public class JDBCTestModuleTest
         preparedStatement.execute();
         MockCallableStatement callableStatement = module.getCallableStatement("call");
         callableStatement.executeUpdate();
-        List sqlStatements = module.getExecutedSQLStatements();
+        List<String> sqlStatements = module.getExecutedSQLStatements();
         assertTrue(sqlStatements.size() == 4);
         assertTrue(sqlStatements.contains("select"));
         assertTrue(sqlStatements.contains("UPDATE"));
@@ -447,34 +449,34 @@ public class JDBCTestModuleTest
         statement.executeQuery("select name");
         statement.executeQuery("select id");
         statement.executeQuery("select xyz");
-        List list = module.getReturnedResultSets();
+        List<MockResultSet[]> list = module.getReturnedResultSets();
         assertEquals(3, list.size());
-        assertEquals("1", ((MockResultSet)list.get(0)).getId());
-        assertEquals("2", ((MockResultSet)list.get(1)).getId());
-        assertEquals("3", ((MockResultSet[])list.get(2))[0].getId());
-        assertEquals("5", ((MockResultSet[])list.get(2))[1].getId());
+        assertEquals("1", list.get(0)[0].getId());
+        assertEquals("2", list.get(1)[0].getId());
+        assertEquals("3", list.get(2)[0].getId());
+        assertEquals("5", list.get(2)[1].getId());
         MockPreparedStatement preparedStatement = (MockPreparedStatement)mockfactory.getMockConnection().prepareStatement("SELECT NAME");
         preparedStatement.setString(1, "test");
         preparedStatement.executeQuery();
         list = module.getReturnedResultSets();
         assertEquals(4, list.size());
-        assertEquals("4", ((MockResultSet)list.get(3)).getId());
+        assertEquals("4", list.get(3)[0].getId());
         MockCallableStatement callableStatement = module.getCallableStatement("call set");
         callableStatement.executeQuery();
         list = module.getReturnedResultSets();
         assertEquals(5, list.size());
-        assertEquals("5", ((MockResultSet)list.get(4)).getId());
+        assertEquals("5", list.get(4)[0].getId());
         callableStatement.setString(1, "xyz");
         callableStatement.executeQuery();
         list = module.getReturnedResultSets();
         assertEquals(6, list.size());
-        assertEquals("6", ((MockResultSet[])list.get(5))[0].getId());
-        assertEquals("7", ((MockResultSet[])list.get(5))[1].getId());
-        assertEquals("1", ((MockResultSet[])list.get(5))[2].getId());
-        list = module.getReturnedResultSets("1");
-        assertEquals(2, list.size());
-        MockResultSet returned1 = (MockResultSet)list.get(0);
-        MockResultSet returned2 = (MockResultSet)list.get(1);
+        assertEquals("6", list.get(5)[0].getId());
+        assertEquals("7", list.get(5)[1].getId());
+        assertEquals("1", list.get(5)[2].getId());
+        List<MockResultSet> list2 = module.getReturnedResultSets("1");
+        assertEquals(2, list2.size());
+        MockResultSet returned1 = list2.get(0);
+        MockResultSet returned2 = list2.get(1);
         assertEquals("1", returned1.getId());
         assertEquals("1", returned2.getId());
         assertNotSame(returned1, returned2);
@@ -505,39 +507,39 @@ public class JDBCTestModuleTest
         statement.executeQuery("select id");
         List<MockResultSet[]> list = module.getReturnedResultSets();
         assertEquals(2, list.size());
-        assertEquals("1", ((MockResultSet)list.get(0)[0]).getId());
-        assertEquals("2", ((MockResultSet)list.get(1)[0]).getId());
+        assertEquals("1", list.get(0)[0].getId());
+        assertEquals("2", list.get(1)[0].getId());
         MockPreparedStatement preparedStatement = module.getPreparedStatement("insert");
         preparedStatement.execute();
         list = module.getReturnedResultSets();
         assertEquals(2, list.size());
-        assertEquals("1", ((MockResultSet)list.get(0)[0]).getId());
-        assertEquals("2", ((MockResultSet)list.get(1)[0]).getId());
+        assertEquals("1", list.get(0)[0].getId());
+        assertEquals("2", list.get(1)[0].getId());
         preparedStatement = (MockPreparedStatement)mockfactory.getMockConnection().prepareStatement("SELECT NAME");
         preparedStatement.setString(1, "test");
         preparedStatement.executeQuery();
         list = module.getReturnedResultSets();
         assertEquals(3, list.size());
-        assertEquals("1", ((MockResultSet)list.get(0)[0]).getId());
-        assertEquals("2", ((MockResultSet)list.get(1)[0]).getId());
-        assertEquals("4", ((MockResultSet)list.get(2)[0]).getId());
+        assertEquals("1", list.get(0)[0].getId());
+        assertEquals("2", list.get(1)[0].getId());
+        assertEquals("4", list.get(2)[0].getId());
         MockCallableStatement callableStatement = module.getCallableStatement("call set");
         callableStatement.setString(1, "test");
         callableStatement.executeQuery();
         list = module.getReturnedResultSets();
         assertEquals(3, list.size());
-        assertEquals("1", ((MockResultSet)list.get(0)[0]).getId());
-        assertEquals("2", ((MockResultSet)list.get(1)[0]).getId());
-        assertEquals("4", ((MockResultSet)list.get(2)[0]).getId());
+        assertEquals("1", list.get(0)[0].getId());
+        assertEquals("2", list.get(1)[0].getId());
+        assertEquals("4", list.get(2)[0].getId());
         callableStatement.setString(1, "xyz");
         callableStatement.executeQuery();
         list = module.getReturnedResultSets();
         assertEquals(4, list.size());
-        assertEquals("1", ((MockResultSet)list.get(0)[0]).getId());
-        assertEquals("2", ((MockResultSet)list.get(1)[0]).getId());
-        assertEquals("4", ((MockResultSet)list.get(2)[0]).getId());
-        assertEquals("5", ((MockResultSet)list.get(3)[0]).getId());
-        ((MockResultSet)list.get(0)[0]).close();
+        assertEquals("1", list.get(0)[0].getId());
+        assertEquals("2", list.get(1)[0].getId());
+        assertEquals("4", list.get(2)[0].getId());
+        assertEquals("5", list.get(3)[0].getId());
+        list.get(0)[0].close();
         module.verifyResultSetClosed("1");
         try
         {
@@ -557,9 +559,9 @@ public class JDBCTestModuleTest
         {
             //should throw exception
         }
-        ((MockResultSet)list.get(1)[0]).close();
-        ((MockResultSet)list.get(2)[0]).close();
-        ((MockResultSet)list.get(3)[0]).close();
+        list.get(1)[0].close();
+        list.get(2)[0].close();
+        list.get(3)[0].close();
         module.verifyAllResultSetsClosed();
     }
     
@@ -619,7 +621,7 @@ public class JDBCTestModuleTest
         {
             //should throw Exception
         }
-        MockResultSet[] resultSets = (MockResultSet[])list.get(list.size() - 1);
+        MockResultSet[] resultSets = list.get(list.size() - 1);
         for (MockResultSet resultSet : resultSets) {
             resultSet.close();
         }
@@ -702,7 +704,7 @@ public class JDBCTestModuleTest
         {
             //should throw Exception
         }
-        List savepoints = module.getSavepoints();
+        List<MockSavepoint> savepoints = module.getSavepoints();
         int[] ids = new int[4];
         for(int ii = 0; ii < savepoints.size(); ii++)
         {
@@ -840,7 +842,7 @@ public class JDBCTestModuleTest
         module.getStatementResultSetHandler().prepareResultSet("select", resultSet);
         Statement statement = mockfactory.getMockConnection().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
         MockResultSet returnedResultSet = (MockResultSet)statement.executeQuery("select");
-        resultSet = (MockResultSet)module.getStatementResultSetHandler().getReturnedResultSets().get(0)[0];
+        resultSet = module.getStatementResultSetHandler().getReturnedResultSets().get(0)[0];
         module.verifyResultSetRowNotDeleted(resultSet, 1);
         module.verifyResultSetRowNotDeleted("test", 2);
         module.verifyResultSetRowNotInserted("test", 2);
@@ -894,20 +896,20 @@ public class JDBCTestModuleTest
 		module.getPreparedStatement(2).execute();
 		module.getCallableStatement(0).execute();
 		module.getCallableStatement(1).execute();
-		Map parameterMap = module.getExecutedSQLStatementParameterMap();
+		Map<String, ParameterSets> parameterMap = module.getExecutedSQLStatementParameterMap();
 		assertEquals(5, parameterMap.size());
-		Map preparedStatementMap1 = ((ParameterSets)parameterMap.get("INSERT INTO TEST (COL1, COL2) VALUES(?, ?)")).getParameterSet(0);
+		MockParameterMap preparedStatementMap1 = parameterMap.get("INSERT INTO TEST (COL1, COL2) VALUES(?, ?)").getParameterSet(0);
 		assertEquals(2, preparedStatementMap1.size());
 		assertEquals("test", preparedStatementMap1.get(1));
 		assertEquals((short)2, preparedStatementMap1.get(2));
-		Map preparedStatementMap2 = ((ParameterSets)parameterMap.get("insert into test (col1, col2, col3) values(?, ?, ?)")).getParameterSet(0);
+		MockParameterMap preparedStatementMap2 = parameterMap.get("insert into test (col1, col2, col3) values(?, ?, ?)").getParameterSet(0);
 		assertEquals(1, preparedStatementMap2.size());
 		assertTrue(Arrays.equals(new byte[]{1}, (byte[])preparedStatementMap2.get(1)));
-		Map preparedStatementMap3 = ((ParameterSets)parameterMap.get("update mytable set test = test + ? where id = ?")).getParameterSet(0);
+		MockParameterMap preparedStatementMap3 = parameterMap.get("update mytable set test = test + ? where id = ?").getParameterSet(0);
 		assertEquals(0, preparedStatementMap3.size());
-		Map callableStatementMap1 = (Map)((ParameterSets)parameterMap.get("{call getData(?, ?, ?, ?)}")).getParameterSet(0);
+		MockParameterMap callableStatementMap1 = parameterMap.get("{call getData(?, ?, ?, ?)}").getParameterSet(0);
 		assertEquals(0, callableStatementMap1.size());
-		Map callableStatementMap2 = (Map)((ParameterSets)parameterMap.get("{call setData(?, ?, ?, ?)}")).getParameterSet(0);
+		MockParameterMap callableStatementMap2 = parameterMap.get("{call setData(?, ?, ?, ?)}").getParameterSet(0);
 		assertEquals(1, callableStatementMap2.size());
 		assertEquals(Boolean.FALSE, callableStatementMap2.get("name"));
     }
@@ -931,11 +933,11 @@ public class JDBCTestModuleTest
 		module.getPreparedStatement(0).execute();
 		ParameterSets sets1 = module.getExecutedSQLStatementParameterSets("INSERT INTO TEST (COL1, COL2)");
 		assertEquals(2, sets1.getNumberParameterSets());
-		Map parameterSet1 = sets1.getParameterSet(0);
+		MockParameterMap parameterSet1 = sets1.getParameterSet(0);
 		assertEquals(2, parameterSet1.size());
 		assertEquals("test", parameterSet1.get(1));
 		assertEquals((short)2, parameterSet1.get(2));
-		Map parameterSet2 = sets1.getParameterSet(1);
+		MockParameterMap parameterSet2 = sets1.getParameterSet(1);
 		assertEquals(2, parameterSet2.size());
 		assertEquals("test1", parameterSet2.get(1));
 		assertEquals((short)3, parameterSet2.get(2));
@@ -984,7 +986,7 @@ public class JDBCTestModuleTest
         }
         try
         {
-            module.verifySQLStatementParameter("INSERT INTO TEST (COL1, COL2) VALUES(?,", 1, new HashMap());
+            module.verifySQLStatementParameter("INSERT INTO TEST (COL1, COL2) VALUES(?,", 1, new MockParameterMap());
             fail();
         }
         catch (VerifyFailedException exc)
@@ -1050,14 +1052,14 @@ public class JDBCTestModuleTest
 		module.getPreparedStatement(0).execute();
 		module.getPreparedStatement(1).execute();
 		module.getPreparedStatement(2).execute();
-		Map emptyMap = new HashMap();
-		Map okTestMap = new HashMap();
+		MockParameterMap emptyMap = new MockParameterMap();
+		MockParameterMap okTestMap = new MockParameterMap();
 		okTestMap.put(1, "test1");
 		okTestMap.put(2, 3);
-		Map failureTestMap1 = new HashMap();
+		MockParameterMap failureTestMap1 = new MockParameterMap();
 		failureTestMap1.put(1, "test1");
 		failureTestMap1.put(2, 2);
-		Map failureTestMap2 = new HashMap();
+		MockParameterMap failureTestMap2 = new MockParameterMap();
 		failureTestMap2.put(1, "test1");
 		failureTestMap2.put(2, 3);
 		failureTestMap2.put(3, 3);
@@ -1232,7 +1234,7 @@ public class JDBCTestModuleTest
 		module.setUseRegularExpressions(false);
 		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 1, 1, "xyz");
 		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 1, "name", Boolean.TRUE);
-		HashMap testMap = new HashMap();
+		MockParameterMap testMap = new MockParameterMap();
 		testMap.put(1, "test1");
 		module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 0, testMap);
 		try
@@ -1246,7 +1248,7 @@ public class JDBCTestModuleTest
 		}
 		try
 		{
-			module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 0, new HashMap());
+			module.verifySQLStatementParameter("{call getData(?, ?, ?, ?)}", 0, new MockParameterMap());
 			fail();
 		}
 		catch (VerifyFailedException exc)
@@ -1267,14 +1269,14 @@ public class JDBCTestModuleTest
         preparedStatement.addBatch();
         preparedStatement.executeBatch();
         module.verifySQLStatementParameter("insert into test", 0, 1, "test1");
-        module.verifySQLStatementParameter("insert into test", 0, 2, new Integer(3));
+        module.verifySQLStatementParameter("insert into test", 0, 2, 3);
         module.verifySQLStatementParameter("insert into test", 1, 1, "test2");
-        module.verifySQLStatementParameter("insert into test", 1, 2, new Integer(4));
-        Map testMap = new HashMap();
+        module.verifySQLStatementParameter("insert into test", 1, 2, 4);
+        MockParameterMap testMap = new MockParameterMap();
         testMap.put(1, "test1");
         testMap.put(2, 3);
         module.verifySQLStatementParameter("insert into test", 0, testMap);
-        testMap = new HashMap();
+        testMap = new MockParameterMap();
         testMap.put(1, "test2");
         testMap.put(2, 4);
         module.verifySQLStatementParameter("insert into test", 1, testMap);
@@ -1297,11 +1299,11 @@ public class JDBCTestModuleTest
         module.verifySQLStatementParameter("call getData", 1, "xyz1", 4);
         module.verifySQLStatementParameter("call getData", 1, "xyz2", 7);
         module.verifySQLStatementParameter("call getData", 1, 1, "test2");
-        Map testMap = new HashMap();
+        MockParameterMap testMap = new MockParameterMap();
         testMap.put("xyz1", "test1");
         testMap.put(1, 3L);
         module.verifySQLStatementParameter("call getData", 0, testMap);
-        testMap = new HashMap();
+        testMap = new MockParameterMap();
         testMap.put("xyz1", 4);
         testMap.put("xyz2", 7);
         testMap.put(1, "test2");

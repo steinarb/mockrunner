@@ -28,7 +28,7 @@ public class CollectionUtil
      * @param size the resulting size of the <code>List</code>
      * @param object the object to fill the list with
      */
-    public static void fillList(List list, int size, Object object)
+    public static <T> void fillList(List<T> list, int size, T object)
     {
         for(int ii = list.size(); ii <  size; ii++)
         {
@@ -42,10 +42,10 @@ public class CollectionUtil
      * @param len the truncate length
      * @return the truncated <code>List</code>
      */
-    public static List truncateList(List list, int len)
+    public static <T> List<T> truncateList(List<T> list, int len)
     {
         if(len >= list.size()) return list;
-        ArrayList newList = new ArrayList(len);
+        ArrayList<T> newList = new ArrayList<T>(len);
         for(int ii = 0; ii < len; ii++)
         {
             newList.add(list.get(ii));

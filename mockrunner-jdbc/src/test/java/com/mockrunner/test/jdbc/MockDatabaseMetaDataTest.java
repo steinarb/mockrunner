@@ -14,12 +14,14 @@ public class MockDatabaseMetaDataTest extends TestCase
 {
     private MockDatabaseMetaData metaData;
     
+    @Override
     protected void setUp() throws Exception
     {
         super.setUp();
         metaData = new MockDatabaseMetaData();
     }
     
+    @Override
     protected void tearDown() throws Exception
     {
         super.tearDown();
@@ -46,7 +48,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setSchemas(null, "test", testResult3);
         assertSame(testResult2, metaData.getSchemas("abc", "test"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getSchemas(null, "test");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -92,7 +94,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertTrue(metaData.getSchemas(null, "t___") instanceof MockResultSet);
         assertNull(metaData.getSchemas("%", "%"));
         polyResult = (PolyResultSet)metaData.getSchemas(null, "ab%");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -107,7 +109,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setSchemas("abc", "test", testResult2);
         metaData.setSchemas(null, "test", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getSchemas(null, "t_st");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getSchemas(null, "t_st");
@@ -140,7 +142,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setExportedKeys(null, "test", "xyz", testResult3);
         assertSame(testResult2, metaData.getExportedKeys("abc", "test", "xyz"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getExportedKeys(null, "test", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -168,7 +170,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setExportedKeys("abc", "test", "xyz", testResult2);
         metaData.setExportedKeys(null, "test", "xyz", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getExportedKeys(null, "test", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getExportedKeys(null, "test", "xyz");
@@ -201,7 +203,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setImportedKeys(null, "test", "xyz", testResult3);
         assertSame(testResult2, metaData.getImportedKeys("abc", "test", "xyz"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getImportedKeys(null, "test", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -229,7 +231,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setImportedKeys("abc", "test", "xyz", testResult2);
         metaData.setImportedKeys(null, "test", "xyz", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getImportedKeys(null, "test", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getImportedKeys(null, "test", "xyz");
@@ -262,7 +264,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setPrimaryKeys(null, "test", "xyz", testResult3);
         assertSame(testResult2, metaData.getPrimaryKeys("abc", "test", "xyz"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getPrimaryKeys(null, "test", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -290,7 +292,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setPrimaryKeys("abc", "test", "xyz", testResult2);
         metaData.setPrimaryKeys(null, "test", "xyz", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getPrimaryKeys(null, "test", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getPrimaryKeys(null, "test", "xyz");
@@ -323,7 +325,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setProcedures(null, "test", "xyz", testResult3);
         assertSame(testResult2, metaData.getProcedures("abc", "test", "xyz"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getProcedures(null, "test", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -373,7 +375,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertTrue(metaData.getProcedures(null, "a__", "xyz_") instanceof MockResultSet);
         assertNull(metaData.getProcedures("%", "%", "%"));
         polyResult = (PolyResultSet)metaData.getProcedures(null, "ab%", "%");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -388,7 +390,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setProcedures("abc", "test", "xyz", testResult2);
         metaData.setProcedures(null, "test", "xyz", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getProcedures(null, "t_st", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getProcedures(null, "t_st", "xyz");
@@ -421,7 +423,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setFunctions(null, "test", "xyz", testResult3);
         assertSame(testResult2, metaData.getFunctions("abc", "test", "xyz"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getFunctions(null, "test", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -471,7 +473,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertTrue(metaData.getFunctions(null, "a__", "xyz_") instanceof MockResultSet);
         assertNull(metaData.getFunctions("%", "%", "%"));
         polyResult = (PolyResultSet)metaData.getFunctions(null, "ab%", "%");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -486,7 +488,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setFunctions("abc", "test", "xyz", testResult2);
         metaData.setFunctions(null, "test", "xyz", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getFunctions(null, "t_st", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getFunctions(null, "t_st", "xyz");
@@ -519,7 +521,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setSuperTables(null, "test", "xyz", testResult3);
         assertSame(testResult2, metaData.getSuperTables("abc", "test", "xyz"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getSuperTables(null, "test", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -569,7 +571,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertTrue(metaData.getSuperTables(null, "a__", "xyz_") instanceof MockResultSet);
         assertNull(metaData.getSuperTables("%", "%", "%"));
         polyResult = (PolyResultSet)metaData.getSuperTables(null, "ab%", "%");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -584,7 +586,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setSuperTables("abc", "test", "xyz", testResult2);
         metaData.setSuperTables(null, "test", "xyz", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getSuperTables(null, "t_st", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getSuperTables(null, "t_st", "xyz");
@@ -617,7 +619,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setSuperTypes(null, "test", "xyz", testResult3);
         assertSame(testResult2, metaData.getSuperTypes("abc", "test", "xyz"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getSuperTypes(null, "test", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -667,7 +669,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertTrue(metaData.getSuperTypes(null, "a__", "xyz_") instanceof MockResultSet);
         assertNull(metaData.getSuperTypes("%", "%", "%"));
         polyResult = (PolyResultSet)metaData.getSuperTypes(null, "ab%", "%");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -682,7 +684,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setSuperTypes("abc", "test", "xyz", testResult2);
         metaData.setSuperTypes(null, "test", "xyz", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getSuperTypes(null, "t_st", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getSuperTypes(null, "t_st", "xyz");
@@ -715,7 +717,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setTablePrivileges(null, "test", "xyz", testResult3);
         assertSame(testResult2, metaData.getTablePrivileges("abc", "test", "xyz"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getTablePrivileges(null, "test", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -765,7 +767,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertTrue(metaData.getTablePrivileges(null, "a__", "xyz_") instanceof MockResultSet);
         assertNull(metaData.getTablePrivileges("%", "%", "%"));
         polyResult = (PolyResultSet)metaData.getTablePrivileges(null, "ab%", "%");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -780,7 +782,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setTablePrivileges("abc", "test", "xyz", testResult2);
         metaData.setTablePrivileges(null, "test", "xyz", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getTablePrivileges(null, "t_st", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getTablePrivileges(null, "t_st", "xyz");
@@ -813,7 +815,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setVersionColumns(null, "test", "xyz", testResult3);
         assertSame(testResult2, metaData.getVersionColumns("abc", "test", "xyz"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getVersionColumns(null, "test", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -841,7 +843,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setVersionColumns("abc", "test", "xyz", testResult2);
         metaData.setVersionColumns(null, "test", "xyz", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getVersionColumns(null, "test", "xyz");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getVersionColumns(null, "test", "xyz");
@@ -874,7 +876,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setBestRowIdentifier(null, "test", "xyz", 2, true, testResult3);
         assertSame(testResult2, metaData.getBestRowIdentifier("abc", "test", "xyz", 2, true));
         PolyResultSet polyResult = (PolyResultSet)metaData.getBestRowIdentifier(null, "test", "xyz", 2, true);
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -902,7 +904,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setBestRowIdentifier("abc", "test", "xyz", 1, false, testResult2);
         metaData.setBestRowIdentifier(null, "test", "xyz", 1, false, testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getBestRowIdentifier(null, "test", "xyz", 1, false);
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getBestRowIdentifier(null, "test", "xyz", 1, false);
@@ -935,7 +937,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setIndexInfo(null, "test", "xyz", false, true, testResult3);
         assertSame(testResult2, metaData.getIndexInfo("abc", "test", "xyz", false, true));
         PolyResultSet polyResult = (PolyResultSet)metaData.getIndexInfo(null, "test", "xyz", false, true);
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -963,7 +965,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setIndexInfo("abc", "test", "xyz", true, false, testResult2);
         metaData.setIndexInfo(null, "test", "xyz", true, false, testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getIndexInfo(null, "test", "xyz", true, false);
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getIndexInfo(null, "test", "xyz", true, false);
@@ -996,7 +998,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setUDTs(null, "test", "xyz", new int[] {1, 2, 3}, testResult3);
         assertSame(testResult2, metaData.getUDTs("abc", "test", "xyz", new int[] {1, 2, 3}));
         PolyResultSet polyResult = (PolyResultSet)metaData.getUDTs(null, "test", "xyz", new int[] {1, 2, 3});
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -1055,7 +1057,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertTrue(metaData.getUDTs(null, "a__", "xyz_", null) instanceof MockResultSet);
         assertNull(metaData.getUDTs("%", "%", "%", null));
         polyResult = (PolyResultSet)metaData.getUDTs(null, "ab%", "%", new int[] {1});
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -1072,7 +1074,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setUDTs("abc", "test", "xyz", new int[] {2, 4}, testResult2);
         assertEquals(testResult2, metaData.getUDTs("abc", "test", "xyz", new int[] {2}));
         PolyResultSet polyResult = (PolyResultSet)metaData.getUDTs("abc", "%", "%", new int[] {1, 2, 3});
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult));
         assertTrue(resultSets.contains(testResult2));
@@ -1087,7 +1089,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setUDTs("abc", "test", "xyz", new int[] {1}, testResult2);
         metaData.setUDTs(null, "test", "xyz", new int[] {1}, testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getUDTs(null, "t_st", "xyz", new int[] {1});
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getUDTs(null, "t_st", "xyz", new int[] {1});
@@ -1120,7 +1122,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setAttributes(null, "test", "xyz", "456", testResult3);
         assertSame(testResult2, metaData.getAttributes("abc", "test", "xyz", "456"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getAttributes(null, "test", "xyz", "456");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -1172,7 +1174,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertTrue(metaData.getAttributes(null, "a__", "xyz_", "4_6") instanceof MockResultSet);
         assertNull(metaData.getAttributes("%", "%", "%", "%"));
         polyResult = (PolyResultSet)metaData.getAttributes(null, "ab%", "%", "4%");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3)); 
@@ -1187,7 +1189,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setAttributes("abc", "test", "xyz", "EFg", testResult2);
         metaData.setAttributes(null, "test", "xyz", "EFg", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getAttributes(null, "t_st", "xyz", "EFG");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getAttributes(null, "t_st", "xyz", "EFg");
@@ -1220,7 +1222,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setColumnPrivileges(null, "test", "xyz", "456", testResult3);
         assertSame(testResult2, metaData.getColumnPrivileges("abc", "test", "xyz", "456"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getColumnPrivileges(null, "test", "xyz", "456");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -1265,7 +1267,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         ResultSet testResult4 = new MockResultSet("id4");
         metaData.setColumnPrivileges("abc1", "abc", "xyz1", "789", testResult4);
         PolyResultSet polyResult = (PolyResultSet)metaData.getColumnPrivileges("abc1", "abc", "xyz1", "___");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
     }
     
@@ -1278,7 +1280,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setColumnPrivileges("abc", "test", "xyz", "EFg", testResult2);
         metaData.setColumnPrivileges(null, "test", "xyz", "EFg", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getColumnPrivileges(null, "test", "xyz", "EFG");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getColumnPrivileges(null, "test", "xyz", "E_g");
@@ -1311,7 +1313,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setColumns(null, "test", "xyz", "456", testResult3);
         assertSame(testResult2, metaData.getColumns("abc", "test", "xyz", "456"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getColumns(null, "test", "xyz", "456");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -1363,7 +1365,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertTrue(metaData.getColumns(null, "a__", "xyz_", "4_6") instanceof MockResultSet);
         assertNull(metaData.getColumns("%", "%", "%", "%"));
         polyResult = (PolyResultSet)metaData.getColumns(null, "ab%", "%", "4%");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3)); 
@@ -1378,7 +1380,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setColumns("abc", "test", "xyz", "EFg", testResult2);
         metaData.setColumns(null, "test", "xyz", "EFg", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getColumns(null, "t_st", "xyz", "EFG");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getColumns(null, "t_st", "xyz", "EFg");
@@ -1411,7 +1413,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setProcedureColumns(null, "test", "xyz", "456", testResult3);
         assertSame(testResult2, metaData.getProcedureColumns("abc", "test", "xyz", "456"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getProcedureColumns(null, "test", "xyz", "456");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -1463,7 +1465,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertTrue(metaData.getProcedureColumns(null, "a__", "xyz_", "4_6") instanceof MockResultSet);
         assertNull(metaData.getProcedureColumns("%", "%", "%", "%"));
         polyResult = (PolyResultSet)metaData.getProcedureColumns(null, "ab%", "%", "4%");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3)); 
@@ -1478,7 +1480,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setProcedureColumns("abc", "test", "xyz", "EFg", testResult2);
         metaData.setProcedureColumns(null, "test", "xyz", "EFg", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getProcedureColumns(null, "t_st", "xyz", "EFG");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getProcedureColumns(null, "t_st", "xyz", "EFg");
@@ -1511,7 +1513,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setFunctionColumns(null, "test", "xyz", "456", testResult3);
         assertSame(testResult2, metaData.getFunctionColumns("abc", "test", "xyz", "456"));
         PolyResultSet polyResult = (PolyResultSet)metaData.getFunctionColumns(null, "test", "xyz", "456");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -1563,7 +1565,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertTrue(metaData.getFunctionColumns(null, "a__", "xyz_", "4_6") instanceof MockResultSet);
         assertNull(metaData.getFunctionColumns("%", "%", "%", "%"));
         polyResult = (PolyResultSet)metaData.getFunctionColumns(null, "ab%", "%", "4%");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3)); 
@@ -1578,7 +1580,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setFunctionColumns("abc", "test", "xyz", "EFg", testResult2);
         metaData.setFunctionColumns(null, "test", "xyz", "EFg", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getFunctionColumns(null, "t_st", "xyz", "EFG");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getFunctionColumns(null, "t_st", "xyz", "EFg");
@@ -1611,7 +1613,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setTables(null, "test", "xyz", new String[] {"2", "3"}, testResult3);
         assertSame(testResult2, metaData.getTables("abc", "test", "xyz", new String[] {"1", "2", "3"}));
         PolyResultSet polyResult = (PolyResultSet)metaData.getTables(null, "test", "xyz", new String[] {"1", "2", "3"});
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -1670,7 +1672,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         assertTrue(metaData.getTables(null, "a__", "xyz_", null) instanceof MockResultSet);
         assertNull(metaData.getTables("%", "%", "%", null));
         polyResult = (PolyResultSet)metaData.getTables(null, "ab%", "%", new String[] {"1"});
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult2));
         assertTrue(resultSets.contains(testResult3));
@@ -1687,7 +1689,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setTables("abc", "test", "xyz", new String[] {"2", "4"}, testResult2);
         assertEquals(testResult2, metaData.getTables("abc", "test", "xyz", new String[] {"2"}));
         PolyResultSet polyResult = (PolyResultSet)metaData.getTables("abc", "%", "%", new String[] {"1", "2", "3"});
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult));
         assertTrue(resultSets.contains(testResult2));
@@ -1702,7 +1704,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setTables("abc", "test", "xyz", new String[] {"a"}, testResult2);
         metaData.setTables(null, "test", "xyz", new String[] {"a"}, testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getTables(null, "t_st", "xyz", new String[] {"a"});
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         metaData.setCaseSensitive(true);
         polyResult = (PolyResultSet)metaData.getTables(null, "t_st", "xyz", new String[] {"a"});
@@ -1731,7 +1733,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setCrossReference(null, "ab", "78", "12", null, "34", testResult);
         metaData.setCrossReference("cd", "ab", "78", "12", "56", "34", testResult2);
         PolyResultSet polyResult = (PolyResultSet)metaData.getCrossReference(null, "ab", "78", "12", null, "34");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(2, resultSets.size());
         assertTrue(resultSets.contains(testResult));
         assertTrue(resultSets.contains(testResult2));
@@ -1751,7 +1753,7 @@ public class MockDatabaseMetaDataTest extends TestCase
         metaData.setCrossReference("Ab", "cd", "EF", "gh", "ij", "kl", testResult2);
         metaData.setCrossReference("ab", "CD", "ef", "gH", "IJ", "kl", testResult3);
         PolyResultSet polyResult = (PolyResultSet)metaData.getCrossReference("ab", "Cd", "ef", "gh", "ij", "kl");
-        List resultSets = polyResult.getUnderlyingResultSetList();
+        List<ResultSet> resultSets = polyResult.getUnderlyingResultSetList();
         assertEquals(3, resultSets.size());
         assertTrue(resultSets.contains(testResult));
         assertTrue(resultSets.contains(testResult2));

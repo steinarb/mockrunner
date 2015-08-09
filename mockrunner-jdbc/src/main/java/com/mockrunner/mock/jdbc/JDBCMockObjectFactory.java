@@ -23,10 +23,10 @@ import com.mockrunner.base.NestedApplicationException;
  */
 public class JDBCMockObjectFactory
 {
-    private MockDataSource dataSource;
-    private MockDriver driver;
-    private MockConnection connection;
-    private Set preservedDrivers;
+    private final MockDataSource dataSource;
+    private final MockDriver driver;
+    private final MockConnection connection;
+    private final Set<Driver> preservedDrivers;
     
     /**
      * Creates a new set of mock objects.
@@ -36,7 +36,7 @@ public class JDBCMockObjectFactory
         dataSource = createMockDataSource();
         driver = createMockDriver();
         connection = createMockConnection();
-        preservedDrivers = new HashSet();
+        preservedDrivers = new HashSet<Driver>();
         setUpDependencies();
     }
 
@@ -51,10 +51,10 @@ public class JDBCMockObjectFactory
     {
         try
         {
-            Enumeration drivers = DriverManager.getDrivers();
+            Enumeration<Driver> drivers = DriverManager.getDrivers();
             while(drivers.hasMoreElements())
             {
-                DriverManager.deregisterDriver((Driver)drivers.nextElement());
+                DriverManager.deregisterDriver(drivers.nextElement());
             }
         }
         catch(SQLException exc)
@@ -67,10 +67,10 @@ public class JDBCMockObjectFactory
     {
         try
         {
-            Enumeration drivers = DriverManager.getDrivers();
+            Enumeration<Driver> drivers = DriverManager.getDrivers();
             while(drivers.hasMoreElements())
             {
-                Driver currentDriver = (Driver)drivers.nextElement();
+                Driver currentDriver = drivers.nextElement();
                 if(currentDriver instanceof MockDriver)
                 {
                     DriverManager.deregisterDriver(currentDriver);
@@ -85,10 +85,10 @@ public class JDBCMockObjectFactory
     
     private void preserveDrivers()
     {
-        Enumeration drivers = DriverManager.getDrivers();
+        Enumeration<Driver> drivers = DriverManager.getDrivers();
         while(drivers.hasMoreElements())
         {
-            Driver currentDriver = (Driver)drivers.nextElement();
+            Driver currentDriver = drivers.nextElement();
             if(!(currentDriver instanceof MockDriver))
             {
                 preservedDrivers.add(currentDriver);
@@ -127,10 +127,10 @@ public class JDBCMockObjectFactory
         deregisterMockDrivers();
         try
         {
-            Iterator drivers = preservedDrivers.iterator();
+            Iterator<Driver> drivers = preservedDrivers.iterator();
             while(drivers.hasNext())
             {
-                DriverManager.registerDriver((Driver)drivers.next());
+                DriverManager.registerDriver(drivers.next());
             }
         }
         catch(SQLException exc)

@@ -105,7 +105,7 @@ public class FileResultSetFactoryTest
         factory.setUseTemplates(true);
         resultSet = factory.create("");
         doTestResultSetDefaultTemplatesEnabled(resultSet);
-        Map customMap = new HashMap();
+        Map<String, String> customMap = new HashMap<String, String>();
         customMap.put("customMarker", "template1");
         customMap.put("anotherCustomMarker", "template2");
         factory.setTemplateConfiguration("%", customMap);

@@ -42,7 +42,7 @@ public class ExecuteQueryTestCase extends TestCase {
         PreparedStatement pStmt = connection.prepareStatement(stmt);
         
         for (int c = 0; c < isbnNumbers.size(); c++) {
-            pStmt.setString(1, (String) isbnNumbers.get(c));
+            pStmt.setString(1, isbnNumbers.get(c));
             ResultSet result = pStmt.executeQuery();
             System.out.println(result);
             while (result.next()) {
@@ -73,7 +73,7 @@ public class ExecuteQueryTestCase extends TestCase {
         PreparedStatementResultSetHandler preparedStatementResultSetHandler = connection.getPreparedStatementResultSetHandler();
         
         for (int c = 0; c < isbnNumbers.size(); c++) {
-            pStmt.setString(1, (String) isbnNumbers.get(c));
+            pStmt.setString(1, isbnNumbers.get(c));
             
             MockResultSet resultSet = new MockResultSet("");
             resultSet.addColumn("isbn");
