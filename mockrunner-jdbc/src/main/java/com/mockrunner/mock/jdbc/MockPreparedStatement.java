@@ -255,7 +255,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             if(null != updateCounts)
             {
                 resultSetHandler.addExecutedStatement(getSQL());
-                return setMultipleUpdateCounts((int[])ArrayUtil.convertToPrimitiveArray(updateCounts), params);
+                return setMultipleUpdateCounts(updateCounts.clone(), params);
             }
         }
         else
@@ -274,12 +274,12 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     
     private int setSingleUpdateCount(int updateCount, MockParameterMap params)
     {
-        setUpdateCounts(new int[] {updateCount});
+        setUpdateCounts(new Integer[] {updateCount});
         setGeneratedKeysResultSet(sql, params);
         return updateCount;
     }
     
-    private int setMultipleUpdateCounts(int[] updateCounts, MockParameterMap params)
+    private int setMultipleUpdateCounts(Integer[] updateCounts, MockParameterMap params)
     {
         setUpdateCounts(updateCounts);
         setGeneratedKeysResultSet(sql, params);

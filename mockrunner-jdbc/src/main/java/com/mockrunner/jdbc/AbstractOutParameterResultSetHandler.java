@@ -16,7 +16,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     private boolean mustRegisterOutParameters = false;
     private MockParameterMap globalOutParameter = null;
     private final Map<String, MockParameterMap> outParameterForStatement = new TreeMap<String, MockParameterMap>();
-    private final Map<String, List<MockOutParameterWrapper>> outParameterForStatementParameters = new TreeMap<String, List<MockOutParameterWrapper>>();
+    private final Map<String, List<ParameterWrapper<MockParameterMap>>> outParameterForStatementParameters = new TreeMap<String, List<ParameterWrapper<MockParameterMap>>>();
     
     /**
      * Set if out parameters must be registered to be returned.
@@ -74,10 +74,10 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      */
     public MockParameterMap getOutParameter(String sql, MockParameterMap parameters)
     {
-        MockOutParameterWrapper wrapper = getMatchingParameterWrapper(sql, parameters, outParameterForStatementParameters);
+        ParameterWrapper<MockParameterMap> wrapper = getMatchingParameterWrapper(sql, parameters, outParameterForStatementParameters);
         if(null != wrapper)
         {
-            return wrapper.getOutParameter();
+            return wrapper.getWrappedObject();
         }
         return null;
     }
@@ -187,28 +187,12 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      */
     public void prepareOutParameter(String sql, MockParameterMap outParameters, MockParameterMap parameters)
     {
-        List<MockOutParameterWrapper> list = outParameterForStatementParameters.get(sql);
+        List<ParameterWrapper<MockParameterMap>> list = outParameterForStatementParameters.get(sql);
         if(null == list)
         {
-            list = new ArrayList<MockOutParameterWrapper>();
+            list = new ArrayList<ParameterWrapper<MockParameterMap>>();
             outParameterForStatementParameters.put(sql, list);
         }
-        list.add(new MockOutParameterWrapper(new MockParameterMap(outParameters), new MockParameterMap(parameters)));
-    }
-    
-    private class MockOutParameterWrapper extends ParameterWrapper
-    {
-        private final MockParameterMap outParameter;
-
-        public MockOutParameterWrapper(MockParameterMap outParameter, MockParameterMap parameters)
-        {
-            super(parameters);
-            this.outParameter = outParameter;
-        }
-
-        public MockParameterMap getOutParameter()
-        {
-            return outParameter;
-        }
-    }
+        list.add(new ParameterWrapper<MockParameterMap>(new MockParameterMap(outParameters), new MockParameterMap(parameters)));
+    }    
 }

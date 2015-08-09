@@ -278,9 +278,9 @@ public class MockCallableStatementTest extends BaseTestCase
     @Test
     public void testPrepareMultipleUpdateCounts() throws Exception
     {
-        callableStatementHandler.prepareGlobalUpdateCounts(new int[] {4, 5, 6});
-        callableStatementHandler.prepareUpdateCounts("doTest", new int[] {7, 8, 9});
-        callableStatementHandler.prepareUpdateCounts("doTest", new int[] {10, 11}, new Object[] {"1", 2L});
+        callableStatementHandler.prepareGlobalUpdateCounts(new Integer[] {4, 5, 6});
+        callableStatementHandler.prepareUpdateCounts("doTest", new Integer[] {7, 8, 9});
+        callableStatementHandler.prepareUpdateCounts("doTest", new Integer[] {10, 11}, new Object[] {"1", 2L});
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("call");
         int updateCount = statement.executeUpdate();
         assertEquals(4, updateCount);

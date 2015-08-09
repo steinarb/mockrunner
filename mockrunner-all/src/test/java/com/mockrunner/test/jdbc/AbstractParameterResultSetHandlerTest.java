@@ -141,7 +141,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         assertEquals(new Integer(2), callableStatementHandler.getUpdateCount("INSERT INTO", parameter));
         callableStatementHandler.setExactMatchParameter(true);
         assertNull(callableStatementHandler.getUpdateCount("INSERT INTO", parameter));
-        callableStatementHandler.prepareUpdateCounts("update", new int[] {1, 3}, new MockParameterMap());
+        callableStatementHandler.prepareUpdateCounts("update", new Integer[] {1, 3}, new MockParameterMap());
         assertEquals(new Integer(1), callableStatementHandler.getUpdateCount("update", new MockParameterMap()));
     }
     
@@ -150,12 +150,12 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
     {
         MockParameterMap parameter = new MockParameterMap();
         parameter.put(1, "1");
-        preparedStatementHandler.prepareUpdateCounts("insert into", new int[] {3}, parameter);
+        preparedStatementHandler.prepareUpdateCounts("insert into", new Integer[] {3}, parameter);
         assertNull(preparedStatementHandler.getUpdateCounts("insert into", new MockParameterMap()));
         Integer[] returnedUpdateCounts = preparedStatementHandler.getUpdateCounts("insert into", parameter);
         assertEquals(1, returnedUpdateCounts.length);
         assertEquals(new Integer(3), returnedUpdateCounts[0]);
-        preparedStatementHandler.prepareUpdateCounts("insert abc", new int[] {5, 6, 7}, new ArrayList<Object>());
+        preparedStatementHandler.prepareUpdateCounts("insert abc", new Integer[] {5, 6, 7}, new ArrayList<Object>());
         returnedUpdateCounts = preparedStatementHandler.getUpdateCounts("insert abc", parameter);
         assertEquals(3, returnedUpdateCounts.length);
         assertEquals(new Integer(5), returnedUpdateCounts[0]);
@@ -173,10 +173,10 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         preparedStatementHandler.prepareUpdateCount("insert into", 3, new Object[] {"1"});
         assertFalse(preparedStatementHandler.hasMultipleUpdateCounts("insert into", new MockParameterMap()));
         assertFalse(preparedStatementHandler.hasMultipleUpdateCounts("insert into", parameter));
-        preparedStatementHandler.prepareUpdateCounts("insert 123", new int[] {3}, new Object[] {"1"});
+        preparedStatementHandler.prepareUpdateCounts("insert 123", new Integer[] {3}, new Object[] {"1"});
         assertFalse(preparedStatementHandler.hasMultipleUpdateCounts("insert 123", new MockParameterMap()));
         assertTrue(preparedStatementHandler.hasMultipleUpdateCounts("insert 123", parameter));
-        preparedStatementHandler.prepareUpdateCounts("insert 123", new int[] {3, 5}, new Object[] {"1"});
+        preparedStatementHandler.prepareUpdateCounts("insert 123", new Integer[] {3, 5}, new Object[] {"1"});
         assertFalse(preparedStatementHandler.hasMultipleUpdateCounts("insert 123", new MockParameterMap()));
         assertTrue(preparedStatementHandler.hasMultipleUpdateCounts("insert 123", parameter));
         preparedStatementHandler.setExactMatchParameter(true);

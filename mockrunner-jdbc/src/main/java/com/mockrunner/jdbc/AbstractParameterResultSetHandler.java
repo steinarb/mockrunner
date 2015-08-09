@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,6 @@ import java.util.TreeMap;
 
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.ParameterReference;
-import com.mockrunner.util.common.ArrayUtil;
 
 /**
  * Abstract base class for all statement types
@@ -23,10 +21,10 @@ import com.mockrunner.util.common.ArrayUtil;
 public abstract class AbstractParameterResultSetHandler extends AbstractResultSetHandler
 {
     private boolean exactMatchParameter = false;
-    private final Map<String, List<MockResultSetArrayWrapper>> resultSetsForStatement = new TreeMap<String, List<MockResultSetArrayWrapper>>();
-    private final Map<String, List<MockUpdateCountArrayWrapper>> updateCountForStatement = new TreeMap<String, List<MockUpdateCountArrayWrapper>>();
-    private final Map<String, List<MockSQLExceptionWrapper>> throwsSQLException = new TreeMap<String, List<MockSQLExceptionWrapper>>();
-    private final Map<String, List<MockResultSetWrapper>> generatedKeysForStatement = new TreeMap<String, List<MockResultSetWrapper>>();
+    private final Map<String, List<ParameterWrapper<MockResultSet[]>>> resultSetsForStatement = new TreeMap<String, List<ParameterWrapper<MockResultSet[]>>>();
+    private final Map<String, List<ParameterWrapper<Integer[]>>> updateCountForStatement = new TreeMap<String, List<ParameterWrapper<Integer[]>>>();
+    private final Map<String, List<ParameterWrapper<SQLException>>> throwsSQLException = new TreeMap<String, List<ParameterWrapper<SQLException>>>();
+    private final Map<String, List<ParameterWrapper<MockResultSet>>> generatedKeysForStatement = new TreeMap<String, List<ParameterWrapper<MockResultSet>>>();
 	private final Map<String, ParameterSets> executedStatementParameters = new TreeMap<String, ParameterSets>();
     
 	/**
@@ -130,13 +128,10 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public Integer[] getUpdateCounts(String sql, MockParameterMap parameters)
     {
-        ParameterWrapper wrapper = (ParameterWrapper)getMatchingParameterWrapper(sql, parameters, updateCountForStatement);
+        ParameterWrapper<Integer[]> wrapper = getMatchingParameterWrapper(sql, parameters, updateCountForStatement);
         if(null != wrapper)
         {
-            if(wrapper instanceof MockUpdateCountArrayWrapper)
-            {
-                return ((MockUpdateCountArrayWrapper)wrapper).getUpdateCount();
-            }
+            wrapper.getWrappedObject();
         }
         return null;
     }
@@ -152,8 +147,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public boolean hasMultipleUpdateCounts(String sql, MockParameterMap parameters)
     {
-        ParameterWrapper wrapper = (ParameterWrapper)getMatchingParameterWrapper(sql, parameters, updateCountForStatement);
-        return (wrapper instanceof MockUpdateCountArrayWrapper);
+        ParameterWrapper<Integer[]> wrapper = getMatchingParameterWrapper(sql, parameters, updateCountForStatement);
+        return (wrapper != null && wrapper.getWrappedObject().length > 1);
     }
 
     /**
@@ -195,10 +190,10 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public MockResultSet[] getResultSets(String sql, MockParameterMap parameters)
     {
-        MockResultSetArrayWrapper wrapper = getMatchingParameterWrapper(sql, parameters, resultSetsForStatement);
+        ParameterWrapper<MockResultSet[]> wrapper = getMatchingParameterWrapper(sql, parameters, resultSetsForStatement);
 
         if(null != wrapper){
-            return wrapper.getResultSets();
+            return wrapper.getWrappedObject();
         }
         return null;
     }
@@ -214,8 +209,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public boolean hasMultipleResultSets(String sql, MockParameterMap parameters)
     {
-        MockResultSetArrayWrapper wrapper = getMatchingParameterWrapper(sql, parameters, resultSetsForStatement);
-        return (null != wrapper && wrapper.getResultSets().length > 1);
+        ParameterWrapper<MockResultSet[]> wrapper = getMatchingParameterWrapper(sql, parameters, resultSetsForStatement);
+        return (null != wrapper && wrapper.getWrappedObject().length > 1);
     }
     
     /**
@@ -251,10 +246,10 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public SQLException getSQLException(String sql, MockParameterMap parameters)
     {
-        MockSQLExceptionWrapper wrapper = getMatchingParameterWrapper(sql, parameters, throwsSQLException);
+        ParameterWrapper<SQLException> wrapper = getMatchingParameterWrapper(sql, parameters, throwsSQLException);
         if(null != wrapper)
         {
-            return wrapper.getException();
+            return wrapper.getWrappedObject();
         }
         return null;
     }
@@ -272,21 +267,21 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public MockResultSet getGeneratedKeys(String sql, MockParameterMap parameters)
     {
-        MockResultSetWrapper wrapper = getMatchingParameterWrapper(sql, parameters, generatedKeysForStatement);
+        ParameterWrapper<MockResultSet> wrapper = getMatchingParameterWrapper(sql, parameters, generatedKeysForStatement);
         if(null != wrapper)
         {
-            return wrapper.getResultSet();
+            return wrapper.getWrappedObject();
         }
         return null;
     }
 
-    protected <T extends ParameterWrapper> T getMatchingParameterWrapper(String sql, MockParameterMap parameters, Map<String, List<T>> statementMap)
+    protected <T> ParameterWrapper<T> getMatchingParameterWrapper(String sql, MockParameterMap parameters, Map<String, List<ParameterWrapper<T>>> statementMap)
     {
-        SQLStatementMatcher<List<T>> matcher = new SQLStatementMatcher<List<T>>(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
-        List<List<T>> list = matcher.getMatchingObjects(statementMap, sql, true);
-        for(List<T> wrapperList : list)
+        SQLStatementMatcher<List<ParameterWrapper<T>>> matcher = new SQLStatementMatcher<List<ParameterWrapper<T>>>(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
+        List<List<ParameterWrapper<T>>> list = matcher.getMatchingObjects(statementMap, sql, true);
+        for(List<ParameterWrapper<T>> wrapperList : list)
         {
-            for(T wrapper : wrapperList)
+            for(ParameterWrapper<T> wrapper : wrapperList)
             {
                 if(doParameterMatch(wrapper.getParameters(), parameters))
                 {
@@ -477,8 +472,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public void prepareResultSet(String sql, MockResultSet resultSet, MockParameterMap parameters)
     {
-        List<MockResultSetArrayWrapper> list = getListFromMapForSQLStatement(sql, resultSetsForStatement);
-        list.add(new MockResultSetArrayWrapper(new MockResultSet[]{resultSet}, new MockParameterMap(parameters)));
+        List<ParameterWrapper<MockResultSet[]>> list = getListFromMapForSQLStatement(sql, resultSetsForStatement);
+        list.add(new ParameterWrapper<MockResultSet[]>(new MockResultSet[]{resultSet}, new MockParameterMap(parameters)));
     }
     
     /**
@@ -499,8 +494,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public void prepareResultSets(String sql, MockResultSet[] resultSets, MockParameterMap parameters)
     {
-        List<MockResultSetArrayWrapper> list = getListFromMapForSQLStatement(sql, resultSetsForStatement);
-        list.add(new MockResultSetArrayWrapper(resultSets.clone(), new MockParameterMap(parameters)));
+        List<ParameterWrapper<MockResultSet[]>> list = getListFromMapForSQLStatement(sql, resultSetsForStatement);
+        list.add(new ParameterWrapper<MockResultSet[]>(resultSets.clone(), new MockParameterMap(parameters)));
     }
     
     /**
@@ -647,8 +642,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public void prepareThrowsSQLException(String sql, SQLException exc, MockParameterMap parameters)
     {
-        List<MockSQLExceptionWrapper> list = getListFromMapForSQLStatement(sql, throwsSQLException);
-        list.add(new MockSQLExceptionWrapper(exc, new MockParameterMap(parameters)));
+        List<ParameterWrapper<SQLException>> list = getListFromMapForSQLStatement(sql, throwsSQLException);
+        list.add(new ParameterWrapper<SQLException>(exc, new MockParameterMap(parameters)));
     }
 
     /**
@@ -689,7 +684,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * @param updateCounts the update count array
      * @param parameters the parameters
      */
-    public void prepareUpdateCounts(String sql, int[] updateCounts, Object[] parameters)
+    public void prepareUpdateCounts(String sql, Integer[] updateCounts, Object[] parameters)
     {
         prepareUpdateCounts(sql, updateCounts, Arrays.asList(parameters));
     }
@@ -733,7 +728,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * @param updateCounts the update count array
      * @param parameters the parameters
      */
-    public void prepareUpdateCounts(String sql, int[] updateCounts, List<Object> parameters)
+    public void prepareUpdateCounts(String sql, Integer[] updateCounts, List<Object> parameters)
     {
         MockParameterMap params = createParameterMap(parameters);
         prepareUpdateCounts(sql, updateCounts,  params);
@@ -756,8 +751,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public void prepareUpdateCount(String sql, int updateCount, MockParameterMap parameters)
     {
-        List<MockUpdateCountArrayWrapper> list = getListFromMapForSQLStatement(sql, updateCountForStatement);
-        list.add(new MockUpdateCountArrayWrapper(new int[]{updateCount}, new MockParameterMap(parameters)));
+        List<ParameterWrapper<Integer[]>> list = getListFromMapForSQLStatement(sql, updateCountForStatement);
+        list.add(new ParameterWrapper<Integer[]>(new Integer[]{updateCount}, new MockParameterMap(parameters)));
     }
     
     /**
@@ -776,10 +771,10 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * @param updateCounts the update count array
      * @param parameters the parameters
      */
-    public void prepareUpdateCounts(String sql, int[] updateCounts, MockParameterMap parameters)
+    public void prepareUpdateCounts(String sql, Integer[] updateCounts, MockParameterMap parameters)
     {
-        List<MockUpdateCountArrayWrapper> list = getListFromMapForSQLStatement(sql, updateCountForStatement);
-        list.add(new MockUpdateCountArrayWrapper(updateCounts.clone(), new MockParameterMap(parameters)));
+        List<ParameterWrapper<Integer[]>> list = getListFromMapForSQLStatement(sql, updateCountForStatement);
+        list.add(new ParameterWrapper<Integer[]>(updateCounts.clone(), new MockParameterMap(parameters)));
     }
     
     /**
@@ -844,8 +839,8 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      */
     public void prepareGeneratedKeys(String sql, MockResultSet generatedKeysResult, MockParameterMap parameters)
     {
-        List<MockResultSetWrapper> list = getListFromMapForSQLStatement(sql, generatedKeysForStatement);
-        list.add(new MockResultSetWrapper(generatedKeysResult, new MockParameterMap(parameters)));
+        List<ParameterWrapper<MockResultSet>> list = getListFromMapForSQLStatement(sql, generatedKeysForStatement);
+        list.add(new ParameterWrapper<MockResultSet>(generatedKeysResult, new MockParameterMap(parameters)));
     }
     
     private <T> List<T> getListFromMapForSQLStatement(String sql, Map<String, List<T>> map)
@@ -869,12 +864,14 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         return params;
     }
     
-    protected class ParameterWrapper
+    protected class ParameterWrapper<T>
     {
         private final MockParameterMap parameters;
+        private final T wrappedObject;
         
-        public ParameterWrapper(MockParameterMap parameters)
+        public ParameterWrapper(T wrappedObject, MockParameterMap parameters)
         {
+            this.wrappedObject = wrappedObject;
             this.parameters = parameters;
         }
 
@@ -888,89 +885,9 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
         {
             return parameters;
         }
-    }
-    
-    private class MockSQLExceptionWrapper extends ParameterWrapper
-    {
-        private final SQLException exception;
         
-    
-        public MockSQLExceptionWrapper(SQLException exception, MockParameterMap parameters)
-        {
-            super(parameters);
-            this.exception = exception;
-        }
-
-        public SQLException getException()
-        {
-            return exception;
+        public T getWrappedObject(){
+            return wrappedObject;
         }
     }
-    
-    private class MockResultSetWrapper extends ParameterWrapper
-    {
-        private final MockResultSet resultSet;
-    
-        public MockResultSetWrapper(MockResultSet resultSet, MockParameterMap parameters)
-        {
-            super(parameters);
-            this.resultSet = resultSet;
-        }
-
-        public MockResultSet getResultSet()
-        {
-            return resultSet;
-        }
-    }
-    
-    private class MockResultSetArrayWrapper extends ParameterWrapper
-    {
-        private final MockResultSet[] resultSets;
-    
-        public MockResultSetArrayWrapper(MockResultSet[] resultSets, MockParameterMap parameters)
-        {
-            super(parameters);
-            this.resultSets = resultSets;
-        }
-
-        public MockResultSet[] getResultSets()
-        {
-            return resultSets;
-        }
-    }
-
-//    private class MockUpdateCountWrapper extends ParameterWrapper
-//    {
-//        private final Integer updateCount;
-//
-//        public MockUpdateCountWrapper(int updateCount, Map<IndexedOrNamed, Object> parameters)
-//        {
-//            super(parameters);
-//            this.updateCount = updateCount;
-//        }
-//
-//        public Integer getUpdateCount()
-//        {
-//            return updateCount;
-//        }
-//    }
-//    
-    private class MockUpdateCountArrayWrapper extends ParameterWrapper
-    {
-        private final Integer[] updateCounts;
-
-        public MockUpdateCountArrayWrapper(int[] updateCounts, MockParameterMap parameters)
-        {
-            super(parameters);
-            this.updateCounts = (Integer[])ArrayUtil.convertToObjectArray(updateCounts);
-        }
-
-        public Integer[] getUpdateCount()
-        {
-            return updateCounts;
-        }
-    }
-    
-   
-    
 }

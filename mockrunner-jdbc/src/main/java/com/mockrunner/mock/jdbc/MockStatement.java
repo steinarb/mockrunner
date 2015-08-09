@@ -21,7 +21,7 @@ public class MockStatement implements Statement
 {
     private AbstractResultSetHandler resultSetHandler;
     private ResultSet[] currentResultSets = null;
-    private int[] currentUpdateCounts = null;
+    private Integer[] currentUpdateCounts = null;
     private int currentResultSetIndex = 0;
     private int currentUpdateCountIndex = 0;
     private List<String> batches = new ArrayList<String>();
@@ -97,7 +97,7 @@ public class MockStatement implements Statement
         this.currentUpdateCountIndex = 0;
     }
     
-    protected void setUpdateCounts(int[] updateCounts)
+    protected void setUpdateCounts(Integer[] updateCounts)
     {
         closeCurrentResultSets();
         this.currentResultSets = null;
@@ -191,7 +191,7 @@ public class MockStatement implements Statement
         resultSetHandler.addExecutedStatement(sql);
         if(resultSetHandler.hasMultipleUpdateCounts(sql))
         {
-            int[] returnValues = resultSetHandler.getUpdateCounts(sql);
+            Integer[] returnValues = resultSetHandler.getUpdateCounts(sql);
             if(null != returnValues)
             {
                 return setMultipleUpdateCounts(returnValues);
@@ -214,12 +214,12 @@ public class MockStatement implements Statement
     
     private int setSingleUpdateCount(int updateCount)
     {
-        setUpdateCounts(new int[] {updateCount});
+        setUpdateCounts(new Integer[] {updateCount});
         setLastGeneratedKeysResultSet(null);
         return updateCount;
     }
     
-    private int setMultipleUpdateCounts(int[] updateCounts)
+    private int setMultipleUpdateCounts(Integer[] updateCounts)
     {
         setUpdateCounts(updateCounts);
         setLastGeneratedKeysResultSet(null);

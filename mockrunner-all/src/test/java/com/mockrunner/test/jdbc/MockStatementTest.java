@@ -350,7 +350,7 @@ public class MockStatementTest extends BaseTestCase
     public void testPrepareMultipleUpdateCounts() throws Exception
     {
         statementHandler.prepareGlobalUpdateCount(2);
-        statementHandler.prepareUpdateCounts("insert into", new int[] {1, 2, 3});
+        statementHandler.prepareUpdateCounts("insert into", new Integer[] {1, 2, 3});
         MockStatement statement = (MockStatement)connection.createStatement();
         int testUpdateCount = statement.executeUpdate("update xy");
         assertEquals(2, testUpdateCount);
@@ -515,7 +515,7 @@ public class MockStatementTest extends BaseTestCase
     @Test
     public void testPrepareMultipleGlobalUpdateCounts() throws Exception
     {
-        statementHandler.prepareGlobalUpdateCounts(new int[] {5, 4});
+        statementHandler.prepareGlobalUpdateCounts(new Integer[] {5, 4});
         statementHandler.prepareUpdateCount("insert into", 7);
         MockStatement statement = (MockStatement)connection.createStatement();
         int testUpdateCount = statement.executeUpdate("insert into");

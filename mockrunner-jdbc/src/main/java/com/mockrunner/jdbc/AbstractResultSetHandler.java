@@ -33,8 +33,8 @@ public abstract class AbstractResultSetHandler
     private boolean continueProcessingOnBatchFailure = false;
     private MockResultSet[] globalResultSets;
     private final Map<String, MockResultSet[]> resultSetsForStatement = new TreeMap<String, MockResultSet[]>();
-    private int[] globalUpdateCounts;
-    private final Map<String, int[]> updateCountForStatement = new TreeMap<String, int[]>();
+    private Integer[] globalUpdateCounts;
+    private final Map<String, Integer[]> updateCountForStatement = new TreeMap<String, Integer[]>();
     private MockResultSet globalGeneratedKeys;
     private final Map<String, MockResultSet> generatedKeysForStatement = new TreeMap<String, MockResultSet>();
     private final Map<String, Boolean> returnsResultSetMap = new TreeMap<String, Boolean>();
@@ -298,7 +298,7 @@ public abstract class AbstractResultSetHandler
      * <code>Integer</code> object.
      * @return the <code>Map</code> of <code>ResultSet</code> objects
      */
-    public Map<String, int[]> getUpdateCountMap()
+    public Map<String, Integer[]> getUpdateCountMap()
     {
         return Collections.unmodifiableMap(updateCountForStatement);
     }
@@ -428,7 +428,7 @@ public abstract class AbstractResultSetHandler
      */
     public Integer getUpdateCount(String sql)
     {
-        int[] updateCounts = getMatchingUpdateCounts(sql);
+        Integer[] updateCounts = getMatchingUpdateCounts(sql);
         if(null == updateCounts) return null;
         if(updateCounts.length > 0)
         {
@@ -447,9 +447,9 @@ public abstract class AbstractResultSetHandler
      * @param sql the SQL string
      * @return the corresponding update count array
      */
-    public int[] getUpdateCounts(String sql)
+    public Integer[] getUpdateCounts(String sql)
     {
-        int[] updateCounts = getMatchingUpdateCounts(sql);
+        Integer[] updateCounts = getMatchingUpdateCounts(sql);
         return updateCounts;
     }
     
@@ -463,14 +463,14 @@ public abstract class AbstractResultSetHandler
      */
     public boolean hasMultipleUpdateCounts(String sql)
     {
-        int[] updateCounts = getMatchingUpdateCounts(sql);
+        Integer[] updateCounts = getMatchingUpdateCounts(sql);
         return (null != updateCounts && updateCounts.length > 1);
     }
     
-    private int[] getMatchingUpdateCounts(String sql)
+    private Integer[] getMatchingUpdateCounts(String sql)
     {
-        SQLStatementMatcher<int[]> matcher = new SQLStatementMatcher<int[]>(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
-        List<int[]> list = matcher.getMatchingObjects(updateCountForStatement, sql, true);
+        SQLStatementMatcher<Integer[]> matcher = new SQLStatementMatcher<Integer[]>(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
+        List<Integer[]> list = matcher.getMatchingObjects(updateCountForStatement, sql, true);
         if(null != list && list.size() > 0)
         {
             return list.get(0);
@@ -499,7 +499,7 @@ public abstract class AbstractResultSetHandler
      * will be wrapped in an array with one element.
      * @return the array of global update counts
      */
-    public int[] getGlobalUpdateCounts()
+    public Integer[] getGlobalUpdateCounts()
     {
         if(null == globalUpdateCounts) return null;
         return globalUpdateCounts;
@@ -660,7 +660,7 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareUpdateCount(String sql, int updateCount)
     {
-        updateCountForStatement.put(sql, new int[]{updateCount});
+        updateCountForStatement.put(sql, new Integer[]{updateCount});
     }
     
     /**
@@ -672,7 +672,7 @@ public abstract class AbstractResultSetHandler
      * @param sql the SQL string
      * @param updateCounts the update count array
      */
-    public void prepareUpdateCounts(String sql, int[] updateCounts)
+    public void prepareUpdateCounts(String sql, Integer[] updateCounts)
     {
         updateCountForStatement.put(sql, updateCounts.clone());
     }
@@ -683,14 +683,14 @@ public abstract class AbstractResultSetHandler
      */
     public void prepareGlobalUpdateCount(int updateCount)
     {
-        this.globalUpdateCounts = new int[]{updateCount};
+        this.globalUpdateCounts = new Integer[]{updateCount};
     }
     
     /**
      * Prepare an array of global update count values for <code>executeUpdate</code> calls.
      * @param updateCounts the update count array
      */
-    public void prepareGlobalUpdateCounts(int[] updateCounts)
+    public void prepareGlobalUpdateCounts(Integer[] updateCounts)
     {
         this.globalUpdateCounts = updateCounts.clone();
     }
