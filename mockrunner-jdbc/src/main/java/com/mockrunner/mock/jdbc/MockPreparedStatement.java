@@ -191,9 +191,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         else
         {
             MockResultSet result = resultSetHandler.getResultSet(getSQL(), params);
-            if(null == result)
-            	return new MockResultSet(String.valueOf(Math.random()));
-            else {
+            if(null != result){
                 resultSetHandler.addExecutedStatement(getSQL());
                 return cloneAndSetSingleResultSet(result, params);
             }

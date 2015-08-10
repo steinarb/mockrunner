@@ -133,7 +133,11 @@ public class MockStatement implements Statement
         {
             return cloneAndSetMultipleResultSets(resultSetHandler.getGlobalResultSets());
         }
-        return cloneAndSetSingleResultSet(resultSetHandler.getGlobalResultSet());
+        MockResultSet result = resultSetHandler.getGlobalResultSet();
+        if(null != result){
+            return cloneAndSetSingleResultSet(result);
+        }
+        return new MockResultSet(String.valueOf(Math.random()));
     }
     
     private MockResultSet cloneAndSetSingleResultSet(MockResultSet result)

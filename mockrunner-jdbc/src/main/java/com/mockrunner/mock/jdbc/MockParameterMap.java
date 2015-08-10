@@ -6,6 +6,7 @@
 package com.mockrunner.mock.jdbc;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -19,17 +20,25 @@ public class MockParameterMap extends HashMap<ParameterReference, Object> {
 //    Map<String, Object> namedParameters;
     
     public MockParameterMap() {
-        
         super();
-//        
-//        this.indexedParameters = new TreeMap<Integer, Object>();
-//        this.namedParameters = new TreeMap<String, Object>();
     }
 
     public MockParameterMap(MockParameterMap other){
         super(other);
-//        this.indexedParameters = new TreeMap<Integer, Object>(other.indexedParameters);
-//        this.namedParameters = new TreeMap<String, Object>(other.namedParameters);
+    }
+
+    public MockParameterMap(Object[] parameterArray){
+        super();
+        for(int ii = 0; ii < parameterArray.length; ii++){
+            put(ii + 1, parameterArray[ii]);
+        }
+    }
+    
+    public MockParameterMap(List<Object> parameterList){
+        super();
+        for(int ii = 0; ii < parameterList.size(); ii++){
+            put(ii + 1, parameterList.get(ii));
+        }
     }
     
     public void put(int index, Object value){

@@ -187,12 +187,16 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      */
     public void prepareOutParameter(String sql, MockParameterMap outParameters, MockParameterMap parameters)
     {
-        List<ParameterWrapper<MockParameterMap>> list = outParameterForStatementParameters.get(sql);
-        if(null == list)
-        {
-            list = new ArrayList<ParameterWrapper<MockParameterMap>>();
-            outParameterForStatementParameters.put(sql, list);
-        }
+        List<ParameterWrapper<MockParameterMap>> list = getListFromMapForSQLStatement(sql, outParameterForStatementParameters);
         list.add(new ParameterWrapper<MockParameterMap>(new MockParameterMap(outParameters), new MockParameterMap(parameters)));
-    }    
+    }
+    
+    public void removeOutParameter(String sql){
+        outParameterForStatement.remove(sql);
+    }
+
+    public void removeOutParameter(String sql, MockParameterMap parameters){
+        removeMatchingParameterWrapper(sql, parameters, outParameterForStatementParameters);
+    }
+    
 }
