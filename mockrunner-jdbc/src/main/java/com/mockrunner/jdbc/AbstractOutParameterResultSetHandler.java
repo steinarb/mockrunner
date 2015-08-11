@@ -74,7 +74,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      */
     public MockParameterMap getOutParameter(String sql, MockParameterMap parameters)
     {
-        ParameterWrapper<MockParameterMap> wrapper = getMatchingParameterWrapper(sql, parameters, outParameterForStatementParameters);
+        ParameterWrapper<MockParameterMap> wrapper = getMatchingParameterWrapper(sql, parameters, outParameterForStatementParameters, exactMatchParameter);
         if(null != wrapper)
         {
             return wrapper.getWrappedObject();
@@ -196,7 +196,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     }
 
     public void removeOutParameter(String sql, MockParameterMap parameters){
-        removeMatchingParameterWrapper(sql, parameters, outParameterForStatementParameters);
+        removeMatchingParameterWrapper(sql, parameters, outParameterForStatementParameters, exactMatchParameter);
     }
     
 }

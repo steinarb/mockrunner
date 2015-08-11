@@ -5,10 +5,9 @@
  */
 package com.mockrunner.mock.jdbc;
 
+import com.mockrunner.jdbc.ParameterUtil;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  *
@@ -58,6 +57,11 @@ public class MockParameterMap extends HashMap<ParameterReference, Object> {
 //    public Object get(Integer index){
 //        return get(new ParameterIndex(index));
 //    }
+//    
+//    @Deprecated
+//    public Object remove(Integer index){
+//        return remove(new ParameterIndex(index));
+//    }
     
     public void put(String name, Object value){
         put(new ParameterName(name), value);
@@ -71,12 +75,35 @@ public class MockParameterMap extends HashMap<ParameterReference, Object> {
         return remove(new ParameterIndex(index));
     }
     
-//    @Deprecated
-//    public Object remove(Integer index){
-//        return remove(new ParameterIndex(index));
-//    }
-    
     public Object remove(String name){
         return remove(new ParameterName(name));
     }
+    
+    public boolean doParameterMatch(MockParameterMap actualParameters, boolean exactMatchParameter)
+    {
+        if(exactMatchParameter)
+        {
+            if(actualParameters.size() != this.size()) return false;
+            for(ParameterReference currentKey : actualParameters.keySet()){
+                Object expectedObject = this.get(currentKey);
+                if(!ParameterUtil.compareParameter(actualParameters.get(currentKey), expectedObject))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        else
+        {
+            for(ParameterReference currentKey : this.keySet()){
+                Object actualObject = actualParameters.get(currentKey);
+                if(!ParameterUtil.compareParameter(actualObject, this.get(currentKey)))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }    
+    
 }
