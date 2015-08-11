@@ -13,13 +13,13 @@ import com.mockrunner.mock.jdbc.MockPreparedStatement;
  */
 public class PreparedStatementResultSetHandler extends AbstractParameterResultSetHandler
 { 
-    private List preparedStatements;
-    private Map preparedStatementMap;
+    private final List<MockPreparedStatement> preparedStatements;
+    private final Map<String, List<MockPreparedStatement>> preparedStatementMap;
     
     public PreparedStatementResultSetHandler()
     {
-        preparedStatements = new ArrayList();
-        preparedStatementMap = new TreeMap();
+        preparedStatements = new ArrayList<MockPreparedStatement>();
+        preparedStatementMap = new TreeMap<String, List<MockPreparedStatement>>();
     }
     
     /**
@@ -30,10 +30,10 @@ public class PreparedStatementResultSetHandler extends AbstractParameterResultSe
     public void addPreparedStatement(MockPreparedStatement statement)
     { 
         statement.setPreparedStatementResultSetHandler(this);
-        List list = (List)preparedStatementMap.get(statement.getSQL());
+        List<MockPreparedStatement> list = preparedStatementMap.get(statement.getSQL());
         if(null == list)
         {
-            list = new ArrayList();
+            list = new ArrayList<MockPreparedStatement>();
             preparedStatementMap.put(statement.getSQL(), list);
         }
         list.add(statement);
@@ -44,7 +44,7 @@ public class PreparedStatementResultSetHandler extends AbstractParameterResultSe
      * Returns a <code>List</code> of all prepared statements.
      * @return the <code>List</code> of {@link MockPreparedStatement} objects
      */
-    public List getPreparedStatements()
+    public List<MockPreparedStatement> getPreparedStatements()
     {
         return Collections.unmodifiableList(preparedStatements);
     }
@@ -55,7 +55,7 @@ public class PreparedStatementResultSetHandler extends AbstractParameterResultSe
      * object.
      * @return the <code>Map</code> of {@link MockPreparedStatement} objects
      */
-    public Map getPreparedStatementMap()
+    public Map<String, List<MockPreparedStatement>> getPreparedStatementMap()
     {
         return Collections.unmodifiableMap(preparedStatementMap);
     }

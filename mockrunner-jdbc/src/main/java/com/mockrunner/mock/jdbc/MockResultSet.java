@@ -55,13 +55,13 @@ public class MockResultSet implements ResultSet, Cloneable
 {
     private Statement statement;
     private String id;
-    private Map columnMap;
-    private Map columnMapCopy;
-    private Map insertRow;
-    private List columnNameList;
-    private List updatedRows;
-    private List deletedRows;
-    private List insertedRows;
+    private Map<String, List<Object>> columnMap;
+    private Map<String, List<Object>> columnMapCopy;
+    private Map<String, List<Object>> insertRow;
+    private List<String> columnNameList;
+    private List<Boolean> updatedRows;
+    private List<Boolean> deletedRows;
+    private List<Boolean> insertedRows;
     private int cursor;
     private boolean isCursorInInsertRow;
     private boolean wasNull;
@@ -92,10 +92,10 @@ public class MockResultSet implements ResultSet, Cloneable
     private void init()
     {
         columnMap = createCaseAwareMap();
-        columnNameList = new ArrayList();
-        updatedRows = new ArrayList();
-        deletedRows = new ArrayList();
-        insertedRows = new ArrayList();
+        columnNameList = new ArrayList<String>();
+        updatedRows = new ArrayList<Boolean>();
+        deletedRows = new ArrayList<Boolean>();
+        insertedRows = new ArrayList<Boolean>();
         cursor = -1;
         wasNull = false;
         closed = false;
@@ -125,15 +125,16 @@ public class MockResultSet implements ResultSet, Cloneable
      * method.
      * @return a copy of this <code>ResultSet</code>
      */
+    @Override
     public Object clone()
     {
         try
         {       
             MockResultSet copy = (MockResultSet)super.clone();
-            copy.columnNameList = new ArrayList(columnNameList);
-            copy.updatedRows = new ArrayList(updatedRows);
-            copy.deletedRows = new ArrayList(deletedRows);
-            copy.insertedRows = new ArrayList(insertedRows);
+            copy.columnNameList = new ArrayList<String>(columnNameList);
+            copy.updatedRows = new ArrayList<Boolean>(updatedRows);
+            copy.deletedRows = new ArrayList<Boolean>(deletedRows);
+            copy.insertedRows = new ArrayList<Boolean>(insertedRows);
             copy.insertRow = copyColumnDataMap(insertRow);
             copy.columnMap = copyColumnDataMap(columnMap);
             copy.columnMapCopy = copyColumnDataMap(columnMapCopy);
@@ -289,7 +290,7 @@ public class MockResultSet implements ResultSet, Cloneable
      */
     public void addRow(Object[] values)
     {
-        List valueList = Arrays.asList(values);
+        List<Object> valueList = Arrays.asList(values);
         addRow(valueList);
     }
     
@@ -306,7 +307,7 @@ public class MockResultSet implements ResultSet, Cloneable
      *        index, i.e. values.get(0) will be stored in the first 
      *        column and so on
      */
-    public void addRow(List values)
+    public void addRow(List<Object> values)
     {
         int missingColumns = values.size() - columnNameList.size();
         for(int yy = 0; yy < missingColumns; yy++)
@@ -317,8 +318,8 @@ public class MockResultSet implements ResultSet, Cloneable
         for(int ii = 0; ii < values.size(); ii++)
         {   
            Object nextValue = values.get(ii);
-           String nextColumnName = (String)columnNameList.get(ii);
-           List nextColumnList = (List)columnMap.get(nextColumnName);
+           String nextColumnName = columnNameList.get(ii);
+           List<Object> nextColumnList = columnMap.get(nextColumnName);
            nextColumnList.add(nextValue);
         }
         adjustColumns();
@@ -346,7 +347,7 @@ public class MockResultSet implements ResultSet, Cloneable
      */
     public void addColumn(String columnName)
     {
-        addColumn(columnName, new ArrayList());
+        addColumn(columnName, new ArrayList<Object>());
     }
     
     /**
@@ -380,7 +381,7 @@ public class MockResultSet implements ResultSet, Cloneable
      *        index, i.e. values.get(0) will be stored in the first 
      *        row and so on
      */
-    public void addColumn(List values)
+    public void addColumn(List<Object> values)
     {
         addColumn(determineValidColumnName(), values);
     }
@@ -400,7 +401,7 @@ public class MockResultSet implements ResultSet, Cloneable
      */
     public void addColumn(String columnName, Object[] values)
     {
-        List columnValues = Arrays.asList(values);
+        List<Object> columnValues = Arrays.asList(values);
         addColumn(columnName, columnValues);
     }
     
@@ -417,9 +418,9 @@ public class MockResultSet implements ResultSet, Cloneable
      *        index, i.e. values.get(0) will be stored in the first 
      *        row and so on
      */
-    public void addColumn(String columnName, List values)
+    public void addColumn(String columnName, List<Object> values)
     {
-        List column = new ArrayList(values);
+        List<Object> column = new ArrayList<Object>(values);
         columnMap.put(columnName, column);
         columnNameList.add(columnName);
         adjustColumns();
@@ -435,7 +436,7 @@ public class MockResultSet implements ResultSet, Cloneable
     public int getRowCount()
     {
         if(columnMapCopy.size() == 0) return 0;
-        List column = (List)columnMapCopy.values().iterator().next();
+        List<Object> column = columnMapCopy.values().iterator().next();
         return column.size();
     }
     
@@ -458,7 +459,7 @@ public class MockResultSet implements ResultSet, Cloneable
     public boolean rowInserted(int number)
     {
         if(number < 1) return false;
-        return ((Boolean)insertedRows.get(number - 1)).booleanValue();
+        return insertedRows.get(number - 1);
     }
     
     /**
@@ -471,7 +472,7 @@ public class MockResultSet implements ResultSet, Cloneable
     public boolean rowDeleted(int number)
     {
         if(number < 1) return false;
-        return ((Boolean)deletedRows.get(number - 1)).booleanValue();
+        return deletedRows.get(number - 1);
     }
     
     /**
@@ -484,7 +485,7 @@ public class MockResultSet implements ResultSet, Cloneable
     public boolean rowUpdated(int number)
     {
         if(number < 1) return false;
-        return ((Boolean)updatedRows.get(number - 1)).booleanValue();
+        return updatedRows.get(number - 1);
     }
     
     /**
@@ -500,9 +501,9 @@ public class MockResultSet implements ResultSet, Cloneable
      * @return <code>true</code> if the row is equal to the specified data,
      *         <code>false</code> otherwise
      */
-    public boolean isRowEqual(int number, List rowData)
+    public boolean isRowEqual(int number, List<Object> rowData)
     {
-        List currentRow = getRow(number);
+        List<Object> currentRow = getRow(number);
         if(null == currentRow) return false;
         if(currentRow.size() != rowData.size()) return false;
         for(int ii = 0; ii < currentRow.size(); ii++)
@@ -538,9 +539,9 @@ public class MockResultSet implements ResultSet, Cloneable
      * @return <code>true</code> if the column is equal to the specified data,
      *         <code>false</code> otherwise
      */
-    public boolean isColumnEqual(int number, List columnData)
+    public boolean isColumnEqual(int number, List<Object> columnData)
     {
-        List currentColumn = getColumn(number);
+        List<Object> currentColumn = getColumn(number);
         if(null == currentColumn) return false;
         if(currentColumn.size() != columnData.size()) return false;
         for(int ii = 0; ii < currentColumn.size(); ii++)
@@ -576,9 +577,9 @@ public class MockResultSet implements ResultSet, Cloneable
      * @return <code>true</code> if the column is equal to the specified data,
      *         <code>false</code> otherwise
      */
-    public boolean isColumnEqual(String name, List columnData)
+    public boolean isColumnEqual(String name, List<Object> columnData)
     {
-        List currentColumn = getColumn(name);
+        List<Object> currentColumn = getColumn(name);
         if(null == currentColumn) return false;
         if(currentColumn.size() != columnData.size()) return false;
         for(int ii = 0; ii < currentColumn.size(); ii++)
@@ -614,8 +615,8 @@ public class MockResultSet implements ResultSet, Cloneable
     public boolean isEqual(MockResultSet resultSet)
     {
         if(null == resultSet) return false;
-        Map thisMap;
-        Map otherMap;
+        Map<String, List<Object>> thisMap;
+        Map<String, List<Object>> otherMap;
         if(isDatabaseView)
         {
             thisMap = columnMap;    
@@ -632,12 +633,12 @@ public class MockResultSet implements ResultSet, Cloneable
         {
             otherMap = resultSet.columnMapCopy;
         }
-        Iterator keys = thisMap.keySet().iterator();
+        Iterator<String> keys = thisMap.keySet().iterator();
         while(keys.hasNext())
         {
-            String currentKey = (String)keys.next();
-            List thisList =  (List)thisMap.get(currentKey);
-            List otherList =  (List)otherMap.get(currentKey);
+            String currentKey = keys.next();
+            List<Object> thisList =  thisMap.get(currentKey);
+            List<Object> otherList =  otherMap.get(currentKey);
             if(null == otherList) return false;
             if(thisList.size() != otherList.size()) return false;
             for(int ii = 0; ii < thisList.size(); ii++)
@@ -672,23 +673,23 @@ public class MockResultSet implements ResultSet, Cloneable
      * @param number the number of the row
      * @return the row data as <code>List</code>
      */
-    public List getRow(int number)
+    public List<Object> getRow(int number)
     {
         if(number > getRowCount()) return null;
         if(number < 1) return null;
         int index = number - 1;
-        List list = new ArrayList();
+        List<Object> list = new ArrayList<Object>();
         for(int ii = 0; ii < columnNameList.size(); ii++)
         {
-            String nextColumnName = (String)columnNameList.get(ii);
-            List nextColumnList;
+            String nextColumnName = columnNameList.get(ii);
+            List<Object> nextColumnList;
             if(isDatabaseView)
             {
-                nextColumnList = (List)columnMap.get(nextColumnName);
+                nextColumnList = columnMap.get(nextColumnName);
             }
             else
             {
-                nextColumnList = (List)columnMapCopy.get(nextColumnName);
+                nextColumnList = columnMapCopy.get(nextColumnName);
             }
             list.add(nextColumnList.get(index));
         }
@@ -704,12 +705,12 @@ public class MockResultSet implements ResultSet, Cloneable
      * @param number the number of the column
      * @return the column data as <code>List</code>
      */
-    public List getColumn(int number)
+    public List<Object> getColumn(int number)
     {
         if(number > getColumnCount()) return null;
         if(number < 1) return null;
         int index = number - 1;
-        String columnName = (String)columnNameList.get(index);
+        String columnName = columnNameList.get(index);
         return getColumn(columnName);
     }
     
@@ -720,17 +721,17 @@ public class MockResultSet implements ResultSet, Cloneable
      * @param name the name of the column
      * @return the column data as <code>List</code>
      */
-    public List getColumn(String name)
+    public List<Object> getColumn(String name)
     {
-        List list = new ArrayList();
-        List columnList;
+        List<Object> list = new ArrayList<Object>();
+        List<Object> columnList;
         if(isDatabaseView)
         {
-            columnList = (List)columnMap.get(name);
+            columnList = columnMap.get(name);
         }
         else
         {
-            columnList = (List)columnMapCopy.get(name);
+            columnList = columnMapCopy.get(name);
         }
         if(null == columnList) return null;
         list.addAll(columnList);
@@ -751,7 +752,7 @@ public class MockResultSet implements ResultSet, Cloneable
     {
         checkColumnBounds(columnIndex);
         checkRowBounds();
-        String columnName = (String)columnNameList.get(columnIndex - 1);
+        String columnName = columnNameList.get(columnIndex - 1);
         return getObject(columnName);
     }
     
@@ -760,36 +761,36 @@ public class MockResultSet implements ResultSet, Cloneable
         checkColumnName(columnName);
         checkRowBounds();
         if(rowDeleted()) throw new SQLException("row was deleted");
-        List column;
+        List<Object> column;
         if(isDatabaseView)
         {
-            column = (List)columnMap.get(columnName);
+            column = columnMap.get(columnName);
         }
         else
         {
-            column = (List)columnMapCopy.get(columnName);
+            column = columnMapCopy.get(columnName);
         }
         Object value = column.get(cursor);
         wasNull = (null == value);
         return value;
     }
     
-    public Object getObject(int columnIndex, Class type) throws SQLException
+    public <T> T getObject(int columnIndex, Class<T> type) throws SQLException
+    {
+        return (T)getObject(columnIndex);
+    }
+
+    public <T> T getObject(String columnLabel, Class<T> type) throws SQLException
+    {
+        return (T)getObject(columnLabel);
+    }
+
+    public Object getObject(int columnIndex, Map<String, Class<?>> map) throws SQLException
     {
         return getObject(columnIndex);
     }
 
-    public Object getObject(String columnLabel, Class type) throws SQLException
-    {
-        return getObject(columnLabel);
-    }
-
-    public Object getObject(int columnIndex, Map map) throws SQLException
-    {
-        return getObject(columnIndex);
-    }
-
-    public Object getObject(String colName, Map map) throws SQLException
+    public Object getObject(String colName, Map<String, Class<?>> map) throws SQLException
     {
         return getObject(colName);
     }
@@ -823,8 +824,8 @@ public class MockResultSet implements ResultSet, Cloneable
         Object value = getObject(columnIndex);
         if(null != value)
         {
-            if(value instanceof Boolean) return ((Boolean)value).booleanValue();
-            return new Boolean(value.toString()).booleanValue();
+            if(value instanceof Boolean) return ((Boolean)value);
+            return Boolean.parseBoolean(value.toString());
         }
         return false;
     }
@@ -834,8 +835,8 @@ public class MockResultSet implements ResultSet, Cloneable
         Object value = getObject(columnName);
         if(null != value)
         {
-            if(value instanceof Boolean) return ((Boolean)value).booleanValue();
-            return new Boolean(value.toString()).booleanValue();
+            if(value instanceof Boolean) return ((Boolean)value);
+            return Boolean.parseBoolean(value.toString());
         }
         return false;
     }
@@ -846,7 +847,7 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).byteValue();
-            return new Byte(value.toString()).byteValue();
+            return Byte.parseByte(value.toString());
         }
         return 0;
     }
@@ -857,7 +858,7 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).byteValue();
-            return new Byte(value.toString()).byteValue();
+            return Byte.parseByte(value.toString());
         }
         return 0;
     }
@@ -868,7 +869,7 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).shortValue();
-            return new Short(value.toString()).shortValue();
+            return Short.parseShort(value.toString());
         }
         return 0;
     }
@@ -879,7 +880,7 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).shortValue();
-            return new Short(value.toString()).shortValue();
+            return Short.parseShort(value.toString());
         }
         return 0;
     }
@@ -890,7 +891,7 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).intValue();
-            return new Integer(value.toString()).intValue();
+            return Integer.parseInt(value.toString());
         }
         return 0;
     }
@@ -901,7 +902,7 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).intValue();
-            return new Integer(value.toString()).intValue();
+            return Integer.parseInt(value.toString());
         }
         return 0;
     }
@@ -912,7 +913,7 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).longValue();
-            return new Long(value.toString()).longValue();
+            return Long.parseLong(value.toString());
         }
         return 0;
     }
@@ -923,7 +924,7 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).longValue();
-            return new Long(value.toString()).longValue();
+            return Long.parseLong(value.toString());
         }
         return 0;
     }
@@ -934,7 +935,7 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).floatValue();
-            return new Float(value.toString()).floatValue();
+            return Float.parseFloat(value.toString());
         }
         return 0;
     }
@@ -945,7 +946,7 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).floatValue();
-            return new Float(value.toString()).floatValue();
+            return Float.parseFloat(value.toString());
         }
         return 0;
     }
@@ -956,7 +957,7 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).doubleValue();
-            return new Double(value.toString()).doubleValue();
+            return Double.parseDouble(value.toString());
         }
         return 0;
     }
@@ -967,11 +968,12 @@ public class MockResultSet implements ResultSet, Cloneable
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).doubleValue();
-            return new Double(value.toString()).doubleValue();
+            return Double.parseDouble(value.toString());
         }
         return 0;
     }
 
+    @Deprecated
     public BigDecimal getBigDecimal(int columnIndex, int scale) throws SQLException
     {
         BigDecimal value = getBigDecimal(columnIndex);
@@ -982,6 +984,7 @@ public class MockResultSet implements ResultSet, Cloneable
         return null;
     }
     
+    @Deprecated
     public BigDecimal getBigDecimal(String columnName, int scale) throws SQLException
     {
         BigDecimal value = getBigDecimal(columnName);
@@ -1371,7 +1374,8 @@ public class MockResultSet implements ResultSet, Cloneable
         }
         return null;
     }
-    
+
+    @Deprecated
     public InputStream getUnicodeStream(int columnIndex) throws SQLException
     {
         Object value = getObject(columnIndex);
@@ -1390,6 +1394,7 @@ public class MockResultSet implements ResultSet, Cloneable
         return null;
     }
 
+    @Deprecated
     public InputStream getUnicodeStream(String columnName) throws SQLException
     {
         Object value = getObject(columnName);
@@ -1462,7 +1467,7 @@ public class MockResultSet implements ResultSet, Cloneable
         metaData.setColumnCount(getColumnCount());
         for(int ii = 0; ii < columnNameList.size(); ii++)
         {
-            metaData.setColumnName(ii + 1, (String)columnNameList.get(ii));
+            metaData.setColumnName(ii + 1, columnNameList.get(ii));
         }
         return metaData;
     }
@@ -1583,10 +1588,7 @@ public class MockResultSet implements ResultSet, Cloneable
             return;
         }
         this.fetchDirection = fetchDirection;
-        Iterator columns = columnMapCopy.values().iterator();
-        while(columns.hasNext())
-        {
-            List column = (List)columns.next();
+        for (List<Object> column : columnMapCopy.values()) {
             Collections.reverse(column);
         }
         if(-1 != cursor) cursor = getRowCount() - cursor - 1;
@@ -1639,7 +1641,7 @@ public class MockResultSet implements ResultSet, Cloneable
             checkRowBounds();
             if(rowDeleted()) throw new SQLException("row was deleted");
         }
-        String columnName = (String)columnNameList.get(columnIndex - 1);
+        String columnName = columnNameList.get(columnIndex - 1);
         updateObject(columnName, value);
     }
     
@@ -1664,12 +1666,12 @@ public class MockResultSet implements ResultSet, Cloneable
         }
         if(isCursorInInsertRow)
         {
-            List column = (List)insertRow.get(columnName);
+            List<Object> column = insertRow.get(columnName);
             column.set(0, value);
         }
         else
         {
-            List column = (List)columnMapCopy.get(columnName);
+            List<Object> column = columnMapCopy.get(columnName);
             column.set(cursor, value);
         }
     }
@@ -1706,72 +1708,72 @@ public class MockResultSet implements ResultSet, Cloneable
 
     public void updateBoolean(int columnIndex, boolean booleanValue) throws SQLException
     {
-        updateObject(columnIndex, new Boolean(booleanValue));
+        updateObject(columnIndex, booleanValue);
     }
     
     public void updateBoolean(String columnName, boolean booleanValue) throws SQLException
     {
-        updateObject(columnName, new Boolean(booleanValue));
+        updateObject(columnName, booleanValue);
     }
 
     public void updateByte(int columnIndex, byte byteValue) throws SQLException
     {
-        updateObject(columnIndex, new Byte(byteValue));
+        updateObject(columnIndex, byteValue);
     }
     
     public void updateByte(String columnName, byte byteValue) throws SQLException
     {
-        updateObject(columnName, new Byte(byteValue));
+        updateObject(columnName, byteValue);
     }
 
     public void updateShort(int columnIndex, short shortValue) throws SQLException
     {
-        updateObject(columnIndex, new Short(shortValue));
+        updateObject(columnIndex, shortValue);
     }
     
     public void updateShort(String columnName, short shortValue) throws SQLException
     {
-        updateObject(columnName, new Short(shortValue));
+        updateObject(columnName, shortValue);
     }
 
     public void updateInt(int columnIndex, int intValue) throws SQLException
     {
-        updateObject(columnIndex, new Integer(intValue));
+        updateObject(columnIndex, intValue);
     }
     
     public void updateInt(String columnName, int intValue) throws SQLException
     {
-        updateObject(columnName, new Integer(intValue));
+        updateObject(columnName, intValue);
     }
     
     public void updateLong(int columnIndex, long longValue) throws SQLException
     {
-        updateObject(columnIndex, new Long(longValue));
+        updateObject(columnIndex, longValue);
     }
     
     public void updateLong(String columnName, long longValue) throws SQLException
     {
-        updateObject(columnName, new Long(longValue));
+        updateObject(columnName, longValue);
     }
 
     public void updateFloat(int columnIndex, float floatValue) throws SQLException
     {
-        updateObject(columnIndex, new Float(floatValue));
+        updateObject(columnIndex, floatValue);
     }
     
     public void updateFloat(String columnName, float floatValue) throws SQLException
     {
-        updateObject(columnName, new Float(floatValue));
+        updateObject(columnName, floatValue);
     }
 
     public void updateDouble(int columnIndex, double doubleValue) throws SQLException
     {
-        updateObject(columnIndex, new Double(doubleValue));
+        updateObject(columnIndex, doubleValue);
     }
     
     public void updateDouble(String columnName, double doubleValue) throws SQLException
     {
-        updateObject(columnName, new Double(doubleValue));
+        updateObject(columnName, doubleValue);
     }
       
     public void updateBigDecimal(int columnIndex, BigDecimal bigDecimal) throws SQLException
@@ -2087,19 +2089,19 @@ public class MockResultSet implements ResultSet, Cloneable
     public boolean rowUpdated() throws SQLException
     {
         checkRowBounds();
-        return ((Boolean)updatedRows.get(cursor)).booleanValue();
+        return (updatedRows.get(cursor));
     }
 
     public boolean rowInserted() throws SQLException
     {
         checkRowBounds();
-        return ((Boolean)insertedRows.get(cursor)).booleanValue();
+        return insertedRows.get(cursor);
     }
 
     public boolean rowDeleted() throws SQLException
     {
         checkRowBounds();
-        return ((Boolean)deletedRows.get(cursor)).booleanValue();
+        return deletedRows.get(cursor);
     }
     
     public void insertRow() throws SQLException
@@ -2116,7 +2118,7 @@ public class MockResultSet implements ResultSet, Cloneable
         checkResultSetConcurrency();
         checkRowBounds();
         updateRow(cursor, true);
-        updatedRows.set(cursor, new Boolean(true));
+        updatedRows.set(cursor, true);
     }
 
     public void deleteRow() throws SQLException
@@ -2125,7 +2127,7 @@ public class MockResultSet implements ResultSet, Cloneable
         checkResultSetConcurrency();
         checkRowBounds();
         deleteRow(cursor);
-        deletedRows.set(cursor, new Boolean(true));
+        deletedRows.set(cursor, true);
     }
 
     public void refreshRow() throws SQLException
@@ -2139,7 +2141,7 @@ public class MockResultSet implements ResultSet, Cloneable
         if(rowDeleted()) throw new SQLException("row was deleted");
         checkRowBounds();
         updateRow(cursor, false);
-        updatedRows.set(cursor, new Boolean(false));
+        updatedRows.set(cursor, false);
     }
 
     public void moveToInsertRow() throws SQLException
@@ -2153,12 +2155,12 @@ public class MockResultSet implements ResultSet, Cloneable
         isCursorInInsertRow = false;
     }
     
-    public boolean isWrapperFor(Class iface) throws SQLException
+    public boolean isWrapperFor(Class<?> iface) throws SQLException
     {
         return false;
     }
 
-    public Object unwrap(Class iface) throws SQLException
+    public <T> T unwrap(Class<T> iface) throws SQLException
     {
         throw new SQLException("No object found for " + iface);
     }
@@ -2219,29 +2221,23 @@ public class MockResultSet implements ResultSet, Cloneable
     
     private void insertRow(int index)
     {
-        Iterator columnNames = columnMapCopy.keySet().iterator();
-        while(columnNames.hasNext())
-        {
-            String currentColumnName = (String)columnNames.next();
-            List copyColumn = (List)columnMapCopy.get(currentColumnName);
-            List databaseColumn = (List)columnMap.get(currentColumnName);
-            List sourceColumn = (List)insertRow.get(currentColumnName);
+        for (String currentColumnName : columnMapCopy.keySet()) {
+            List<Object> copyColumn = columnMapCopy.get(currentColumnName);
+            List<Object> databaseColumn = columnMap.get(currentColumnName);
+            List<Object> sourceColumn = insertRow.get(currentColumnName);
             copyColumn.add(index, ParameterUtil.copyParameter(sourceColumn.get(0)));
             databaseColumn.add(index, ParameterUtil.copyParameter(sourceColumn.get(0)));  
         }
-        updatedRows.add(index, new Boolean(false));
-        deletedRows.add(index, new Boolean(false));
-        insertedRows.add(index, new Boolean(true));
+        updatedRows.add(index, false);
+        deletedRows.add(index, false);
+        insertedRows.add(index, true);
     }
     
     private void deleteRow(int index)
     {
-        Iterator columnNames = columnMapCopy.keySet().iterator();
-        while(columnNames.hasNext())
-        {
-            String currentColumnName = (String)columnNames.next();
-            List copyColumn = (List)columnMapCopy.get(currentColumnName);
-            List databaseColumn = (List)columnMap.get(currentColumnName);
+        for (String currentColumnName : columnMapCopy.keySet()) {
+            List<Object> copyColumn = columnMapCopy.get(currentColumnName);
+            List<Object> databaseColumn = columnMap.get(currentColumnName);
             copyColumn.set(index, null);
             databaseColumn.set(index, null);
         }
@@ -2249,21 +2245,18 @@ public class MockResultSet implements ResultSet, Cloneable
     
     private void updateRow(int index, boolean toDatabase)
     {
-        Iterator columnNames = columnMapCopy.keySet().iterator();
-        while(columnNames.hasNext())
-        {
-            String currentColumnName = (String)columnNames.next();
-            List sourceColumn;
-            List targetColumn;
+        for (String currentColumnName : columnMapCopy.keySet()) {
+            List<Object> sourceColumn;
+            List<Object> targetColumn;
             if(toDatabase)
             {
-                sourceColumn = (List)columnMapCopy.get(currentColumnName);
-                targetColumn = (List)columnMap.get(currentColumnName);
+                sourceColumn = columnMapCopy.get(currentColumnName);
+                targetColumn = columnMap.get(currentColumnName);
             }
             else
             {
-                sourceColumn = (List)columnMap.get(currentColumnName);
-                targetColumn = (List)columnMapCopy.get(currentColumnName);
+                sourceColumn = columnMap.get(currentColumnName);
+                targetColumn = columnMapCopy.get(currentColumnName);
             } 
             targetColumn.set(index, ParameterUtil.copyParameter(sourceColumn.get(index)));
         }
@@ -2284,16 +2277,16 @@ public class MockResultSet implements ResultSet, Cloneable
     private void adjustColumns()
     {
         int rowCount = 0;
-        Iterator columns = columnMap.values().iterator();
+        Iterator<List<Object>> columns = columnMap.values().iterator();
         while(columns.hasNext())
         {
-            List nextColumn = (List)columns.next();
+            List<Object> nextColumn = columns.next();
             rowCount = Math.max(rowCount, nextColumn.size());
         }
-        columns = columnMap.values().iterator();
-        while(columns.hasNext())
+        Iterator<List<Object>> columns1 = columnMap.values().iterator();
+        while(columns1.hasNext())
         {
-            List nextColumn = (List)columns.next();
+            List<Object> nextColumn = columns1.next();
             CollectionUtil.fillList(nextColumn, rowCount);
         }
     }
@@ -2302,27 +2295,27 @@ public class MockResultSet implements ResultSet, Cloneable
     {
         for(int ii = updatedRows.size(); ii < getRowCount(); ii++)
         {
-            updatedRows.add(new Boolean(false));
+            updatedRows.add(false);
         }
         for(int ii = deletedRows.size(); ii < getRowCount(); ii++)
         {
-            deletedRows.add(new Boolean(false));
+            deletedRows.add(false);
         }
         for(int ii = insertedRows.size(); ii < getRowCount(); ii++)
         {
-            insertedRows.add(new Boolean(false));
+            insertedRows.add(false);
         }
     }
     
     private void adjustInsertRow()
     {
         insertRow = createCaseAwareMap();
-        Iterator columns = columnMap.keySet().iterator();
+        Iterator<String> columns = columnMap.keySet().iterator();
         while(columns.hasNext())
         {
-            ArrayList list = new ArrayList(1);
+            ArrayList<Object> list = new ArrayList<Object>(1);
             list.add(null);
-            insertRow.put((String)columns.next(), list);
+            insertRow.put(columns.next(), list);
         }
     }
     
@@ -2342,18 +2335,17 @@ public class MockResultSet implements ResultSet, Cloneable
         return name + count;
     }
     
-    private Map copyColumnDataMap(Map columnMap)
+    private <T> Map<String, List<T>> copyColumnDataMap(Map<String, List<T>> columnMap)
     {
-        Map copy = createCaseAwareMap();
-        Iterator columns = columnMap.keySet().iterator();
+        Map<String, List<T>> copy = createCaseAwareMap();
+        Iterator<String> columns = columnMap.keySet().iterator();
         while(columns.hasNext())
         {
-            List copyList = new ArrayList();
-            String nextKey = (String)columns.next();
-            List nextColumnList = (List)columnMap.get(nextKey);
-            for(int ii = 0; ii < nextColumnList.size(); ii++)
-            {
-                Object copyParameter = ParameterUtil.copyParameter(nextColumnList.get(ii));
+            List<T> copyList = new ArrayList<T>();
+            String nextKey = columns.next();
+            List<T> nextColumnList = columnMap.get(nextKey);
+            for (T nextColumnList1 : nextColumnList) {
+                T copyParameter = (T) ParameterUtil.copyParameter(nextColumnList1);
                 copyList.add(copyParameter);
             }
             copy.put(nextKey, copyList);
@@ -2361,9 +2353,9 @@ public class MockResultSet implements ResultSet, Cloneable
         return copy;
     }
     
-    private Map createCaseAwareMap()
+    private <T> Map<String, T> createCaseAwareMap()
     {
-        return new CaseAwareMap(columnsCaseSensitive);
+        return (Map<String, T>)new CaseAwareMap(columnsCaseSensitive);
     }
     
     private NClob getNClobFromClob(Clob clobValue) throws SQLException
@@ -2371,6 +2363,7 @@ public class MockResultSet implements ResultSet, Cloneable
         return new MockNClob(clobValue.getSubString(1, (int)clobValue.length()));
     }
     
+    @Override
     public String toString()
     {
         StringBuffer buffer = new StringBuffer("ResultSet " + id + ":\n");

@@ -18,7 +18,7 @@ import com.mockrunner.util.common.CollectionUtil;
  */
 public class MockBlob implements Blob, Cloneable
 {
-    private List blobData;
+    private List<Byte> blobData;
     private boolean wasFreeCalled;
     
     public MockBlob(byte[] data)
@@ -135,6 +135,7 @@ public class MockBlob implements Blob, Cloneable
         return wasFreeCalled;
     }
 
+    @Override
     public boolean equals(Object obj)
     {
         if(null == obj) return false;
@@ -144,6 +145,7 @@ public class MockBlob implements Blob, Cloneable
         return blobData.equals(other.blobData);
     }
 
+    @Override
     public int hashCode()
     {
         int hashCode = blobData.hashCode();
@@ -151,17 +153,19 @@ public class MockBlob implements Blob, Cloneable
         return hashCode;
     }
 
+    @Override
     public String toString()
     {
         return "Blob data: " + blobData.toString();     
     }
     
-    public Object clone()
+    @Override
+    public Object clone() throws CloneNotSupportedException
     {
         try
         {
             MockBlob blob = (MockBlob)super.clone();
-            blob.blobData = new ArrayList(blobData);
+            blob.blobData = new ArrayList<Byte>(blobData);
             return blob;
         }
         catch(CloneNotSupportedException exc)

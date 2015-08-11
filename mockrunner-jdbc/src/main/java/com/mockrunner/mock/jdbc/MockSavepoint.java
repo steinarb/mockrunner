@@ -53,6 +53,7 @@ public class MockSavepoint implements Savepoint
     /**
      * @deprecated use {@link #isRolledBack}
      */
+    @Deprecated
     public boolean isRollbacked()
     {
         return isRolledBack();
@@ -71,6 +72,7 @@ public class MockSavepoint implements Savepoint
     /**
      * @deprecated use {@link #setRolledBack}
      */
+    @Deprecated
     public void setRollbacked(boolean rollbacked)
     {
         setRolledBack(rollbacked);

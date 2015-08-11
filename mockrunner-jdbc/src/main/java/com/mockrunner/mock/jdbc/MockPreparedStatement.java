@@ -43,8 +43,8 @@ import com.mockrunner.util.common.StringUtil;
 public class MockPreparedStatement extends MockStatement implements PreparedStatement
 {
     private AbstractParameterResultSetHandler resultSetHandler;
-    private Map paramObjects = new HashMap();
-    private List batchParameters = new ArrayList();
+    protected final MockParameterMap paramObjects = new MockParameterMap();
+    private final List<MockParameterMap> batchParameters = new ArrayList<MockParameterMap>();
     private String sql;
     private MockParameterMetaData parameterMetaData;
     private boolean returnGeneratedKeys = false;
@@ -94,24 +94,30 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return sql;
     }
     
-    public Map getIndexedParameterMap()
+    public MockParameterMap getIndexedParameterMap()
     {
-        return Collections.unmodifiableMap(paramObjects);
+        MockParameterMap indexedParameters = new MockParameterMap();
+        for(ParameterReference parameterReference : paramObjects.keySet()){
+            if(parameterReference instanceof ParameterIndex){
+                indexedParameters.put(parameterReference, paramObjects.get(parameterReference));
+            }
+        }
+        return new MockUnmodifiableParameterMap(indexedParameters);
     }
     
-	public Map getParameterMap()
+	public MockParameterMap getParameterMap()
 	{
 		return getIndexedParameterMap();
 	}
     
     public Object getParameter(int index)
     {
-        return paramObjects.get(new Integer(index));
+        return paramObjects.get(index);
     }
     
     public void setObject(int index, Object object) throws SQLException 
     {
-        paramObjects.put(new Integer(index), object);
+        paramObjects.put(index, object);
     }
     
     public void setObject(int parameterIndex, Object object, int targetSqlType, int scale) throws SQLException
@@ -126,9 +132,10 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     
     public void addBatch() throws SQLException
     {
-        batchParameters.add(new HashMap(paramObjects));
+        batchParameters.add(new MockParameterMap(paramObjects));
     }
     
+    @Override
     public void clearBatch() throws SQLException
     {
         super.clearBatch();
@@ -159,7 +166,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return executeQuery(paramObjects);
     }
     
-    protected ResultSet executeQuery(Map params) throws SQLException
+    protected ResultSet executeQuery(MockParameterMap params) throws SQLException
     {
         SQLException exception = resultSetHandler.getSQLException(sql, params);
         if(null != exception)
@@ -184,9 +191,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         else
         {
             MockResultSet result = resultSetHandler.getResultSet(getSQL(), params);
-            if(null == result)
-            	return new MockResultSet(String.valueOf(Math.random()));
-            else {
+            if(null != result){
                 resultSetHandler.addExecutedStatement(getSQL());
                 return cloneAndSetSingleResultSet(result, params);
             }
@@ -196,7 +201,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return superResultSet;
     }
     
-    private MockResultSet cloneAndSetSingleResultSet(MockResultSet result, Map params)
+    private MockResultSet cloneAndSetSingleResultSet(MockResultSet result, MockParameterMap params)
     {
         result = cloneResultSet(result);
         if(null != result)
@@ -208,7 +213,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return result;
     }
     
-    private MockResultSet cloneAndSetMultipleResultSets(MockResultSet[] results, Map params)
+    private MockResultSet cloneAndSetMultipleResultSets(MockResultSet[] results, MockParameterMap params)
     {
         results = cloneResultSets(results);
         if(null != results)
@@ -229,7 +234,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return executeUpdate(paramObjects);
     }
     
-    protected int executeUpdate(Map params) throws SQLException
+    protected int executeUpdate(MockParameterMap params) throws SQLException
     {
         SQLException exception = resultSetHandler.getSQLException(sql, params);
         if(null != exception)
@@ -248,7 +253,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             if(null != updateCounts)
             {
                 resultSetHandler.addExecutedStatement(getSQL());
-                return setMultipleUpdateCounts((int[])ArrayUtil.convertToPrimitiveArray(updateCounts), params);
+                return setMultipleUpdateCounts(updateCounts.clone(), params);
             }
         }
         else
@@ -257,7 +262,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             if(null != updateCount)
             {
                 resultSetHandler.addExecutedStatement(getSQL());
-                return setSingleUpdateCount(updateCount.intValue(), params);
+                return setSingleUpdateCount(updateCount, params);
             }
         }
         int superUpdateCount = super.executeUpdate(getSQL());
@@ -265,14 +270,14 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return superUpdateCount;
     }
     
-    private int setSingleUpdateCount(int updateCount, Map params)
+    private int setSingleUpdateCount(int updateCount, MockParameterMap params)
     {
-        setUpdateCounts(new int[] {updateCount});
+        setUpdateCounts(new Integer[] {updateCount});
         setGeneratedKeysResultSet(sql, params);
         return updateCount;
     }
     
-    private int setMultipleUpdateCounts(int[] updateCounts, Map params)
+    private int setMultipleUpdateCounts(Integer[] updateCounts, MockParameterMap params)
     {
         setUpdateCounts(updateCounts);
         setGeneratedKeysResultSet(sql, params);
@@ -283,12 +288,13 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return 0;
     }
     
+    @Override
     public int[] executeBatch() throws SQLException
     {        
         return executeBatch(this.batchParameters);
     }
     
-    protected int[] executeBatch(List batchParams) throws SQLException
+    protected int[] executeBatch(List<MockParameterMap> batchParams) throws SQLException
     {
         int[] results = new int[batchParams.size()];
         SQLException exception = null;
@@ -302,7 +308,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             {
                 try
                 {
-                    Map currentParameters = (Map)batchParams.get(ii);
+                    MockParameterMap currentParameters = batchParams.get(ii);
                     results[ii] = executeUpdate(currentParameters);
                 } 
                 catch(SQLException exc)
@@ -322,7 +328,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         return results;
     }
 
-    private void setGeneratedKeysResultSet(String sql, Map params)
+    private void setGeneratedKeysResultSet(String sql, MockParameterMap params)
     {
         MockResultSet generatedKeys = resultSetHandler.getGeneratedKeys(sql, params);
         if(returnGeneratedKeys)
@@ -397,7 +403,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     
     public void setCharacterStream(int parameterIndex, Reader reader, int length) throws SQLException
     {
-        String data = StreamUtil.getReaderAsString(reader, (int)length);
+        String data = StreamUtil.getReaderAsString(reader, length);
         setObject(parameterIndex, new StringReader(data));
     }
 
@@ -440,12 +446,12 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public void setBoolean(int parameterIndex, boolean bool) throws SQLException
     {
-        setObject(parameterIndex, new Boolean(bool));
+        setObject(parameterIndex, bool);
     }
 
     public void setByte(int parameterIndex, byte byteValue) throws SQLException
     {
-        setObject(parameterIndex, new Byte(byteValue));
+        setObject(parameterIndex, byteValue);
     }
 
     public void setBytes(int parameterIndex, byte[] byteArray) throws SQLException
@@ -504,22 +510,22 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public void setDouble(int parameterIndex, double doubleValue) throws SQLException
     {
-        setObject(parameterIndex, new Double(doubleValue));
+        setObject(parameterIndex, doubleValue);
     }
 
     public void setFloat(int parameterIndex, float floatValue) throws SQLException
     {
-        setObject(parameterIndex, new Float(floatValue));
+        setObject(parameterIndex, floatValue);
     }
 
     public void setInt(int parameterIndex, int intValue) throws SQLException
     {
-        setObject(parameterIndex, new Integer(intValue));
+        setObject(parameterIndex, intValue);
     }
 
     public void setLong(int parameterIndex, long longValue) throws SQLException
     {
-        setObject(parameterIndex, new Long(longValue));
+        setObject(parameterIndex, longValue);
     }
 
     public void setNull(int parameterIndex, int sqlType, String typeName) throws SQLException
@@ -544,7 +550,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
 
     public void setShort(int parameterIndex, short shortValue) throws SQLException
     {
-        setObject(parameterIndex, new Short(shortValue));
+        setObject(parameterIndex, shortValue);
     }
 
     public void setString(int parameterIndex, String string) throws SQLException
@@ -577,6 +583,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         setObject(parameterIndex, timeStamp);
     }
 
+    @Deprecated
     public void setUnicodeStream(int parameterIndex, InputStream stream, int length) throws SQLException
     {
         setObject(parameterIndex, stream);
@@ -587,13 +594,13 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
         setObject(parameterIndex, url);
     }
     
-    private Map getParameterMapCopy(Map actualParameters)
+    private MockParameterMap getParameterMapCopy(MockParameterMap actualParameters)
     {
-    	Map copyParameters = new HashMap();
-    	Iterator keys = actualParameters.keySet().iterator();
+    	MockParameterMap copyParameters = new MockParameterMap();
+    	Iterator<ParameterReference> keys = actualParameters.keySet().iterator();
     	while(keys.hasNext())
     	{
-    		Object key = keys.next();
+    		ParameterReference key = keys.next();
     		Object actualParameter = actualParameters.get(key);
     		Object copyParameter = ParameterUtil.copyParameter(actualParameter);
 			copyParameters.put(key, copyParameter);

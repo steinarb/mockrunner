@@ -15,13 +15,13 @@ import java.util.List;
  */
 public class OrderDB
 {
-    public static List getNames(Date date) throws SQLException
+    public static List<String> getNames(Date date) throws SQLException
     {
         Connection connection = DriverManager.getConnection("jdbc:db2://127.0.0.1/test");
         CallableStatement statement = connection.prepareCall("call getnames(?)");
         statement.setDate(1, date);
         ResultSet result = statement.executeQuery();
-        List resultList = new ArrayList();
+        List<String> resultList = new ArrayList<String>();
         while(result.next())
         {
             resultList.add(result.getString("name"));

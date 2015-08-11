@@ -2,11 +2,11 @@ package com.mockrunner.jdbc;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import com.mockrunner.util.common.StringUtil;
+import java.util.Map.Entry;
 
 /**
  * Helper class for finding matching SQL statements based on various
@@ -22,7 +22,7 @@ import com.mockrunner.util.common.StringUtil;
  *                                   <code>false</code>, strings match, if one string starts with the other
  *                                   (default is <code>false</code>)
  */
-public class SQLStatementMatcher
+public class SQLStatementMatcher<T>
 {
     private boolean caseSensitive = false;
     private boolean exactMatch = false;
@@ -52,38 +52,65 @@ public class SQLStatementMatcher
      *        or if query must contain the <code>Map</code> keys (<code>true</code>)
      * @return the result <code>List</code>
      */
-    public List getMatchingObjects(Map dataMap, String query, boolean resolveCollection, boolean queryContainsMapData)
+    public List<T> getMatchingObjects(Map<String, ? extends T> dataMap, String query, boolean queryContainsMapData)
 	{
 		if(null == query) query = "";
-		Iterator iterator = dataMap.keySet().iterator();
-		ArrayList resultList = new ArrayList();
-		while(iterator.hasNext())
-		{
-			String nextKey = (String)iterator.next();
+		List<T> resultList = new ArrayList<T>();
+        
+        for(Entry<String, ? extends T> entry : dataMap.entrySet()){
 			String source, currentQuery;
 			if(queryContainsMapData)
 			{
 				source = query;
-				currentQuery = nextKey;
+				currentQuery = entry.getKey();
 			}
 			else
 			{
-				source = nextKey;
+				source = entry.getKey();
 				currentQuery = query;
 			}
-			if(doStringsMatch(source, currentQuery))
+			if(doStringsMatch(source, currentQuery)){
+                T matchingObject = entry.getValue();
+    			resultList.add(matchingObject);
+            }
+        }
+		return resultList;
+	}
+    
+    /**
+     * Compares all keys in the specified <code>Map</code> with the
+     * specified query string using the method {@link #doStringsMatch}.
+     * If the strings match, the corresponding object from the <code>Map</code>
+     * is added to the resulting <code>List</code>.
+     * @param dataMap the source <code>Map</code>
+     * @param query the query string that must match the keys in <i>dataMap</i>
+     * @param queryContainsMapData only matters if <i>isExactMatch</i> is <code>false</code>,
+     *        specifies if query must be contained in the <code>Map</code> keys (<code>false</code>)
+     *        or if query must contain the <code>Map</code> keys (<code>true</code>)
+     * @return the result <code>List</code>
+     */
+    public List<T> getMatchingObjectsFromCollections(Map<String, ? extends Collection<? extends T>> dataMap, String query, boolean queryContainsMapData)
+	{
+		if(null == query) query = "";
+		List<T> resultList = new ArrayList<T>();
+        
+        for(Entry<String, ? extends Collection<? extends T>> entry : dataMap.entrySet()){
+			String source, currentQuery;
+			if(queryContainsMapData)
 			{
-				Object matchingObject = dataMap.get(nextKey);
-				if(resolveCollection && (matchingObject instanceof Collection))
-				{
-					resultList.addAll((Collection)matchingObject);
-				}
-				else
-				{
-					resultList.add(dataMap.get(nextKey));
-				}    
-			} 
-		}
+				source = query;
+				currentQuery = entry.getKey();
+			}
+			else
+			{
+				source = entry.getKey();
+				currentQuery = query;
+			}
+			if(doStringsMatch(source, currentQuery)){
+                Collection<? extends T> matchingObject = entry.getValue();
+                resultList.addAll(matchingObject);
+            }
+        }
 		return resultList;
 	}
     
@@ -97,24 +124,21 @@ public class SQLStatementMatcher
      *        or if query must contain the <code>Collection</code> data (<code>true</code>)
      * @return <code>true</code> if <i>col</i> contains <i>query</i>, false otherwise
      */
-    public boolean contains(Collection col, String query, boolean queryContainsData)
+    public boolean contains(Collection<String> col, String query, boolean queryContainsData)
     {
-        Iterator iterator = col.iterator();
-        while(iterator.hasNext())
-        {
-            String nextKey = (String)iterator.next();
-            String source, currentQuery;
-            if(queryContainsData)
-            {
-                source = query;
-                currentQuery = nextKey;
-            }
-            else
-            {
-                source = nextKey;
-                currentQuery = query;
-            }
-            if(doStringsMatch(source, currentQuery)) return true;
+        for(String element : col){
+			String source, currentQuery;
+			if(queryContainsData)
+			{
+				source = query;
+				currentQuery = element;
+			}
+			else
+			{
+				source = element;
+				currentQuery = query;
+			}
+			if(doStringsMatch(source, currentQuery)) return true;
         }
         return false;
     }

@@ -14,7 +14,7 @@ import com.mockrunner.base.NestedApplicationException;
 public class MockStruct implements Struct, Cloneable
 {
     private String sqlTypeName;
-    private List attributes;
+    private List<Object> attributes;
     
     public MockStruct(Object[] attributes)
     {
@@ -24,7 +24,7 @@ public class MockStruct implements Struct, Cloneable
     public MockStruct(String sqlTypeName, Object[] attributes)
     {
         this.sqlTypeName = sqlTypeName;
-        this.attributes = new ArrayList();
+        this.attributes = new ArrayList<Object>();
         addAttributes(attributes);
     }
     
@@ -48,7 +48,7 @@ public class MockStruct implements Struct, Cloneable
         return attributes.toArray();
     }
 
-    public Object[] getAttributes(Map map) throws SQLException
+    public Object[] getAttributes(Map<String, Class<?>> map) throws SQLException
     {
         return getAttributes();
     }
@@ -60,13 +60,12 @@ public class MockStruct implements Struct, Cloneable
     
     public void addAttributes(Object[] attributes)
     {
-        for(int ii = 0; ii < attributes.length; ii++)
-        {
-            addAttribute(attributes[ii]);
+        for (Object attribute : attributes) {
+            addAttribute(attribute);
         }
     }
     
-    public void addAttributes(List attributes)
+    public void addAttributes(List<Object> attributes)
     {
         addAttributes(attributes.toArray());
     }
@@ -76,6 +75,7 @@ public class MockStruct implements Struct, Cloneable
         attributes.clear();
     }
     
+    @Override
     public boolean equals(Object obj)
     {
         if(null == obj) return false;
@@ -88,6 +88,7 @@ public class MockStruct implements Struct, Cloneable
         return attributes.equals(other.attributes);
     }
 
+    @Override
     public int hashCode()
     {
         int hashCode = 17;
@@ -96,17 +97,19 @@ public class MockStruct implements Struct, Cloneable
         return hashCode;
     }
 
+    @Override
     public String toString()
     {
         return "Struct data: " + attributes.toString();
     }
     
+    @Override
     public Object clone()
     {
         try
         {
             MockStruct copy = (MockStruct)super.clone();
-            copy.attributes = new ArrayList();
+            copy.attributes = new ArrayList<Object>();
             copy.addAttributes(attributes.toArray());
             return copy;
         } 

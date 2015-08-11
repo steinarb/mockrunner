@@ -13,13 +13,13 @@ import com.mockrunner.mock.jdbc.MockCallableStatement;
  */
 public class CallableStatementResultSetHandler extends AbstractOutParameterResultSetHandler
 {
-    private List callableStatements;
-    private Map callbaleStatementMap;
+    private final List<MockCallableStatement> callableStatements;
+    private final Map<String, List<MockCallableStatement>> callableStatementMap;
 
     public CallableStatementResultSetHandler()
     {
-        callableStatements = new ArrayList();
-        callbaleStatementMap = new TreeMap();
+        callableStatements = new ArrayList<MockCallableStatement>();
+        callableStatementMap = new TreeMap<String, List<MockCallableStatement>>();
     }
 
     /**
@@ -30,11 +30,11 @@ public class CallableStatementResultSetHandler extends AbstractOutParameterResul
     public void addCallableStatement(MockCallableStatement statement)
     { 
         statement.setCallableStatementResultSetHandler(this);
-        List list = (List)callbaleStatementMap.get(statement.getSQL());
+        List<MockCallableStatement> list = callableStatementMap.get(statement.getSQL());
         if(null == list)
         {
-            list = new ArrayList();
-            callbaleStatementMap.put(statement.getSQL(), list);
+            list = new ArrayList<MockCallableStatement>();
+            callableStatementMap.put(statement.getSQL(), list);
         }
         list.add(statement);
         callableStatements.add(statement);
@@ -44,7 +44,7 @@ public class CallableStatementResultSetHandler extends AbstractOutParameterResul
      * Returns a <code>List</code> of all callable statements.
      * @return the <code>List</code> of {@link MockCallableStatement} objects
      */
-    public List getCallableStatements()
+    public List<MockCallableStatement> getCallableStatements()
     {
         return Collections.unmodifiableList(callableStatements);
     }
@@ -55,9 +55,9 @@ public class CallableStatementResultSetHandler extends AbstractOutParameterResul
      * object.
      * @return the <code>Map</code> of {@link MockCallableStatement} objects
      */
-    public Map getCallableStatementMap()
+    public Map<String, List<MockCallableStatement>> getCallableStatementMap()
     {
-        return Collections.unmodifiableMap(callbaleStatementMap);
+        return Collections.unmodifiableMap(callableStatementMap);
     }
 
     /**
@@ -66,6 +66,6 @@ public class CallableStatementResultSetHandler extends AbstractOutParameterResul
     public void clearCallableStatements()
     {
         callableStatements.clear();
-        callbaleStatementMap.clear();
+        callableStatementMap.clear();
     }   
 }

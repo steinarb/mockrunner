@@ -21,10 +21,10 @@ public class MockStatement implements Statement
 {
     private AbstractResultSetHandler resultSetHandler;
     private ResultSet[] currentResultSets = null;
-    private int[] currentUpdateCounts = null;
+    private Integer[] currentUpdateCounts = null;
     private int currentResultSetIndex = 0;
     private int currentUpdateCountIndex = 0;
-    private List batches = new ArrayList();
+    private List<String> batches = new ArrayList<String>();
     private String cursorName = "";
     private int querySeconds = 0;
     private int maxRows = 0;
@@ -97,7 +97,7 @@ public class MockStatement implements Statement
         this.currentUpdateCountIndex = 0;
     }
     
-    protected void setUpdateCounts(int[] updateCounts)
+    protected void setUpdateCounts(Integer[] updateCounts)
     {
         closeCurrentResultSets();
         this.currentResultSets = null;
@@ -133,7 +133,11 @@ public class MockStatement implements Statement
         {
             return cloneAndSetMultipleResultSets(resultSetHandler.getGlobalResultSets());
         }
-        return cloneAndSetSingleResultSet(resultSetHandler.getGlobalResultSet());
+        MockResultSet result = resultSetHandler.getGlobalResultSet();
+        if(null != result){
+            return cloneAndSetSingleResultSet(result);
+        }
+        return new MockResultSet(String.valueOf(Math.random()));
     }
     
     private MockResultSet cloneAndSetSingleResultSet(MockResultSet result)
@@ -168,16 +172,12 @@ public class MockStatement implements Statement
     {
         if(null != currentResultSets)
         {
-            for(int ii = 0; ii < currentResultSets.length; ii++)
-            {
-                try
-                {
-                    if(null != currentResultSets[ii])
-                    {
-                        currentResultSets[ii].close();
+            for (ResultSet currentResultSet : currentResultSets) {
+                try {
+                    if (null != currentResultSet) {
+                        currentResultSet.close();
                     }
-                } 
-                catch(SQLException exc)
+                }catch(SQLException exc)
                 {
                     throw new NestedApplicationException(exc);
                 }
@@ -198,7 +198,7 @@ public class MockStatement implements Statement
             Integer[] returnValues = resultSetHandler.getUpdateCounts(sql);
             if(null != returnValues)
             {
-                return setMultipleUpdateCounts((int[])ArrayUtil.convertToPrimitiveArray(returnValues));
+                return setMultipleUpdateCounts(returnValues);
             }
         }
         else
@@ -206,7 +206,7 @@ public class MockStatement implements Statement
             Integer returnValue = resultSetHandler.getUpdateCount(sql);
             if(null != returnValue)
             {
-                return setSingleUpdateCount(returnValue.intValue());
+                return setSingleUpdateCount(returnValue);
             }
         }
         if(resultSetHandler.hasMultipleGlobalUpdateCounts())
@@ -218,12 +218,12 @@ public class MockStatement implements Statement
     
     private int setSingleUpdateCount(int updateCount)
     {
-        setUpdateCounts(new int[] {updateCount});
+        setUpdateCounts(new Integer[] {updateCount});
         setLastGeneratedKeysResultSet(null);
         return updateCount;
     }
     
-    private int setMultipleUpdateCounts(int[] updateCounts)
+    private int setMultipleUpdateCounts(Integer[] updateCounts)
     {
         setUpdateCounts(updateCounts);
         setLastGeneratedKeysResultSet(null);
@@ -254,7 +254,7 @@ public class MockStatement implements Statement
         SQLException exception = null;
         for(int ii = 0; ii < results.length; ii++)
         {
-            String nextSQL = (String)batches.get(ii);
+            String nextSQL = batches.get(ii);
             if(isQuery(nextSQL))
             {
                 exception = prepareFailedResult(results, ii, "SQL " + batches.get(ii) + " in the list of batches returned a ResultSet.", null);
@@ -431,7 +431,7 @@ public class MockStatement implements Statement
         Boolean returnsResultSet = resultSetHandler.getReturnsResultSet(sql);
         if(null != returnsResultSet)
         {
-            isQuery = returnsResultSet.booleanValue();
+            isQuery = returnsResultSet;
         }
         else
         {
@@ -559,12 +559,12 @@ public class MockStatement implements Statement
         this.poolable = poolable;
     }
 
-    public boolean isWrapperFor(Class iface) throws SQLException
+    public boolean isWrapperFor(Class<?> iface) throws SQLException
     {
         return false;
     }
 
-    public Object unwrap(Class iface) throws SQLException
+    public <T> T unwrap(Class<T> iface) throws SQLException
     {
         throw new SQLException("No object found for " + iface);
     }

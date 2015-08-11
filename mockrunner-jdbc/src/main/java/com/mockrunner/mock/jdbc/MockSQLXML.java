@@ -274,7 +274,7 @@ public class MockSQLXML implements SQLXML, Cloneable
         }
     }
 
-    public Source getSource(Class sourceClass) throws SQLException
+    public <T extends Source> T getSource(Class<T> sourceClass) throws SQLException
     {
         verifyRead();
         wasReadMethodCalled = true;
@@ -282,19 +282,19 @@ public class MockSQLXML implements SQLXML, Cloneable
         {
             if(null == sourceClass || StreamSource.class.equals(sourceClass))
             {
-                return new StreamSource(contentToInputStream());
+                return (T) new StreamSource(contentToInputStream());
             }
             if(DOMSource.class.equals(sourceClass))
             {
-                return new DOMSource(contentToW3CDocument());
+                return (T) new DOMSource(contentToW3CDocument());
             }
             if(SAXSource.class.equals(sourceClass))
             {
-                return new SAXSource(saxParser.getXMLReader(), new InputSource(contentToInputStream()));
+                return (T) new SAXSource(saxParser.getXMLReader(), new InputSource(contentToInputStream()));
             }
             if(StAXSource.class.equals(sourceClass))
             {
-                return new StAXSource(contentToXMLStreamReader());
+                return (T) new StAXSource(contentToXMLStreamReader());
             }
         } 
         catch(Exception exc)
@@ -334,25 +334,25 @@ public class MockSQLXML implements SQLXML, Cloneable
         return (Writer)content;
     }
 
-    public Result setResult(Class resultClass) throws SQLException
+    public <T extends Result> T setResult(Class<T> resultClass) throws SQLException
     {
         verifyWrite();
         wasWriteMethodCalled = true;
         if(null == resultClass || StreamResult.class.equals(resultClass))
         {
             content = new ByteArrayOutputStream();
-            return new StreamResult((OutputStream)content);
+            return (T)new StreamResult((OutputStream)content);
         }
         if(DOMResult.class.equals(resultClass))
         {
             org.w3c.dom.Document document = domParser.newDocument();
             content = new DOMResult(document);
-            return (DOMResult)content;
+            return (T)content;
         }
         if(SAXResult.class.equals(resultClass))
         {
             content = new SAXHandler();
-            return new SAXResult((SAXHandler)content);
+            return (T)new SAXResult((SAXHandler)content);
         }
         if(StAXResult.class.equals(resultClass))
         {
@@ -367,7 +367,7 @@ public class MockSQLXML implements SQLXML, Cloneable
                 throw new SQLException(exc);
             }
             content = new StreamWriterOutputStreamMapping(xmlWriter, outStream);
-            return new StAXResult(xmlWriter);
+            return (T)new StAXResult(xmlWriter);
         }
         throw new SQLException(resultClass.getName() + " not supported as Result");
     }
@@ -414,6 +414,7 @@ public class MockSQLXML implements SQLXML, Cloneable
         return !(wasFreeCalled || wasWriteMethodCalled);
     }
     
+    @Override
     public boolean equals(Object otherObject)
     {
         if(null == otherObject) return false;
@@ -438,6 +439,7 @@ public class MockSQLXML implements SQLXML, Cloneable
         }   
     }
 
+    @Override
     public int hashCode()
     {
         int hashCode = 17;
@@ -459,6 +461,7 @@ public class MockSQLXML implements SQLXML, Cloneable
         return hashCode;
     }
     
+    @Override
     public Object clone()
     {
         try
@@ -493,9 +496,10 @@ public class MockSQLXML implements SQLXML, Cloneable
         }
     }
 
+    @Override
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer("XML data:\n");
+        StringBuilder buffer = new StringBuilder("XML data:\n");
         if(null == content)
         {
             buffer.append("null");

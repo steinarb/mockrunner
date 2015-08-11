@@ -13,6 +13,7 @@ import org.junit.Test;
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
 import com.mockrunner.mock.jdbc.JDBCMockObjectFactory;
 import com.mockrunner.mock.jdbc.MockDriver;
+import java.sql.Driver;
 
 public class BasicJDBCTestCaseAdapterTest extends BasicJDBCTestCaseAdapter
 {
@@ -36,7 +37,7 @@ public class BasicJDBCTestCaseAdapterTest extends BasicJDBCTestCaseAdapter
     @Test
     public void testDriverDeregistered() throws Exception
     {
-        Enumeration drivers = DriverManager.getDrivers();
+        Enumeration<Driver> drivers = DriverManager.getDrivers();
         assertTrue(drivers.nextElement() instanceof MockDriver);
         assertFalse(drivers.hasMoreElements());
         super.tearDown();

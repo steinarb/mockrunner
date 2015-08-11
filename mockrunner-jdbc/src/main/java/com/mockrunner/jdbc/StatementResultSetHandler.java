@@ -11,11 +11,11 @@ import com.mockrunner.mock.jdbc.MockStatement;
  */
 public class StatementResultSetHandler extends AbstractResultSetHandler
 {
-    private List statements;
+    private final List<MockStatement> statements;
 
     public StatementResultSetHandler()
     {
-        statements = new ArrayList();
+        statements = new ArrayList<MockStatement>();
     }  
     
     /**
@@ -33,7 +33,7 @@ public class StatementResultSetHandler extends AbstractResultSetHandler
      * Returns a <code>List</code> of all statements.
      * @return the <code>List</code> of {@link MockStatement} objects
      */
-    public List getStatements()
+    public List<MockStatement> getStatements()
     {
         return Collections.unmodifiableList(statements);
     }

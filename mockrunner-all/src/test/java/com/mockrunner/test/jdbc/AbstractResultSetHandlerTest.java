@@ -146,14 +146,14 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         statementHandler.setExactMatch(true);
         assertEquals(new Integer(4), statementHandler.getUpdateCount("insert Xyz"));
         assertNull(statementHandler.getUpdateCount("insert"));
-        statementHandler.prepareUpdateCounts("update", new int[] {1, 2});
+        statementHandler.prepareUpdateCounts("update", new Integer[] {1, 2});
         assertEquals(new Integer(1), statementHandler.getUpdateCount("update"));
     }
     
     @Test
     public void testGetUpdateCounts()
     {
-        int[] updateCounts = new int[] {1, 2};
+        Integer[] updateCounts = new Integer[] {1, 2};
         statementHandler.prepareUpdateCounts(".*", updateCounts);
         statementHandler.prepareUpdateCount("insert xyz", 4);
         Integer[] returnedUpdateCounts = statementHandler.getUpdateCounts(".*");
@@ -170,8 +170,8 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
     public void testHasMultipleUpdateCounts()
     {
         statementHandler.prepareUpdateCount("update", 3);
-        statementHandler.prepareUpdateCounts("insert into xyz", new int [] {4});
-        statementHandler.prepareUpdateCounts("insert into abc", new int [] {1, 2, 4});
+        statementHandler.prepareUpdateCounts("insert into xyz", new Integer[] {4});
+        statementHandler.prepareUpdateCounts("insert into abc", new Integer[] {1, 2, 4});
         assertFalse(statementHandler.hasMultipleUpdateCounts("update"));
         assertFalse(statementHandler.hasMultipleUpdateCounts("do nothing"));
         assertTrue(statementHandler.hasMultipleUpdateCounts("insert into xyz"));
@@ -181,19 +181,19 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
     @Test
     public void testGetGlobalUpdateCount()
     {
-        int[] updateCounts = new int[] {1, 2};
+        Integer[] updateCounts = new Integer[]{1, 2};
         statementHandler.prepareGlobalUpdateCount(4);
         assertEquals(4, statementHandler.getGlobalUpdateCount());
-        int[] returnedUpdateCounts = statementHandler.getGlobalUpdateCounts();
+        Integer[] returnedUpdateCounts = statementHandler.getGlobalUpdateCounts();
         assertEquals(1, returnedUpdateCounts.length);
-        assertEquals(4, returnedUpdateCounts[0]);
+        assertEquals(new Integer(4), returnedUpdateCounts[0]);
         statementHandler.prepareGlobalUpdateCounts(updateCounts);
         assertEquals(1, statementHandler.getGlobalUpdateCount());
         returnedUpdateCounts = statementHandler.getGlobalUpdateCounts();
         assertNotSame(updateCounts, returnedUpdateCounts);
         assertEquals(2, returnedUpdateCounts.length);
-        assertEquals(1, returnedUpdateCounts[0]);
-        assertEquals(2, returnedUpdateCounts[1]);
+        assertEquals(new Integer(1), returnedUpdateCounts[0]);
+        assertEquals(new Integer(2), returnedUpdateCounts[1]);
     }
     
     @Test
@@ -201,9 +201,9 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
     {
         statementHandler.prepareGlobalUpdateCount(4);
         assertFalse(statementHandler.hasMultipleGlobalUpdateCounts());
-        statementHandler.prepareGlobalUpdateCounts(new int[] {1});
+        statementHandler.prepareGlobalUpdateCounts(new Integer[] {1});
         assertTrue(statementHandler.hasMultipleGlobalUpdateCounts());
-        statementHandler.prepareGlobalUpdateCounts(new int[] {7, 8});
+        statementHandler.prepareGlobalUpdateCounts(new Integer[] {7, 8});
         assertTrue(statementHandler.hasMultipleGlobalUpdateCounts());
     }
     
@@ -235,7 +235,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertTrue(statementHandler.getThrowsSQLException("b statementxyz"));
         assertNotSame(exc, statementHandler.getSQLException("b statementxyz"));
         String message = statementHandler.getSQLException("b statementxyz").getMessage();
-        assertTrue(message.indexOf("[abc] statementxyz") != -1);
+        assertTrue(message.contains("[abc] statementxyz"));
     }
     
     @Test
@@ -275,7 +275,7 @@ public class AbstractResultSetHandlerTest extends BaseTestCase
         assertSame(result2, statementHandler.getResultSets("select")[0]);
         assertEquals(new Integer(3), statementHandler.getUpdateCount("SELECT"));
         assertEquals(new Integer(3), statementHandler.getUpdateCounts("selecT")[0]);
-        assertTrue(statementHandler.getReturnsResultSet("select").booleanValue());
+        assertTrue(statementHandler.getReturnsResultSet("select"));
         assertSame(result1, statementHandler.getGeneratedKeys("select"));
     }
 }

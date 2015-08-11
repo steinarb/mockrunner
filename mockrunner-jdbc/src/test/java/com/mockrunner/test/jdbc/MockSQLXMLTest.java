@@ -299,10 +299,10 @@ public class MockSQLXMLTest extends TestCase
         assertTrue(readerSQLXML.isWriteable());
         assertTrue(inputStreamSQLXML.isWriteable());
         assertTrue(w3cDocumentSQLXML.isWriteable());
-        StreamResult stringResult = (StreamResult)stringSQLXML.setResult(StreamResult.class);
-        StreamResult readerResult = (StreamResult)readerSQLXML.setResult(StreamResult.class);
-        StreamResult inputStreamResult = (StreamResult)inputStreamSQLXML.setResult(StreamResult.class);
-        StreamResult w3cDocumentResult = (StreamResult)w3cDocumentSQLXML.setResult(StreamResult.class);
+        StreamResult stringResult = stringSQLXML.setResult(StreamResult.class);
+        StreamResult readerResult = readerSQLXML.setResult(StreamResult.class);
+        StreamResult inputStreamResult = inputStreamSQLXML.setResult(StreamResult.class);
+        StreamResult w3cDocumentResult = w3cDocumentSQLXML.setResult(StreamResult.class);
         stringResult.getOutputStream().write(getSecondTestXMLAsString().getBytes("UTF-8"));
         readerResult.getOutputStream().write(getSecondTestXMLAsString().getBytes("UTF-8"));
         inputStreamResult.getOutputStream().write(getSecondTestXMLAsString().getBytes("UTF-8"));
@@ -324,10 +324,10 @@ public class MockSQLXMLTest extends TestCase
         assertTrue(readerSQLXML.isWriteable());
         assertTrue(inputStreamSQLXML.isWriteable());
         assertTrue(w3cDocumentSQLXML.isWriteable());
-        DOMResult stringResult = (DOMResult)stringSQLXML.setResult(DOMResult.class);
-        DOMResult readerResult = (DOMResult)readerSQLXML.setResult(DOMResult.class);
-        DOMResult inputStreamResult = (DOMResult)inputStreamSQLXML.setResult(DOMResult.class);
-        DOMResult w3cDocumentResult = (DOMResult)w3cDocumentSQLXML.setResult(DOMResult.class);
+        DOMResult stringResult = stringSQLXML.setResult(DOMResult.class);
+        DOMResult readerResult = readerSQLXML.setResult(DOMResult.class);
+        DOMResult inputStreamResult = inputStreamSQLXML.setResult(DOMResult.class);
+        DOMResult w3cDocumentResult = w3cDocumentSQLXML.setResult(DOMResult.class);
         stringResult.setNode(getTestXMLAsW3CDocument(getSecondTestXMLAsString()));
         readerResult.setNode(getTestXMLAsW3CDocument(getSecondTestXMLAsString()).getFirstChild());
         inputStreamResult.setNode(getTestXMLAsW3CDocument(getSecondTestXMLAsString()));
@@ -349,10 +349,10 @@ public class MockSQLXMLTest extends TestCase
         assertTrue(readerSQLXML.isWriteable());
         assertTrue(inputStreamSQLXML.isWriteable());
         assertTrue(w3cDocumentSQLXML.isWriteable());
-        DOMResult stringResult = (DOMResult)stringSQLXML.setResult(DOMResult.class);
-        DOMResult readerResult = (DOMResult)readerSQLXML.setResult(DOMResult.class);
-        DOMResult inputStreamResult = (DOMResult)inputStreamSQLXML.setResult(DOMResult.class);
-        DOMResult w3cDocumentResult = (DOMResult)w3cDocumentSQLXML.setResult(DOMResult.class);
+        DOMResult stringResult = stringSQLXML.setResult(DOMResult.class);
+        DOMResult readerResult = readerSQLXML.setResult(DOMResult.class);
+        DOMResult inputStreamResult = inputStreamSQLXML.setResult(DOMResult.class);
+        DOMResult w3cDocumentResult = w3cDocumentSQLXML.setResult(DOMResult.class);
         org.w3c.dom.Document stringDocument = (org.w3c.dom.Document)stringResult.getNode();
         org.w3c.dom.Document readerDocument = (org.w3c.dom.Document)readerResult.getNode();
         org.w3c.dom.Document inputStreamDocument = (org.w3c.dom.Document)inputStreamResult.getNode();
@@ -378,10 +378,10 @@ public class MockSQLXMLTest extends TestCase
         assertTrue(readerSQLXML.isWriteable());
         assertTrue(inputStreamSQLXML.isWriteable());
         assertTrue(w3cDocumentSQLXML.isWriteable());
-        SAXResult stringResult = (SAXResult)stringSQLXML.setResult(SAXResult.class);
-        SAXResult readerResult = (SAXResult)readerSQLXML.setResult(SAXResult.class);
-        SAXResult inputStreamResult = (SAXResult)inputStreamSQLXML.setResult(SAXResult.class);
-        SAXResult w3cDocumentResult = (SAXResult)w3cDocumentSQLXML.setResult(SAXResult.class);
+        SAXResult stringResult = stringSQLXML.setResult(SAXResult.class);
+        SAXResult readerResult = readerSQLXML.setResult(SAXResult.class);
+        SAXResult inputStreamResult = inputStreamSQLXML.setResult(SAXResult.class);
+        SAXResult w3cDocumentResult = w3cDocumentSQLXML.setResult(SAXResult.class);
         prepareSecondTestXMLForSAX(stringResult);
         prepareSecondTestXMLForSAX(readerResult);
         prepareSecondTestXMLForSAX(inputStreamResult);
@@ -403,10 +403,10 @@ public class MockSQLXMLTest extends TestCase
         assertTrue(readerSQLXML.isWriteable());
         assertTrue(inputStreamSQLXML.isWriteable());
         assertTrue(w3cDocumentSQLXML.isWriteable());
-        StAXResult stringResult = (StAXResult)stringSQLXML.setResult(StAXResult.class);
-        StAXResult readerResult = (StAXResult)readerSQLXML.setResult(StAXResult.class);
-        StAXResult inputStreamResult = (StAXResult)inputStreamSQLXML.setResult(StAXResult.class);
-        StAXResult w3cDocumentResult = (StAXResult)w3cDocumentSQLXML.setResult(StAXResult.class);
+        StAXResult stringResult = stringSQLXML.setResult(StAXResult.class);
+        StAXResult readerResult = readerSQLXML.setResult(StAXResult.class);
+        StAXResult inputStreamResult = inputStreamSQLXML.setResult(StAXResult.class);
+        StAXResult w3cDocumentResult = w3cDocumentSQLXML.setResult(StAXResult.class);
         prepareSecondTestXMLForStAX(stringResult);
         prepareSecondTestXMLForStAX(readerResult);
         prepareSecondTestXMLForStAX(inputStreamResult);
@@ -591,7 +591,7 @@ public class MockSQLXMLTest extends TestCase
     private void doTestGetStreamSource(MockSQLXML sqlXML, String testXML) throws Exception
     {
         assertTrue(sqlXML.isReadable());
-        StreamSource source = (StreamSource)sqlXML.getSource(StreamSource.class);
+        StreamSource source = sqlXML.getSource(StreamSource.class);
         String xml = new String(StreamUtil.getStreamAsByteArray(source.getInputStream()), "UTF-8");
         assertXMLEqualsTestXML(xml, testXML);
         assertFalse(sqlXML.isReadable());
@@ -609,7 +609,7 @@ public class MockSQLXMLTest extends TestCase
     private void doTestGetDOMSource(MockSQLXML sqlXML, String testXML) throws Exception
     {
         assertTrue(sqlXML.isReadable());
-        DOMSource source = (DOMSource)sqlXML.getSource(DOMSource.class);
+        DOMSource source = sqlXML.getSource(DOMSource.class);
         assertXMLEqualsTestXML((org.w3c.dom.Document)source.getNode(), testXML);
         assertFalse(sqlXML.isReadable());
         try
@@ -626,7 +626,7 @@ public class MockSQLXMLTest extends TestCase
     private void doTestGetSAXSource(MockSQLXML sqlXML, String testXML) throws Exception
     {
         assertTrue(sqlXML.isReadable());
-        SAXSource source = (SAXSource)sqlXML.getSource(SAXSource.class);
+        SAXSource source = sqlXML.getSource(SAXSource.class);
         InputStream stream = source.getInputSource().getByteStream();
         String xml = new String(StreamUtil.getStreamAsByteArray(stream), "UTF-8");
         assertXMLEqualsTestXML(xml, testXML);
@@ -645,7 +645,7 @@ public class MockSQLXMLTest extends TestCase
     private void doTestGetStAXSource(MockSQLXML sqlXML, boolean testFirst) throws Exception
     {
         assertTrue(sqlXML.isReadable());
-        StAXSource source = (StAXSource)sqlXML.getSource(StAXSource.class);
+        StAXSource source = sqlXML.getSource(StAXSource.class);
         if(testFirst)
         {
             assertXMLEqualsFirstTestXML(source.getXMLStreamReader());

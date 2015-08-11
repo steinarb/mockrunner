@@ -32,6 +32,7 @@ import com.mockrunner.mock.jdbc.MockCallableStatement;
 import com.mockrunner.mock.jdbc.MockClob;
 import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockNClob;
+import com.mockrunner.mock.jdbc.MockParameterMap;
 import com.mockrunner.mock.jdbc.MockResultSet;
 import com.mockrunner.mock.jdbc.MockStruct;
 
@@ -60,6 +61,7 @@ public class MockCallableStatementTest extends BaseTestCase
     }
 
     @After
+    @Override
     public void tearDown() throws Exception
     {
         super.tearDown();
@@ -90,8 +92,8 @@ public class MockCallableStatementTest extends BaseTestCase
     {
         callableStatementHandler.prepareGlobalResultSet(resultSet1); 
         callableStatementHandler.prepareResultSet("call", resultSet2);
-        Map params = new HashMap();
-        params.put(new Integer(1), new MockBlob(new byte[] {1}));
+        MockParameterMap params = new MockParameterMap();
+        params.put(1, new MockBlob(new byte[] {1}));
         params.put("param2", "Test");
         callableStatementHandler.prepareResultSet("{call doCall", resultSet3, params);
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doCall(?, ?, ?)}");
@@ -129,9 +131,9 @@ public class MockCallableStatementTest extends BaseTestCase
     @Test
     public void testPrepareMultipleResultSets() throws Exception
     {
-        Map parameters = new HashMap();
+        MockParameterMap parameters = new MockParameterMap();
         parameters.put("param1", "value1");
-        parameters.put(new Integer(2), new Integer(5));
+        parameters.put(2, 5);
         callableStatementHandler.prepareGlobalResultSets(new MockResultSet[] {resultSet3}); 
         callableStatementHandler.prepareResultSets("call", new MockResultSet[] {resultSet2, resultSet3});
         callableStatementHandler.prepareResultSets("call", new MockResultSet[] {resultSet1, resultSet2, resultSet3}, parameters);
@@ -184,7 +186,7 @@ public class MockCallableStatementTest extends BaseTestCase
     @Test
     public void testPrepareMultipleResultSetsClose() throws Exception
     {
-        callableStatementHandler.prepareResultSets("call", new MockResultSet[] {resultSet2, resultSet3, resultSet1}, new HashMap());
+        callableStatementHandler.prepareResultSets("call", new MockResultSet[] {resultSet2, resultSet3, resultSet1}, new MockParameterMap());
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("CALL");
         statement.setString("param1", "value1");
         statement.executeQuery();
@@ -212,7 +214,7 @@ public class MockCallableStatementTest extends BaseTestCase
     @Test
     public void testCurrentResultSetsCloseOnExecute() throws Exception
     {
-        callableStatementHandler.prepareResultSets("call", new MockResultSet[] {resultSet1, resultSet2}, new HashMap());
+        callableStatementHandler.prepareResultSets("call", new MockResultSet[] {resultSet1, resultSet2}, new MockParameterMap());
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("CALL");
         statement.setString("param1", "value1");
         statement.executeQuery();
@@ -227,8 +229,8 @@ public class MockCallableStatementTest extends BaseTestCase
     @Test
     public void testPrepareResultSetNullParameter() throws Exception
     {
-        Map params = new HashMap();
-        params.put(new Integer(1), new MockBlob(new byte[] {1}));
+        MockParameterMap params = new MockParameterMap();
+        params.put(1, new MockBlob(new byte[] {1}));
         params.put("param2", null);
         callableStatementHandler.prepareResultSet("{call doCall", resultSet1, params);
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doCall(?, ?, ?)}");
@@ -249,9 +251,9 @@ public class MockCallableStatementTest extends BaseTestCase
     {
         callableStatementHandler.prepareGlobalUpdateCount(8);
         callableStatementHandler.prepareUpdateCount("doTest", 3);
-        Map params = new HashMap();
+        MockParameterMap params = new MockParameterMap();
         params.put("1", "Test");
-        params.put(new Integer(5), new Long(2));
+        params.put(5, 2L);
         params.put("3", new byte[] {1, 2, 3});
         callableStatementHandler.prepareUpdateCount("doTest", 4, params);
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doTEST(?, ?, ?)}");
@@ -276,9 +278,9 @@ public class MockCallableStatementTest extends BaseTestCase
     @Test
     public void testPrepareMultipleUpdateCounts() throws Exception
     {
-        callableStatementHandler.prepareGlobalUpdateCounts(new int[] {4, 5, 6});
-        callableStatementHandler.prepareUpdateCounts("doTest", new int[] {7, 8, 9});
-        callableStatementHandler.prepareUpdateCounts("doTest", new int[] {10, 11}, new Object[] {"1", new Long(2)});
+        callableStatementHandler.prepareGlobalUpdateCounts(new Integer[] {4, 5, 6});
+        callableStatementHandler.prepareUpdateCounts("doTest", new Integer[] {7, 8, 9});
+        callableStatementHandler.prepareUpdateCounts("doTest", new Integer[] {10, 11}, new Object[] {"1", 2L});
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("call");
         int updateCount = statement.executeUpdate();
         assertEquals(4, updateCount);
@@ -326,9 +328,9 @@ public class MockCallableStatementTest extends BaseTestCase
     @Test
     public void testPrepareUpdateCountNullParameter() throws Exception
     {
-        Map params = new HashMap();
+        MockParameterMap params = new MockParameterMap();
         params.put("1", "Test");
-        params.put(new Integer(5), null);
+        params.put(5, null);
         params.put("3", new byte[] {1, 2, 3});
         callableStatementHandler.prepareUpdateCount("doTest", 4, params);
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doTEST(?, ?, ?)}");
@@ -354,10 +356,10 @@ public class MockCallableStatementTest extends BaseTestCase
         callableStatementHandler.prepareUpdateCount("doTest", 4);
         MockStruct struct = new MockStruct("test");
         struct.addAttribute("attribute");
-        Map params = new HashMap();
+        MockParameterMap params = new MockParameterMap();
         params.put("1", "Test");
-        params.put(new Integer(5), struct);
-        params.put(new Integer(6), "xyz");
+        params.put(5, struct);
+        params.put(6, "xyz");
         callableStatementHandler.prepareUpdateCount("doTest", 3, params);
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doTest(?, ?, ?)}");
         statement.setObject(5, struct.clone());
@@ -394,8 +396,8 @@ public class MockCallableStatementTest extends BaseTestCase
         statement.setObject(5, new MockStruct("test"));
         statement.addBatch();
         statement.addBatch();
-        Map paramMap = new HashMap();
-        paramMap.put(new Integer(5), new MockStruct("test"));
+        MockParameterMap paramMap = new MockParameterMap();
+        paramMap.put(5, new MockStruct("test"));
         callableStatementHandler.prepareThrowsSQLException("doTest", new SQLException("reason", "state", 25), paramMap);
         try
         {
@@ -439,8 +441,8 @@ public class MockCallableStatementTest extends BaseTestCase
         statement.addBatch();
         statement.clearParameters();
         statement.addBatch();
-        Map paramMap = new HashMap();
-        paramMap.put(new Integer(5), new MockStruct("test"));
+        MockParameterMap paramMap = new MockParameterMap();
+        paramMap.put(5, new MockStruct("test"));
         callableStatementHandler.prepareThrowsSQLException("doTest", new SQLException("reason", "state", 25), paramMap);
         try
         {
@@ -459,7 +461,7 @@ public class MockCallableStatementTest extends BaseTestCase
             assertEquals("state", exc.getSQLState());
             assertEquals(25, exc.getErrorCode());
         }
-        callableStatementHandler.prepareThrowsSQLException("doTest", new SQLException("xyz", "abc", 1), new HashMap());
+        callableStatementHandler.prepareThrowsSQLException("doTest", new SQLException("xyz", "abc", 1), new MockParameterMap());
         callableStatementHandler.setExactMatchParameter(true);
         try
         {
@@ -483,9 +485,9 @@ public class MockCallableStatementTest extends BaseTestCase
     {
         SQLException exception = new SQLWarning();
         callableStatementHandler.prepareThrowsSQLException("doValues", exception);
-        Map params = new HashMap();
+        MockParameterMap params = new MockParameterMap();
         params.put("1", "Test");
-        params.put(new Integer(5), new Long(2));
+        params.put(5, 2L);
         params.put("3", new byte[] {1, 2, 3});
         callableStatementHandler.prepareThrowsSQLException("doTest", params);
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doTEST(?, ?, ?)}");
@@ -494,7 +496,7 @@ public class MockCallableStatementTest extends BaseTestCase
         statement.setString("1", "Test");
         statement.executeQuery();
         statement.setBytes("3", new byte[] {1, 2, 3});
-        Map outParams = new HashMap();
+        MockParameterMap outParams = new MockParameterMap();
         outParams.put("name", "value");
         callableStatementHandler.prepareOutParameter("doTEST", outParams);
         callableStatementHandler.prepareOutParameter("{call doValues(?, ?, ?)}", outParams);
@@ -507,7 +509,7 @@ public class MockCallableStatementTest extends BaseTestCase
         {
             assertNull(statement.getString("name"));
             assertNotSame(exception, exc);
-            assertTrue(exc.getMessage().indexOf("doTest") != -1);
+            assertTrue(exc.getMessage().contains("doTest"));
         }
         callableStatementHandler.setExactMatchParameter(true);
         try
@@ -519,7 +521,7 @@ public class MockCallableStatementTest extends BaseTestCase
         {
             assertNull(statement.getString("name"));
             assertNotSame(exception, exc);
-            assertTrue(exc.getMessage().indexOf("doTest") != -1);
+            assertTrue(exc.getMessage().contains("doTest"));
         }
         callableStatementHandler.setCaseSensitive(true);
         statement.execute();
@@ -543,15 +545,15 @@ public class MockCallableStatementTest extends BaseTestCase
     @Test
     public void testPrepareOutParameter() throws Exception
     {
-        Map outParams = new HashMap();
+        MockParameterMap outParams = new MockParameterMap();
         outParams.put("1", "test");
         callableStatementHandler.prepareGlobalOutParameter(outParams);
         outParams.clear();
         outParams.put("TestParam", "xyz");
-        outParams.put(new Integer(1), new Integer(2));
-        outParams.put(new Integer(3), new byte[] {1, 2, 3});
+        outParams.put(1, 2);
+        outParams.put(3, new byte[] {1, 2, 3});
         callableStatementHandler.prepareOutParameter("doGetParam", outParams);
-        outParams.put(new Integer(1), new Integer(5));
+        outParams.put(1, 5);
         outParams.put("anotherParam", new MockClob("test"));
         callableStatementHandler.prepareOutParameter("doGetParam", outParams, new Object[] {"1", "2"});
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doGetParam()}");
@@ -601,13 +603,13 @@ public class MockCallableStatementTest extends BaseTestCase
     @Test
     public void testMustRegisterOutParameters() throws Exception
     {
-        Map outParams = new HashMap();
+        MockParameterMap outParams = new MockParameterMap();
         outParams.put("1", "test");
         callableStatementHandler.prepareGlobalOutParameter(outParams);
         outParams.clear();
         outParams.put("TestParam", "xyz");
-        outParams.put(new Integer(1), new Integer(2));
-        outParams.put(new Integer(3), new byte[] {1, 2, 3});
+        outParams.put(1, 2);
+        outParams.put(3, new byte[] {1, 2, 3});
         callableStatementHandler.prepareOutParameter("doGetParam", outParams);
         callableStatementHandler.setMustRegisterOutParameters(true);
         MockCallableStatement statement = (MockCallableStatement)connection.prepareCall("{call doGetParam()}");
@@ -641,7 +643,7 @@ public class MockCallableStatementTest extends BaseTestCase
     @Test
     public void testMockResultSetOutParameter() throws Exception
     {
-        Map outParams = new HashMap();
+        MockParameterMap outParams = new MockParameterMap();
         MockResultSet resultSet = new MockResultSet("id");
         outParams.put("TestParam", resultSet);
         callableStatementHandler.prepareOutParameter("doGetParam", outParams, new Object[] {"1", "2"});
@@ -695,12 +697,12 @@ public class MockCallableStatementTest extends BaseTestCase
     @Test
     public void testParameterCopy() throws Exception
     {
-        Map params = new HashMap();
-        params.put(new Integer(1), "1");
-        params.put(new Integer(2), "2");
+        MockParameterMap params = new MockParameterMap();
+        params.put(1, "1");
+        params.put(2, "2");
         callableStatementHandler.prepareResultSet("call1", resultSet1, params);
         MockCallableStatement callableStatement = (MockCallableStatement)connection.prepareCall("call1");
-        params.put(new Integer(2), "3");
+        params.put(2, "3");
         callableStatement.setString(1, "1");
         callableStatement.setString(2, "3");
         MockResultSet currentResult = (MockResultSet)callableStatement.executeQuery();
@@ -708,23 +710,23 @@ public class MockCallableStatementTest extends BaseTestCase
         callableStatement.setString(2, "2");
         currentResult = (MockResultSet)callableStatement.executeQuery();
         assertTrue(isResultSet1(currentResult));
-        params = new HashMap();
-        params.put(new Integer(1), "1");
-        params.put(new Integer(2), "2");
+        params = new MockParameterMap();
+        params.put(1, "1");
+        params.put(2, "2");
         callableStatementHandler.prepareUpdateCount("call2", 5, params);
         callableStatement = (MockCallableStatement)connection.prepareCall("call2");
-        params.put(new Integer(2), "3");
+        params.put(2, "3");
         callableStatement.setString(1, "1");
         callableStatement.setString(2, "3");
         assertEquals(0, callableStatement.executeUpdate());
         callableStatement.setString(2, "2");
         assertEquals(5, callableStatement.executeUpdate());
-        params = new HashMap();
-        params.put(new Integer(1), "1");
-        params.put(new Integer(2), "2");
+        params = new MockParameterMap();
+        params.put(1, "1");
+        params.put(2, "2");
         callableStatementHandler.prepareThrowsSQLException("call3", params);
         callableStatement = (MockCallableStatement)connection.prepareCall("call3");
-        params.put(new Integer(2), "3");
+        params.put(2, "3");
         callableStatement.setString(1, "1");
         callableStatement.setString(2, "3");
         callableStatement.execute();
@@ -738,12 +740,12 @@ public class MockCallableStatementTest extends BaseTestCase
         {
             //should throw exception
         }
-        params = new HashMap();
-        params.put(new Integer(1), "1");
-        params.put(new Integer(2), "2");
+        params = new MockParameterMap();
+        params.put(1, "1");
+        params.put(2, "2");
         callableStatementHandler.prepareOutParameter("call4", params, params);
         callableStatement = (MockCallableStatement)connection.prepareCall("call4");
-        params.put(new Integer(2), "3");
+        params.put(2, "3");
         callableStatement.setString(1, "1");
         callableStatement.setString(2, "3");
         callableStatement.execute();
@@ -780,7 +782,7 @@ public class MockCallableStatementTest extends BaseTestCase
         assertEquals(-1, inputStream.read());
         updateStream = new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5});
         callableStatement.setAsciiStream(1, updateStream);
-        inputStream = (InputStream)callableStatement.getParameterMap().get(new Integer(1));
+        inputStream = (InputStream)callableStatement.getParameterMap().get(1);
         assertEquals(1, inputStream.read());
         assertEquals(2, inputStream.read());
         assertEquals(3, inputStream.read());
@@ -796,7 +798,7 @@ public class MockCallableStatementTest extends BaseTestCase
         assertEquals(-1, inputStream.read());
         StringReader updateReader = new StringReader("test");
         callableStatement.setCharacterStream(1, updateReader);
-        Reader inputReader = (Reader)callableStatement.getParameterMap().get(new Integer(1));
+        Reader inputReader = (Reader)callableStatement.getParameterMap().get(1);
         assertEquals('t', (char)inputReader.read());
         assertEquals('e', (char)inputReader.read());
         assertEquals('s', (char)inputReader.read());
@@ -820,22 +822,22 @@ public class MockCallableStatementTest extends BaseTestCase
     {
         MockCallableStatement callableStatement = (MockCallableStatement)connection.prepareCall("call");
         callableStatement.setBlob(1, new MockBlob(new byte[] {1, 2, 3}));
-        assertEquals(new MockBlob(new byte[] {1, 2, 3}), callableStatement.getParameterMap().get(new Integer(1)));
+        assertEquals(new MockBlob(new byte[] {1, 2, 3}), callableStatement.getParameterMap().get(1));
         callableStatement.setBlob("column", new ByteArrayInputStream(new byte[] {1, 2, 3}));
         assertEquals(new MockBlob(new byte[] {1, 2, 3}), callableStatement.getParameterMap().get("column"));
         callableStatement.setBlob(1, new ByteArrayInputStream(new byte[] {1, 2, 3, 4, 5}), 3);
-        assertEquals(new MockBlob(new byte[] {1, 2, 3}), callableStatement.getParameterMap().get(new Integer(1)));
+        assertEquals(new MockBlob(new byte[] {1, 2, 3}), callableStatement.getParameterMap().get(1));
         callableStatement.setClob("column", new MockClob("test"));
         assertEquals(new MockClob("test"), callableStatement.getParameterMap().get("column"));
         callableStatement.setClob(2, new StringReader("test"));
-        assertEquals(new MockClob("test"), callableStatement.getParameterMap().get(new Integer(2)));
+        assertEquals(new MockClob("test"), callableStatement.getParameterMap().get(2));
         callableStatement.setClob("column", new StringReader("testxyz"), 4);
         assertEquals(new MockClob("test"), callableStatement.getParameterMap().get("column"));
         callableStatement.setNClob(3, new MockNClob("test"));
-        assertEquals(new MockNClob("test"), callableStatement.getParameterMap().get(new Integer(3)));
+        assertEquals(new MockNClob("test"), callableStatement.getParameterMap().get(3));
         callableStatement.setNClob(3, new StringReader("test"));
-        assertEquals(new MockNClob("test"), callableStatement.getParameterMap().get(new Integer(3)));
+        assertEquals(new MockNClob("test"), callableStatement.getParameterMap().get(3));
         callableStatement.setNClob(3, new StringReader("testxyz"), 4);
-        assertEquals(new MockNClob("test"), callableStatement.getParameterMap().get(new Integer(3)));
+        assertEquals(new MockNClob("test"), callableStatement.getParameterMap().get(3));
     }
 }

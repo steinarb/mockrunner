@@ -42,11 +42,11 @@ import com.mockrunner.util.common.StreamUtil;
 public class MockCallableStatement extends MockPreparedStatement implements CallableStatement
 {
     private AbstractOutParameterResultSetHandler resultSetHandler;
-    private Map paramObjects = new HashMap();
-    private Set registeredOutParameterSetIndexed = new HashSet();
-    private Set registeredOutParameterSetNamed = new HashSet();
-    private List batchParameters = new ArrayList();
-    private Map lastOutParameters = null;
+//    private final MockParameterMap paramObjects = new MockParameterMap();
+    private final Set<ParameterIndex> registeredOutParameterSetIndexed = new HashSet<ParameterIndex>();
+    private final Set<ParameterName> registeredOutParameterSetNamed = new HashSet<ParameterName>();
+    private List<MockParameterMap> batchParameters = new ArrayList<MockParameterMap>();
+    private MockParameterMap lastOutParameters = null;
     private boolean wasNull = false;
     
     public MockCallableStatement(Connection connection, String sql)
@@ -70,47 +70,53 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         this.resultSetHandler = resultSetHandler;
     }
     
-    public Map getNamedParameterMap()
+    public MockParameterMap getNamedParameterMap()
     {
-        return Collections.unmodifiableMap(paramObjects);
+        MockParameterMap namedParameters = new MockParameterMap();
+        for(ParameterReference parameterReference : paramObjects.keySet()){
+            if(parameterReference instanceof ParameterName){
+                namedParameters.put(parameterReference, paramObjects.get(parameterReference));
+            }
+        }
+        return new MockUnmodifiableParameterMap(namedParameters);
     }
     
-    public Map getParameterMap()
-    {
-        Map parameterMap = new HashMap(getIndexedParameterMap());
-        parameterMap.putAll(getNamedParameterMap());
-        return Collections.unmodifiableMap(parameterMap);
-    }
+    @Override
+	public MockParameterMap getParameterMap()
+	{
+		return new MockUnmodifiableParameterMap(paramObjects);
+	}
     
     public Object getParameter(String name)
     {
         return paramObjects.get(name);
     }
     
+    @Override
     public void clearParameters() throws SQLException
     {
         super.clearParameters();
         paramObjects.clear();
     }
     
-    public Set getNamedRegisteredOutParameterSet()
+    public Set<ParameterName> getNamedRegisteredOutParameterSet()
     {
         return Collections.unmodifiableSet(registeredOutParameterSetNamed);
     }
     
     public boolean isOutParameterRegistered(int index)
     {
-        return registeredOutParameterSetIndexed.contains(new Integer(index));
+        return registeredOutParameterSetIndexed.contains(new ParameterIndex(index));
     }
     
-    public Set getIndexedRegisteredOutParameterSet()
+    public Set<ParameterIndex> getIndexedRegisteredOutParameterSet()
     {
         return Collections.unmodifiableSet(registeredOutParameterSetIndexed);
     }
     
     public boolean isOutParameterRegistered(String parameterName)
     {
-        return registeredOutParameterSetNamed.contains(parameterName);
+        return registeredOutParameterSetNamed.contains(new ParameterName(parameterName));
     }
     
     public void clearRegisteredOutParameter()
@@ -119,6 +125,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         registeredOutParameterSetNamed.clear();
     }
     
+    @Override
     public ResultSet executeQuery() throws SQLException
     {
         ResultSet resultSet = executeQuery(getParameterMap());
@@ -126,6 +133,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         return resultSet;
     }
     
+    @Override
     public int executeUpdate() throws SQLException
     {
         int updateCount = executeUpdate(getParameterMap());
@@ -133,11 +141,13 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         return updateCount;
     }
     
+    @Override
     public void addBatch() throws SQLException
     {
-        batchParameters.add(new HashMap(getParameterMap()));
+        batchParameters.add(new MockParameterMap(getParameterMap()));
     }
 
+    @Override
     public int[] executeBatch() throws SQLException
     {
         return executeBatch(batchParameters);
@@ -145,7 +155,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     
     public void registerOutParameter(int parameterIndex, int sqlType) throws SQLException
     {
-        registeredOutParameterSetIndexed.add(new Integer(parameterIndex));
+        registeredOutParameterSetIndexed.add(new ParameterIndex(parameterIndex));
     }
 
     public void registerOutParameter(int parameterIndex, int sqlType, int scale) throws SQLException
@@ -160,7 +170,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     
     public void registerOutParameter(String parameterName, int sqlType) throws SQLException
     {
-        registeredOutParameterSetNamed.add(parameterName);
+        registeredOutParameterSetNamed.add(new ParameterName(parameterName));
     }
     
     public void registerOutParameter(String parameterName, int sqlType, int scale) throws SQLException
@@ -184,25 +194,25 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         Object returnValue = null;
         if(null != lastOutParameters)
         {
-            returnValue = lastOutParameters.get(new Integer(parameterIndex));
+            returnValue = lastOutParameters.get(parameterIndex);
         }
         if(null == returnValue) wasNull = true;
         return returnValue;
     }
     
-    public Object getObject(int parameterIndex, Map map) throws SQLException
+    public Object getObject(int parameterIndex, Map<String, Class<?>> map) throws SQLException
     {
         return getObject(parameterIndex);
     }
 
-    public Object getObject(int parameterIndex, Class type) throws SQLException
+    public <T> T getObject(int parameterIndex, Class<T> type) throws SQLException
     {
-        return getObject(parameterIndex);
+        return (T)getObject(parameterIndex);
     }
 
-    public Object getObject(String parameterName, Class type) throws SQLException
+    public <T> T getObject(String parameterName, Class<T> type) throws SQLException
     {
-        return getObject(parameterName);
+        return (T)getObject(parameterName);
     }
 
     public byte getByte(int parameterIndex) throws SQLException
@@ -211,7 +221,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).byteValue();
-            return new Byte(value.toString()).byteValue();
+            return Byte.parseByte(value.toString());
         }
         return 0;
     }
@@ -222,7 +232,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).doubleValue();
-            return new Double(value.toString()).doubleValue();
+            return Double.parseDouble(value.toString());
         }
         return 0;
     }
@@ -233,7 +243,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).floatValue();
-            return new Float(value.toString()).floatValue();
+            return Float.parseFloat(value.toString());
         }
         return 0;
     }
@@ -244,7 +254,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).intValue();
-            return new Integer(value.toString()).intValue();
+            return Integer.parseInt(value.toString());
         }
         return 0;
     }
@@ -255,7 +265,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).longValue();
-            return new Long(value.toString()).longValue();
+            return Long.parseLong(value.toString());
         }
         return 0;
     }
@@ -266,7 +276,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).shortValue();
-            return new Short(value.toString()).shortValue();
+            return Short.parseShort(value.toString());
         }
         return 0;
     }
@@ -276,8 +286,8 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         Object value = getObject(parameterIndex);
         if(null != value)
         {
-            if(value instanceof Boolean) return ((Boolean)value).booleanValue();
-            return new Boolean(value.toString()).booleanValue();
+            if(value instanceof Boolean) return ((Boolean)value);
+            return Boolean.parseBoolean(value.toString());
         }
         return false;
     }
@@ -324,6 +334,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         return null;
     }
 
+    @Deprecated
     public BigDecimal getBigDecimal(int parameterIndex, int scale) throws SQLException
     {
         BigDecimal value = getBigDecimal(parameterIndex);
@@ -506,7 +517,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         return returnValue;
     }
     
-    public Object getObject(String parameterName, Map map) throws SQLException
+    public Object getObject(String parameterName, Map<String, Class<?>> map) throws SQLException
     {
         return getObject(parameterName);
     }
@@ -517,7 +528,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).byteValue();
-            return new Byte(value.toString()).byteValue();
+            return Byte.parseByte(value.toString());
         }
         return 0;
     }
@@ -528,7 +539,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).doubleValue();
-            return new Double(value.toString()).doubleValue();
+            return Double.parseDouble(value.toString());
         }
         return 0;
     }
@@ -539,7 +550,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).floatValue();
-            return new Float(value.toString()).floatValue();
+            return Float.parseFloat(value.toString());
         }
         return 0;
     }
@@ -550,7 +561,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).intValue();
-            return new Integer(value.toString()).intValue();
+            return Integer.parseInt(value.toString());
         }
         return 0;
     }
@@ -561,7 +572,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).longValue();
-            return new Long(value.toString()).longValue();
+            return Long.parseLong(value.toString());
         }
         return 0;
     }
@@ -572,7 +583,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         if(null != value)
         {
             if(value instanceof Number) return ((Number)value).shortValue();
-            return new Short(value.toString()).shortValue();
+            return Short.parseShort(value.toString());
         }
         return 0;
     }
@@ -582,8 +593,8 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         Object value = getObject(parameterName);
         if(null != value)
         {
-            if(value instanceof Boolean) return ((Boolean)value).booleanValue();
-            return new Boolean(value.toString()).booleanValue();
+            if(value instanceof Boolean) return (Boolean)value;
+            return Boolean.parseBoolean(value.toString());
         }
         return false;
     }
@@ -792,22 +803,22 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
 
     public void setByte(String parameterName, byte byteValue) throws SQLException
     {
-        setObject(parameterName, new Byte(byteValue));
+        setObject(parameterName, byteValue);
     }
 
     public void setDouble(String parameterName, double doubleValue) throws SQLException
     {
-        setObject(parameterName, new Double(doubleValue));
+        setObject(parameterName, doubleValue);
     }
 
     public void setFloat(String parameterName, float floatValue) throws SQLException
     {
-        setObject(parameterName, new Float(floatValue));
+        setObject(parameterName, floatValue);
     }
 
     public void setInt(String parameterName, int intValue) throws SQLException
     {
-        setObject(parameterName, new Integer(intValue));
+        setObject(parameterName, intValue);
     }
 
     public void setNull(String parameterName, int sqlType) throws SQLException
@@ -822,17 +833,17 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
 
     public void setLong(String parameterName, long longValue) throws SQLException
     {
-        setObject(parameterName, new Long(longValue));
+        setObject(parameterName, longValue);
     }
 
     public void setShort(String parameterName, short shortValue) throws SQLException
     {
-        setObject(parameterName, new Short(shortValue));
+        setObject(parameterName, shortValue);
     }
 
     public void setBoolean(String parameterName, boolean booleanValue) throws SQLException
     {
-        setObject(parameterName, new Boolean(booleanValue));
+        setObject(parameterName, booleanValue);
     }
 
     public void setBytes(String parameterName, byte[] byteArray) throws SQLException
@@ -1025,9 +1036,9 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         setObject(parameterName, object);
     }
     
-    private Map getOutParameterMap()
+    private MockParameterMap getOutParameterMap()
     {
-        Map outParameter = resultSetHandler.getOutParameter(getSQL(), getParameterMap());
+        MockParameterMap outParameter = resultSetHandler.getOutParameter(getSQL(), getParameterMap());
         if(null == outParameter)
         {
             outParameter = resultSetHandler.getOutParameter(getSQL());
@@ -1043,19 +1054,19 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
         return outParameter;
     }
     
-    private Map filterNotRegisteredParameters(Map outParameter)
+    private MockParameterMap filterNotRegisteredParameters(MockParameterMap outParameter)
     {
-        Map filteredMap = new HashMap();
-        Iterator keys = outParameter.keySet().iterator();
+        MockParameterMap filteredMap = new MockParameterMap();
+        Iterator<ParameterReference> keys = outParameter.keySet().iterator();
         while(keys.hasNext())
         {
-            Object nextKey = keys.next();
+            ParameterReference nextKey = keys.next();
             if(registeredOutParameterSetIndexed.contains(nextKey) || registeredOutParameterSetNamed.contains(nextKey))
             {
                 filteredMap.put(nextKey, outParameter.get(nextKey));
             }
         }
-        return Collections.unmodifiableMap(filteredMap);
+        return new MockUnmodifiableParameterMap(filteredMap);
     }
     
     private NClob getNClobFromClob(Clob clobValue) throws SQLException

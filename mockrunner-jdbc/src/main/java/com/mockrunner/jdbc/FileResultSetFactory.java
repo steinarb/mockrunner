@@ -32,7 +32,7 @@ public class FileResultSetFactory implements ResultSetFactory
     private boolean trim = true;
     private boolean useTemplates = false;
     private String templateMarker = null;
-    private Map templates = null;
+    private Map<String, String> templates = null;
 
     public FileResultSetFactory(String fileName)
     {
@@ -124,7 +124,7 @@ public class FileResultSetFactory implements ResultSetFactory
      * @param marker the custom marker replacing the default <code>$</code>
      * @param templates the custom template map
      */
-    public void setTemplateConfiguration(String marker, Map templates)
+    public void setTemplateConfiguration(String marker, Map<String, String> templates)
     {
         this.templates = templates;
         this.templateMarker = marker;
@@ -142,11 +142,11 @@ public class FileResultSetFactory implements ResultSetFactory
      */
     public void setDefaultTemplateConfiguration()
     {
-        Map templates = new HashMap();
-        templates.put("defaultString", "");
-        templates.put("defaultDate", "1970-01-01");
-        templates.put("defaultInteger", "0");
-        setTemplateConfiguration("$", templates);
+        Map<String, String> defaultTemplates = new HashMap<String, String>();
+        defaultTemplates.put("defaultString", "");
+        defaultTemplates.put("defaultDate", "1970-01-01");
+        defaultTemplates.put("defaultInteger", "0");
+        setTemplateConfiguration("$", defaultTemplates);
     }
 
     public MockResultSet create(String id)
@@ -155,7 +155,7 @@ public class FileResultSetFactory implements ResultSetFactory
         File fileToRead = getFile();
         List<String> lines = FileUtil.getLinesFromFile(fileToRead);
 
-        if(lines.size() == 0)
+        if(lines.isEmpty())
         	return resultSet; // empty resultset
         
         int firstLineNumber = 0;
@@ -166,9 +166,8 @@ public class FileResultSetFactory implements ResultSetFactory
             String firstLine = lines.get(firstLineNumber);
             firstLineNumber++;
             String[] names = StringUtil.split(firstLine, delimiter, trim);
-            for(int ii = 0; ii < names.length; ii++)
-            {
-                resultSet.addColumn(names[ii]);
+            for (String name : names) {
+                resultSet.addColumn(name);
             }
         }
         
@@ -185,7 +184,7 @@ public class FileResultSetFactory implements ResultSetFactory
             		{
                 		if(values[yy].startsWith(templateMarker) && templates.containsKey(values[yy].substring(1)))
                 		{
-                			values[yy] = (String)templates.get(values[yy].substring(1));
+                			values[yy] = templates.get(values[yy].substring(1));
                 		}
             		}
             	}

@@ -11,10 +11,10 @@ public class MockStructTest extends TestCase
 {
     private MockStruct prepareTestStruct()
     {
-        MockStruct struct = new MockStruct("teststruct", new Object[] {new Long(1), "anAttribute2"});
+        MockStruct struct = new MockStruct("teststruct", new Object[] {1L, "anAttribute2"});
         struct.addAttribute("myAttribute3");
-        struct.addAttributes(new Object[] {new Integer(4), "anAttribute5"});
-        List list = new ArrayList();
+        struct.addAttributes(new Object[] {4, "anAttribute5"});
+        List<Object> list = new ArrayList<Object>();
         list.add("myAttribute6");
         list.add("myAttribute7");
         struct.addAttributes(list);
@@ -76,10 +76,10 @@ public class MockStructTest extends TestCase
     {
         assertEquals("teststruct", struct.getSQLTypeName());
         Object[] attributes = struct.getAttributes();
-        assertEquals(new Long(1), attributes[0]);
+        assertEquals(1L, attributes[0]);
         assertEquals("anAttribute2", attributes[1]);
         assertEquals("myAttribute3", attributes[2]);
-        assertEquals(new Integer(4), attributes[3]);
+        assertEquals(4, attributes[3]);
         assertEquals("anAttribute5", attributes[4]);
         assertEquals("myAttribute6", attributes[5]);
         assertEquals("myAttribute7", attributes[6]);

@@ -171,27 +171,27 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     private ResultSet tableTypes;
     private ResultSet typeInfo;
     private ResultSet clientInfoProperties;
-    private Map schemasMap = new HashMap();
-    private Map exportedKeysMap = new HashMap();
-    private Map importedKeysMap = new HashMap();
-    private Map primaryKeysMap = new HashMap();
-    private Map proceduresMap = new HashMap();
-    private Map functionsMap = new HashMap();
-    private Map superTablesMap = new HashMap();
-    private Map superTypesMap = new HashMap();
-    private Map tablePrivilegesMap = new HashMap();
-    private Map versionColumnsMap = new HashMap();
-    private Map bestRowIdentifierMap = new HashMap();
-    private Map indexInfoMap = new HashMap();
-    private Map udtsMap = new HashMap();
-    private Map attributesMap = new HashMap();
-    private Map columnPrivilegesMap = new HashMap();
-    private Map columnsMap = new HashMap();
-    private Map procedureColumnsMap = new HashMap();
-    private Map functionColumnsMap = new HashMap();
-    private Map tablesMap = new HashMap();
-    private Map crossReferenceMap = new HashMap();
-    private Map pseudoColumnsMap = new HashMap();
+    private Map<DatabaseIdentifier, ResultSet> schemasMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> exportedKeysMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> importedKeysMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> primaryKeysMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> proceduresMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> functionsMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> superTablesMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> superTypesMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> tablePrivilegesMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> versionColumnsMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> bestRowIdentifierMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> indexInfoMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> udtsMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> attributesMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> columnPrivilegesMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> columnsMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> procedureColumnsMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> functionColumnsMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> tablesMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> crossReferenceMap = new HashMap<DatabaseIdentifier, ResultSet>();
+    private Map<DatabaseIdentifier, ResultSet> pseudoColumnsMap = new HashMap<DatabaseIdentifier, ResultSet>();
     
     /**
      * Set if matching of catalogs, schemas, tables and columns
@@ -2165,12 +2165,12 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         crossReferenceMap.clear();
     }
 
-    public boolean isWrapperFor(Class iface) throws SQLException
+    public boolean isWrapperFor(Class<?> iface) throws SQLException
     {
         return false;
     }
 
-    public Object unwrap(Class iface) throws SQLException
+    public <T> T unwrap(Class<T> iface) throws SQLException
     {
         throw new SQLException("No object found for " + iface);
     }
@@ -2180,29 +2180,27 @@ public class MockDatabaseMetaData implements DatabaseMetaData
      * ResultSet otherwise return a PolyResultSet with the ResultSet of each
      * matching DatabaseIdentifier.
      */
-    private ResultSet findMatchingDatabaseIdentifier(DatabaseIdentifier expected, Map theMap)
+    private ResultSet findMatchingDatabaseIdentifier(DatabaseIdentifier expected, Map<DatabaseIdentifier, ResultSet> theMap)
     {
-        List list = new ArrayList();
-        for(Iterator it = theMap.entrySet().iterator(); it.hasNext(); )
-        {
-            Map.Entry entry = (Map.Entry)it.next();
-            DatabaseIdentifier next = (DatabaseIdentifier)entry.getKey();
+        List<ResultSet> list = new ArrayList<ResultSet>();
+        for (Map.Entry<DatabaseIdentifier, ResultSet> entry : theMap.entrySet()) {
+            DatabaseIdentifier next = entry.getKey();
             if(next.isGlobal() || expected.matches(next)) 
             {
                 list.add(entry.getValue());
             }
         }
         if(list.isEmpty()) return null;
-        if(list.size() == 1) return (ResultSet)list.get(0);
+        if(list.size() == 1) return list.get(0);
         return new PolyResultSet(list);
     }
     
-    private ResultSet getAll(Map theMap)
+    private ResultSet getAll(Map<DatabaseIdentifier, ResultSet> theMap)
     {
-        List list = new ArrayList();
+        List<ResultSet> list = new ArrayList<ResultSet>();
         list.addAll(theMap.values());
         if(list.isEmpty()) return null;
-        if(list.size() == 1) return (ResultSet)list.get(0);
+        if(list.size() == 1) return list.get(0);
         return new PolyResultSet(list);
     }
     
@@ -2335,6 +2333,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             }
         }
         
+        @Override
         public boolean equals(Object object)
         {
             if(null == object) return false;
@@ -2350,6 +2349,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return true;
         }
         
+        @Override
         public int hashCode()
         {
             int hashCode = 17;
@@ -2386,6 +2386,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return attributeNamePattern;
         }
         
+        @Override
         public boolean matches(DatabaseIdentifier object) 
         {
             if(!super.matches(object)) return false;
@@ -2395,6 +2396,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return StringUtil.matchesPerl5(other.getAttributeNamePattern(), convert(attributeNamePattern), caseSensitive);
         }
         
+        @Override
         public boolean equals(Object object)
         {
             if(!super.equals(object)) return false;
@@ -2404,6 +2406,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return true;
         }
         
+        @Override
         public int hashCode()
         {
             int hashCode = super.hashCode();
@@ -2438,6 +2441,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return columnNamePattern;
         }
         
+        @Override
         public boolean matches(DatabaseIdentifier object) 
         {
             if(!super.matches(object)) return false;
@@ -2447,6 +2451,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return StringUtil.matchesPerl5(other.getColumnNamePattern(), convert(columnNamePattern), caseSensitive);
         }
         
+        @Override
         public boolean equals(Object object)
         {
             if(!super.equals(object)) return false;
@@ -2456,6 +2461,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return true;
         }
         
+        @Override
         public int hashCode()
         {
             int hashCode = super.hashCode();
@@ -2491,12 +2497,14 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return scope;
         }
         
+        @Override
         public boolean matches(DatabaseIdentifier object)
         {
             if(!super.matches(object)) return false;
             return isEqual(object);
         }
 
+        @Override
         public boolean equals(Object object)
         {
             if(!super.equals(object)) return false;
@@ -2511,6 +2519,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return true;
         }
         
+        @Override
         public int hashCode()
         {
             int hashCode = (super.hashCode() * 31) + scope;
@@ -2546,12 +2555,14 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return unique;
         }
         
+        @Override
         public boolean matches(DatabaseIdentifier object)
         {
             if(!super.matches(object)) return false;
             return isEqual(object);
         }
         
+        @Override
         public boolean equals(Object object)
         {
             if(!super.equals(object)) return false;
@@ -2566,6 +2577,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return true;
         }
         
+        @Override
         public int hashCode()
         {
             int hashCode = super.hashCode();
@@ -2601,6 +2613,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return types;
         }
         
+        @Override
         public boolean matches(DatabaseIdentifier object) 
         {
             if(!super.matches(object)) return false;
@@ -2613,17 +2626,17 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         private boolean matchesTypes(TableDatabaseIdentifierImpl other)
         {
             String[] otherTypes = other.getTypes();
-            for(int ii = 0; ii < types.length; ii++) 
-            {
-                String type = types[ii];
-                for(int jj = 0; jj < otherTypes.length; jj++) 
-                {
-                    if(type.equals(otherTypes[jj])) return true;
+            for (String type : types) {
+                for (String otherType : otherTypes) {
+                    if (type.equals(otherType)) {
+                        return true;
+                    }
                 }
             }
             return false;
         }
         
+        @Override
         public boolean equals(Object object)
         {
             if(!super.equals(object)) return false;
@@ -2634,16 +2647,15 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return Arrays.equals(types, other.getTypes());
         }
         
+        @Override
         public int hashCode()
         {
             int hashCode = super.hashCode();
             if(null != types)
             {
-                for(int ii = 0; ii < types.length; ii++)
-                {
-                    if(null != types[ii])
-                    {
-                        hashCode = (31 * hashCode) + types[ii].hashCode();
+                for (String type : types) {
+                    if (null != type) {
+                        hashCode = (31 * hashCode) + type.hashCode();
                     }
                 }
             }
@@ -2677,6 +2689,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return types;
         }
         
+        @Override
         public boolean matches(DatabaseIdentifier object) 
         {
             if(!super.matches(object)) return false;
@@ -2700,6 +2713,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return false;
         }
         
+        @Override
         public boolean equals(Object object)
         {
             if(!super.equals(object)) return false;
@@ -2710,6 +2724,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return Arrays.equals(types, other.getTypes());
         }
         
+        @Override
         public int hashCode()
         {
             int hashCode = super.hashCode();
@@ -2726,8 +2741,8 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     
     private class DatabaseIdentifierImplWrapper implements DatabaseIdentifier
     {
-        private DatabaseIdentifier identifier1;
-        private DatabaseIdentifier identifier2;
+        private final DatabaseIdentifier identifier1;
+        private final DatabaseIdentifier identifier2;
         
         public DatabaseIdentifierImplWrapper(DatabaseIdentifier identifier1, DatabaseIdentifier identifier2)
         {
@@ -2762,6 +2777,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return true;
         }
         
+        @Override
         public boolean equals(Object object)
         {
             if(null == object) return false;
@@ -2774,6 +2790,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             return true;
         }
         
+        @Override
         public int hashCode()
         {
             int hashCode = 0;
