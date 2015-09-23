@@ -488,7 +488,7 @@ public abstract class AbstractResultSetHandler
         ParameterWrapper<Integer[]> wrapper = getMatchingParameterWrapper(sql, parameters, updateCountForStatement, exactMatchParameter);
         if(null != wrapper)
         {
-            wrapper.getWrappedObject();
+            return wrapper.getWrappedObject();
         }
         return null;
     }    
