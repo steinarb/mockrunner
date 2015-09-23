@@ -35,26 +35,34 @@ public class MockConnection implements Connection
     private PreparedStatementResultSetHandler preparedStatementHandler;
     private CallableStatementResultSetHandler callableStatementHandler;
     private DatabaseMetaData metaData;
-    private final Map<Integer, MockSavepoint> savepoints;
+    private Map<Integer, MockSavepoint> savepoints;
     private int savepointCount;
     private boolean closed;
     private boolean autoCommit;
     private boolean readOnly;
     private int holdability;
     private int level;
-    private Map<String,Class<?>> typeMap;
+    private Map<String,Class<?>> typeMap = Collections.EMPTY_MAP;
     private String catalog;
     private String schema;
     private int numberCommits;
     private int numberRollbacks;
     private Properties clientInfo;
     private int networkTimeout;
-    
-    public MockConnection()
+
+    public MockConnection() {
+        this(new StatementResultSetHandler(),
+              new PreparedStatementResultSetHandler(),
+              new CallableStatementResultSetHandler());
+    }
+
+    public MockConnection(StatementResultSetHandler statementHandler,
+                          PreparedStatementResultSetHandler preparedStatementHandler,
+                          CallableStatementResultSetHandler callableStatementHandler)
     {
-        statementHandler = new StatementResultSetHandler();
-        preparedStatementHandler = new PreparedStatementResultSetHandler();
-        callableStatementHandler = new CallableStatementResultSetHandler();
+        this.statementHandler = statementHandler;
+        this.preparedStatementHandler = preparedStatementHandler;
+        this.callableStatementHandler = callableStatementHandler;
         metaData = new MockDatabaseMetaData();
         ((MockDatabaseMetaData)metaData).setConnection(this);
         closed = false;
@@ -69,8 +77,6 @@ public class MockConnection implements Connection
         {
             throw new NestedApplicationException(exc);
         }
-        typeMap = new HashMap<String, Class<?>>();
-        savepoints = new HashMap<Integer, MockSavepoint>();
         savepointCount = 0;
         catalog = null;
         numberCommits = 0;
@@ -114,6 +120,9 @@ public class MockConnection implements Connection
     
     public Map<Integer, MockSavepoint> getSavepointMap()
     {
+        if (savepoints == null) {
+            return Collections.EMPTY_MAP;
+        }
         return Collections.unmodifiableMap(savepoints);
     }
     
@@ -129,7 +138,10 @@ public class MockConnection implements Connection
     
     public void resetSavepointMap()
     {
-        savepoints.clear();
+        if (savepoints != null)
+        {
+            savepoints.clear();
+        }
     }
     
     public StatementResultSetHandler getStatementResultSetHandler()
@@ -367,6 +379,9 @@ public class MockConnection implements Connection
     
     public Savepoint setSavepoint(String name) throws SQLException
     {
+        if (savepoints == null) {
+            savepoints = new HashMap<Integer, MockSavepoint>();
+        }
         MockSavepoint savePoint = new MockSavepoint(name, savepointCount);
         savepoints.put(savePoint.getSavepointId(), savePoint);
         savepointCount++;
@@ -406,6 +421,10 @@ public class MockConnection implements Connection
 
     public void releaseSavepoint(Savepoint savepoint) throws SQLException
     {
+        if (savepoints == null)
+        {
+            throw new SQLException("No savepoints set!");
+        }
         MockSavepoint currentSavepoint = savepoints.get(savepoint.getSavepointId());
         if(currentSavepoint.isReleased())
         {
@@ -427,6 +446,10 @@ public class MockConnection implements Connection
     
     public void rollback(Savepoint savepoint) throws SQLException
     {
+        if (savepoints == null)
+        {
+            throw new SQLException("No savepoints set!");
+        }
         MockSavepoint currentSavepoint = savepoints.get(savepoint.getSavepointId());
         if(currentSavepoint.isReleased())
         {
