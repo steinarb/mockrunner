@@ -105,6 +105,17 @@ public class MockResultSet implements ResultSet, Cloneable
         copyColumnMap();
         adjustInsertRow();
     }
+
+   /**
+    * This method returns instance with contents evaluated using given SQL query and parameters.
+    * This implementation does not evaluate anything and returns directly this.
+    *
+    * @param parameters
+    * @return this instance
+    */
+    public MockResultSet evaluate(String sql, MockParameterMap parameters) {
+        return this;
+    }
     
     /**
      * Set if column names are case sensitive. Default is

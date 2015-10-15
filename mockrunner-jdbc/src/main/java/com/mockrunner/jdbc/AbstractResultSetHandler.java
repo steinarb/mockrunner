@@ -359,12 +359,20 @@ public abstract class AbstractResultSetHandler
     {
         ParameterWrapper<MockResultSet[]> wrapper = getMatchingParameterWrapper(sql, parameters, resultSetsForStatement, exactMatchParameter);
 
-        if(null != wrapper){
-            return wrapper.getWrappedObject();
+        if (null == wrapper) {
+            return null;
         }
-        return null;
+        MockResultSet[] resultSets = wrapper.getWrappedObject();
+        if (resultSets == null) {
+            return null;
+        }
+        MockResultSet[] evaluated = new MockResultSet[resultSets.length];
+        for (int i = 0; i < resultSets.length; ++i) {
+            evaluated[i] = resultSets[i].evaluate(sql, parameters);
+        }
+        return evaluated;
     }
-    
+
     /**
      * Returns the if the specified SQL string returns multiple result sets.
      * Please note that you can modify the match parameters with {@link #setCaseSensitive},
@@ -548,12 +556,11 @@ public abstract class AbstractResultSetHandler
     protected MockResultSet getGeneratedKeys(String sql, MockParameterMap parameters, boolean exactMatchParameter)
     {
         ParameterWrapper<MockResultSet> wrapper = getMatchingParameterWrapper(sql, parameters, generatedKeysForStatement, exactMatchParameter);
-        if(null != wrapper)
-        {
-            return wrapper.getWrappedObject();
+        if (null == wrapper) {
+            return null;
         }
-        return null;
-    }    
+        return wrapper.getWrappedObject().evaluate(sql, parameters);
+    }
     
     /**
      * Returns the global generated keys <code>ResultSet</code>.
