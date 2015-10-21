@@ -119,15 +119,17 @@ public class MockStatement implements Statement
             throw exception;
         }
         resultSetHandler.addExecutedStatement(sql);
-        if(resultSetHandler.hasMultipleResultSets(sql))
+        MockResultSet[] results = resultSetHandler.getResultSets(sql);
+        if (results != null && results.length != 0)
         {
-            MockResultSet[] results = resultSetHandler.getResultSets(sql);
-            if(null != results) return cloneAndSetMultipleResultSets(results);
-        }
-        else
-        {
-            MockResultSet result = resultSetHandler.getResultSet(sql);
-            if(null != result) return cloneAndSetSingleResultSet(result);
+            if (results.length > 1)
+            {
+                return cloneAndSetMultipleResultSets(results);
+            }
+            else
+            {
+                return cloneAndSetSingleResultSet(results[0]);
+            }
         }
         if(resultSetHandler.hasMultipleGlobalResultSets())
         {
@@ -139,7 +141,7 @@ public class MockStatement implements Statement
         }
         return new MockResultSet(String.valueOf(Math.random()));
     }
-    
+
     private MockResultSet cloneAndSetSingleResultSet(MockResultSet result)
     {
         result = cloneResultSet(result);
@@ -193,20 +195,16 @@ public class MockStatement implements Statement
             throw exception;
         }
         resultSetHandler.addExecutedStatement(sql);
-        if(resultSetHandler.hasMultipleUpdateCounts(sql))
+        Integer[] returnValues = resultSetHandler.getUpdateCounts(sql);
+        if (returnValues != null && returnValues.length != 0)
         {
-            Integer[] returnValues = resultSetHandler.getUpdateCounts(sql);
-            if(null != returnValues)
+            if(returnValues.length > 1)
             {
                 return setMultipleUpdateCounts(returnValues);
             }
-        }
-        else
-        {
-            Integer returnValue = resultSetHandler.getUpdateCount(sql);
-            if(null != returnValue)
+            else
             {
-                return setSingleUpdateCount(returnValue);
+                return setSingleUpdateCount(returnValues[0]);
             }
         }
         if(resultSetHandler.hasMultipleGlobalUpdateCounts())
