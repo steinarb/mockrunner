@@ -777,7 +777,6 @@ public class MockResultSet implements ResultSet, Cloneable
     
     public Object getObject(String columnName) throws SQLException
     {
-        checkColumnName(columnName);
         checkRowBounds();
         if(rowDeleted()) throw new SQLException("row was deleted");
         List<Object> column;
@@ -789,6 +788,7 @@ public class MockResultSet implements ResultSet, Cloneable
         {
             column = columnMapCopy.get(columnName);
         }
+        checkColumnNotNull(column, columnName);
         Object value = column.get(cursor);
         wasNull = (null == value);
         return value;
@@ -1676,7 +1676,6 @@ public class MockResultSet implements ResultSet, Cloneable
 
     public void updateObject(String columnName, Object value) throws SQLException
     {
-        checkColumnName(columnName);
         checkResultSetConcurrency();
         if(!isCursorInInsertRow)
         {
@@ -1686,11 +1685,13 @@ public class MockResultSet implements ResultSet, Cloneable
         if(isCursorInInsertRow)
         {
             List<Object> column = insertRow.get(columnName);
+            checkColumnNotNull(column, columnName);
             column.set(0, value);
         }
         else
         {
             List<Object> column = columnMapCopy.get(columnName);
+            checkColumnNotNull(column, columnName);
             column.set(cursor, value);
         }
     }
@@ -2184,9 +2185,9 @@ public class MockResultSet implements ResultSet, Cloneable
         throw new SQLException("No object found for " + iface);
     }
     
-    private void checkColumnName(String columnName) throws SQLException
+    private void checkColumnNotNull(List<Object> column, String columnName) throws SQLException
     {
-        if(!columnMap.containsKey(columnName))
+        if(column == null)
         {
             throw new SQLException("No column " + columnName);
         }
