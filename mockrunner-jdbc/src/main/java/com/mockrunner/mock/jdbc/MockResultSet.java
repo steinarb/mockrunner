@@ -160,6 +160,14 @@ public class MockResultSet implements ResultSet, Cloneable
             throw new NestedApplicationException(exc);
         }
     }
+
+   public MockResultSet shallowCopy() {
+      try {
+         return (MockResultSet) super.clone();
+      } catch (CloneNotSupportedException e) {
+         throw new NestedApplicationException(e);
+      }
+   }
     
     /**
      * Returns the id of this <code>ResultSet</code>. Ids are used

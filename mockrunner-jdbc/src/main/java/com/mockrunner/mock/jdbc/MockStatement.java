@@ -582,6 +582,10 @@ public class MockStatement implements Statement
 
     protected MockResultSet cloneResultSet(MockResultSet resultSet)
     {
+        if (resultSetConcurrency == ResultSet.CONCUR_READ_ONLY) {
+            // no need to clone
+            return resultSet.shallowCopy();
+        }
         if(null == resultSet) return null;
         MockResultSet clone = (MockResultSet)resultSet.clone();
         clone.setStatement(this);
@@ -596,8 +600,12 @@ public class MockStatement implements Statement
         {
             if(null != resultSets[ii])
             {
-                clonedResultsSets[ii] = (MockResultSet)resultSets[ii].clone();
-                clonedResultsSets[ii].setStatement(this);
+                if (resultSetConcurrency == ResultSet.CONCUR_READ_ONLY) {
+                    clonedResultsSets[ii] = resultSets[ii].shallowCopy();
+                } else {
+                    clonedResultsSets[ii] = (MockResultSet) resultSets[ii].clone();
+                    clonedResultsSets[ii].setStatement(this);
+                }
             }
         }
         return clonedResultsSets;
