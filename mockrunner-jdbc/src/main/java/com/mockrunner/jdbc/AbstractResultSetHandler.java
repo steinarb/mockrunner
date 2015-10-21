@@ -29,6 +29,7 @@ import com.mockrunner.util.regexp.PatternMatcher;
  */
 public abstract class AbstractResultSetHandler
 {
+    private ResultSetFactory resultSetFactory = ResultSetFactory.Default.INSTANCE;
     private boolean caseSensitive = false;
     private boolean exactMatch = false;
     private boolean useRegularExpressions = false;
@@ -58,7 +59,7 @@ public abstract class AbstractResultSetHandler
      */
     public MockResultSet createResultSet()
     {
-        return new MockResultSet(String.valueOf(Math.random()));
+        return resultSetFactory.create(String.valueOf(Math.random()));
     }
     
     /**
@@ -68,7 +69,7 @@ public abstract class AbstractResultSetHandler
      */
     public MockResultSet createResultSet(String id)
     {
-        return new MockResultSet(id);
+        return resultSetFactory.create(id);
     }
     
     /**
@@ -92,8 +93,24 @@ public abstract class AbstractResultSetHandler
     {
         return factory.create(id);
     }
-    
+
     /**
+     * @return Current falctory used for {@link #createResultSet()} and {@link #createResultSet(String)}
+     */
+    public ResultSetFactory getResultSetFactory() {
+        return resultSetFactory;
+    }
+
+    /**
+     * Set factory used for {@link #createResultSet()} and {@link #createResultSet(String)}
+      *
+     * @param resultSetFactory
+     */
+    public void setResultSetFactory(ResultSetFactory resultSetFactory) {
+        this.resultSetFactory = resultSetFactory;
+    }
+
+   /**
      * Set if specified SQL strings should be handled case sensitive.
      * Defaults to to <code>false</code>, i.e. <i>INSERT</i> is the same
      * as <i>insert</i>.

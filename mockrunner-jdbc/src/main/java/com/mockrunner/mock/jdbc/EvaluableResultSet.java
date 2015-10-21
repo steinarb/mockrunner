@@ -1,5 +1,7 @@
 package com.mockrunner.mock.jdbc;
 
+import com.mockrunner.jdbc.ResultSetFactory;
+
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -49,5 +51,21 @@ public class EvaluableResultSet extends MockResultSet {
     */
    public interface Evaluable {
       Object evaluate(String sql, MockParameterMap parameters, String columnName, int row);
+   }
+
+   public static class Factory implements ResultSetFactory {
+      protected final boolean columnsCaseSensitive;
+
+      public Factory(boolean columnsCaseSensitive) {
+         this.columnsCaseSensitive = columnsCaseSensitive;
+      }
+
+      public EvaluableResultSet create(String id) {
+         EvaluableResultSet resultSet = new EvaluableResultSet(id);
+         if (columnsCaseSensitive) {
+            resultSet.setColumnsCaseSensitive(true);
+         }
+         return resultSet;
+      }
    }
 }
