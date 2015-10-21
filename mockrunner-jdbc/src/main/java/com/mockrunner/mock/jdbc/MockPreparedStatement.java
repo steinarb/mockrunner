@@ -165,7 +165,7 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     {
         return executeQuery(paramObjects);
     }
-    
+
     protected ResultSet executeQuery(MockParameterMap params) throws SQLException
     {
         SQLException exception = resultSetHandler.getSQLException(sql, params);
@@ -179,21 +179,17 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             throw exception;
         }
         resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy(params));
-        if(resultSetHandler.hasMultipleResultSets(getSQL(), params))
+        MockResultSet[] results = resultSetHandler.getResultSets(getSQL(), params);
+        if (results != null && results.length != 0)
         {
-            MockResultSet[] results = resultSetHandler.getResultSets(getSQL(), params);
-            if(null != results)
+            resultSetHandler.addExecutedStatement(getSQL());
+            if (results.length > 1)
             {
-                resultSetHandler.addExecutedStatement(getSQL());
                 return cloneAndSetMultipleResultSets(results, params);
             }
-        }
-        else
-        {
-            MockResultSet result = resultSetHandler.getResultSet(getSQL(), params);
-            if(null != result){
-                resultSetHandler.addExecutedStatement(getSQL());
-                return cloneAndSetSingleResultSet(result, params);
+            else
+            {
+                return cloneAndSetSingleResultSet(results[0], params);
             }
         }
         ResultSet superResultSet = super.executeQuery(getSQL());
@@ -247,22 +243,16 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
             throw exception;
         }
         resultSetHandler.addParameterMapForExecutedStatement(getSQL(), getParameterMapCopy(params));
-        if(resultSetHandler.hasMultipleUpdateCounts(getSQL(), params))
+        Integer[] updateCounts = resultSetHandler.getUpdateCounts(getSQL(), params);
+        if (updateCounts != null && updateCounts.length != 0)
         {
-            Integer[] updateCounts = resultSetHandler.getUpdateCounts(getSQL(), params);
-            if(null != updateCounts)
-            {
-                resultSetHandler.addExecutedStatement(getSQL());
+            resultSetHandler.addExecutedStatement(getSQL());
+            if (updateCounts.length > 1) {
                 return setMultipleUpdateCounts(updateCounts.clone(), params);
             }
-        }
-        else
-        {
-            Integer updateCount = resultSetHandler.getUpdateCount(getSQL(), params);
-            if(null != updateCount)
+            else
             {
-                resultSetHandler.addExecutedStatement(getSQL());
-                return setSingleUpdateCount(updateCount, params);
+                return setSingleUpdateCount(updateCounts[0], params);
             }
         }
         int superUpdateCount = super.executeUpdate(getSQL());

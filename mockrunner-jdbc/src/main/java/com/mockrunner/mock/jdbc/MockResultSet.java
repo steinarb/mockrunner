@@ -105,6 +105,17 @@ public class MockResultSet implements ResultSet, Cloneable
         copyColumnMap();
         adjustInsertRow();
     }
+
+   /**
+    * This method returns instance with contents evaluated using given SQL query and parameters.
+    * This implementation does not evaluate anything and returns directly this.
+    *
+    * @param parameters
+    * @return this instance
+    */
+    public MockResultSet evaluate(String sql, MockParameterMap parameters) {
+        return this;
+    }
     
     /**
      * Set if column names are case sensitive. Default is
@@ -149,6 +160,14 @@ public class MockResultSet implements ResultSet, Cloneable
             throw new NestedApplicationException(exc);
         }
     }
+
+   public MockResultSet shallowCopy() {
+      try {
+         return (MockResultSet) super.clone();
+      } catch (CloneNotSupportedException e) {
+         throw new NestedApplicationException(e);
+      }
+   }
     
     /**
      * Returns the id of this <code>ResultSet</code>. Ids are used
@@ -758,7 +777,6 @@ public class MockResultSet implements ResultSet, Cloneable
     
     public Object getObject(String columnName) throws SQLException
     {
-        checkColumnName(columnName);
         checkRowBounds();
         if(rowDeleted()) throw new SQLException("row was deleted");
         List<Object> column;
@@ -770,6 +788,7 @@ public class MockResultSet implements ResultSet, Cloneable
         {
             column = columnMapCopy.get(columnName);
         }
+        checkColumnNotNull(column, columnName);
         Object value = column.get(cursor);
         wasNull = (null == value);
         return value;
@@ -1657,7 +1676,6 @@ public class MockResultSet implements ResultSet, Cloneable
 
     public void updateObject(String columnName, Object value) throws SQLException
     {
-        checkColumnName(columnName);
         checkResultSetConcurrency();
         if(!isCursorInInsertRow)
         {
@@ -1667,11 +1685,13 @@ public class MockResultSet implements ResultSet, Cloneable
         if(isCursorInInsertRow)
         {
             List<Object> column = insertRow.get(columnName);
+            checkColumnNotNull(column, columnName);
             column.set(0, value);
         }
         else
         {
             List<Object> column = columnMapCopy.get(columnName);
+            checkColumnNotNull(column, columnName);
             column.set(cursor, value);
         }
     }
@@ -2165,9 +2185,9 @@ public class MockResultSet implements ResultSet, Cloneable
         throw new SQLException("No object found for " + iface);
     }
     
-    private void checkColumnName(String columnName) throws SQLException
+    private void checkColumnNotNull(List<Object> column, String columnName) throws SQLException
     {
-        if(!columnMap.containsKey(columnName))
+        if(column == null)
         {
             throw new SQLException("No column " + columnName);
         }

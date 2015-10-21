@@ -214,7 +214,7 @@ public class JDBCTestModule
     public ParameterSets getExecutedSQLStatementParameterSets(String sql)
     {
         Map<String, ParameterSets> map = getExecutedSQLStatementParameterMap();
-        SQLStatementMatcher<ParameterSets> matcher = new SQLStatementMatcher<ParameterSets>(caseSensitive, exactMatch, useRegularExpressions);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch, useRegularExpressions);
         List<ParameterSets> list = matcher.getMatchingObjects(map, sql, false);
         if(list != null && list.size() > 0)
         {
@@ -351,7 +351,7 @@ public class JDBCTestModule
     public List<MockPreparedStatement> getPreparedStatements(String sql)
     {
         Map<String, List<MockPreparedStatement>> sqlStatements = mockFactory.getMockConnection().getPreparedStatementResultSetHandler().getPreparedStatementMap();
-        SQLStatementMatcher<MockPreparedStatement> matcher = new SQLStatementMatcher<MockPreparedStatement>(caseSensitive, exactMatch, useRegularExpressions);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch, useRegularExpressions);
         return matcher.getMatchingObjectsFromCollections(sqlStatements, sql, false); 
     }
     
@@ -410,7 +410,7 @@ public class JDBCTestModule
     public List<MockCallableStatement> getCallableStatements(String sql)
     {
         Map<String, List<MockCallableStatement>> sqlStatements = mockFactory.getMockConnection().getCallableStatementResultSetHandler().getCallableStatementMap();
-        SQLStatementMatcher<MockCallableStatement> matcher = new SQLStatementMatcher<MockCallableStatement>(caseSensitive, exactMatch, useRegularExpressions);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch, useRegularExpressions);
         return matcher.getMatchingObjectsFromCollections(sqlStatements, sql, false); 
     }
     
@@ -588,7 +588,7 @@ public class JDBCTestModule
      */
     public void verifySQLStatementExecuted(String sql)
     {
-        SQLStatementMatcher<Object> matcher = new SQLStatementMatcher<Object>(caseSensitive, exactMatch, useRegularExpressions);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch, useRegularExpressions);
         if(!matcher.contains(getExecutedSQLStatements(), sql, false))
         {
             throw new VerifyFailedException("Statement " + sql + " not executed.");
@@ -602,7 +602,7 @@ public class JDBCTestModule
      */
     public void verifySQLStatementNotExecuted(String sql)
     {
-        SQLStatementMatcher<Object> matcher = new SQLStatementMatcher<Object>(caseSensitive, exactMatch, useRegularExpressions);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch, useRegularExpressions);
         if(matcher.contains(getExecutedSQLStatements(), sql, false))
         {
             throw new VerifyFailedException("Statement " + sql + " was executed.");
@@ -727,7 +727,7 @@ public class JDBCTestModule
     private MockParameterMap verifyAndGetParametersForSQL(String sql, int indexOfParameterSet)
     {
         verifySQLStatementExecuted(sql);
-        SQLStatementMatcher<ParameterSets> matcher = new SQLStatementMatcher<ParameterSets>(caseSensitive, exactMatch, useRegularExpressions);
+        SQLStatementMatcher matcher = new SQLStatementMatcher(caseSensitive, exactMatch, useRegularExpressions);
         List<ParameterSets> matchingParameterList = matcher.getMatchingObjects(getExecutedSQLStatementParameterMap(), sql, false);
         if(null == matchingParameterList || matchingParameterList.isEmpty())
         {

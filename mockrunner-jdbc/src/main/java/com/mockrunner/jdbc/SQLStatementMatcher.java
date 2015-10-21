@@ -5,7 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import com.mockrunner.util.common.StringUtil;
+import com.mockrunner.util.regexp.PatternMatcher;
+
 import java.util.Map.Entry;
 
 /**
@@ -22,12 +23,10 @@ import java.util.Map.Entry;
  *                                   <code>false</code>, strings match, if one string starts with the other
  *                                   (default is <code>false</code>)
  */
-public class SQLStatementMatcher<T>
+public class SQLStatementMatcher
 {
-    private boolean caseSensitive = false;
-    private boolean exactMatch = false;
-    private boolean useRegularExpressions = false;
-    
+    private final PatternMatcher.Factory patternMatcherFactory;
+
     public SQLStatementMatcher(boolean caseSensitive, boolean exactMatch)
     {
         this(caseSensitive, exactMatch, false);
@@ -35,9 +34,11 @@ public class SQLStatementMatcher<T>
     
     public SQLStatementMatcher(boolean caseSensitive, boolean exactMatch, boolean useRegularExpressions)
     {
-        this.caseSensitive = caseSensitive;
-        this.exactMatch = exactMatch;
-        this.useRegularExpressions = useRegularExpressions;
+        this(PatternMatcher.Factories.from(caseSensitive, exactMatch, useRegularExpressions));
+    }
+
+    public SQLStatementMatcher(PatternMatcher.Factory patternMatcherFactory) {
+        this.patternMatcherFactory = patternMatcherFactory;
     }
     
     /**
@@ -52,7 +53,7 @@ public class SQLStatementMatcher<T>
      *        or if query must contain the <code>Map</code> keys (<code>true</code>)
      * @return the result <code>List</code>
      */
-    public List<T> getMatchingObjects(Map<String, ? extends T> dataMap, String query, boolean queryContainsMapData)
+    public <T> List<T> getMatchingObjects(Map<String, ? extends T> dataMap, String query, boolean queryContainsMapData)
 	{
 		if(null == query) query = "";
 		List<T> resultList = new ArrayList<T>();
@@ -89,7 +90,7 @@ public class SQLStatementMatcher<T>
      *        or if query must contain the <code>Map</code> keys (<code>true</code>)
      * @return the result <code>List</code>
      */
-    public List<T> getMatchingObjectsFromCollections(Map<String, ? extends Collection<? extends T>> dataMap, String query, boolean queryContainsMapData)
+    public <T> List<T> getMatchingObjectsFromCollections(Map<String, ? extends Collection<? extends T>> dataMap, String query, boolean queryContainsMapData)
 	{
 		if(null == query) query = "";
 		List<T> resultList = new ArrayList<T>();
@@ -153,30 +154,7 @@ public class SQLStatementMatcher<T>
     {
         if(null == source) source = "";
         if(null == query) query = "";
-        if(useRegularExpressions && !exactMatch)
-        {
-            return doPerl5Match(source, query);
-        }
-        else
-        {
-            return doSimpleMatch(source, query);
-        }
-    }
-
-    private boolean doSimpleMatch(String source, String query)
-    {
-        if(exactMatch)
-        {
-            return StringUtil.matchesExact(source, query, caseSensitive);
-        }
-        else
-        {
-            return StringUtil.matchesContains(source, query, caseSensitive);
-        }
-    }
-    
-    private boolean doPerl5Match(String source, String query)
-    {
-        return StringUtil.matchesPerl5(source, query, caseSensitive);
+        PatternMatcher patternMatcher = patternMatcherFactory.create(query);
+        return patternMatcher.matches(source);
     }
 }
