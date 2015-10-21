@@ -4,11 +4,13 @@ import com.mockrunner.mock.jdbc.MockParameterMap;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
 import com.mockrunner.mock.jdbc.MockResultSet;
+import com.mockrunner.util.regexp.PatternMatcher;
 
 /**
  * Abstract base class for all <code>ResultSet</code> handlers.
@@ -30,19 +32,25 @@ public abstract class AbstractResultSetHandler
     private boolean caseSensitive = false;
     private boolean exactMatch = false;
     private boolean useRegularExpressions = false;
+    private PatternMatcher.Factory patternMatcherFactory = PatternMatcher.Factories.from(caseSensitive, exactMatch, useRegularExpressions);
     private boolean continueProcessingOnBatchFailure = false;
     private MockResultSet[] globalResultSets;
     private Integer[] globalUpdateCounts;
     private final Map<String, Boolean> returnsResultSetMap = new TreeMap<String, Boolean>();
+    private final Map<PatternMatcher, Boolean> returnsResultSetMapCompiled = new HashMap<PatternMatcher, Boolean>();
     private MockResultSet globalGeneratedKeys;
     private final List<String> executedStatements = new ArrayList<String>();
     private final List<MockResultSet[]> returnedResultSets = new ArrayList<MockResultSet[]>();
     
     private final Map<String, List<ParameterWrapper<MockResultSet[]>>> resultSetsForStatement = new TreeMap<String, List<ParameterWrapper<MockResultSet[]>>>();
+    private final Map<PatternMatcher, List<ParameterWrapper<MockResultSet[]>>> resultSetsForStatementCompiled = new HashMap<PatternMatcher, List<ParameterWrapper<MockResultSet[]>>>();
     private final Map<String, List<ParameterWrapper<Integer[]>>> updateCountForStatement = new TreeMap<String, List<ParameterWrapper<Integer[]>>>();
+    private final Map<PatternMatcher, List<ParameterWrapper<Integer[]>>> updateCountForStatementCompiled = new HashMap<PatternMatcher, List<ParameterWrapper<Integer[]>>>();
     private final Map<String, List<ParameterWrapper<SQLException>>> throwsSQLException = new TreeMap<String, List<ParameterWrapper<SQLException>>>();
+    private final Map<PatternMatcher, List<ParameterWrapper<SQLException>>> throwsSQLExceptionCompiled = new HashMap<PatternMatcher, List<ParameterWrapper<SQLException>>>();
     private final Map<String, List<ParameterWrapper<MockResultSet>>> generatedKeysForStatement = new TreeMap<String, List<ParameterWrapper<MockResultSet>>>();
-	
+    private final Map<PatternMatcher, List<ParameterWrapper<MockResultSet>>> generatedKeysForStatementCompiled = new HashMap<PatternMatcher, List<ParameterWrapper<MockResultSet>>>();
+
     /**
      * Creates a new <code>ResultSet</code> with a
      * random id.
@@ -100,6 +108,7 @@ public abstract class AbstractResultSetHandler
     public void setCaseSensitive(boolean caseSensitive)
     {
         this.caseSensitive = caseSensitive;
+        resetPatternMatcherFactory();
     }
 
     /**
@@ -124,6 +133,7 @@ public abstract class AbstractResultSetHandler
     public void setExactMatch(boolean exactMatch)
     {
         this.exactMatch = exactMatch;
+        resetPatternMatcherFactory();
     }
     
     /**
@@ -143,9 +153,42 @@ public abstract class AbstractResultSetHandler
     public void setUseRegularExpressions(boolean useRegularExpressions)
     {
         this.useRegularExpressions = useRegularExpressions;
+        resetPatternMatcherFactory();
     }
-    
-    /**
+
+   /**
+    * Sets custom factory for patterns for matching SQL statements. When custom factory
+    * is set, <code>caseSensitive</code>, </code><code>exactMatch</code>,
+    * <code>useRegularExpressions</code> are ignored. When one of these parameters
+    * is set, the custom factory is discarded.
+    * @param factory The factory that provides pattern interprets.
+    */
+    public void setPatternMatcherFactory(PatternMatcher.Factory factory) {
+        this.patternMatcherFactory = factory;
+        onPatternMatcherFactoryChanged();
+    }
+
+   /**
+    * @return Factory used for creation of pattern matchers.
+    */
+    public PatternMatcher.Factory getPatternMatcherFactory() {
+        return patternMatcherFactory;
+    }
+
+    protected void resetPatternMatcherFactory() {
+        this.patternMatcherFactory = PatternMatcher.Factories.from(caseSensitive, exactMatch, useRegularExpressions);
+        onPatternMatcherFactoryChanged();
+    }
+
+    protected void onPatternMatcherFactoryChanged() {
+        recompile(returnsResultSetMap, returnsResultSetMapCompiled);
+        recompile(resultSetsForStatement, resultSetsForStatementCompiled);
+        recompile(updateCountForStatement, updateCountForStatementCompiled);
+        recompile(throwsSQLException, throwsSQLExceptionCompiled);
+        recompile(generatedKeysForStatement, generatedKeysForStatementCompiled);
+    }
+
+   /**
      * Set if batch processing should be continued if one of the commands
      * in the batch fails. This behaviour is driver dependend. The default is
      * <code>false</code>, i.e. if a command fails with an exception,
@@ -222,6 +265,7 @@ public abstract class AbstractResultSetHandler
     public void clearResultSets()
     {
         resultSetsForStatement.clear();
+        resultSetsForStatementCompiled.clear();
     }
     
     /**
@@ -230,6 +274,7 @@ public abstract class AbstractResultSetHandler
     public void clearUpdateCounts()
     {
         updateCountForStatement.clear();
+        updateCountForStatementCompiled.clear();
     }
     
     /**
@@ -239,6 +284,7 @@ public abstract class AbstractResultSetHandler
     public void clearReturnsResultSet()
     {
         returnsResultSetMap.clear();
+        returnsResultSetMapCompiled.clear();
     }
     
     /**
@@ -247,6 +293,7 @@ public abstract class AbstractResultSetHandler
     public void clearThrowsSQLException()
     {
         throwsSQLException.clear();
+        throwsSQLExceptionCompiled.clear();
     }
     
     /**
@@ -255,6 +302,7 @@ public abstract class AbstractResultSetHandler
     public void clearGeneratedKeys()
     {
         generatedKeysForStatement.clear();
+        generatedKeysForStatementCompiled.clear();
     }
     
     /**
@@ -357,7 +405,7 @@ public abstract class AbstractResultSetHandler
 
     protected MockResultSet[] getResultSets(String sql, MockParameterMap parameters, boolean exactMatchParameter)
     {
-        ParameterWrapper<MockResultSet[]> wrapper = getMatchingParameterWrapper(sql, parameters, resultSetsForStatement, exactMatchParameter);
+        ParameterWrapper<MockResultSet[]> wrapper = getMatchingParameterWrapper(sql, parameters, resultSetsForStatementCompiled, exactMatchParameter);
 
         if (null == wrapper) {
             return null;
@@ -388,7 +436,7 @@ public abstract class AbstractResultSetHandler
     
     protected boolean hasMultipleResultSets(String sql, MockParameterMap parameters, boolean exactMatchParameter)
     {
-        ParameterWrapper<MockResultSet[]> wrapper = getMatchingParameterWrapper(sql, parameters, resultSetsForStatement, exactMatchParameter);
+        ParameterWrapper<MockResultSet[]> wrapper = getMatchingParameterWrapper(sql, parameters, resultSetsForStatementCompiled, exactMatchParameter);
         return (null != wrapper && wrapper.getWrappedObject().length > 1);
     }    
     
@@ -487,13 +535,13 @@ public abstract class AbstractResultSetHandler
 
     protected boolean hasMultipleUpdateCounts(String sql, MockParameterMap parameters, boolean exactMatchParameter)
     {
-        ParameterWrapper<Integer[]> wrapper = getMatchingParameterWrapper(sql, parameters, updateCountForStatement, exactMatchParameter);
+        ParameterWrapper<Integer[]> wrapper = getMatchingParameterWrapper(sql, parameters, updateCountForStatementCompiled, exactMatchParameter);
         return (wrapper != null && wrapper.getWrappedObject().length > 1);
     }    
     
     public Integer[] getUpdateCounts(String sql, MockParameterMap parameters, boolean exactMatchParameter)
     {
-        ParameterWrapper<Integer[]> wrapper = getMatchingParameterWrapper(sql, parameters, updateCountForStatement, exactMatchParameter);
+        ParameterWrapper<Integer[]> wrapper = getMatchingParameterWrapper(sql, parameters, updateCountForStatementCompiled, exactMatchParameter);
         if(null != wrapper)
         {
             return wrapper.getWrappedObject();
@@ -555,7 +603,7 @@ public abstract class AbstractResultSetHandler
 
     protected MockResultSet getGeneratedKeys(String sql, MockParameterMap parameters, boolean exactMatchParameter)
     {
-        ParameterWrapper<MockResultSet> wrapper = getMatchingParameterWrapper(sql, parameters, generatedKeysForStatement, exactMatchParameter);
+        ParameterWrapper<MockResultSet> wrapper = getMatchingParameterWrapper(sql, parameters, generatedKeysForStatementCompiled, exactMatchParameter);
         if (null == wrapper) {
             return null;
         }
@@ -585,8 +633,7 @@ public abstract class AbstractResultSetHandler
      */
     public Boolean getReturnsResultSet(String sql)
     {
-        SQLStatementMatcher<Boolean> matcher = new SQLStatementMatcher<Boolean>(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
-        List<Boolean> list = matcher.getMatchingObjects(returnsResultSetMap, sql, true);
+        List<Boolean> list = getMatchingObjects(returnsResultSetMapCompiled, sql);
         if(null == list || list.isEmpty())
         {
             return null;
@@ -627,7 +674,7 @@ public abstract class AbstractResultSetHandler
 
     protected SQLException getSQLException(String sql, MockParameterMap parameters, boolean exactMatchParameter)
     {
-        ParameterWrapper<SQLException> wrapper = getMatchingParameterWrapper(sql, parameters, throwsSQLException, exactMatchParameter);
+        ParameterWrapper<SQLException> wrapper = getMatchingParameterWrapper(sql, parameters, throwsSQLExceptionCompiled, exactMatchParameter);
         if(null != wrapper)
         {
             return wrapper.getWrappedObject();
@@ -652,6 +699,7 @@ public abstract class AbstractResultSetHandler
     {
         List<ParameterWrapper<MockResultSet[]>> list = getListFromMapForSQLStatement(sql, resultSetsForStatement);
         list.add(new ParameterWrapper<MockResultSet[]>(new MockResultSet[]{resultSet}, new MockParameterMap(parameters)));
+        resultSetsForStatementCompiled.put(patternMatcherFactory.create(sql), list);
     }
     
     /**
@@ -672,6 +720,7 @@ public abstract class AbstractResultSetHandler
     {
         List<ParameterWrapper<MockResultSet[]>> list = getListFromMapForSQLStatement(sql, resultSetsForStatement);
         list.add(new ParameterWrapper<MockResultSet[]>(resultSets.clone(), new MockParameterMap(parameters)));
+        resultSetsForStatementCompiled.put(patternMatcherFactory.create(sql), list);
     }    
     
     /**
@@ -709,6 +758,7 @@ public abstract class AbstractResultSetHandler
     {
         List<ParameterWrapper<Integer[]>> list = getListFromMapForSQLStatement(sql, updateCountForStatement);
         list.add(new ParameterWrapper<Integer[]>(new Integer[]{updateCount}, new MockParameterMap(parameters)));
+        updateCountForStatementCompiled.put(patternMatcherFactory.create(sql), list);
     }    
     
     /**
@@ -729,6 +779,7 @@ public abstract class AbstractResultSetHandler
     {
         List<ParameterWrapper<Integer[]>> list = getListFromMapForSQLStatement(sql, updateCountForStatement);
         list.add(new ParameterWrapper<Integer[]>(updateCounts.clone(), new MockParameterMap(parameters)));
+        updateCountForStatementCompiled.put(patternMatcherFactory.create(sql), list);
     }
     
     /**
@@ -766,6 +817,7 @@ public abstract class AbstractResultSetHandler
     {
         List<ParameterWrapper<MockResultSet>> list = getListFromMapForSQLStatement(sql, generatedKeysForStatement);
         list.add(new ParameterWrapper<MockResultSet>(generatedKeysResult, new MockParameterMap(parameters)));
+        generatedKeysForStatementCompiled.put(patternMatcherFactory.create(sql), list);
     }    
     
     /**
@@ -791,6 +843,7 @@ public abstract class AbstractResultSetHandler
     public void prepareReturnsResultSet(String sql, boolean returnsResultSet)
     {
         returnsResultSetMap.put(sql, returnsResultSet);
+        returnsResultSetMapCompiled.put(patternMatcherFactory.create(sql), returnsResultSet);
     }
     
     /**
@@ -833,6 +886,7 @@ public abstract class AbstractResultSetHandler
     {
         List<ParameterWrapper<SQLException>> list = getListFromMapForSQLStatement(sql, throwsSQLException);
         list.add(new ParameterWrapper<SQLException>(exc, new MockParameterMap(parameters)));
+        throwsSQLExceptionCompiled.put(patternMatcherFactory.create(sql), list);
     }    
     /**
      * Returns if specified SQL strings should be handled case sensitive.
@@ -842,7 +896,7 @@ public abstract class AbstractResultSetHandler
     {
         return caseSensitive;
     }
-    
+
     /**
      * Returns if specified SQL statements must match exactly.
      * @return is exact matching enabled or disabled
@@ -851,7 +905,7 @@ public abstract class AbstractResultSetHandler
     {
         return exactMatch;
     }
-    
+
     /**
      * Returns if regular expression matching is enabled
      * @return if regular expression matching is enabled
@@ -876,7 +930,8 @@ public abstract class AbstractResultSetHandler
      * @param sql The SQL string associated with the resultset
      */
     public void removeAllResultSet(String sql) {
-    	resultSetsForStatement.remove(sql);
+    	  resultSetsForStatement.remove(sql);
+        resultSetsForStatementCompiled.remove(patternMatcherFactory.create(sql));
     }
 
     /**
@@ -884,7 +939,8 @@ public abstract class AbstractResultSetHandler
      * @param sql The SQL string which identifies the conditions under which to throw a SQLException
      */
     public void removeAllThrowsSqlException(String sql) {
-    	throwsSQLException.remove(sql);
+    	  throwsSQLException.remove(sql);
+        throwsSQLExceptionCompiled.remove(patternMatcherFactory.create(sql));
     }
 
 
@@ -893,7 +949,8 @@ public abstract class AbstractResultSetHandler
      * @param sql The SQL string which identifies the conditions under which to return the specified update count
      */
     public void removeAllUpdateCount(String sql) {
-    	updateCountForStatement.remove(sql);
+    	  updateCountForStatement.remove(sql);
+        updateCountForStatementCompiled.remove(patternMatcherFactory.create(sql));
     }
 
 
@@ -902,7 +959,8 @@ public abstract class AbstractResultSetHandler
      * @param sql The SQL string which identifies the conditions under which the generated keys result would be returned.
      */
     public void removeAllGeneratedKeys(String sql) {
-    	generatedKeysForStatement.remove(sql);
+        generatedKeysForStatement.remove(sql);
+        generatedKeysForStatementCompiled.remove(patternMatcherFactory.create(sql));
     }
 
     /**
@@ -915,6 +973,7 @@ public abstract class AbstractResultSetHandler
 
     protected void removeResultSet(String sql, MockParameterMap parameters, boolean exactMatchParameter) {
         removeMatchingParameterWrapper(sql, parameters, resultSetsForStatement, exactMatchParameter);
+        removeMatchingParameterWrapper(patternMatcherFactory.create(sql), parameters, resultSetsForStatementCompiled, exactMatchParameter);
     }
 
     /**
@@ -953,11 +1012,25 @@ public abstract class AbstractResultSetHandler
     protected void removeGeneratedKeys(String sql, MockParameterMap parameters, boolean exactMatchParameter) {
         removeMatchingParameterWrapper(sql, parameters, generatedKeysForStatement, exactMatchParameter);
     }
-    
-    protected <T> ParameterWrapper<T> getMatchingParameterWrapper(String sql, MockParameterMap parameters, Map<String, List<ParameterWrapper<T>>> statementMap, boolean exactMatchParameter)
+
+    protected <T> List<T> getMatchingObjects(Map<PatternMatcher, ? extends T> dataMap, String query)
     {
-        SQLStatementMatcher<List<ParameterWrapper<T>>> matcher = new SQLStatementMatcher<List<ParameterWrapper<T>>>(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
-        List<List<ParameterWrapper<T>>> list = matcher.getMatchingObjects(statementMap, sql, true);
+        if(null == query) query = "";
+        List<T> resultList = new ArrayList<T>();
+
+        for(Map.Entry<PatternMatcher, ? extends T> entry : dataMap.entrySet()){
+            PatternMatcher matcher = entry.getKey();
+            if (matcher.matches(query)) {
+                T matchingObject = entry.getValue();
+                resultList.add(matchingObject);
+            }
+        }
+        return resultList;
+    }
+    
+    protected <T> ParameterWrapper<T> getMatchingParameterWrapper(String sql, MockParameterMap parameters, Map<PatternMatcher, List<ParameterWrapper<T>>> statementMap, boolean exactMatchParameter)
+    {
+        List<List<ParameterWrapper<T>>> list = getMatchingObjects(statementMap, sql);
         for(List<ParameterWrapper<T>> wrapperList : list)
         {
             for(ParameterWrapper<T> wrapper : wrapperList)
@@ -971,25 +1044,21 @@ public abstract class AbstractResultSetHandler
         return null;
     }
     
-    protected <T> ParameterWrapper<T> removeMatchingParameterWrapper(String sql, MockParameterMap parameters, Map<String, List<ParameterWrapper<T>>> statementMap, boolean exactMatchParameter)
+    protected <S, T> ParameterWrapper<T> removeMatchingParameterWrapper(S sql, MockParameterMap parameters, Map<S, List<ParameterWrapper<T>>> map, boolean exactMatchParameter)
     {
-        SQLStatementMatcher<List<ParameterWrapper<T>>> matcher = new SQLStatementMatcher<List<ParameterWrapper<T>>>(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
-        List<List<ParameterWrapper<T>>> list = matcher.getMatchingObjects(statementMap, sql, true);
-        for(List<ParameterWrapper<T>> wrapperList : list)
+        List<ParameterWrapper<T>> list = map.get(sql);
+        for(ParameterWrapper<T> wrapper : list)
         {
-            for(ParameterWrapper<T> wrapper : wrapperList)
+            if(wrapper.getParameters().doParameterMatch(parameters, exactMatchParameter))
             {
-                if(wrapper.getParameters().doParameterMatch(parameters, exactMatchParameter))
-                {
-                    wrapperList.remove(wrapper);
-                    return wrapper;
-                }
+                list.remove(wrapper);
+                return wrapper;
             }
         }
         return null;
     }
     
-    protected <T> List<T> getListFromMapForSQLStatement(String sql, Map<String, List<T>> map)
+    protected <S, T> List<T> getListFromMapForSQLStatement(S sql, Map<S, List<T>> map)
     {
         List<T> list = map.get(sql);
         if(null == list)
@@ -999,6 +1068,13 @@ public abstract class AbstractResultSetHandler
         }
         return list;
     }
-    
-    
+
+
+    protected <T> void recompile(Map<String, T> source, Map<PatternMatcher, T> compiled) {
+        compiled.clear();
+        for (Map.Entry<String, T> entry : source.entrySet()) {
+            PatternMatcher patternMatcher = getPatternMatcherFactory().create(entry.getKey());
+            compiled.put(patternMatcher, entry.getValue());
+        }
+    }
 }

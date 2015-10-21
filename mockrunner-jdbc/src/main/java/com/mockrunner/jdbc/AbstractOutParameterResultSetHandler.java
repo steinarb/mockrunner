@@ -1,8 +1,10 @@
 package com.mockrunner.jdbc;
 
 import com.mockrunner.mock.jdbc.MockParameterMap;
-import java.util.ArrayList;
+import com.mockrunner.util.regexp.PatternMatcher;
+
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -16,8 +18,18 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     private boolean mustRegisterOutParameters = false;
     private MockParameterMap globalOutParameter = null;
     private final Map<String, MockParameterMap> outParameterForStatement = new TreeMap<String, MockParameterMap>();
+    private final Map<PatternMatcher, MockParameterMap> outParameterForStatementCompiled = new TreeMap<PatternMatcher, MockParameterMap>();
     private final Map<String, List<ParameterWrapper<MockParameterMap>>> outParameterForStatementParameters = new TreeMap<String, List<ParameterWrapper<MockParameterMap>>>();
-    
+    private final Map<PatternMatcher, List<ParameterWrapper<MockParameterMap>>> outParameterForStatementParametersCompiled
+          = new HashMap<PatternMatcher, List<ParameterWrapper<MockParameterMap>>>();
+
+    @Override
+    protected void onPatternMatcherFactoryChanged() {
+        super.onPatternMatcherFactoryChanged();
+        recompile(outParameterForStatement, outParameterForStatementCompiled);
+        recompile(outParameterForStatementParameters, outParameterForStatementParametersCompiled);
+    }
+
     /**
      * Set if out parameters must be registered to be returned.
      * The default is <code>false</code>, i.e. if there are matching
@@ -52,8 +64,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      */
     public MockParameterMap getOutParameter(String sql)
     {
-        SQLStatementMatcher<MockParameterMap> matcher = new SQLStatementMatcher<MockParameterMap>(getCaseSensitive(), getExactMatch(), getUseRegularExpressions());
-        List<MockParameterMap> list = matcher.getMatchingObjects(outParameterForStatement, sql, true);
+        List<MockParameterMap> list = getMatchingObjects(outParameterForStatementCompiled, sql);
         if(null != list && list.size() > 0)
         {
             return list.get(0);
@@ -74,7 +85,7 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      */
     public MockParameterMap getOutParameter(String sql, MockParameterMap parameters)
     {
-        ParameterWrapper<MockParameterMap> wrapper = getMatchingParameterWrapper(sql, parameters, outParameterForStatementParameters, exactMatchParameter);
+        ParameterWrapper<MockParameterMap> wrapper = getMatchingParameterWrapper(sql, parameters, outParameterForStatementParametersCompiled, exactMatchParameter);
         if(null != wrapper)
         {
             return wrapper.getWrappedObject();
@@ -88,7 +99,9 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     public void clearOutParameter()
     {
         outParameterForStatement.clear();
+        outParameterForStatementCompiled.clear();
         outParameterForStatementParameters.clear();
+        outParameterForStatementParametersCompiled.clear();
     }
     
     /**
@@ -120,7 +133,9 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
      */
     public void prepareOutParameter(String sql, MockParameterMap outParameters)
     {
-        outParameterForStatement.put(sql, new MockParameterMap(outParameters));
+        MockParameterMap mockParameterMap = new MockParameterMap(outParameters);
+        outParameterForStatement.put(sql, mockParameterMap);
+        outParameterForStatementCompiled.put(getPatternMatcherFactory().create(sql), mockParameterMap);
     }
     
     /**
@@ -189,10 +204,12 @@ public abstract class AbstractOutParameterResultSetHandler extends AbstractParam
     {
         List<ParameterWrapper<MockParameterMap>> list = getListFromMapForSQLStatement(sql, outParameterForStatementParameters);
         list.add(new ParameterWrapper<MockParameterMap>(new MockParameterMap(outParameters), new MockParameterMap(parameters)));
+        outParameterForStatementParametersCompiled.put(getPatternMatcherFactory().create(sql), list);
     }
     
     public void removeOutParameter(String sql){
         outParameterForStatement.remove(sql);
+        outParameterForStatementCompiled.remove(getPatternMatcherFactory().create(sql));
     }
 
     public void removeOutParameter(String sql, MockParameterMap parameters){
