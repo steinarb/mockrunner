@@ -1,8 +1,8 @@
 package com.mockrunner.jms;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import com.mockrunner.mock.jms.MockQueue;
 import com.mockrunner.mock.jms.MockTopic;
@@ -17,13 +17,13 @@ import com.mockrunner.mock.jms.MockTopic;
  */
 public class DestinationManager implements Serializable
 {
-    private Map queues;
-    private Map topics;
+    private ConcurrentMap<String, MockQueue> queues;
+    private ConcurrentMap<String, MockTopic> topics;
 
     public DestinationManager()
     {
-        queues = new HashMap();
-        topics = new HashMap();
+        queues = new ConcurrentHashMap<String, MockQueue>();
+        topics = new ConcurrentHashMap<String, MockTopic>();
     }
 
     /**
@@ -40,8 +40,8 @@ public class DestinationManager implements Serializable
     public MockQueue createQueue(String name)
     {
         MockQueue queue = new MockQueue(name);
-        queues.put(name, queue);
-        return queue;
+        MockQueue orig = queues.putIfAbsent(name, queue);
+        return orig == null ? queue : orig;
     }
 
     /**
@@ -55,14 +55,13 @@ public class DestinationManager implements Serializable
 
     /**
      * Returns a <code>Queue</code> that was created with
-     * {@link #createQueue} or <code>null</code> if no such
-     * <code>Queue</code> is present.
+     * {@link #createQueue}, or creates one if it didn't exist yet.
      * @param name the name of the <code>Queue</code>
      * @return the <code>Queue</code>
      */
     public MockQueue getQueue(String name)
     {
-        return (MockQueue)queues.get(name);
+        return createQueue(name);
     }
     
     /**
@@ -79,8 +78,8 @@ public class DestinationManager implements Serializable
     public MockTopic createTopic(String name)
     {
         MockTopic topic = new MockTopic(name);
-        topics.put(name, topic);
-        return topic;
+        MockTopic orig = topics.putIfAbsent(name, topic);
+        return orig == null ? topic : orig;
     }
 
     /**
@@ -94,13 +93,20 @@ public class DestinationManager implements Serializable
 
     /**
      * Returns a <code>Topic</code> that was created with
-     * {@link #createTopic} or <code>null</code> if no such
-     * <code>Topic</code> is present.
+     * {@link #createTopic}, or creates one if it didn't exist yet.
      * @param name the name of the <code>Topic</code>
      * @return the <code>Topic</code>
      */
     public MockTopic getTopic(String name)
     {
-        return (MockTopic)topics.get(name);
+        return createTopic(name);
+    }
+
+    public boolean existsTopic(String topicName) {
+        return topics.containsKey(topicName);
+    }
+
+    public boolean existsQueue(String queueName) {
+        return queues.containsKey(queueName);
     }
 }
