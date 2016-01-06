@@ -286,43 +286,36 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     
     protected int[] executeBatch(List<MockParameterMap> batchParams) throws SQLException
     {
-        try
+        int[] results = new int[batchParams.size()];
+        SQLException exception = null;
+        for(int ii = 0; ii < results.length; ii++)
         {
-            int[] results = new int[batchParams.size()];
-            SQLException exception = null;
-            for(int ii = 0; ii < results.length; ii++)
+            if(isQuery(getSQL()))
             {
-                if(isQuery(getSQL()))
+                exception = prepareFailedResult(results, ii, "SQL " + getSQL() + " in the list of batches returned a ResultSet.", null);
+            }
+            else
+            {
+                try
                 {
-                    exception = prepareFailedResult(results, ii, "SQL " + getSQL() + " in the list of batches returned a ResultSet.", null);
-                }
-                else
+                    MockParameterMap currentParameters = batchParams.get(ii);
+                    results[ii] = executeUpdate(currentParameters);
+                } 
+                catch(SQLException exc)
                 {
-                    try
-                    {
-                        MockParameterMap currentParameters = batchParams.get(ii);
-                        results[ii] = executeUpdate(currentParameters);
-                    } 
-                    catch(SQLException exc)
-                    {
-                        exception = prepareFailedResult(results, ii, null, exc);
-                    }
-                }
-                if(null != exception && !resultSetHandler.getContinueProcessingOnBatchFailure())
-                {
-                    throw exception;
+                    exception = prepareFailedResult(results, ii, null, exc);
                 }
             }
-            if(null != exception)
+            if(null != exception && !resultSetHandler.getContinueProcessingOnBatchFailure())
             {
-                throw new BatchUpdateException(exception.getMessage(), exception.getSQLState(), exception.getErrorCode(), results);
+                throw exception;
             }
-            return results;
         }
-        finally
+        if(null != exception)
         {
-            clearBatch();
+            throw new BatchUpdateException(exception.getMessage(), exception.getSQLState(), exception.getErrorCode(), results);
         }
+        return results;
     }
 
     private void setGeneratedKeysResultSet(String sql, MockParameterMap params)
