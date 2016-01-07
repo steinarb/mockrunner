@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import org.junit.Test;
 
 import com.mockrunner.jdbc.BasicJDBCTestCaseAdapter;
+import com.mockrunner.jdbc.ParameterSets;
 import com.mockrunner.jdbc.PreparedStatementResultSetHandler;
 import com.mockrunner.mock.jdbc.MockConnection;
 import com.mockrunner.mock.jdbc.MockParameterMap;
@@ -94,5 +95,32 @@ public class PreparedStatementResultSetTest extends BasicJDBCTestCaseAdapter {
         assertEquals(rs3.getString("username"), "bar");
         rs3.close();
         
+    }
+    
+    
+    // Testing if parameter sets added to the batch are cleared after executeBatch (JDBC 3.0 section 15.1.2)
+    
+    @Test
+    public void testWBatches() throws Exception {
+        String query = "insert into users (id, username) values (?,?)";
+        
+        MockConnection conn = getJDBCMockObjectFactory().getMockConnection();
+        PreparedStatement preparedStatement1 = conn.prepareStatement(query);
+        preparedStatement1.setInt(1, 1);
+        preparedStatement1.setString(2,"user1");
+        preparedStatement1.addBatch();
+        preparedStatement1.setInt(1, 2);
+        preparedStatement1.setString(2,"user2");
+        preparedStatement1.addBatch();
+        preparedStatement1.executeBatch();
+        preparedStatement1.setInt(1, 3);
+        preparedStatement1.setString(2,"user3");
+        preparedStatement1.addBatch();
+        preparedStatement1.executeBatch();
+
+        PreparedStatementResultSetHandler handler = conn.getPreparedStatementResultSetHandler();
+        ParameterSets parameterSets = handler.getExecutedStatementParameterMap().get(query);
+        
+        assertTrue(parameterSets.getNumberParameterSets() == 3);
     }
 }

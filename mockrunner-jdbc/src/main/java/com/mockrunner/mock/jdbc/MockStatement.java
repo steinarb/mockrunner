@@ -248,36 +248,43 @@ public class MockStatement implements Statement
     
     public int[] executeBatch() throws SQLException
     {
-        int[] results = new int[batches.size()];
-        SQLException exception = null;
-        for(int ii = 0; ii < results.length; ii++)
-        {
-            String nextSQL = batches.get(ii);
-            if(isQuery(nextSQL))
+        try{
+            int[] results = new int[batches.size()];
+            SQLException exception = null;
+            for(int ii = 0; ii < results.length; ii++)
             {
-                exception = prepareFailedResult(results, ii, "SQL " + batches.get(ii) + " in the list of batches returned a ResultSet.", null);
-            }
-            else
-            {
-                try
+                String nextSQL = batches.get(ii);
+                if(isQuery(nextSQL))
                 {
-                    results[ii] = executeUpdate(nextSQL);
-                } 
-                catch(SQLException exc)
+                    exception = prepareFailedResult(results, ii, "SQL " + batches.get(ii) + " in the list of batches returned a ResultSet.", null);
+                }
+                else
                 {
-                    exception = prepareFailedResult(results, ii, null, exc);
+                    try
+                    {
+                        results[ii] = executeUpdate(nextSQL);
+                    } 
+                    catch(SQLException exc)
+                    {
+                        exception = prepareFailedResult(results, ii, null, exc);
+                    }
+                }
+                if(null != exception && !resultSetHandler.getContinueProcessingOnBatchFailure())
+                {
+                    throw exception;
                 }
             }
-            if(null != exception && !resultSetHandler.getContinueProcessingOnBatchFailure())
+            if(null != exception)
             {
-                throw exception;
+                throw new BatchUpdateException(exception.getMessage(), exception.getSQLState(), exception.getErrorCode(), results);
             }
+            return results;
         }
-        if(null != exception)
+        finally
         {
-            throw new BatchUpdateException(exception.getMessage(), exception.getSQLState(), exception.getErrorCode(), results);
+            // The statement’s batch is reset to empty once executeBatch returns. (JDBC 3.0 section 15.1.2)
+            clearBatch();
         }
-        return results;
     }
     
     protected SQLException prepareFailedResult(int[] actualResults, int index, String message, SQLException caughtException)
