@@ -91,16 +91,8 @@ public class MockQueueSessionTest
     @Test
     public void testCreateQueues() throws Exception
     {
-        try
-        {
-            session.createQueue("Queue1");
-            fail();
-        }
-        catch(JMSException exc)
-        {
-            //should throw exception
-        }
         DestinationManager manager = connection.getDestinationManager();
+        assertFalse(manager.existsQueue("Queue1"));
         Queue managerQueue1 = manager.createQueue("Queue1");
         Queue managerQueue2 = manager.getQueue("Queue1");
         Queue queue = session.createQueue("Queue1");
@@ -110,15 +102,7 @@ public class MockQueueSessionTest
         manager.createQueue("Queue2");
         assertNotNull(session.createQueue("Queue2"));
         manager.removeQueue("Queue1");
-        try
-        {
-            session.createQueue("Queue1");
-            fail();
-        }
-        catch(JMSException exc)
-        {
-            //should throw exception
-        }
+        assertFalse(manager.existsQueue("Queue1"));
         session.createTemporaryQueue();
         TemporaryQueue tempQueue = session.createTemporaryQueue();
         session.createTemporaryQueue();

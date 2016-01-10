@@ -1,13 +1,5 @@
 package com.mockrunner.test.jms;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
 import javax.jms.BytesMessage;
 import javax.jms.JMSException;
 import javax.jms.MapMessage;
@@ -64,6 +56,8 @@ import com.mockrunner.mock.jms.MockTopicConnection;
 import com.mockrunner.mock.jms.MockTopicPublisher;
 import com.mockrunner.mock.jms.MockTopicSession;
 import com.mockrunner.mock.jms.MockTopicSubscriber;
+
+import static org.junit.Assert.*;
 
 public class JMSTestModuleTest
 {
@@ -279,21 +273,13 @@ public class JMSTestModuleTest
         manager.createQueue("test1");
         manager.createQueue("test2");
         assertNotNull(module.getQueue("test1"));
-        assertNotNull(module.getQueue("test2"));
-        assertNull(module.getQueue("xyz"));
+        MockQueue test2 = module.getQueue("test2");
+        assertNotNull(test2);
         QueueSession session = queueConnection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
-        session.createQueue("test2");
+        assertSame(test2, session.createQueue("test2"));
         manager.removeQueue("test2");
-        assertNull(module.getQueue("test2"));
-        try
-        {
-            session.createQueue("test2");
-            fail();
-        }
-        catch (JMSException e)
-        {
-            //should throw exception
-        }
+        assertNotNull(module.getQueue("test2"));
+        assertNotSame(test2, module.getQueue("test2"));
     }
     
     @Test
@@ -302,22 +288,15 @@ public class JMSTestModuleTest
         DestinationManager manager = mockFactory.getDestinationManager();
         manager.createTopic("myTopic1");
         manager.createTopic("myTopic2");
-        assertNotNull(module.getTopic("myTopic1"));
-        assertNotNull(module.getTopic("myTopic2"));
-        assertNull(module.getTopic("xyz"));
+        MockTopic topic1 = module.getTopic("myTopic1");
+        MockTopic topic2 = module.getTopic("myTopic2");
+        assertNotNull(topic1);
+        assertNotNull(topic2);
         TopicSession session = topicConnection.createTopicSession(false, Session.AUTO_ACKNOWLEDGE);
-        session.createTopic("myTopic1");
+        assertSame(topic1, session.createTopic("myTopic1"));
         manager.removeTopic("myTopic1");
-        assertNull(module.getTopic("myTopic1"));
-        try
-        {
-            session.createTopic("myTopic1");
-            fail();
-        }
-        catch (JMSException e)
-        {
-            //should throw exception
-        }
+        assertNotNull(session.createTopic("myTopic1"));
+        assertNotSame(topic1, session.createTopic("myTopic1"));
     }
     
     @Test
@@ -337,24 +316,6 @@ public class JMSTestModuleTest
         assertSame(queue2, session3.createQueue("queue2"));
         assertSame(queue1, session2.createQueue("queue1"));
         assertSame(queue3, session1.createQueue("queue3"));
-        try
-        {
-            session1.createQueue("queue4");
-            fail();
-        }
-        catch (JMSException e)
-        {
-            //should throw exception
-        }
-        try
-        {
-            session3.createTopic("topic3");
-            fail();
-        }
-        catch (JMSException e)
-        {
-            //should throw exception
-        }
     }
     
     @Test

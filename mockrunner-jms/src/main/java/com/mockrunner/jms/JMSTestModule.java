@@ -4252,7 +4252,7 @@ public class JMSTestModule
     private void checkQueueByName(String queueName)
     {
         DestinationManager destinationManager = getDestinationManager();
-        if(null == destinationManager.getQueue(queueName))
+        if(!destinationManager.existsQueue(queueName))
         {
             throw new VerifyFailedException("Queue with name " + queueName + " is not present.");
         }
@@ -4261,7 +4261,7 @@ public class JMSTestModule
     private void checkTopicByName(String topicName)
     {
         DestinationManager destinationManager = getDestinationManager();
-        if(null == destinationManager.getTopic(topicName))
+        if(!destinationManager.existsTopic(topicName))
         {
             throw new VerifyFailedException("Topic with name " + topicName + " is not present.");
         }
