@@ -81,16 +81,8 @@ public class MockTopicSessionTest
     @Test
     public void testCreateTopics() throws Exception
     {
-        try
-        {
-            session.createTopic("Topic1");
-            fail();
-        }
-        catch(JMSException exc)
-        {
-            //should throw exception
-        }
         DestinationManager manager = connection.getDestinationManager();
+        assertFalse(manager.existsTopic("Topic1"));
         Topic managerTopic1 = manager.createTopic("Topic1");
         Topic topic = session.createTopic("Topic1");
         assertTrue(topic == managerTopic1);
@@ -98,15 +90,7 @@ public class MockTopicSessionTest
         manager.createTopic("Topic2");
         assertTrue(manager.getTopic("Topic2") == session.createTopic("Topic2"));
         manager.removeTopic("Topic2");
-        try
-        {
-            session.createTopic("Topic2");
-            fail();
-        }
-        catch(JMSException exc)
-        {
-            //should throw exception
-        }
+        assertFalse(manager.existsTopic("Topic2"));
         session.createTemporaryTopic();
         TemporaryTopic tempTopic = session.createTemporaryTopic();
         assertNotNull(session.getTemporaryTopic(0));
