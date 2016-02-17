@@ -42,7 +42,15 @@ class MessageListenerBeanPostProcessor implements BeanPostProcessor {
      * @return
      */
     private String findQueueNameForMessageListener(Object bean) {
-        MessageDriven messageDrivenAnn = AnnotationUtils.getAnnotation(bean.getClass(), MessageDriven.class);
+        Class<?> objClz = bean.getClass();
+        /*
+         * workaround if the bean is a proxy, otherwise the annotations are null
+         */
+        if (org.springframework.aop.support.AopUtils.isAopProxy(bean)) {
+
+            objClz = org.springframework.aop.support.AopUtils.getTargetClass(bean);
+        }
+        MessageDriven messageDrivenAnn = AnnotationUtils.getAnnotation(objClz, MessageDriven.class);
         for (ActivationConfigProperty activationConfigProperty : messageDrivenAnn.activationConfig()) {
             if(activationConfigProperty.propertyName().equals("destination")) {
                 return activationConfigProperty.propertyValue();
