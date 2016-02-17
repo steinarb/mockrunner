@@ -4,7 +4,6 @@ machine:
 
 dependencies:
   override:
-    - mvn dependency:resolve -s settings.xml 
     - mvn install -DskipTests
 
 test:
