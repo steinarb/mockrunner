@@ -1,3 +1,15 @@
 machine:
   java:
     version: oraclejdk7
+
+dependencies:
+  override:
+    - mvn dependency:resolve -s settings.xml 
+    - mvn install -DskipTests
+
+test:
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/target/.*-reports/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+  override:
+    - mvn deploy -Prun-its -s settings.xml
