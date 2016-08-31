@@ -10,14 +10,13 @@ public class SQLUtil
 {
     /**
      * Returns if the specified SQL string is a select, i.e.
-     * contains the string <i>select</i> (case insensitive).
+     * starts with the string <i>select</i> (case insensitive).
      * @param sql the SQL string
      * @return <code>true</code> if the specified SQL string is a select
      */
     public static boolean isSelect(String sql)
     {
-        sql = sql.toLowerCase();
-        return (-1 != sql.indexOf("select"));
+        return sql.toLowerCase().startsWith("select");
     }
     
     /**
