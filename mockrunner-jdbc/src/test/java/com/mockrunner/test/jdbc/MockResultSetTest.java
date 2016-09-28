@@ -13,9 +13,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
-
-import junit.framework.TestCase;
 
 import com.mockrunner.mock.jdbc.MockBlob;
 import com.mockrunner.mock.jdbc.MockClob;
@@ -26,6 +25,8 @@ import com.mockrunner.mock.jdbc.MockResultSetMetaData;
 import com.mockrunner.mock.jdbc.MockRowId;
 import com.mockrunner.mock.jdbc.MockSQLXML;
 import com.mockrunner.mock.jdbc.MockStruct;
+
+import junit.framework.TestCase;
 
 public class MockResultSetTest extends TestCase
 {
@@ -87,6 +88,15 @@ public class MockResultSetTest extends TestCase
         assertEquals("test2", resultSet.getString("secondColumn"));
         assertEquals(null, resultSet.getString("thirdColumn"));
         assertEquals(null, resultSet.getString("Column4"));
+
+        MockResultSet resultSet2 = new MockResultSet("add Rows");
+        HashMap<String,Object> rowMap = new HashMap<String, Object>();
+        rowMap.put("Name","value1");
+        rowMap.put("Id",1);
+        resultSet2.addColumns(rowMap.keySet());
+        resultSet2.addRow(rowMap);
+        assertEquals(1,resultSet2.getColumn("Id").get(0));
+        assertEquals("value1",resultSet2.getColumn("Name").get(0));
     }
     
     public void testAddColumn() throws Exception
@@ -141,7 +151,7 @@ public class MockResultSetTest extends TestCase
         assertEquals("value4", resultSet.getString("stringColumn"));
         assertEquals(null, resultSet.getString("Column3"));
     }
-    
+
     public void testGetValues() throws Exception
     {
         List<Object> column = new ArrayList<Object>();
