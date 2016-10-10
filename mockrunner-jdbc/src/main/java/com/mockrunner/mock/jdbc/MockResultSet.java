@@ -27,9 +27,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.jdbc.ParameterUtil;
@@ -88,7 +90,7 @@ public class MockResultSet implements ResultSet, Cloneable
         this.id = id;
         columnsCaseSensitive = false;
     }
-    
+
     private void init()
     {
         columnMap = createCaseAwareMap();
@@ -312,6 +314,20 @@ public class MockResultSet implements ResultSet, Cloneable
         List<Object> valueList = Arrays.asList(values);
         addRow(valueList);
     }
+
+    public void addRow(HashMap<String,Object> row) throws Exception
+    {
+        if(! row.keySet().equals(columnMap.keySet()))
+        {
+            throw new Exception("Columns on row don't match results set");
+        }
+        List<Object> vals = new ArrayList<Object>();
+        for(String col : row.keySet())
+        {
+            vals.add(row.get(col));
+        }
+        addRow(vals);
+    }
     
     /**
      * Adds a row to the simulated database table.
@@ -385,6 +401,18 @@ public class MockResultSet implements ResultSet, Cloneable
     public void addColumn(Object[] values)
     {
         addColumn(determineValidColumnName(), values);
+    }
+
+    public void addColumns(Set<String> cols) throws Exception
+    {
+        if(columnMap.keySet().size() > 0)
+        {
+            throw new Exception("resultSet already has column");
+        }
+        for(String col : cols)
+        {
+            addColumn(col);
+        }
     }
 
     /**
