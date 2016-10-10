@@ -43,7 +43,7 @@ public class ServletTestModuleTest extends BaseTestCase
     @Test
     public void testServletInitCalls() throws Exception
     {
-        TestServlet servlet = (TestServlet)module.createServlet(TestServlet.class);
+        TestServlet servlet = module.createServlet(TestServlet.class);
         assertTrue(servlet.wasInitCalled());
         servlet = new TestServlet();
         module.setServlet(servlet);
@@ -67,7 +67,7 @@ public class ServletTestModuleTest extends BaseTestCase
     @Test
     public void testFilterInitCalls() throws Exception
     {
-        TestFilter filter1 = (TestFilter)module.createFilter(TestFilter.class);
+        TestFilter filter1 = module.createFilter(TestFilter.class);
         assertTrue(filter1.wasInitCalled());
         TestFilter filter2 = new TestFilter();
         module.addFilter(filter2);
@@ -121,7 +121,7 @@ public class ServletTestModuleTest extends BaseTestCase
     @Test
     public void testServletMethodsCalled()
     {
-        TestServlet servlet = (TestServlet)module.createServlet(TestServlet.class);
+        TestServlet servlet = module.createServlet(TestServlet.class);
         module.doDelete();
         assertTrue(servlet.wasDoDeleteCalled());
         module.doGet();
@@ -143,9 +143,9 @@ public class ServletTestModuleTest extends BaseTestCase
     {
         module.setServlet(new TestServlet(), true);
         TestServlet servlet = (TestServlet)module.getServlet();
-        TestFilter filter1 = (TestFilter)module.createFilter(TestFilter.class);
-        TestFilter filter2 = (TestFilter)module.createFilter(TestFilter.class);
-        TestFilter filter3 = (TestFilter)module.createFilter(TestFilter.class);
+        TestFilter filter1 = module.createFilter(TestFilter.class);
+        TestFilter filter2 = module.createFilter(TestFilter.class);
+        TestFilter filter3 = module.createFilter(TestFilter.class);
         module.doGet();
         assertTrue(filter1.wasInitCalled());
         assertTrue(filter2.wasInitCalled());
@@ -175,7 +175,7 @@ public class ServletTestModuleTest extends BaseTestCase
     @Test
     public void testFilterChainWithRelease()
     {
-        TestServlet servlet = (TestServlet)module.createServlet(TestServlet.class);
+        TestServlet servlet = module.createServlet(TestServlet.class);
         TestFilter filter = new TestFilter();
         module.setDoChain(true);
         module.addFilter(filter, true);
