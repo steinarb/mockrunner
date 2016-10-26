@@ -2111,7 +2111,7 @@ public class JMSTestModule
     {
         checkAndGetTopicSessionByIndex(indexOfSession);
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
-        MockTopicSubscriber subscriber = (MockTopicSubscriber)manager.getDurableTopicSubscriber(name);
+        MockTopicSubscriber subscriber = manager.getDurableTopicSubscriber(name);
         if(null == subscriber)
         {
             throw new VerifyFailedException("Durable TopicSubscriber with subscription name " + name + " not present.");
@@ -2132,13 +2132,11 @@ public class JMSTestModule
     {
         checkAndGetTopicSessionByIndex(indexOfSession);
         TopicTransmissionManager manager = getTopicTransmissionManager(indexOfSession);
-        Iterator keys = manager.getDurableTopicSubscriberMap().keySet().iterator();
-        while(keys.hasNext())
-        {
-            MockTopicSubscriber currentSubscriber = (MockTopicSubscriber)manager.getDurableTopicSubscriberMap().get(keys.next());
-            if(!currentSubscriber.isClosed())
-            {
-                throw new VerifyFailedException("Durable TopicSubscriber with name " + currentSubscriber.getName() + " not closed.");
+        for (Object o : manager.getDurableTopicSubscriberMap().keySet()) {
+            MockTopicSubscriber currentSubscriber = (MockTopicSubscriber) manager.getDurableTopicSubscriberMap().get(o);
+            if (!currentSubscriber.isClosed()) {
+                throw new VerifyFailedException("Durable TopicSubscriber with name " + currentSubscriber.getName() +
+                        " not closed.");
             }
         }
     }

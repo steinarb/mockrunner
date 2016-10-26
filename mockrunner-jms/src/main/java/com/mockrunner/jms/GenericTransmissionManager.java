@@ -51,16 +51,12 @@ public class GenericTransmissionManager implements Serializable
      */
     public void closeAllMessageProducers()
     {
-        for(int ii = 0; ii < messageProducerList.size(); ii++)
-        {
-            MessageProducer producer = (MessageProducer)messageProducerList.get(ii);
-            try
-            {
+        for (Object aMessageProducerList : messageProducerList) {
+            MessageProducer producer = (MessageProducer) aMessageProducerList;
+            try {
                 producer.close();
-            }
-            catch(JMSException exc)
-            {
-            
+            } catch (JMSException ignored) {
+
             }
         }
     }

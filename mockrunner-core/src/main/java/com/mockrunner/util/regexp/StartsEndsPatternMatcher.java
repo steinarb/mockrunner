@@ -25,8 +25,7 @@ public class StartsEndsPatternMatcher extends PatternMatcher.Base {
    public boolean matches(String string) {
       if (string.length() < minLength) return false;
       if (start != null && !string.startsWith(start)) return false;
-      if (end != null && !string.endsWith(end)) return false;
-      return true;
+       return !(end != null && !string.endsWith(end));
    }
 
    public static class Factory implements PatternMatcher.Factory {

@@ -249,9 +249,8 @@ public class MockConnection implements Connection, Serializable
     public void close() throws JMSException
     {
         throwJMSException();
-        for(int ii = 0; ii < sessions.size(); ii++)
-        {
-            Session session = (Session)sessions.get(ii);
+        for (Object session1 : sessions) {
+            Session session = (Session) session1;
             session.close();
         }
         closed = true;

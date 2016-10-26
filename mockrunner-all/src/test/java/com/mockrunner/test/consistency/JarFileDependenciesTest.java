@@ -69,16 +69,13 @@ public class JarFileDependenciesTest extends TestCase
     {
         List mockrunnerJars = MockrunnerJars.getMockrunnerJars();
         List jarFileNames = new ArrayList();
-        for(int ii = 0; ii < jarFiles.size(); ii++)
-        {
-            jarFileNames.add(((File)jarFiles.get(ii)).getName());
+        for (Object jarFile : jarFiles) {
+            jarFileNames.add(((File) jarFile).getName());
         }
         boolean ok = true;
-        for(int ii = 0; ii < mockrunnerJars.size(); ii++)
-        {
-            if(!jarFileNames.contains(mockrunnerJars.get(ii)))
-            {
-                System.out.println("Missing jar in release " + message + ": " + mockrunnerJars.get(ii));
+        for (Object mockrunnerJar : mockrunnerJars) {
+            if (!jarFileNames.contains(mockrunnerJar)) {
+                System.out.println("Missing jar in release " + message + ": " + mockrunnerJar);
                 ok = false;
             }
         }
@@ -157,16 +154,12 @@ public class JarFileDependenciesTest extends TestCase
             }
         }
         Jar filteredJars[] = extractor.filter(jars);
-        for(int ii = 0; ii < filteredJars.length; ii++)
-        {
-            Jar currentJar = filteredJars[ii];
+        for (Jar currentJar : filteredJars) {
             List extRefList = currentJar.getAllUnidentifiableExternallyReferencedPackages();
-            if(null != extRefList && !extRefList.isEmpty())
-            {
+            if (null != extRefList && !extRefList.isEmpty()) {
                 System.out.println("Unidentifiable dependencies for " + currentJar.getJarFileName());
-                for(int yy = 0; yy < extRefList.size(); yy++)
-                {
-                    System.out.println("Unidentifiable dependency: " + extRefList.get(yy));
+                for (Object anExtRefList : extRefList) {
+                    System.out.println("Unidentifiable dependency: " + anExtRefList);
                 }
                 System.out.println();
                 failure = true;
@@ -183,10 +176,8 @@ public class JarFileDependenciesTest extends TestCase
         if(!prohibited.isEmpty())
         {
             System.out.println("Illegal dependencies for " + nextJarName);
-            Iterator iterator = prohibited.iterator();
-            while(iterator.hasNext())
-            {
-                System.out.println("Illegal dependency: " + iterator.next());
+            for (Object aProhibited : prohibited) {
+                System.out.println("Illegal dependency: " + aProhibited);
             }
             System.out.println();
             return false;
@@ -196,10 +187,9 @@ public class JarFileDependenciesTest extends TestCase
     
     private void copyFiles(File tempDir, List allJars) throws IOException
     {
-        for(int ii = 0; ii < allJars.size(); ii++)
-        {
-            File nextFile = (File)allJars.get(ii);
-            File nextCopyFile = new File(tempDir, nextFile.getName());   
+        for (Object allJar : allJars) {
+            File nextFile = (File) allJar;
+            File nextCopyFile = new File(tempDir, nextFile.getName());
             copyFile(nextFile, nextCopyFile);
         }
     }
@@ -222,9 +212,8 @@ public class JarFileDependenciesTest extends TestCase
         else
         {
             File[] files = file.listFiles();
-            for(int ii = 0; ii < files.length; ii++)
-            {
-                delete(files[ii]);
+            for (File file1 : files) {
+                delete(file1);
             }
             file.delete();
         }

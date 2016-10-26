@@ -82,7 +82,7 @@ public class DefaultExceptionHandlerConfig implements ExceptionHandlerConfig
     {
         if(!canHandle(exception)) return null;
         if(null == exceptionHandler) return null;
-        return exceptionHandler.execute((Exception)exception, exceptionConfig, mapping, form, request, response);
+        return exceptionHandler.execute(exception, exceptionConfig, mapping, form, request, response);
     }
 
     /**

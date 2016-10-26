@@ -123,10 +123,7 @@ public class CaseAwareMap implements Map
     
     public void putAll(Map map)
     {
-        Iterator keys = map.keySet().iterator();
-        while(keys.hasNext())
-        {
-            Object nextKey = keys.next();
+        for (Object nextKey : map.keySet()) {
             Object nextValue = map.get(nextKey);
             put(nextKey, nextValue);
         }
@@ -186,12 +183,8 @@ public class CaseAwareMap implements Map
         {
             return modifier.modify(key, compareKey);
         }
-        Iterator iterator = actualMap.keySet().iterator();
-        while(iterator.hasNext())
-        {
-            Object actualKey = iterator.next();
-            if(areKeysEquals(actualKey, compareKey))
-            {
+        for (Object actualKey : actualMap.keySet()) {
+            if (areKeysEquals(actualKey, compareKey)) {
                 return modifier.modify(actualKey, compareKey);
             }
         }
@@ -200,7 +193,7 @@ public class CaseAwareMap implements Map
     
     private interface ConsistentModify
     {
-        public Object modify(Object key1, Object key2);
+        Object modify(Object key1, Object key2);
     }
     
     private class ConsistentRemove implements ConsistentModify

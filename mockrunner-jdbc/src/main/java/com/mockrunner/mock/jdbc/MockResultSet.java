@@ -227,7 +227,7 @@ public class MockResultSet implements ResultSet, Cloneable
             fetchSize = statement.getFetchSize();
             cursorName = ((MockStatement)statement).getCursorName();
         }
-        catch(SQLException exc)
+        catch(SQLException ignored)
         {
 
         }
@@ -680,30 +680,24 @@ public class MockResultSet implements ResultSet, Cloneable
         {
             otherMap = resultSet.columnMapCopy;
         }
-        Iterator<String> keys = thisMap.keySet().iterator();
-        while(keys.hasNext())
-        {
-            String currentKey = keys.next();
-            List<Object> thisList =  thisMap.get(currentKey);
-            List<Object> otherList =  otherMap.get(currentKey);
-            if(null == otherList) return false;
-            if(thisList.size() != otherList.size()) return false;
-            for(int ii = 0; ii < thisList.size(); ii++)
-            {
+        for (String currentKey : thisMap.keySet()) {
+            List<Object> thisList = thisMap.get(currentKey);
+            List<Object> otherList = otherMap.get(currentKey);
+            if (null == otherList) return false;
+            if (thisList.size() != otherList.size()) return false;
+            for (int ii = 0; ii < thisList.size(); ii++) {
                 Object source = thisList.get(ii);
                 Object target = otherList.get(ii);
-                if(null != source && null != target)
-                {
-                    if(!source.getClass().isAssignableFrom(target.getClass()) && !target.getClass().isAssignableFrom(source.getClass()))
-                    {
+                if (null != source && null != target) {
+                    if (!source.getClass().isAssignableFrom(target.getClass()) && !target.getClass().isAssignableFrom
+                            (source.getClass())) {
                         source = source.toString();
                         target = target.toString();
                     }
                 }
-                if(!ParameterUtil.compareParameter(source, target))
-                {
+                if (!ParameterUtil.compareParameter(source, target)) {
                     return false;
-                }    
+                }
             }
         }
         return true;
@@ -726,16 +720,11 @@ public class MockResultSet implements ResultSet, Cloneable
         if(number < 1) return null;
         int index = number - 1;
         List<Object> list = new ArrayList<Object>();
-        for(int ii = 0; ii < columnNameList.size(); ii++)
-        {
-            String nextColumnName = columnNameList.get(ii);
+        for (String nextColumnName : columnNameList) {
             List<Object> nextColumnList;
-            if(isDatabaseView)
-            {
+            if (isDatabaseView) {
                 nextColumnList = columnMap.get(nextColumnName);
-            }
-            else
-            {
+            } else {
                 nextColumnList = columnMapCopy.get(nextColumnName);
             }
             list.add(nextColumnList.get(index));
@@ -1208,7 +1197,7 @@ public class MockResultSet implements ResultSet, Cloneable
             {
                 return new URL(value.toString());
             }
-            catch(MalformedURLException exc)
+            catch(MalformedURLException ignored)
             {
             
             }
@@ -1226,7 +1215,7 @@ public class MockResultSet implements ResultSet, Cloneable
             {
                 return new URL(value.toString());
             }
-            catch(MalformedURLException exc)
+            catch(MalformedURLException ignored)
             {
             
             }
@@ -2325,16 +2314,10 @@ public class MockResultSet implements ResultSet, Cloneable
     private void adjustColumns()
     {
         int rowCount = 0;
-        Iterator<List<Object>> columns = columnMap.values().iterator();
-        while(columns.hasNext())
-        {
-            List<Object> nextColumn = columns.next();
+        for (List<Object> nextColumn : columnMap.values()) {
             rowCount = Math.max(rowCount, nextColumn.size());
         }
-        Iterator<List<Object>> columns1 = columnMap.values().iterator();
-        while(columns1.hasNext())
-        {
-            List<Object> nextColumn = columns1.next();
+        for (List<Object> nextColumn : columnMap.values()) {
             CollectionUtil.fillList(nextColumn, rowCount);
         }
     }
@@ -2358,12 +2341,10 @@ public class MockResultSet implements ResultSet, Cloneable
     private void adjustInsertRow()
     {
         insertRow = createCaseAwareMap();
-        Iterator<String> columns = columnMap.keySet().iterator();
-        while(columns.hasNext())
-        {
+        for (String s : columnMap.keySet()) {
             ArrayList<Object> list = new ArrayList<Object>(1);
             list.add(null);
-            insertRow.put(columns.next(), list);
+            insertRow.put(s, list);
         }
     }
     
@@ -2386,11 +2367,9 @@ public class MockResultSet implements ResultSet, Cloneable
     private <T> Map<String, List<T>> copyColumnDataMap(Map<String, List<T>> columnMap)
     {
         Map<String, List<T>> copy = createCaseAwareMap();
-        Iterator<String> columns = columnMap.keySet().iterator();
-        while(columns.hasNext())
-        {
+        for (String s : columnMap.keySet()) {
             List<T> copyList = new ArrayList<T>();
-            String nextKey = columns.next();
+            String nextKey = s;
             List<T> nextColumnList = columnMap.get(nextKey);
             for (T nextColumnList1 : nextColumnList) {
                 T copyParameter = (T) ParameterUtil.copyParameter(nextColumnList1);
@@ -2415,14 +2394,14 @@ public class MockResultSet implements ResultSet, Cloneable
     public String toString()
     {
         StringBuffer buffer = new StringBuffer("ResultSet " + id + ":\n");
-        buffer.append("Number of rows: " + getRowCount() + "\n");
-        buffer.append("Number of columns: " + getColumnCount() + "\n");
+        buffer.append("Number of rows: ").append(getRowCount()).append("\n");
+        buffer.append("Number of columns: ").append(getColumnCount()).append("\n");
         buffer.append("Column names:\n");
         StringUtil.appendObjectsAsString(buffer, columnNameList);
         buffer.append("Data:\n");
         for(int ii = 1; ii <= getRowCount(); ii++)
         {
-            buffer.append("Row number " + ii + ":\n");
+            buffer.append("Row number ").append(ii).append(":\n");
             StringUtil.appendObjectsAsString(buffer, getRow(ii));
         }
         return buffer.toString();

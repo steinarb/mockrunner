@@ -116,9 +116,8 @@ public class JavaLineAssembler
         }
         else
         {
-            for(int ii = 0; ii < lines.length; ii++)
-            {
-                appendLine(lines[ii]);
+            for (String line : lines) {
+                appendLine(line);
             }
         }
     }
@@ -140,9 +139,8 @@ public class JavaLineAssembler
     public void appendImports(List imports)
     {
         if(null == imports) return;
-        for(int ii = 0; ii < imports.size(); ii++)
-        {
-            appendImport((String)imports.get(ii));
+        for (Object anImport : imports) {
+            appendImport((String) anImport);
         }
     }
     
@@ -244,10 +242,10 @@ public class JavaLineAssembler
         StringBuffer buffer = new StringBuffer(30);
         if(null != defaultMethodModifier && defaultMethodModifier.length() > 0)
         {
-            buffer.append(defaultMethodModifier + " ");
+            buffer.append(defaultMethodModifier).append(" ");
         }
         buffer.append(prepareModifierList(modifiers));
-        buffer.append(returnType + " ");
+        buffer.append(returnType).append(" ");
         appendSignature(name, parameterTypes, parameterNames, exceptions, buffer);
         appendLine(buffer.toString());
     }
@@ -265,7 +263,7 @@ public class JavaLineAssembler
     {
         if(null == exceptions || exceptions.length <= 0) return;
         String throwsClause = prepareCommaSeparatedList(exceptions, null);
-        buffer.append(" throws " + throwsClause);
+        buffer.append(" throws ").append(throwsClause);
     }
 
     public void appendComment(String oneLineComment)
@@ -288,9 +286,8 @@ public class JavaLineAssembler
     {
         if(null == commentLines || commentLines.length <= 0) return;
         appendLine(commentStart);
-        for(int ii = 0; ii < commentLines.length; ii++)
-        {
-            appendLine(" * " + commentLines[ii]);
+        for (String commentLine : commentLines) {
+            appendLine(" * " + commentLine);
         }
         appendLine(" */");
     }
@@ -298,10 +295,9 @@ public class JavaLineAssembler
     private String prepareModifierList(String[] modifiers)
     {
         if(null == modifiers) modifiers = new String[0];
-        StringBuffer listBuffer = new StringBuffer(50);
-        for(int ii = 0; ii < modifiers.length; ii++)
-        {
-            listBuffer.append(modifiers[ii] + " ");
+        StringBuilder listBuffer = new StringBuilder(50);
+        for (String modifier : modifiers) {
+            listBuffer.append(modifier).append(" ");
         }
         return listBuffer.toString();
     }
@@ -324,13 +320,13 @@ public class JavaLineAssembler
     {
         if(null == types) types = new String[0];
         if(null == names) names = new String[0];
-        StringBuffer listBuffer = new StringBuffer(50);
+        StringBuilder listBuffer = new StringBuilder(50);
         for(int ii = 0; ii < types.length; ii++)
         {
             listBuffer.append(types[ii]);
             if(ii < names.length)
             {
-                listBuffer.append(" " + names[ii]);
+                listBuffer.append(" ").append(names[ii]);
             }
             if(ii < types.length - 1)
             {

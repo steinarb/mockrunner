@@ -177,7 +177,7 @@ public class MockHttpServletRequestTest extends TestCase
         assertTrue(list.contains("testHeader"));
         assertTrue(list.contains("dateHeader"));
         long date = request.getDateHeader("dateHeader");
-        assertEquals(1076108388000l, date);
+        assertEquals(1076108388000L, date);
         assertEquals(-1, request.getDateHeader("anotherDateHeader"));
         request.setHeader("dateHeader", "3.3.1980");
         try

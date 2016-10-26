@@ -293,7 +293,7 @@ public abstract class JMSTestCaseAdapter extends BaseTestCase
      */
     protected TransmissionManagerWrapper getTransmissionManager(int indexOfSession)
     {
-        return jmsTestModule.getTransmissionManager(indexOfSession);
+        return jmsTestModule.getTransmissionManagerWrapper(indexOfSession);
     }
 
     /**

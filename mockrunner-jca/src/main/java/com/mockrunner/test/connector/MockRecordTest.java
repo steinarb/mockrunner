@@ -60,9 +60,9 @@ public class MockRecordTest extends TestCase
         record.setRecordName("recordName");
         record.setRecordShortDescription("shortDescription");
         String string = record.toString();
-        assertTrue(-1 != string.indexOf(MockRecord.class.getName()));
-        assertTrue(-1 != string.indexOf("recordName"));
-        assertTrue(-1 != string.indexOf("shortDescription"));
+        assertTrue(string.contains(MockRecord.class.getName()));
+        assertTrue(string.contains("recordName"));
+        assertTrue(string.contains("shortDescription"));
     }
     
     public void testClone() throws Exception

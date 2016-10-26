@@ -21,11 +21,11 @@ public class MockVariableResolverTest extends TestCase
     public void testResolve() throws Exception
     {
         assertNull(resolver.resolveVariable("test"));
-        resolver.addVariable("test", new Integer(3));
-        assertEquals(new Integer(3), resolver.resolveVariable("test"));
+        resolver.addVariable("test", 3);
+        assertEquals(3, resolver.resolveVariable("test"));
         assertNull(resolver.resolveVariable("test1"));
         resolver.addVariable("test1", "xyz");
-        assertEquals(new Integer(3), resolver.resolveVariable("test"));
+        assertEquals(3, resolver.resolveVariable("test"));
         assertEquals("xyz", resolver.resolveVariable("test1"));
         resolver.clearVariables();
         assertNull(resolver.resolveVariable("test"));

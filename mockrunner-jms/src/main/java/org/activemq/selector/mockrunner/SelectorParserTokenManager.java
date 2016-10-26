@@ -808,7 +808,7 @@ private final int jjMoveNfa_0(int startState, int curPos)
       }
       else
       {
-         int hiByte = (int)(curChar >> 8);
+         int hiByte = curChar >> 8;
          int i1 = hiByte >> 6;
          long l1 = 1L << (hiByte & 077);
          int i2 = (curChar & 0xff) >> 6;
@@ -874,16 +874,14 @@ static final int[] jjnextStates = {
    29, 30, 35, 36, 23, 24, 25, 1, 2, 4, 8, 9, 11, 19, 20, 33, 
    34, 37, 38, 
 };
-private static final boolean jjCanMove_0(int hiByte, int i1, int i2, long l1, long l2)
+private static boolean jjCanMove_0(int hiByte, int i1, int i2, long l1, long l2)
 {
    switch(hiByte)
    {
       case 0:
          return ((jjbitVec2[i2] & l2) != 0L);
-      default : 
-         if ((jjbitVec0[i1] & l1) != 0L)
-            return true;
-         return false;
+      default :
+          return (jjbitVec0[i1] & l1) != 0L;
    }
 }
 public static final String[] jjstrLiteralImages = {

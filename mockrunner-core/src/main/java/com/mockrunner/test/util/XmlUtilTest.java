@@ -17,7 +17,7 @@ public class XmlUtilTest extends TestCase
     private void prepareHTMLFile() throws Exception
     {
         FileInputStream stream = new FileInputStream("target/test-classes/com/mockrunner/test/util/test.html");
-        StringBuffer output = new StringBuffer();
+        StringBuilder output = new StringBuilder();
         int nextChar = stream.read();
         while(-1 != nextChar)
         {
@@ -29,21 +29,20 @@ public class XmlUtilTest extends TestCase
   
     private void prepareHTML()
     {
-        StringBuffer output = new StringBuffer();
-        output.append("<html>\n");
-        output.append("<head>\n");
-        output.append("<meta http-equiv=\"refresh\" content=\"");
-        output.append("0;URL=http://www.mockrunner.com>\"\n");
-        output.append("</head>\n");
-        output.append("<body>\n");
-        output.append("<h3>");
-        output.append("You will be redirected to ");
-        output.append("<a href=\"http://www.mockrunner.com\">");
-        output.append("http://www.mockrunner.com</a>");
-        output.append("</h3>\n");
-        output.append("</body>\n");
-        output.append("</html>\n");
-        source = output.toString();
+        String output = "<html>\n" +
+                "<head>\n" +
+                "<meta http-equiv=\"refresh\" content=\"" +
+                "0;URL=http://www.mockrunner.com>\"\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "<h3>" +
+                "You will be redirected to " +
+                "<a href=\"http://www.mockrunner.com\">" +
+                "http://www.mockrunner.com</a>" +
+                "</h3>\n" +
+                "</body>\n" +
+                "</html>\n";
+        source = output;
     }
 
     public void testParseHTML() throws Exception

@@ -33,7 +33,7 @@ public interface NestedTag
      * does not set the flag for child tags.
      * @param doRelease should release be called, default is <code>false</code>
      */
-    public void setDoRelease(boolean doRelease);
+    void setDoRelease(boolean doRelease);
     
     /**
      * Specify if the <code>release</code> method should be called
@@ -46,14 +46,14 @@ public interface NestedTag
      * tag and all child tags recursively.
      * @param doRelease should release be called, default is <code>false</code>
      */
-    public void setDoReleaseRecursive(boolean doRelease);
+    void setDoReleaseRecursive(boolean doRelease);
     
     /**
      * Populates the attributes of the underlying tag. The setters
      * of the tag are called. Please note that child tags are not
      * populated.
      */
-    public void populateAttributes();
+    void populateAttributes();
     
     /**
      * Performs the tag lifecycle. All <code>doBody</code> and <code>doTag</code> 
@@ -64,43 +64,43 @@ public interface NestedTag
      * (use {@link #setDoRelease(boolean)}).
      * @return the result of the final <code>doEndTag</code> call
      */
-    public int doLifecycle() throws JspException;
+    int doLifecycle() throws JspException;
     
     /**
      * Returns the wrapped tag (the testee).
      * @return the wrapped tag
      */
-    public TagSupport getTag();
+    TagSupport getTag();
     
     /**
      * Returns the wrapped tag (the testee).
      * @return the wrapped tag
      */
-    public JspTag getWrappedTag();
+    JspTag getWrappedTag();
     
     /**
      * Removes all childs.
      */
-    public void removeChilds();
+    void removeChilds();
      
     /**
      * Returns the <code>List</code> of childs.
      * @return the <code>List</code> of childs
      */
-    public List getChilds();
+    List getChilds();
      
     /**
      * Returns a child specified by its index.
      * @param index the index
      * @return the child
      */
-    public Object getChild(int index);
+    Object getChild(int index);
       
     /**
      * Adds a text child simulating static body content.
      * @param text the static text
      */
-    public void addTextChild(String text);
+    void addTextChild(String text);
     
     /**
      * Adds a dynamic child simulating scriptlets and
@@ -109,7 +109,7 @@ public interface NestedTag
      * for details about child handling.
      * @param child the dynamic child instance
      */
-    public void addDynamicChild(DynamicChild child);
+    void addDynamicChild(DynamicChild child);
      
     /**
      * Adds a tag child simulating nested tags.
@@ -117,8 +117,8 @@ public interface NestedTag
      * automatically wrapping the specified tag. An empty attribute 
      * <code>Map</code> will be used for the tag.
      * @param tag the tag class
-     */  
-    public NestedTag addTagChild(Class tag);
+     */
+    NestedTag addTagChild(Class tag);
      
     /**
      * Adds a tag child simulating nested tags.
@@ -128,8 +128,8 @@ public interface NestedTag
      * (<i>propertyname</i> maps to <i>propertyvalue</i>).
      * @param tag the tag class
      * @param attributeMap the attribute map
-     */     
-    public NestedTag addTagChild(Class tag, Map attributeMap);
+     */
+    NestedTag addTagChild(Class tag, Map attributeMap);
     
     /**
      * Adds a tag child simulating nested tags.
@@ -137,8 +137,8 @@ public interface NestedTag
      * wrapping the specified tag. An empty attribute <code>Map</code> 
      * will be used for the tag.
      * @param tag the tag
-     */  
-    public NestedTag addTagChild(TagSupport tag);
+     */
+    NestedTag addTagChild(TagSupport tag);
      
     /**
      * Adds a tag child simulating nested tags.
@@ -148,8 +148,8 @@ public interface NestedTag
      * (<i>propertyname</i> maps to <i>propertyvalue</i>).
      * @param tag the tag
      * @param attributeMap the attribute map
-     */     
-    public NestedTag addTagChild(TagSupport tag, Map attributeMap);
+     */
+    NestedTag addTagChild(TagSupport tag, Map attributeMap);
     
     /**
      * Adds a tag child simulating nested tags.
@@ -157,8 +157,8 @@ public interface NestedTag
      * wrapping the specified tag. An empty attribute <code>Map</code> 
      * will be used for the tag.
      * @param tag the tag
-     */  
-    public NestedTag addTagChild(JspTag tag);
+     */
+    NestedTag addTagChild(JspTag tag);
      
     /**
      * Adds a tag child simulating nested tags.
@@ -168,6 +168,6 @@ public interface NestedTag
      * (<i>propertyname</i> maps to <i>propertyvalue</i>).
      * @param tag the tag
      * @param attributeMap the attribute map
-     */     
-    public NestedTag addTagChild(JspTag tag, Map attributeMap);
+     */
+    NestedTag addTagChild(JspTag tag, Map attributeMap);
 }

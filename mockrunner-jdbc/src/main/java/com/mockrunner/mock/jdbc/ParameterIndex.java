@@ -32,10 +32,7 @@ public class ParameterIndex implements ParameterReference{
             return false;
         }
         final ParameterIndex other = (ParameterIndex) obj;
-        if (this.index != other.index) {
-            return false;
-        }
-        return true;
+        return this.index == other.index;
     }
 
     @Override

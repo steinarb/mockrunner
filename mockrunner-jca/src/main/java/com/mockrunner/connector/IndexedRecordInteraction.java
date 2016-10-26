@@ -373,11 +373,10 @@ public class IndexedRecordInteraction implements InteractionImplementor
         } 
         catch(Exception exc)
         {
-            ResourceException resExc = new ResourceException("execute() failed");
-            resExc.setLinkedException(exc);
+            ResourceException resExc = new ResourceException("execute() failed", exc);
             throw resExc;
         }
-        return (Record)response;
+        return response;
     }
 
     /**
@@ -413,8 +412,7 @@ public class IndexedRecordInteraction implements InteractionImplementor
         } 
         catch(Exception exc)
         {
-            ResourceException resExc = new ResourceException("execute() failed");
-            resExc.setLinkedException(exc);
+            ResourceException resExc = new ResourceException("execute() failed", exc);
             throw resExc;
         }
         return true;

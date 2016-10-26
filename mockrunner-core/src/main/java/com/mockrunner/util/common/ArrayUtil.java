@@ -21,9 +21,8 @@ public class ArrayUtil
     public static List<Byte> getListFromByteArray(byte[] data)
     {
         ArrayList<Byte> list = new ArrayList<Byte>(data.length);
-        for(int ii = 0; ii < data.length; ii++)
-        {
-            list.add(data[ii]);
+        for (byte aData : data) {
+            list.add(aData);
         }
         return list;
     }
@@ -430,18 +429,13 @@ public class ArrayUtil
     
     private static void renameDuplicates(String[] names, Map nameMap)
     {
-        Iterator iterator = nameMap.keySet().iterator();
-        while(iterator.hasNext())
-        {
-            String nextName = (String)iterator.next();
-            Integer nextValue = (Integer)nameMap.get(nextName);
-            if(nextValue.intValue() > 1)
-            {
+        for (Object o : nameMap.keySet()) {
+            String nextName = (String) o;
+            Integer nextValue = (Integer) nameMap.get(nextName);
+            if (nextValue > 1) {
                 int number = 1;
-                for(int ii = 0; ii < names.length; ii++)
-                {
-                    if(names[ii].equals(nextName))
-                    {
+                for (int ii = 0; ii < names.length; ii++) {
+                    if (names[ii].equals(nextName)) {
                         names[ii] = nextName + number;
                         number++;
                     }
@@ -453,16 +447,12 @@ public class ArrayUtil
     private static Map collectOccurences(String[] names)
     {
         Map nameMap = new HashMap();
-        for(int ii = 0; ii < names.length; ii++)
-        {
-            Integer currentValue = (Integer)nameMap.get(names[ii]);            
-            if(null == currentValue)
-            {
-                nameMap.put(names[ii], new Integer(1));
-            }
-            else
-            {
-                nameMap.put(names[ii], new Integer(currentValue.intValue() + 1));
+        for (String name : names) {
+            Integer currentValue = (Integer) nameMap.get(name);
+            if (null == currentValue) {
+                nameMap.put(name, 1);
+            } else {
+                nameMap.put(name, currentValue.intValue() + 1);
             }
         }
         return nameMap;

@@ -95,12 +95,9 @@ public class NestedStandardTag extends TagSupport implements NestedTag
     public void setDoReleaseRecursive(boolean doRelease)
     {
         this.doRelease = doRelease;
-        for(int ii = 0; ii < childs.size(); ii++)
-        {
-            Object child = childs.get(ii);
-            if(child instanceof NestedTag)
-            {
-                ((NestedTag)child).setDoReleaseRecursive(doRelease);
+        for (Object child : childs) {
+            if (child instanceof NestedTag) {
+                ((NestedTag) child).setDoReleaseRecursive(doRelease);
             }
         }
     }
@@ -366,16 +363,11 @@ public class NestedStandardTag extends TagSupport implements NestedTag
     {
         this.pageContext = pageContext;
         tag.setPageContext(pageContext);
-        for(int ii = 0; ii < childs.size(); ii++)
-        {
-            Object child = childs.get(ii);
-            if(child instanceof Tag)
-            {
-                ((Tag)child).setPageContext(pageContext);
-            }
-            else if(child instanceof SimpleTag)
-            {
-                ((SimpleTag)child).setJspContext(pageContext);
+        for (Object child : childs) {
+            if (child instanceof Tag) {
+                ((Tag) child).setPageContext(pageContext);
+            } else if (child instanceof SimpleTag) {
+                ((SimpleTag) child).setJspContext(pageContext);
             }
         }
     }

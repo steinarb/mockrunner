@@ -40,12 +40,12 @@ public class GreetingsActionTest extends BasicActionTestCaseAdapter
     @Test
     public void testSuccesfulGreetings()
     {
-        getActionMockObjectFactory().getMockServletContext().setAttribute("counter", new Integer(0));
+        getActionMockObjectFactory().getMockServletContext().setAttribute("counter", 0);
         getActionMockObjectFactory().getMockActionMapping().setPath("/greetings");
         addRequestParameter("name", "testname");
         actionPerform(GreetingsAction.class, GreetingsValidatorForm.class);
         assertEquals("Hello testname, you are visitor 1", getRequestAttribute("greetings"));
-        getActionMockObjectFactory().getMockServletContext().setAttribute("counter", new Integer(6));
+        getActionMockObjectFactory().getMockServletContext().setAttribute("counter", 6);
         verifyNoActionErrors();
         actionPerform(GreetingsAction.class, GreetingsValidatorForm.class);
         assertEquals("Hello testname, you are visitor 7", getRequestAttribute("greetings"));
@@ -56,7 +56,7 @@ public class GreetingsActionTest extends BasicActionTestCaseAdapter
     @Test
     public void testValidationError()
     {
-        getActionMockObjectFactory().getMockServletContext().setAttribute("counter", new Integer(0));
+        getActionMockObjectFactory().getMockServletContext().setAttribute("counter", 0);
         getActionMockObjectFactory().getMockActionMapping().setPath("/greetings"); 
         actionPerform(GreetingsAction.class, GreetingsValidatorForm.class);
         verifyNumberActionErrors(1);

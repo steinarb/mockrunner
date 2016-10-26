@@ -147,7 +147,7 @@ public class TransmissionManagerTest
         TopicTransmissionManager manager = session.getTopicTransmissionManager();
         MockTopicPublisher publisher1 = manager.createTopicPublisher(new MockTopic("Topic1"));
         MockTopicPublisher publisher2 = manager.createTopicPublisher(new MockTopic("Topic2"));
-        MockTopicSubscriber subscriber1 = manager.createTopicSubscriber(new MockTopic("Topic1"), "", false);;
+        MockTopicSubscriber subscriber1 = manager.createTopicSubscriber(new MockTopic("Topic1"), "", false);
         MockTopicSubscriber durableSubscriber1 = manager.createDurableTopicSubscriber(new MockTopic("Topic1"), "subscription1", "", true);
         MockTopicSubscriber durableSubscriber2 = manager.createDurableTopicSubscriber(new MockTopic("Topic1"), "subscription2", "", false);
         MockTopicSubscriber durableSubscriber3 = manager.createDurableTopicSubscriber(new MockTopic("Topic2"), "subscription3", "", true);
@@ -163,7 +163,7 @@ public class TransmissionManagerTest
         publisher1 = manager.createTopicPublisher(new
         MockTopic("Topic1")); publisher2 =
         manager.createTopicPublisher(new MockTopic("Topic2")); subscriber1
-        = manager.createTopicSubscriber(new MockTopic("Topic1"), "", false);;
+        = manager.createTopicSubscriber(new MockTopic("Topic1"), "", false);
         durableSubscriber1 = manager.createDurableTopicSubscriber(new MockTopic("Topic1"), "subscription1", "", true);
         durableSubscriber2 = manager.createDurableTopicSubscriber(new MockTopic("Topic1"), "subscription2", "", false);
         durableSubscriber3 = manager.createDurableTopicSubscriber(new MockTopic("Topic2"), "subscription3", "", true);

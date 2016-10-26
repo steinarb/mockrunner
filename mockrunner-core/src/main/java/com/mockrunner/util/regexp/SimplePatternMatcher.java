@@ -32,7 +32,7 @@ public class SimplePatternMatcher extends PatternMatcher.Base {
          if (!caseSensitive) {
             string = string.toUpperCase();
          }
-         return string.indexOf(pattern) >= 0;
+         return string.contains(pattern);
       }
    }
 

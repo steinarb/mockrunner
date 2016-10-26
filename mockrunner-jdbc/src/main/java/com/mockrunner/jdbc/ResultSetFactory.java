@@ -7,7 +7,7 @@ import com.mockrunner.mock.jdbc.MockResultSet;
  */
 public interface ResultSetFactory
 {
-    public MockResultSet create(String id);
+    MockResultSet create(String id);
 
     class Default implements ResultSetFactory {
         public final static ResultSetFactory INSTANCE = new Default(false);

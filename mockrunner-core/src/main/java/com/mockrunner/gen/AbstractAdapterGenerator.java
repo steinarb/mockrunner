@@ -1,7 +1,6 @@
 package com.mockrunner.gen;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -17,10 +16,8 @@ public abstract class AbstractAdapterGenerator
     protected void generate() throws Exception
     {
         List units = initialize();
-        Iterator iterator = units.iterator();
-        while(iterator.hasNext())
-        {
-            ProcessingUnit nextUnit = (ProcessingUnit)iterator.next();
+        for (Object unit : units) {
+            ProcessingUnit nextUnit = (ProcessingUnit) unit;
             AdapterProcessor processor = nextUnit.getProcessor();
             processor.process(nextUnit.getModule(), nextUnit.getExcludedMethods());
             writeOutputFile(processor);
@@ -28,7 +25,7 @@ public abstract class AbstractAdapterGenerator
         System.out.println("Adapters successfully created");
     }
     
-    private void writeOutputFile(AdapterProcessor processor) throws FileNotFoundException, IOException
+    private void writeOutputFile(AdapterProcessor processor) throws IOException
     {
         System.out.println("Writing output file " + processor.getName());
         File currentFile = new File(getSrcDir() + "/" + processor.getName());

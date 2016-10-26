@@ -81,16 +81,11 @@ public class MockJspFragment extends JspFragment
     public void setJspContext(JspContext jspContext)
     {
         this.jspContext = jspContext;
-        for(int ii = 0; ii < childs.size(); ii++)
-        {
-            Object child = childs.get(ii);
-            if(child instanceof Tag && jspContext instanceof PageContext)
-            {
-                ((Tag)child).setPageContext((PageContext)jspContext);
-            }
-            else if(child instanceof SimpleTag)
-            {
-                ((SimpleTag)child).setJspContext(jspContext);
+        for (Object child : childs) {
+            if (child instanceof Tag && jspContext instanceof PageContext) {
+                ((Tag) child).setPageContext((PageContext) jspContext);
+            } else if (child instanceof SimpleTag) {
+                ((SimpleTag) child).setJspContext(jspContext);
             }
         }
     }

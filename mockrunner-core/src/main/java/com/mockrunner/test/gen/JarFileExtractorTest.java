@@ -42,9 +42,8 @@ public class JarFileExtractorTest extends TestCase
     private JarImpl createJarWithDependencies(String name, String[] dependencies)
     {
         JarImpl jar = createEmptyJar(name);
-        for(int ii = 0; ii < dependencies.length; ii++)
-        {
-            jar.addOutgoingDependency(createEmptyJar(dependencies[ii]));
+        for (String dependency : dependencies) {
+            jar.addOutgoingDependency(createEmptyJar(dependency));
         }
         return jar;
     }

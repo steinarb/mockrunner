@@ -11,7 +11,7 @@ public class Marshaller
     {
         if(null == data) data = "";
         if(data.length() > size) data = data.substring(0, size);
-        StringBuffer buffer = new StringBuffer(data);
+        StringBuilder buffer = new StringBuilder(data);
         for(int ii = buffer.length(); ii < size; ii++)
         {
             buffer.append(" ");

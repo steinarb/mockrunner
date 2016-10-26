@@ -132,8 +132,8 @@ public class TagUtilTest extends BaseTestCase
     public void testPopulateTag()
     {
         testMap.put("testString", "test");
-        testMap.put("testDouble", new Double(12.3));
-        testMap.put("testInteger", new Integer(100));
+        testMap.put("testDouble", 12.3);
+        testMap.put("testInteger", 100);
         TestTag tag = new TestTag();
         TagUtil.populateTag(tag, testMap);
         assertEquals("test", tag.getTestString());
@@ -254,7 +254,7 @@ public class TagUtilTest extends BaseTestCase
         bodyList.add(new TestDynamicChild("thisisa"));
         bodyList.add("test");
         bodyList.add(new TestDynamicChild(null));
-        bodyList.add(new Integer(123));
+        bodyList.add(123);
         bodyList.add(null);
         TagUtil.evalBody(bodyList, pageContext);
         assertTrue(testStandardTag.wasDoStartTagCalled());

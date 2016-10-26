@@ -50,11 +50,11 @@ public class ConstrainedNumericTextTag extends TextTag
     
     private String createJavaScriptHandler()
     {
-        StringBuffer handler = new StringBuffer();
+        StringBuilder handler = new StringBuilder();
         handler.append("checkConstraints(");
         handler.append("this,");
-        handler.append(getMinValue() + ",");
-        handler.append(getMaxValue() + ");");
+        handler.append(getMinValue()).append(",");
+        handler.append(getMaxValue()).append(");");
         if(null != getOnblur()) handler.append(getOnblur());
         return handler.toString();
     }

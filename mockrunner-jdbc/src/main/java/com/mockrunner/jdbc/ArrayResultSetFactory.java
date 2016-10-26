@@ -170,14 +170,12 @@ public class ArrayResultSetFactory implements ResultSetFactory
             MockResultSet resultSet = new MockResultSet(id);
             if (columnNames != null)
             {
-                for (int ii = 0; ii < columnNames.length; ii++)
-                {
-                    resultSet.addColumn(columnNames[ii]);
+                for (String columnName : columnNames) {
+                    resultSet.addColumn(columnName);
                 }
             }
-            for (int jj = 0; jj < stringMatrix.length; jj++)
-            {
-                resultSet.addRow(stringMatrix[jj]);
+            for (String[] aStringMatrix : stringMatrix) {
+                resultSet.addRow(aStringMatrix);
             }
             return resultSet;
         }

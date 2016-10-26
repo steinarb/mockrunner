@@ -63,7 +63,7 @@ public class StringUtil
         {
             throw new IllegalArgumentException("match must not be empty");
         }
-        StringBuffer buffer = new StringBuffer(source.length() + 10);
+        StringBuilder buffer = new StringBuilder(source.length() + 10);
         int index = 0;
         int newIndex = 0;
         while((newIndex = source.indexOf(match, index)) >= 0)
@@ -124,7 +124,7 @@ public class StringUtil
      */
     public static String lowerCase(String string, int startIndex, int endIndex)
     {
-        StringBuffer buffer = new StringBuffer(string);
+        StringBuilder buffer = new StringBuilder(string);
         if(endIndex <= startIndex) endIndex = startIndex + 1;
         for(int ii = startIndex; ii < endIndex; ii++)
         {
@@ -150,7 +150,7 @@ public class StringUtil
         StringBuffer buffer = new StringBuffer();
         if(null == field)
         {
-            buffer.append(fieldName + ": " + "null");
+            buffer.append(fieldName).append(": ").append("null");
         }
         else if(field.getClass().isArray())
         {
@@ -166,7 +166,7 @@ public class StringUtil
         }
         else
         {
-            buffer.append(fieldName + ": " + field.toString());
+            buffer.append(fieldName).append(": ").append(field.toString());
         }
         return buffer.toString();
     }
@@ -176,7 +176,7 @@ public class StringUtil
         int length = Array.getLength(field);
         if(0 >= length)
         {
-            buffer.append(fieldName + ": " + "empty");
+            buffer.append(fieldName).append(": ").append("empty");
         }
         else
         {
@@ -196,7 +196,7 @@ public class StringUtil
         List list = new ArrayList((Collection)field);
         if(0 >= list.size())
         {
-            buffer.append(fieldName + ": " + "empty");
+            buffer.append(fieldName).append(": ").append("empty");
         }
         else
         {
@@ -215,7 +215,7 @@ public class StringUtil
     {
         if(0 >= ((Map)field).size())
         {
-            buffer.append(fieldName + ": " + "empty");
+            buffer.append(fieldName).append(": ").append("empty");
         }
         else
         {
@@ -243,9 +243,8 @@ public class StringUtil
      */
     public static void appendObjectsAsString(StringBuffer buffer, List data)
     {
-        for(int ii = 0; ii < data.size(); ii++)
-        {
-            buffer.append(data.get(ii));
+        for (Object aData : data) {
+            buffer.append(aData);
             buffer.append("\n");
         }
     }
@@ -355,7 +354,7 @@ public class StringUtil
             source = source.toLowerCase();
             target = target.toLowerCase();
         }
-        return (-1 != source.indexOf(target));
+        return (source.contains(target));
     }
     
     /**

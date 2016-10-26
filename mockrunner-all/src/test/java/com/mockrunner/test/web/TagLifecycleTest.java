@@ -194,7 +194,7 @@ public class TagLifecycleTest extends BaseTestCase
     
     private void clearOutput() throws Exception
     {
-        ((MockJspWriter)(getWebMockObjectFactory().getMockPageContext().getOut())).clearBuffer();
+        getWebMockObjectFactory().getMockPageContext().getOut().clearBuffer();
     }
     
     private class TestDynamicChild implements DynamicChild

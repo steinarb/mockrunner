@@ -23,11 +23,9 @@ public class JarFileExtractor
     public Jar[] filter(Jar jars[])
     {
         List finalList = new ArrayList();
-        for(int ii = 0; ii < jars.length; ii++) 
-        {
-            if(mainJars.contains(jars[ii].getJarFileName()))
-            {
-                finalList.add(jars[ii]);
+        for (Jar jar : jars) {
+            if (mainJars.contains(jar.getJarFileName())) {
+                finalList.add(jar);
             }
         }
         return (Jar[])finalList.toArray(new Jar[finalList.size()]);
@@ -36,12 +34,10 @@ public class JarFileExtractor
     public Map createDependencies(Jar jars[])
     {
         Map finalMap = new HashMap();
-        for(int ii = 0; ii < jars.length; ii++) 
-        {
-            if(mainJars.contains(jars[ii].getJarFileName()))
-            {
-                Set currentSet = createDependencySet(jars[ii]);
-                finalMap.put(jars[ii].getJarFileName(), currentSet);
+        for (Jar jar : jars) {
+            if (mainJars.contains(jar.getJarFileName())) {
+                Set currentSet = createDependencySet(jar);
+                finalMap.put(jar.getJarFileName(), currentSet);
             }
         }
         return finalMap;
@@ -52,13 +48,11 @@ public class JarFileExtractor
         Set resultSet = new TreeSet();
         List dependendJars = jar.getOutgoingDependencies();
         if(null == dependendJars) return resultSet;
-        for(int ii = 0; ii < dependendJars.size(); ii++)
-        {
-            Jar currentJar = (Jar)dependendJars.get(ii);
+        for (Object dependendJar : dependendJars) {
+            Jar currentJar = (Jar) dependendJar;
             String currentJarFileName = currentJar.getJarFileName();
             resultSet.add(currentJarFileName);
-            if(!exceptionJars.contains(currentJarFileName))
-            {
+            if (!exceptionJars.contains(currentJarFileName)) {
                 resultSet.addAll(createDependencySet(currentJar));
             }
         }

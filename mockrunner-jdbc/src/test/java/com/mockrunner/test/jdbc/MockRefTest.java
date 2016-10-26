@@ -38,11 +38,11 @@ public class MockRefTest extends TestCase
         assertTrue(ref.equals(other));
         assertTrue(other.equals(ref));
         assertEquals(ref.hashCode(), other.hashCode());
-        other = new MockRef(new Integer(3));
+        other = new MockRef(3);
         other.setBaseTypeName("baseTypeName");
         assertFalse(ref.equals(other));
         assertFalse(other.equals(ref));
-        ref = new MockRef(new Integer(3));
+        ref = new MockRef(3);
         assertFalse(ref.equals(other));
         assertFalse(other.equals(ref));
         ref.setBaseTypeName("baseTypeName");

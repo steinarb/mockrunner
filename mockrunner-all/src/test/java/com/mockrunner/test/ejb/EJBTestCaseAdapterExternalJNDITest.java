@@ -92,13 +92,13 @@ public class EJBTestCaseAdapterExternalJNDITest extends EJBTestCaseAdapter
         }
     }
     
-    public static interface TestSession extends javax.ejb.EJBObject
+    public interface TestSession extends javax.ejb.EJBObject
     {
-        public void test(boolean setRollbackOnly) throws RemoteException;
+        void test(boolean setRollbackOnly) throws RemoteException;
     }
     
-    public static interface TestSessionHome extends javax.ejb.EJBHome
+    public interface TestSessionHome extends javax.ejb.EJBHome
     {
-        public TestSession create() throws CreateException, RemoteException;
+        TestSession create() throws CreateException, RemoteException;
     }
 }

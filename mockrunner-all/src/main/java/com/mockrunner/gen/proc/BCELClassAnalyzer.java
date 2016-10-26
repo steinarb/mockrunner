@@ -14,6 +14,7 @@ import org.apache.bcel.classfile.EmptyVisitor;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.LocalVariable;
 import org.apache.bcel.classfile.LocalVariableTable;
+import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.ArrayType;
 import org.apache.bcel.generic.BasicType;
 import org.apache.bcel.generic.ObjectType;
@@ -42,11 +43,9 @@ public class BCELClassAnalyzer
         if(null == bcelMethod) return false;
         Attribute[] attributes = bcelMethod.getAttributes();
         DeprecatedVisitor visitor = new DeprecatedVisitor();
-        for(int ii = 0; ii < attributes.length; ii++)
-        {
-            attributes[ii].accept(visitor);
-            if(visitor.isDeprecated())
-            {
+        for (Attribute attribute : attributes) {
+            attribute.accept(visitor);
+            if (visitor.isDeprecated()) {
                 return true;
             }
         }
@@ -98,11 +97,9 @@ public class BCELClassAnalyzer
     private void findAndAddBCELMethod(List reflectMethodList, List bcelMethodList)
     {
         java.lang.reflect.Method reflectMethod = (java.lang.reflect.Method)reflectMethodList.remove(0);
-        for(int ii = 0; ii < bcelMethodList.size(); ii++)
-        {
-            org.apache.bcel.classfile.Method bcelMethod = (org.apache.bcel.classfile.Method)bcelMethodList.get(ii);
-            if(areMethodsEqual(reflectMethod, bcelMethod))
-            {
+        for (Object aBcelMethodList : bcelMethodList) {
+            Method bcelMethod = (Method) aBcelMethodList;
+            if (areMethodsEqual(reflectMethod, bcelMethod)) {
                 methodMap.put(reflectMethod, bcelMethod);
             }
         }
@@ -124,11 +121,9 @@ public class BCELClassAnalyzer
     {
         Type[] bcelArguments = bcelMethod.getArgumentTypes();
         List argumentList = new ArrayList();
-        for(int ii = 0; ii < bcelArguments.length; ii++)
-        {
-            Class currentClass = typeToClass(bcelArguments[ii]);
-            if(null != currentClass)
-            {
+        for (Type bcelArgument : bcelArguments) {
+            Class currentClass = typeToClass(bcelArgument);
+            if (null != currentClass) {
                 argumentList.add(currentClass);
             }
         }

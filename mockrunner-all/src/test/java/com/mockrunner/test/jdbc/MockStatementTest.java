@@ -125,15 +125,15 @@ public class MockStatementTest extends BaseTestCase
         testResultSet = (MockResultSet)statement.executeQuery("SELECT TEST FROM");
         assertTrue(isResultSet1(testResultSet));
         assertTrue(isResultSet1((MockResultSet)statement.getResultSet()));
-        assertNotSame(resultSet1, (MockResultSet)statement.getResultSet());
+        assertNotSame(resultSet1, statement.getResultSet());
         assertEquals(-1, statement.getUpdateCount());
         assertTrue(statement.getMoreResults());
         assertTrue(isResultSet2((MockResultSet)statement.getResultSet()));
-        assertNotSame(resultSet2, (MockResultSet)statement.getResultSet());
+        assertNotSame(resultSet2, statement.getResultSet());
         assertEquals(-1, statement.getUpdateCount());
         assertTrue(statement.getMoreResults());
         assertTrue(isResultSet3((MockResultSet)statement.getResultSet()));
-        assertNotSame(resultSet3, (MockResultSet)statement.getResultSet());
+        assertNotSame(resultSet3, statement.getResultSet());
         assertEquals(-1, statement.getUpdateCount());
         assertFalse(statement.getMoreResults());
         assertFalse(statement.getMoreResults());
@@ -278,25 +278,25 @@ public class MockStatementTest extends BaseTestCase
         MockStatement statement = (MockStatement)connection.createStatement();
         statement.executeUpdate("inser", new int[1]);
         assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
-        assertSame(statement, ((MockResultSet)statement.getGeneratedKeys()).getStatement());
+        assertSame(statement, statement.getGeneratedKeys().getStatement());
         statement.execute("insert into", Statement.NO_GENERATED_KEYS);
         assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
         statement.executeUpdate("do insert into table xyz", new String[0]);
         assertTrue(isResultSet3((MockResultSet)statement.getGeneratedKeys()));
-        assertSame(statement, ((MockResultSet)statement.getGeneratedKeys()).getStatement());
+        assertSame(statement, statement.getGeneratedKeys().getStatement());
         statementHandler.setUseRegularExpressions(true);
         statement.executeUpdate("insert into table xyz", new String[0]);
         assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
         statementHandler.prepareGlobalGeneratedKeys(resultSet1);
         statement.execute("insert into table xyz", Statement.RETURN_GENERATED_KEYS);
         assertTrue(isResultSet1((MockResultSet)statement.getGeneratedKeys()));
-        assertSame(statement, ((MockResultSet)statement.getGeneratedKeys()).getStatement());
+        assertSame(statement, statement.getGeneratedKeys().getStatement());
         statement.execute("insert into table xyz");
         assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
         statementHandler.setExactMatch(true);
         statement.executeUpdate("insert into othertable", Statement.RETURN_GENERATED_KEYS);
         assertTrue(isResultSet2((MockResultSet)statement.getGeneratedKeys()));
-        assertSame(statement, ((MockResultSet)statement.getGeneratedKeys()).getStatement());
+        assertSame(statement, statement.getGeneratedKeys().getStatement());
         statement.executeUpdate("insert into othertable", Statement.NO_GENERATED_KEYS);
         assertTrue(isEmpty((MockResultSet)statement.getGeneratedKeys()));
         statementHandler.clearGlobalGeneratedKeys();
@@ -601,7 +601,7 @@ public class MockStatementTest extends BaseTestCase
         catch(SQLException exc)
         {
             assertNotSame(exception, exc);
-            assertTrue(exc.getMessage().indexOf("select from") != -1);
+            assertTrue(exc.getMessage().contains("select from"));
         }
     }
     

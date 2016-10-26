@@ -66,7 +66,7 @@ public class MockActionForward extends MockForwardConfig
             Boolean value = (Boolean)getContextRelativeMethod.invoke(copyMe, null);
             if(null != value)
             {
-                setContextRelative(value.booleanValue());
+                setContextRelative(value);
             }
         } 
         catch(Exception exc)
@@ -79,21 +79,13 @@ public class MockActionForward extends MockForwardConfig
     public boolean verifyName(String name)
     {
         if (null == getName()) return false;
-        if (getName().equals(name))
-        {
-            return true;
-        }
-        return false;
+        return getName().equals(name);
     }
     
     public boolean verifyPath(String path)
     {
         if (null == getPath()) return false;
-        if (getPath().equals(path))
-        {
-            return true;
-        }
-        return false;
+        return getPath().equals(path);
     }
     
     public boolean verifyRedirect(boolean redirect)

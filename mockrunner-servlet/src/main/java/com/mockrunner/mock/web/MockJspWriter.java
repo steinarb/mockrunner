@@ -61,7 +61,7 @@ public class MockJspWriter extends JspWriter
             {
                 if(null == response)
                 {
-                    return ((StringWriter)writer).toString();
+                    return writer.toString();
                 }
                 if(response instanceof MockHttpServletResponse)
                 {

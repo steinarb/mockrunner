@@ -124,7 +124,7 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public void addIntHeader(String key, int value)
     {
-        String stringValue = new Integer(value).toString();
+        String stringValue = Integer.toString(value);
         addHeader(key, stringValue);
     }
 
@@ -165,7 +165,7 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public void setIntHeader(String key, int value)
     {
-        String stringValue = new Integer(value).toString();
+        String stringValue = Integer.toString(value);
         setHeader(key, stringValue);
     }
 

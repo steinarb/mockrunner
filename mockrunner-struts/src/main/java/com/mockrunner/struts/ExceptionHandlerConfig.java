@@ -22,7 +22,7 @@ public interface ExceptionHandlerConfig
      * @return <code>true</code> if this handler is able to handle the exception,
      *         <code>false</code> otherwise
      */
-    public boolean canHandle(Exception exception);
+    boolean canHandle(Exception exception);
     
     /**
      * Handles the exception.
@@ -34,5 +34,6 @@ public interface ExceptionHandlerConfig
      * @return the handler return value, usually an <code>ActionForward</code>,
      *         but may be any object
      */
-    public Object handle(Exception exception, ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception;
+    Object handle(Exception exception, ActionMapping mapping, ActionForm form, HttpServletRequest request,
+                  HttpServletResponse response) throws Exception;
 }

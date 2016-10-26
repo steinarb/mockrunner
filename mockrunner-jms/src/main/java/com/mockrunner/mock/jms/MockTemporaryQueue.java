@@ -1,7 +1,5 @@
 package com.mockrunner.mock.jms;
 
-import java.io.Serializable;
-
 import javax.jms.JMSException;
 import javax.jms.TemporaryQueue;
 

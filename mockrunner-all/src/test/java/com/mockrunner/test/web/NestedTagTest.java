@@ -70,8 +70,8 @@ public class NestedTagTest extends BaseTestCase
         testTagChild1 = nestedTagRoot.addTagChild(new TestTag(), testMap);
         nestedTagRoot.addTextChild("test");
         testTagChild11 = testTagChild1.addTagChild(TestTag.class, testMap);
-        testTag1 = (TestTag)testTagChild1.getTag();
-        testTag11 = (TestTag)testTagChild11.getTag();
+        testTag1 = testTagChild1.getTag();
+        testTag11 = testTagChild11.getTag();
     }
     
     private void prepareBodyTagTest()
@@ -81,8 +81,8 @@ public class NestedTagTest extends BaseTestCase
         testTagChild1 = nestedTagRoot.addTagChild(TestTag.class, testMap);
         testTagChild11 = testTagChild1.addTagChild(new TestBodyTag(), testMap);
         testTagChild1.addTextChild("bodytest");
-        testTag1 = (TestTag)testTagChild1.getTag();
-        testTag11 = (TestBodyTag)testTagChild11.getTag();
+        testTag1 = testTagChild1.getTag();
+        testTag11 = testTagChild11.getTag();
     }
     
     private void prepareSimpleTagTest()
@@ -95,8 +95,8 @@ public class NestedTagTest extends BaseTestCase
         testTagChild1 = nestedTagRoot.addTagChild(TestTag.class, testMap);
         testTagChild11 = testTagChild1.addTagChild(new TestBodyTag(), testMap);
         testTagChild1.addTextChild("simpletest");
-        testTag1 = (TestTag)testTagChild1.getTag();
-        testTag11 = (TestBodyTag)testTagChild11.getTag();
+        testTag1 = testTagChild1.getTag();
+        testTag11 = testTagChild11.getTag();
         testTagChild111 = testTagChild11.addTagChild(TestSimpleTag.class);
         testTag111 = (SimpleTag)testTagChild111.getWrappedTag();
     }
@@ -208,9 +208,9 @@ public class NestedTagTest extends BaseTestCase
     {
         Map map = new HashMap();
         map.put("dynamicAttribute1", "test");
-        map.put("dynamicAttribute2", new Integer(1));
-        map.put("dynamicAttribute3", new TestRuntimeAttribute(new Long(3)));
-        map.put("dynamicAttribute4", new DynamicAttribute(null, new TestRuntimeAttribute(new Byte((byte)4))));
+        map.put("dynamicAttribute2", 1);
+        map.put("dynamicAttribute3", new TestRuntimeAttribute(3L));
+        map.put("dynamicAttribute4", new DynamicAttribute(null, new TestRuntimeAttribute((byte) 4)));
         TestSimpleTag simpleTag = new TestSimpleTag();
         NestedTag nestedTag = new NestedSimpleTag(simpleTag, context, map);
         nestedTag.populateAttributes();
@@ -222,15 +222,15 @@ public class NestedTagTest extends BaseTestCase
         assertNull(attribute1.getUri());
         assertEquals("test", attribute1.getValue());
         assertNull(attribute2.getUri());
-        assertEquals(new Integer(1), attribute2.getValue());
+        assertEquals(1, attribute2.getValue());
         assertNull(attribute3.getUri());
-        assertEquals(new Long(3), attribute3.getValue());
+        assertEquals(3L, attribute3.getValue());
         assertNull(attribute4.getUri());
-        assertEquals(new Byte((byte)4), attribute4.getValue());
+        assertEquals((byte) 4, attribute4.getValue());
         map = new HashMap();
         map.put("dynamicAttribute1", "test");
-        map.put("dynamicAttribute2", new Integer(1));
-        map.put("dynamicAttribute3", new TestRuntimeAttribute(new Long(3)));
+        map.put("dynamicAttribute2", 1);
+        map.put("dynamicAttribute3", new TestRuntimeAttribute(3L));
         TestBodyTag bodyTag = new TestBodyTag();
         nestedTag = new NestedBodyTag(bodyTag, context, map);
         nestedTag.populateAttributes();

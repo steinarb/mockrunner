@@ -10,19 +10,19 @@ public interface BillEntity
    extends javax.ejb.EJBObject
 {
 
-   public java.lang.Integer getId(  )
+   java.lang.Integer getId()
       throws java.rmi.RemoteException;
 
-   public java.util.Date getDate(  )
+   java.util.Date getDate()
       throws java.rmi.RemoteException;
 
-   public void setDate( java.util.Date date )
+   void setDate(java.util.Date date)
       throws java.rmi.RemoteException;
 
-   public boolean getPaid(  )
+   boolean getPaid()
       throws java.rmi.RemoteException;
 
-   public void setPaid( boolean isPaid )
+   void setPaid(boolean isPaid)
       throws java.rmi.RemoteException;
 
 }

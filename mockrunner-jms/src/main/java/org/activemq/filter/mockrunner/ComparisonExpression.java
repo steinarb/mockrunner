@@ -50,26 +50,26 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
     static final private HashSet REGEXP_CONTROL_CHARS = new HashSet();
 
     static {
-        REGEXP_CONTROL_CHARS.add(new Character('.'));
-        REGEXP_CONTROL_CHARS.add(new Character('\\'));
-        REGEXP_CONTROL_CHARS.add(new Character('['));
-        REGEXP_CONTROL_CHARS.add(new Character(']'));
-        REGEXP_CONTROL_CHARS.add(new Character('^'));
-        REGEXP_CONTROL_CHARS.add(new Character('$'));
-        REGEXP_CONTROL_CHARS.add(new Character('?'));
-        REGEXP_CONTROL_CHARS.add(new Character('*'));
-        REGEXP_CONTROL_CHARS.add(new Character('+'));
-        REGEXP_CONTROL_CHARS.add(new Character('{'));
-        REGEXP_CONTROL_CHARS.add(new Character('}'));
-        REGEXP_CONTROL_CHARS.add(new Character('|'));
-        REGEXP_CONTROL_CHARS.add(new Character('('));
-        REGEXP_CONTROL_CHARS.add(new Character(')'));
-        REGEXP_CONTROL_CHARS.add(new Character(':'));
-        REGEXP_CONTROL_CHARS.add(new Character('&'));
-        REGEXP_CONTROL_CHARS.add(new Character('<'));
-        REGEXP_CONTROL_CHARS.add(new Character('>'));
-        REGEXP_CONTROL_CHARS.add(new Character('='));
-        REGEXP_CONTROL_CHARS.add(new Character('!'));
+        REGEXP_CONTROL_CHARS.add('.');
+        REGEXP_CONTROL_CHARS.add('\\');
+        REGEXP_CONTROL_CHARS.add('[');
+        REGEXP_CONTROL_CHARS.add(']');
+        REGEXP_CONTROL_CHARS.add('^');
+        REGEXP_CONTROL_CHARS.add('$');
+        REGEXP_CONTROL_CHARS.add('?');
+        REGEXP_CONTROL_CHARS.add('*');
+        REGEXP_CONTROL_CHARS.add('+');
+        REGEXP_CONTROL_CHARS.add('{');
+        REGEXP_CONTROL_CHARS.add('}');
+        REGEXP_CONTROL_CHARS.add('|');
+        REGEXP_CONTROL_CHARS.add('(');
+        REGEXP_CONTROL_CHARS.add(')');
+        REGEXP_CONTROL_CHARS.add(':');
+        REGEXP_CONTROL_CHARS.add('&');
+        REGEXP_CONTROL_CHARS.add('<');
+        REGEXP_CONTROL_CHARS.add('>');
+        REGEXP_CONTROL_CHARS.add('=');
+        REGEXP_CONTROL_CHARS.add('!');
     }
 
     static class LikeExpression extends UnaryExpression implements BooleanExpression {
@@ -82,7 +82,7 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         public LikeExpression(Expression right, String like, int escape) {
             super(right);
 
-            StringBuffer regexp = new StringBuffer(like.length() * 2);
+            StringBuilder regexp = new StringBuilder(like.length() * 2);
             regexp.append("\\A"); // The beginning of the input
             for (int i = 0; i < like.length(); i++) {
                 char c = like.charAt(i);
@@ -103,7 +103,7 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
                 else if (c == '_') {
                     regexp.append("."); // match one 
                 }
-                else if (REGEXP_CONTROL_CHARS.contains(new Character(c))) {
+                else if (REGEXP_CONTROL_CHARS.contains(c)) {
                     regexp.append("\\x");
                     regexp.append(Integer.toHexString(0xFFFF & c));
                 }
@@ -368,13 +368,13 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
         if (lc != rc) {
             if (lc == Integer.class) {
                 if (rc == Long.class) {
-                    lv = new Long(((Number) lv).longValue());
+                    lv = ((Number) lv).longValue();
                 }
                 else if (rc == Float.class) {
-                    lv = new Float(((Number) lv).floatValue());
+                    lv = ((Number) lv).floatValue();
                 }
                 else if (rc == Double.class) {
-                    lv = new Double(((Number) lv).doubleValue());
+                    lv = ((Number) lv).doubleValue();
                 }
                 else {
                     return Boolean.FALSE;
@@ -382,13 +382,13 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
             }
             else if (lc == Long.class) {
                 if (rc == Integer.class) {
-                    rv = new Long(((Number) rv).longValue());
+                    rv = ((Number) rv).longValue();
                 }
                 else if (rc == Float.class) {
-                    lv = new Float(((Number) lv).floatValue());
+                    lv = ((Number) lv).floatValue();
                 }
                 else if (rc == Double.class) {
-                    lv = new Double(((Number) lv).doubleValue());
+                    lv = ((Number) lv).doubleValue();
                 }
                 else {
                     return Boolean.FALSE;
@@ -396,13 +396,13 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
             }
             else if (lc == Float.class) {
                 if (rc == Integer.class) {
-                    rv = new Float(((Number) rv).floatValue());
+                    rv = ((Number) rv).floatValue();
                 }
                 else if (rc == Long.class) {
-                    rv = new Float(((Number) rv).floatValue());
+                    rv = ((Number) rv).floatValue();
                 }
                 else if (rc == Double.class) {
-                    lv = new Double(((Number) lv).doubleValue());
+                    lv = ((Number) lv).doubleValue();
                 }
                 else {
                     return Boolean.FALSE;
@@ -410,13 +410,13 @@ public abstract class ComparisonExpression extends BinaryExpression implements B
             } 
             else if (lc == Double.class) {
                 if (rc == Integer.class) {
-                    rv = new Double(((Number) rv).doubleValue());
+                    rv = ((Number) rv).doubleValue();
                 }
                 else if (rc == Long.class) {
-                    rv = new Double(((Number) rv).doubleValue());
+                    rv = ((Number) rv).doubleValue();
                 }
                 else if (rc == Float.class) {
-                	rv = new Float(((Number) rv).doubleValue());
+                	rv = (float) ((Number) rv).doubleValue();
                 }
                 else {
                     return Boolean.FALSE;

@@ -325,7 +325,7 @@ public class MockServletContext implements ServletContext
     
     public synchronized void setResourceAsStream(String path, byte[] data)
     {
-        byte[] copy = (byte[])data.clone();
+        byte[] copy = data.clone();
         resourceStreams.put(path, copy);
     }
 
@@ -434,28 +434,25 @@ public class MockServletContext implements ServletContext
     
     private synchronized void callAttributeListenersAddedMethod(String key, Object value)
     {
-        for(int ii = 0; ii < attributeListener.size(); ii++)
-        {
+        for (Object anAttributeListener : attributeListener) {
             ServletContextAttributeEvent event = new ServletContextAttributeEvent(this, key, value);
-            ((ServletContextAttributeListener)attributeListener.get(ii)).attributeAdded(event);
+            ((ServletContextAttributeListener) anAttributeListener).attributeAdded(event);
         }
     }
 
     private synchronized void callAttributeListenersReplacedMethod(String key, Object value)
     {
-        for(int ii = 0; ii < attributeListener.size(); ii++)
-        {
+        for (Object anAttributeListener : attributeListener) {
             ServletContextAttributeEvent event = new ServletContextAttributeEvent(this, key, value);
-            ((ServletContextAttributeListener)attributeListener.get(ii)).attributeReplaced(event);
+            ((ServletContextAttributeListener) anAttributeListener).attributeReplaced(event);
         }
     }
 
     private synchronized void callAttributeListenersRemovedMethod(String key, Object value)
     {
-        for(int ii = 0; ii < attributeListener.size(); ii++)
-        {
+        for (Object anAttributeListener : attributeListener) {
             ServletContextAttributeEvent event = new ServletContextAttributeEvent(this, key, value);
-            ((ServletContextAttributeListener)attributeListener.get(ii)).attributeRemoved(event);
+            ((ServletContextAttributeListener) anAttributeListener).attributeRemoved(event);
         }
     }
 }

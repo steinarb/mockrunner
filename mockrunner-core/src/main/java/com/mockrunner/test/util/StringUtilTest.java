@@ -166,9 +166,9 @@ public class StringUtilTest extends TestCase
         List list = new ArrayList();
         list.add("Test");
         list.add("Test");
-        list.add(new Integer(1000));
+        list.add(1000);
         list.add(null);
-        list.add(new Long(3));
+        list.add(3L);
         StringBuffer buffer = new StringBuffer();
         StringUtil.appendObjectsAsString(buffer, list);
         assertEquals("Test\nTest\n1000\nnull\n3\n", buffer.toString());
@@ -232,11 +232,11 @@ public class StringUtilTest extends TestCase
     public void testFieldToString()
     { 
         assertEquals("test: class java.lang.String", StringUtil.fieldToString("test", String.class));
-        assertEquals("test: 3", StringUtil.fieldToString("test", new Integer(3)));
+        assertEquals("test: 3", StringUtil.fieldToString("test", 3));
         assertEquals("test: empty", StringUtil.fieldToString("test", new ArrayList()));
         assertEquals("test: empty", StringUtil.fieldToString("test", new Object[0]));
         List testList = new ArrayList();
-        testList.add(new Integer(5));
+        testList.add(5);
         testList.add("abc");
         testList.add(this.getClass());
         assertEquals("test 0: 5\ntest 1: abc\ntest 2: class com.mockrunner.test.util.StringUtilTest", StringUtil.fieldToString("test", testList));

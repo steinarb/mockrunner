@@ -108,7 +108,7 @@ public class UserEntityBean implements EntityBean
                 if(null != statement) statement.close();
                 if(null != connection) connection.close();
             } 
-            catch(SQLException exc)
+            catch(SQLException ignored)
             {
                 
             }
@@ -149,7 +149,7 @@ public class UserEntityBean implements EntityBean
                 if(null != statement) statement.close();
                 if(null != connection) connection.close();
             } 
-            catch(SQLException exc)
+            catch(SQLException ignored)
             {
                 
             }
@@ -185,7 +185,7 @@ public class UserEntityBean implements EntityBean
                 if(null != statement) statement.close();
                 if(null != connection) connection.close();
             } 
-            catch(SQLException exc)
+            catch(SQLException ignored)
             {
                 
             }
@@ -225,7 +225,7 @@ public class UserEntityBean implements EntityBean
                 if(null != statement) statement.close();
                 if(null != connection) connection.close();
             } 
-            catch(SQLException exc)
+            catch(SQLException ignored)
             {
                 
             }
@@ -258,7 +258,7 @@ public class UserEntityBean implements EntityBean
                 if(null != statement) statement.close();
                 if(null != connection) connection.close();
             } 
-            catch(SQLException exc)
+            catch(SQLException ignored)
             {
                 
             }
@@ -292,7 +292,7 @@ public class UserEntityBean implements EntityBean
                 if(null != statement) statement.close();
                 if(null != connection) connection.close();
             } 
-            catch(SQLException exc)
+            catch(SQLException ignored)
             {
                 
             }

@@ -45,20 +45,16 @@ public class ImageButtonRequestWrapper extends HttpServletRequestWrapper
         
         if(null != parameterMap)
         {
-	        Iterator keys = parameterMap.keySet().iterator();
-            while(keys.hasNext())
-            {
-                String key = (String)keys.next();
+            for (Object o : parameterMap.keySet()) {
+                String key = (String) o;
                 Object value = parameterMap.get(key);
-                if(!key.endsWith(".y"))
-                {
-                    if(key.endsWith(".x"))
-                    {
-                        key = key.substring(0, key.length() -2);
+                if (!key.endsWith(".y")) {
+                    if (key.endsWith(".x")) {
+                        key = key.substring(0, key.length() - 2);
                     }
                     newMap.put(key, value);
                 }
-	        }
+            }
         }
         return Collections.unmodifiableMap(newMap);
     }

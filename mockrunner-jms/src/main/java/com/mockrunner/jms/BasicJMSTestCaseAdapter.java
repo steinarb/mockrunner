@@ -349,7 +349,7 @@ public abstract class BasicJMSTestCaseAdapter
      */
     protected TransmissionManagerWrapper getTransmissionManager(int indexOfSession)
     {
-        return jmsTestModule.getTransmissionManager(indexOfSession);
+        return jmsTestModule.getTransmissionManagerWrapper(indexOfSession);
     }
 
     /**

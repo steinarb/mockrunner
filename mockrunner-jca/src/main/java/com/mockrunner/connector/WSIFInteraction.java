@@ -153,11 +153,8 @@ public class WSIFInteraction implements InteractionImplementor
             return cl;
         }
         Class[] classes = cl.getDeclaredClasses();
-        for (int current = 0; current < classes.length; current++)
-        {
-            Class c = classes[current];
-            if (className.equals(c.getName()))
-            {
+        for (Class c : classes) {
+            if (className.equals(c.getName())) {
                 return c;
             }
         }

@@ -46,7 +46,7 @@ public class FilterImagesTagTest extends BasicTagTestCaseAdapter
         processTagLifecycle();
         verifyOutputContains("src=\"/anotherimage.jpg\"");
         verifyOutputContains("src=\"/testimage.jpg\"");
-        assertTrue(-1 == getOutput().indexOf("dummy.jpg"));
+        assertTrue(!getOutput().contains("dummy.jpg"));
     }
     
     @Test
@@ -55,8 +55,8 @@ public class FilterImagesTagTest extends BasicTagTestCaseAdapter
         prepareFilterImagesTag("true");
         processTagLifecycle();
         verifyOutputContains("src=\"dummy.jpg\"");
-        assertTrue(-1 == getOutput().indexOf("anotherimage.jpg"));
-        assertTrue(-1 == getOutput().indexOf("testimage.jpg"));
+        assertTrue(!getOutput().contains("anotherimage.jpg"));
+        assertTrue(!getOutput().contains("testimage.jpg"));
     }
 
     private class SessionImageChild extends AbstractDynamicChild

@@ -21,7 +21,7 @@ public class ActionMappingProxyGenerator
         delegateMethods = new Method[3];
         try
         {
-            delegateMethods[0] = MockActionMapping.class.getDeclaredMethod("findForward", new Class[] {String.class});
+            delegateMethods[0] = MockActionMapping.class.getDeclaredMethod("findForward", String.class);
             delegateMethods[1] = MockActionMapping.class.getDeclaredMethod("findForwards", null);
             delegateMethods[2] = MockActionMapping.class.getDeclaredMethod("getInputForward", null);
             duplicateMethods = MethodUtil.getMatchingDeclaredMethods(ActionConfig.class, "(set.*)|(remove.*)|(add.*)");

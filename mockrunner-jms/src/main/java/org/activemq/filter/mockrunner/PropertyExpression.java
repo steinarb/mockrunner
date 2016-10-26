@@ -53,10 +53,10 @@ public class PropertyExpression implements Expression {
                 result = message.getJMSCorrelationID();
             }
             else if (name.equals("JMSPriority")) {
-                result = new Integer(message.getJMSPriority());
+                result = message.getJMSPriority();
             }
             else if (name.equals("JMSTimestamp")) {
-                result = new Long(message.getJMSTimestamp());
+                result = message.getJMSTimestamp();
             }
         }
         return result;

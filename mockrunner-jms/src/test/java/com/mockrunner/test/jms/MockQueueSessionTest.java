@@ -442,12 +442,12 @@ public class MockQueueSessionTest
         MockQueueReceiver receiver3 = (MockQueueReceiver)session.createReceiver(queue);
         receiver3.setMessageListener(listener);
         sender = anotherSession.createSender(sameQueue);
-        sender.send(new MockObjectMessage(new Integer(1)));
+        sender.send(new MockObjectMessage(1));
         assertEquals(3, queue.getReceivedMessageList().size());
         assertEquals(0, queue.getCurrentMessageList().size());
         assertEquals(3, listener.getMessageList().size());
         Object object = listener.getMessageList().get(2);
-        assertEquals(new Integer(1), ((MockObjectMessage)object).getObject());
+        assertEquals(1, ((MockObjectMessage)object).getObject());
     }
     
     @Test
@@ -511,7 +511,7 @@ public class MockQueueSessionTest
     {
         MockQueueSession session = (MockQueueSession)connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
         DestinationManager manager = connection.getDestinationManager();
-        MockQueue queue = (MockQueue)manager.createQueue("Queue");
+        MockQueue queue = manager.createQueue("Queue");
         QueueSender sender = session.createSender(null);
         MockTextMessage message = new MockTextMessage("Text");
         sender.send(queue, message);

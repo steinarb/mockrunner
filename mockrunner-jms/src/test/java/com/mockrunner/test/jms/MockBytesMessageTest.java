@@ -100,7 +100,7 @@ public class MockBytesMessageTest
         assertEquals(1.2, message.readDouble(), 0);
         message = new MockBytesMessage();
         message.writeObject(Boolean.TRUE);
-        message.writeObject(new Long(1));
+        message.writeObject(1L);
         message.writeObject("xyz");
         message.writeObject(new byte[] { 1 });
         message.reset();

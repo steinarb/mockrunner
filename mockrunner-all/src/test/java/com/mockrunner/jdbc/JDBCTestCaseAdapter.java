@@ -182,7 +182,7 @@ public abstract class JDBCTestCaseAdapter extends BaseTestCase
      */
     protected Map getExecutedSQLStatementParameter()
     {
-        return jdbcTestModule.getExecutedSQLStatementParameter();
+        return jdbcTestModule.getExecutedSQLStatementParameterMap();
     }
 
     /**
@@ -1151,7 +1151,7 @@ public abstract class JDBCTestCaseAdapter extends BaseTestCase
      */
     protected void verifySavepointRollbacked(String name)
     {
-        jdbcTestModule.verifySavepointRollbacked(name);
+        jdbcTestModule.verifySavepointRolledBack(name);
     }
 
     /**
@@ -1160,7 +1160,7 @@ public abstract class JDBCTestCaseAdapter extends BaseTestCase
      */
     protected void verifySavepointRollbacked(int index)
     {
-        jdbcTestModule.verifySavepointRollbacked(index);
+        jdbcTestModule.verifySavepointRolledBack(index);
     }
 
     /**
@@ -1169,7 +1169,7 @@ public abstract class JDBCTestCaseAdapter extends BaseTestCase
      */
     protected void verifySavepointNotRollbacked(String name)
     {
-        jdbcTestModule.verifySavepointNotRollbacked(name);
+        jdbcTestModule.verifySavepointNotRolledBack(name);
     }
 
     /**
@@ -1178,6 +1178,6 @@ public abstract class JDBCTestCaseAdapter extends BaseTestCase
      */
     protected void verifySavepointNotRollbacked(int index)
     {
-        jdbcTestModule.verifySavepointNotRollbacked(index);
+        jdbcTestModule.verifySavepointNotRolledBack(index);
     }
 }

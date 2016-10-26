@@ -76,7 +76,7 @@ public class PaySessionBean implements SessionBean
             {
                 if(null != connection) connection.close();
             }
-            catch(SQLException sqlExc)
+            catch(SQLException ignored)
             {
         
             }

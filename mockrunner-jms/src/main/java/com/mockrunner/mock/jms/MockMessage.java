@@ -203,15 +203,15 @@ public class MockMessage implements Message, Cloneable, Serializable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            return Boolean.valueOf(null).booleanValue();
+            return Boolean.valueOf(null);
         }
         if(value instanceof String)
         {
-            return Boolean.valueOf((String)value).booleanValue();
+            return Boolean.valueOf((String) value);
         }
         if(value instanceof Boolean)
         {
-            return ((Boolean)value).booleanValue();
+            return (Boolean) value;
         }
         throw new MessageFormatException("Cannot convert property " + name + " of type " + value.getClass().getName() + " to boolean");
     }
@@ -221,11 +221,11 @@ public class MockMessage implements Message, Cloneable, Serializable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            return Byte.valueOf(null).byteValue();
+            return Byte.valueOf(null);
         }
         if(value instanceof String)
         {
-            return Byte.valueOf((String)value).byteValue();
+            return Byte.valueOf((String) value);
         }
         if(value instanceof Byte)
         {
@@ -239,11 +239,11 @@ public class MockMessage implements Message, Cloneable, Serializable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            return Short.valueOf(null).shortValue();
+            return Short.valueOf(null);
         }
         if(value instanceof String)
         {
-            return Short.valueOf((String)value).shortValue();
+            return Short.valueOf((String) value);
         }
         if((value instanceof Short) || (value instanceof Byte))
         {
@@ -257,11 +257,11 @@ public class MockMessage implements Message, Cloneable, Serializable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            return Integer.valueOf(null).intValue();
+            return Integer.valueOf(null);
         }
         if(value instanceof String)
         {
-            return Integer.valueOf((String)value).intValue();
+            return Integer.valueOf((String) value);
         }
         if((value instanceof Integer) || (value instanceof Short) || (value instanceof Byte))
         {
@@ -275,11 +275,11 @@ public class MockMessage implements Message, Cloneable, Serializable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            return Long.valueOf(null).longValue();
+            return Long.valueOf(null);
         }
         if(value instanceof String)
         {
-            return Long.valueOf((String)value).longValue();
+            return Long.valueOf((String) value);
         }
         if((value instanceof Long) || (value instanceof Integer) || (value instanceof Short) || (value instanceof Byte))
         {
@@ -293,11 +293,11 @@ public class MockMessage implements Message, Cloneable, Serializable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            return Float.valueOf(null).floatValue();
+            return Float.valueOf(null);
         }
         if(value instanceof String)
         {
-            return Float.valueOf((String)value).floatValue();
+            return Float.valueOf((String) value);
         }
         if(value instanceof Float)
         {
@@ -311,11 +311,11 @@ public class MockMessage implements Message, Cloneable, Serializable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            return Double.valueOf(null).doubleValue();
+            return Double.valueOf(null);
         }
         if(value instanceof String)
         {
-           return Double.valueOf((String)value).doubleValue();
+           return Double.valueOf((String) value);
         }
         if((value instanceof Double) || (value instanceof Float))
         {
@@ -343,37 +343,37 @@ public class MockMessage implements Message, Cloneable, Serializable
 
     public void setBooleanProperty(String name, boolean value) throws JMSException
     {
-        setObjectProperty(name, new Boolean(value));
+        setObjectProperty(name, value);
     }
 
     public void setByteProperty(String name, byte value) throws JMSException
     {
-        setObjectProperty(name, new Byte(value));
+        setObjectProperty(name, value);
     }
 
     public void setShortProperty(String name, short value) throws JMSException
     {
-        setObjectProperty(name, new Short(value));
+        setObjectProperty(name, value);
     }
 
     public void setIntProperty(String name, int value) throws JMSException
     {
-        setObjectProperty(name, new Integer(value));
+        setObjectProperty(name, value);
     }
 
     public void setLongProperty(String name, long value) throws JMSException
     {
-        setObjectProperty(name, new Long(value));
+        setObjectProperty(name, value);
     }
 
     public void setFloatProperty(String name, float value) throws JMSException
     {
-        setObjectProperty(name, new Float(value));
+        setObjectProperty(name, value);
     }
 
     public void setDoubleProperty(String name, double value) throws JMSException
     {
-        setObjectProperty(name, new Double(value));
+        setObjectProperty(name, value);
     }
 
     public void setStringProperty(String name, String value) throws JMSException

@@ -375,8 +375,8 @@ public class WebMockObjectFactory
     {
         try
         {
-            Constructor constructor = wrapper.getConstructor(new Class[] {HttpServletRequest.class});
-            wrappedRequest = (HttpServletRequest)constructor.newInstance(new Object[] {wrappedRequest});
+            Constructor constructor = wrapper.getConstructor(HttpServletRequest.class);
+            wrappedRequest = (HttpServletRequest)constructor.newInstance(wrappedRequest);
         }
         catch(Exception exc)
         {
@@ -415,8 +415,8 @@ public class WebMockObjectFactory
     {
         try
         {
-            Constructor constructor = wrapper.getConstructor(new Class[] {HttpServletResponse.class});
-            wrappedResponse = (HttpServletResponse)constructor.newInstance(new Object[] {wrappedResponse});
+            Constructor constructor = wrapper.getConstructor(HttpServletResponse.class);
+            wrappedResponse = (HttpServletResponse)constructor.newInstance(wrappedResponse);
         }
         catch(Exception exc)
         {

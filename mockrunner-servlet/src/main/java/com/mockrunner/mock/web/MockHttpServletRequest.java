@@ -355,7 +355,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     public Enumeration getHeaders(String key)
     {
         List headerList = (List)headers.get(key);
-        if(null == headerList) return new Vector().elements();;
+        if(null == headerList) return new Vector().elements();
         return new Vector(headerList).elements();
     }
 
@@ -363,7 +363,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         String header = getHeader(key);
         if(null == header) return -1;
-        return new Integer(header).intValue();
+        return new Integer(header);
     }
     
     public void addHeader(String key, String value)
@@ -524,19 +524,18 @@ public class MockHttpServletRequest implements HttpServletRequest
     public boolean isRequestedSessionIdValid()
     {
         HttpSession session = getSession();
-        if(null == session) return false;
-        return true;
+        return null != session;
     }
 
     public boolean isUserInRole(String role)
     {
         if(!roles.containsKey(role)) return false;
-        return ((Boolean)roles.get(role)).booleanValue();
+        return (Boolean) roles.get(role);
     }
     
     public void setUserInRole(String role, boolean isInRole)
     {
-        roles.put(role, new Boolean(isInRole));
+        roles.put(role, isInRole);
     }
 
     public String getCharacterEncoding()
@@ -746,28 +745,28 @@ public class MockHttpServletRequest implements HttpServletRequest
     
     private void callAttributeListenersAddedMethod(String key, Object value)
     {
-        for(int ii = 0; ii < attributeListener.size(); ii++)
-        {
-            ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key, value);
-            ((ServletRequestAttributeListener)attributeListener.get(ii)).attributeAdded(event);
+        for (Object anAttributeListener : attributeListener) {
+            ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key,
+                    value);
+            ((ServletRequestAttributeListener) anAttributeListener).attributeAdded(event);
         }
     }
     
     private void callAttributeListenersReplacedMethod(String key, Object value)
     {
-        for(int ii = 0; ii < attributeListener.size(); ii++)
-        {
-            ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key, value);
-            ((ServletRequestAttributeListener)attributeListener.get(ii)).attributeReplaced(event);
+        for (Object anAttributeListener : attributeListener) {
+            ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key,
+                    value);
+            ((ServletRequestAttributeListener) anAttributeListener).attributeReplaced(event);
         }
     }
 
     private void callAttributeListenersRemovedMethod(String key, Object value)
     {
-        for(int ii = 0; ii < attributeListener.size(); ii++)
-        {
-            ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key, value);
-            ((ServletRequestAttributeListener)attributeListener.get(ii)).attributeRemoved(event);
+        for (Object anAttributeListener : attributeListener) {
+            ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key,
+                    value);
+            ((ServletRequestAttributeListener) anAttributeListener).attributeRemoved(event);
         }
     }
     

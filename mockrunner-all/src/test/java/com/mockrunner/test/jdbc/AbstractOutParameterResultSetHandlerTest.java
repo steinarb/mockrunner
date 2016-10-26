@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,13 +15,12 @@ import com.mockrunner.mock.jdbc.MockParameterMap;
 
 public class AbstractOutParameterResultSetHandlerTest extends BaseTestCase
 {
-    private MockConnection connection;
     private CallableStatementResultSetHandler callableStatementHandler;
 
     @Before
     public void setUp() throws Exception
     {
-        connection = getJDBCMockObjectFactory().getMockConnection();
+        MockConnection connection = getJDBCMockObjectFactory().getMockConnection();
         callableStatementHandler = connection.getCallableStatementResultSetHandler();
     }
 

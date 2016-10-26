@@ -128,14 +128,14 @@ public class MockParameterMetaData implements ParameterMetaData
 
     public String getParameterClassName(int param) throws SQLException
     {
-        String parameterClassName = parameterClassNameMap.get(new Integer(param));
+        String parameterClassName = parameterClassNameMap.get(param);
         if(null == parameterClassName) return Object.class.getName();
         return parameterClassName;
     }
 
     public String getParameterTypeName(int param) throws SQLException
     {
-        String ParameterTypeName = parameterTypeNameMap.get(new Integer(param));
+        String ParameterTypeName = parameterTypeNameMap.get(param);
         if(null == ParameterTypeName) return Object.class.getName();
         return ParameterTypeName;
     }

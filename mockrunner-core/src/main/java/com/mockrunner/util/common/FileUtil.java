@@ -1,14 +1,15 @@
 package com.mockrunner.util.common;
 
+import com.mockrunner.base.NestedApplicationException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.util.List;
-
-import com.mockrunner.base.NestedApplicationException;
 
 public class FileUtil
 {
@@ -41,6 +42,7 @@ public class FileUtil
                 }
                 catch(Exception exc)
                 {
+                    //noinspection ThrowFromFinallyBlock
                     throw new NestedApplicationException(exc);
                 }
             }
@@ -76,10 +78,14 @@ public class FileUtil
     {
         if(fileURL != null)
         {
-            File file = new File(fileURL.getFile());
-            if(isExistingFile(file)) return file;
-            file = new File(URLDecoder.decode(fileURL.getFile()));
-            if(isExistingFile(file)) return file;
+            try {
+                File file = new File(fileURL.getFile());
+                if(isExistingFile(file)) return file;
+                file = new File(URLDecoder.decode(fileURL.getFile(), "UTF-8"));
+                if(isExistingFile(file)) return file;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }

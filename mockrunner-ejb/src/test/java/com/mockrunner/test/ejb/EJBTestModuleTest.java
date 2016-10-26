@@ -435,7 +435,7 @@ public class EJBTestModuleTest
         InitialContext context = new InitialContext();
         Object home = context.lookup("mybean");
         TestSessionHome testHome = (TestSessionHome)PortableRemoteObject.narrow(home, TestSessionHome.class);
-        TestSession testBean = (TestSession)testHome.create();
+        TestSession testBean = testHome.create();
         testBean.test(false);
         ejbModule.verifyCommitted();
         ejbModule.verifyNotMarkedForRollback();
@@ -451,7 +451,7 @@ public class EJBTestModuleTest
 		ejbModule.resetUserTransaction();
 		home = context.lookup("myEntityBean");
 		TestEntityHome testEntityHome = (TestEntityHome)PortableRemoteObject.narrow(home, TestEntityHome.class);
-		TestEntityBean testEntity = (TestEntityBean)testEntityHome.create();
+		TestEntityBean testEntity = testEntityHome.create();
 		testEntity.setName("aName");
 		ejbModule.verifyCommitted();
 		ejbModule.verifyNotMarkedForRollback();
@@ -576,22 +576,22 @@ public class EJBTestModuleTest
         }
     }
     
-    public static interface TestSession extends javax.ejb.EJBObject
+    public interface TestSession extends javax.ejb.EJBObject
     {
-        public void test(boolean setRollbackOnly) throws RemoteException;
+        void test(boolean setRollbackOnly) throws RemoteException;
         
-        public void testBMT(boolean rollback) throws RemoteException;
+        void testBMT(boolean rollback) throws RemoteException;
     }
     
-    public static interface TestSessionHome extends javax.ejb.EJBHome
+    public interface TestSessionHome extends javax.ejb.EJBHome
     {
-        public TestSession create() throws CreateException, RemoteException;
+        TestSession create() throws CreateException, RemoteException;
         
-        public TestSession create(Integer testInt) throws CreateException, RemoteException;
+        TestSession create(Integer testInt) throws CreateException, RemoteException;
         
-        public TestSession create(int testInt, Boolean testBoolean) throws CreateException, RemoteException;
+        TestSession create(int testInt, Boolean testBoolean) throws CreateException, RemoteException;
     
-        public TestSession createWithSuffix(int testInt, Boolean testBoolean) throws CreateException, RemoteException;
+        TestSession createWithSuffix(int testInt, Boolean testBoolean) throws CreateException, RemoteException;
     }
     
 	public static abstract class TestEntityEJB implements EntityBean
@@ -665,23 +665,23 @@ public class EJBTestModuleTest
 		}
 	}
 
-	public static interface TestEntityBean extends javax.ejb.EJBObject
+	public interface TestEntityBean extends javax.ejb.EJBObject
 	{
-		public String getName() throws RemoteException;
-		public void setName(String name) throws RemoteException;
+		String getName() throws RemoteException;
+		void setName(String name) throws RemoteException;
 	}
     
-    public static interface SuperEntityHome extends javax.ejb.EJBHome
+    public interface SuperEntityHome extends javax.ejb.EJBHome
     {
         
     }
 
-	public static interface TestEntityHome extends SuperEntityHome
+	public interface TestEntityHome extends SuperEntityHome
 	{
-		public TestEntityBean create() throws CreateException, RemoteException;
-        public TestEntityBean create(Short param) throws CreateException, RemoteException;
-		public TestEntityBean createWithName(String name) throws CreateException, RemoteException;
-        public TestEntityBean findByPrimaryKey(String pk) throws FinderException, RemoteException;
+		TestEntityBean create() throws CreateException, RemoteException;
+        TestEntityBean create(Short param) throws CreateException, RemoteException;
+		TestEntityBean createWithName(String name) throws CreateException, RemoteException;
+        TestEntityBean findByPrimaryKey(String pk) throws FinderException, RemoteException;
     }
 	
 	public static class TestMessageBean implements MessageDrivenBean, MessageListener

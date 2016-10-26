@@ -60,25 +60,25 @@ public class ConstantExpression implements Expression {
     	
         long l = value.longValue();
         if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE) {
-            value = new Integer(value.intValue());
+            value = value.intValue();
         }
         return new ConstantExpression(value);
     }
 
     public static ConstantExpression createFromHex(String text) {
-        Number value = new Long(Long.parseLong(text.substring(2), 16));
+        Number value = Long.parseLong(text.substring(2), 16);
         long l = value.longValue();
         if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE) {
-            value = new Integer(value.intValue());
+            value = value.intValue();
         }
         return new ConstantExpression(value);
     }
 
     public static ConstantExpression createFromOctal(String text) {
-        Number value = new Long(Long.parseLong(text, 8));
+        Number value = Long.parseLong(text, 8);
         long l = value.longValue();
         if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE) {
-            value = new Integer(value.intValue());
+            value = value.intValue();
         }
         return new ConstantExpression(value);
     }
@@ -108,7 +108,7 @@ public class ConstantExpression implements Expression {
             return "NULL";
         }
         if (value instanceof Boolean) {
-            return ((Boolean) value).booleanValue() ? "TRUE" : "FALSE";
+            return (Boolean) value ? "TRUE" : "FALSE";
         }
         if (value instanceof String) {
             return encodeString((String) value);
@@ -148,7 +148,7 @@ public class ConstantExpression implements Expression {
      * @return the encoded string
      */
     public static String encodeString(String s) {
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         b.append('\'');
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);

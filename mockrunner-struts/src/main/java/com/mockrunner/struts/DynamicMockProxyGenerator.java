@@ -58,9 +58,8 @@ public class DynamicMockProxyGenerator
         Method[] methods = delegate.getClass().getMethods();
         Set actualMethods = new HashSet();
         Set tempProvidedMethods = new HashSet(providedMethods);
-        for(int ii = 0; ii < methods.length; ii++)
-        {
-            findAndAddMethod(tempProvidedMethods, methods[ii], actualMethods);
+        for (Method method : methods) {
+            findAndAddMethod(tempProvidedMethods, method, actualMethods);
         }
         return (Method[])actualMethods.toArray(new Method[actualMethods.size()]);
     }
@@ -95,18 +94,14 @@ public class DynamicMockProxyGenerator
         
         public Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable
         {
-            for(int ii = 0; ii < methodsToIntercept.length; ii++)
-            {
-                if(MethodUtil.areMethodsEqual(method, methodsToIntercept[ii]))
-                {
-                    return methodsToIntercept[ii].invoke(delegate, args);
+            for (Method aMethodsToIntercept : methodsToIntercept) {
+                if (MethodUtil.areMethodsEqual(method, aMethodsToIntercept)) {
+                    return aMethodsToIntercept.invoke(delegate, args);
                 }
             }
-            for(int ii = 0; ii < methodsToDuplicate.length; ii++)
-            {
-                if(MethodUtil.areMethodsEqual(method, methodsToDuplicate[ii]))
-                {
-                    methodsToDuplicate[ii].invoke(delegate, args);
+            for (Method aMethodsToDuplicate : methodsToDuplicate) {
+                if (MethodUtil.areMethodsEqual(method, aMethodsToDuplicate)) {
+                    aMethodsToDuplicate.invoke(delegate, args);
                 }
             }
             return proxy.invokeSuper(obj, args);

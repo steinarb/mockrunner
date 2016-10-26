@@ -8,5 +8,5 @@ package com.mockrunner.tag;
  */
 public interface RuntimeAttribute
 {
-    public Object evaluate();
+    Object evaluate();
 }

@@ -61,11 +61,8 @@ public class StandardAdapterProcessor implements AdapterProcessor
     private Class determineFactoryClass(Class module)
     {
         Constructor[] constructors = module.getDeclaredConstructors();
-        for(int ii = 0; ii < constructors.length; ii++)
-        {
-            Constructor constructor = constructors[ii];
-            if(constructor.getParameterTypes().length == 1)
-            {
+        for (Constructor constructor : constructors) {
+            if (constructor.getParameterTypes().length == 1) {
                 return constructor.getParameterTypes()[0];
             }
         }
@@ -114,31 +111,26 @@ public class StandardAdapterProcessor implements AdapterProcessor
     private void addDelegatorMethods(JavaClassGenerator classGenerator, BCELClassAnalyzer analyzer, List excludedMethods, MemberInfo memberInfo)
     {
         Method[] moduleMethods = getDelegateMethods(memberInfo.getModule(), excludedMethods);
-        for(int ii = 0; ii < moduleMethods.length; ii++)
-        {
-            Method method = moduleMethods[ii];
+        for (Method method : moduleMethods) {
             MethodDeclaration delegationMethod = createProtectedMethod();
             delegationMethod.setName(method.getName());
             delegationMethod.setReturnType(method.getReturnType());
             Class[] exceptions = method.getExceptionTypes();
-            if(exceptions.length > 0)
-            {
+            if (exceptions.length > 0) {
                 delegationMethod.setExceptions(exceptions);
             }
             Class[] parameters = method.getParameterTypes();
             String[] argumentNames = null;
-            if(parameters.length > 0)
-            {
+            if (parameters.length > 0) {
                 delegationMethod.setArguments(parameters);
                 argumentNames = analyzer.getArgumentNames(method);
-                if(null == argumentNames || argumentNames.length <= 0)
-                {
+                if (null == argumentNames || argumentNames.length <= 0) {
                     argumentNames = prepareSuitableArgumentNames(parameters);
                 }
                 delegationMethod.setArgumentNames(argumentNames);
             }
             String delegationCodeLine = createDelegationCodeLine(method, memberInfo.getModuleMember(), argumentNames);
-            delegationMethod.setCodeLines(new String[] {delegationCodeLine});
+            delegationMethod.setCodeLines(new String[]{delegationCodeLine});
             String[] delegationMethodComment = createDelegationMethodComment(analyzer, memberInfo.getModule(), method);
             delegationMethod.setCommentLines(delegationMethodComment);
             classGenerator.addMethodDeclaration(delegationMethod);
@@ -170,11 +162,8 @@ public class StandardAdapterProcessor implements AdapterProcessor
     {
         Method[] moduleMethods = module.getDeclaredMethods();
         List delegateMethods = new ArrayList();
-        for(int ii = 0; ii < moduleMethods.length; ii++)
-        {
-            Method currentMethod = moduleMethods[ii];
-            if(shouldMethodBeAdded(currentMethod, excludedMethods))
-            {
+        for (Method currentMethod : moduleMethods) {
+            if (shouldMethodBeAdded(currentMethod, excludedMethods)) {
                 delegateMethods.add(currentMethod);
             }
         }
@@ -185,13 +174,12 @@ public class StandardAdapterProcessor implements AdapterProcessor
     {
         if(!Modifier.isPublic(currentMethod.getModifiers())) return false;
         if(null == excludedMethods) return true;
-        if(excludedMethods.contains(currentMethod.getName())) return false;
-        return true;
+        return !excludedMethods.contains(currentMethod.getName());
     }
     
     private String[] createDelegationMethodComment(BCELClassAnalyzer analyzer, Class module, Method method)
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append("Delegates to {@link ");
         buffer.append(module.getName());
         buffer.append("#");
@@ -220,7 +208,7 @@ public class StandardAdapterProcessor implements AdapterProcessor
     
     private String createDelegationCodeLine(Method method, String memberName, String[] argumentNames)
     {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         if(!Void.TYPE.equals(method.getReturnType()))
         {
             buffer.append("return ");

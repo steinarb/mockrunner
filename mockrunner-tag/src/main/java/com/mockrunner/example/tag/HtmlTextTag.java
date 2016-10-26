@@ -38,15 +38,14 @@ public class HtmlTextTag extends SimpleTagSupport
 
     public void doTag() throws JspException, IOException
     {
-        StringBuffer html = new StringBuffer();
-        html.append("<input type=\"text\" ");
-        html.append("name=\"");
-        html.append(name);
-        html.append("\" ");
-        html.append("value=\"");
-        html.append(value.getValue(getJspContext().getELContext()));
-        html.append("\"");
-        html.append("/>");
-        getJspContext().getOut().print(html.toString());
+        String html = "<input type=\"text\" " +
+                "name=\"" +
+                name +
+                "\" " +
+                "value=\"" +
+                value.getValue(getJspContext().getELContext()) +
+                "\"" +
+                "/>";
+        getJspContext().getOut().print(html);
     }
 }

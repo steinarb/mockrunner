@@ -40,7 +40,7 @@ public class ExpressionFilter implements Filter {
     public boolean matches(Message message) throws JMSException {
         Object value = expression.evaluate(message);
         if (value != null && value instanceof Boolean) {
-            return ((Boolean) value).booleanValue();
+            return (Boolean) value;
         }
         return false;
     }

@@ -36,12 +36,12 @@ public interface Filter {
      * @return true if this filter matches the given JMS message
      * @throws JMSException is the message cannot be macthed
      */
-    public boolean matches(Message message) throws JMSException;
+    boolean matches(Message message) throws JMSException;
 
     /**
      * @return return true if this filter is a wildcard filter
      *         and so can match multiple destinations
      */
-    public boolean isWildcard();
+    boolean isWildcard();
 
 }

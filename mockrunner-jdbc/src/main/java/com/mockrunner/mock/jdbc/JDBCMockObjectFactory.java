@@ -127,10 +127,8 @@ public class JDBCMockObjectFactory
         deregisterMockDrivers();
         try
         {
-            Iterator<Driver> drivers = preservedDrivers.iterator();
-            while(drivers.hasNext())
-            {
-                DriverManager.registerDriver(drivers.next());
+            for (Driver preservedDriver : preservedDrivers) {
+                DriverManager.registerDriver(preservedDriver);
             }
         }
         catch(SQLException exc)

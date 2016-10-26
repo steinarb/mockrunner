@@ -97,11 +97,9 @@ public class StockQuotePublisher
     private MapMessage createStockQuoteMessage(TopicSession topicSession, Map rates) throws JMSException
     {
         MapMessage message = topicSession.createMapMessage();
-        Iterator keys = rates.keySet().iterator();
-        while(keys.hasNext())
-        {
-            String nextKey = (String)keys.next();
-            message.setString(nextKey, (String)rates.get(nextKey));
+        for (Object o : rates.keySet()) {
+            String nextKey = (String) o;
+            message.setString(nextKey, (String) rates.get(nextKey));
         }
         return message;
     }

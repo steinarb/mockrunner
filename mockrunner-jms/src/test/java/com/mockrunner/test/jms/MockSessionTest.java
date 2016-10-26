@@ -97,7 +97,7 @@ public class MockSessionTest
         message = new MockTextMessage("Text1");
         destManager.createTopic("Topic1");
         MockTopic topic = (MockTopic)session.createTopic("Topic1");
-        ((MockMessageProducer)sender).send(topic, message);
+        sender.send(topic, message);
         assertEquals(topic, message.getJMSDestination());
     }
     
@@ -221,7 +221,7 @@ public class MockSessionTest
         assertTrue(producer2 instanceof MockTopicPublisher);
         ((MockQueueSender)producer1).send(queue, new MockTextMessage("mytext1"));
         ((MockQueueSender)producer1).send(queue, new MockTextMessage("mytext2"));
-        ((MockTopicPublisher)producer2).send(topic, new MockTextMessage("mytext3"));
+        producer2.send(topic, new MockTextMessage("mytext3"));
         List messageQueueList = queue.getCurrentMessageList();
         assertEquals(2, messageQueueList.size());
         assertTrue(messageQueueList.contains(new MockTextMessage("mytext1")));
@@ -277,7 +277,7 @@ public class MockSessionTest
         MessageProducer producer = session.createProducer(topic);
         listener = new TestMessageListener();
         consumer2.setMessageListener(listener);
-        ((MockTopicPublisher)producer).send(topic, new MockTextMessage("mytext4"));
+        producer.send(topic, new MockTextMessage("mytext4"));
         assertEquals(1, topic.getCurrentMessageList().size());
         assertEquals(3, topic.getReceivedMessageList().size());
         assertEquals(new MockTextMessage("mytext4"), listener.getMessage());

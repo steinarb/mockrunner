@@ -45,9 +45,8 @@ public class JavaLineProcessor
         LineNumberReader input = new LineNumberReader(new StringReader(source));
         StringWriter resultStringWriter = new StringWriter(source.length() + 100);
         PrintWriter output = new PrintWriter(resultStringWriter);
-        for(int ii = 0; ii < result.size(); ii++)
-        {
-            Line nextLine = (Line)result.get(ii);
+        for (Object aResult : result) {
+            Line nextLine = (Line) aResult;
             int processUntil = nextLine.getLineNumber();
             dumpToOutputUntil(input, output, processUntil);
             handleLine(nextLine, input, output);

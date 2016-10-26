@@ -37,8 +37,7 @@ public class SelectorParserTest extends TestCase {
     public void testParseWithParensAround() throws Exception {
         String[] values = {"x = 1 and y = 2", "(x = 1) and (y = 2)", "((x = 1) and (y = 2))"};
 
-        for (int i = 0; i < values.length; i++) {
-            String value = values[i];
+        for (String value : values) {
             System.out.println("Parsing: " + value);
 
             Filter filter = parse(value);

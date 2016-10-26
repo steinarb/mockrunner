@@ -47,10 +47,7 @@ public class PackageImportSorter
     private List getGroupsAsSortedList()
     {
         Set allGroupSet = new TreeSet();
-        for(int ii = 0; ii < order.length; ii++)
-        {
-            allGroupSet.add(order[ii]);
-        }
+        Collections.addAll(allGroupSet, order);
         List allGroups = new ArrayList(allGroupSet);
         Collections.reverse(allGroups);
         return allGroups;
@@ -58,11 +55,9 @@ public class PackageImportSorter
     
     private void prepareResultList(Map groups, List resultList)
     {
-        for(int ii = 0; ii < order.length; ii++)
-        {
-            Group currentGroup = (Group)groups.get(order[ii]);
-            if(null != currentGroup)
-            {
+        for (String anOrder : order) {
+            Group currentGroup = (Group) groups.get(anOrder);
+            if (null != currentGroup) {
                 addIfNotEmpty(resultList, currentGroup.getBeforeGroup());
                 addIfNotEmpty(resultList, currentGroup.getActualGroup());
                 addIfNotEmpty(resultList, currentGroup.getAfterGroup());
@@ -80,9 +75,8 @@ public class PackageImportSorter
     {   
         List allGroups = getGroupsAsSortedList();
         sortedGroups.addAll(imports);
-        for(int ii = 0; ii < imports.size(); ii++)
-        {
-            String currentImport = (String)imports.get(ii);
+        for (Object anImport : imports) {
+            String currentImport = (String) anImport;
             createGroupIfMatching(allGroups, groups, sortedGroups, currentImport);
         }
         sortedGroups.addAll(groups.keySet());
@@ -90,11 +84,9 @@ public class PackageImportSorter
 
     private void createGroupIfMatching(List allGroups, Map groups, Set sortedGroups, String currentImport)
     {
-        for(int ii = 0; ii < allGroups.size(); ii++)
-        {
-            String groupName = (String)allGroups.get(ii);
-            if(currentImport.startsWith(groupName))
-            {
+        for (Object allGroup : allGroups) {
+            String groupName = (String) allGroup;
+            if (currentImport.startsWith(groupName)) {
                 Group group = getGroupByName(groups, groupName);
                 group.addToActualGroup(currentImport);
                 sortedGroups.remove(currentImport);
@@ -118,11 +110,9 @@ public class PackageImportSorter
     {
         Group currentGroup = null;
         Set tempBeforeGroup = new TreeSet();
-        Iterator iterator = sortedGroups.iterator();
-        while(iterator.hasNext())
-        {
-            String currentImport = (String)iterator.next();
-            Group tempGroup = (Group)groups.get(currentImport);
+        for (Object sortedGroup : sortedGroups) {
+            String currentImport = (String) sortedGroup;
+            Group tempGroup = (Group) groups.get(currentImport);
             currentGroup = handleTempGroup(currentGroup, tempBeforeGroup, currentImport, tempGroup);
         }
     }

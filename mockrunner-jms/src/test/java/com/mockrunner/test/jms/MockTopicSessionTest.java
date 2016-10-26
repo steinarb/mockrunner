@@ -153,9 +153,9 @@ public class MockTopicSessionTest
         TopicSubscriber subscriber1 = session.createDurableSubscriber(topic1, "Durable1");
         TopicSubscriber subscriber2 = session.createDurableSubscriber(topic1, "Durable2", null, true);
         assertEquals(2, transManager.getDurableTopicSubscriberMap().size());
-        assertFalse(((MockTopicSubscriber)subscriber1).getNoLocal());
+        assertFalse(subscriber1.getNoLocal());
         assertTrue(((MockTopicSubscriber)subscriber1).isDurable());
-        assertTrue(((MockTopicSubscriber)subscriber2).getNoLocal());
+        assertTrue(subscriber2.getNoLocal());
         assertTrue(((MockTopicSubscriber)subscriber2).isDurable());
         assertTrue(subscriber1 == transManager.getDurableTopicSubscriber("Durable1"));
         assertTrue(subscriber2 == transManager.getDurableTopicSubscriber("Durable2"));
@@ -167,7 +167,7 @@ public class MockTopicSessionTest
         assertNull(transManager.getDurableTopicSubscriberMap().get("Durable2"));
         assertNull(transManager.getDurableTopicSubscriber("Durable2"));
         TopicSubscriber subscriber3 = session.createDurableSubscriber(topic1, "Durable1");
-        assertFalse(((MockTopicSubscriber)subscriber3).getNoLocal());
+        assertFalse(subscriber3.getNoLocal());
         assertTrue(((MockTopicSubscriber)subscriber3).isDurable());
         assertFalse(subscriber1 == transManager.getDurableTopicSubscriber("Durable1"));
         assertTrue(subscriber3 == transManager.getDurableTopicSubscriber("Durable1"));
@@ -530,7 +530,7 @@ public class MockTopicSessionTest
         MockTopicSubscriber subscriber3 = (MockTopicSubscriber)session.createSubscriber(topic1);
         subscriber3.setMessageListener(listener);
         publisher = anotherSession.createPublisher(topic2);
-        publisher.publish(new MockObjectMessage(new Integer(1)));
+        publisher.publish(new MockObjectMessage(1));
         assertEquals(3, topic1.getReceivedMessageList().size());
         assertEquals(3, topic2.getReceivedMessageList().size());
         assertEquals(0, topic1.getCurrentMessageList().size());
@@ -604,7 +604,7 @@ public class MockTopicSessionTest
     {
         MockTopicSession session = (MockTopicSession)connection.createTopicSession(false, Session.CLIENT_ACKNOWLEDGE);
         DestinationManager manager = connection.getDestinationManager();
-        MockTopic topic = (MockTopic)manager.createTopic("Topic");
+        MockTopic topic = manager.createTopic("Topic");
         TopicPublisher publisher = session.createPublisher(null);
         MockTextMessage message = new MockTextMessage("Text");
         publisher.publish(topic, message);

@@ -14,8 +14,6 @@ import javax.servlet.jsp.tagext.TagAdapter;
 import org.junit.Before;
 import org.junit.Test;
 
-import junit.framework.TestCase;
-
 import com.mockrunner.mock.web.MockJspFragment;
 import com.mockrunner.mock.web.MockJspWriter;
 import com.mockrunner.mock.web.MockPageContext;

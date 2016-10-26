@@ -298,30 +298,30 @@ public abstract class BasicEJBTestCaseAdapter
     }
 
     /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#lookupBean(String)}
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#createBean(String)}
      * @deprecated
      */
     protected Object lookupBean(String name)
     {
-        return ejbTestModule.lookupBean(name);
+        return ejbTestModule.createBean(name);
     }
 
     /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#lookupBean(String, String, Object[])}
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#createBean(String, String, Object[])}
      * @deprecated
      */
     protected Object lookupBean(String name, String createMethod, Object[] parameters)
     {
-        return ejbTestModule.lookupBean(name, createMethod, parameters);
+        return ejbTestModule.createBean(name, createMethod, parameters);
     }
 
     /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#lookupBean(String, Object[])}
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#createBean(String, Object[])}
      * @deprecated
      */
     protected Object lookupBean(String name, Object[] parameters)
     {
-        return ejbTestModule.lookupBean(name, parameters);
+        return ejbTestModule.createBean(name, parameters);
     }
 
     /**

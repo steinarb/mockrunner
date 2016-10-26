@@ -91,7 +91,7 @@ public class DefaultExceptionHandlerConfigTest extends TestCase
         ActionForward forward = (ActionForward)config.handle(exception, mapping, form, request, response);
         doTestCalled(config, exception, mapping, form, request, response);
         assertTrue(forward instanceof MockActionForward);
-        assertEquals("testname", ((MockActionForward)forward).getName());
+        assertEquals("testname", forward.getName());
     }
     
     private void doTestNotCalled(DefaultExceptionHandlerConfig config)

@@ -80,9 +80,8 @@ public class ClassUtil
         if(clazz.isInterface()) return new Class[0];
         Class[] classes = getInheritanceHierarchy(clazz);
         Set interfaceSet = new HashSet();
-        for(int ii = 0; ii < classes.length; ii++)
-        {
-            interfaceSet.addAll(Arrays.asList(classes[ii].getInterfaces()));
+        for (Class aClass : classes) {
+            interfaceSet.addAll(Arrays.asList(aClass.getInterfaces()));
         }
         return (Class[])interfaceSet.toArray(new Class[interfaceSet.size()]);
     }
@@ -119,9 +118,8 @@ public class ClassUtil
      */
     public static boolean isKeyword(String name)
     {
-        for(int ii = 0; ii < KEYWORDS.length; ii++)
-        {
-            if(KEYWORDS[ii].equals(name)) return true;
+        for (String KEYWORD : KEYWORDS) {
+            if (KEYWORD.equals(name)) return true;
         }
         return false;
     }

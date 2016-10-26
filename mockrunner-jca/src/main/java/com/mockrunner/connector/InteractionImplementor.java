@@ -30,7 +30,7 @@ public interface InteractionImplementor
      * @return <code>true</code> if this implementor will handle the request and
      *         will return the specified response, <code>false</code> otherwise
      */
-    public boolean canHandle(InteractionSpec interactionSpec, Record actualRequest, Record actualResponse);
+    boolean canHandle(InteractionSpec interactionSpec, Record actualRequest, Record actualResponse);
     
     /**
      * First version of the <code>Interaction.execute</code> methods.
@@ -38,7 +38,7 @@ public interface InteractionImplementor
      * @param actualRequest the actual request
      * @return the response according to the current request
      */
-    public Record execute(InteractionSpec interactionSpec, Record actualRequest) throws ResourceException;
+    Record execute(InteractionSpec interactionSpec, Record actualRequest) throws ResourceException;
     
     /**
      * Second version of the <code>Interaction.execute</code> methods.
@@ -47,5 +47,5 @@ public interface InteractionImplementor
      * @param actualResponse the actual response
      * @return <code>true</code> under normal conditions
      */
-    public boolean execute(InteractionSpec interactionSpec, Record actualRequest, Record actualResponse) throws ResourceException;
+    boolean execute(InteractionSpec interactionSpec, Record actualRequest, Record actualResponse) throws ResourceException;
 }

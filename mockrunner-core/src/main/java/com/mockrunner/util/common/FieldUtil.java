@@ -19,9 +19,8 @@ public class FieldUtil
     {
         List hierarchyList = new ArrayList();
         Class[] hierarchyClasses = ClassUtil.getInheritanceHierarchy(theClass);
-        for(int ii = 0; ii < hierarchyClasses.length; ii++)
-        {
-            addFieldsForClass(hierarchyList, hierarchyClasses[ii]);
+        for (Class hierarchyClass : hierarchyClasses) {
+            addFieldsForClass(hierarchyList, hierarchyClass);
         }
         return (Field[][])hierarchyList.toArray(new Field[hierarchyList.size()][]);
     }
@@ -30,11 +29,9 @@ public class FieldUtil
     {
         List methodList = new ArrayList();
         Field[] fields = clazz.getDeclaredFields();
-        for(int ii = 0; ii < fields.length; ii++)
-        {
-            if(!Modifier.isStatic(fields[ii].getModifiers()))
-            {
-                methodList.add(fields[ii]);
+        for (Field field : fields) {
+            if (!Modifier.isStatic(field.getModifiers())) {
+                methodList.add(field);
             }
         }
         hierarchyList.add(methodList.toArray(new Field[methodList.size()]));

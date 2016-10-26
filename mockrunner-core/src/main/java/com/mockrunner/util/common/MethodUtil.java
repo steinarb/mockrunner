@@ -49,8 +49,8 @@ public class MethodUtil
     {
         try
         {
-            Method method = object.getClass().getMethod(methodName, new Class[] {parameter.getClass()});
-            return method.invoke(object, new Object[] {parameter});
+            Method method = object.getClass().getMethod(methodName, parameter.getClass());
+            return method.invoke(object, parameter);
         } 
         catch(Exception exc)
         {
@@ -107,22 +107,16 @@ public class MethodUtil
     {
         Method[][] declaredMethods = MethodUtil.getMethodsSortedByInheritanceHierarchy(clazz); 
         Set overridingMethods = new HashSet();
-        for(int ii = 0; ii < methods.length; ii++)
-        {
-            Method currentAroundInvokeMethod = methods[ii];
+        for (Method currentAroundInvokeMethod : methods) {
             Set currentOverridingMethods = new HashSet();
-            for(int yy = 0; yy < declaredMethods.length; yy++)
-            {
-                for(int zz = 0; zz < declaredMethods[yy].length; zz++)
-                {
-                    if(MethodUtil.overrides(currentAroundInvokeMethod, declaredMethods[yy][zz]))
-                    {
-                        currentOverridingMethods.add(declaredMethods[yy][zz]);
+            for (Method[] declaredMethod : declaredMethods) {
+                for (int zz = 0; zz < declaredMethod.length; zz++) {
+                    if (MethodUtil.overrides(currentAroundInvokeMethod, declaredMethod[zz])) {
+                        currentOverridingMethods.add(declaredMethod[zz]);
                     }
                 }
             }
-            if(!currentOverridingMethods.isEmpty())
-            {
+            if (!currentOverridingMethods.isEmpty()) {
                 overridingMethods.add(currentAroundInvokeMethod);
                 overridingMethods.addAll(currentOverridingMethods);
             }
@@ -141,11 +135,9 @@ public class MethodUtil
     {
         Method[] methods = theClass.getDeclaredMethods();
         List resultList = new ArrayList();
-        for(int ii = 0; ii < methods.length; ii++)
-        {
-            if(StringUtil.matchesPerl5(methods[ii].getName(), expr, true))
-            {
-                resultList.add(methods[ii]);
+        for (Method method : methods) {
+            if (StringUtil.matchesPerl5(method.getName(), expr, true)) {
+                resultList.add(method);
             }
         }
         return (Method[])resultList.toArray(new Method[resultList.size()]);
@@ -163,9 +155,8 @@ public class MethodUtil
     {
         List hierarchyList = new ArrayList();
         Class[] hierarchyClasses = ClassUtil.getInheritanceHierarchy(theClass);
-        for(int ii = 0; ii < hierarchyClasses.length; ii++)
-        {
-            addMethodsForClass(hierarchyList, hierarchyClasses[ii]);
+        for (Class hierarchyClass : hierarchyClasses) {
+            addMethodsForClass(hierarchyList, hierarchyClass);
         }
         return (Method[][])hierarchyList.toArray(new Method[hierarchyList.size()][]);
     }
@@ -174,11 +165,9 @@ public class MethodUtil
     {
         List methodList = new ArrayList();
         Method[] methods = clazz.getDeclaredMethods();
-        for(int ii = 0; ii < methods.length; ii++)
-        {
-            if(!Modifier.isStatic(methods[ii].getModifiers()))
-            {
-                methodList.add(methods[ii]);
+        for (Method method : methods) {
+            if (!Modifier.isStatic(method.getModifiers())) {
+                methodList.add(method);
             }
         }
         hierarchyList.add(methodList.toArray(new Method[methodList.size()]));

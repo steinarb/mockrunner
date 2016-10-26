@@ -97,14 +97,13 @@ public class MockForwardConfig extends ActionForward
 
     public String toString() 
     {
-        StringBuffer sb = new StringBuffer("ForwardConfig[");
-        sb.append("name=");
-        sb.append(this.name);
-        sb.append(",path=");
-        sb.append(this.path);
-        sb.append(",redirect=");
-        sb.append(this.redirect);
-        sb.append("]");
-        return (sb.toString());
+        String sb = "ForwardConfig[" + "name=" +
+                this.name +
+                ",path=" +
+                this.path +
+                ",redirect=" +
+                this.redirect +
+                "]";
+        return (sb);
     }
 }

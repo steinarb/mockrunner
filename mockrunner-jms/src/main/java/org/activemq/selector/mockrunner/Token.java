@@ -75,7 +75,7 @@ public class Token {
      * @param ofKind the kind of token to create
      * @return the new token
      */
-    public static final Token newToken(int ofKind) {
+    public static Token newToken(int ofKind) {
         switch (ofKind) {
             default :
                 return new Token();

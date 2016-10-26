@@ -17,7 +17,7 @@ public class ArrayUtilTest extends TestCase
         assertTrue(list.size() == 9);
         for(int ii = 0; ii < testArray.length; ii++)
         {
-            byte nextByteFromList = ((Byte)list.get(ii)).byteValue();
+            byte nextByteFromList = (Byte) list.get(ii);
             assertEquals(testArray[ii], nextByteFromList);
         }
     }
@@ -27,10 +27,10 @@ public class ArrayUtilTest extends TestCase
         ArrayList list = new ArrayList();
         for(int ii = 0; ii < 9; ii++)
         {
-            list.add(new Byte((byte)ii));
+            list.add((byte) ii);
         }
         list.add(null);
-        list.add(new Byte((byte)0));
+        list.add((byte) 0);
         byte[] data = ArrayUtil.getByteArrayFromList(list);
         assertTrue(data.length == 11);
         for(int ii = 0; ii < 9; ii++)
@@ -71,14 +71,14 @@ public class ArrayUtilTest extends TestCase
         assertTrue(list.size() == 9);
         for(int ii = 0; ii < testArray.length; ii++)
         {
-            byte nextByteFromList = ((Byte)list.get(ii)).byteValue();
+            byte nextByteFromList = (Byte) list.get(ii);
             assertEquals(testArray[ii], nextByteFromList);
         }
         ArrayUtil.addBytesToList(testArray, 1, 3, list, 9);
         assertTrue(list.size() == 12);
         for(int ii = 0; ii < testArray.length; ii++)
         {
-            byte nextByteFromList = ((Byte)list.get(ii)).byteValue();
+            byte nextByteFromList = (Byte) list.get(ii);
             assertEquals(testArray[ii], nextByteFromList);
         }
         assertEquals(1, ((Byte)list.get(9)).byteValue());
@@ -98,7 +98,7 @@ public class ArrayUtilTest extends TestCase
         }
         for(int ii = 100; ii < 109; ii++)
         {
-            byte nextByteFromList = ((Byte)list.get(ii)).byteValue();
+            byte nextByteFromList = (Byte) list.get(ii);
             assertEquals(testArray[ii - 100], nextByteFromList);
         }
     }
@@ -146,13 +146,13 @@ public class ArrayUtilTest extends TestCase
         int[] intArray = new int[] {1, 2, 3};
         Object[] integerWrappedArray = ArrayUtil.convertToObjectArray(intArray);
         assertTrue(integerWrappedArray instanceof Integer[]);
-        assertEquals(new Integer(1), integerWrappedArray[0]);
-        assertEquals(new Integer(2), integerWrappedArray[1]);
-        assertEquals(new Integer(3), integerWrappedArray[2]);
+        assertEquals(1, integerWrappedArray[0]);
+        assertEquals(2, integerWrappedArray[1]);
+        assertEquals(3, integerWrappedArray[2]);
         double[] doubleArray = new double[] {1.3};
         Object[] doubleWrappedArray = ArrayUtil.convertToObjectArray(doubleArray);
         assertTrue(doubleWrappedArray instanceof Double[]);
-        assertEquals(new Double(1.3), doubleWrappedArray[0]);
+        assertEquals(1.3, doubleWrappedArray[0]);
         String[] stringArray = new String[] {"This", "is", "an", "array", "of", "strings"};
         Object[] stringTargetArray = ArrayUtil.convertToObjectArray(stringArray);
         assertTrue(stringArray == stringTargetArray);
@@ -244,12 +244,12 @@ public class ArrayUtilTest extends TestCase
     {
         assertTrue(ArrayUtil.areArraysEqual(null, null));
         assertTrue(ArrayUtil.areArraysEqual("1", "1"));
-        assertTrue(ArrayUtil.areArraysEqual(new Long(1), new Long(1)));
+        assertTrue(ArrayUtil.areArraysEqual(1L, 1L));
         assertFalse(ArrayUtil.areArraysEqual(null, "1"));
         assertFalse(ArrayUtil.areArraysEqual("1", null));
         assertFalse(ArrayUtil.areArraysEqual("1", "2"));
         assertFalse(ArrayUtil.areArraysEqual("1", new String[] {"1"}));
-        assertFalse(ArrayUtil.areArraysEqual(new String[] {"1", "2"}, new Integer(2)));
+        assertFalse(ArrayUtil.areArraysEqual(new String[] {"1", "2"}, 2));
         assertFalse(ArrayUtil.areArraysEqual(new String[] {}, new String[] {"1"}));
         assertTrue(ArrayUtil.areArraysEqual(new String[] {"1"}, new String[] {"1"}));
         assertTrue(ArrayUtil.areArraysEqual(new int[] {1, 2, 3}, new int[] {1, 2, 3}));

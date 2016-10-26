@@ -1,13 +1,9 @@
 package com.mockrunner.test.util;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
 import junit.framework.TestCase;
-
-import com.mockrunner.util.common.FileUtil;
 
 public class FileUtilTest extends TestCase
 {

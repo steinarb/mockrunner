@@ -93,7 +93,7 @@ public class NewsSubscriberTest extends JMSTestCaseAdapter
 			{
 				NewsSubscriber.main(new String[] {contextFactory, providerURL, subject});
 			}
-			catch(RuntimeException exc)
+			catch(RuntimeException ignored)
 			{
 				
 			}

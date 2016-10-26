@@ -54,8 +54,7 @@ public class MockRecord implements Record
         if(null != recordName && !recordName.equals(other.recordName)) return false;
         if(null != recordDescription && !recordDescription.equals(other.recordDescription)) return false;
         if(null == recordName && null != other.recordName) return false;
-        if(null == recordDescription && null != other.recordDescription) return false;
-        return true;
+        return !(null == recordDescription && null != other.recordDescription);
     }
 
     public int hashCode()
@@ -68,11 +67,10 @@ public class MockRecord implements Record
 
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(this.getClass().getName() + ", ");
-        buffer.append("name: " + recordName + ", ");
-        buffer.append("description: " + recordDescription);
-        return buffer.toString();
+        String buffer = this.getClass().getName() + ", " +
+                "name: " + recordName + ", " +
+                "description: " + recordDescription;
+        return buffer;
     }
 
     public Object clone() throws CloneNotSupportedException

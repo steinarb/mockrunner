@@ -355,7 +355,7 @@ public class ServletTestModule extends HTMLOutputModule
         {
             mockFactory.getMockResponse().getWriter().flush();    
         }
-        catch(Exception exc)
+        catch(Exception ignored)
         {
             
         }

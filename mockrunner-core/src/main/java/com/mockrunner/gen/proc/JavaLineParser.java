@@ -80,21 +80,19 @@ public class JavaLineParser
     
     private void checkLinesOrBlocksLeft(List tempLinesToParse, List tempBlocksToParse)
     {
-        StringBuffer message = new StringBuffer("");
+        StringBuilder message = new StringBuilder("");
         if(tempLinesToParse.size() > 0)
         {
             message.append("Lines not found:\n");
-            for(int ii = 0; ii < tempLinesToParse.size(); ii++)
-            {
-                message.append(tempLinesToParse.get(ii).toString() + "\n");
+            for (Object aTempLinesToParse : tempLinesToParse) {
+                message.append(aTempLinesToParse.toString()).append("\n");
             }
         }
         if(tempBlocksToParse.size() > 0)
         {
             message.append("Blocks not found:\n");
-            for(int ii = 0; ii < tempBlocksToParse.size(); ii++)
-            {
-                message.append(tempBlocksToParse.get(ii).toString() + "\n");
+            for (Object aTempBlocksToParse : tempBlocksToParse) {
+                message.append(aTempBlocksToParse.toString()).append("\n");
             }
         }
         if(message.length() > 0)
@@ -105,11 +103,9 @@ public class JavaLineParser
     
     private String checkLine(String currentLine, List linesToParse)
     {
-        for(int ii = 0; ii < linesToParse.size(); ii++)
-        {
-            String nextLine = (String)linesToParse.get(ii);
-            if(currentLine.trim().indexOf(nextLine) != -1)
-            {
+        for (Object aLinesToParse : linesToParse) {
+            String nextLine = (String) aLinesToParse;
+            if (currentLine.trim().contains(nextLine)) {
                 return nextLine;
             }
         }
@@ -118,11 +114,9 @@ public class JavaLineParser
     
     private String checkBlock(String currentLine, List blocksToParse)
     {
-        for(int ii = 0; ii < blocksToParse.size(); ii++)
-        {
-            String nextLine = (String)blocksToParse.get(ii);
-            if(currentLine.trim().indexOf(nextLine) != -1)
-            {
+        for (Object aBlocksToParse : blocksToParse) {
+            String nextLine = (String) aBlocksToParse;
+            if (currentLine.trim().contains(nextLine)) {
                 return nextLine;
             }
         }
@@ -134,15 +128,15 @@ public class JavaLineParser
         String currentLine = null;
         try
         {
-            while((null != (currentLine = input.readLine())) && (currentLine.trim().indexOf("{") == -1));
+            while((null != (currentLine = input.readLine())) && (!currentLine.trim().contains("{")));
             int level = 1;
             while((level > 0) && (null != (currentLine = input.readLine())))
             {
-                if(currentLine.trim().indexOf("{") != -1)
+                if(currentLine.trim().contains("{"))
                 {
                     level++;
                 }
-                else if(currentLine.trim().indexOf("}") != -1)
+                else if(currentLine.trim().contains("}"))
                 {
                     level--;
                 }

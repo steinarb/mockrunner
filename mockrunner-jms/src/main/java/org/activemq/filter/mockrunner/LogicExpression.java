@@ -36,7 +36,7 @@ public abstract class LogicExpression extends BinaryExpression implements Boolea
                 
             	Boolean lv = (Boolean) left.evaluate(message);
                 // Can we do an OR shortcut??
-            	if (lv !=null && lv.booleanValue()) {
+            	if (lv !=null && lv) {
                     return Boolean.TRUE;
                 }
             	
@@ -60,7 +60,7 @@ public abstract class LogicExpression extends BinaryExpression implements Boolea
                 // Can we do an AND shortcut??
             	if( lv==null )
             		return null;
-            	if (!lv.booleanValue()) {
+            	if (!lv) {
                     return Boolean.FALSE;
                 }
             	

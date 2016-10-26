@@ -9,10 +9,10 @@ package com.mockrunner.example.ejb.interfaces;
 public interface PaySessionHome
    extends javax.ejb.EJBHome
 {
-   public static final String COMP_NAME="java:comp/env/ejb/PaySession";
-   public static final String JNDI_NAME="com/mockrunner/example/PaySession";
+   String COMP_NAME="java:comp/env/ejb/PaySession";
+   String JNDI_NAME="com/mockrunner/example/PaySession";
 
-   public com.mockrunner.example.ejb.interfaces.PaySession create()
+   com.mockrunner.example.ejb.interfaces.PaySession create()
       throws javax.ejb.CreateException,java.rmi.RemoteException;
 
 }

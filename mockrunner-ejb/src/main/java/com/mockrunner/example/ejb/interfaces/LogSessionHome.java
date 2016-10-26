@@ -9,10 +9,10 @@ package com.mockrunner.example.ejb.interfaces;
 public interface LogSessionHome
    extends javax.ejb.EJBHome
 {
-   public static final String COMP_NAME="java:comp/env/ejb/LogSession";
-   public static final String JNDI_NAME="com/mockrunner/example/LogSession";
+   String COMP_NAME="java:comp/env/ejb/LogSession";
+   String JNDI_NAME="com/mockrunner/example/LogSession";
 
-   public com.mockrunner.example.ejb.interfaces.LogSession create()
+   com.mockrunner.example.ejb.interfaces.LogSession create()
       throws javax.ejb.CreateException,java.rmi.RemoteException;
 
 }

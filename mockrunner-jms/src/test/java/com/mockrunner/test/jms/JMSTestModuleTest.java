@@ -897,8 +897,8 @@ public class JMSTestModuleTest
         connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
         DestinationManager manager = mockFactory.getDestinationManager();
         manager.createQueue("queue");
-        QueueBrowser browser1 = (QueueBrowser)module.getSession(0).createBrowser(manager.getQueue("queue"));
-        QueueBrowser browser2 = (QueueBrowser)module.getSession(0).createBrowser(manager.getQueue("queue"));
+        QueueBrowser browser1 = module.getSession(0).createBrowser(manager.getQueue("queue"));
+        QueueBrowser browser2 = module.getSession(0).createBrowser(manager.getQueue("queue"));
         module.verifyNumberQueueBrowsers(0, 0);
         module.verifyNumberQueueBrowsers(0, "queue", 0);
         try
@@ -914,7 +914,7 @@ public class JMSTestModuleTest
         assertEquals(2, transManager.getQueueBrowserList().size());
         assertSame(browser1, transManager.getQueueBrowser(0));
         assertSame(browser2, transManager.getQueueBrowser(1));
-        QueueBrowser browser3 = (QueueBrowser)module.getTopicSession(0).createBrowser(manager.getQueue("queue"));
+        QueueBrowser browser3 = module.getTopicSession(0).createBrowser(manager.getQueue("queue"));
         module.verifyNumberQueueBrowsers(0, 0);
         transManager = module.getTopicSession(0).getQueueTransmissionManager();
         assertEquals(1, transManager.getQueueBrowserList().size());
@@ -1272,7 +1272,7 @@ public class JMSTestModuleTest
         TextMessage message1 = module.getQueueSession(0).createTextMessage();
         message1.setText("text1");
         ObjectMessage message2 = module.getQueueSession(0).createObjectMessage();
-        message2.setObject(new Integer(1));
+        message2.setObject(1);
         MapMessage message3 = module.getQueueSession(0).createMapMessage();
         message3.setFloat("float1", 1.2f);
         message3.setString("string1", "teststring");
@@ -1280,9 +1280,9 @@ public class JMSTestModuleTest
         sender.send(message2);
         sender.send(message3);
         module.verifyCurrentQueueMessageEquals("queue", 0, new MockTextMessage("text1"));
-        module.verifyCurrentQueueMessageEquals("queue", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentQueueMessageEquals("queue", 1, new MockObjectMessage(1));
         module.verifyReceivedQueueMessageEquals("queue", 0, new MockTextMessage("text1"));
-        module.verifyReceivedQueueMessageEquals("queue", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedQueueMessageEquals("queue", 1, new MockObjectMessage(1));
         MockMapMessage testMessage = new MockMapMessage();
         testMessage.setFloat("float1", 1.2f);
         testMessage.setString("string1", "teststring");
@@ -1330,15 +1330,15 @@ public class JMSTestModuleTest
         {
             //should throw exception
         }
-        module.verifyCurrentQueueMessageEquals("queue", 0, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentQueueMessageEquals("queue", 0, new MockObjectMessage(1));
         module.verifyCurrentQueueMessageEquals("queue", 1, testMessage);      
         module.verifyReceivedQueueMessageEquals("queue", 0, new MockTextMessage("text1"));
-        module.verifyReceivedQueueMessageEquals("queue", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedQueueMessageEquals("queue", 1, new MockObjectMessage(1));
         module.verifyReceivedQueueMessageEquals("queue", 2, testMessage);
         receiver.receive();
         try
         {
-            module.verifyCurrentQueueMessageEquals("queue", 0, new MockObjectMessage(new Integer(1)));
+            module.verifyCurrentQueueMessageEquals("queue", 0, new MockObjectMessage(1));
             fail();
         }
         catch(VerifyFailedException exc)
@@ -1347,7 +1347,7 @@ public class JMSTestModuleTest
         }
         module.verifyCurrentQueueMessageEquals("queue", 0, testMessage);      
         module.verifyReceivedQueueMessageEquals("queue", 0, new MockTextMessage("text1"));
-        module.verifyReceivedQueueMessageEquals("queue", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedQueueMessageEquals("queue", 1, new MockObjectMessage(1));
         module.verifyReceivedQueueMessageEquals("queue", 2, testMessage);
         TemporaryQueue tempQueue = module.getQueueSession(0).createTemporaryQueue();
         sender = module.getQueueSession(0).createSender(tempQueue);
@@ -1355,10 +1355,10 @@ public class JMSTestModuleTest
         sender.send(message2);
         sender.send(message3);
         module.verifyCurrentQueueMessageEquals(0, 0, 0, new MockTextMessage("text1"));
-        module.verifyCurrentQueueMessageEquals(0, 0, 1, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentQueueMessageEquals(0, 0, 1, new MockObjectMessage(1));
         module.verifyCurrentQueueMessageEquals(0, 0, 2, testMessage);
         module.verifyReceivedQueueMessageEquals(0, 0, 0, new MockTextMessage("text1"));
-        module.verifyReceivedQueueMessageEquals(0, 0, 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedQueueMessageEquals(0, 0, 1, new MockObjectMessage(1));
         module.verifyReceivedQueueMessageEquals(0, 0, 2, testMessage);
         try
         {
@@ -1380,10 +1380,10 @@ public class JMSTestModuleTest
         {
             //should throw exception
         }
-        module.verifyCurrentQueueMessageEquals(0, 0, 0, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentQueueMessageEquals(0, 0, 0, new MockObjectMessage(1));
         module.verifyCurrentQueueMessageEquals(0, 0, 1, testMessage);
         module.verifyReceivedQueueMessageEquals(0, 0, 0, new MockTextMessage("text1"));
-        module.verifyReceivedQueueMessageEquals(0, 0, 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedQueueMessageEquals(0, 0, 1, new MockObjectMessage(1));
         module.verifyReceivedQueueMessageEquals(0, 0, 2, testMessage);
     }
     
@@ -1397,7 +1397,7 @@ public class JMSTestModuleTest
         ObjectMessage message1 = module.getTopicSession(0).createObjectMessage();
         message1.setObject("testObject");
         ObjectMessage message2 = module.getTopicSession(0).createObjectMessage();
-        message2.setObject(new Integer(1));
+        message2.setObject(1);
         BytesMessage message3 = module.getTopicSession(0).createBytesMessage();
         message3.writeInt(1);
         message3.writeInt(2);
@@ -1406,9 +1406,9 @@ public class JMSTestModuleTest
         publisher.publish(message2);
         publisher.publish(message3);
         module.verifyCurrentTopicMessageEquals("topic", 0, new MockObjectMessage("testObject"));
-        module.verifyCurrentTopicMessageEquals("topic", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentTopicMessageEquals("topic", 1, new MockObjectMessage(1));
         module.verifyReceivedTopicMessageEquals("topic", 0, new MockObjectMessage("testObject"));
-        module.verifyReceivedTopicMessageEquals("topic", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedTopicMessageEquals("topic", 1, new MockObjectMessage(1));
         MockBytesMessage testMessage = new MockBytesMessage();
         testMessage.writeInt(1);
         testMessage.writeInt(2);
@@ -1458,15 +1458,15 @@ public class JMSTestModuleTest
         {
             //should throw exception
         }
-        module.verifyCurrentTopicMessageEquals("topic", 0, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentTopicMessageEquals("topic", 0, new MockObjectMessage(1));
         module.verifyCurrentTopicMessageEquals("topic", 1, testMessage);      
         module.verifyReceivedTopicMessageEquals("topic", 0, new MockObjectMessage("testObject"));
-        module.verifyReceivedTopicMessageEquals("topic", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedTopicMessageEquals("topic", 1, new MockObjectMessage(1));
         module.verifyReceivedTopicMessageEquals("topic", 2, testMessage);
         subscriber.receive();
         try
         {
-            module.verifyCurrentTopicMessageEquals("topic", 0, new MockObjectMessage(new Integer(1)));
+            module.verifyCurrentTopicMessageEquals("topic", 0, new MockObjectMessage(1));
             fail();
         }
         catch(VerifyFailedException exc)
@@ -1475,7 +1475,7 @@ public class JMSTestModuleTest
         }
         module.verifyCurrentTopicMessageEquals("topic", 0, testMessage);      
         module.verifyReceivedTopicMessageEquals("topic", 0, new MockObjectMessage("testObject"));
-        module.verifyReceivedTopicMessageEquals("topic", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedTopicMessageEquals("topic", 1, new MockObjectMessage(1));
         module.verifyReceivedTopicMessageEquals("topic", 2, testMessage);
         TemporaryTopic tempTopic = module.getTopicSession(0).createTemporaryTopic();
         publisher = module.getTopicSession(0).createPublisher(tempTopic);
@@ -1483,10 +1483,10 @@ public class JMSTestModuleTest
         publisher.publish(message2);
         publisher.publish(message3);
         module.verifyCurrentTopicMessageEquals(0, 0, 0, new MockObjectMessage("testObject"));
-        module.verifyCurrentTopicMessageEquals(0, 0, 1, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentTopicMessageEquals(0, 0, 1, new MockObjectMessage(1));
         module.verifyCurrentTopicMessageEquals(0, 0, 2, testMessage);
         module.verifyReceivedTopicMessageEquals(0, 0, 0, new MockObjectMessage("testObject"));
-        module.verifyReceivedTopicMessageEquals(0, 0, 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedTopicMessageEquals(0, 0, 1, new MockObjectMessage(1));
         module.verifyReceivedTopicMessageEquals(0, 0, 2, testMessage);
         try
         {
@@ -1508,15 +1508,15 @@ public class JMSTestModuleTest
         {
             //should throw exception
         }
-        module.verifyCurrentTopicMessageEquals(0, 0, 0, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentTopicMessageEquals(0, 0, 0, new MockObjectMessage(1));
         module.verifyCurrentTopicMessageEquals(0, 0, 1, testMessage);
         module.verifyReceivedTopicMessageEquals(0, 0, 0, new MockObjectMessage("testObject"));
-        module.verifyReceivedTopicMessageEquals(0, 0, 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedTopicMessageEquals(0, 0, 1, new MockObjectMessage(1));
         module.verifyReceivedTopicMessageEquals(0, 0, 2, testMessage);
         subscriber.receive();
         module.verifyCurrentTopicMessageEquals(0, 0, 0, testMessage);
         module.verifyReceivedTopicMessageEquals(0, 0, 0, new MockObjectMessage("testObject"));
-        module.verifyReceivedTopicMessageEquals(0, 0, 1, new MockObjectMessage(new Integer(1)));
+        module.verifyReceivedTopicMessageEquals(0, 0, 1, new MockObjectMessage(1));
         module.verifyReceivedTopicMessageEquals(0, 0, 2, testMessage);
     }
     
@@ -1535,10 +1535,10 @@ public class JMSTestModuleTest
         MockMapMessage mapMessage = new MockMapMessage();
         mapMessage.setInt("prop", 1);
         producer1.send(new MockTextMessage("text"));
-        producer2.send(new MockObjectMessage(new Integer(1)));
+        producer2.send(new MockObjectMessage(1));
         producer3.send(mapMessage);
         module.verifyCurrentQueueMessageEquals("queue", 0, new MockTextMessage("text"));
-        module.verifyCurrentQueueMessageEquals("queue", 1, new MockObjectMessage(new Integer(1)));
+        module.verifyCurrentQueueMessageEquals("queue", 1, new MockObjectMessage(1));
         module.verifyCurrentQueueMessageEquals("queue", 2, mapMessage);
         producer3 = (MockMessageProducer)module.getSession(0).createProducer(manager.getTopic("topic"));
         producer3.send(mapMessage);
@@ -2511,7 +2511,7 @@ public class JMSTestModuleTest
     @Test
     public void testGenericFactory() throws Exception
     {
-        MockConnectionFactory factory = (MockConnectionFactory)mockFactory.getMockConnectionFactory();
+        MockConnectionFactory factory = mockFactory.getMockConnectionFactory();
         QueueConnection queueConnection = factory.createQueueConnection();
         TopicConnection topicConnection = factory.createTopicConnection();
         MockConnection connection = (MockConnection)factory.createConnection();

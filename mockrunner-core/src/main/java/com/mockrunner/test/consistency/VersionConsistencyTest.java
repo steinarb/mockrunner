@@ -33,21 +33,15 @@ public class VersionConsistencyTest extends TestCase
         util.addJavaSrcFiles(sourceDir, sourceFile, sourceMap);
         util.addJavaSrcFiles(destinationDir, destFile, destMap);
         boolean ok = true;
-        Iterator sourceIterator = sourceMap.keySet().iterator();
-        while(sourceIterator.hasNext())
-        {
-            String currentFileName = (String)sourceIterator.next();
-            File currentSourceFile = (File)sourceMap.get(currentFileName);
-            File currentDestFile = (File)destMap.get(currentFileName);
-            if(null == currentDestFile)
-            {
+        for (Object o : sourceMap.keySet()) {
+            String currentFileName = (String) o;
+            File currentSourceFile = (File) sourceMap.get(currentFileName);
+            File currentDestFile = (File) destMap.get(currentFileName);
+            if (null == currentDestFile) {
                 System.out.println("File " + currentSourceFile.getPath() + " not found under src");
                 ok = false;
-            }
-            else
-            {
-                if(!compareFiles(currentSourceFile, currentDestFile))
-                {
+            } else {
+                if (!compareFiles(currentSourceFile, currentDestFile)) {
                     System.out.println("Mismatch in file " + currentSourceFile.getPath());
                     System.out.println();
                     ok = false;

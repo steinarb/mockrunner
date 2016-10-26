@@ -35,37 +35,27 @@ public class MockTopic extends MockDestination implements Topic
     {
         addReceivedMessage(message);    
         boolean isConsumed = false;
-        Iterator sessionsIterator = sessionSet().iterator();
-        while(sessionsIterator.hasNext())
-        {
-            MockSession session = (MockSession)sessionsIterator.next();
+        for (Object o1 : sessionSet()) {
+            MockSession session = (MockSession) o1;
             MessageListener globalListener = session.getMessageListener();
-            if(null != globalListener)
-            {
+            if (null != globalListener) {
                 globalListener.onMessage(message);
                 isConsumed = true;
                 acknowledgeMessage(message, session);
-            }
-            else
-            {
+            } else {
                 List subscribers = session.getTopicTransmissionManager().getTopicSubscriberList(name);
-                for(int ii = 0; ii < subscribers.size(); ii++)
-                {
-                    MockTopicSubscriber subscriber = (MockTopicSubscriber)subscribers.get(ii);
-                    if(subscriber.canConsume(message))
-                    {
+                for (Object subscriber1 : subscribers) {
+                    MockTopicSubscriber subscriber = (MockTopicSubscriber) subscriber1;
+                    if (subscriber.canConsume(message)) {
                         subscriber.receiveMessage(message);
                         isConsumed = true;
                         acknowledgeMessage(message, session);
                     }
                 }
                 Map durableSubscribers = session.getTopicTransmissionManager().getDurableTopicSubscriberMap(name);
-                Iterator keys = durableSubscribers.keySet().iterator();
-                while(keys.hasNext())
-                {
-                    MockTopicSubscriber subscriber = (MockTopicSubscriber)durableSubscribers.get(keys.next());
-                    if(subscriber.canConsume(message))
-                    {
+                for (Object o : durableSubscribers.keySet()) {
+                    MockTopicSubscriber subscriber = (MockTopicSubscriber) durableSubscribers.get(o);
+                    if (subscriber.canConsume(message)) {
                         subscriber.receiveMessage(message);
                         isConsumed = true;
                         acknowledgeMessage(message, session);

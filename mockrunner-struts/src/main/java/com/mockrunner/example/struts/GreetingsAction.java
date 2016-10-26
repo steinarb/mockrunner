@@ -26,7 +26,7 @@ public class GreetingsAction extends Action
         GreetingsValidatorForm greetForm = (GreetingsValidatorForm)form;
         String name = greetForm.getName();
         Integer counter = (Integer)request.getSession().getServletContext().getAttribute("counter");
-        counter = new Integer(counter.intValue() + 1);
+        counter = counter.intValue() + 1;
         request.getSession().getServletContext().setAttribute("counter", counter);
         MessageResources resources = getResources(request);
         String helloMessage = resources.getMessage("hello.name", name);

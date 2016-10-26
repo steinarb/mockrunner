@@ -112,14 +112,11 @@ public class AdapterConsistencyTest extends TestCase
     
     public void testAdapterConsistency()
     {
-        Iterator modules = adapterMap.keySet().iterator();
-        while(modules.hasNext())
-        {
-            Class currentModule = (Class)modules.next();
-            List adapterList = (List)adapterMap.get(currentModule);
-            for(int ii = 0; ii < adapterList.size(); ii++)
-            {
-                Class currentAdapter = (Class)adapterList.get(ii);
+        for (Object o : adapterMap.keySet()) {
+            Class currentModule = (Class) o;
+            List adapterList = (List) adapterMap.get(currentModule);
+            for (Object anAdapterList : adapterList) {
+                Class currentAdapter = (Class) anAdapterList;
                 doTestAdapter(currentModule, currentAdapter);
             }
         }
@@ -130,13 +127,9 @@ public class AdapterConsistencyTest extends TestCase
     {
         Method[] adapterMethods = currentAdapter.getDeclaredMethods();
         Method[] moduleMethods = currentModule.getDeclaredMethods();
-        for(int ii = 0; ii < moduleMethods.length; ii++)
-        {
-            Method currentMethod = moduleMethods[ii];
-            if(shouldMethodBeChecked(currentMethod, currentModule))
-            {
-                if(!isMethodDeclared(currentMethod, adapterMethods))
-                {
+        for (Method currentMethod : moduleMethods) {
+            if (shouldMethodBeChecked(currentMethod, currentModule)) {
+                if (!isMethodDeclared(currentMethod, adapterMethods)) {
                     addFailureEntry(currentModule, currentAdapter, currentMethod);
                 }
             }
@@ -147,20 +140,13 @@ public class AdapterConsistencyTest extends TestCase
     {
         if(!Modifier.isPublic(theMethod.getModifiers())) return false;
         List exceptionMethods = (List)exceptionMap.get(module);
-        if(null != exceptionMethods && exceptionMethods.contains(theMethod.getName()))
-        {
-            return false;
-        }
-        return true;
+        return !(null != exceptionMethods && exceptionMethods.contains(theMethod.getName()));
     }
     
     private boolean isMethodDeclared(Method theMethod, Method[] otherClassMethods)
     {
-        for(int ii = 0; ii < otherClassMethods.length; ii++)
-        {
-            Method currentMethod = otherClassMethods[ii];
-            if(areMethodsEqual(theMethod, currentMethod))
-            {
+        for (Method currentMethod : otherClassMethods) {
+            if (areMethodsEqual(theMethod, currentMethod)) {
                 return true;
             }
         }
@@ -184,9 +170,8 @@ public class AdapterConsistencyTest extends TestCase
     
     private void dumpFailures()
     {
-        for(int ii = 0; ii < failureList.size(); ii++)
-        {
-            FailureEntry currentEntry = (FailureEntry)failureList.get(ii);
+        for (Object aFailureList : failureList) {
+            FailureEntry currentEntry = (FailureEntry) aFailureList;
             Class currentModule = currentEntry.getModule();
             Class currentAdapter = currentEntry.getAdapter();
             Method currentMethod = currentEntry.getMethod();
@@ -196,12 +181,9 @@ public class AdapterConsistencyTest extends TestCase
             Class[] params = currentMethod.getParameterTypes();
             System.out.println("Name: " + currentMethod.getName());
             System.out.println("Return type: " + currentMethod.getReturnType().getName());
-            if(null != params && params.length > 0)
-            {
+            if (null != params && params.length > 0) {
                 System.out.print("Parameter: ");
-                for(int yy = 0; yy < params.length; yy++)
-                {
-                    Class currentParam = params[yy];
+                for (Class currentParam : params) {
                     System.out.print(currentParam.getName() + "; ");
                 }
                 System.out.println();

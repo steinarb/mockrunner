@@ -30,7 +30,7 @@ public class MockExpressionEvaluatorTest extends TestCase
         {
             //should throw exception
         }
-        evaluator.addObject("myexp", new Integer(3));
+        evaluator.addObject("myexp", 3);
         try
         {
             evaluator.evaluate("myexp", String.class, new MockVariableResolver(), new MockFunctionMapper());
@@ -44,8 +44,8 @@ public class MockExpressionEvaluatorTest extends TestCase
     
     public void testEvaluateOk() throws Exception
     {
-        evaluator.addObject("myexp", new Integer(3));
-        assertEquals(new Integer(3), evaluator.evaluate("myexp", Integer.class, null, null));
+        evaluator.addObject("myexp", 3);
+        assertEquals(3, evaluator.evaluate("myexp", Integer.class, null, null));
         Object object = new Object();
         evaluator.addObject("myexp", object);
         assertEquals(object, evaluator.evaluate("myexp", Object.class, null, null));
@@ -65,7 +65,7 @@ public class MockExpressionEvaluatorTest extends TestCase
         }
         evaluator.addObject("myexp", "abc");
         assertEquals("abc", expression.evaluate(null));
-        evaluator.addObject("myexp", new Character('a'));
+        evaluator.addObject("myexp", 'a');
         try
         {
             expression.evaluate(new MockVariableResolver());

@@ -32,7 +32,7 @@ public class TestConfigurationClassLoader extends URLClassLoader
              * forces CGLib to recreate this classes.
              * This is not necessary for CGGLIB 2.0 and previous.
              */
-            if(name.indexOf("ByCGLIB$") != -1)
+            if(name.contains("ByCGLIB$"))
             {
                 throw exc;
             }

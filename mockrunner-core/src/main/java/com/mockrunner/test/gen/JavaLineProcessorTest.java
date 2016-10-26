@@ -18,78 +18,75 @@ public class JavaLineProcessorTest extends TestCase
     
     private String getValidTestCode()
     {
-        StringBuffer testJava = new StringBuffer();
-        testJava.append("package com.mockrunner.test.consistency;\n");
-        testJava.append("\n");
-        testJava.append("import java.io.FileInputStream;\n");
-        testJava.append("import java.io.FileReader;\n");
-        testJava.append("\n");
-        testJava.append("import junit.framework.TestCase;\n");
-        testJava.append("\n");
-        testJava.append("public class JavaLineParserTest extends TestCase\n");
-        testJava.append("{\n");
-        testJava.append("    private String test;\n");
-        testJava.append("    protected int myInt;\n");
-        testJava.append("    public test()\n");
-        testJava.append("{\n");
-        testJava.append(" //do it\n");
-        testJava.append(" if(true)\n");
-        testJava.append("{\n");
-        testJava.append("  \t}\n");
-        testJava.append("}\n");
-        testJava.append("\n");
-        testJava.append("public anotherMethod()\n");
-        testJava.append("{\n");
-        testJava.append("}  \n");
-        testJava.append("}");
-        return testJava.toString();
+        String testJava = "package com.mockrunner.test.consistency;\n" +
+                "\n" +
+                "import java.io.FileInputStream;\n" +
+                "import java.io.FileReader;\n" +
+                "\n" +
+                "import junit.framework.TestCase;\n" +
+                "\n" +
+                "public class JavaLineParserTest extends TestCase\n" +
+                "{\n" +
+                "    private String test;\n" +
+                "    protected int myInt;\n" +
+                "    public test()\n" +
+                "{\n" +
+                " //do it\n" +
+                " if(true)\n" +
+                "{\n" +
+                "  \t}\n" +
+                "}\n" +
+                "\n" +
+                "public anotherMethod()\n" +
+                "{\n" +
+                "}  \n" +
+                "}";
+        return testJava;
     }
     
     private String getInvalidTestCode()
     {
-        StringBuffer testJava = new StringBuffer();
-        testJava.append("package com.mockrunner.test.consistency;\n");
-        testJava.append("\n");
-        testJava.append("import java.io.FileInputStream;\n");
-        testJava.append("import java.io.FileReader;\n");
-        testJava.append("");
-        testJava.append("import junit.framework.TestCase;\n");
-        testJava.append("\n");
-        testJava.append("public class JavaLineParserTest extends TestCase\n");
-        testJava.append("{\n");
-        testJava.append("    private String test;\n");
-        testJava.append("    protected int myInt;\n");
-        testJava.append("    public test()\n");
-        testJava.append("{\n");
-        testJava.append(" //do it\n");
-        testJava.append(" if(true)\n");
-        testJava.append("{\n");
-        testJava.append("{\n");
-        testJava.append("  \t}\n");
-        testJava.append("}}}}}}}}}}}}\n");
-        return testJava.toString();
+        String testJava = "package com.mockrunner.test.consistency;\n" +
+                "\n" +
+                "import java.io.FileInputStream;\n" +
+                "import java.io.FileReader;\n" +
+                "" +
+                "import junit.framework.TestCase;\n" +
+                "\n" +
+                "public class JavaLineParserTest extends TestCase\n" +
+                "{\n" +
+                "    private String test;\n" +
+                "    protected int myInt;\n" +
+                "    public test()\n" +
+                "{\n" +
+                " //do it\n" +
+                " if(true)\n" +
+                "{\n" +
+                "{\n" +
+                "  \t}\n" +
+                "}}}}}}}}}}}}\n";
+        return testJava;
     }
     
     private String getNestedTestCode()
     {
-        StringBuffer testJava = new StringBuffer();
-        testJava.append("test\n");
-        testJava.append("\n");
-        testJava.append("\n");
-        testJava.append("{\n");
-        testJava.append("{\n");
-        testJava.append("ff{sfs\n");
-        testJava.append("yxv{yxvx\n");
-        testJava.append("\n");
-        testJava.append("abc\n");
-        testJava.append("}}\n");
-        testJava.append("abc\n");
-        testJava.append("\n");
-        testJava.append("\n");
-        testJava.append("}\n");
-        testJava.append("}\n");
-        testJava.append("}}}\n");
-        return testJava.toString();
+        String testJava = "test\n" +
+                "\n" +
+                "\n" +
+                "{\n" +
+                "{\n" +
+                "ff{sfs\n" +
+                "yxv{yxvx\n" +
+                "\n" +
+                "abc\n" +
+                "}}\n" +
+                "abc\n" +
+                "\n" +
+                "\n" +
+                "}\n" +
+                "}\n" +
+                "}}}\n";
+        return testJava;
     }
     
     public void testParseValid() throws Exception
@@ -137,9 +134,9 @@ public class JavaLineProcessorTest extends TestCase
         } 
         catch(RuntimeException exc)
         {
-            assertTrue(exc.getMessage().indexOf("Blocks not found") != -1);
-            assertTrue(exc.getMessage().indexOf("public test()") != -1);
-            assertTrue(exc.getMessage().indexOf("Lines not found") == -1);
+            assertTrue(exc.getMessage().contains("Blocks not found"));
+            assertTrue(exc.getMessage().contains("public test()"));
+            assertTrue(!exc.getMessage().contains("Lines not found"));
         }
         
     }
@@ -176,11 +173,11 @@ public class JavaLineProcessorTest extends TestCase
         } 
         catch(RuntimeException exc)
         {
-            assertTrue(exc.getMessage().indexOf("Lines not found") != -1);
-            assertTrue(exc.getMessage().indexOf("imprt java.io.FileReader") != -1);
-            assertTrue(exc.getMessage().indexOf("Blocks not found") != -1);
-            assertTrue(exc.getMessage().indexOf("public test)") != -1);
-            assertTrue(exc.getMessage().indexOf("anotherethod") != -1);
+            assertTrue(exc.getMessage().contains("Lines not found"));
+            assertTrue(exc.getMessage().contains("imprt java.io.FileReader"));
+            assertTrue(exc.getMessage().contains("Blocks not found"));
+            assertTrue(exc.getMessage().contains("public test)"));
+            assertTrue(exc.getMessage().contains("anotherethod"));
         }
     }
     
@@ -197,10 +194,11 @@ public class JavaLineProcessorTest extends TestCase
         processor.addBlocks(blockList);
         processor.addBlock("anotherMethod");
         String result = processor.process(testCode);
-        assertTrue(-1 != result.indexOf("//import java.io.FileReader"));
-        assertTrue(-1 != result.indexOf("//import java.io.FileInputStream"));
-        assertTrue(-1 != result.indexOf("    /*public test()" + NL + "{" + NL + " //do it" + NL + " if(true)" + NL + "{" + NL + "  \t}" + NL + "}*/"));
-        assertTrue(-1 != result.indexOf("/*public anotherMethod()" + NL + "{" + NL + "}*/"));
+        assertTrue(result.contains("//import java.io.FileReader"));
+        assertTrue(result.contains("//import java.io.FileInputStream"));
+        assertTrue(result.contains("    /*public test()" + NL + "{" + NL + " //do it" + NL + " if(true)" + NL + "{" +
+                NL + "  \t}" + NL + "}*/"));
+        assertTrue(result.contains("/*public anotherMethod()" + NL + "{" + NL + "}*/"));
         assertEquals(stripChars(testCode), stripChars(result));
     }
     
@@ -260,7 +258,7 @@ public class JavaLineProcessorTest extends TestCase
     
     private String stripChars(String theString)
     {
-        StringBuffer buffer = new StringBuffer(theString);
+        StringBuilder buffer = new StringBuilder(theString);
         int ii = 0;
         while(ii < buffer.length())
         {

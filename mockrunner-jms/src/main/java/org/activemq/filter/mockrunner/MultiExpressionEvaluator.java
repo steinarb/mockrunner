@@ -142,8 +142,8 @@ public class MultiExpressionEvaluator {
      * Objects that are interested in the results of an expression
      * should implement this interface.
      */
-    static interface ExpressionListener {
-        public void evaluateResultEvent(Expression selector, Message message, Object result);
+    interface ExpressionListener {
+        void evaluateResultEvent(Expression selector, Message message, Object result);
     }
 
     /**
@@ -262,16 +262,15 @@ public class MultiExpressionEvaluator {
      */
     public void evaluate(Message message) {
         Collection expressionListeners = rootExpressions.values();
-        for (Iterator iter = expressionListeners.iterator(); iter.hasNext();) {
-            ExpressionListenerSet els = (ExpressionListenerSet) iter.next();
+        for (Object expressionListener : expressionListeners) {
+            ExpressionListenerSet els = (ExpressionListenerSet) expressionListener;
             try {
                 Object result = els.expression.evaluate(message);
-                for (Iterator iterator = els.listeners.iterator(); iterator.hasNext();) {
-                    ExpressionListener l = (ExpressionListener) iterator.next();
+                for (Object listener : els.listeners) {
+                    ExpressionListener l = (ExpressionListener) listener;
                     l.evaluateResultEvent(els.expression, message, result);
                 }
-            }
-            catch (Throwable e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
         }

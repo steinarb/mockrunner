@@ -25,7 +25,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -355,7 +354,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
             {
                 return new URL(value.toString());
             }
-            catch(MalformedURLException exc)
+            catch(MalformedURLException ignored)
             {
             
             }
@@ -651,7 +650,7 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
             {
                 return new URL(value.toString());
             }
-            catch(MalformedURLException exc)
+            catch(MalformedURLException ignored)
             {
             
             }
@@ -1057,12 +1056,9 @@ public class MockCallableStatement extends MockPreparedStatement implements Call
     private MockParameterMap filterNotRegisteredParameters(MockParameterMap outParameter)
     {
         MockParameterMap filteredMap = new MockParameterMap();
-        Iterator<ParameterReference> keys = outParameter.keySet().iterator();
-        while(keys.hasNext())
-        {
-            ParameterReference nextKey = keys.next();
-            if(registeredOutParameterSetIndexed.contains(nextKey) || registeredOutParameterSetNamed.contains(nextKey))
-            {
+        for (ParameterReference nextKey : outParameter.keySet()) {
+            if (registeredOutParameterSetIndexed.contains(nextKey) || registeredOutParameterSetNamed.contains
+                    (nextKey)) {
                 filteredMap.put(nextKey, outParameter.get(nextKey));
             }
         }

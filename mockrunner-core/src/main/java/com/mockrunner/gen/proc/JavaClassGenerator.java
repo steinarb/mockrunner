@@ -146,11 +146,9 @@ public class JavaClassGenerator
     {
         if(null == classList || classList.size() <= 0) return null;
         List nameList = new ArrayList();
-        for(int ii = 0; ii < classList.size(); ii++)
-        {
-            Class clazz = (Class)classList.get(ii);
-            if(null != clazz)
-            {
+        for (Object aClassList : classList) {
+            Class clazz = (Class) aClassList;
+            if (null != clazz) {
                 nameList.add(getClassName(clazz));
             }
         }
@@ -175,10 +173,7 @@ public class JavaClassGenerator
         if(null != argumentNames && argumentNames.length >= arguments.length) return argumentNames;
         if(null == argumentNames) argumentNames = new String[0];
         String[] newNames = new String[arguments.length];
-        for(int ii = 0; ii < argumentNames.length; ii++)
-        {
-            newNames[ii] = argumentNames[ii];
-        }
+        System.arraycopy(argumentNames, 0, newNames, 0, argumentNames.length);
         for(int ii = argumentNames.length; ii < arguments.length; ii++)
         {
             newNames[ii] = ClassUtil.getArgumentName(arguments[ii]);
@@ -190,9 +185,8 @@ public class JavaClassGenerator
     private void appendImportBlocks(JavaLineAssembler assembler)
     {
         List importBlocks = processImports();
-        for(int ii = 0; ii < importBlocks.size(); ii++)
-        {
-            Set currentBlock = (Set)importBlocks.get(ii);
+        for (Object importBlock : importBlocks) {
+            Set currentBlock = (Set) importBlock;
             assembler.appendImports(new ArrayList(currentBlock));
             assembler.appendNewLine();
         }
@@ -222,25 +216,24 @@ public class JavaClassGenerator
     
     private void appendMethods(JavaLineAssembler assembler)
     {
-        for(int ii = 0; ii < methods.size(); ii++)
-        {
-            MethodDeclaration declaration = (MethodDeclaration)methods.get(ii);
+        for (Object method : methods) {
+            MethodDeclaration declaration = (MethodDeclaration) method;
             appendMethodHeader(assembler, declaration);
             String[] modifiers = prepareModifiers(declaration.getModifier());
             String returnType = getClassName(declaration.getReturnType());
             String[] argumentTypes = getClassNames(declaration.getArguments());
             String[] exceptionTypes = getClassNames(declaration.getExceptions());
             String[] argumentNames = getArgumentNames(declaration.getArguments(), declaration.getArgumentNames());
-            assembler.appendMethodDeclaration(modifiers, returnType, declaration.getName(), argumentTypes, argumentNames, exceptionTypes);
+            assembler.appendMethodDeclaration(modifiers, returnType, declaration.getName(), argumentTypes,
+                    argumentNames, exceptionTypes);
             appendMethodBody(assembler, declaration);
         }
     }
     
     private void appendConstructors(JavaLineAssembler assembler)
     {
-        for(int ii = 0; ii < constructors.size(); ii++)
-        {
-            ConstructorDeclaration declaration = (ConstructorDeclaration)constructors.get(ii);
+        for (Object constructor : constructors) {
+            ConstructorDeclaration declaration = (ConstructorDeclaration) constructor;
             appendMethodHeader(assembler, declaration);
             String[] argumentTypes = getClassNames(declaration.getArguments());
             String[] exceptionTypes = getClassNames(declaration.getExceptions());
@@ -293,15 +286,13 @@ public class JavaClassGenerator
         addImportIfNecessary(superClass);
         addImportsIfNecessary(interfaces);
         addImportsIfNecessary(memberTypes);
-        for(int ii = 0; ii < constructors.size(); ii++)
-        {
-            ConstructorDeclaration declaration = (ConstructorDeclaration)constructors.get(ii);
+        for (Object constructor : constructors) {
+            ConstructorDeclaration declaration = (ConstructorDeclaration) constructor;
             addImportsForArguments(declaration);
             addImportsForExceptions(declaration);
         }
-        for(int ii = 0; ii < methods.size(); ii++)
-        {
-            MethodDeclaration declaration = (MethodDeclaration)methods.get(ii);
+        for (Object method : methods) {
+            MethodDeclaration declaration = (MethodDeclaration) method;
             addImportForReturnType(declaration);
             addImportsForArguments(declaration);
             addImportsForExceptions(declaration);
@@ -312,9 +303,8 @@ public class JavaClassGenerator
     {
         Class[] exceptions = declaration.getExceptions();
         if(null == exceptions || exceptions.length <= 0) return;
-        for(int ii = 0; ii < exceptions.length; ii++)
-        {
-            addImportIfNecessary(exceptions[ii]);
+        for (Class exception : exceptions) {
+            addImportIfNecessary(exception);
         }
     }
 
@@ -322,9 +312,8 @@ public class JavaClassGenerator
     {
         Class[] arguments = declaration.getArguments();
         if(null == arguments || arguments.length <= 0) return;
-        for(int ii = 0; ii < arguments.length; ii++)
-        {
-            addImportIfNecessary(arguments[ii]);
+        for (Class argument : arguments) {
+            addImportIfNecessary(argument);
         }
     }
     
@@ -338,9 +327,8 @@ public class JavaClassGenerator
     private void addImportsIfNecessary(List classes)
     {
         if(null == classes) return;
-        for(int ii = 0; ii < classes.size(); ii++)
-        {
-            addImportIfNecessary((Class)classes.get(ii));
+        for (Object aClass : classes) {
+            addImportIfNecessary((Class) aClass);
         }
     }
 

@@ -43,11 +43,11 @@ public class MockMessageTest
             //should throw Exception
         }
         message.setDoubleProperty("double1", 123.4);
-        assertEquals(new Double(123.4), message.getObjectProperty("double1"));
+        assertEquals(123.4, message.getObjectProperty("double1"));
         assertEquals("123.4", message.getStringProperty("double1"));
         assertEquals(123.4, message.getDoubleProperty("double1"), 0.01);
         message.setFloatProperty("float1", 123.4f);
-        assertEquals(new Float(123.4), message.getObjectProperty("float1"));
+        assertEquals(123.4f, message.getObjectProperty("float1"));
         assertEquals("123.4", message.getStringProperty("float1"));
         assertEquals(123.4, message.getFloatProperty("float1"), 0.01);
         try
@@ -69,7 +69,7 @@ public class MockMessageTest
             //should throw Exception
         }
         message.setByteProperty("byte1", (byte)123);
-        assertEquals(new Byte((byte)123), message.getObjectProperty("byte1"));
+        assertEquals((byte) 123, message.getObjectProperty("byte1"));
         assertEquals("123", message.getStringProperty("byte1"));
         assertEquals((byte)123, message.getByteProperty("byte1"));
         assertEquals(123, message.getLongProperty("byte1"));
@@ -86,7 +86,7 @@ public class MockMessageTest
             //should throw Exception
         }
         message.setIntProperty("int1", 12345);
-        assertEquals(new Integer(12345), message.getObjectProperty("int1"));
+        assertEquals(12345, message.getObjectProperty("int1"));
         assertEquals("12345", message.getStringProperty("int1"));
         assertEquals(12345, message.getLongProperty("int1"));
         assertEquals(12345, message.getIntProperty("int1"));

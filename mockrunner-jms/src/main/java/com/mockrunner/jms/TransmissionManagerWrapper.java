@@ -96,11 +96,8 @@ public class TransmissionManagerWrapper implements Serializable
         List resultList = new ArrayList();
         resultList.addAll(queueManager.getQueueSenderList());
         List genericList = genericManager.getMessageProducerList();
-        for(int ii = 0; ii < genericList.size(); ii++)
-        {
-            Object next = genericList.get(ii);
-            if(next instanceof MockQueueSender)
-            {
+        for (Object next : genericList) {
+            if (next instanceof MockQueueSender) {
                 resultList.add(next);
             }
         }
@@ -139,11 +136,8 @@ public class TransmissionManagerWrapper implements Serializable
         List resultList = new ArrayList();
         resultList.addAll(topicManager.getTopicPublisherList());
         List genericList = genericManager.getMessageProducerList();
-        for(int ii = 0; ii < genericList.size(); ii++)
-        {
-            Object next = genericList.get(ii);
-            if(next instanceof MockTopicPublisher)
-            {
+        for (Object next : genericList) {
+            if (next instanceof MockTopicPublisher) {
                 resultList.add(next);
             }
         }

@@ -24,7 +24,7 @@ public class CaseAwareMapTest extends TestCase
         map.setCaseSensitive(true);
         assertTrue(map.isCaseSensitive());
         map.put("test", "abc");
-        map.put(new Integer(3), "abc");
+        map.put(3, "abc");
         map.setCaseSensitive(true);
         assertEquals(0, map.size());
     }
@@ -33,10 +33,10 @@ public class CaseAwareMapTest extends TestCase
     {
         assertEquals(0, map.size());
         map.put("test", "abc");
-        map.put(new Integer(3), "abc");
+        map.put(3, "abc");
         assertEquals(2, map.size());
         map.setCaseSensitive(true);
-        map.put(new Integer(3), "abc");
+        map.put(3, "abc");
         assertEquals(1, map.size());
     }
     
@@ -45,7 +45,7 @@ public class CaseAwareMapTest extends TestCase
         assertTrue(map.isEmpty());
         map.clear();
         assertTrue(map.isEmpty());
-        map.put(new Integer(3), "abc");
+        map.put(3, "abc");
         assertFalse(map.isEmpty());
         map.clear();
         assertTrue(map.isEmpty());
@@ -58,22 +58,22 @@ public class CaseAwareMapTest extends TestCase
         map.put("Test", "1");
         map.put("XyZ", "2");
         map.put("TEST", "3");
-        map.put(new Double(4), "4");
+        map.put(4d, "4");
         set = map.keySet();
         assertEquals(3, set.size());
         assertTrue(set.contains("Test"));
         assertTrue(set.contains("XyZ"));
-        assertTrue(set.contains(new Double(4)));
+        assertTrue(set.contains(4d));
         map.setCaseSensitive(true);
         map.put("Test", "1");
         map.put("XyZ", "2");
         map.put("TEST", "3");
-        map.put(new Double(4), "4");
+        map.put(4d, "4");
         assertEquals(4, set.size());
         set = map.keySet();
         assertTrue(set.contains("Test"));
         assertTrue(set.contains("XyZ"));
-        assertTrue(set.contains(new Double(4)));
+        assertTrue(set.contains(4d));
         assertTrue(set.contains("TEST"));
     }
     
@@ -100,7 +100,7 @@ public class CaseAwareMapTest extends TestCase
         Map otherMap = new HashMap();
         otherMap.put("hello", "1");
         otherMap.put("heLLo", "2");
-        otherMap.put(new Integer(3), "3");
+        otherMap.put(3, "3");
         map.putAll(otherMap);
         assertEquals(2, map.size());
         map.setCaseSensitive(true);
@@ -112,11 +112,11 @@ public class CaseAwareMapTest extends TestCase
     {
         Object object = new Object();
         map.put("Test", object);
-        map.put(new Integer(1), "123");
+        map.put(1, "123");
         assertSame(object, map.get("test"));
         assertSame(object, map.get("Test"));
         assertSame(object, map.get("TEST"));
-        assertEquals("123", map.get(new Integer(1)));
+        assertEquals("123", map.get(1));
         map.setCaseSensitive(true);
         map.put("Test", object);
         assertNull(map.get("test"));
@@ -129,7 +129,7 @@ public class CaseAwareMapTest extends TestCase
         map.put("Test", "1");
         map.put("TEST", "2");
         map.put("TeSt", "3");
-        map.put(new Integer(1), "123");
+        map.put(1, "123");
         assertEquals(2, map.values().size());
         assertTrue(map.values().contains("3"));
         assertTrue(map.values().contains("123"));
@@ -137,7 +137,7 @@ public class CaseAwareMapTest extends TestCase
         map.put("Test", "1");
         map.put("TEST", "2");
         map.put("TeSt", "3");
-        map.put(new Integer(1), "123");
+        map.put(1, "123");
         assertEquals(4, map.values().size());
         assertTrue(map.values().contains("1"));
         assertTrue(map.values().contains("2"));
@@ -214,21 +214,21 @@ public class CaseAwareMapTest extends TestCase
     {
         map.put("Test", "0");
         map.put("test", "1");
-        map.put(new Integer(2), "2");
+        map.put(2, "2");
         assertEquals(2, map.size());
         assertEquals("1", map.remove("TeST"));
         assertNull(map.remove("TEST"));
         assertEquals(1, map.size());
-        assertEquals("2", map.remove(new Integer(2)));
+        assertEquals("2", map.remove(2));
         assertEquals(0, map.size());
         map.setCaseSensitive(true);
         map.put("Test", "1");
-        map.put(new Integer(2), "2");
+        map.put(2, "2");
         assertNull(map.remove("TEST"));
         assertEquals("1", map.remove("Test"));
         assertNull(map.remove("Test"));
         assertEquals(1, map.size());
-        assertEquals("2", map.remove(new Integer(2)));
-        assertNull(map.remove(new Integer(2)));
+        assertEquals("2", map.remove(2));
+        assertNull(map.remove(2));
     }
 }

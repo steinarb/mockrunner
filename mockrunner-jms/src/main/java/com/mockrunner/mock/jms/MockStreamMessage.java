@@ -39,14 +39,14 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             throw new MessageEOFException("No more data");
         }
         Object value = readObject();
-        if(null == value) return Boolean.valueOf(null).booleanValue();
+        if(null == value) return Boolean.valueOf(null);
         if(value instanceof Boolean)
         {
-            return ((Boolean)value).booleanValue();
+            return (Boolean) value;
         }
         if(value instanceof String)
         {
-            return Boolean.valueOf((String)value).booleanValue();
+            return Boolean.valueOf((String) value);
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to boolean");
     }
@@ -62,14 +62,14 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             throw new MessageEOFException("No more data");
         }
         Object value = readObject();
-        if(null == value) return Byte.valueOf(null).byteValue();
+        if(null == value) return Byte.valueOf(null);
         if(value instanceof Byte)
         {
-            return ((Byte)value).byteValue();
+            return (Byte) value;
         }
         if(value instanceof String)
         {
-            return Byte.valueOf((String)value).byteValue();
+            return Byte.valueOf((String) value);
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to byte");
     }
@@ -85,14 +85,14 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             throw new MessageEOFException("No more data");
         }
         Object value = readObject();
-        if(null == value) return Short.valueOf(null).shortValue();
+        if(null == value) return Short.valueOf(null);
         if((value instanceof Byte) || (value instanceof Short))
         {
             return ((Number)value).shortValue();
         }
         if(value instanceof String)
         {
-            return Short.valueOf((String)value).shortValue();
+            return Short.valueOf((String) value);
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to short");
     }
@@ -114,7 +114,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         }
         if(value instanceof Character)
         {
-            return ((Character)value).charValue();
+            return (Character) value;
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to char");
     }
@@ -130,14 +130,14 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             throw new MessageEOFException("No more data");
         }
         Object value = readObject();
-        if(null == value) return Integer.valueOf(null).intValue();
+        if(null == value) return Integer.valueOf(null);
         if((value instanceof Byte) || (value instanceof Short) || (value instanceof Integer))
         {
             return ((Number)value).intValue();
         }
         if(value instanceof String)
         {
-            return Integer.valueOf((String)value).intValue();
+            return Integer.valueOf((String) value);
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to int");
     }
@@ -153,14 +153,14 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             throw new MessageEOFException("No more data");
         }
         Object value = readObject();
-        if(null == value) return Long.valueOf(null).longValue();
+        if(null == value) return Long.valueOf(null);
         if((value instanceof Byte) || (value instanceof Short) || (value instanceof Integer) || (value instanceof Long))
         {
             return ((Number)value).longValue();
         }
         if(value instanceof String)
         {
-            return Long.valueOf((String)value).longValue();
+            return Long.valueOf((String) value);
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to long");
     }
@@ -176,14 +176,14 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             throw new MessageEOFException("No more data");
         }
         Object value = readObject();
-        if(null == value) return Float.valueOf(null).floatValue();
+        if(null == value) return Float.valueOf(null);
         if(value instanceof Float)
         {
-            return ((Float)value).floatValue();
+            return (Float) value;
         }
         if(value instanceof String)
         {
-            return Float.valueOf((String)value).floatValue();
+            return Float.valueOf((String) value);
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to float");
     }
@@ -199,14 +199,14 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             throw new MessageEOFException("No more data");
         }
         Object value = readObject();
-        if(null == value) return Double.valueOf(null).doubleValue();
+        if(null == value) return Double.valueOf(null);
         if((value instanceof Float) || (value instanceof Double))
         {
             return ((Number)value).doubleValue();
         }
         if(value instanceof String)
         {
-            return Double.valueOf((String)value).doubleValue();
+            return Double.valueOf((String) value);
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to double");
     }
@@ -303,7 +303,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
-        writeObject(new Boolean(value));
+        writeObject(value);
     }
 
     public void writeByte(byte value) throws JMSException
@@ -312,7 +312,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
-        writeObject(new Byte(value));
+        writeObject(value);
     }
 
     public void writeShort(short value) throws JMSException
@@ -321,7 +321,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
-        writeObject(new Short(value));
+        writeObject(value);
     }
 
     public void writeChar(char value) throws JMSException
@@ -330,7 +330,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
-        writeObject(new Character(value));
+        writeObject(value);
     }
 
     public void writeInt(int value) throws JMSException
@@ -339,7 +339,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
-        writeObject(new Integer(value));
+        writeObject(value);
     }
 
     public void writeLong(long value) throws JMSException
@@ -348,7 +348,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
-        writeObject(new Long(value));
+        writeObject(value);
     }
 
     public void writeFloat(float value) throws JMSException
@@ -357,7 +357,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
-        writeObject(new Float(value));
+        writeObject(value);
     }
 
     public void writeDouble(double value) throws JMSException
@@ -366,7 +366,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             throw new MessageNotWriteableException("Message is in read mode");
         }
-        writeObject(new Double(value));
+        writeObject(value);
     }
 
     public void writeString(String value) throws JMSException
@@ -419,7 +419,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         }
         if(object instanceof byte[])
         {
-            byte[] arrayData = (byte[])((byte[])object).clone();
+            byte[] arrayData = ((byte[])object).clone();
             data.push(arrayData);
             return;
         }
@@ -485,18 +485,12 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
         {
             Collections.reverse(theData);
         }
-        for(int ii = 0; ii < theData.size(); ii++)
-        {
-            Object nextValue = theData.get(ii);
-            if(nextValue instanceof byte[])
-            {
-                for(int yy = 0; yy < ((byte[])nextValue).length; yy++)
-                {
-                    value = (31 * value) + ((byte[])nextValue)[yy];
+        for (Object nextValue : theData) {
+            if (nextValue instanceof byte[]) {
+                for (int yy = 0; yy < ((byte[]) nextValue).length; yy++) {
+                    value = (31 * value) + ((byte[]) nextValue)[yy];
                 }
-            }
-            else if(nextValue != null)
-            {
+            } else if (nextValue != null) {
                 value = (31 * value) + nextValue.hashCode();
             }
         }
