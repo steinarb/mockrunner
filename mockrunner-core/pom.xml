@@ -120,6 +120,7 @@
 						<artifactId>site-maven-plugin</artifactId>
 						<configuration>
 							<path>${project.artifactId}</path>
+							<message>Core Site</message>
 						</configuration>
 						<executions>
 							<execution>

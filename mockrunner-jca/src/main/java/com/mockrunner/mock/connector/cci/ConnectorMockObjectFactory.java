@@ -9,7 +9,7 @@ import com.mockrunner.connector.InteractionHandler;
  * factory in your tests you can be sure that they are all
  * up to date. If you are using JNDI for obtaining the
  * <code>MockConnectionFactory</code> you have to bind them to 
- * the mock JNDI context with {@link com.mockrunner.ejb.EJBTestModule#bindToContext}.
+ * the mock JNDI context with com.mockrunner.ejb.EJBTestModule#bindToContext.
  */
 public class ConnectorMockObjectFactory
 {

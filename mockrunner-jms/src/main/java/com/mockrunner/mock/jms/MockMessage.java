@@ -203,7 +203,7 @@ public class MockMessage implements Message, Cloneable, Serializable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            return Boolean.valueOf(null);
+            return (boolean) null;
         }
         if(value instanceof String)
         {
@@ -221,7 +221,7 @@ public class MockMessage implements Message, Cloneable, Serializable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            return Byte.valueOf(null);
+            return (byte) null;
         }
         if(value instanceof String)
         {
@@ -239,7 +239,7 @@ public class MockMessage implements Message, Cloneable, Serializable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            return Short.valueOf(null);
+            return (short) null;
         }
         if(value instanceof String)
         {
@@ -257,7 +257,7 @@ public class MockMessage implements Message, Cloneable, Serializable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            return Integer.valueOf(null);
+            return (int) null;
         }
         if(value instanceof String)
         {
@@ -275,7 +275,7 @@ public class MockMessage implements Message, Cloneable, Serializable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            return Long.valueOf(null);
+            return (long) null;
         }
         if(value instanceof String)
         {
@@ -293,7 +293,7 @@ public class MockMessage implements Message, Cloneable, Serializable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            return Float.valueOf(null);
+            return (float) null;
         }
         if(value instanceof String)
         {
@@ -311,7 +311,7 @@ public class MockMessage implements Message, Cloneable, Serializable
         Object value = getObjectProperty(name);
         if(value == null)
         {
-            return Double.valueOf(null);
+            return (double) null;
         }
         if(value instanceof String)
         {

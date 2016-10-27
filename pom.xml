@@ -223,7 +223,50 @@
                     <version>2.10.1</version>
                     <configuration>
                         <failOnError>false</failOnError>
+                        <javadocExecutable>${javadoc-executable-path}</javadocExecutable>
+                        <charset>${project.build.sourceEncoding}</charset>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <docencoding>${project.build.sourceEncoding}</docencoding>
+                        <excludePackageNames>*.internal*</excludePackageNames>
+                        <failOnError>false</failOnError>
                     </configuration>
+                    <reports>
+                        <report>javadoc</report>
+                    </reports>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <configuration>
+                        <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
+                        <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                    </configuration>
+                    <reports>
+                        <!-- <report>cim</report> generate the Project Continuous Integration
+                        System report. -->
+                        <!-- <report>dependencies</report> generate the Project Dependencies
+                        report. -->
+                        <!-- <report>dependency-convergence</report> generate the Project
+                        Dependency Convergence report for reactor builds. -->
+                        <!-- <report>dependency-info</report> to generate code snippets to
+                        be added to build tools. -->
+                        <!-- <report>dependency-management</report> generate the Project
+                        DependencyManagement report. -->
+                        <report>distribution-management</report> <!-- generate the Project Distribution Management report. -->
+                        <report>index</report> <!-- generate the Project index page. -->
+                        <report>issue-tracking</report> <!-- generate the Project Issue Tracking report. -->
+                        <report>license</report> <!-- generate the Project License report. -->
+                        <!-- <report>mailing-list</report> generate the Project Mailing List
+                        report. -->
+                        <!--  generate the Project Modules report. -->
+                        <report>modules</report>
+                        <!-- <report>plugin-management</report> generate the Project PluginManagement
+                        report. -->
+                        <!-- <report>plugins</report> generate the Project Plugins report. -->
+                        <report>project-team</report> <!-- generate the Project Team report. -->
+                        <report>scm</report> <!-- generate the Project Source Code Management report. -->
+                        <report>summary</report> <!-- generate the Project information reports summary. -->
+                    </reports>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -285,57 +328,6 @@
                         <chmod>true</chmod>
                         <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
                         <outputEncoding>${project.reporting.outputEncoding}</outputEncoding>
-                        <reportPlugins>
-                            <plugin>
-                                <groupId>org.apache.maven.plugins</groupId>
-                                <artifactId>maven-javadoc-plugin</artifactId>
-                                <configuration>
-                                    <javadocExecutable>${javadoc-executable-path}</javadocExecutable>
-                                    <charset>${project.build.sourceEncoding}</charset>
-                                    <encoding>${project.build.sourceEncoding}</encoding>
-                                    <docencoding>${project.build.sourceEncoding}</docencoding>
-                                    <excludePackageNames>*.internal*</excludePackageNames>
-                                    <failOnError>false</failOnError>
-                                </configuration>
-                                <reports>
-                                    <report>javadoc</report>
-                                </reports>
-                            </plugin>
-                            <plugin>
-                                <groupId>org.apache.maven.plugins</groupId>
-                                <artifactId>maven-project-info-reports-plugin</artifactId>
-                                <configuration>
-                                    <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
-                                    <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
-                                </configuration>
-                                <reports>
-                                    <!-- <report>cim</report> generate the Project Continuous Integration 
-                                    System report. -->
-                                    <!-- <report>dependencies</report> generate the Project Dependencies 
-                                    report. -->
-                                    <!-- <report>dependency-convergence</report> generate the Project 
-                                    Dependency Convergence report for reactor builds. -->
-                                    <!-- <report>dependency-info</report> to generate code snippets to 
-                                    be added to build tools. -->
-                                    <!-- <report>dependency-management</report> generate the Project 
-                                    DependencyManagement report. -->
-                                    <report>distribution-management</report> <!-- generate the Project Distribution Management report. -->
-                                    <report>index</report> <!-- generate the Project index page. -->
-                                    <report>issue-tracking</report> <!-- generate the Project Issue Tracking report. -->
-                                    <report>license</report> <!-- generate the Project License report. -->
-                                    <!-- <report>mailing-list</report> generate the Project Mailing List 
-                                    report. -->
-                                    <!--  generate the Project Modules report. -->
-                                    <report>modules</report>
-                                    <!-- <report>plugin-management</report> generate the Project PluginManagement 
-                                    report. -->
-                                    <!-- <report>plugins</report> generate the Project Plugins report. -->
-                                    <report>project-team</report> <!-- generate the Project Team report. -->
-                                    <report>scm</report> <!-- generate the Project Source Code Management report. -->
-                                    <report>summary</report> <!-- generate the Project information reports summary. -->
-                                </reports>
-                            </plugin>
-                        </reportPlugins>
                     </configuration>
                     <dependencies>
                         <dependency>
@@ -360,8 +352,8 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.2</version>
                     <configuration>
-                        <source>1.5</source>
-                        <target>1.5</target>
+                        <source>1.6</source>
+                        <target>1.6</target>
                         <compilerArgument>-Xlint:all</compilerArgument>
                         <showWarnings>true</showWarnings>
                         <showDeprecation>true</showDeprecation>
@@ -427,6 +419,18 @@
             </properties>
         </profile>
         <profile>
+            <id>Linux-Profile</id>
+            <activation>
+                <os>
+                    <family>unix</family>
+                    <name>linux</name>
+                </os>
+            </activation>
+            <properties>
+                <javadoc-executable-path>/usr/bin/javadoc</javadoc-executable-path>
+            </properties>
+        </profile>
+        <profile>
             <id>Windows-Profile</id>
             <activation>
                 <os>
@@ -459,6 +463,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>

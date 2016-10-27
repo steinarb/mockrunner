@@ -452,7 +452,7 @@ public class ArrayUtil
             if (null == currentValue) {
                 nameMap.put(name, 1);
             } else {
-                nameMap.put(name, currentValue.intValue() + 1);
+                nameMap.put(name, currentValue + 1);
             }
         }
         return nameMap;

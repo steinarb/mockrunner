@@ -332,8 +332,8 @@ public class EJBTestModule
      * Deploys a message driven bean to the mock container.
      * You have to specify JNDI names for connection factory and
      * destination. For creating connection factory and destination 
-     * objects you can use {@link com.mockrunner.mock.jms.JMSMockObjectFactory}
-     * and {@link com.mockrunner.jms.DestinationManager}.
+     * objects you can use com.mockrunner.mock.jms.JMSMockObjectFactory
+     * and com.mockrunner.jms.DestinationManager.
      * The specified objects are automatically bound to JNDI using
      * the specified names. The mock container automatically creates
      * a connection and session.
@@ -353,8 +353,8 @@ public class EJBTestModule
      * Deploys a message driven bean to the mock container.
      * You have to specify JNDI names for connection factory and
      * destination. For creating connection factory and destination 
-     * objects you can use {@link com.mockrunner.mock.jms.JMSMockObjectFactory}
-     * and {@link com.mockrunner.jms.DestinationManager}.
+     * objects you can use com.mockrunner.mock.jms.JMSMockObjectFactory
+     * and com.mockrunner.jms.DestinationManager.
      * The specified objects are automatically bound to JNDI using
      * the specified names. The mock container automatically creates
      * a connection and session.

@@ -110,9 +110,9 @@ public class MethodUtil
         for (Method currentAroundInvokeMethod : methods) {
             Set currentOverridingMethods = new HashSet();
             for (Method[] declaredMethod : declaredMethods) {
-                for (int zz = 0; zz < declaredMethod.length; zz++) {
-                    if (MethodUtil.overrides(currentAroundInvokeMethod, declaredMethod[zz])) {
-                        currentOverridingMethods.add(declaredMethod[zz]);
+                for (Method aDeclaredMethod : declaredMethod) {
+                    if (MethodUtil.overrides(currentAroundInvokeMethod, aDeclaredMethod)) {
+                        currentOverridingMethods.add(aDeclaredMethod);
                     }
                 }
             }

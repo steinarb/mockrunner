@@ -39,7 +39,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             throw new MessageEOFException("No more data");
         }
         Object value = readObject();
-        if(null == value) return Boolean.valueOf(null);
+        if(null == value) return (boolean) null;
         if(value instanceof Boolean)
         {
             return (Boolean) value;
@@ -62,7 +62,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             throw new MessageEOFException("No more data");
         }
         Object value = readObject();
-        if(null == value) return Byte.valueOf(null);
+        if(null == value) return (byte) null;
         if(value instanceof Byte)
         {
             return (Byte) value;
@@ -85,7 +85,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             throw new MessageEOFException("No more data");
         }
         Object value = readObject();
-        if(null == value) return Short.valueOf(null);
+        if(null == value) return (short) null;
         if((value instanceof Byte) || (value instanceof Short))
         {
             return ((Number)value).shortValue();
@@ -130,7 +130,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             throw new MessageEOFException("No more data");
         }
         Object value = readObject();
-        if(null == value) return Integer.valueOf(null);
+        if(null == value) return (int) null;
         if((value instanceof Byte) || (value instanceof Short) || (value instanceof Integer))
         {
             return ((Number)value).intValue();
@@ -153,7 +153,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             throw new MessageEOFException("No more data");
         }
         Object value = readObject();
-        if(null == value) return Long.valueOf(null);
+        if(null == value) return (long) null;
         if((value instanceof Byte) || (value instanceof Short) || (value instanceof Integer) || (value instanceof Long))
         {
             return ((Number)value).longValue();
@@ -176,7 +176,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             throw new MessageEOFException("No more data");
         }
         Object value = readObject();
-        if(null == value) return Float.valueOf(null);
+        if(null == value) return (float) null;
         if(value instanceof Float)
         {
             return (Float) value;
@@ -199,7 +199,7 @@ public class MockStreamMessage extends MockMessage implements StreamMessage
             throw new MessageEOFException("No more data");
         }
         Object value = readObject();
-        if(null == value) return Double.valueOf(null);
+        if(null == value) return (double) null;
         if((value instanceof Float) || (value instanceof Double))
         {
             return ((Number)value).doubleValue();

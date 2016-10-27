@@ -16,7 +16,7 @@ import com.mockrunner.example.ejb.interfaces.LogSessionHome;
 /**
  * This example action takes a message parameter from the request
  * and uses the {@link LogSessionBean} to log the message.
- * See {@link LogActionTest} for an example test of this action.
+ * See LogActionTest for an example test of this action.
  */
 public class LogAction extends Action
 {

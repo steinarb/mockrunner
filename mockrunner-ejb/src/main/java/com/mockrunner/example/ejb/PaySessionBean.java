@@ -31,7 +31,7 @@ import javax.sql.DataSource;
  */
 /**
  * This is the EJB-version of 
- * {@link com.mockrunner.example.jdbc.PayAction}.
+ * com.mockrunner.example.jdbc.PayAction.
  * It throws a <code>PaySessionException</code> in case of error.
  */
 public class PaySessionBean implements SessionBean

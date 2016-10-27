@@ -398,8 +398,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * should raise an exception.
      * This can be used to simulate database exceptions.
      * This method creates an <code>SQLException</code> and will throw this 
-     * exception. With {@link #prepareThrowsSQLException(String)} 
-     * you can specify the exception.
+     * exception.
      * @param sql the SQL string
      */
     @Override
@@ -463,7 +462,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * should raise an exception.
      * This can be used to simulate database exceptions.
      * This method creates an <code>SQLException</code> and will throw this 
-     * exception. With {@link #prepareThrowsSQLException(String, SQLException, Map)} 
+     * exception. With
      * you can specify the exception.
      * The specified parameters <code>Map</code> must contain the parameters by 
      * mapping <code>Integer</code> objects to the corresponding parameter. 
@@ -488,8 +487,7 @@ public abstract class AbstractParameterResultSetHandler extends AbstractResultSe
      * should raise an exception.
      * This can be used to simulate database exceptions.
      * This method creates an <code>SQLException</code> and will throw this 
-     * exception. With {@link #prepareThrowsSQLException(String, SQLException)} 
-     * you can specify the exception.
+     * exception.
      * @param sql the SQL string
      * @param exc the <code>SQLException</code> that should be thrown
      */

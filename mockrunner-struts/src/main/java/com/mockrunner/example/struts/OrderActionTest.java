@@ -10,8 +10,8 @@ import com.mockrunner.struts.ActionTestModule;
 /**
  * Example test for the {@link OrderAction}.
  * This is an example how to write tests if you do not
- * subclass {@link com.mockrunner.struts.ActionTestCaseAdapter} or
- * {@link com.mockrunner.struts.BasicActionTestCaseAdapter}.
+ * subclass com.mockrunner.struts.ActionTestCaseAdapter or
+ * com.mockrunner.struts.BasicActionTestCaseAdapter.
  */
 public class OrderActionTest extends TestCase
 {

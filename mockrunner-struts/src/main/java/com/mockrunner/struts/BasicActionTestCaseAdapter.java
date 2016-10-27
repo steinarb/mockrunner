@@ -30,9 +30,9 @@ import com.mockrunner.mock.web.WebMockObjectFactory;
  * subclass this adapter or use {@link com.mockrunner.struts.ActionTestModule}
  * directly (so your test case can use another base class).
  * This basic adapter can be used if you don't need any other modules. It
- * does not extend {@link com.mockrunner.base.BaseTestCase}. If you want
+ * does not extend com.mockrunner.base.BaseTestCase. If you want
  * to use several modules in conjunction, consider subclassing
- * {@link com.mockrunner.struts.ActionTestCaseAdapter}.
+ * com.mockrunner.struts.ActionTestCaseAdapter.
  * <b>This class is generated from the {@link com.mockrunner.struts.ActionTestModule}
  * and should not be edited directly</b>.
  */

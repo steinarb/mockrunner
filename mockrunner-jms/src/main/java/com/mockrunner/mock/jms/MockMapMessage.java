@@ -31,7 +31,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         Object value = getObject(name);
         if(null == value)
         {
-            return Boolean.valueOf(null);
+            return (boolean) null;
         }
         if(value instanceof Boolean)
         {
@@ -49,7 +49,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         Object value = getObject(name);
         if(null == value)
         {
-            return Byte.valueOf(null);
+            return (byte) null;
         }
         if(value instanceof Byte)
         {
@@ -67,7 +67,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         Object value = getObject(name);
         if(null == value)
         {
-            return Short.valueOf(null);
+            return (short) null;
         }
         if((value instanceof Byte) || (value instanceof Short))
         {
@@ -99,7 +99,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         Object value = getObject(name);
         if(null == value)
         {
-            return Integer.valueOf(null);
+            return (int) null;
         }
         if((value instanceof Byte) || (value instanceof Short) || (value instanceof Integer))
         {
@@ -117,7 +117,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         Object value = getObject(name);
         if(null == value)
         {
-            return Long.valueOf(null);
+            return (long) null;
         }
         if((value instanceof Byte) || (value instanceof Short) || (value instanceof Integer) || (value instanceof Long))
         {
@@ -135,7 +135,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         Object value = getObject(name);
         if(null == value)
         {
-            return Float.valueOf(null);
+            return (float) null;
         }
         if(value instanceof Float)
         {
@@ -153,7 +153,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         Object value = getObject(name);
         if(null == value)
         {
-            return Double.valueOf(null);
+            return (double) null;
         }
         if((value instanceof Double) || (value instanceof Float))
         {

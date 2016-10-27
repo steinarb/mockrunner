@@ -43,7 +43,6 @@ public class WebMockObjectFactory
      * request and session objects, but they will share
      * one <code>ServletContext</code>.
      * @param factory the other factory
-     * @see com.mockrunner.base.BaseTestCase#createWebMockObjectFactory(WebMockObjectFactory)
      */
     public WebMockObjectFactory(WebMockObjectFactory factory)
     {
@@ -58,7 +57,6 @@ public class WebMockObjectFactory
      * @param factory the other factory
      * @param createNewSession <code>true</code> creates a new session,
      *                         <code>false</code> uses the session from factory
-     * @see com.mockrunner.base.BaseTestCase#createWebMockObjectFactory(WebMockObjectFactory, boolean)
      */
     public WebMockObjectFactory(WebMockObjectFactory factory, boolean createNewSession)
     {
