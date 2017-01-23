@@ -148,6 +148,7 @@ public class MockHttpServletResponse implements HttpServletResponse
     public void sendRedirect(String location) throws IOException
     {
         setHeader("Location", location);
+        setStatus(SC_FOUND);
         wasRedirectSent = true;
     }
 
