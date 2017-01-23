@@ -149,4 +149,11 @@ public class MockHttpServletResponseTest extends TestCase
         String output = response.getOutputStreamContent();
         assertTrue(output.equals(input));
     }
+
+    public void testRedirect() throws IOException
+    {
+        response.sendRedirect("/some-location");
+        assertEquals("/some-location", response.getHeader("Location"));
+        assertEquals(HttpServletResponse.SC_FOUND, response.getStatusCode());
+    }
 }
