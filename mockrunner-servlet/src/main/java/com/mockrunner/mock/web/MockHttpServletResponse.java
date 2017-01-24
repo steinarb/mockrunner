@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.util.common.CaseAwareMap;
+import org.apache.catalina.util.URLEncoder;
 
 /**
  * Mock implementation of <code>HttpServletResponse</code>.
@@ -36,6 +37,7 @@ public class MockHttpServletResponse implements HttpServletResponse
     private int errorCode;
     private int statusCode;
     private List cookies;
+    private URLEncoder urlEncoder;
 
     public MockHttpServletResponse()
     {
@@ -64,6 +66,7 @@ public class MockHttpServletResponse implements HttpServletResponse
         {
             throw new NestedApplicationException(exc);
         }
+        urlEncoder = new URLEncoder();
     }
 
     public String encodeURL(String url)
@@ -73,12 +76,12 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public String encodeRedirectUrl(String url)
     {
-        return url;
+        return urlEncoder.encode(url);
     }
 
     public String encodeRedirectURL(String url)
     {
-        return url;
+        return urlEncoder.encode(url);
     }
 
     public String encodeUrl(String url)
