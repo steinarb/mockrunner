@@ -13,6 +13,10 @@
 	<name>MockRunner-JMS</name>
 	<description>Mock classes for Java Messaging System</description>
 
+    <properties>
+        <Bundle-SymbolicName>com.mockrunner.jms</Bundle-SymbolicName>
+    </properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
@@ -83,9 +87,24 @@
 					<failOnError>false</failOnError>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Export-Package>
+                            com.mockrunner.jms,
+                            com.mockrunner.mock.jms,
+                            org.activemq.filter.mockrunner,
+                            org.activemq.mockrunner.test,
+                            org.activemq.selector.mockrunner
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
 		<profile>
 			<id>release-module-exclusives</id>

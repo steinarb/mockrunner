@@ -13,6 +13,10 @@
 	<name>MockRunner-ALL</name>
 	<description>Comprehensive mock classes spanning more than one Mockrunner module</description>
 
+    <properties>
+        <Bundle-SymbolicName>com.mockrunner.all</Bundle-SymbolicName>
+    </properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
@@ -146,9 +150,24 @@
 					<failOnError>false</failOnError>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Export-Package>
+                            com.mockrunner.base,
+                            com.mockrunner.example.ejb,
+                            com.mockrunner.example.jdbc,
+                            com.mockrunner.gen.proc,
+                            com.mockrunner.tag
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
 		<profile>
 			<id>release-module-exclusives</id>

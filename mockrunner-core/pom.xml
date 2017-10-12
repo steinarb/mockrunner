@@ -13,27 +13,31 @@
 	<name>MockRunner-Core</name>
 	<description>Core classes common to all Mockrunner modules</description>
 
+    <properties>
+        <Bundle-SymbolicName>com.mockrunner.core</Bundle-SymbolicName>
+    </properties>
+
 	<dependencies>
-	
+
 		<!-- needed in multiple classes -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
-		
+
 		<!-- needed in StreamUtil -->
 		<dependency>
 			<groupId>commons-logging</groupId>
 			<artifactId>commons-logging</artifactId>
 			<optional>true</optional>
 		</dependency>
-		
+
 		<!-- needed for XML Util -->
 		<dependency>
 			<groupId>jdom</groupId>
 			<artifactId>jdom</artifactId>
 		</dependency>
-		
+
 		<!-- needed for StringUtil (Perl5Compiler) -->
 		<dependency>
 			<groupId>oro</groupId>
@@ -100,6 +104,26 @@
 					<failOnError>false</failOnError>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Export-Package>
+                            com.mockrunner.base,
+                            com.mockrunner.gen,
+                            com.mockrunner.gen.jar,
+                            com.mockrunner.gen.proc,
+                            com.mockrunner.test.consistency,
+                            com.mockrunner.test.gen,
+                            com.mockrunner.test.util,
+                            com.mockrunner.util.common,
+                            com.mockrunner.util.regexp,
+                            com.mockrunner.util.web
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 

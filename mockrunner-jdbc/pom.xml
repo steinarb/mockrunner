@@ -13,6 +13,10 @@
 	<name>MockRunner-JDBC</name>
 	<description>Mock classes for JDBC</description>
 
+    <properties>
+        <Bundle-SymbolicName>com.mockrunner.jdbc</Bundle-SymbolicName>
+    </properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
@@ -72,6 +76,18 @@
 					<failOnError>false</failOnError>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Export-Package>
+                            com.mockrunner.jdbc,
+                            com.mockrunner.mock.jdbc
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 

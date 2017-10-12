@@ -13,6 +13,10 @@
 	<name>MockRunner-EJB</name>
 	<description>Mock classes for enterprise java beans</description>
 
+    <properties>
+        <Bundle-SymbolicName>com.mockrunner.ejb</Bundle-SymbolicName>
+    </properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
@@ -71,9 +75,23 @@
 					<failOnError>false</failOnError>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Export-Package>
+                            com.mockrunner.ejb,
+                            com.mockrunner.example.ejb,
+                            com.mockrunner.example.ejb.interfaces,
+                            com.mockrunner.mock.ejb
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
 		<profile>
 			<id>release-module-exclusives</id>

@@ -13,6 +13,10 @@
 	<name>MockRunner-Struts</name>
 	<description>Mock classes for Struts</description>
 
+    <properties>
+        <Bundle-SymbolicName>com.mockrunner.struts</Bundle-SymbolicName>
+    </properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.mockrunner</groupId>
@@ -80,9 +84,22 @@
 					<failOnError>false</failOnError>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Export-Package>
+                            com.mockrunner.example.struts,
+                            com.mockrunner.mock.web,
+                            com.mockrunner.strus
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
-	
+
 	<profiles>
 		<profile>
 			<id>release-module-exclusives</id>
