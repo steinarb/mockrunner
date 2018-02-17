@@ -11,7 +11,7 @@
 
     <groupId>com.mockrunner</groupId>
     <artifactId>mockrunner</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>MockRunner</name>
     <url>http://mockrunner.github.io</url>
@@ -58,7 +58,7 @@
         <connection>scm:git:https://github.com/mockrunner/mockrunner.git</connection>
         <url>https://github.com/mockrunner/mockrunner</url>
         <developerConnection>scm:git:https://github.com/mockrunner/mockrunner.git</developerConnection>
-        <tag>mockrunner-2.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
