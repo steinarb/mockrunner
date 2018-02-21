@@ -106,7 +106,6 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <javadoc.opts>-Xdoclint:none</javadoc.opts>
         <github.global.server>github</github.global.server>
     </properties>
 
@@ -229,12 +228,13 @@
                         <encoding>${project.build.sourceEncoding}</encoding>
                         <docencoding>${project.build.sourceEncoding}</docencoding>
                         <excludePackageNames>*.internal*</excludePackageNames>
-                        <additionalparam>${javadoc.opts}</additionalparam>
+                        <doclint>none</doclint>
                     </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
+                    <version>2.9</version>
                     <configuration>
                         <dependencyDetailsEnabled>false</dependencyDetailsEnabled>
                         <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
