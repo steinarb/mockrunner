@@ -288,7 +288,7 @@
                     <version>2.5.3</version>
                     <configuration>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <releaseProfiles>performRelease</releaseProfiles>
+                        <useReleaseProfile>true</useReleaseProfile>
                     </configuration>
                 </plugin>
                 <plugin>
