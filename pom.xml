@@ -11,7 +11,7 @@
 
     <groupId>com.mockrunner</groupId>
     <artifactId>mockrunner</artifactId>
-    <version>2.0.2-SNAPSHOT</version>
+    <version>2.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>MockRunner</name>
     <url>http://mockrunner.github.io</url>
@@ -311,7 +311,6 @@
                     <configuration>
                         <message>Creating site for ${project.artifactId}, ${project.version}</message>
                         <!-- this does the trick to place every module in the correct subfolder -->
-                        <server>github</server>
                         <merge>true</merge>
                     </configuration>
                 </plugin>
