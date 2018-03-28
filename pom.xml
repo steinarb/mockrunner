@@ -471,6 +471,9 @@
                     <plugin>
                         <groupId>com.github.github</groupId>
                         <artifactId>site-maven-plugin</artifactId>
+                        <configuration>
+                            <server>github</server>
+                        </configuration>
                         <executions>
                             <execution>
                                 <id>github-site</id>
