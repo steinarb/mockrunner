@@ -312,6 +312,7 @@
                         <message>Creating site for ${project.artifactId}, ${project.version}</message>
                         <!-- this does the trick to place every module in the correct subfolder -->
                         <merge>true</merge>
+                        <server>github</server>
                     </configuration>
                 </plugin>
                 <plugin>
