@@ -108,6 +108,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.scm.id>github</project.scm.id>
         <github.global.server>github</github.global.server>
+        <javadoc.opts>-Xdoclint:none</javadoc.opts>
     </properties>
 
     <dependencyManagement>
@@ -230,6 +231,7 @@
                         <docencoding>${project.build.sourceEncoding}</docencoding>
                         <excludePackageNames>*.internal*</excludePackageNames>
                         <doclint>none</doclint>
+                        <additionalOptions>-Xdoclint:none</additionalOptions>
                     </configuration>
                 </plugin>
                 <plugin>

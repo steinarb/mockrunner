@@ -133,6 +133,8 @@
 					<encoding>${project.build.sourceEncoding}</encoding>
 					<docencoding>${project.build.sourceEncoding}</docencoding>
 					<failOnError>false</failOnError>
+					<doclint>none</doclint>
+					<additionalOptions>-Xdoclint:none</additionalOptions>
 				</configuration>
 			</plugin>
 		</plugins>
