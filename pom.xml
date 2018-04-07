@@ -3,12 +3,6 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>org.sonatype.oss</groupId>
-        <artifactId>oss-parent</artifactId>
-        <version>9</version>
-    </parent>
-
     <groupId>com.mockrunner</groupId>
     <artifactId>mockrunner</artifactId>
     <version>2.0.2-SNAPSHOT</version>
@@ -286,12 +280,14 @@
                 </plugin>
                 <plugin>
                     <!-- Configuration for the realease plugin -->
-                    <groupId>org.apache.maven.plugins</groupId>
+                    <groupId>org.apache.manven.plugins</groupId>
                     <artifactId>maven-release-plugin</artifactId>
                     <version>2.5.3</version>
                     <configuration>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <useReleaseProfile>true</useReleaseProfile>
+                        <useReleaseProfile>false</useReleaseProfile>
+                        <useReleaseProfiles>release</useReleaseProfiles>
+                        <goals>deploy</goals>
                     </configuration>
                 </plugin>
                 <plugin>
@@ -401,6 +397,17 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>sonatype-nexus-staging</serverId>
+                    <nexusUrl>https://oss.sonatype.org</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -444,7 +451,7 @@
             <!-- Profile automatically triggered when release:perform is executed -->
             <activation>
                 <property>
-                    <name>performRelease</name>
+                    <name>release</name>
                     <value>true</value>
                 </property>
             </activation>
