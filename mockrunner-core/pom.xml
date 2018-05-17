@@ -87,7 +87,6 @@
 					<charset>${project.build.sourceEncoding}</charset>
 					<encoding>${project.build.sourceEncoding}</encoding>
 					<docencoding>${project.build.sourceEncoding}</docencoding>
-					<failOnError>false</failOnError>
 					<doclint>none</doclint>
 					<additionalOptions>-Xdoclint:none</additionalOptions>
 				</configuration>

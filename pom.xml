@@ -218,7 +218,6 @@
                     <artifactId>maven-javadoc-plugin</artifactId>
                     <version>3.0.0</version>
                     <configuration>
-                        <failOnError>false</failOnError>
                         <javadocExecutable>${javadoc-executable-path}</javadocExecutable>
                         <charset>${project.build.sourceEncoding}</charset>
                         <encoding>${project.build.sourceEncoding}</encoding>
