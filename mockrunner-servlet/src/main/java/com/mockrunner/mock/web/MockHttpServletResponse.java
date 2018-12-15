@@ -102,6 +102,11 @@ public class MockHttpServletResponse implements HttpServletResponse
         return outputStream.getContent();
     }
 
+    public byte[] getOutputStreamBinaryContent()
+    {
+        return outputStream.getBinaryContent();
+    }
+
     public void addCookie(Cookie cookie)
     {
         cookies.add(cookie);
