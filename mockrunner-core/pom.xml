@@ -19,6 +19,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		
 		<!-- needed in StreamUtil -->
@@ -55,6 +56,30 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<configuration>
+					<instructions>
+						<Export-Package>
+							com.mockrunner.base,
+							com.mockrunner.gen,
+							com.mockrunner.gen.jar,
+							com.mockrunner.gen.proc,
+							com.mockrunner.test.consistency,
+							com.mockrunner.test.gen,
+							com.mockrunner.test.util,
+							com.mockrunner.util.common,
+							com.mockrunner.util.regexp,
+							com.mockrunner.util.web
+						</Export-Package>Export-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.karaf.tooling</groupId>
+				<artifactId>karaf-maven-plugin</artifactId>
+			</plugin>
 			<plugin>
 				<!-- Generate a jar for the source files when deploying -->
 				<groupId>org.apache.maven.plugins</groupId>
