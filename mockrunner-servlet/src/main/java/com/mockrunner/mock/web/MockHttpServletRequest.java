@@ -71,7 +71,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     private boolean sessionCreated;
     private List attributeListener;
     private boolean isAsyncSupported;
-    
+
     public MockHttpServletRequest()
     {
         resetAll();
@@ -112,7 +112,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         attributeListener.add(listener);
     }
-    
+
     public String getParameter(String key)
     {
         String[] values = getParameterValues(key);
@@ -122,7 +122,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         }
         return null;
     }
-    
+
     /**
      * Clears the parameters.
      */
@@ -166,7 +166,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         return Collections.unmodifiableMap(parameters);
     }
-    
+
     public void clearAttributes()
     {
         attributes.clear();
@@ -206,12 +206,12 @@ public class MockHttpServletRequest implements HttpServletRequest
         }
         handleAttributeListenerCalls(key, value, oldValue);
     }
-    
+
     public HttpSession getSession()
     {
         return getSession(true);
     }
-    
+
     public HttpSession getSession(boolean create)
     {
         if(!create && !sessionCreated) return null;
@@ -233,9 +233,9 @@ public class MockHttpServletRequest implements HttpServletRequest
      * Sets the <code>HttpSession</code>.
      * @param session the <code>HttpSession</code>
      */
-    public void setSession(HttpSession session) 
+    public void setSession(HttpSession session)
     {
-        this.session = session;   
+        this.session = session;
     }
 
     public RequestDispatcher getRequestDispatcher(String path)
@@ -248,7 +248,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         }
         return dispatcher;
     }
-    
+
     /**
      * Returns the map of <code>RequestDispatcher</code> objects. The specified path
      * maps to the corresponding <code>RequestDispatcher</code> object.
@@ -258,15 +258,15 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         return Collections.unmodifiableMap(requestDispatchers);
     }
-    
+
     /**
-     * Clears the map of <code>RequestDispatcher</code> objects. 
+     * Clears the map of <code>RequestDispatcher</code> objects.
      */
     public void clearRequestDispatcherMap()
     {
         requestDispatchers.clear();
     }
-    
+
     /**
      * Sets a <code>RequestDispatcher</code> that will be returned when calling
      * {@link #getRequestDispatcher} with the specified path. If no <code>RequestDispatcher</code>
@@ -283,7 +283,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         }
         requestDispatchers.put(path, dispatcher);
     }
-    
+
     public Locale getLocale()
     {
         if(locales.size() < 1) return Locale.getDefault();
@@ -294,17 +294,17 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         return locales.elements();
     }
-    
+
     public void addLocale(Locale locale)
     {
         locales.add(locale);
     }
-    
+
     public void addLocales(List localeList)
     {
         locales.addAll(localeList);
     }
-    
+
     public String getMethod()
     {
         return method;
@@ -314,12 +314,12 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         this.method = method;
     }
-    
+
     public String getAuthType()
     {
         return authType;
     }
-    
+
     public void setAuthType(String authType)
     {
         this.authType = authType;
@@ -365,7 +365,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         if(null == header) return -1;
         return new Integer(header);
     }
-    
+
     public void addHeader(String key, String value)
     {
         List valueList = (List) headers.get(key);
@@ -376,99 +376,99 @@ public class MockHttpServletRequest implements HttpServletRequest
         }
         valueList.add(value);
     }
-    
+
     public void setHeader(String key, String value)
     {
         List valueList = new ArrayList();
         headers.put(key, valueList);
         valueList.add(value);
     }
-    
+
     public void clearHeaders()
     {
         headers.clear();
     }
-    
+
     public String getContextPath()
     {
         return contextPath;
     }
-    
+
     public void setContextPath(String contextPath)
     {
         this.contextPath = contextPath;
     }
-    
+
     public String getPathInfo()
     {
         return pathInfo;
     }
-    
+
     public void setPathInfo(String pathInfo)
     {
         this.pathInfo = pathInfo;
     }
-    
+
     public String getPathTranslated()
     {
         return pathTranslated;
     }
-    
+
     public void setPathTranslated(String pathTranslated)
     {
         this.pathTranslated = pathTranslated;
     }
-    
+
     public String getQueryString()
     {
         return queryString;
     }
-    
+
     public void setQueryString(String queryString)
     {
         this.queryString = queryString;
     }
-    
+
     public String getRequestURI()
     {
         return requestUri;
     }
-    
+
     public void setRequestURI(String requestUri)
     {
         this.requestUri = requestUri;
     }
-    
+
     public StringBuffer getRequestURL()
     {
         return requestUrl;
     }
-    
+
     public void setRequestURL(String requestUrl)
     {
         this.requestUrl = new StringBuffer(requestUrl);
     }
-    
+
     public String getServletPath()
     {
         return servletPath;
     }
-    
+
     public void setServletPath(String servletPath)
     {
         this.servletPath = servletPath;
     }
-    
+
     public Principal getUserPrincipal()
     {
         return principal;
     }
-    
+
     public void setUserPrincipal(Principal principal)
     {
         this.principal = principal;
     }
-    
+
     public String getRemoteUser()
     {
         return remoteUser;
@@ -484,7 +484,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         if(null == cookies) return null;
         return (Cookie[])cookies.toArray(new Cookie[cookies.size()]);
     }
-    
+
     public void addCookie(Cookie cookie)
     {
         if(null == cookies)
@@ -515,7 +515,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         return !requestedSessionIdIsFromCookie;
     }
-    
+
     public void setRequestedSessionIdFromCookie(boolean requestedSessionIdIsFromCookie)
     {
         this.requestedSessionIdIsFromCookie = requestedSessionIdIsFromCookie;
@@ -532,7 +532,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         if(!roles.containsKey(role)) return false;
         return (Boolean) roles.get(role);
     }
-    
+
     public void setUserInRole(String role, boolean isInRole)
     {
         roles.put(role, isInRole);
@@ -542,7 +542,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         return characterEncoding;
     }
-    
+
     public void setCharacterEncoding(String characterEncoding) throws UnsupportedEncodingException
     {
         this.characterEncoding = characterEncoding;
@@ -552,7 +552,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         return contentLength;
     }
-    
+
     public void setContentLength(int contentLength)
     {
         this.contentLength = contentLength;
@@ -562,7 +562,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         return contentType;
     }
-    
+
     public void setContentType(String contentType)
     {
         this.contentType = contentType;
@@ -572,57 +572,57 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         return protocol;
     }
-    
+
     public void setProtocol(String protocol)
     {
         this.protocol = protocol;
     }
-    
+
     public String getServerName()
     {
         return serverName;
     }
-    
+
     public void setServerName(String serverName)
     {
         this.serverName = serverName;
     }
-    
+
     public int getServerPort()
     {
         return serverPort;
     }
-    
+
     public void setServerPort(int serverPort)
     {
         this.serverPort = serverPort;
     }
-    
+
     public String getScheme()
     {
         return scheme;
     }
-    
+
     public void setScheme(String scheme)
     {
         this.scheme = scheme;
     }
-    
+
     public String getRemoteAddr()
     {
         return remoteAddr;
     }
-    
+
     public void setRemoteAddr(String remoteAddr)
     {
         this.remoteAddr = remoteAddr;
     }
-    
+
     public String getRemoteHost()
     {
         return remoteHost;
     }
-    
+
     public void setRemoteHost(String remoteHost)
     {
         this.remoteHost = remoteHost;
@@ -632,28 +632,28 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         return new BufferedReader(new InputStreamReader(bodyContent));
     }
-    
+
     public ServletInputStream getInputStream() throws IOException
     {
         return bodyContent;
     }
-    
+
     public void setBodyContent(byte[] data)
     {
-        bodyContent = new MockServletInputStream(data); 
+        bodyContent = new MockServletInputStream(data);
     }
-    
+
     public void setBodyContent(String bodyContent)
     {
         String encoding = (null == characterEncoding) ? "ISO-8859-1" : characterEncoding;
         try
         {
             setBodyContent(bodyContent.getBytes(encoding));
-        } 
+        }
         catch(UnsupportedEncodingException exc)
         {
             throw new NestedApplicationException(exc);
-        }        
+        }
     }
 
     public String getRealPath(String path)
@@ -661,20 +661,20 @@ public class MockHttpServletRequest implements HttpServletRequest
         HttpSession session = getSession();
         if(null == session) return null;
         return session.getServletContext().getRealPath(path);
-    } 
-    
+    }
+
     public boolean isSecure()
     {
         String scheme = getScheme();
         if(null == scheme) return false;
         return scheme.equals("https");
     }
-    
+
     public String getLocalAddr()
     {
         return localAddr;
     }
-    
+
     public void setLocalAddr(String localAddr)
     {
         this.localAddr = localAddr;
@@ -684,7 +684,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         return localName;
     }
-    
+
     public void setLocalName(String localName)
     {
         this.localName = localName;
@@ -694,7 +694,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         return localPort;
     }
-    
+
     public void setLocalPort(int localPort)
     {
         this.localPort = localPort;
@@ -709,7 +709,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         this.remotePort = remotePort;
     }
-    
+
     public boolean isAsyncSupported()
     {
         return isAsyncSupported;
@@ -739,24 +739,24 @@ public class MockHttpServletRequest implements HttpServletRequest
             {
                 callAttributeListenersAddedMethod(key, value);
             }
-    
+
         }
     }
-    
+
     private void callAttributeListenersAddedMethod(String key, Object value)
     {
         for (Object anAttributeListener : attributeListener) {
             ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key,
-                    value);
+                                                                                  value);
             ((ServletRequestAttributeListener) anAttributeListener).attributeAdded(event);
         }
     }
-    
+
     private void callAttributeListenersReplacedMethod(String key, Object value)
     {
         for (Object anAttributeListener : attributeListener) {
             ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key,
-                    value);
+                                                                                  value);
             ((ServletRequestAttributeListener) anAttributeListener).attributeReplaced(event);
         }
     }
@@ -765,11 +765,11 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         for (Object anAttributeListener : attributeListener) {
             ServletRequestAttributeEvent event = new ServletRequestAttributeEvent(getServletContext(), this, key,
-                    value);
+                                                                                  value);
             ((ServletRequestAttributeListener) anAttributeListener).attributeRemoved(event);
         }
     }
-    
+
     private ServletContext getServletContext()
     {
         if(null == session) return new MockServletContext();

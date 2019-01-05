@@ -24,17 +24,17 @@ import com.mockrunner.mock.web.MockRequestDispatcher;
 public class MockHttpServletRequestTest extends TestCase
 {
     private MockHttpServletRequest request;
-    
+
     protected void setUp()
     {
         request = new MockHttpServletRequest();
     }
-    
+
     protected void tearDown()
     {
         request = null;
     }
-    
+
     public void testResetAll() throws Exception
     {
         request.setAttribute("key", "value");
@@ -45,7 +45,7 @@ public class MockHttpServletRequestTest extends TestCase
         assertNull(request.getHeader("header"));
         assertEquals(-1, request.getContentLength());
     }
-    
+
     public void testAttributeListenerCalled()
     {
         TestAttributeListener listener1 = new TestAttributeListener();
@@ -110,7 +110,7 @@ public class MockHttpServletRequestTest extends TestCase
         request.removeAttribute("myKey");
         assertFalse(listener.wasAttributeRemovedCalled());
     }
-    
+
     public void testGetAttributeNames()
     {
         Enumeration enumeration = request.getAttributeNames();
@@ -141,7 +141,7 @@ public class MockHttpServletRequestTest extends TestCase
         enumeration = request.getAttributeNames();
         assertFalse(enumeration.hasMoreElements());
     }
-    
+
     public void testAddRequestParameter() throws Exception
     {
         request.setupAddParameter("abc", "abc");
@@ -155,7 +155,7 @@ public class MockHttpServletRequestTest extends TestCase
         assertEquals("123", request.getParameterValues("abc")[0]);
         assertEquals("456", request.getParameterValues("abc")[1]);
     }
-    
+
     public void testHeaders()
     {
         request.addHeader("testHeader", "xyz");
@@ -208,7 +208,7 @@ public class MockHttpServletRequestTest extends TestCase
         assertFalse(headers.hasMoreElements());
         assertFalse(request.getHeaders("doesnotexist").hasMoreElements());
     }
-    
+
     public void testHeadersCaseInsensitive()
     {
         request.addHeader("testHeader", "xyz");
@@ -235,7 +235,7 @@ public class MockHttpServletRequestTest extends TestCase
         assertTrue(headerNames.contains("MYHEADER1"));
         assertTrue(headerNames.contains("myHeader2"));
     }
-    
+
     public void testCookies()
     {
         assertNull(request.getCookies());
@@ -251,7 +251,7 @@ public class MockHttpServletRequestTest extends TestCase
         assertEquals("name3", cookies[2].getName());
         assertEquals("value3", cookies[2].getValue());
     }
-    
+
     public void testBodyContent() throws Exception
     {
         request.setBodyContent("test\nanothertest???");
@@ -267,24 +267,24 @@ public class MockHttpServletRequestTest extends TestCase
         assertEquals(127, stream.read());
         assertEquals(55, stream.read());
     }
-    
+
     public void testRequestDispatcher() throws Exception
     {
         final String rdPath1 = "rdPathOne";
         final String rdPath2 = "rdPathTwo";
         final String rdPath3 = "rdPathThree";
-    
+
         assertEquals(0, request.getRequestDispatcherMap().size());
 
         MockRequestDispatcher rd1 = (MockRequestDispatcher)request.getRequestDispatcher(rdPath1);
         assertEquals(rdPath1, rd1.getPath());
         assertNull(rd1.getForwardedRequest());
         assertNull(rd1.getIncludedRequest());
-        
+
         assertEquals(1, request.getRequestDispatcherMap().size());
         assertTrue(request.getRequestDispatcherMap().containsKey(rdPath1));
         assertSame(rd1, request.getRequestDispatcherMap().get(rdPath1));
-        
+
         MockRequestDispatcher actualRd2 = new MockRequestDispatcher();
         request.setRequestDispatcher(rdPath2, actualRd2);
         MockRequestDispatcher rd2 = (MockRequestDispatcher)request.getRequestDispatcher(rdPath2);
@@ -292,24 +292,24 @@ public class MockHttpServletRequestTest extends TestCase
         assertSame(actualRd2, rd2);
         assertNull(rd1.getForwardedRequest());
         assertNull(rd1.getIncludedRequest());
-        
+
         assertEquals(2, request.getRequestDispatcherMap().size());
         assertTrue(request.getRequestDispatcherMap().containsKey(rdPath2));
         assertSame(rd2, request.getRequestDispatcherMap().get(rdPath2));
-        
+
         RequestDispatcher actualRd3 = new TestRequestDispatcher();
         request.setRequestDispatcher(rdPath3, actualRd3);
         RequestDispatcher rd3 = request.getRequestDispatcher(rdPath3);
         assertSame(actualRd3, rd3);
-        
+
         assertEquals(3, request.getRequestDispatcherMap().size());
         assertTrue(request.getRequestDispatcherMap().containsKey(rdPath3));
         assertSame(rd3, request.getRequestDispatcherMap().get(rdPath3));
-        
+
         request.clearRequestDispatcherMap();
         assertEquals(0, request.getRequestDispatcherMap().size());
     }
-    
+
     public void testSessionCreation() throws Exception
     {
         request.setSession(null);
@@ -317,7 +317,7 @@ public class MockHttpServletRequestTest extends TestCase
         assertNull(request.getSession(true));
         assertNull(request.getSession());
         request = new MockHttpServletRequest();
-        MockHttpSession session = new MockHttpSession(); 
+        MockHttpSession session = new MockHttpSession();
         request.setSession(session);
         assertNull(request.getSession(false));
         assertNotNull(request.getSession());
@@ -330,7 +330,7 @@ public class MockHttpServletRequestTest extends TestCase
         assertNotNull(request.getSession(true));
         assertNotNull(request.getSession(false));
     }
-    
+
     public void testSessionInvalidate() throws Exception
     {
         request.setSession(new MockHttpSession());
@@ -338,7 +338,7 @@ public class MockHttpServletRequestTest extends TestCase
         assertFalse(((MockHttpSession)request.getSession(false)).isValid());
         assertTrue(((MockHttpSession)request.getSession(true)).isValid());
     }
-    
+
     public void testIsUserInRole()
     {
         request.setUserInRole("role1", true);
@@ -347,13 +347,13 @@ public class MockHttpServletRequestTest extends TestCase
         assertFalse(request.isUserInRole("role2"));
         assertFalse(request.isUserInRole("role3"));
     }
-    
+
     private class TestAttributeListener implements ServletRequestAttributeListener
     {
         private boolean wasAttributeAddedCalled = false;
         private boolean wasAttributeReplacedCalled = false;
         private boolean wasAttributeRemovedCalled = false;
-    
+
         public void attributeAdded(ServletRequestAttributeEvent event)
         {
             wasAttributeAddedCalled = true;
@@ -368,14 +368,14 @@ public class MockHttpServletRequestTest extends TestCase
         {
             wasAttributeReplacedCalled = true;
         }
-    
+
         public void reset()
         {
             wasAttributeAddedCalled = false;
             wasAttributeReplacedCalled = false;
             wasAttributeRemovedCalled = false;
         }
-    
+
         public boolean wasAttributeAddedCalled()
         {
             return wasAttributeAddedCalled;
@@ -400,7 +400,7 @@ public class MockHttpServletRequestTest extends TestCase
         private Object replacedEventValue;
         private String removedEventKey;
         private Object removedEventValue;
-    
+
         public void attributeAdded(ServletRequestAttributeEvent event)
         {
             addedEventKey = event.getName();
@@ -418,7 +418,7 @@ public class MockHttpServletRequestTest extends TestCase
             replacedEventKey = event.getName();
             replacedEventValue = event.getValue();
         }
-    
+
         public String getAddedEventKey()
         {
             return addedEventKey;
@@ -449,15 +449,15 @@ public class MockHttpServletRequestTest extends TestCase
             return replacedEventValue;
         }
     }
-    
+
     private class TestRequestDispatcher implements RequestDispatcher
     {
-        
+
         public void forward(ServletRequest request, ServletResponse response) throws ServletException, IOException
         {
 
         }
-        
+
         public void include(ServletRequest request, ServletResponse response) throws ServletException, IOException
         {
 
