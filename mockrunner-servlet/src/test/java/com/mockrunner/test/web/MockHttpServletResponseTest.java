@@ -101,6 +101,7 @@ public class MockHttpServletResponseTest extends TestCase
         response.getWriter().print("test");
         response.flushBuffer();
         assertEquals("testtruetest", response.getOutputStreamContent());
+        assertEquals("testtruetest".getBytes().length, response.getOutputStreamBinaryContent().length);
     }
     
     public void testGetSetContentType() throws IOException
