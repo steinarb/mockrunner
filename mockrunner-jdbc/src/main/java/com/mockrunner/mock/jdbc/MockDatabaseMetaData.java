@@ -2445,6 +2445,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         {
             if(!super.matches(object)) return false;
             ColumnDatabaseIdentifierImpl other = (ColumnDatabaseIdentifierImpl)object;
+            if(null == columnNamePattern && null == other.getColumnNamePattern()) return true;
             if(null == columnNamePattern) return false;
             if(null == other.getColumnNamePattern()) return false;
             return StringUtil.matchesPerl5(other.getColumnNamePattern(), convert(columnNamePattern), caseSensitive);
