@@ -40,9 +40,9 @@ public class ExecuteQueryTestCase extends TestCase {
 
         String stmt = "select isbn, quantity from books where isbn = ?";
         PreparedStatement pStmt = connection.prepareStatement(stmt);
-        
-        for (int c = 0; c < isbnNumbers.size(); c++) {
-            pStmt.setString(1, isbnNumbers.get(c));
+
+        for (String isbnNumber : isbnNumbers) {
+            pStmt.setString(1, isbnNumber);
             ResultSet result = pStmt.executeQuery();
             System.out.println(result);
             while (result.next()) {

@@ -73,9 +73,8 @@ public class GenericFailureInteractionTest extends TestCase
     
     public void testExceptionType() throws Exception
     {
-        ResourceException setExc = new ResourceException();
         Exception nested = new Exception();
-        setExc.setLinkedException(nested);
+        ResourceException setExc = new ResourceException(nested);
         GenericFailureInteraction interaction = new GenericFailureInteraction(true, setExc);
         interactionHandler.addImplementor(interaction);
         try

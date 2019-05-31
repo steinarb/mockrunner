@@ -64,7 +64,7 @@ public class MethodUtilTest extends TestCase
             //should throw exception
         }
         assertNull(MethodUtil.invoke(testObject, "testMethod4", "test"));
-        assertEquals(new Integer(3), MethodUtil.invoke(testObject, "testMethod5", new Integer[] { new Integer(3)}));
+        assertEquals(3, MethodUtil.invoke(testObject, "testMethod5", new Integer[] { new Integer(3)}));
         assertFalse(testObject.wasMethod1Called());
         assertTrue(testObject.wasMethod4Called());
         assertTrue(testObject.wasMethod5Called());
@@ -74,11 +74,11 @@ public class MethodUtilTest extends TestCase
     {
         Method method1 = TestObject.class.getMethod("testMethod1", null);
         Method method2 = TestObject.class.getMethod("testMethod2", null);
-        Method method4 = TestObject.class.getMethod("testMethod4", new Class[] {String.class});
-        Method method5 = TestObject.class.getMethod("testMethod5", new Class[] {Integer[].class});
+        Method method4 = TestObject.class.getMethod("testMethod4", String.class);
+        Method method5 = TestObject.class.getMethod("testMethod5", Integer[].class);
         Method anotherMethod2 = AnotherTestObject.class.getMethod("testMethod2", null);
-        Method anotherMethod4 = AnotherTestObject.class.getMethod("testMethod4", new Class[] {Integer.class});
-        Method anotherMethod5 = AnotherTestObject.class.getMethod("testMethod5", new Class[] {Integer[].class});
+        Method anotherMethod4 = AnotherTestObject.class.getMethod("testMethod4", Integer.class);
+        Method anotherMethod5 = AnotherTestObject.class.getMethod("testMethod5", Integer[].class);
         try
         {
             MethodUtil.areMethodsEqual(null, method1);
@@ -110,9 +110,8 @@ public class MethodUtilTest extends TestCase
         Method[] methods = MethodUtil.getMatchingDeclaredMethods(TestObject.class, "test.*");
         assertEquals(5, methods.length);
         List methodNames = new ArrayList();
-        for(int ii = 0; ii < methods.length; ii++)
-        {
-            methodNames.add(methods[ii].getName());
+        for (Method method1 : methods) {
+            methodNames.add(method1.getName());
         }
         assertTrue(methodNames.contains("testMethod1"));
         assertTrue(methodNames.contains("testMethod2"));
@@ -122,9 +121,8 @@ public class MethodUtilTest extends TestCase
         methods = MethodUtil.getMatchingDeclaredMethods(TestObject.class, "wasMethod.Called");
         assertEquals(5, methods.length);
         methodNames = new ArrayList();
-        for(int ii = 0; ii < methods.length; ii++)
-        {
-            methodNames.add(methods[ii].getName());
+        for (Method method : methods) {
+            methodNames.add(method.getName());
         }
         assertTrue(methodNames.contains("wasMethod1Called"));
         assertTrue(methodNames.contains("wasMethod2Called"));
@@ -138,12 +136,12 @@ public class MethodUtilTest extends TestCase
     public void testOverrides() throws Exception
     {
         Method method1Super = TestSuper.class.getDeclaredMethod("testMethod1", null);
-        Method method2Super = TestSuper.class.getDeclaredMethod("testMethod2", new Class[] { int[].class, String.class});
+        Method method2Super = TestSuper.class.getDeclaredMethod("testMethod2", int[].class, String.class);
         Method method4Super = TestSuper.class.getDeclaredMethod("testMethod4", null);
         Method method1SubOverride = TestSub.class.getDeclaredMethod("testMethod1", null);
-        Method method2SubOverride = TestSub.class.getDeclaredMethod("testMethod2", new Class[] { int[].class, String.class});
-        Method method1SubNotOverride = TestSub.class.getDeclaredMethod("testMethod1", new Class[] { String.class });
-        Method method2SubNotOverride = TestSub.class.getDeclaredMethod("testMethod2", new Class[] { int[].class});
+        Method method2SubOverride = TestSub.class.getDeclaredMethod("testMethod2", int[].class, String.class);
+        Method method1SubNotOverride = TestSub.class.getDeclaredMethod("testMethod1", String.class);
+        Method method2SubNotOverride = TestSub.class.getDeclaredMethod("testMethod2", int[].class);
         Method method4SubNotOverride = TestSub.class.getDeclaredMethod("testMethod4", null);
         Method methodInterface = TestInterface.class.getDeclaredMethod("testInterface", null);
         Method methodSubInterface = TestSub.class.getDeclaredMethod("testInterface", null);
@@ -167,11 +165,11 @@ public class MethodUtilTest extends TestCase
         assertEquals(7, methods[2].length);
         assertEquals(3, methods[3].length);
         Method method1Super = TestSuper.class.getDeclaredMethod("testMethod1", null);
-        Method method2Super = TestSuper.class.getDeclaredMethod("testMethod2", new Class[] { int[].class, String.class});
+        Method method2Super = TestSuper.class.getDeclaredMethod("testMethod2", int[].class, String.class);
         Method method1SubOverride = TestSub.class.getDeclaredMethod("testMethod1", null);
-        Method method2SubOverride = TestSub.class.getDeclaredMethod("testMethod2", new Class[] { int[].class, String.class});
-        Method method1SubNotOverride = TestSub.class.getDeclaredMethod("testMethod1", new Class[] { String.class });
-        Method method2SubNotOverride = TestSub.class.getDeclaredMethod("testMethod2", new Class[] { int[].class});
+        Method method2SubOverride = TestSub.class.getDeclaredMethod("testMethod2", int[].class, String.class);
+        Method method1SubNotOverride = TestSub.class.getDeclaredMethod("testMethod1", String.class);
+        Method method2SubNotOverride = TestSub.class.getDeclaredMethod("testMethod2", int[].class);
         Method methodSubInterface = TestSub.class.getDeclaredMethod("testInterface", null);
         Method methodSubtoString = TestSub.class.getDeclaredMethod("toString", null);
         Method methodSub2another = TestSub2.class.getDeclaredMethod("anotherMethod", null); 
@@ -193,10 +191,10 @@ public class MethodUtilTest extends TestCase
     
     public void testGetOverriddenMethods() throws Exception
     {
-        Method method2Super = TestSuper.class.getDeclaredMethod("testMethod2", new Class[] { int[].class, String.class});
+        Method method2Super = TestSuper.class.getDeclaredMethod("testMethod2", int[].class, String.class);
         Method method1SubOverride = TestSub.class.getDeclaredMethod("testMethod1", null);
-        Method method2SubOverride = TestSub.class.getDeclaredMethod("testMethod2", new Class[] { int[].class, String.class});
-        Method method2SubNotOverride = TestSub.class.getDeclaredMethod("testMethod2", new Class[] { int[].class});
+        Method method2SubOverride = TestSub.class.getDeclaredMethod("testMethod2", int[].class, String.class);
+        Method method2SubNotOverride = TestSub.class.getDeclaredMethod("testMethod2", int[].class);
         Method methodSubtoString = TestSub.class.getDeclaredMethod("toString", null);
         Method methodSub2another = TestSub2.class.getDeclaredMethod("anotherMethod", null);
         Method methodSub2toString = TestSub2.class.getDeclaredMethod("toString", null);
@@ -250,7 +248,7 @@ public class MethodUtilTest extends TestCase
         public int testMethod5(Integer[] arg)
         {
             method5Called = true;
-            return arg[0].intValue();
+            return arg[0];
         }
         
         public boolean wasMethod1Called()
@@ -297,9 +295,9 @@ public class MethodUtilTest extends TestCase
         }
     }
     
-    public static interface TestInterface
+    public interface TestInterface
     {
-        public Integer testInterface();
+        Integer testInterface();
     }
     
     public static class TestSuper

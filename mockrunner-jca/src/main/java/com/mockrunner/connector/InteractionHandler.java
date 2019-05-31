@@ -52,12 +52,9 @@ public class InteractionHandler
      */
     public Record execute(InteractionSpec is, Record request) throws ResourceException
     {
-        Iterator iter = implementors.iterator();
-        while (iter.hasNext())
-        {
-            InteractionImplementor ii = (InteractionImplementor) iter.next();
-            if (ii.canHandle(is, request, null))
-            {
+        for (Object implementor : implementors) {
+            InteractionImplementor ii = (InteractionImplementor) implementor;
+            if (ii.canHandle(is, request, null)) {
                 return ii.execute(is, request);
             }
         }
@@ -71,12 +68,9 @@ public class InteractionHandler
      */
     public boolean execute(InteractionSpec is, Record request, Record response) throws ResourceException
     {
-        Iterator iter = implementors.iterator();
-        while (iter.hasNext())
-        {
-            InteractionImplementor ii = (InteractionImplementor) iter.next();
-            if (ii.canHandle(is, request, response))
-            {
+        for (Object implementor : implementors) {
+            InteractionImplementor ii = (InteractionImplementor) implementor;
+            if (ii.canHandle(is, request, response)) {
                 return ii.execute(is, request, response);
             }
         }

@@ -71,7 +71,7 @@ public class DBStatefulBean implements SessionBean
                 if(null != statement) statement.close();
                 if(null != connection) connection.close();
             }
-            catch(SQLException sqlExc)
+            catch(SQLException ignored)
             {
         
             }

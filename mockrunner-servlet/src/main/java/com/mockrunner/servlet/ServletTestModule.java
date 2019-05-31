@@ -39,7 +39,7 @@ public class ServletTestModule extends HTMLOutputModule
      * @throws RuntimeException if <code>servletClass</code> is not an
      *         instance of <code>HttpServlet</code>
      */
-    public HttpServlet createServlet(Class servletClass)
+    public <T extends HttpServlet> T createServlet(Class<T> servletClass)
     {
         if(!HttpServlet.class.isAssignableFrom(servletClass))
         {
@@ -47,7 +47,7 @@ public class ServletTestModule extends HTMLOutputModule
         }
         try
         {
-            HttpServlet theServlet = (HttpServlet)servletClass.newInstance();
+            T theServlet = servletClass.newInstance();
             setServlet(theServlet, true);
             return theServlet;
         }
@@ -115,7 +115,7 @@ public class ServletTestModule extends HTMLOutputModule
      * @throws RuntimeException if <code>filterClass</code> is not an
      *         instance of <code>Filter</code>
      */
-    public Filter createFilter(Class filterClass)
+    public <T extends Filter> T createFilter(Class<T> filterClass)
     {
         if(!Filter.class.isAssignableFrom(filterClass))
         {
@@ -123,7 +123,7 @@ public class ServletTestModule extends HTMLOutputModule
         }
         try
         {
-            Filter theFilter = (Filter)filterClass.newInstance();
+            T theFilter = filterClass.newInstance();
             addFilter(theFilter, true);
             return theFilter;
         }
@@ -355,7 +355,7 @@ public class ServletTestModule extends HTMLOutputModule
         {
             mockFactory.getMockResponse().getWriter().flush();    
         }
-        catch(Exception exc)
+        catch(Exception ignored)
         {
             
         }

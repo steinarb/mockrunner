@@ -9,10 +9,10 @@ package com.mockrunner.example.ejb.interfaces;
 public interface DBStatefulHome
    extends javax.ejb.EJBHome
 {
-   public static final String COMP_NAME="java:comp/env/ejb/DBStateful";
-   public static final String JNDI_NAME="com/mockrunner/example/DBStateful";
+   String COMP_NAME="java:comp/env/ejb/DBStateful";
+   String JNDI_NAME="com/mockrunner/example/DBStateful";
 
-   public com.mockrunner.example.ejb.interfaces.DBStateful create()
+   com.mockrunner.example.ejb.interfaces.DBStateful create()
       throws javax.ejb.CreateException,java.rmi.RemoteException;
 
 }

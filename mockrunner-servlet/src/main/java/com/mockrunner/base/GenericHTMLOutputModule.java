@@ -23,7 +23,7 @@ public class GenericHTMLOutputModule extends HTMLOutputModule
         {
             factory.getMockResponse().getWriter().flush();    
         }
-        catch(Exception exc)
+        catch(Exception ignored)
         {
         
         }

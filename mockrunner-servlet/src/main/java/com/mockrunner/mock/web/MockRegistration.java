@@ -24,48 +24,48 @@ public class MockRegistration //implements Registration, Registration.Dynamic
         this.isAsyncSupported = false;
     }
     
-    *//**
-     * Returns the name.
-     * 
-     * @return the name
+    *//*
+      Returns the name.
+
+      @return the name
      *//*
     public String getName()
     {
         return name;
     }
 
-    *//**
-     * Returns the class name.
-     * 
-     * @return the class name
+    *//*
+      Returns the class name.
+
+      @return the class name
      *//*
     public String getClassName()
     {
         return className;
     }
     
-    *//**
-     * Sets the name.
-     * 
-     * @param name the name
+    *//*
+      Sets the name.
+
+      @param name the name
      *//*
     public void setName(String name)
     {
         this.name = name;
     }
 
-    *//**
-     * Sets the class name.
-     * 
-     * @param className the class name
+    *//*
+      Sets the class name.
+
+      @param className the class name
      *//*
     public void setClassName(String className)
     {
         this.className = className;
     }
 
-    *//**
-     * Clears the init parameters.
+    *//*
+      Clears the init parameters.
      *//*
     public void clearInitParameters()
     {
@@ -117,10 +117,10 @@ public class MockRegistration //implements Registration, Registration.Dynamic
         return conflicting;
     }
 
-    *//**
-     * Returns if asynchronous operations are supported.
-     * 
-     * @return <code>true</code> if asynchronous operations are supported, <code>false</code> otherwiese
+    *//*
+      Returns if asynchronous operations are supported.
+
+      @return <code>true</code> if asynchronous operations are supported, <code>false</code> otherwiese
      *//*
     public boolean isAsyncSupported()
     {

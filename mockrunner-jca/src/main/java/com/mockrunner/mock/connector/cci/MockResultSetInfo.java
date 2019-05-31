@@ -40,134 +40,134 @@ public class MockResultSetInfo implements ResultSetInfo
 
     public boolean deletesAreDetected(int type) throws ResourceException
     {
-        Boolean deletesAreDetected = (Boolean)deletesAreDetectedMap.get(new Integer(type));
+        Boolean deletesAreDetected = (Boolean)deletesAreDetectedMap.get(type);
         if(null == deletesAreDetected) return true;
-        return deletesAreDetected.booleanValue();
+        return deletesAreDetected;
     }
 
     public boolean insertsAreDetected(int type) throws ResourceException
     {
-        Boolean insertsAreDetected = (Boolean)insertsAreDetectedMap.get(new Integer(type));
+        Boolean insertsAreDetected = (Boolean)insertsAreDetectedMap.get(type);
         if(null == insertsAreDetected) return true;
-        return insertsAreDetected.booleanValue();
+        return insertsAreDetected;
     }
     
     public boolean updatesAreDetected(int type) throws ResourceException
     {
-        Boolean updatesAreDetected = (Boolean)updatesAreDetectedMap.get(new Integer(type));
+        Boolean updatesAreDetected = (Boolean)updatesAreDetectedMap.get(type);
         if(null == updatesAreDetected) return true;
-        return updatesAreDetected.booleanValue();
+        return updatesAreDetected;
     }
 
     public boolean othersDeletesAreVisible(int type) throws ResourceException
     {
-        Boolean othersDeletesAreVisible = (Boolean)othersDeletesAreVisibleMap.get(new Integer(type));
+        Boolean othersDeletesAreVisible = (Boolean)othersDeletesAreVisibleMap.get(type);
         if(null == othersDeletesAreVisible) return true;
-        return othersDeletesAreVisible.booleanValue();
+        return othersDeletesAreVisible;
     }
 
     public boolean othersInsertsAreVisible(int type) throws ResourceException
     {
-        Boolean othersInsertsAreVisible = (Boolean)othersInsertsAreVisibleMap.get(new Integer(type));
+        Boolean othersInsertsAreVisible = (Boolean)othersInsertsAreVisibleMap.get(type);
         if(null == othersInsertsAreVisible) return true;
-        return othersInsertsAreVisible.booleanValue();
+        return othersInsertsAreVisible;
     }
 
     public boolean othersUpdatesAreVisible(int type) throws ResourceException
     {
-        Boolean othersUpdatesAreVisible = (Boolean)othersUpdatesAreVisibleMap.get(new Integer(type));
+        Boolean othersUpdatesAreVisible = (Boolean)othersUpdatesAreVisibleMap.get(type);
         if(null == othersUpdatesAreVisible) return true;
-        return othersUpdatesAreVisible.booleanValue();
+        return othersUpdatesAreVisible;
     }
 
     public boolean ownDeletesAreVisible(int type) throws ResourceException
     {
-        Boolean ownDeletesAreVisible = (Boolean)ownDeletesAreVisibleMap.get(new Integer(type));
+        Boolean ownDeletesAreVisible = (Boolean)ownDeletesAreVisibleMap.get(type);
         if(null == ownDeletesAreVisible) return true;
-        return ownDeletesAreVisible.booleanValue();
+        return ownDeletesAreVisible;
     }
 
     public boolean ownInsertsAreVisible(int type) throws ResourceException
     {
-        Boolean ownInsertsAreVisible = (Boolean)ownInsertsAreVisibleMap.get(new Integer(type));
+        Boolean ownInsertsAreVisible = (Boolean)ownInsertsAreVisibleMap.get(type);
         if(null == ownInsertsAreVisible) return true;
-        return ownInsertsAreVisible.booleanValue();
+        return ownInsertsAreVisible;
     }
 
     public boolean ownUpdatesAreVisible(int type) throws ResourceException
     {
-        Boolean ownUpdatesAreVisible = (Boolean)ownUpdatesAreVisibleMap.get(new Integer(type));
+        Boolean ownUpdatesAreVisible = (Boolean)ownUpdatesAreVisibleMap.get(type);
         if(null == ownUpdatesAreVisible) return true;
-        return ownUpdatesAreVisible.booleanValue();
+        return ownUpdatesAreVisible;
     }
 
     public boolean supportsResultSetType(int type) throws ResourceException
     {
-        Boolean supportsResultSetType = (Boolean)supportsResultSetTypeMap.get(new Integer(type));
+        Boolean supportsResultSetType = (Boolean)supportsResultSetTypeMap.get(type);
         if(null == supportsResultSetType) return true;
-        return supportsResultSetType.booleanValue();
+        return supportsResultSetType;
     }
 
     public boolean supportsResultTypeConcurrency(int type, int concurrency) throws ResourceException
     {
         Boolean supportsResultTypeConcurrency = (Boolean)supportsResultTypeConcurrencyMap.get(new SupportsResultTypeConcurrencyKey(type, concurrency));
         if(null == supportsResultTypeConcurrency) return true;
-        return supportsResultTypeConcurrency.booleanValue();
+        return supportsResultTypeConcurrency;
     }
     
     public void setDeletesAreDetected(int type, boolean deletesAreDetected)
     {
-        deletesAreDetectedMap.put(new Integer(type), new Boolean(deletesAreDetected));
+        deletesAreDetectedMap.put(type, deletesAreDetected);
     }
 
     public void setInsertsAreDetected(int type, boolean insertsAreDetected)
     {
-        insertsAreDetectedMap.put(new Integer(type), new Boolean(insertsAreDetected));
+        insertsAreDetectedMap.put(type, insertsAreDetected);
     }
     
     public void setUpdatesAreDetected(int type, boolean updatesAreDetected)
     {
-        updatesAreDetectedMap.put(new Integer(type), new Boolean(updatesAreDetected));
+        updatesAreDetectedMap.put(type, updatesAreDetected);
     }
 
     public void setOthersDeletesAreVisible(int type, boolean othersDeletesAreVisible)
     {
-        othersDeletesAreVisibleMap.put(new Integer(type), new Boolean(othersDeletesAreVisible));
+        othersDeletesAreVisibleMap.put(type, othersDeletesAreVisible);
     }
 
     public void setOthersInsertsAreVisible(int type, boolean othersInsertsAreVisible)
     {
-        othersInsertsAreVisibleMap.put(new Integer(type), new Boolean(othersInsertsAreVisible));
+        othersInsertsAreVisibleMap.put(type, othersInsertsAreVisible);
     }
 
     public void setOthersUpdatesAreVisible(int type, boolean othersUpdatesAreVisible)
     {
-        othersUpdatesAreVisibleMap.put(new Integer(type), new Boolean(othersUpdatesAreVisible));
+        othersUpdatesAreVisibleMap.put(type, othersUpdatesAreVisible);
     }
 
     public void setOwnDeletesAreVisible(int type, boolean ownDeletesAreVisible)
     {
-        ownDeletesAreVisibleMap.put(new Integer(type), new Boolean(ownDeletesAreVisible));
+        ownDeletesAreVisibleMap.put(type, ownDeletesAreVisible);
     }
 
     public void setOwnInsertsAreVisible(int type, boolean ownInsertsAreVisible)
     {
-        ownInsertsAreVisibleMap.put(new Integer(type), new Boolean(ownInsertsAreVisible));
+        ownInsertsAreVisibleMap.put(type, ownInsertsAreVisible);
     }
 
     public void setOwnUpdatesAreVisible(int type, boolean ownUpdatesAreVisible)
     {
-        ownUpdatesAreVisibleMap.put(new Integer(type), new Boolean(ownUpdatesAreVisible));
+        ownUpdatesAreVisibleMap.put(type, ownUpdatesAreVisible);
     }
 
     public void setSupportsResultSetType(int type, boolean supportsResultSetType)
     {
-        supportsResultSetTypeMap.put(new Integer(type), new Boolean(supportsResultSetType));
+        supportsResultSetTypeMap.put(type, supportsResultSetType);
     }
 
     public void setSupportsResultTypeConcurrency(int type, int concurrency, boolean supportsResultTypeConcurrency)
     {
-        supportsResultTypeConcurrencyMap.put(new SupportsResultTypeConcurrencyKey(type, concurrency), new Boolean(supportsResultTypeConcurrency));
+        supportsResultTypeConcurrencyMap.put(new SupportsResultTypeConcurrencyKey(type, concurrency), supportsResultTypeConcurrency);
     }
 
     private class SupportsResultTypeConcurrencyKey

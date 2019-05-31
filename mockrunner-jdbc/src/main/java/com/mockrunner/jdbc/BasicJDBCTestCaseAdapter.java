@@ -21,9 +21,9 @@ import com.mockrunner.mock.jdbc.MockStatement;
  * subclass this adapter or use {@link com.mockrunner.jdbc.JDBCTestModule}
  * directly (so your test case can use another base class).
  * This basic adapter can be used if you don't need any other modules. It
- * does not extend {@link com.mockrunner.base.BaseTestCase}. If you want
+ * does not extend com.mockrunner.base.BaseTestCase. If you want
  * to use several modules in conjunction, consider subclassing
- * {@link com.mockrunner.jdbc.JDBCTestCaseAdapter}.
+ * com.mockrunner.jdbc.JDBCTestCaseAdapter.
  * <b>This class is generated from the {@link com.mockrunner.jdbc.JDBCTestModule}
  * and should not be edited directly</b>.
  */
@@ -246,7 +246,7 @@ public abstract class BasicJDBCTestCaseAdapter
     @Deprecated    
     protected Map<String, ParameterSets> getExecutedSQLStatementParameter()
     {
-        return jdbcTestModule.getExecutedSQLStatementParameter();
+        return jdbcTestModule.getExecutedSQLStatementParameterMap();
     }
 
     /**
@@ -490,7 +490,7 @@ public abstract class BasicJDBCTestCaseAdapter
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySQLStatementParameter(String, int, Map)}
+     * Delegates to {@Link #verifySQLStatementParameter(String sql, int indexOfParameterSet, int indexOfParameter, Object expectedParameter)}
      */
     protected void verifySQLStatementParameter(String sql, int indexOfParameterSet, MockParameterMap parameterMap)
     {
@@ -1216,7 +1216,7 @@ public abstract class BasicJDBCTestCaseAdapter
     @Deprecated
     protected void verifySavepointRollbacked(String name)
     {
-        jdbcTestModule.verifySavepointRollbacked(name);
+        jdbcTestModule.verifySavepointRolledBack(name);
     }
 
     /**
@@ -1226,7 +1226,7 @@ public abstract class BasicJDBCTestCaseAdapter
     @Deprecated
     protected void verifySavepointRollbacked(int index)
     {
-        jdbcTestModule.verifySavepointRollbacked(index);
+        jdbcTestModule.verifySavepointRolledBack(index);
     }
 
     /**
@@ -1236,16 +1236,16 @@ public abstract class BasicJDBCTestCaseAdapter
     @Deprecated
     protected void verifySavepointNotRollbacked(String name)
     {
-        jdbcTestModule.verifySavepointNotRollbacked(name);
+        jdbcTestModule.verifySavepointNotRolledBack(name);
     }
 
     /**
-     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointNotRollbacked(int)}
+     * Delegates to {@link com.mockrunner.jdbc.JDBCTestModule#verifySavepointNotRolledBack(int)}
      * @deprecated
      */
     @Deprecated
     protected void verifySavepointNotRollbacked(int index)
     {
-        jdbcTestModule.verifySavepointNotRollbacked(index);
+        jdbcTestModule.verifySavepointNotRolledBack(index);
     }
 }

@@ -104,16 +104,15 @@ public class MockrunnerJarTestConfiguration
     private List createMappings(List jars, List thirdpartyJarURLs) throws Exception
     {
         List mappings = new ArrayList();
-        for(int ii = 0; ii < jars.size(); ii++)
-        {
-            File currentFile = (File)jars.get(ii);
+        for (Object jar : jars) {
+            File currentFile = (File) jar;
             String name = currentFile.getName();
             String referenceTest = getReferenceTest(name);
             List urls = new ArrayList();
             urls.add(currentFile.toURI().toURL());
             urls.add(new File(BUILD_DIR).toURI().toURL());
             urls.addAll(thirdpartyJarURLs);
-            Mapping currentMapping = new Mapping(referenceTest, (URL[])urls.toArray(new URL[urls.size()]));
+            Mapping currentMapping = new Mapping(referenceTest, (URL[]) urls.toArray(new URL[urls.size()]));
             mappings.add(currentMapping);
         }
         return mappings;
@@ -121,15 +120,15 @@ public class MockrunnerJarTestConfiguration
 
     private String getReferenceTest(String jarName)
     {
-        if(jarName.indexOf("servlet") > -1)
+        if(jarName.contains("servlet"))
         {
             return SERVLET_REFERENCE_TEST;
         }
-        else if(jarName.indexOf("tag") > -1)
+        else if(jarName.contains("tag"))
         {
             return TAG_REFERENCE_TEST;
         }
-        else if(jarName.indexOf("struts") > -1)
+        else if(jarName.contains("struts"))
         {
             return STRUTS_REFERENCE_TEST;
         }
@@ -137,15 +136,15 @@ public class MockrunnerJarTestConfiguration
 //        {
 //            return JMS_REFERENCE_TEST;
 //        }
-        else if(jarName.indexOf("ejb") > -1)
+        else if(jarName.contains("ejb"))
         {
             return EJB_REFERENCE_TEST;
         }
-        else if(jarName.indexOf("jdbc") > -1)
+        else if(jarName.contains("jdbc"))
         {
             return JDBC_REFERENCE_TEST;
         }
-        else if(jarName.indexOf("jca") > -1)
+        else if(jarName.contains("jca"))
         {
             return CONNECTOR_REFERENCE_TEST;
         }
@@ -155,9 +154,8 @@ public class MockrunnerJarTestConfiguration
     private List getURLFromFileList(List list) throws Exception
     {
         List urlList = new ArrayList();
-        for(int ii = 0; ii < list.size(); ii++)
-        {
-            File currentFile = (File)list.get(ii);
+        for (Object aList : list) {
+            File currentFile = (File) aList;
             urlList.add(currentFile.toURI().toURL());
         }
         return urlList;
@@ -189,11 +187,9 @@ public class MockrunnerJarTestConfiguration
     {
         List fileList = getThirdPartyJarsJEE5();
         List resultList = new ArrayList();
-        for(int ii = 0; ii < fileList.size(); ii++)
-        {
-            File currentFile = (File)fileList.get(ii);
-            if(!isJEE5StandardInterfaceOrJEE5OnlyJar(currentFile))
-            {
+        for (Object aFileList : fileList) {
+            File currentFile = (File) aFileList;
+            if (!isJEE5StandardInterfaceOrJEE5OnlyJar(currentFile)) {
                 resultList.add(currentFile);
             }
         }
@@ -203,8 +199,7 @@ public class MockrunnerJarTestConfiguration
     private boolean isJEE5StandardInterfaceOrJEE5OnlyJar(File currentFile)
     {
         if(MockrunnerJars.getStandardInterfaceJars().contains(currentFile.getName())) return true;
-        if(MockrunnerJars.getJEE5OnlyJars().contains(currentFile.getName())) return true;
-        return false;
+        return MockrunnerJars.getJEE5OnlyJars().contains(currentFile.getName());
     }
 
     public List getReleasedJars(String jdkDir, String j2eeDir)
@@ -230,8 +225,7 @@ public class MockrunnerJarTestConfiguration
     {
         public boolean accept(File dir, String name)
         {
-            if(name.endsWith(".jar")) return true;
-            return false;
+            return name.endsWith(".jar");
         }
     }
     

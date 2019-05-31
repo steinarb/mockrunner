@@ -21,9 +21,8 @@ public class MockModuleConfig extends ModuleConfigImpl
         MessageResourcesConfig[] configs = findMessageResourcesConfigs();
         if(null != configs)
         {
-            for(int ii = 0; ii < configs.length; ii++)
-            {
-                removeMessageResourcesConfig(configs[ii]);
+            for (MessageResourcesConfig config : configs) {
+                removeMessageResourcesConfig(config);
             }
         }
     }

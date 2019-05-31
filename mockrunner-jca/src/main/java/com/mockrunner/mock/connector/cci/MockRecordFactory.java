@@ -98,15 +98,11 @@ public class MockRecordFactory implements RecordFactory
     private List getCreatedRecords(String recordName, boolean recognizeRecordName, List recordWrapperList)
     {
         List result = new ArrayList();
-        for(int ii = 0; ii < recordWrapperList.size(); ii++)
-        {
-            RecordWrapper currentWrapper = (RecordWrapper)recordWrapperList.get(ii);
-            if(!recognizeRecordName)
-            {
+        for (Object aRecordWrapperList : recordWrapperList) {
+            RecordWrapper currentWrapper = (RecordWrapper) aRecordWrapperList;
+            if (!recognizeRecordName) {
                 result.add(currentWrapper.getRecord());
-            }
-            else
-            {
+            } else {
                 addRecordIfMatching(recordName, result, currentWrapper);
             }
         }

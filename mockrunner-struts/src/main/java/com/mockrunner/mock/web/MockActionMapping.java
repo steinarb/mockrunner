@@ -41,13 +41,10 @@ public class MockActionMapping extends ActionMapping
      */
     public ActionForward findForward(String name)
     {
-        Iterator iterator = forwards.keySet().iterator();
-        while(iterator.hasNext())
-        { 
-            String key = (String)iterator.next();
-            if(key.equals(name))
-            {
-                return (ActionForward)forwards.get(key);
+        for (Object o : forwards.keySet()) {
+            String key = (String) o;
+            if (key.equals(name)) {
+                return (ActionForward) forwards.get(key);
             }
         }
         return new MockActionForward(name, name, false); 
@@ -72,11 +69,9 @@ public class MockActionMapping extends ActionMapping
      */
     public void setupForwards(String[] forwardNames)
     {
-        if(null == forwardNames) return; 
-        for(int ii = 0; ii < forwardNames.length; ii++) 
-        { 
-            String name = forwardNames[ii];
-            ActionForward forward = new MockActionForward(name, name, false); 
+        if(null == forwardNames) return;
+        for (String name : forwardNames) {
+            ActionForward forward = new MockActionForward(name, name, false);
             forwards.put(name, forward);
         }
     }

@@ -8,45 +8,45 @@ public class JavaLineAssembler
     private String newLine;
     private int indentLevel;
     private String defaultMethodModifier;
-      
+
     public JavaLineAssembler()
     {
         reset();
         newLine = System.getProperty("line.separator");
     }
-    
+
     public void reset()
     {
         buffer = new StringBuffer();
         indentLevel = 0;
         defaultMethodModifier = "";
     }
-    
+
     public String getResult()
     {
         return buffer.toString();
     }
-    
+
     public StringBuffer getResultAsBuffer()
     {
         return new StringBuffer(getResult());
     }
-    
+
     public void setIndentLevel(int indentLevel)
     {
         this.indentLevel = indentLevel;
     }
-    
+
     public void setDefaultMethodModifier(String defaultMethodModifier)
     {
         this.defaultMethodModifier = defaultMethodModifier;
     }
-    
+
     public void appendBlank()
     {
         buffer.append(" ");
     }
-    
+
     public void appendBlank(int number)
     {
         for(int ii = 0; ii < number; ii++)
@@ -54,12 +54,12 @@ public class JavaLineAssembler
             appendBlank();
         }
     }
-    
+
     public void appendNewLine()
     {
         buffer.append(newLine);
     }
-    
+
     public void appendNewLine(int number)
     {
         for(int ii = 0; ii < number; ii++)
@@ -67,37 +67,37 @@ public class JavaLineAssembler
             appendNewLine();
         }
     }
-    
+
     public void appendLeftBrace()
     {
         buffer.append("{");
     }
-    
+
     public void appendRightBrace()
     {
         buffer.append("}");
     }
-    
+
     public void appendLeftParenthesis()
     {
         buffer.append("(");
     }
-    
+
     public void appendRightParenthesis()
     {
         buffer.append(")");
     }
-    
+
     public void appendComma()
     {
         buffer.append(",");
     }
-    
+
     public void appendIndent()
     {
         appendBlank(indentLevel * 4);
     }
-    
+
     public void appendLine(String line)
     {
         if(null != line && line.length() > 0)
@@ -107,7 +107,7 @@ public class JavaLineAssembler
             appendNewLine();
         }
     }
-    
+
     public void appendCodeLines(String[] lines)
     {
         if(null == lines || lines.length <= 0)
@@ -116,13 +116,12 @@ public class JavaLineAssembler
         }
         else
         {
-            for(int ii = 0; ii < lines.length; ii++)
-            {
-                appendLine(lines[ii]);
+            for (String line : lines) {
+                appendLine(line);
             }
         }
     }
-    
+
     public void appendPackageInfo(String packageName)
     {
         if(null != packageName && packageName.length() > 0)
@@ -131,36 +130,35 @@ public class JavaLineAssembler
             appendNewLine();
         }
     }
-    
+
     public void appendImport(String importLine)
     {
         appendLine("import " + importLine + ";");
     }
-    
-    public void appendImports(List imports)
+
+    public void appendImports(List<String> imports)
     {
         if(null == imports) return;
-        for(int ii = 0; ii < imports.size(); ii++)
-        {
-            appendImport((String)imports.get(ii));
+        for (String anImport : imports) {
+            appendImport(anImport);
         }
     }
-    
+
     public void appendClassDefintion(String className)
     {
         appendClassDefintion(className, "");
     }
-    
+
     public void appendClassDefintion(String className, String superClass)
     {
         appendClassDefintion(className, "", superClass, null);
     }
-    
+
     public void appendClassDefintion(String className, String[] interfaceDef)
     {
         appendClassDefintion(className, "", "", interfaceDef);
     }
-    
+
     public void appendClassDefintion(String className, String modifier, String superClass, String[] interfaceDef)
     {
         if(null == className || className.length() <= 0) return;
@@ -187,24 +185,24 @@ public class JavaLineAssembler
         }
         appendLine("public " + modifier + "class " + className + superClass + interfaceDefList);
     }
-    
+
     public void appendMemberDeclaration(String type, String name)
     {
         if(null == type || type.length() <= 0) return;
         if(null == name || name.length() <= 0) return;
         appendLine("private " + type + " " + name + ";");
     }
-    
+
     public void appendConstructorDeclaration(String name)
     {
         appendConstructorDeclaration(name, null, null);
     }
-    
+
     public void appendConstructorDeclaration(String name, String[] parameterTypes, String[] parameterNames)
     {
         appendConstructorDeclaration(name, parameterTypes, parameterNames, null);
     }
-    
+
     public void appendConstructorDeclaration(String name, String[] parameterTypes, String[] parameterNames, String[] exceptions)
     {
         if(null == name || name.length() <= 0) return;
@@ -213,27 +211,27 @@ public class JavaLineAssembler
         appendSignature(name, parameterTypes, parameterNames, exceptions, buffer);
         appendLine(buffer.toString());
     }
-    
+
     public void appendMethodDeclaration(String name)
     {
         appendMethodDeclaration("void", name);
     }
-    
+
     public void appendMethodDeclaration(String returnType, String name)
     {
         appendMethodDeclaration(returnType, name, null, null);
     }
-    
+
     public void appendMethodDeclaration(String returnType, String name, String[] parameterTypes, String[] parameterNames)
     {
         appendMethodDeclaration(null, returnType, name, parameterTypes, parameterNames);
     }
-    
+
     public void appendMethodDeclaration(String[] modifiers, String returnType, String name, String[] parameterTypes, String[] parameterNames)
     {
         appendMethodDeclaration(modifiers, returnType, name, parameterTypes, parameterNames, null);
     }
-    
+
     public void appendMethodDeclaration(String[] modifiers, String returnType, String name, String[] parameterTypes, String[] parameterNames, String[] exceptions)
     {
         if(null == name || name.length() <= 0) return;
@@ -244,14 +242,14 @@ public class JavaLineAssembler
         StringBuffer buffer = new StringBuffer(30);
         if(null != defaultMethodModifier && defaultMethodModifier.length() > 0)
         {
-            buffer.append(defaultMethodModifier + " ");
+            buffer.append(defaultMethodModifier).append(" ");
         }
         buffer.append(prepareModifierList(modifiers));
-        buffer.append(returnType + " ");
+        buffer.append(returnType).append(" ");
         appendSignature(name, parameterTypes, parameterNames, exceptions, buffer);
         appendLine(buffer.toString());
     }
-    
+
     private void appendSignature(String name, String[] parameterTypes, String[] parameterNames, String[] exceptions, StringBuffer buffer)
     {
         buffer.append(name);
@@ -260,12 +258,12 @@ public class JavaLineAssembler
         buffer.append(")");
         appendThrowsClause(exceptions, buffer);
     }
-    
+
     private void appendThrowsClause(String[] exceptions, StringBuffer buffer)
     {
         if(null == exceptions || exceptions.length <= 0) return;
         String throwsClause = prepareCommaSeparatedList(exceptions, null);
-        buffer.append(" throws " + throwsClause);
+        buffer.append(" throws ").append(throwsClause);
     }
 
     public void appendComment(String oneLineComment)
@@ -273,24 +271,23 @@ public class JavaLineAssembler
         if(null == oneLineComment || oneLineComment.length() <= 0) return;
         appendLine("//" + oneLineComment);
     }
-    
+
     public void appendBlockComment(String[] commentLines)
     {
         appendBlockComment(commentLines, "/*");
     }
-    
+
     public void appendJavaDocComment(String[] commentLines)
     {
         appendBlockComment(commentLines, "/**");
     }
-    
+
     private void appendBlockComment(String[] commentLines, String commentStart)
     {
         if(null == commentLines || commentLines.length <= 0) return;
         appendLine(commentStart);
-        for(int ii = 0; ii < commentLines.length; ii++)
-        {
-            appendLine(" * " + commentLines[ii]);
+        for (String commentLine : commentLines) {
+            appendLine(" * " + commentLine);
         }
         appendLine(" */");
     }
@@ -298,14 +295,13 @@ public class JavaLineAssembler
     private String prepareModifierList(String[] modifiers)
     {
         if(null == modifiers) modifiers = new String[0];
-        StringBuffer listBuffer = new StringBuffer(50);
-        for(int ii = 0; ii < modifiers.length; ii++)
-        {
-            listBuffer.append(modifiers[ii] + " ");
+        StringBuilder listBuffer = new StringBuilder(50);
+        for (String modifier : modifiers) {
+            listBuffer.append(modifier).append(" ");
         }
         return listBuffer.toString();
     }
-    
+
     private String[] getParameterNameList(String[] types, String[] names)
     {
         if(null == types) types = new String[0];
@@ -319,18 +315,18 @@ public class JavaLineAssembler
         }
         return newNames;
     }
-    
+
     private String prepareCommaSeparatedList(String[] types, String[] names)
     {
         if(null == types) types = new String[0];
         if(null == names) names = new String[0];
-        StringBuffer listBuffer = new StringBuffer(50);
+        StringBuilder listBuffer = new StringBuilder(50);
         for(int ii = 0; ii < types.length; ii++)
         {
             listBuffer.append(types[ii]);
             if(ii < names.length)
             {
-                listBuffer.append(" " + names[ii]);
+                listBuffer.append(" ").append(names[ii]);
             }
             if(ii < types.length - 1)
             {

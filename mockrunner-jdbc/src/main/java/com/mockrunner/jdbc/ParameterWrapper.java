@@ -42,10 +42,8 @@ public class ParameterWrapper<T> {
         if (this.parameters != other.parameters && (this.parameters == null || !this.parameters.equals(other.parameters))) {
             return false;
         }
-        if (this.wrappedObject != other.wrappedObject && (this.wrappedObject == null || !this.wrappedObject.equals(other.wrappedObject))) {
-            return false;
-        }
-        return true;
+        return !(this.wrappedObject != other.wrappedObject && (this.wrappedObject == null || !this.wrappedObject
+                .equals(other.wrappedObject)));
     }
 
     public MockParameterMap getParameters()

@@ -18,21 +18,21 @@ public class MockOrderManager extends OrderManager
 
     public void setStock(String id, int amount)
     {
-        products.put(id, new Integer(amount));
+        products.put(id, amount);
     }
     
     public int getStock(String id)
     {
         Integer amount = (Integer)products.get(id);
         if(null == amount) return 0;
-        return amount.intValue();
+        return amount;
     }
 
     public void order(String id, int amount)
     {
         int available = getStock(id);
         if(available < amount) throw new RuntimeException("not enough in stock");
-        Integer newStock = new Integer(available - amount);
+        Integer newStock = available - amount;
         products.put(id, newStock);
     }
 

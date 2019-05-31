@@ -1,25 +1,21 @@
 package com.mockrunner.test.util;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.mockrunner.util.common.FileUtil;
-
 public class FileUtilTest extends TestCase
 {
 	//TODO breaks upon release
-	
+
     public void testGetLinesFromFile()
     {
 //        File file = new File("target/test-classes/com/mockrunner/test/util/testlines.txt");
 //        List lineList = FileUtil.getLinesFromFile(file);
 //        doTestLines(lineList);
     }
-    
+
     public void testFindFile() throws IOException
     {
 //        File file = FileUtil.findFile("target/test-classes/com/mockrunner/test/util/testlines.txt");
@@ -39,14 +35,14 @@ public class FileUtilTest extends TestCase
 //        {
 //            FileUtil.findFile("notfound");
 //            fail();
-//        } 
+//        }
 //        catch(FileNotFoundException exc)
 //        {
 //            //should throw exception
 //        }
     }
-    
-    private void doTestLines(List lineList)
+
+    private void doTestLines(List<String> lineList)
     {
         assertTrue(lineList.size() == 6);
         assertEquals("line1", lineList.get(0));

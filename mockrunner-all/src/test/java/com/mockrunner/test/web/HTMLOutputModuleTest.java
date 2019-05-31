@@ -204,10 +204,10 @@ public class HTMLOutputModuleTest
     
     private void doTestAttributes(WebTestModule module)
     {
-        module.setSessionAttribute("sessionatt", new Integer(3));
+        module.setSessionAttribute("sessionatt", 3);
         module.addRequestParameter("requestparam");
         module.setRequestAttribute("requestatt", "xyz");
-        assertEquals(new Integer(3), actionWebFactory.getMockSession().getAttribute("sessionatt"));
+        assertEquals(3, actionWebFactory.getMockSession().getAttribute("sessionatt"));
         assertEquals("", actionWebFactory.getMockRequest().getParameter("requestparam"));
         assertEquals("xyz", actionWebFactory.getMockRequest().getAttribute("requestatt"));
     }

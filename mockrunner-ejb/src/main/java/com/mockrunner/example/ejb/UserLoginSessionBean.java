@@ -41,12 +41,8 @@ public class UserLoginSessionBean implements SessionBean
             try
             {  
                 UserEntity user = home.findByPrimaryKey(username);
-                if(user.getPassword().equals(password))
-                {
-                    return true;
-                }
-                return false;
-            }  
+                return user.getPassword().equals(password);
+            }
             catch(FinderException exc)
             {
                 return false;

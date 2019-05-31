@@ -491,42 +491,42 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
         }
         if(object instanceof Byte) 
         {
-            writeByte(((Byte)object).byteValue());
+            writeByte((Byte) object);
             return;
         }
         if(object instanceof Short) 
         {
-            writeShort(((Short)object).shortValue());
+            writeShort((Short) object);
             return;
         }
         if(object instanceof Integer) 
         {
-            writeInt(((Integer)object).intValue());
+            writeInt((Integer) object);
             return;
         }
         if(object instanceof Long) 
         {
-            writeLong(((Long)object).longValue());
+            writeLong((Long) object);
             return;
         }
         if(object instanceof Float) 
         {
-            writeFloat(((Float)object).floatValue());
+            writeFloat((Float) object);
             return;
         }
         if(object instanceof Double) 
         {
-            writeDouble(((Double)object).doubleValue());
+            writeDouble((Double) object);
             return;
         }
         if(object instanceof Character) 
         {
-            writeChar(((Character)object).charValue());
+            writeChar((Character) object);
             return;
         }
         if(object instanceof Boolean) 
         {
-            writeBoolean(((Boolean)object).booleanValue());
+            writeBoolean((Boolean) object);
             return;
         }
         if(object instanceof String) 
@@ -598,9 +598,8 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
     {
         int value = 17;
         byte[] data = getBytes();
-        for(int ii = 0; ii < data.length; ii++)
-        {
-            value = (31 * value) + data[ii];
+        for (byte aData : data) {
+            value = (31 * value) + aData;
         }
         return value;
     }
@@ -622,8 +621,8 @@ public class MockBytesMessage extends MockMessage implements BytesMessage
 
     public String toString()
     {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append(this.getClass().getName() + ": [");
+        StringBuilder buffer = new StringBuilder();
+        buffer.append(this.getClass().getName()).append(": [");
         byte[] data = getBytes();
         for(int ii = 0; ii < data.length; ii++)
         {

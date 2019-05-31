@@ -43,7 +43,7 @@ import javax.servlet.jsp.tagext.BodyTagSupport;
  * </pre>
  * 
  * Note: The <i>bean:write</i> tag is the common Struts tag.
- * Check out {@link TableEnumTagTest} to see how to write a test for
+ * Check out TableEnumTagTest to see how to write a test for
  * this tag.
  */
 public class TableEnumTag extends BodyTagSupport

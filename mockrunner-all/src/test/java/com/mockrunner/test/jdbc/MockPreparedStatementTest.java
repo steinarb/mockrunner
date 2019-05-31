@@ -18,9 +18,7 @@ import java.sql.SQLException;
 import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
@@ -438,7 +436,7 @@ public class MockPreparedStatementTest extends BaseTestCase {
 		statement.addBatch();
 		statement.addBatch();
 		statement.executeBatch();
-		ParameterSets parameterSets = (ParameterSets) preparedStatementHandler .getExecutedStatementParameterMap().get("insert into x(y) values(?)");
+		ParameterSets parameterSets = preparedStatementHandler .getExecutedStatementParameterMap().get("insert into x(y) values(?)");
 		assertEquals(2, parameterSets.getNumberParameterSets());
 		assertEquals(2, parameterSets.getParameterSet(0).size());
 		assertEquals(2, parameterSets.getParameterSet(1).size());

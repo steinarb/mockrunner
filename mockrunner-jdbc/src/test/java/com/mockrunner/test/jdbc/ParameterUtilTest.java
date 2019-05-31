@@ -25,7 +25,7 @@ public class ParameterUtilTest extends TestCase
         assertTrue(ParameterUtil.compareParameter(null, null));
         assertFalse(ParameterUtil.compareParameter("test", null));
         assertTrue(ParameterUtil.compareParameter("test", "test"));
-        assertFalse(ParameterUtil.compareParameter(new Double(1), new Double(2)));
+        assertFalse(ParameterUtil.compareParameter(1d, 2d));
         assertTrue(ParameterUtil.compareParameter(new byte[] {1, 2, 3}, new byte[] {1, 2, 3}));
         assertFalse(ParameterUtil.compareParameter(new byte[] {1, 2, 4}, new byte[] {1, 2, 3}));
         assertTrue(ParameterUtil.compareParameter(new ByteArrayInputStream(new byte[] {1, 2, 3}), new ByteArrayInputStream(new byte[] {1, 2, 3})));
@@ -59,9 +59,9 @@ public class ParameterUtilTest extends TestCase
         MockStruct anotherStruct = new MockStruct("123");
         anotherStruct.addAttribute("test");
         assertTrue(ParameterUtil.compareParameter(struct, anotherStruct));
-        anotherStruct.addAttribute(new Integer(2));
+        anotherStruct.addAttribute(2);
         assertFalse(ParameterUtil.compareParameter(struct, anotherStruct));
-        struct.addAttribute(new Integer(2));
+        struct.addAttribute(2);
         assertTrue(ParameterUtil.compareParameter(struct, anotherStruct));
         MockResultSet resultSet1 = new MockResultSet("id");
         resultSet1.addRow(new Object[] {"1", new Integer(1)});
@@ -79,7 +79,7 @@ public class ParameterUtilTest extends TestCase
     
     public void testCopyParameter()
     {
-        String testString = new String("Test");
+        String testString = "Test";
         String copyString = (String)ParameterUtil.copyParameter(testString);
         assertTrue(testString == copyString);
         byte[] testArray = new byte[] {1, 2, 3};
@@ -113,7 +113,8 @@ public class ParameterUtilTest extends TestCase
     
     public static class TestParameter implements Cloneable
     {
-		public Object clone() throws CloneNotSupportedException
+		@SuppressWarnings("CloneDoesntCallSuperClone")
+        public Object clone() throws CloneNotSupportedException
 		{
 			throw new RuntimeException("OOPPSS");
 		}

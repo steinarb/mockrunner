@@ -10,7 +10,7 @@ public interface BillManagerSession
    extends javax.ejb.EJBObject
 {
 
-   public void markAsPaid(  )
+   void markAsPaid()
       throws java.rmi.RemoteException;
 
 }

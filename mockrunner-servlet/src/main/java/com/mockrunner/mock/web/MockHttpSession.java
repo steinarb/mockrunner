@@ -42,7 +42,7 @@ public class MockHttpSession implements HttpSession
         attributes = new HashMap();
         isValid = true;
         creationTime = System.currentTimeMillis();
-        sessionId = new Double(Math.random()).toString();
+        sessionId = Double.toString(Math.random());
         maxInactiveInterval = -1;
         attributeListener = new ArrayList();
     }
@@ -92,10 +92,8 @@ public class MockHttpSession implements HttpSession
         if (!isValid) throw new IllegalStateException("session invalid");
         isValid = false;
         Map clone = new HashMap(attributes);
-        Iterator keys = clone.keySet().iterator();
-        while (keys.hasNext())
-        {
-            doRemoveAttribute((String)keys.next());
+        for (Object o : clone.keySet()) {
+            doRemoveAttribute((String) o);
         } 
     }
 
@@ -237,28 +235,25 @@ public class MockHttpSession implements HttpSession
     
     private synchronized void callAttributeListenersAddedMethod(String key, Object value)
     {
-        for(int ii = 0; ii < attributeListener.size(); ii++)
-        {
+        for (Object anAttributeListener : attributeListener) {
             HttpSessionBindingEvent event = new HttpSessionBindingEvent(this, key, value);
-            ((HttpSessionAttributeListener)attributeListener.get(ii)).attributeAdded(event);
+            ((HttpSessionAttributeListener) anAttributeListener).attributeAdded(event);
         }
     }
 
     private synchronized void callAttributeListenersReplacedMethod(String key, Object value)
     {
-        for(int ii = 0; ii < attributeListener.size(); ii++)
-        {
+        for (Object anAttributeListener : attributeListener) {
             HttpSessionBindingEvent event = new HttpSessionBindingEvent(this, key, value);
-            ((HttpSessionAttributeListener)attributeListener.get(ii)).attributeReplaced(event);
+            ((HttpSessionAttributeListener) anAttributeListener).attributeReplaced(event);
         }
     }
 
     private synchronized void callAttributeListenersRemovedMethod(String key, Object value)
     {
-        for(int ii = 0; ii < attributeListener.size(); ii++)
-        {
+        for (Object anAttributeListener : attributeListener) {
             HttpSessionBindingEvent event = new HttpSessionBindingEvent(this, key, value);
-            ((HttpSessionAttributeListener)attributeListener.get(ii)).attributeRemoved(event);
+            ((HttpSessionAttributeListener) anAttributeListener).attributeRemoved(event);
         }
     }
 

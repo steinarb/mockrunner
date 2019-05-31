@@ -15,26 +15,23 @@ public class FieldUtil
      * @param theClass the class whose methods are examined
      * @return the array of field arrays
      */
-    public static Field[][] getFieldsSortedByInheritanceHierarchy(Class theClass)
+    public static Field[][] getFieldsSortedByInheritanceHierarchy(Class<?> theClass)
     {
-        List hierarchyList = new ArrayList();
-        Class[] hierarchyClasses = ClassUtil.getInheritanceHierarchy(theClass);
-        for(int ii = 0; ii < hierarchyClasses.length; ii++)
-        {
-            addFieldsForClass(hierarchyList, hierarchyClasses[ii]);
+        List<Field[]> hierarchyList = new ArrayList<>();
+        Class<?>[] hierarchyClasses = ClassUtil.getInheritanceHierarchy(theClass);
+        for (Class<?> hierarchyClass : hierarchyClasses) {
+            addFieldsForClass(hierarchyList, hierarchyClass);
         }
-        return (Field[][])hierarchyList.toArray(new Field[hierarchyList.size()][]);
+        return hierarchyList.toArray(new Field[hierarchyList.size()][]);
     }
-    
-    private static void addFieldsForClass(List hierarchyList, Class clazz)
+
+    private static void addFieldsForClass(List<Field[]> hierarchyList, Class<?> clazz)
     {
-        List methodList = new ArrayList();
+        List<Field> methodList = new ArrayList<>();
         Field[] fields = clazz.getDeclaredFields();
-        for(int ii = 0; ii < fields.length; ii++)
-        {
-            if(!Modifier.isStatic(fields[ii].getModifiers()))
-            {
-                methodList.add(fields[ii]);
+        for (Field field : fields) {
+            if (!Modifier.isStatic(field.getModifiers())) {
+                methodList.add(field);
             }
         }
         hierarchyList.add(methodList.toArray(new Field[methodList.size()]));

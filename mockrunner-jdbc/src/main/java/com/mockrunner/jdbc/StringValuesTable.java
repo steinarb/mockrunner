@@ -231,7 +231,7 @@ public class StringValuesTable
      */
     public boolean isValidColumnName(String columnName)
     {
-        return columnName == null ? false : isColumnNumberValid(this.columnNames.indexOf(columnName) + 1);
+        return columnName != null && isColumnNumberValid(this.columnNames.indexOf(columnName) + 1);
     }
 
     /**

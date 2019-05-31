@@ -41,10 +41,8 @@ public class BillManagerSessionBean implements SessionBean
             InitialContext context = new InitialContext();
             BillEntityHome home = (BillEntityHome)context.lookup("java:comp/env/ejb/BillEntity");
             Collection unpaid = home.findUnpaid();
-            Iterator unpaidIterator = unpaid.iterator();
-            while(unpaidIterator.hasNext())
-            {
-                BillEntity next = (BillEntity)unpaidIterator.next();
+            for (Object anUnpaid : unpaid) {
+                BillEntity next = (BillEntity) anUnpaid;
                 next.setPaid(true);
             }
         }

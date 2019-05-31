@@ -1,21 +1,21 @@
-/** 
- * 
- * Copyright 2004 Protique Ltd
- * Copyright 2004 Hiram Chirino
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
- * 
- **/
+/*
+
+  Copyright 2004 Protique Ltd
+  Copyright 2004 Hiram Chirino
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+ */
 package org.activemq.filter.mockrunner;
 
 import java.math.BigDecimal;
@@ -60,25 +60,25 @@ public class ConstantExpression implements Expression {
     	
         long l = value.longValue();
         if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE) {
-            value = new Integer(value.intValue());
+            value = value.intValue();
         }
         return new ConstantExpression(value);
     }
 
     public static ConstantExpression createFromHex(String text) {
-        Number value = new Long(Long.parseLong(text.substring(2), 16));
+        Number value = Long.parseLong(text.substring(2), 16);
         long l = value.longValue();
         if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE) {
-            value = new Integer(value.intValue());
+            value = value.intValue();
         }
         return new ConstantExpression(value);
     }
 
     public static ConstantExpression createFromOctal(String text) {
-        Number value = new Long(Long.parseLong(text, 8));
+        Number value = Long.parseLong(text, 8);
         long l = value.longValue();
         if (Integer.MIN_VALUE <= l && l <= Integer.MAX_VALUE) {
-            value = new Integer(value.intValue());
+            value = value.intValue();
         }
         return new ConstantExpression(value);
     }
@@ -108,7 +108,7 @@ public class ConstantExpression implements Expression {
             return "NULL";
         }
         if (value instanceof Boolean) {
-            return ((Boolean) value).booleanValue() ? "TRUE" : "FALSE";
+            return (Boolean) value ? "TRUE" : "FALSE";
         }
         if (value instanceof String) {
             return encodeString((String) value);
@@ -148,7 +148,7 @@ public class ConstantExpression implements Expression {
      * @return the encoded string
      */
     public static String encodeString(String s) {
-        StringBuffer b = new StringBuffer();
+        StringBuilder b = new StringBuilder();
         b.append('\'');
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);

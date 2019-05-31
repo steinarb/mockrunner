@@ -35,9 +35,8 @@ public class MockRowId implements RowId, Cloneable
     public int hashCode()
     {
         int value = 17;
-        for(int ii = 0; ii < rowIdData.length; ii++)
-        {
-            value = (31 * value) + rowIdData[ii];
+        for (byte aRowIdData : rowIdData) {
+            value = (31 * value) + aRowIdData;
         }
         return value;
     }

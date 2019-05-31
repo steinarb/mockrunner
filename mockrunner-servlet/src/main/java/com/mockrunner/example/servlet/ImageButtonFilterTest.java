@@ -24,7 +24,7 @@ public class ImageButtonFilterTest extends BasicServletTestCaseAdapter
     public void setUp() throws Exception
     {
         super.setUp();
-        filter = (ImageButtonFilter)createFilter(ImageButtonFilter.class);
+        filter = createFilter(ImageButtonFilter.class);
     }
 
     @Test

@@ -63,7 +63,7 @@ public class MockConnectionTest extends TestCase
         assertEquals("testid", ((MockResultSet)statement.getGeneratedKeys()).getId());
         statement = (MockPreparedStatement)connection.prepareStatement("select", Statement.NO_GENERATED_KEYS);
         statement.execute();
-        assertTrue(((MockResultSet)statement.getGeneratedKeys()).getId().indexOf("testid") < 0);
+        assertTrue(!((MockResultSet) statement.getGeneratedKeys()).getId().contains("testid"));
     }
     
     public void testClientInfo() throws SQLException

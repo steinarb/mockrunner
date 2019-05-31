@@ -53,16 +53,12 @@ public class QueueTransmissionManager implements Serializable
      */
     public void closeAllQueueSenders()
     {
-        for(int ii = 0; ii < queueSenderList.size(); ii++)
-        {
-            QueueSender sender = (QueueSender)queueSenderList.get(ii);
-            try
-            {
+        for (Object aQueueSenderList : queueSenderList) {
+            QueueSender sender = (QueueSender) aQueueSenderList;
+            try {
                 sender.close();
-            }
-            catch(JMSException exc)
-            {
-            
+            } catch (JMSException ignored) {
+
             }
         }
     }
@@ -72,16 +68,12 @@ public class QueueTransmissionManager implements Serializable
      */
     public void closeAllQueueReceivers()
     {
-        for(int ii = 0; ii < queueReceiverList.size(); ii++)
-        {
-            QueueReceiver receiver = (QueueReceiver)queueReceiverList.get(ii);
-            try
-            {
+        for (Object aQueueReceiverList : queueReceiverList) {
+            QueueReceiver receiver = (QueueReceiver) aQueueReceiverList;
+            try {
                 receiver.close();
-            }
-            catch(JMSException exc)
-            {
-    
+            } catch (JMSException ignored) {
+
             }
         }
     }
@@ -91,15 +83,11 @@ public class QueueTransmissionManager implements Serializable
      */
     public void closeAllQueueBrowsers()
     {
-        for(int ii = 0; ii < queueBrowserList.size(); ii++)
-        {
-            QueueBrowser browser = (QueueBrowser)queueBrowserList.get(ii);
-            try
-            {
+        for (Object aQueueBrowserList : queueBrowserList) {
+            QueueBrowser browser = (QueueBrowser) aQueueBrowserList;
+            try {
                 browser.close();
-            }
-            catch(JMSException exc)
-            {
+            } catch (JMSException ignored) {
 
             }
         }
@@ -156,19 +144,14 @@ public class QueueTransmissionManager implements Serializable
     public List getQueueSenderList(String queueName)
     {
         List resultList = new ArrayList();
-        for(int ii = 0; ii < queueSenderList.size(); ii++)
-        {
-            QueueSender sender = (QueueSender)queueSenderList.get(ii);
-            try
-            {
-                if(sender.getQueue().getQueueName().equals(queueName))
-                {
+        for (Object aQueueSenderList : queueSenderList) {
+            QueueSender sender = (QueueSender) aQueueSenderList;
+            try {
+                if (sender.getQueue().getQueueName().equals(queueName)) {
                     resultList.add(sender);
                 }
-            }
-            catch(JMSException exc)
-            {
-            
+            } catch (JMSException ignored) {
+
             }
         }
         return Collections.unmodifiableList(resultList);
@@ -235,19 +218,14 @@ public class QueueTransmissionManager implements Serializable
     public List getQueueReceiverList(String queueName)
     {
         List resultList = new ArrayList();
-        for(int ii = 0; ii < queueReceiverList.size(); ii++)
-        {
-            QueueReceiver receiver = (QueueReceiver)queueReceiverList.get(ii);
-            try
-            {
-                if(receiver.getQueue().getQueueName().equals(queueName))
-                {
+        for (Object aQueueReceiverList : queueReceiverList) {
+            QueueReceiver receiver = (QueueReceiver) aQueueReceiverList;
+            try {
+                if (receiver.getQueue().getQueueName().equals(queueName)) {
                     resultList.add(receiver);
                 }
-            }
-            catch(JMSException exc)
-            {
-            
+            } catch (JMSException ignored) {
+
             }
         }
         return Collections.unmodifiableList(resultList);
@@ -314,19 +292,14 @@ public class QueueTransmissionManager implements Serializable
     public List getQueueBrowserList(String queueName)
     {
         List resultList = new ArrayList();
-        for(int ii = 0; ii < queueBrowserList.size(); ii++)
-        {
-            QueueBrowser browser = (QueueBrowser)queueBrowserList.get(ii);
-            try
-            {
-                if(browser.getQueue().getQueueName().equals(queueName))
-                {
+        for (Object aQueueBrowserList : queueBrowserList) {
+            QueueBrowser browser = (QueueBrowser) aQueueBrowserList;
+            try {
+                if (browser.getQueue().getQueueName().equals(queueName)) {
                     resultList.add(browser);
                 }
-            }
-            catch(JMSException exc)
-            {
-            
+            } catch (JMSException ignored) {
+
             }
         }
         return Collections.unmodifiableList(resultList);

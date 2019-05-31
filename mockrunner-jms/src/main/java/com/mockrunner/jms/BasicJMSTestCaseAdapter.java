@@ -25,9 +25,9 @@ import com.mockrunner.mock.jms.MockTopicSession;
  * subclass this adapter or use {@link com.mockrunner.jms.JMSTestModule}
  * directly (so your test case can use another base class).
  * This basic adapter can be used if you don't need any other modules. It
- * does not extend {@link com.mockrunner.base.BaseTestCase}. If you want
+ * does not extend com.mockrunner.base.BaseTestCase. If you want
  * to use several modules in conjunction, consider subclassing
- * {@link com.mockrunner.jms.JMSTestCaseAdapter}.
+ * com.mockrunner.jms.JMSTestCaseAdapter.
  * <b>This class is generated from the {@link com.mockrunner.jms.JMSTestModule}
  * and should not be edited directly</b>.
  */
@@ -349,7 +349,7 @@ public abstract class BasicJMSTestCaseAdapter
      */
     protected TransmissionManagerWrapper getTransmissionManager(int indexOfSession)
     {
-        return jmsTestModule.getTransmissionManager(indexOfSession);
+        return jmsTestModule.getTransmissionManagerWrapper(indexOfSession);
     }
 
     /**

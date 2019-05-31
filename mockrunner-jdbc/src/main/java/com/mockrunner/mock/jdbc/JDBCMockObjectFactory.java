@@ -120,17 +120,15 @@ public class JDBCMockObjectFactory
      * drivers from the <code>DriveManager</code> (so the
      * {@link MockDriver} is guaranteed to be the only one)
      * you can use this method to restore the original drivers.
-     * Automatically called by {@link com.mockrunner.base.BaseTestCase#tearDown}.
+     * Automatically called by com.mockrunner.base.BaseTestCase#tearDown.
      */
     public void restoreDrivers()
     {
         deregisterMockDrivers();
         try
         {
-            Iterator<Driver> drivers = preservedDrivers.iterator();
-            while(drivers.hasNext())
-            {
-                DriverManager.registerDriver(drivers.next());
+            for (Driver preservedDriver : preservedDrivers) {
+                DriverManager.registerDriver(preservedDriver);
             }
         }
         catch(SQLException exc)

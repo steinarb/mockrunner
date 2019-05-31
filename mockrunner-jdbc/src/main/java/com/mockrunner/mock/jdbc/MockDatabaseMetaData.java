@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -98,7 +97,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     private boolean supportsIntegrityEnhancementFacility = true;
     private boolean supportsLikeEscapeClause = true;
     private boolean supportsLimitedOuterJoins = true;   
-    private boolean supportsMinimumSQLGrammar = true;;
+    private boolean supportsMinimumSQLGrammar = true;
     private boolean supportsMixedCaseIdentifiers = true;
     private boolean supportsMixedCaseQuotedIdentifiers = true;
     private boolean supportsMultipleOpenResults = true;
@@ -2206,9 +2205,9 @@ public class MockDatabaseMetaData implements DatabaseMetaData
     
     private interface DatabaseIdentifier
     {
-        public boolean isGlobal();
+        boolean isGlobal();
         
-        public boolean matches(DatabaseIdentifier other);
+        boolean matches(DatabaseIdentifier other);
     }
     
     private class DatabaseIdentifierImpl implements DatabaseIdentifier
@@ -2345,8 +2344,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             if(null != schema && !schema.equals(other.getSchema())) return false;
             if(null != other.getSchema() && !other.getSchema().equals(schema)) return false;
             if(null != table && !table.equals(other.getTable())) return false;
-            if(null != other.getTable() && !other.getTable().equals(table)) return false;
-            return true;
+            return !(null != other.getTable() && !other.getTable().equals(table));
         }
         
         @Override
@@ -2402,8 +2400,9 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             if(!super.equals(object)) return false;
             AttributesDatabaseIdentifierImpl other = (AttributesDatabaseIdentifierImpl)object;
             if(null != attributeNamePattern && !attributeNamePattern.equals(other.getAttributeNamePattern())) return false;
-            if(null != other.getAttributeNamePattern() && !other.getAttributeNamePattern().equals(attributeNamePattern)) return false;
-            return true;
+
+            return !(null != other.getAttributeNamePattern() && !other.getAttributeNamePattern().equals
+                    (attributeNamePattern));
         }
         
         @Override
@@ -2457,8 +2456,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             if(!super.equals(object)) return false;
             ColumnDatabaseIdentifierImpl other = (ColumnDatabaseIdentifierImpl)object;
             if(null != columnNamePattern && !columnNamePattern.equals(other.getColumnNamePattern())) return false;
-            if(null != other.getColumnNamePattern() && !other.getColumnNamePattern().equals(columnNamePattern)) return false;
-            return true;
+            return !(null != other.getColumnNamePattern() && !other.getColumnNamePattern().equals(columnNamePattern));
         }
         
         @Override
@@ -2515,8 +2513,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         {
             RowIdentifierDatabaseIdentifierImpl other = (RowIdentifierDatabaseIdentifierImpl)object;
             if(scope != other.getScope()) return false;
-            if(nullable != other.isNullable()) return false;
-            return true;
+            return nullable == other.isNullable();
         }
         
         @Override
@@ -2573,8 +2570,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         {
             IndexInfoDatabaseIdentifierImpl other = (IndexInfoDatabaseIdentifierImpl)object;
             if(unique != other.isUnique()) return false;
-            if(approximate != other.isApproximate()) return false;
-            return true;
+            return approximate == other.isApproximate();
         }
         
         @Override
@@ -2702,12 +2698,9 @@ public class MockDatabaseMetaData implements DatabaseMetaData
         private boolean matchesTypes(UDTDatabaseIdentifierImpl other)
         {
             int[] otherTypes = other.getTypes();
-            for(int ii = 0; ii < types.length; ii++) 
-            {
-                int type = types[ii];
-                for(int jj = 0; jj < otherTypes.length; jj++) 
-                {
-                    if (type == otherTypes[jj]) return true;
+            for (int type : types) {
+                for (int otherType : otherTypes) {
+                    if (type == otherType) return true;
                 }
             }
             return false;
@@ -2730,9 +2723,8 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             int hashCode = super.hashCode();
             if(null != types)
             {
-                for(int ii = 0; ii < types.length; ii++)
-                {
-                    hashCode = (31 * hashCode) + types[ii];
+                for (int type : types) {
+                    hashCode = (31 * hashCode) + type;
                 }
             }
             return hashCode;
@@ -2772,9 +2764,8 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             if(null == object) return false;
             if(!object.getClass().equals(this.getClass())) return false;
             DatabaseIdentifierImplWrapper other = (DatabaseIdentifierImplWrapper)object;
-            if(null != identifier1 && !identifier1.matches(other.getIdentifier1())) return false; 
-            if(null != identifier2 && !identifier2.matches(other.getIdentifier2())) return false;
-            return true;
+            if(null != identifier1 && !identifier1.matches(other.getIdentifier1())) return false;
+            return !(null != identifier2 && !identifier2.matches(other.getIdentifier2()));
         }
         
         @Override
@@ -2786,8 +2777,7 @@ public class MockDatabaseMetaData implements DatabaseMetaData
             if(null != identifier1 && !identifier1.equals(other.getIdentifier1())) return false;
             if(null != other.getIdentifier1() && !other.getIdentifier1().equals(identifier1)) return false;
             if(null != identifier2 && !identifier2.equals(other.getIdentifier2())) return false;
-            if(null != other.getIdentifier2() && !other.getIdentifier2().equals(identifier2)) return false;
-            return true;
+            return !(null != other.getIdentifier2() && !other.getIdentifier2().equals(identifier2));
         }
         
         @Override

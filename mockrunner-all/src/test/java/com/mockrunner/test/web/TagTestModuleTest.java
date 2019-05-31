@@ -97,12 +97,12 @@ public class TagTestModuleTest extends BaseTestCase
         HashMap testMap = new HashMap();
         testMap.put("testString", "test");
         TestTag testTag = new TestTag();
-        testTag.setTestInteger(new Integer(3));
+        testTag.setTestInteger(3);
         module.setTag(testTag, testMap);
         module.populateAttributes();
         assertEquals(new Integer(3), testTag.getTestInteger());
         assertEquals("test", testTag.getTestString());
-        testMap.put("testInteger", new Integer(5));
+        testMap.put("testInteger", 5);
         module.setTag(testTag, testMap);
         module.populateAttributes();
         assertEquals(new Integer(5), testTag.getTestInteger());
@@ -113,7 +113,7 @@ public class TagTestModuleTest extends BaseTestCase
         module.populateAttributes();
         assertEquals("anothervalue", simpleTag.getTestString());
         assertEquals(1, simpleTag.getDynamicAttributesMap().size());
-        assertEquals(new Integer(5), ((DynamicAttribute)simpleTag.getDynamicAttributesMap().get("testInteger")).getValue());
+        assertEquals(5, ((DynamicAttribute)simpleTag.getDynamicAttributesMap().get("testInteger")).getValue());
     }
     
     @Test

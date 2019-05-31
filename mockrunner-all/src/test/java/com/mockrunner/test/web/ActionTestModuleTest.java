@@ -809,7 +809,7 @@ public class ActionTestModuleTest extends BaseTestCase
         form.setValidationOk(false);
         module.setValidate(false);
         module.actionPerform(TestAction.class, form);
-        assertEquals("success", ((MockActionForward)module.getActionForward()).getPath());
+        assertEquals("success", module.getActionForward().getPath());
         module.verifyForward("success");
         assertEquals("value", form.getProperty());
         module.verifyNoActionErrors();
@@ -958,7 +958,7 @@ public class ActionTestModuleTest extends BaseTestCase
         }
         module.addRequestParameter("property2", "123");
         module.actionPerform(TestAction.class, form);
-        assertEquals(new Integer(123), form.get("property2"));
+        assertEquals(123, form.get("property2"));
     }
 
     @Test
@@ -975,7 +975,7 @@ public class ActionTestModuleTest extends BaseTestCase
         form.setFirstName("ABCDEF");
         form.setLastName("ABCDEF");
         ActionErrors errors = form.validate(getActionMockObjectFactory().getMockActionMapping(), getActionMockObjectFactory().getMockRequest());
-        assertTrue(errors.isEmpty());;
+        assertTrue(errors.isEmpty());
         form.setFirstName("ABCD");
         form.setLastName("12345678901");
         errors = form.validate(getActionMockObjectFactory().getMockActionMapping(), getActionMockObjectFactory().getMockRequest());
@@ -1080,7 +1080,7 @@ public class ActionTestModuleTest extends BaseTestCase
     public void testExceptionHandlerActionForward()
     {
         TestExceptionHandlerConfig config1 = new TestExceptionHandlerConfig(true, new MockActionForward("test"));
-        TestExceptionHandlerConfig config2 = new TestExceptionHandlerConfig(false, new Integer(1));
+        TestExceptionHandlerConfig config2 = new TestExceptionHandlerConfig(false, 1);
         module.addExceptionHandler(config1);
         module.addExceptionHandler(config2);
         ActionForward forward = module.actionPerform(new TestFailureAction(new Exception()));
@@ -1245,9 +1245,9 @@ public class ActionTestModuleTest extends BaseTestCase
     public static class TestForm extends ActionForm
     {
         private boolean validationOk = true;
-        private Map mappedProperties = new HashMap();
+        private Map<String, Object> mappedProperties = new HashMap<String, Object>();
         private String property;
-        private Map indexedProperties = new HashMap();
+        private Map<Integer, String> indexedProperties = new HashMap<Integer, String>();
         private TestNested nested = new TestNested();
         private boolean resetCalled = false;
     
@@ -1273,12 +1273,12 @@ public class ActionTestModuleTest extends BaseTestCase
 
         public String getIndexedProperty(int index)
         {
-            return (String)indexedProperties.get(new Integer(index));
+            return (String)indexedProperties.get(index);
         }
 
         public void setIndexedProperty(int index, String string)
         {
-            indexedProperties.put(new Integer(index), string);
+            indexedProperties.put(index, string);
         }
 
         public Object getValue(String name)

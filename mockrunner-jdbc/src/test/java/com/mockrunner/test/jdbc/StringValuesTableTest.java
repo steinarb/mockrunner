@@ -187,7 +187,7 @@ public class StringValuesTableTest extends TestCase
             stringValuesTable.getColumn(null);
             fail("an IllegalArgumentException should have thrown");
         }
-        catch (IllegalArgumentException expected)
+        catch (IllegalArgumentException ignored)
         {
         }
         try
@@ -227,7 +227,7 @@ public class StringValuesTableTest extends TestCase
             stringValuesTable.getColumn("id");
             fail("an IllegalArgumentException should have thrown");
         }
-        catch (IllegalArgumentException expected)
+        catch (IllegalArgumentException ignored)
         {
         }
     }
@@ -289,9 +289,8 @@ public class StringValuesTableTest extends TestCase
     {
         String[] columnNames = stringValuesTable.getColumnNames();
         assertEquals(columnNames.length, columnNames.length);
-        for (int i = 0; i < columnNames.length; i++)
-        {
-            assertEquals(columnNames[i], columnNames[i]);
+        for (String columnName : columnNames) {
+            assertEquals(columnName, columnName);
         }
         // exercise tables with no columns:
         //
@@ -488,9 +487,8 @@ public class StringValuesTableTest extends TestCase
         assertFalse(stringValuesTable.isValidColumnName(null));
         assertFalse(stringValuesTable.isValidColumnName(""));
         assertFalse(stringValuesTable.isValidColumnName(columnNames[0] + "foo"));
-        for (int ii = 0; ii < columnNames.length; ii++)
-        {
-            assertTrue(stringValuesTable.isValidColumnName(columnNames[ii]));
+        for (String columnName : columnNames) {
+            assertTrue(stringValuesTable.isValidColumnName(columnName));
         }
     }
 

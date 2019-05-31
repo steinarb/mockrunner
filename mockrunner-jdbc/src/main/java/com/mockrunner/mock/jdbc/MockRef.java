@@ -82,7 +82,7 @@ public class MockRef implements Ref, Cloneable
     {
         try
         {
-            return (MockRef)super.clone();
+            return super.clone();
         } 
         catch(CloneNotSupportedException exc)
         {

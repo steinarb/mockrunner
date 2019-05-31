@@ -91,16 +91,8 @@ public class MockQueueSessionTest
     @Test
     public void testCreateQueues() throws Exception
     {
-        try
-        {
-            session.createQueue("Queue1");
-            fail();
-        }
-        catch(JMSException exc)
-        {
-            //should throw exception
-        }
         DestinationManager manager = connection.getDestinationManager();
+        assertFalse(manager.existsQueue("Queue1"));
         Queue managerQueue1 = manager.createQueue("Queue1");
         Queue managerQueue2 = manager.getQueue("Queue1");
         Queue queue = session.createQueue("Queue1");
@@ -110,15 +102,7 @@ public class MockQueueSessionTest
         manager.createQueue("Queue2");
         assertNotNull(session.createQueue("Queue2"));
         manager.removeQueue("Queue1");
-        try
-        {
-            session.createQueue("Queue1");
-            fail();
-        }
-        catch(JMSException exc)
-        {
-            //should throw exception
-        }
+        assertFalse(manager.existsQueue("Queue1"));
         session.createTemporaryQueue();
         TemporaryQueue tempQueue = session.createTemporaryQueue();
         session.createTemporaryQueue();
@@ -458,12 +442,12 @@ public class MockQueueSessionTest
         MockQueueReceiver receiver3 = (MockQueueReceiver)session.createReceiver(queue);
         receiver3.setMessageListener(listener);
         sender = anotherSession.createSender(sameQueue);
-        sender.send(new MockObjectMessage(new Integer(1)));
+        sender.send(new MockObjectMessage(1));
         assertEquals(3, queue.getReceivedMessageList().size());
         assertEquals(0, queue.getCurrentMessageList().size());
         assertEquals(3, listener.getMessageList().size());
         Object object = listener.getMessageList().get(2);
-        assertEquals(new Integer(1), ((MockObjectMessage)object).getObject());
+        assertEquals(1, ((MockObjectMessage)object).getObject());
     }
     
     @Test
@@ -527,7 +511,7 @@ public class MockQueueSessionTest
     {
         MockQueueSession session = (MockQueueSession)connection.createQueueSession(false, Session.AUTO_ACKNOWLEDGE);
         DestinationManager manager = connection.getDestinationManager();
-        MockQueue queue = (MockQueue)manager.createQueue("Queue");
+        MockQueue queue = manager.createQueue("Queue");
         QueueSender sender = session.createSender(null);
         MockTextMessage message = new MockTextMessage("Text");
         sender.send(queue, message);

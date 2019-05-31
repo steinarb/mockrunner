@@ -163,9 +163,8 @@ public class ArrayResultSetFactoryTest
         }
         mockResultSet = arrayResultSetFactory.create("");
         assertEquals(columnNames.length, mockResultSet.getColumnCount());
-        for (int ii = 0; ii < columnNames.length; ii++)
-        {
-            assertNotNull(mockResultSet.getColumn(columnNames[ii]));
+        for (String columnName : columnNames) {
+            assertNotNull(mockResultSet.getColumn(columnName));
         }
         for (int ii = 0; ii < stringMatrix.length; ii++)
         {

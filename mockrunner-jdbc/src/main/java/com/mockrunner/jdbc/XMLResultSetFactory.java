@@ -177,11 +177,9 @@ public class XMLResultSetFactory implements ResultSetFactory
                if (firstIteration)
                {
                    List columns = cRowChildren;
-                   Iterator ci = columns.iterator();
-                   
-                   while (ci.hasNext()) 
-                   {
-                       Element ccRow = (Element)ci.next();
+
+                   for (Object column : columns) {
+                       Element ccRow = (Element) column;
                        resultSet.addColumn(ccRow.getName());
                        colNum++;
                    }
@@ -242,13 +240,13 @@ public class XMLResultSetFactory implements ResultSetFactory
                	    maxColumnNumber = columnNumber;
                }
                String columnName = cColumn.getChildText("name");
-               columnNameMap.put(new Integer(columnNumber), columnName);
+               columnNameMap.put(columnNumber, columnName);
            }
            offset = 0;
            for (int ii=0; ii<columnNameMap.size(); ii++)
            {
                while (true) {
-                   String name = (String)columnNameMap.get(new Integer(ii + offset));
+                   String name = (String)columnNameMap.get(ii + offset);
                    if (name==null) {
                        offset++;
                        resultSet.addColumn("unknown."+offset);
@@ -264,16 +262,13 @@ public class XMLResultSetFactory implements ResultSetFactory
            }
            
            List rows = root.getChild("rows").getChildren("row");
-           Iterator ri = rows.iterator();
-           while (ri.hasNext())
-           {
-               Element cRow = (Element)ri.next();
+           for (Object row : rows) {
+               Element cRow = (Element) row;
                List cRowChildren = cRow.getChildren();
                Iterator cri = cRowChildren.iterator();
                String[] cRowValues = new String[maxColumnNumber + 1];
-               while (cri.hasNext())
-               {
-                   Element crValue = (Element)cri.next();
+               while (cri.hasNext()) {
+                   Element crValue = (Element) cri.next();
                    String value = trim ? crValue.getTextTrim() : crValue.getText();
                    int curCol = crValue.getAttribute("columnNumber").getIntValue();
                    cRowValues[curCol] = value;

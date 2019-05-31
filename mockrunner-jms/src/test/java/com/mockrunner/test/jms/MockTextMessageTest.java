@@ -10,8 +10,6 @@ import javax.jms.MessageNotWriteableException;
 
 import org.junit.Test;
 
-import junit.framework.TestCase;
-
 import com.mockrunner.mock.jms.MockTextMessage;
 
 public class MockTextMessageTest

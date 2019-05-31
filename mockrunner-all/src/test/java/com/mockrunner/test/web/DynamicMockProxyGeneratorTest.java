@@ -12,8 +12,6 @@ import org.junit.Test;
 
 import com.mockrunner.struts.DynamicMockProxyGenerator;
 
-import junit.framework.TestCase;
-
 public class DynamicMockProxyGeneratorTest
 {
     private Delegator delegator;

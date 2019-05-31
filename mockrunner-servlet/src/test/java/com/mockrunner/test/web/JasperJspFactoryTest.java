@@ -178,7 +178,7 @@ public class JasperJspFactoryTest extends TestCase
         
         public Integer getTestReadOnlyProperty()
         {
-            return new Integer(25);
+            return 25;
         }
         
         public String testMethod(String test)

@@ -30,10 +30,10 @@ public class MockJspConfigDescriptor // implements JspConfigDescriptor
         return new ArrayList(taglibs);
     }
 
-    /**
-     * Adds a <code>JspPropertyGroupDescriptor</code> to the list of JSP property groups.
-     * 
-     * @param jspPropertyGroup the <code>JspPropertyGroupDescriptor</code> to add
+    /*
+      Adds a <code>JspPropertyGroupDescriptor</code> to the list of JSP property groups.
+
+      @param jspPropertyGroup the <code>JspPropertyGroupDescriptor</code> to add
      */
 //    public void addJspPropertyGroup(JspPropertyGroupDescriptor jspPropertyGroup)
 //    {
@@ -48,10 +48,10 @@ public class MockJspConfigDescriptor // implements JspConfigDescriptor
         this.jspPropertyGroups.clear();
     }
     
-    /**
-     * Adds a <code>TaglibDescriptor</code> to the list of taglibs.
-     * 
-     * @param taglib the <code>TaglibDescriptor</code> to add
+    /*
+      Adds a <code>TaglibDescriptor</code> to the list of taglibs.
+
+      @param taglib the <code>TaglibDescriptor</code> to add
      */
 //    public void addTaglib(TaglibDescriptor taglib)
 //    {

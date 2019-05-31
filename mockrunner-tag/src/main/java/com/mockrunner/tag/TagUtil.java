@@ -161,22 +161,16 @@ public class TagUtil
         if(null == attributes || attributes.isEmpty()) return;
         try
         {
-            Iterator names = attributes.keySet().iterator();
-            while(names.hasNext()) 
-            {
-                String currentName = (String)names.next();
+            for (Object o : attributes.keySet()) {
+                String currentName = (String) o;
                 Object currentValue = attributes.get(currentName);
-                if(currentValue instanceof DynamicAttribute)
-                {
-                    populateDynamicAttribute(tag, currentName, (DynamicAttribute)currentValue);
+                if (currentValue instanceof DynamicAttribute) {
+                    populateDynamicAttribute(tag, currentName, (DynamicAttribute) currentValue);
                     continue;
                 }
-                if(PropertyUtils.isWriteable(tag, currentName)) 
-                {
+                if (PropertyUtils.isWriteable(tag, currentName)) {
                     BeanUtils.copyProperty(tag, currentName, evaluateValue(attributes.get(currentName)));
-                }
-                else if(tag instanceof DynamicAttributes)
-                {
+                } else if (tag instanceof DynamicAttributes) {
                     populateDynamicAttribute(tag, currentName, new DynamicAttribute(null, currentValue));
                 }
             }
@@ -227,44 +221,27 @@ public class TagUtil
      */
     public static void evalBody(List bodyList, Object pageContext) throws JspException
     {
-        for(int ii = 0; ii < bodyList.size(); ii++)
-        {
-            Object nextChild = bodyList.get(ii);
-            if(nextChild instanceof NestedBodyTag)
-            {
-                int result = ((NestedBodyTag)nextChild).doLifecycle();
-                if(Tag.SKIP_PAGE == result) return;
-            }
-            else if(nextChild instanceof NestedStandardTag)
-            {
-                int result = ((NestedStandardTag)nextChild).doLifecycle();
-                if(Tag.SKIP_PAGE == result) return;
-            }
-            else if(nextChild instanceof NestedSimpleTag)
-            {
-                ((NestedSimpleTag)nextChild).doLifecycle();
-            }
-            else
-            {
-                try
-                {
-                    if(pageContext instanceof PageContext)
-                    {
-                        ((PageContext)pageContext).getOut().print(getChildText(nextChild));
-                    }
-                    else if(pageContext instanceof JspContext)
-                    {
-                        ((JspContext)pageContext).getOut().print(getChildText(nextChild));
-                    }
-                    else
-                    {
+        for (Object nextChild : bodyList) {
+            if (nextChild instanceof NestedBodyTag) {
+                int result = ((NestedBodyTag) nextChild).doLifecycle();
+                if (Tag.SKIP_PAGE == result) return;
+            } else if (nextChild instanceof NestedStandardTag) {
+                int result = ((NestedStandardTag) nextChild).doLifecycle();
+                if (Tag.SKIP_PAGE == result) return;
+            } else if (nextChild instanceof NestedSimpleTag) {
+                ((NestedSimpleTag) nextChild).doLifecycle();
+            } else {
+                try {
+                    if (pageContext instanceof PageContext) {
+                        ((PageContext) pageContext).getOut().print(getChildText(nextChild));
+                    } else if (pageContext instanceof JspContext) {
+                        ((JspContext) pageContext).getOut().print(getChildText(nextChild));
+                    } else {
                         throw new IllegalArgumentException("pageContext must be an instance of JspContext");
                     }
-                }
-                catch(IOException exc)
-                {
+                } catch (IOException exc) {
                     throw new NestedApplicationException(exc);
-                }	
+                }
             }
         }
     }
@@ -287,10 +264,10 @@ public class TagUtil
     public static String dumpTag(NestedTag tag, StringBuffer buffer, int level)
     {
         StringUtil.appendTabs(buffer, level);
-        buffer.append("<" + tag.getClass().getName() + ">\n");
+        buffer.append("<").append(tag.getClass().getName()).append(">\n");
         TagUtil.dumpTagTree(tag.getChilds(), buffer, level);
         StringUtil.appendTabs(buffer, level);
-        buffer.append("</" + tag.getClass().getName() + ">");
+        buffer.append("</").append(tag.getClass().getName()).append(">");
         return buffer.toString();
     }
     
@@ -299,17 +276,12 @@ public class TagUtil
      */
     public static void dumpTagTree(List bodyList, StringBuffer buffer, int level)
     {
-        for(int ii = 0; ii < bodyList.size(); ii++)
-        {
-            Object nextChild = bodyList.get(ii);
-            if(nextChild instanceof NestedTag)
-            {
-                dumpTag((NestedTag)nextChild, buffer, level + 1);
-            }
-            else
-            {
+        for (Object nextChild : bodyList) {
+            if (nextChild instanceof NestedTag) {
+                dumpTag((NestedTag) nextChild, buffer, level + 1);
+            } else {
                 StringUtil.appendTabs(buffer, level + 1);
-                buffer.append(bodyList.get(ii).toString());
+                buffer.append(nextChild.toString());
             }
             buffer.append("\n");
         }

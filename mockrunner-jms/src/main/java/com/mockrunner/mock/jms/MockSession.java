@@ -400,12 +400,9 @@ public class MockSession implements Session, Serializable
     
     private void removeSessionFromDestinations(Collection destinations)
     {
-        Iterator iterator = destinations.iterator();
-        while(iterator.hasNext())
-        {
-            Object currentDestination = (Object)iterator.next();
-            if(currentDestination instanceof MockDestination)
-            ((MockDestination)currentDestination).removeSession(this);
+        for (Object currentDestination : destinations) {
+            if (currentDestination instanceof MockDestination)
+                ((MockDestination) currentDestination).removeSession(this);
         }
     }
 
@@ -424,7 +421,7 @@ public class MockSession implements Session, Serializable
     public Queue createQueue(String name) throws JMSException
     {
         getConnection().throwJMSException();
-        MockQueue queue = ((MockConnection)getConnection()).getDestinationManager().getQueue(name);
+        MockQueue queue = getConnection().getDestinationManager().getQueue(name);
         if(null == queue)
         {
             throw new JMSException("Queue with name " + name + " not found");
@@ -445,7 +442,7 @@ public class MockSession implements Session, Serializable
     public Topic createTopic(String name) throws JMSException
     {
         getConnection().throwJMSException();
-        MockTopic topic = ((MockConnection)getConnection()).getDestinationManager().getTopic(name);
+        MockTopic topic = getConnection().getDestinationManager().getTopic(name);
         if(null == topic)
         {
             throw new JMSException("Topic with name " + name + " not found");

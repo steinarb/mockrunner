@@ -452,7 +452,7 @@ public class MockSQLXML implements SQLXML, Cloneable
                 String documentAsString = xmlCompareOutputter.outputString(document);
                 if(null != documentAsString) hashCode = (31 * hashCode) + documentAsString.hashCode();
             } 
-            catch(Exception exc)
+            catch(Exception ignored)
             {
                 
             }
@@ -565,7 +565,7 @@ public class MockSQLXML implements SQLXML, Cloneable
         }
         else if(content instanceof StringWriter)
         {
-            jdomDocument = jdomParser.build(new StringReader(((StringWriter)content).toString()));
+            jdomDocument = jdomParser.build(new StringReader(content.toString()));
         }
         else if(content instanceof ByteArrayOutputStream)
         {

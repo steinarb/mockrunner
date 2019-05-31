@@ -82,7 +82,7 @@ public class ClassUtilTest extends TestCase
         assertTrue(Arrays.equals(classes, new Class[] { Object.class, Super.class, Sub1.class, Sub2.class }));
     }
     
-    public static interface TestInterface
+    public interface TestInterface
     {
         
     }

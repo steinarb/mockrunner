@@ -31,15 +31,15 @@ public class MockMapMessage extends MockMessage implements MapMessage
         Object value = getObject(name);
         if(null == value)
         {
-            return Boolean.valueOf(null).booleanValue();
+            throw new MessageFormatException(getNullPropertyMessage(name));
         }
         if(value instanceof Boolean)
         {
-            return ((Boolean)value).booleanValue();
+            return (Boolean) value;
         }
         if(value instanceof String)
         {
-            return Boolean.valueOf((String)value).booleanValue();
+            return Boolean.valueOf((String) value);
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to boolean");
     }
@@ -49,15 +49,15 @@ public class MockMapMessage extends MockMessage implements MapMessage
         Object value = getObject(name);
         if(null == value)
         {
-            return Byte.valueOf(null).byteValue();
+            throw new MessageFormatException(getNullPropertyMessage(name));
         }
         if(value instanceof Byte)
         {
-            return ((Byte)value).byteValue();
+            return (Byte) value;
         }
         if(value instanceof String)
         {
-            return Byte.valueOf((String)value).byteValue();
+            return Byte.valueOf((String) value);
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to byte");
     }
@@ -67,7 +67,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         Object value = getObject(name);
         if(null == value)
         {
-            return Short.valueOf(null).shortValue();
+            throw new MessageFormatException(getNullPropertyMessage(name));
         }
         if((value instanceof Byte) || (value instanceof Short))
         {
@@ -75,7 +75,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         }
         if(value instanceof String)
         {
-            return Short.valueOf((String)value).shortValue();
+            return Short.valueOf((String) value);
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to short");
     }
@@ -91,7 +91,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         {
             throw new MessageFormatException(value.getClass().getName() + " cannot be converted to char");
         }
-        return ((Character)value).charValue();
+        return (Character) value;
     }
 
     public int getInt(String name) throws JMSException
@@ -99,7 +99,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         Object value = getObject(name);
         if(null == value)
         {
-            return Integer.valueOf(null).intValue();
+            throw new MessageFormatException(getNullPropertyMessage(name));
         }
         if((value instanceof Byte) || (value instanceof Short) || (value instanceof Integer))
         {
@@ -107,7 +107,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         }
         if(value instanceof String)
         {
-            return Integer.valueOf((String)value).intValue();
+            return Integer.valueOf((String) value);
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to int");
     }
@@ -117,7 +117,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         Object value = getObject(name);
         if(null == value)
         {
-            return Long.valueOf(null).longValue();
+            throw new MessageFormatException(getNullPropertyMessage(name));
         }
         if((value instanceof Byte) || (value instanceof Short) || (value instanceof Integer) || (value instanceof Long))
         {
@@ -125,7 +125,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         }
         if(value instanceof String)
         {
-            return Long.valueOf((String)value).longValue();
+            return Long.valueOf((String) value);
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to long");
     }
@@ -135,15 +135,15 @@ public class MockMapMessage extends MockMessage implements MapMessage
         Object value = getObject(name);
         if(null == value)
         {
-            return Float.valueOf(null).floatValue();
+            throw new MessageFormatException(getNullPropertyMessage(name));
         }
         if(value instanceof Float)
         {
-            return ((Float)value).floatValue();
+            return (Float) value;
         }
         if(value instanceof String)
         {
-            return Float.valueOf((String)value).floatValue();
+            return Float.valueOf((String) value);
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to float");
     }
@@ -153,7 +153,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         Object value = getObject(name);
         if(null == value)
         {
-            return Double.valueOf(null).doubleValue();
+            throw new MessageFormatException(getNullPropertyMessage(name));
         }
         if((value instanceof Double) || (value instanceof Float))
         {
@@ -161,7 +161,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
         }
         if(value instanceof String)
         {
-            return Double.valueOf((String)value).doubleValue();
+            return Double.valueOf((String) value);
         }
         throw new MessageFormatException(value.getClass().getName() + " cannot be converted to double");
     }
@@ -206,42 +206,42 @@ public class MockMapMessage extends MockMessage implements MapMessage
 
     public void setBoolean(String name, boolean value) throws JMSException
     {
-        setObject(name, new Boolean(value));
+        setObject(name, value);
     }
 
     public void setByte(String name, byte value) throws JMSException
     {
-        setObject(name, new Byte(value));
+        setObject(name, value);
     }
 
     public void setShort(String name, short value) throws JMSException
     {
-        setObject(name, new Short(value));
+        setObject(name, value);
     }
 
     public void setChar(String name, char value) throws JMSException
     {
-        setObject(name, new Character(value));
+        setObject(name, value);
     }
 
     public void setInt(String name, int value) throws JMSException
     {
-        setObject(name, new Integer(value));
+        setObject(name, value);
     }
 
     public void setLong(String name, long value) throws JMSException
     {
-        setObject(name, new Long(value));
+        setObject(name, value);
     }
 
     public void setFloat(String name, float value) throws JMSException
     {
-        setObject(name, new Float(value));
+        setObject(name, value);
     }
 
     public void setDouble(String name, double value) throws JMSException
     {
-        setObject(name, new Double(value));
+        setObject(name, value);
     }
 
     public void setString(String name, String value) throws JMSException
@@ -251,7 +251,7 @@ public class MockMapMessage extends MockMessage implements MapMessage
 
     public void setBytes(String name, byte[] byteData) throws JMSException
     {
-        byte[] copy = (byte[])byteData.clone();
+        byte[] copy = byteData.clone();
         setObject(name, copy);
     }
 
@@ -316,25 +316,17 @@ public class MockMapMessage extends MockMessage implements MapMessage
         if(!(otherObject instanceof MockMapMessage)) return false;
         MockMapMessage otherMessage = (MockMapMessage)otherObject;
         if(data.size() != otherMessage.data.size()) return false;
-        Iterator keys = data.keySet().iterator();
-        while(keys.hasNext())
-        {
-            Object nextKey = keys.next();
+        for (Object nextKey : data.keySet()) {
             Object nextValue = data.get(nextKey);
             Object otherValue = otherMessage.data.get(nextKey);
-            if(null == nextValue)
-            {
-                if(null != otherValue) return false;
-            }
-            else if(nextValue instanceof byte[])
-            {
-                if(null == otherValue) return false;
-                if(!(otherValue instanceof byte[])) return false;
-                if(!Arrays.equals((byte[])nextValue, (byte[])otherValue)) return false;
-            }
-            else
-            {
-                if(!nextValue.equals(otherValue)) return false;
+            if (null == nextValue) {
+                if (null != otherValue) return false;
+            } else if (nextValue instanceof byte[]) {
+                if (null == otherValue) return false;
+                if (!(otherValue instanceof byte[])) return false;
+                if (!Arrays.equals((byte[]) nextValue, (byte[]) otherValue)) return false;
+            } else {
+                if (!nextValue.equals(otherValue)) return false;
             }
         }
         return true;
@@ -343,19 +335,12 @@ public class MockMapMessage extends MockMessage implements MapMessage
     public int hashCode()
     {
         int value = 17;
-        Iterator values = data.values().iterator();
-        while(values.hasNext())
-        {
-            Object nextValue = values.next();
-            if(nextValue instanceof byte[])
-            {
-                for(int ii = 0; ii < ((byte[])nextValue).length; ii++)
-                {
-                    value = (31 * value) + ((byte[])nextValue)[ii];
+        for (Object nextValue : data.values()) {
+            if (nextValue instanceof byte[]) {
+                for (int ii = 0; ii < ((byte[]) nextValue).length; ii++) {
+                    value = (31 * value) + ((byte[]) nextValue)[ii];
                 }
-            }
-            else if(nextValue != null)
-            {
+            } else if (nextValue != null) {
                 value = (31 * value) + nextValue.hashCode();
             }
         }
@@ -372,17 +357,11 @@ public class MockMapMessage extends MockMessage implements MapMessage
     
     private void copyDataToMap(Map target)
     {
-        Iterator keys = data.keySet().iterator();
-        while(keys.hasNext())
-        {
-            Object nextKey = keys.next();
+        for (Object nextKey : data.keySet()) {
             Object nextValue = data.get(nextKey);
-            if(nextValue instanceof byte[])
-            {
-                target.put(nextKey, ((byte[])nextValue).clone());
-            }
-            else
-            {
+            if (nextValue instanceof byte[]) {
+                target.put(nextKey, ((byte[]) nextValue).clone());
+            } else {
                 target.put(nextKey, nextValue);
             }
         }

@@ -44,11 +44,11 @@ public class AccountDAOTest extends ConnectorTestCaseAdapter
     
     private void prepareValidInteraction(String firstName, String lastName, int id)
     {
-        List request = new ArrayList();
+        List<Object> request = new ArrayList<Object>();
         request.add(firstName);
         request.add(lastName);
-        List response = new ArrayList();
-        response.add(new Integer(id));
+        List<Object> response = new ArrayList<Object>();
+        response.add(id);
         IndexedRecordInteraction indexedInteraction = new IndexedRecordInteraction(request, response);
         getInteractionHandler().addImplementor(indexedInteraction);
     }

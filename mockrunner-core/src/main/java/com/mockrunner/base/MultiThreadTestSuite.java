@@ -68,13 +68,13 @@ public class MultiThreadTestSuite extends TestSuite
 			Constructor constructor = getTestConstructor(test.getClass());
 			if (constructor.getParameterTypes().length == 0) 
 			{
-				newTest = (TestCase)constructor.newInstance(new Object[0]);
+				newTest = (TestCase)constructor.newInstance();
 				newTest.setName(test.getName());
 								
 			} 
 			else 
 			{
-				newTest = (TestCase)constructor.newInstance(new Object[]{test.getName()});
+				newTest = (TestCase)constructor.newInstance(test.getName());
 			}
 		}
 		catch(Exception exc)
@@ -99,23 +99,18 @@ public class MultiThreadTestSuite extends TestSuite
 
 	private void runAllThreadsForTest(List threads)
 	{
-		for(int ii = 0; ii < threads.size(); ii++)
-		{
-			Thread thread = (Thread)threads.get(ii);
-			thread.start();
-		}
-		for(int ii = 0; ii < threads.size(); ii++)
-		{
-			Thread thread = (Thread)threads.get(ii);
-			try
-			{
-				thread.join();
-			}
-			catch(InterruptedException exc)
-			{
-				log.error("Interrupted", exc);
-			}
-		}
+        for (Object thread2 : threads) {
+            Thread thread = (Thread) thread2;
+            thread.start();
+        }
+        for (Object thread1 : threads) {
+            Thread thread = (Thread) thread1;
+            try {
+                thread.join();
+            } catch (InterruptedException exc) {
+                log.error("Interrupted", exc);
+            }
+        }
 	}
 	
 	private static class TestThread extends Thread

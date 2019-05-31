@@ -8,13 +8,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.struts.taglib.bean.WriteTag;
-import org.jdom.Element;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.mockrunner.tag.BasicTagTestCaseAdapter;
 import com.mockrunner.tag.NestedTag;
-import com.mockrunner.util.web.XmlUtil;
 
 /**
  * Example test for the {@link TableEnumTag}.

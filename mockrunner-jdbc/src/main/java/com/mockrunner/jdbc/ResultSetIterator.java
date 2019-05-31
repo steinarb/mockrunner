@@ -27,7 +27,7 @@ public class ResultSetIterator implements Iterator<List<?>> {
 		try {
 			this.resultSet.beforeFirst();
 			this.resultSet.setFetchDirection(ResultSet.FETCH_FORWARD);
-		} catch (SQLException e) {
+		} catch (SQLException ignored) {
 		}
 	}
 
@@ -50,7 +50,7 @@ public class ResultSetIterator implements Iterator<List<?>> {
 				List<?> row = resultSet.getRow(resultSet.getRow());
 				return row;
 			}
-		} catch (SQLException e) {
+		} catch (SQLException ignored) {
 		}
 		return null;
 	}

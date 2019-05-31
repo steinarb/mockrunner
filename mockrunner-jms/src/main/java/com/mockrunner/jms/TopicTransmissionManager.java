@@ -54,15 +54,11 @@ public class TopicTransmissionManager implements Serializable
      */
     public void closeAllTopicPublishers()
     {
-        for(int ii = 0; ii < topicPublisherList.size(); ii++)
-        {
-            TopicPublisher publisher = (TopicPublisher)topicPublisherList.get(ii);
-            try
-            {
+        for (Object aTopicPublisherList : topicPublisherList) {
+            TopicPublisher publisher = (TopicPublisher) aTopicPublisherList;
+            try {
                 publisher.close();
-            }
-            catch(JMSException exc)
-            {
+            } catch (JMSException ignored) {
 
             }
         }
@@ -73,15 +69,11 @@ public class TopicTransmissionManager implements Serializable
      */
     public void closeAllTopicSubscribers()
     {
-        for(int ii = 0; ii < topicSubscriberList.size(); ii++)
-        {
-            TopicSubscriber subscriber = (TopicSubscriber)topicSubscriberList.get(ii);
-            try
-            {
+        for (Object aTopicSubscriberList : topicSubscriberList) {
+            TopicSubscriber subscriber = (TopicSubscriber) aTopicSubscriberList;
+            try {
                 subscriber.close();
-            }
-            catch(JMSException exc)
-            {
+            } catch (JMSException ignored) {
 
             }
         }
@@ -92,16 +84,11 @@ public class TopicTransmissionManager implements Serializable
      */
     public void closeAllTopicDurableSubscribers()
     {
-        Iterator keys = topicDurableSubscriberMap.keySet().iterator();
-        while(keys.hasNext())
-        {
-            TopicSubscriber subscriber = (TopicSubscriber)topicDurableSubscriberMap.get(keys.next());
-            try
-            {
+        for (Object o : topicDurableSubscriberMap.keySet()) {
+            TopicSubscriber subscriber = (TopicSubscriber) topicDurableSubscriberMap.get(o);
+            try {
                 subscriber.close();
-            }
-            catch(JMSException exc)
-            {
+            } catch (JMSException ignored) {
 
             }
         }
@@ -158,19 +145,14 @@ public class TopicTransmissionManager implements Serializable
     public List getTopicPublisherList(String topicName)
     {
         List resultList = new ArrayList();
-        for(int ii = 0; ii < topicPublisherList.size(); ii++)
-        {
-            TopicPublisher publisher = (TopicPublisher)topicPublisherList.get(ii);
-            try
-            {
-                if(publisher.getTopic().getTopicName().equals(topicName))
-                {
+        for (Object aTopicPublisherList : topicPublisherList) {
+            TopicPublisher publisher = (TopicPublisher) aTopicPublisherList;
+            try {
+                if (publisher.getTopic().getTopicName().equals(topicName)) {
                     resultList.add(publisher);
                 }
-            }
-            catch(JMSException exc)
-            {
-        
+            } catch (JMSException ignored) {
+
             }
         }
         return Collections.unmodifiableList(resultList);
@@ -239,19 +221,14 @@ public class TopicTransmissionManager implements Serializable
     public List getTopicSubscriberList(String topicName)
     {
         List resultList = new ArrayList();
-        for(int ii = 0; ii < topicSubscriberList.size(); ii++)
-        {
-            TopicSubscriber subscriber = (TopicSubscriber)topicSubscriberList.get(ii);
-            try
-            {
-                if(subscriber.getTopic().getTopicName().equals(topicName))
-                {
+        for (Object aTopicSubscriberList : topicSubscriberList) {
+            TopicSubscriber subscriber = (TopicSubscriber) aTopicSubscriberList;
+            try {
+                if (subscriber.getTopic().getTopicName().equals(topicName)) {
                     resultList.add(subscriber);
                 }
-            }
-            catch(JMSException exc)
-            {
-    
+            } catch (JMSException ignored) {
+
             }
         }
         return Collections.unmodifiableList(resultList);
@@ -315,21 +292,14 @@ public class TopicTransmissionManager implements Serializable
     public Map getDurableTopicSubscriberMap(String topicName)
     {
         Map resultMap = new HashMap();
-        Iterator subscriberNames = topicDurableSubscriberMap.keySet().iterator();
-        while(subscriberNames.hasNext())
-        {
-            Object nextName = subscriberNames.next();
-            MockTopicSubscriber subscriber = (MockTopicSubscriber)topicDurableSubscriberMap.get(nextName);
-            try
-            {
-                if(null != subscriber && subscriber.getTopic().getTopicName().equals(topicName))
-                {
+        for (Object nextName : topicDurableSubscriberMap.keySet()) {
+            MockTopicSubscriber subscriber = (MockTopicSubscriber) topicDurableSubscriberMap.get(nextName);
+            try {
+                if (null != subscriber && subscriber.getTopic().getTopicName().equals(topicName)) {
                     resultMap.put(nextName, subscriber);
                 }
-            }
-            catch(JMSException exc)
-            {
-                
+            } catch (JMSException ignored) {
+
             }
         }
         return resultMap;

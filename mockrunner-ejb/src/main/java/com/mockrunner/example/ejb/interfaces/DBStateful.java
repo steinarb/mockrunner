@@ -10,13 +10,13 @@ public interface DBStateful
    extends javax.ejb.EJBObject
 {
 
-   public void beginTransaction(  )
+   void beginTransaction()
       throws java.rmi.RemoteException;
 
-   public void executeSQL( java.lang.String sql )
+   void executeSQL(java.lang.String sql)
       throws java.rmi.RemoteException;
 
-   public void endTransaction( boolean commit )
+   void endTransaction(boolean commit)
       throws java.rmi.RemoteException;
 
 }

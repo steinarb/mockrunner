@@ -9,10 +9,10 @@ package com.mockrunner.example.jms.interfaces;
 public interface PrintSessionHome
    extends javax.ejb.EJBHome
 {
-   public static final String COMP_NAME="java:comp/env/ejb/PrintSession";
-   public static final String JNDI_NAME="com/mockrunner/example/PrintSession";
+   String COMP_NAME="java:comp/env/ejb/PrintSession";
+   String JNDI_NAME="com/mockrunner/example/PrintSession";
 
-   public com.mockrunner.example.jms.interfaces.PrintSession create()
+   com.mockrunner.example.jms.interfaces.PrintSession create()
       throws javax.ejb.CreateException,java.rmi.RemoteException;
 
 }

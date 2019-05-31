@@ -9,8 +9,6 @@ import java.io.File;
 
 import org.junit.Test;
 
-import junit.framework.TestCase;
-
 import com.mockrunner.jdbc.XMLResultSetFactory;
 import com.mockrunner.mock.jdbc.MockResultSet;
 

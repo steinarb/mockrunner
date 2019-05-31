@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.mockrunner</groupId>
 		<artifactId>mockrunner</artifactId>
-		<version>1.1.1-SNAPSHOT</version>
+		<version>2.0.2-SNAPSHOT</version>
 		<relativePath>..</relativePath>
 	</parent>
 
@@ -17,7 +17,12 @@
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-core</artifactId>
-			<version>1.1.1-SNAPSHOT</version>
+			<version>2.0.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<scope>provided</scope>
 		</dependency>
 		<!-- needed in StreamUtil -->
 		<dependency>
@@ -38,16 +43,6 @@
 	</dependencies>
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.0</version>
-				<configuration>
-					<compilerVersion>1.5</compilerVersion>
-					<source>1.5</source>
-					<target>1.5</target>
-				</configuration>
-			</plugin>
 			<plugin>
 				<!-- Generate a jar for the source files when deploying -->
 				<groupId>org.apache.maven.plugins</groupId>
@@ -80,7 +75,8 @@
 					<charset>${project.build.sourceEncoding}</charset>
 					<encoding>${project.build.sourceEncoding}</encoding>
 					<docencoding>${project.build.sourceEncoding}</docencoding>
-					<failOnError>false</failOnError>
+					<doclint>none</doclint>
+					<additionalOptions>-Xdoclint:none</additionalOptions>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -103,6 +99,7 @@
 						<artifactId>site-maven-plugin</artifactId>
 						<configuration>
 							<path>${project.artifactId}</path>
+							<message>Jms Site</message>
 						</configuration>
 						<executions>
 							<execution>

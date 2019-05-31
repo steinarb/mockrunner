@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -73,12 +74,12 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public String encodeRedirectUrl(String url)
     {
-        return url;
+        return URLEncoder.encode(url);
     }
 
     public String encodeRedirectURL(String url)
     {
-        return url;
+        return URLEncoder.encode(url);
     }
 
     public String encodeUrl(String url)
@@ -99,6 +100,11 @@ public class MockHttpServletResponse implements HttpServletResponse
     public String getOutputStreamContent()
     {
         return outputStream.getContent();
+    }
+
+    public byte[] getOutputStreamBinaryContent()
+    {
+        return outputStream.getBinaryContent();
     }
 
     public void addCookie(Cookie cookie)
@@ -124,7 +130,7 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public void addIntHeader(String key, int value)
     {
-        String stringValue = new Integer(value).toString();
+        String stringValue = Integer.toString(value);
         addHeader(key, stringValue);
     }
 
@@ -148,6 +154,7 @@ public class MockHttpServletResponse implements HttpServletResponse
     public void sendRedirect(String location) throws IOException
     {
         setHeader("Location", location);
+        setStatus(SC_FOUND);
         wasRedirectSent = true;
     }
 
@@ -165,7 +172,7 @@ public class MockHttpServletResponse implements HttpServletResponse
 
     public void setIntHeader(String key, int value)
     {
-        String stringValue = new Integer(value).toString();
+        String stringValue = Integer.toString(value);
         setHeader(key, stringValue);
     }
 

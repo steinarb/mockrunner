@@ -115,6 +115,7 @@ public class InteractionHandlerTest extends TestCase
             
         }
 
+        @SuppressWarnings("CloneDoesntCallSuperClone")
         public Object clone() throws CloneNotSupportedException
         {
             return null;

@@ -99,6 +99,7 @@ public class MockInteractionTest extends TestCase
             
         }
 
+        @SuppressWarnings("CloneDoesntCallSuperClone")
         public Object clone() throws CloneNotSupportedException
         {
             return null;

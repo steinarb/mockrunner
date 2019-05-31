@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Enumeration;
 
 import javax.jms.DeliveryMode;
+import javax.jms.JMSException;
 import javax.jms.MessageFormatException;
 import javax.jms.MessageNotWriteableException;
 
@@ -43,11 +44,11 @@ public class MockMessageTest
             //should throw Exception
         }
         message.setDoubleProperty("double1", 123.4);
-        assertEquals(new Double(123.4), message.getObjectProperty("double1"));
+        assertEquals(123.4, message.getObjectProperty("double1"));
         assertEquals("123.4", message.getStringProperty("double1"));
         assertEquals(123.4, message.getDoubleProperty("double1"), 0.01);
         message.setFloatProperty("float1", 123.4f);
-        assertEquals(new Float(123.4), message.getObjectProperty("float1"));
+        assertEquals(123.4f, message.getObjectProperty("float1"));
         assertEquals("123.4", message.getStringProperty("float1"));
         assertEquals(123.4, message.getFloatProperty("float1"), 0.01);
         try
@@ -69,7 +70,7 @@ public class MockMessageTest
             //should throw Exception
         }
         message.setByteProperty("byte1", (byte)123);
-        assertEquals(new Byte((byte)123), message.getObjectProperty("byte1"));
+        assertEquals((byte) 123, message.getObjectProperty("byte1"));
         assertEquals("123", message.getStringProperty("byte1"));
         assertEquals((byte)123, message.getByteProperty("byte1"));
         assertEquals(123, message.getLongProperty("byte1"));
@@ -86,7 +87,7 @@ public class MockMessageTest
             //should throw Exception
         }
         message.setIntProperty("int1", 12345);
-        assertEquals(new Integer(12345), message.getObjectProperty("int1"));
+        assertEquals(12345, message.getObjectProperty("int1"));
         assertEquals("12345", message.getStringProperty("int1"));
         assertEquals(12345, message.getLongProperty("int1"));
         assertEquals(12345, message.getIntProperty("int1"));
@@ -126,8 +127,8 @@ public class MockMessageTest
         assertTrue(nameList.contains("byte1"));
         assertTrue(nameList.contains("boolean1"));
     }
-    
-	@Test
+
+    @Test
     public void testNullPropertyName() throws Exception
     {
         MockMessage message = new MockMessage();
@@ -135,7 +136,7 @@ public class MockMessageTest
         {
             message.setDoubleProperty(null, 123.4);
             fail();
-        } 
+        }
         catch(IllegalArgumentException exc)
         {
             //should throw exception
@@ -144,7 +145,7 @@ public class MockMessageTest
         {
             message.setObjectProperty("", "test");
             fail();
-        } 
+        }
         catch(IllegalArgumentException exc)
         {
             //should throw exception
@@ -153,14 +154,56 @@ public class MockMessageTest
         {
             message.setByteProperty(null, (byte)1);
             fail();
-        } 
+        }
         catch(IllegalArgumentException exc)
         {
             //should throw exception
         }
     }
-    
-	@Test
+
+    @Test(expected=MessageFormatException.class)
+    public void testNullFloatProperty() throws JMSException {
+        MockMessage m = new MockMessage();
+        m.setObjectProperty("null", null);
+        m.getFloatProperty(null);
+    }
+
+    @Test(expected=MessageFormatException.class)
+    public void testNullIntProperty() throws JMSException {
+        MockMessage m = new MockMessage();
+        m.setObjectProperty("null", null);
+        m.getIntProperty(null);
+    }
+
+    @Test(expected=MessageFormatException.class)
+    public void testNullByteProperty() throws JMSException {
+        MockMessage m = new MockMessage();
+        m.setObjectProperty("null", null);
+        m.getByteProperty(null);
+    }
+
+    @Test(expected=MessageFormatException.class)
+    public void testNullShortProperty() throws JMSException {
+        MockMessage m = new MockMessage();
+        m.setObjectProperty("null", null);
+        m.getShortProperty(null);
+    }
+
+    @Test(expected=MessageFormatException.class)
+    public void testNullLongProperty() throws JMSException {
+        MockMessage m = new MockMessage();
+        m.setObjectProperty("null", null);
+        m.getLongProperty(null);
+    }
+
+    @Test(expected=MessageFormatException.class)
+    public void testNullDoubleProperty() throws JMSException {
+        MockMessage m = new MockMessage();
+        m.setObjectProperty("null", null);
+        m.getDoubleProperty(null);
+    }
+
+    @Test
     public void testNullProperties() throws Exception
     {
         MockMessage message = new MockMessage();
@@ -168,56 +211,11 @@ public class MockMessageTest
         assertFalse(message.propertyExists("null"));
         assertNull(message.getObjectProperty("null"));
         assertNull(message.getStringProperty("test"));
-        try
-        {
-            message.getDoubleProperty("null");
-            fail();
-        } 
-        catch(NullPointerException exc)
-        {
-            //should throw exception
-        }
-        try
-        {
-            message.getFloatProperty("null");
-            fail();
-        } 
-        catch(NullPointerException exc)
-        {
-            //should throw exception
-        }
-        try
-        {
-            message.getByteProperty("null");
-            fail();
-        } 
-        catch(NumberFormatException exc)
-        {
-            //should throw exception
-        }
-        try
-        {
-            message.getIntProperty("test");
-            fail();
-        } 
-        catch(NumberFormatException exc)
-        {
-            //should throw exception
-        }
-        try
-        {
-            message.getShortProperty("null");
-            fail();
-        } 
-        catch(NumberFormatException exc)
-        {
-            //should throw exception
-        }
         assertFalse(message.getBooleanProperty("null"));
         assertFalse(message.getBooleanProperty("test"));
     }
-    
-	@Test
+
+    @Test
     public void testReadOnlyProperties() throws Exception
     {
         MockMessage message = new MockMessage();
@@ -229,7 +227,7 @@ public class MockMessageTest
         {
             message.setStringProperty("string", "anothertest");
             fail();
-        } 
+        }
         catch(MessageNotWriteableException exc)
         {
             //should throw exception
@@ -238,7 +236,7 @@ public class MockMessageTest
         {
             message.setDoubleProperty("double", 456);
             fail();
-        } 
+        }
         catch(MessageNotWriteableException exc)
         {
             //should throw exception
@@ -248,7 +246,7 @@ public class MockMessageTest
         {
             message.setBooleanProperty("boolean", true);
             fail();
-        } 
+        }
         catch(MessageNotWriteableException exc)
         {
             //should throw exception
@@ -262,7 +260,7 @@ public class MockMessageTest
         assertTrue(message.getBooleanProperty("boolean"));
         assertTrue(message.propertyExists("boolean"));
     }
-    
+
 	@Test
     public void testSetAndGetCorrelationID() throws Exception
     {
@@ -279,7 +277,7 @@ public class MockMessageTest
         assertEquals("test", message.getJMSCorrelationID());
         assertTrue(Arrays.equals("test".getBytes("ISO-8859-1"), message.getJMSCorrelationIDAsBytes()));
     }
-    
+
 	@Test
     public void testClone() throws Exception
     {

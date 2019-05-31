@@ -24,12 +24,12 @@ public class MockObjectMessageTest
         assertTrue(message.equals(message));
         assertTrue(new MockObjectMessage("test").equals(new MockObjectMessage("test")));
         assertFalse(new MockObjectMessage("test").equals(new MockTextMessage("test")));
-        assertTrue(new MockObjectMessage(new Integer(1)).equals(new MockObjectMessage(new Integer(1))));
-        assertFalse(new MockObjectMessage(new Double(1.1)).equals(new MockObjectMessage(new Double(1.3))));
-        assertFalse(new MockObjectMessage(new Long(3)).equals(null));
+        assertTrue(new MockObjectMessage(1).equals(new MockObjectMessage(1)));
+        assertFalse(new MockObjectMessage(1.1).equals(new MockObjectMessage(1.3)));
+        assertFalse(new MockObjectMessage(3L).equals(null));
         assertFalse(new MockObjectMessage(null).equals(null));
         assertTrue(new MockObjectMessage(null).equals(new MockObjectMessage(null)));
-        assertEquals(new MockObjectMessage(new Double(1.1)).hashCode(), new MockObjectMessage(new Double(1.1)).hashCode());
+        assertEquals(new MockObjectMessage(1.1).hashCode(), new MockObjectMessage(1.1).hashCode());
         assertEquals(new MockObjectMessage(null).hashCode(), new MockObjectMessage(null).hashCode());
     }
     
@@ -37,22 +37,22 @@ public class MockObjectMessageTest
     public void testReadOnly() throws Exception
     {
         MockObjectMessage message = new MockObjectMessage("test");
-        message.setObject(new Integer(2));
-        assertEquals(new Integer(2), message.getObject());
+        message.setObject(2);
+        assertEquals(2, message.getObject());
         message.setReadOnly(true);
         try
         {
-            message.setObject(new Integer(3));
+            message.setObject(3);
             fail();
         } 
         catch(MessageNotWriteableException exc)
         {
             //should throw exception
         }
-        assertEquals(new Integer(2), message.getObject());
+        assertEquals(2, message.getObject());
         message.clearBody();
-        message.setObject(new Integer(3));
-        assertEquals(new Integer(3), message.getObject());
+        message.setObject(3);
+        assertEquals(3, message.getObject());
     }
     
 	@Test
@@ -66,9 +66,9 @@ public class MockObjectMessageTest
         assertEquals(message, newMessage);
         assertEquals("aText", newMessage.getObject());
         assertEquals("test", newMessage.getStringProperty("string"));
-        message.setObject(new Integer(7));
+        message.setObject(7);
         newMessage = (MockObjectMessage)message.clone();
-        assertEquals(new Integer(7), newMessage.getObject());
+        assertEquals(7, newMessage.getObject());
         TestObject testObject = new TestObject();
         message.setObject(testObject);
         newMessage = (MockObjectMessage)message.clone();
@@ -80,7 +80,7 @@ public class MockObjectMessageTest
     {
         MockObjectMessage message = new MockObjectMessage();
         assertEquals(MockObjectMessage.class.getName() + ": null", message.toString());
-        message.setObject(new Integer(3));
+        message.setObject(3);
         assertEquals(MockObjectMessage.class.getName() + ": 3", message.toString());
         message.setObject(new TestObject());
         assertEquals(MockObjectMessage.class.getName() + ": TestObject", message.toString());

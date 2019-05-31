@@ -90,10 +90,10 @@ public class MockMappedRecordTest extends TestCase
         map.put("2", "2");
         mappedRecord.putAll(map);
         String string = mappedRecord.toString();
-        assertTrue(-1 != string.indexOf(MockMappedRecord.class.getName()));
-        assertTrue(-1 != string.indexOf("recordName"));
-        assertTrue(-1 != string.indexOf("shortDescription"));
-        assertTrue(-1 != string.indexOf(map.toString()));
+        assertTrue(string.contains(MockMappedRecord.class.getName()));
+        assertTrue(string.contains("recordName"));
+        assertTrue(string.contains("shortDescription"));
+        assertTrue(string.contains(map.toString()));
     }
     
     public void testClone()

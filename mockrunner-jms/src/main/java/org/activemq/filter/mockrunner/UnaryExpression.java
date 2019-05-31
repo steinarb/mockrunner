@@ -1,20 +1,20 @@
-/** 
- * 
- * Copyright 2004 Hiram Chirino
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
- * 
- **/
+/*
+
+  Copyright 2004 Hiram Chirino
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+ */
 package org.activemq.filter.mockrunner;
 
 import java.math.BigDecimal;
@@ -90,21 +90,20 @@ public abstract class UnaryExpression implements Expression {
             }
 
             public String toString() {
-            	StringBuffer answer = new StringBuffer();
+            	StringBuilder answer = new StringBuilder();
             	answer.append(this.right);
             	answer.append(" ");
             	answer.append(getExpressionSymbol());
             	answer.append(" ( ");
 
             	int count=0;
-            	for (Iterator i = inList.iterator(); i.hasNext();) {
-					Object o = (Object) i.next();
-					if( count!=0 ) {
-		            	answer.append(", ");				
-					}
-	            	answer.append(o);				
-	            	count++;
-				}
+                for (Object o : inList) {
+                    if (count != 0) {
+                        answer.append(", ");
+                    }
+                    answer.append(o);
+                    count++;
+                }
             	
             	answer.append(" )");				
                 return answer.toString();
@@ -123,9 +122,9 @@ public abstract class UnaryExpression implements Expression {
         public BooleanUnaryExpression(Expression left) {        	
             super(left);
         }
-    };
+    }
 
-        
+
     public static BooleanExpression createNOT(BooleanExpression left) {
         return new BooleanUnaryExpression(left) {
             public Object evaluate(Message message) throws JMSException {
@@ -133,7 +132,7 @@ public abstract class UnaryExpression implements Expression {
                 if (lvalue == null) {
                     return null;
                 }
-                return lvalue.booleanValue() ? Boolean.FALSE : Boolean.TRUE;
+                return lvalue ? Boolean.FALSE : Boolean.TRUE;
             }
 
             public String getExpressionSymbol() {
@@ -163,16 +162,16 @@ public abstract class UnaryExpression implements Expression {
     private static Number negate(Number left) {
     	Class clazz = left.getClass();
         if (clazz == Integer.class) {
-            return new Integer(-left.intValue());
+            return -left.intValue();
         }
         else if (clazz == Long.class) {
-            return new Long(-left.longValue());
+            return -left.longValue();
         }
         else if (clazz ==  Float.class) {
-            return new Float(-left.floatValue());
+            return -left.floatValue();
         }
         else if (clazz == Double.class) {
-            return new Double(-left.doubleValue());
+            return -left.doubleValue();
         }
         else if (clazz == BigDecimal.class) {
         	// We ussually get a big deciamal when we have Long.MIN_VALUE constant in the 
@@ -183,7 +182,7 @@ public abstract class UnaryExpression implements Expression {
         	bd = bd.negate();
         	
         	if( BD_LONG_MIN_VALUE.compareTo(bd)==0  ) {
-        		return new Long(Long.MIN_VALUE);
+        		return Long.MIN_VALUE;
         	}
             return bd;
         }

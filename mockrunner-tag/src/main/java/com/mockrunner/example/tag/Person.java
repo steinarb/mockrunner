@@ -1,7 +1,7 @@
 package com.mockrunner.example.tag;
 
 /**
- * Represents a person. Used in {@link HtmlTextTagTest}.
+ * Represents a person. Used in HtmlTextTagTest.
  */
 public class Person
 {

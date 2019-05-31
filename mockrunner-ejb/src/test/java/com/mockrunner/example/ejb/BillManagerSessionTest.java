@@ -47,8 +47,8 @@ public class BillManagerSessionTest extends BasicEJBTestCaseAdapter
         AspectSystem aspectSystem =  AspectSystemFactory.getAspectSystem();
         aspectSystem.add(new FindUnpaidAspect());
         bean.markAsPaid();
-        BillEntity entity1 = (BillEntity)findByPrimaryKey("java:comp/env/ejb/BillEntity", new Integer(1));
-        BillEntity entity2 = (BillEntity)findByPrimaryKey("java:comp/env/ejb/BillEntity", new Integer(2));
+        BillEntity entity1 = (BillEntity)findByPrimaryKey("java:comp/env/ejb/BillEntity", 1);
+        BillEntity entity2 = (BillEntity)findByPrimaryKey("java:comp/env/ejb/BillEntity", 2);
         assertTrue(entity1.getPaid());
         assertTrue(entity2.getPaid());
     }
@@ -63,8 +63,8 @@ public class BillManagerSessionTest extends BasicEJBTestCaseAdapter
         public void intercept(InvocationContext invocationContext) throws Exception
         {
             List unpaidObjects = new ArrayList();
-            BillEntity entity1 = (BillEntity)createEntityBean("java:comp/env/ejb/BillEntity", new Object[] {new Integer(1)}, new Integer(1));
-            BillEntity entity2 = (BillEntity)createEntityBean("java:comp/env/ejb/BillEntity", new Object[] {new Integer(2)}, new Integer(2));
+            BillEntity entity1 = (BillEntity)createEntityBean("java:comp/env/ejb/BillEntity", new Object[] {new Integer(1)}, 1);
+            BillEntity entity2 = (BillEntity)createEntityBean("java:comp/env/ejb/BillEntity", new Object[] {new Integer(2)}, 2);
             entity1.setPaid(false);
             entity2.setPaid(false);
             unpaidObjects.add(entity1);

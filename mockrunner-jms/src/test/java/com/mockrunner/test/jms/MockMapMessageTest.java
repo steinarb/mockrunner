@@ -40,7 +40,7 @@ public class MockMapMessageTest
         {
             //should throw exception
         }
-        message.setObject("byteObject1", new Byte((byte)1));
+        message.setObject("byteObject1", (byte) 1);
         assertEquals("1", message.getString("byteObject1"));
         assertEquals(1, message.getLong("byteObject1"));
         assertEquals(1, message.getInt("byteObject1"));
@@ -88,7 +88,7 @@ public class MockMapMessageTest
             message.getInt("null");
             fail();
         }
-        catch(NumberFormatException exc)
+        catch(MessageFormatException exc)
         {
             //should throw exception
         }
@@ -216,11 +216,11 @@ public class MockMapMessageTest
         message.setInt("2", 2);
         assertEquals(2, message.getMap().size());
         assertEquals("value1", message.getMap().get("1"));
-        assertEquals(new Integer(2), message.getMap().get("2"));
+        assertEquals(2, message.getMap().get("2"));
         message.getMap().put("3", "3");
         assertEquals(2, message.getMap().size());
         assertEquals("value1", message.getMap().get("1"));
-        assertEquals(new Integer(2), message.getMap().get("2"));
+        assertEquals(2, message.getMap().get("2"));
         MockMapMessage otherMessage = new MockMapMessage();
         otherMessage.setString("1", "value1");
         otherMessage.setInt("2", 2);

@@ -14,18 +14,14 @@ import javax.jms.ConnectionConsumer;
 import javax.jms.Destination;
 import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
-import javax.jms.Queue;
 import javax.jms.QueueConnection;
 import javax.jms.QueueSession;
 import javax.jms.Session;
-import javax.jms.Topic;
 import javax.jms.TopicConnection;
 import javax.jms.TopicSession;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import junit.framework.TestCase;
 
 import com.mockrunner.jms.ConfigurationManager;
 import com.mockrunner.jms.DestinationManager;
@@ -317,15 +313,15 @@ public class MockConnectionTest
     {
         assertTrue(queueConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE) instanceof QueueSession);
         assertNotNull(queueConnection.createConnectionConsumer((Destination)null, null, null, 0));
-        assertNotNull(queueConnection.createConnectionConsumer((Queue)null, null, null, 0));
+        assertNotNull(queueConnection.createConnectionConsumer(null, null, null, 0));
         assertNotNull(queueConnection.createDurableConnectionConsumer(null, null, null, null, 0));
         assertTrue(topicConnection.createSession(true, Session.CLIENT_ACKNOWLEDGE) instanceof TopicSession);
         assertNotNull(topicConnection.createConnectionConsumer((Destination)null, null, null, 0));
-        assertNotNull(topicConnection.createConnectionConsumer((Topic)null, null, null, 0));
+        assertNotNull(topicConnection.createConnectionConsumer(null, null, null, 0));
         assertNotNull(topicConnection.createDurableConnectionConsumer(null, null, null, null, 0));
         assertTrue(connection.createSession(true, Session.CLIENT_ACKNOWLEDGE) instanceof Session);
-        assertNotNull(connection.createConnectionConsumer((Destination)null, null, null, 0));
-        assertNotNull(connection.createConnectionConsumer((Topic)null, null, null, 0));
+        assertNotNull(connection.createConnectionConsumer(null, null, null, 0));
+        assertNotNull(connection.createConnectionConsumer(null, null, null, 0));
         assertNotNull(connection.createDurableConnectionConsumer(null, null, null, null, 0));
     }
     

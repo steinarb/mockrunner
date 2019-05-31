@@ -40,7 +40,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
             return this.JmsSelector();
         }
         catch (Throwable e) {
-                throw (InvalidSelectorException)new InvalidSelectorException("test");
+                throw new InvalidSelectorException("test");
         }
 
     }
@@ -73,8 +73,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case OR:
-        ;
-        break;
+          break;
       default:
         break label_1;
       }
@@ -94,8 +93,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case AND:
-        ;
-        break;
+          break;
       default:
         break label_2;
       }
@@ -117,8 +115,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
       case IS:
       case 28:
       case 29:
-        ;
-        break;
+          break;
       default:
         break label_3;
       }
@@ -177,8 +174,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
       case 31:
       case 32:
       case 33:
-        ;
-        break;
+          break;
       default:
         break label_4;
       }
@@ -213,7 +209,6 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
           u = stringLitteral();
           break;
         default:
-          ;
         }
                     left = ComparisonExpression.createLike(left, t, u);
         break;
@@ -229,7 +224,6 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
             u = stringLitteral();
             break;
           default:
-            ;
           }
                     left = ComparisonExpression.createNotLike(left, t, u);
         } else {
@@ -261,8 +255,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
                 while (true) {
                   switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
                   case 35:
-                    ;
-                    break;
+                      break;
                   default:
                     break label_5;
                   }
@@ -285,8 +278,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
                   while (true) {
                     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
                     case 35:
-                      ;
-                      break;
+                        break;
                     default:
                       break label_6;
                     }
@@ -317,7 +309,6 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     label_7:
     while (true) {
       if (jj_2_5(2147483647)) {
-        ;
       } else {
         break label_7;
       }
@@ -351,8 +342,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
       case 39:
       case 40:
       case 41:
-        ;
-        break;
+          break;
       default:
         break label_8;
       }
@@ -496,7 +486,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
 
   final public String stringLitteral() throws ParseException {
     Token t;
-    StringBuffer rc = new StringBuffer();
+    StringBuilder rc = new StringBuilder();
     boolean first=true;
     t = jj_consume_token(STRING_LITERAL);
         // Decode the sting value.
@@ -520,37 +510,37 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     throw new Error("Missing return statement in function");
   }
 
-  final private boolean jj_2_1(int xla) {
+  private boolean jj_2_1(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     return !jj_3_1();
   }
 
-  final private boolean jj_2_2(int xla) {
+  private boolean jj_2_2(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     return !jj_3_2();
   }
 
-  final private boolean jj_2_3(int xla) {
+  private boolean jj_2_3(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     return !jj_3_3();
   }
 
-  final private boolean jj_2_4(int xla) {
+  private boolean jj_2_4(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     return !jj_3_4();
   }
 
-  final private boolean jj_2_5(int xla) {
+  private boolean jj_2_5(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     return !jj_3_5();
   }
 
-  final private boolean jj_2_6(int xla) {
+  private boolean jj_2_6(int xla) {
     jj_la = xla; jj_lastpos = jj_scanpos = token;
     return !jj_3_6();
   }
 
-  final private boolean jj_3R_53() {
+  private boolean jj_3R_53() {
     if (jj_scan_token(32)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_45()) return true;
@@ -558,13 +548,13 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_29() {
+  private boolean jj_3R_29() {
     if (jj_scan_token(ID)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3R_63() {
+  private boolean jj_3R_63() {
     if (jj_scan_token(35)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_23()) return true;
@@ -572,7 +562,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_50() {
+  private boolean jj_3R_50() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_58()) {
@@ -583,7 +573,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_40() {
+  private boolean jj_3R_40() {
     if (jj_scan_token(OR)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_39()) return true;
@@ -591,7 +581,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_52() {
+  private boolean jj_3R_52() {
     if (jj_scan_token(31)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_45()) return true;
@@ -599,7 +589,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_27() {
+  private boolean jj_3R_27() {
     if (jj_scan_token(34)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_30()) return true;
@@ -609,13 +599,13 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_26() {
+  private boolean jj_3R_26() {
     if (jj_3R_29()) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3R_51() {
+  private boolean jj_3R_51() {
     if (jj_scan_token(30)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_45()) return true;
@@ -623,7 +613,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_46() {
+  private boolean jj_3R_46() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_51()) {
@@ -658,13 +648,13 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_25() {
+  private boolean jj_3R_25() {
     if (jj_3R_28()) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3R_45() {
+  private boolean jj_3R_45() {
     if (jj_3R_11()) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     Token xsp;
@@ -676,7 +666,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_30() {
+  private boolean jj_3R_30() {
     if (jj_3R_39()) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     Token xsp;
@@ -688,7 +678,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_24() {
+  private boolean jj_3R_24() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_25()) {
@@ -702,19 +692,19 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_19() {
+  private boolean jj_3R_19() {
     if (jj_3R_24()) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3R_23() {
+  private boolean jj_3R_23() {
     if (jj_scan_token(STRING_LITERAL)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3R_62() {
+  private boolean jj_3R_62() {
     if (jj_scan_token(35)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_23()) return true;
@@ -722,7 +712,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_18() {
+  private boolean jj_3R_18() {
     if (jj_scan_token(XQUERY)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_23()) return true;
@@ -730,7 +720,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_43() {
+  private boolean jj_3R_43() {
     if (jj_3R_45()) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     Token xsp;
@@ -742,7 +732,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_61() {
+  private boolean jj_3R_61() {
     if (jj_scan_token(ESCAPE)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_23()) return true;
@@ -750,7 +740,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3_4() {
+  private boolean jj_3_4() {
     if (jj_scan_token(NOT)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_scan_token(IN)) return true;
@@ -770,7 +760,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3_6() {
+  private boolean jj_3_6() {
     if (jj_scan_token(37)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_12()) return true;
@@ -778,7 +768,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_17() {
+  private boolean jj_3R_17() {
     if (jj_scan_token(XPATH)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_23()) return true;
@@ -786,13 +776,13 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_38() {
+  private boolean jj_3R_38() {
     if (jj_scan_token(NULL)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3R_16() {
+  private boolean jj_3R_16() {
     if (jj_scan_token(NOT)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_12()) return true;
@@ -800,7 +790,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_14() {
+  private boolean jj_3R_14() {
     if (jj_scan_token(37)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_12()) return true;
@@ -808,7 +798,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_57() {
+  private boolean jj_3R_57() {
     if (jj_scan_token(IN)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_scan_token(34)) return true;
@@ -826,7 +816,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_49() {
+  private boolean jj_3R_49() {
     if (jj_scan_token(IS)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_scan_token(NOT)) return true;
@@ -836,7 +826,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_15() {
+  private boolean jj_3R_15() {
     if (jj_scan_token(38)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_12()) return true;
@@ -844,13 +834,13 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_37() {
+  private boolean jj_3R_37() {
     if (jj_scan_token(FALSE)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3_1() {
+  private boolean jj_3_1() {
     if (jj_scan_token(IS)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_scan_token(NULL)) return true;
@@ -858,7 +848,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_12() {
+  private boolean jj_3R_12() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_14()) {
@@ -881,13 +871,13 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_36() {
+  private boolean jj_3R_36() {
     if (jj_scan_token(TRUE)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3R_48() {
+  private boolean jj_3R_48() {
     if (jj_scan_token(29)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_43()) return true;
@@ -895,7 +885,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3_3() {
+  private boolean jj_3_3() {
     if (jj_scan_token(NOT)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_scan_token(BETWEEN)) return true;
@@ -909,7 +899,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_47() {
+  private boolean jj_3R_47() {
     if (jj_scan_token(28)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_43()) return true;
@@ -917,7 +907,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_44() {
+  private boolean jj_3R_44() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_47()) {
@@ -934,13 +924,13 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_35() {
+  private boolean jj_3R_35() {
     if (jj_scan_token(FLOATING_POINT_LITERAL)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3R_56() {
+  private boolean jj_3R_56() {
     if (jj_scan_token(BETWEEN)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_45()) return true;
@@ -952,7 +942,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_60() {
+  private boolean jj_3R_60() {
     if (jj_scan_token(ESCAPE)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_23()) return true;
@@ -960,13 +950,13 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_34() {
+  private boolean jj_3R_34() {
     if (jj_scan_token(OCTAL_LITERAL)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3R_22() {
+  private boolean jj_3R_22() {
     if (jj_scan_token(41)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_12()) return true;
@@ -974,7 +964,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_41() {
+  private boolean jj_3R_41() {
     if (jj_3R_43()) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     Token xsp;
@@ -986,7 +976,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3_2() {
+  private boolean jj_3_2() {
     if (jj_scan_token(NOT)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_scan_token(LIKE)) return true;
@@ -1000,7 +990,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_55() {
+  private boolean jj_3R_55() {
     if (jj_scan_token(LIKE)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_23()) return true;
@@ -1012,13 +1002,13 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_33() {
+  private boolean jj_3R_33() {
     if (jj_scan_token(HEX_LITERAL)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3R_21() {
+  private boolean jj_3R_21() {
     if (jj_scan_token(40)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_12()) return true;
@@ -1026,7 +1016,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_13() {
+  private boolean jj_3R_13() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_20()) {
@@ -1040,7 +1030,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_20() {
+  private boolean jj_3R_20() {
     if (jj_scan_token(39)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_12()) return true;
@@ -1048,7 +1038,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_42() {
+  private boolean jj_3R_42() {
     if (jj_scan_token(AND)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_41()) return true;
@@ -1056,13 +1046,13 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_32() {
+  private boolean jj_3R_32() {
     if (jj_scan_token(DECIMAL_LITERAL)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3R_11() {
+  private boolean jj_3R_11() {
     if (jj_3R_12()) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     Token xsp;
@@ -1074,25 +1064,25 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_10() {
+  private boolean jj_3R_10() {
     if (jj_scan_token(38)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3R_31() {
+  private boolean jj_3R_31() {
     if (jj_3R_23()) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3R_9() {
+  private boolean jj_3R_9() {
     if (jj_scan_token(37)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     return false;
   }
 
-  final private boolean jj_3R_59() {
+  private boolean jj_3R_59() {
     if (jj_scan_token(38)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_11()) return true;
@@ -1100,7 +1090,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_39() {
+  private boolean jj_3R_39() {
     if (jj_3R_41()) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     Token xsp;
@@ -1112,7 +1102,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3_5() {
+  private boolean jj_3_5() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_9()) {
@@ -1125,7 +1115,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_28() {
+  private boolean jj_3R_28() {
     Token xsp;
     xsp = jj_scanpos;
     if (jj_3R_31()) {
@@ -1154,7 +1144,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_54() {
+  private boolean jj_3R_54() {
     if (jj_scan_token(33)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_45()) return true;
@@ -1162,7 +1152,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return false;
   }
 
-  final private boolean jj_3R_58() {
+  private boolean jj_3R_58() {
     if (jj_scan_token(37)) return true;
     if (jj_la == 0 && jj_scanpos == jj_lastpos) return false;
     if (jj_3R_11()) return true;
@@ -1219,7 +1209,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     jj_ntk = -1;
   }
 
-  final private Token jj_consume_token(int kind) throws ParseException {
+  private Token jj_consume_token(int kind) throws ParseException {
     Token oldToken;
     if ((oldToken = token).next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
@@ -1231,7 +1221,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     throw generateParseException();
   }
 
-  final private boolean jj_scan_token(int kind) {
+  private boolean jj_scan_token(int kind) {
     if (jj_scanpos == jj_lastpos) {
       jj_la--;
       if (jj_scanpos.next == null) {
@@ -1261,7 +1251,7 @@ public class SelectorParser implements SelectorParserConstants, Serializable {
     return t;
   }
 
-  final private int jj_ntk() {
+  private int jj_ntk() {
     if ((jj_nt=token.next) == null)
       return (jj_ntk = (token.next=token_source.getNextToken()).kind);
     else

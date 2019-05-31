@@ -10,7 +10,7 @@ public interface PaySession
    extends javax.ejb.EJBObject
 {
 
-   public void payBill( java.lang.String customerId,java.lang.String billId,double amount )
+   void payBill(java.lang.String customerId, java.lang.String billId, double amount)
       throws com.mockrunner.example.ejb.PaySessionException, java.rmi.RemoteException;
 
 }

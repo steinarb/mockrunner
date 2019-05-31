@@ -10,10 +10,10 @@ public interface UserLoginSession
    extends javax.ejb.EJBObject
 {
 
-   public boolean loginUser( java.lang.String username,java.lang.String password )
+   boolean loginUser(java.lang.String username, java.lang.String password)
       throws java.rmi.RemoteException;
 
-   public boolean createUser( java.lang.String username,java.lang.String password )
+   boolean createUser(java.lang.String username, java.lang.String password)
       throws java.rmi.RemoteException;
 
 }

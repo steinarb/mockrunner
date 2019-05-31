@@ -111,7 +111,7 @@ public class MockTopicSubscriber extends MockMessageConsumer implements TopicSub
     			// this behavior causes a 10 ms poll, as opposed to a wait. 
     			topic.wait(10);
     		}
-		} catch (InterruptedException e) {
+		} catch (InterruptedException ignored) {
 		}
     }
 }

@@ -313,7 +313,7 @@ public class MockMessageProducerTest
         MockTextMessage textMessage = new MockTextMessage();
         textMessage.setText("test");
         MockObjectMessage objectMessage = new MockObjectMessage();
-        objectMessage.setObject(new Long(3));
+        objectMessage.setObject(3L);
         producer1.send(textMessage);
         producer1.send(textMessage);
         producer2.send(textMessage);

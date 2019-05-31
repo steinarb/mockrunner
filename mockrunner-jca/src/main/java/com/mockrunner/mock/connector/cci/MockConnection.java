@@ -62,9 +62,8 @@ public class MockConnection implements Connection
 
     public void close() throws ResourceException
     {
-        for(int ii = 0; ii < interactions.size(); ii++)
-        {
-            ((Interaction)interactions.get(ii)).close();
+        for (Object interaction : interactions) {
+            ((Interaction) interaction).close();
         }
         closed = true;
     }

@@ -4,8 +4,6 @@ import static org.junit.Assert.assertNotSame;
 
 import org.junit.Test;
 
-import junit.framework.TestCase;
-
 import com.mockrunner.mock.jms.JMSMockObjectFactory;
 import com.mockrunner.mock.jms.MockConnectionFactory;
 import com.mockrunner.mock.jms.MockQueueConnectionFactory;

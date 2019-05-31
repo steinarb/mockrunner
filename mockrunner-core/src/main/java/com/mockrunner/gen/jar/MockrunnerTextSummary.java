@@ -109,10 +109,8 @@ public class MockrunnerTextSummary implements Summary
         writer.println();
         writer.println("Depends on: ");
         writer.println();
-        Iterator jarDependencies = dependendJars.iterator();
-        while(jarDependencies.hasNext()) 
-        {
-            String jar = (String)jarDependencies.next();
+        for (Object dependendJar : dependendJars) {
+            String jar = (String) dependendJar;
             writer.println(jar);
         }
     }

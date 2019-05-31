@@ -10,5 +10,5 @@ package com.mockrunner.tag;
  */
 public interface DynamicChild
 {
-    public Object evaluate();
+    Object evaluate();
 }

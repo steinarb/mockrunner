@@ -101,6 +101,7 @@ public class MockHttpServletResponseTest extends TestCase
         response.getWriter().print("test");
         response.flushBuffer();
         assertEquals("testtruetest", response.getOutputStreamContent());
+        assertEquals("testtruetest".getBytes().length, response.getOutputStreamBinaryContent().length);
     }
     
     public void testGetSetContentType() throws IOException
@@ -148,5 +149,26 @@ public class MockHttpServletResponseTest extends TestCase
         response.flushBuffer(); 
         String output = response.getOutputStreamContent();
         assertTrue(output.equals(input));
+    }
+
+    public void testRedirect() throws IOException
+    {
+        response.sendRedirect("/some-location");
+        assertEquals("/some-location", response.getHeader("Location"));
+        assertEquals(HttpServletResponse.SC_FOUND, response.getStatusCode());
+    }
+
+    public void testEncodeRedirectURL() throws IOException {
+        final String encoded1 = response.encodeRedirectURL("page#/some-location?a=b&c=d");
+        assertEquals("page%23%2Fsome-location%3Fa%3Db%26c%3Dd", encoded1);
+        final String encoded2 = response.encodeRedirectURL("page");
+        assertEquals("page", encoded2);
+    }
+
+    public void testEncodeRedirectUrl() throws IOException {
+        final String encoded = response.encodeRedirectUrl("page#/some-location?a=b&c=d");
+        assertEquals("page%23%2Fsome-location%3Fa%3Db%26c%3Dd", encoded);
+        final String encoded2 = response.encodeRedirectUrl("page");
+        assertEquals("page", encoded2);
     }
 }

@@ -332,8 +332,8 @@ public class EJBTestModule
      * Deploys a message driven bean to the mock container.
      * You have to specify JNDI names for connection factory and
      * destination. For creating connection factory and destination 
-     * objects you can use {@link com.mockrunner.mock.jms.JMSMockObjectFactory}
-     * and {@link com.mockrunner.jms.DestinationManager}.
+     * objects you can use com.mockrunner.mock.jms.JMSMockObjectFactory
+     * and com.mockrunner.jms.DestinationManager.
      * The specified objects are automatically bound to JNDI using
      * the specified names. The mock container automatically creates
      * a connection and session.
@@ -353,8 +353,8 @@ public class EJBTestModule
      * Deploys a message driven bean to the mock container.
      * You have to specify JNDI names for connection factory and
      * destination. For creating connection factory and destination 
-     * objects you can use {@link com.mockrunner.mock.jms.JMSMockObjectFactory}
-     * and {@link com.mockrunner.jms.DestinationManager}.
+     * objects you can use com.mockrunner.mock.jms.JMSMockObjectFactory
+     * and com.mockrunner.jms.DestinationManager.
      * The specified objects are automatically bound to JNDI using
      * the specified names. The mock container automatically creates
      * a connection and session.
@@ -609,7 +609,7 @@ public class EJBTestModule
      */
     public Object createEntityBean(String name, String createMethod, Object[] parameters, Object primaryKey)
     {
-        return createEntityBean(name, createMethod, parameters, (Class[])null, primaryKey);
+        return createEntityBean(name, createMethod, parameters, null, primaryKey);
     }
     
     /**
@@ -670,12 +670,9 @@ public class EJBTestModule
     
     private Class getHomeInterfaceClass(Class[] interfaces)
     {
-        for(int ii = 0; ii < interfaces.length; ii++)
-        {
-            Class current = interfaces[ii];
-            if(EJBHome.class.isAssignableFrom(current) || EJBLocalHome.class.isAssignableFrom(current))
-            {
-                 return current;
+        for (Class current : interfaces) {
+            if (EJBHome.class.isAssignableFrom(current) || EJBLocalHome.class.isAssignableFrom(current)) {
+                return current;
             }
         }
         return null;
@@ -714,10 +711,8 @@ public class EJBTestModule
     
     private void checkNullParameters(String createMethod, Object[] parameters)
     {
-        for(int ii = 0; ii < parameters.length; ii++)
-        {
-            if(null == parameters[ii])
-            {
+        for (Object parameter : parameters) {
+            if (null == parameter) {
                 String message = "Calling method " + createMethod + " failed. ";
                 message += "Null is not allowed if the parameter types are not specified.";
                 throw new IllegalArgumentException(message);

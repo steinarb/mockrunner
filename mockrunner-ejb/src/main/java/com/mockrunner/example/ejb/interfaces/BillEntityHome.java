@@ -9,19 +9,19 @@ package com.mockrunner.example.ejb.interfaces;
 public interface BillEntityHome
    extends javax.ejb.EJBHome
 {
-   public static final String COMP_NAME="java:comp/env/ejb/BillEntity";
-   public static final String JNDI_NAME="com/mockrunner/example/UserEntity";
+   String COMP_NAME="java:comp/env/ejb/BillEntity";
+   String JNDI_NAME="com/mockrunner/example/UserEntity";
 
-   public com.mockrunner.example.ejb.interfaces.BillEntity create(java.lang.Integer id)
+   com.mockrunner.example.ejb.interfaces.BillEntity create(java.lang.Integer id)
       throws javax.ejb.CreateException,java.rmi.RemoteException;
 
-   public java.util.Collection findUnpaid()
+   java.util.Collection findUnpaid()
       throws javax.ejb.FinderException,java.rmi.RemoteException;
 
-   public java.util.Collection findAll()
+   java.util.Collection findAll()
       throws javax.ejb.FinderException,java.rmi.RemoteException;
 
-   public com.mockrunner.example.ejb.interfaces.BillEntity findByPrimaryKey(java.lang.Integer pk)
+   com.mockrunner.example.ejb.interfaces.BillEntity findByPrimaryKey(java.lang.Integer pk)
       throws javax.ejb.FinderException,java.rmi.RemoteException;
 
 }

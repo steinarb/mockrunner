@@ -37,6 +37,6 @@ public class NestedApplicationExceptionTest
     @Test
     public void testGetMessage()
     {
-        assertTrue(nested.getMessage().indexOf("TestException") != -1);
+        assertTrue(nested.getMessage().contains("TestException"));
     }
 }

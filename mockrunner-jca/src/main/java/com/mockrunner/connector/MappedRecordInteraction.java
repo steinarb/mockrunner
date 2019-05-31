@@ -292,14 +292,10 @@ public class MappedRecordInteraction implements InteractionImplementor
             {
                 MappedRecord mappedRequest = (MappedRecord)request;
                 if(mappedRequest.size() != expectedRequest.size()) return false;
-                Iterator keys = mappedRequest.keySet().iterator();
-                while(keys.hasNext())
-                {
-                    Object nextKey = keys.next();
+                for (Object nextKey : mappedRequest.keySet()) {
                     Object actualValue = mappedRequest.get(nextKey);
                     Object expectedValue = expectedRequest.get(nextKey);
-                    if(!areObjectsEquals(actualValue, expectedValue))
-                    {
+                    if (!areObjectsEquals(actualValue, expectedValue)) {
                         return false;
                     }
                 }
@@ -376,11 +372,10 @@ public class MappedRecordInteraction implements InteractionImplementor
         } 
         catch(Exception exc)
         {
-            ResourceException resExc = new ResourceException("execute() failed");
-            resExc.setLinkedException(exc);
+            ResourceException resExc = new ResourceException("execute() failed", exc);
             throw resExc;
         }
-        return (Record)response;
+        return response;
     }
 
     /**
@@ -416,8 +411,7 @@ public class MappedRecordInteraction implements InteractionImplementor
         } 
         catch(Exception exc)
         {
-            ResourceException resExc = new ResourceException("execute() failed");
-            resExc.setLinkedException(exc);
+            ResourceException resExc = new ResourceException("execute() failed", exc);
             throw resExc;
         }
         return true;

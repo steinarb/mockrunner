@@ -15,9 +15,9 @@ import com.mockrunner.mock.ejb.EJBMockObjectFactory;
  * subclass this adapter or use {@link com.mockrunner.ejb.EJBTestModule}
  * directly (so your test case can use another base class).
  * This basic adapter can be used if you don't need any other modules. It
- * does not extend {@link com.mockrunner.base.BaseTestCase}. If you want
+ * does not extend com.mockrunner.base.BaseTestCase. If you want
  * to use several modules in conjunction, consider subclassing
- * {@link com.mockrunner.ejb.EJBTestCaseAdapter}.
+ * com.mockrunner.ejb.EJBTestCaseAdapter.
  * <b>This class is generated from the {@link com.mockrunner.ejb.EJBTestModule}
  * and should not be edited directly</b>.
  */
@@ -298,30 +298,30 @@ public abstract class BasicEJBTestCaseAdapter
     }
 
     /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#lookupBean(String)}
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#createBean(String)}
      * @deprecated
      */
     protected Object lookupBean(String name)
     {
-        return ejbTestModule.lookupBean(name);
+        return ejbTestModule.createBean(name);
     }
 
     /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#lookupBean(String, String, Object[])}
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#createBean(String, String, Object[])}
      * @deprecated
      */
     protected Object lookupBean(String name, String createMethod, Object[] parameters)
     {
-        return ejbTestModule.lookupBean(name, createMethod, parameters);
+        return ejbTestModule.createBean(name, createMethod, parameters);
     }
 
     /**
-     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#lookupBean(String, Object[])}
+     * Delegates to {@link com.mockrunner.ejb.EJBTestModule#createBean(String, Object[])}
      * @deprecated
      */
     protected Object lookupBean(String name, Object[] parameters)
     {
-        return ejbTestModule.lookupBean(name, parameters);
+        return ejbTestModule.createBean(name, parameters);
     }
 
     /**

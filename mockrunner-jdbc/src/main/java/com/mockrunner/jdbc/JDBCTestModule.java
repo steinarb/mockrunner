@@ -1537,12 +1537,11 @@ public class JDBCTestModule
     {
         if(!source.isEqual(target))
         {
-            StringBuilder buffer = new StringBuilder("Source data:\n");  
-            buffer.append(source.toString());
-            buffer.append("\n");
-            buffer.append("Target data:\n");
-            buffer.append(target.toString());
-            throw new VerifyFailedException("Mismatch in ResultSet data.\n" + buffer.toString());
+            String buffer = "Source data:\n" + source.toString() +
+                    "\n" +
+                    "Target data:\n" +
+                    target.toString();
+            throw new VerifyFailedException("Mismatch in ResultSet data.\n" + buffer);
         }
     }
     

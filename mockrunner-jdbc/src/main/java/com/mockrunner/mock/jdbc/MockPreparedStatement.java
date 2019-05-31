@@ -25,15 +25,11 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import com.mockrunner.jdbc.AbstractParameterResultSetHandler;
 import com.mockrunner.jdbc.ParameterUtil;
-import com.mockrunner.util.common.ArrayUtil;
 import com.mockrunner.util.common.StreamUtil;
 import com.mockrunner.util.common.StringUtil;
 
@@ -595,14 +591,11 @@ public class MockPreparedStatement extends MockStatement implements PreparedStat
     private MockParameterMap getParameterMapCopy(MockParameterMap actualParameters)
     {
     	MockParameterMap copyParameters = new MockParameterMap();
-    	Iterator<ParameterReference> keys = actualParameters.keySet().iterator();
-    	while(keys.hasNext())
-    	{
-    		ParameterReference key = keys.next();
-    		Object actualParameter = actualParameters.get(key);
-    		Object copyParameter = ParameterUtil.copyParameter(actualParameter);
-			copyParameters.put(key, copyParameter);
-    	}
+        for (ParameterReference key : actualParameters.keySet()) {
+            Object actualParameter = actualParameters.get(key);
+            Object copyParameter = ParameterUtil.copyParameter(actualParameter);
+            copyParameters.put(key, copyParameter);
+        }
     	return copyParameters;
     }
 }

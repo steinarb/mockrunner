@@ -40,7 +40,7 @@ public class MockStreamableByteArrayRecord extends MockRecord implements Streama
     public byte[] getContent()
     {
         if(null == content) return null;
-        return (byte[])content.clone();
+        return content.clone();
     }
 
     /**
@@ -56,7 +56,7 @@ public class MockStreamableByteArrayRecord extends MockRecord implements Streama
         }
         else
         {
-            this.content = (byte[])content.clone();
+            this.content = content.clone();
         }
     }
 

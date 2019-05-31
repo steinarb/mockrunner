@@ -10,7 +10,7 @@ public interface PrintSession
    extends javax.ejb.EJBObject
 {
 
-   public void sendMessage( java.lang.String customerId )
+   void sendMessage(java.lang.String customerId)
       throws java.rmi.RemoteException;
 
 }

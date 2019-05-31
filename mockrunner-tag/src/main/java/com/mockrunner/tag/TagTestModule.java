@@ -531,7 +531,7 @@ public class TagTestModule extends HTMLOutputModule
         }
         try
         {
-            return ((NestedTag)tag).doLifecycle();
+            return tag.doLifecycle();
         }
         catch(JspException exc)
         {

@@ -94,10 +94,10 @@ public class MockIndexedRecordTest extends TestCase
         list.add("2");
         indexedRecord.addAll(list);
         String string = indexedRecord.toString();
-        assertTrue(-1 != string.indexOf(MockIndexedRecord.class.getName()));
-        assertTrue(-1 != string.indexOf("recordName"));
-        assertTrue(-1 != string.indexOf("shortDescription"));
-        assertTrue(-1 != string.indexOf(list.toString()));
+        assertTrue(string.contains(MockIndexedRecord.class.getName()));
+        assertTrue(string.contains("recordName"));
+        assertTrue(string.contains("shortDescription"));
+        assertTrue(string.contains(list.toString()));
     }
     
     public void testClone()

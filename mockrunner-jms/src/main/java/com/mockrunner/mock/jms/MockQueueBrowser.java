@@ -102,18 +102,13 @@ public class MockQueueBrowser implements QueueBrowser, Serializable
         if(null == messageSelectorFilter) return messages;
         if(!connection.getConfigurationManager().getUseMessageSelectors()) return messages;
         List filteredMessages = new ArrayList();
-        for(int ii = 0; ii < messages.size(); ii++)
-        {
-            Message nextMessage = (Message)messages.get(ii);
-            try
-            {
-                if(messageSelectorFilter.matches(nextMessage))
-                {
+        for (Object message : messages) {
+            Message nextMessage = (Message) message;
+            try {
+                if (messageSelectorFilter.matches(nextMessage)) {
                     filteredMessages.add(nextMessage);
                 }
-            } 
-            catch(JMSException exc)
-            {
+            } catch (JMSException exc) {
                 throw new RuntimeException(exc.getMessage());
             }
         }

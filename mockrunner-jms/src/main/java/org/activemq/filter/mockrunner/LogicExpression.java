@@ -1,20 +1,20 @@
-/** 
- * 
- * Copyright 2004 Hiram Chirino
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
- * 
- **/
+/*
+
+  Copyright 2004 Hiram Chirino
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+
+ */
 package org.activemq.filter.mockrunner;
 
 import javax.jms.JMSException;
@@ -36,7 +36,7 @@ public abstract class LogicExpression extends BinaryExpression implements Boolea
                 
             	Boolean lv = (Boolean) left.evaluate(message);
                 // Can we do an OR shortcut??
-            	if (lv !=null && lv.booleanValue()) {
+            	if (lv !=null && lv) {
                     return Boolean.TRUE;
                 }
             	
@@ -60,7 +60,7 @@ public abstract class LogicExpression extends BinaryExpression implements Boolea
                 // Can we do an AND shortcut??
             	if( lv==null )
             		return null;
-            	if (!lv.booleanValue()) {
+            	if (!lv) {
                     return Boolean.FALSE;
                 }
             	

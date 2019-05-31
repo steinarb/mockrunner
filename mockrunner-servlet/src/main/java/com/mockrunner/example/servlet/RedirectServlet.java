@@ -24,20 +24,19 @@ public class RedirectServlet extends HttpServlet
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         String redirectUrl = request.getParameter("redirecturl");
-        StringBuffer output = new StringBuffer();
-        output.append("<html>\n");
-        output.append("<head>\n");
-        output.append("<meta http-equiv=\"refresh\" content=\"");
-        output.append("0;URL=" + redirectUrl + "\">\n");
-        output.append("</head>\n");
-        output.append("<body>\n");
-        output.append("<h3>");
-        output.append("You will be redirected to ");
-        output.append("<a href=\"" + redirectUrl + "\">");
-        output.append(redirectUrl + "</a>");
-        output.append("</h3>\n");
-        output.append("</body>\n");
-        output.append("</html>\n");
-        response.getWriter().write(output.toString());
+        String output = "<html>\n" +
+                "<head>\n" +
+                "<meta http-equiv=\"refresh\" content=\"" +
+                "0;URL=" + redirectUrl + "\">\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "<h3>" +
+                "You will be redirected to " +
+                "<a href=\"" + redirectUrl + "\">" +
+                redirectUrl + "</a>" +
+                "</h3>\n" +
+                "</body>\n" +
+                "</html>\n";
+        response.getWriter().write(output);
     }
 }

@@ -13,7 +13,6 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -411,7 +410,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         preparedStatement2.execute();
         Map<String, ParameterSets> parameterMap = preparedStatementHandler.getExecutedStatementParameterMap();
         assertEquals(2, parameterMap.size());
-        ParameterSets setsFor1 = (ParameterSets)parameterMap.get("select");
+        ParameterSets setsFor1 = parameterMap.get("select");
         assertEquals(3, setsFor1.getNumberParameterSets());
         MockParameterMap mapFor1 = setsFor1.getParameterSet(0);
         assertEquals(0, mapFor1.size());
@@ -422,7 +421,7 @@ public class AbstractParameterResultSetHandlerTest extends BaseTestCase
         mapFor1 = setsFor1.getParameterSet(2);
         assertEquals(1, mapFor1.size());
         assertEquals("xyz", mapFor1.get(1));
-        ParameterSets setsFor2 = (ParameterSets)parameterMap.get("insert");
+        ParameterSets setsFor2 = parameterMap.get("insert");
         assertEquals(2, setsFor2.getNumberParameterSets());
         MockParameterMap mapFor2 = setsFor2.getParameterSet(0);
         assertEquals(0, mapFor2.size());

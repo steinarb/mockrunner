@@ -37,7 +37,9 @@ public class AccountDAO
             spec.setCatalog(null);
             RecordFactory recordFactory = connectionFactory.getRecordFactory();
             IndexedRecord inputRecord = recordFactory.createIndexedRecord("Input");
+            //noinspection unchecked
             inputRecord.add(firstName);
+            //noinspection unchecked
             inputRecord.add(lastName);
             transaction = connection.getLocalTransaction();
             transaction.begin();
@@ -49,7 +51,7 @@ public class AccountDAO
                 if(iterator.hasNext())
                 {
                     Integer value = (Integer)iterator.next();
-                    return value.intValue();
+                    return value;
                 }
             }
         }

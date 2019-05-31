@@ -60,7 +60,7 @@ public class MockQueueReceiver extends MockMessageConsumer implements QueueRecei
     		synchronized(queue) {
     			queue.wait(timeout);
     		}
-		} catch (InterruptedException e) {
+		} catch (InterruptedException ignored) {
 		}
     }
 }

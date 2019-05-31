@@ -29,17 +29,12 @@ public class BCELClassAnalyzerTest extends TestCase
     private void checkMethod2()
     {
         Method[] methods = theClass.getDeclaredMethods();
-        for(int ii = 0; ii < methods.length; ii++)
-        {
-            if(methods[ii].getName().equals("method2"))
-            {
-                boolean isDeprecated = analyzer.isMethodDeprecated(methods[ii]);
-                if(methods[ii].getParameterTypes()[0].equals(String.class))
-                {
+        for (Method method : methods) {
+            if (method.getName().equals("method2")) {
+                boolean isDeprecated = analyzer.isMethodDeprecated(method);
+                if (method.getParameterTypes()[0].equals(String.class)) {
                     assertTrue(isDeprecated);
-                }
-                else
-                {
+                } else {
                     assertFalse(isDeprecated);
                 }
             }
@@ -49,11 +44,9 @@ public class BCELClassAnalyzerTest extends TestCase
     private void assertDeprecated(String methodName, boolean shouldBeDeprecated)
     {
         Method[] methods = theClass.getDeclaredMethods();
-        for(int ii = 0; ii < methods.length; ii++)
-        {
-            if(methodName.equals(methods[ii].getName()))
-            {
-                boolean isDeprecated = analyzer.isMethodDeprecated(methods[ii]);
+        for (Method method : methods) {
+            if (methodName.equals(method.getName())) {
+                boolean isDeprecated = analyzer.isMethodDeprecated(method);
                 assertTrue(isDeprecated == shouldBeDeprecated);
             }
         }

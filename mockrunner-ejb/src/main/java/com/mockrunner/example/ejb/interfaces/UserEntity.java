@@ -10,13 +10,13 @@ public interface UserEntity
    extends javax.ejb.EJBObject
 {
 
-   public java.lang.String getPassword(  )
+   java.lang.String getPassword()
       throws java.rmi.RemoteException;
 
-   public void setPassword( java.lang.String password )
+   void setPassword(java.lang.String password)
       throws java.rmi.RemoteException;
 
-   public java.lang.String getUsername(  )
+   java.lang.String getUsername()
       throws java.rmi.RemoteException;
 
 }

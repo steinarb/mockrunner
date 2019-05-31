@@ -301,19 +301,14 @@ public class ActionTestModule extends HTMLOutputModule
     
     private void setUpServletContextResourcePath(String[] resourcesFiles)
     {
-        for(int ii = 0; ii < resourcesFiles.length; ii++)
-        {
-            String file = resourcesFiles[ii];
-            try
-            {
+        for (String file : resourcesFiles) {
+            try {
                 File streamFile = new File(file);
                 FileInputStream stream = new FileInputStream(streamFile);
                 byte[] fileData = StreamUtil.getStreamAsByteArray(stream);
                 mockFactory.getMockServletContext().setResourceAsStream(file, fileData);
-                mockFactory.getMockServletContext().setResource(file, streamFile.toURL());
-            }
-            catch(Exception exc)
-            {
+                mockFactory.getMockServletContext().setResource(file, streamFile.toURI().toURL());
+            } catch (Exception exc) {
                 throw new NestedApplicationException(exc);
             }
         }
@@ -414,13 +409,13 @@ public class ActionTestModule extends HTMLOutputModule
     {
         if(containsMessages(messages))
         {
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             buffer.append("has the following messages/errors: ");
             Iterator iterator = messages.get();
             while(iterator.hasNext())
             {
                 ActionMessage message = (ActionMessage)iterator.next();
-                buffer.append(message.getKey() + ";");
+                buffer.append(message.getKey()).append(";");
             }
             throw new VerifyFailedException(buffer.toString());
         }
@@ -716,7 +711,7 @@ public class ActionTestModule extends HTMLOutputModule
      */
     public ActionMessage getActionMessageByKey(String messageKey)
     {
-        return (ActionMessage)getActionMessageByKey(messageKey, getActionMessages());
+        return getActionMessageByKey(messageKey, getActionMessages());
     }
     
     private ActionMessage getActionMessageByKey(String messageKey, ActionMessages messages)
@@ -1162,7 +1157,7 @@ public class ActionTestModule extends HTMLOutputModule
                 ActionForward currentForward = null;
                 try
                 {
-                    currentForward = (ActionForward)actionObj.execute(getActionMapping(), formObj, mockFactory.getWrappedRequest(), mockFactory.getWrappedResponse());
+                    currentForward = actionObj.execute(getActionMapping(), formObj, mockFactory.getWrappedRequest(), mockFactory.getWrappedResponse());
                 } 
                 catch(Exception exc)
                 {
@@ -1205,7 +1200,7 @@ public class ActionTestModule extends HTMLOutputModule
         {
             mockFactory.getMockResponse().getWriter().flush();    
         }
-        catch(Exception exc)
+        catch(Exception ignored)
         {
             
         }
@@ -1226,10 +1221,9 @@ public class ActionTestModule extends HTMLOutputModule
     
     private ExceptionHandlerConfig findExceptionHandler(Exception exc)
     {
-        for(int ii = 0; ii < exceptionHandlers.size(); ii++)
-        {
-            ExceptionHandlerConfig next = (ExceptionHandlerConfig)exceptionHandlers.get(ii);
-            if(next.canHandle(exc)) return next;
+        for (Object exceptionHandler : exceptionHandlers) {
+            ExceptionHandlerConfig next = (ExceptionHandlerConfig) exceptionHandler;
+            if (next.canHandle(exc)) return next;
         }
         return null;
     }

@@ -11,54 +11,47 @@ import com.kirkk.analyzer.framework.Jar;
 
 public class JarFileExtractor
 {
-    private List mainJars;
-    private List exceptionJars;
+    private List<String> mainJars;
+    private List<String> exceptionJars;
 
-    public JarFileExtractor(List mainJars, List exceptionJars)
+    public JarFileExtractor(List<String> mainJars, List<String> exceptionJars)
     {
-        this.mainJars = new ArrayList(mainJars);
-        this.exceptionJars = new ArrayList(exceptionJars);
+        this.mainJars = new ArrayList<>(mainJars);
+        this.exceptionJars = new ArrayList<>(exceptionJars);
     }
-    
+
     public Jar[] filter(Jar jars[])
     {
-        List finalList = new ArrayList();
-        for(int ii = 0; ii < jars.length; ii++) 
-        {
-            if(mainJars.contains(jars[ii].getJarFileName()))
-            {
-                finalList.add(jars[ii]);
+        List<Jar> finalList = new ArrayList<>();
+        for (Jar jar : jars) {
+            if (mainJars.contains(jar.getJarFileName())) {
+                finalList.add(jar);
             }
         }
-        return (Jar[])finalList.toArray(new Jar[finalList.size()]);
+        return finalList.toArray(new Jar[finalList.size()]);
     }
-    
-    public Map createDependencies(Jar jars[])
+
+    public Map<String,Set<String>> createDependencies(Jar jars[])
     {
-        Map finalMap = new HashMap();
-        for(int ii = 0; ii < jars.length; ii++) 
-        {
-            if(mainJars.contains(jars[ii].getJarFileName()))
-            {
-                Set currentSet = createDependencySet(jars[ii]);
-                finalMap.put(jars[ii].getJarFileName(), currentSet);
+        Map<String,Set<String>> finalMap = new HashMap<>();
+        for (Jar jar : jars) {
+            if (mainJars.contains(jar.getJarFileName())) {
+                Set<String> currentSet = createDependencySet(jar);
+                finalMap.put(jar.getJarFileName(), currentSet);
             }
         }
         return finalMap;
     }
-    
-    private Set createDependencySet(Jar jar)
+
+    private Set<String> createDependencySet(Jar jar)
     {
-        Set resultSet = new TreeSet();
-        List dependendJars = jar.getOutgoingDependencies();
+        Set<String> resultSet = new TreeSet<>();
+        List<Jar> dependendJars = jar.getOutgoingDependencies();
         if(null == dependendJars) return resultSet;
-        for(int ii = 0; ii < dependendJars.size(); ii++)
-        {
-            Jar currentJar = (Jar)dependendJars.get(ii);
+        for (Jar currentJar : dependendJars) {
             String currentJarFileName = currentJar.getJarFileName();
             resultSet.add(currentJarFileName);
-            if(!exceptionJars.contains(currentJarFileName))
-            {
+            if (!exceptionJars.contains(currentJarFileName)) {
                 resultSet.addAll(createDependencySet(currentJar));
             }
         }

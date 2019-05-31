@@ -10,10 +10,10 @@ public interface LogSession
    extends javax.ejb.EJBObject
 {
 
-   public void createLogTable(  )
+   void createLogTable()
       throws java.rmi.RemoteException;
 
-   public void logMessage( java.lang.String message )
+   void logMessage(java.lang.String message)
       throws java.rmi.RemoteException;
 
 }

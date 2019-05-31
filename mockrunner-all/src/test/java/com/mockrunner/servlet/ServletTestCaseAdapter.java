@@ -162,7 +162,7 @@ public abstract class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link com.mockrunner.servlet.ServletTestModule#createServlet(Class)}
      */
-    protected HttpServlet createServlet(Class servletClass)
+    protected <T extends HttpServlet> T createServlet(Class<T> servletClass)
     {
         return servletTestModule.createServlet(servletClass);
     }
@@ -170,7 +170,7 @@ public abstract class ServletTestCaseAdapter extends HTMLOutputTestCase
     /**
      * Delegates to {@link com.mockrunner.servlet.ServletTestModule#createFilter(Class)}
      */
-    protected Filter createFilter(Class filterClass)
+    protected <T extends Filter> T createFilter(Class<T> filterClass)
     {
         return servletTestModule.createFilter(filterClass);
     }
