@@ -1,3 +1,7 @@
+mockrunner-2.0.2:
+- Moved to java 8
+- Integrated several contributions
+
 mockrunner-0.4.7:
 - Reorganization of the modules and shift dependencies from the core module.
 

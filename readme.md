@@ -6,3 +6,7 @@ FYI: Older 1.1.x branch with support for Java 6 has been moved to "Best Effort" 
 Documentation
 -------------
 Maven site (http://mockrunner.github.io/mockrunner/)
+
+Building
+--------
+Must be build using Java 8
