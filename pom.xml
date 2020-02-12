@@ -41,7 +41,7 @@
         <contributor>
             <name>Carlos Martins</name>
             <email>carlos.mfa.martins@gmail.com</email>
-            <timezone>Europe/Lisbon</timezone>
+            <timezone>Europe/Amsterdam</timezone>
         </contributor>
         <contributor>
             <name>Deven Phillips</name>
@@ -49,9 +49,9 @@
     </contributors>
 
     <scm>
-        <connection>scm:git:https://github.com/mockrunner/mockrunner.git</connection>
-        <url>https://github.com/mockrunner/mockrunner</url>
-        <developerConnection>scm:git:https://github.com/mockrunner/mockrunner.git</developerConnection>
+        <connection>scm:git:git://github.com/github.com/mockrunner/mockrunner.git</connection>
+        <url>scm:git:git://github.com/github.com/mockrunner/mockrunner</url>
+        <developerConnection>scm:git:git://github.com/github.com/mockrunner/mockrunner.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
