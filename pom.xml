@@ -5,7 +5,7 @@
 
     <groupId>com.mockrunner</groupId>
     <artifactId>mockrunner</artifactId>
-    <version>2.0.2</version>
+    <version>2.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>MockRunner</name>
     <url>http://mockrunner.github.io</url>
@@ -52,7 +52,7 @@
         <connection>scm:git:git://github.com/github.com/mockrunner/mockrunner.git</connection>
         <url>scm:git:git://github.com/github.com/mockrunner/mockrunner</url>
         <developerConnection>scm:git:git://github.com/github.com/mockrunner/mockrunner.git</developerConnection>
-        <tag>mockrunner-2.0.2</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
