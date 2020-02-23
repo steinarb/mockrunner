@@ -49,9 +49,9 @@
     </contributors>
 
     <scm>
-        <connection>https://github.com/mockrunner/mockrunner</connection>
-        <url>scm:git:git://github.com/mockrunner/mockrunner.git</url>
-        <developerConnection>scm:git:git@github.com:mockrunner/mockrunner.git</developerConnection>
+        <connection>scm:git:git://github.com/github.com/mockrunner/mockrunner.git</connection>
+        <url>scm:git:git://github.com/github.com/mockrunner/mockrunner</url>
+        <developerConnection>scm:git:git://github.com/github.com/mockrunner/mockrunner.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
