@@ -61,16 +61,16 @@
     </issueManagement>
 
     <distributionManagement>
-        <repository>
-            <id>sonatype-nexus-staging</id>
-            <name>Nexus Staging Repository</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-        </repository>
         <snapshotRepository>
-            <id>sonatype-nexus-snapshots</id>
+            <id>ossrh</id>
             <name>Nexus Snaphots Repository</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <name>Nexus Staging Repository</name>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+        </repository>
         <site>
             <id>github-pages-site</id>
             <name>Deployment through GitHub's site deployment plugin</name>
@@ -80,7 +80,7 @@
 
 	<repositories>
 	    <repository>
-	        <id>sonatype-nexus-snapshots</id>
+	        <id>ossrh</id>
 	        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
 	        <snapshots>
 	            <enabled>true</enabled>
@@ -334,7 +334,7 @@
                     <configuration>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                         <useReleaseProfile>false</useReleaseProfile>
-                        <useReleaseProfiles>release</useReleaseProfiles>
+                        <releaseProfiles>release</releaseProfiles>
                         <goals>deploy</goals>
                     </configuration>
                 </plugin>
@@ -451,8 +451,8 @@
                 <version>1.6.8</version>
                 <extensions>true</extensions>
                 <configuration>
-                    <serverId>sonatype-nexus-staging</serverId>
-                    <nexusUrl>https://oss.sonatype.org</nexusUrl>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
             </plugin>
