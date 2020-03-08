@@ -5,7 +5,7 @@
 
     <groupId>com.mockrunner</groupId>
     <artifactId>mockrunner</artifactId>
-    <version>2.0.3-SNAPSHOT</version>
+    <version>2.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>MockRunner</name>
     <url>http://mockrunner.github.io</url>
@@ -495,7 +495,14 @@
             </properties>
         </profile>
         <profile>
-            <id>release</id>
+            <id>release-exclusives</id>
+            <!-- Profile automatically triggered when release:perform is executed -->
+            <activation>
+                <property>
+                    <name>release</name>
+                    <value>true</value>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <!-- Skip tests during release perform -->
