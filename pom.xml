@@ -333,8 +333,7 @@
                     <version>2.5.3</version>
                     <configuration>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
-                        <useReleaseProfile>false</useReleaseProfile>
-                        <useReleaseProfiles>release</useReleaseProfiles>
+                        <releaseProfiles>release</releaseProfiles>
                         <goals>deploy</goals>
                     </configuration>
                 </plugin>
@@ -495,14 +494,8 @@
             </properties>
         </profile>
         <profile>
-            <id>release-exclusives</id>
+            <id>release</id>
             <!-- Profile automatically triggered when release:perform is executed -->
-            <activation>
-                <property>
-                    <name>release</name>
-                    <value>true</value>
-                </property>
-            </activation>
             <build>
                 <plugins>
                     <!-- Skip tests during release perform -->
