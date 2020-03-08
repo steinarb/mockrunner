@@ -495,14 +495,7 @@
             </properties>
         </profile>
         <profile>
-            <id>release-exclusives</id>
-            <!-- Profile automatically triggered when release:perform is executed -->
-            <activation>
-                <property>
-                    <name>release</name>
-                    <value>true</value>
-                </property>
-            </activation>
+            <id>release</id>
             <build>
                 <plugins>
                     <!-- Skip tests during release perform -->
