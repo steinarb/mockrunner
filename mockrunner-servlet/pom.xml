@@ -26,6 +26,8 @@
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-core</artifactId>
+			<type>xml</type>
+			<classifier>features</classifier>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
