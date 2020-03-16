@@ -43,7 +43,6 @@
 		<dependency>
 			<groupId>com.mockrunner</groupId>
 			<artifactId>mockrunner-jms</artifactId>
-            <version>${project.version}</version>
 		</dependency>
 		<!-- needed in StreamUtil -->
 		<dependency>
