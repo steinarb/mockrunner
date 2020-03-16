@@ -217,6 +217,13 @@
                 <artifactId>mockrunner-servlet</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.mockrunner</groupId>
+                <artifactId>mockrunner-core</artifactId>
+                <version>${project.version}</version>
+                <type>xml</type>
+                <classifier>features</classifier>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
