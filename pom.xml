@@ -54,7 +54,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/mockrunner/mockrunner.git</connection>
-        <url>https://github.com/mockrunner/mockrunner</url>
+            <url>https://github.com/mockrunner/mockrunner</url>
         <developerConnection>scm:git:https://github.com/mockrunner/mockrunner.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
