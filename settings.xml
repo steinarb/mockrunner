@@ -3,19 +3,20 @@
     <servers>
         <server>
             <id>ossrh</id>
-            <username>${env.SONATYPE_USER}</username>
-            <password>${env.SONATYPE_PASSWORD}</password>
+            <username>${env.NEXUS_USERNAME}</username>
+            <password>${env.NEXUS_PASSWORD}</password>
         </server>
         <server>
-            <id>ossrh</id>
-            <username>${env.SONATYPE_USER}</username>
-            <password>${env.SONATYPE_PASSWORD}</password>
+            <id>sonatype-nexus-staging</id>
+            <username>${env.NEXUS_USERNAME}</username>
+            <password>${env.NEXUS_PASSWORD}</password>
         </server>
     </servers>
     <profiles>
         <profile>
             <id>gpg</id>
             <properties>
+                <gpg.keyname>mockrunner</gpg.keyname>
                 <gpg.passphrase>${env.GPG_PASSPHRASE}</gpg.passphrase>
             </properties>
         </profile>
