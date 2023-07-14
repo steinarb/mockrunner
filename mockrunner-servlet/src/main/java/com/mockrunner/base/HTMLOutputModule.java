@@ -66,10 +66,10 @@ public abstract class HTMLOutputModule extends WebTestModule
      * to parse the string output yourself. Please note that
      * HTML parsing is not very fast and may slow down
      * your test suite.
-     * @return the output as <code>org.jdom.Document</code>
+     * @return the output as <code>org.jdom2.Document</code>
      * @throws RuntimeException if a parsing error occurs
      */
-    public org.jdom.Document getOutputAsJDOMDocument()
+    public org.jdom2.Document getOutputAsJDOMDocument()
     {
         return XmlUtil.createJDOMDocument(getOutputAsW3CDocument());
     }

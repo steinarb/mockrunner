@@ -56,7 +56,7 @@ public abstract class BasicHTMLOutputTestCase extends BasicWebTestCase
     /**
      * Delegates to {@link HTMLOutputModule#getOutputAsJDOMDocument}
      */
-    protected org.jdom.Document getOutputAsJDOMDocument()
+    protected org.jdom2.Document getOutputAsJDOMDocument()
     {
         return getHTMLOutputModule().getOutputAsJDOMDocument();
     }
