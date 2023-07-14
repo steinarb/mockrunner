@@ -147,9 +147,9 @@
                 <version>2.0.8</version>
             </dependency>
             <dependency>
-                <groupId>jdom</groupId>
-                <artifactId>jdom</artifactId>
-                <version>1.0</version>
+                <groupId>org.jdom</groupId>
+                <artifactId>jdom2</artifactId>
+                <version>2.0.6.1</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>
@@ -493,7 +493,7 @@
                 </os>
             </activation>
             <properties>
-                <javadoc-executable-path>/usr/bin/javadoc</javadoc-executable-path>
+                <javadoc-executable-path>${env.JAVA_HOME}/bin/javadoc</javadoc-executable-path>
             </properties>
         </profile>
         <profile>
@@ -505,7 +505,7 @@
                 </os>
             </activation>
             <properties>
-                <javadoc-executable-path>/usr/bin/javadoc</javadoc-executable-path>
+                <javadoc-executable-path>${env.JAVA_HOME}/bin/javadoc</javadoc-executable-path>
             </properties>
         </profile>
         <profile>

@@ -17,7 +17,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.jdom.Element;
+import org.jdom2.Element;
 import org.junit.Before;
 import org.junit.Test;
 

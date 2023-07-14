@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.BufferedReader;
 
-import org.jdom.Element;
+import org.jdom2.Element;
 import org.junit.Before;
 import org.junit.Test;
 
