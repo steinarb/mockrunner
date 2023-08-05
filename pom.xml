@@ -119,7 +119,7 @@
             <dependency>
                 <groupId>commons-beanutils</groupId>
                 <artifactId>commons-beanutils</artifactId>
-                <version>1.9.2</version>
+                <version>1.9.4</version>
             </dependency>
             <dependency>
                 <groupId>commons-digester</groupId>
@@ -154,7 +154,7 @@
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.12</version>
+                <version>4.13.1</version>
             </dependency>
             <dependency>
                 <groupId>org.mockejb</groupId>
@@ -169,7 +169,7 @@
             <dependency>
                 <groupId>xerces</groupId>
                 <artifactId>xercesImpl</artifactId>
-                <version>2.9.0</version>
+                <version>2.12.2</version>
             </dependency>
             <dependency>
                 <groupId>xml-apis</groupId>
