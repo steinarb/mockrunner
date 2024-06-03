@@ -32,13 +32,13 @@ import javax.xml.transform.stax.StAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
-import org.jdom.Document;
-import org.jdom.input.DOMBuilder;
-import org.jdom.input.SAXBuilder;
-import org.jdom.input.SAXHandler;
-import org.jdom.output.DOMOutputter;
-import org.jdom.output.Format;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Document;
+import org.jdom2.input.DOMBuilder;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.input.sax.SAXHandler;
+import org.jdom2.output.DOMOutputter;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 
@@ -146,6 +146,7 @@ public class MockSQLXML implements SQLXML, Cloneable
     
     protected SAXBuilder createJDOMSAXBuilder()
     {
+
         SAXBuilder builder = new SAXBuilder();
         builder.setValidation(false);
         return builder;

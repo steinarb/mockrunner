@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.apache.xerces.parsers.DOMParser;
 import org.cyberneko.html.HTMLConfiguration;
-import org.jdom.Element;
-import org.jdom.input.DOMBuilder;
-import org.jdom.output.XMLOutputter;
+import org.jdom2.Element;
+import org.jdom2.input.DOMBuilder;
+import org.jdom2.output.XMLOutputter;
 import org.xml.sax.InputSource;
 
 import com.mockrunner.base.NestedApplicationException;
@@ -34,10 +34,10 @@ public class XmlUtil
      * </pre>
      * 
      * the method returns the h1 tag as <code>Element</code>.
-     * @param document the <code>org.jdom.Document</code>
+     * @param document the <code>org.jdom2.Document</code>
      * @return the body <code>Element</code>
      */
-    public static Element getBodyFragmentFromJDOMDocument(org.jdom.Document document)
+    public static Element getBodyFragmentFromJDOMDocument(org.jdom2.Document document)
     {
         Element element = document.getRootElement().getChild("BODY");
         if(null == element)
@@ -57,17 +57,17 @@ public class XmlUtil
      * @return the body element
      * @deprecated use {@link #getBodyFragmentFromJDOMDocument}
      */
-    public static Element getBodyFragmentJDOMDocument(org.jdom.Document document)
+    public static Element getBodyFragmentJDOMDocument(org.jdom2.Document document)
     {
         return getBodyFragmentFromJDOMDocument(document);
     }
     
     /**
      * Returns the documents XML content as a string.
-     * @param document the <code>org.jdom.Document</code>
+     * @param document the <code>org.jdom2.Document</code>
      * @return the output as string
      */
-    public static String createStringFromJDOMDocument(org.jdom.Document document)
+    public static String createStringFromJDOMDocument(org.jdom2.Document document)
     {
         try
         {
@@ -83,9 +83,9 @@ public class XmlUtil
      * Creates a JDOM <code>Document</code> from a specified
      * W3C <code>Document</code>.
      * @param document the <code>org.w3c.dom.Document</code>
-     * @return the <code>org.jdom.Document</code>
+     * @return the <code>org.jdom2.Document</code>
      */
-    public static org.jdom.Document createJDOMDocument(org.w3c.dom.Document document)
+    public static org.jdom2.Document createJDOMDocument(org.w3c.dom.Document document)
     {
         return new DOMBuilder().build(document);
     }
