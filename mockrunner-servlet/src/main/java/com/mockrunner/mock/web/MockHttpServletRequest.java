@@ -815,6 +815,12 @@ public class MockHttpServletRequest implements HttpServletRequest
         return this;
     }
 
+    public ServletContext getServletContext()
+    {
+        if(null == session) return new MockServletContext();
+        return session.getServletContext();
+    }
+
     public int getLocalPort()
     {
         return localPort;
@@ -896,11 +902,5 @@ public class MockHttpServletRequest implements HttpServletRequest
                                                                                   value);
             ((ServletRequestAttributeListener) anAttributeListener).attributeRemoved(event);
         }
-    }
-
-    private ServletContext getServletContext()
-    {
-        if(null == session) return new MockServletContext();
-        return session.getServletContext();
     }
 }
