@@ -102,6 +102,10 @@ public class MockHttpSession implements HttpSession
         return sessionId;
     }
 
+	public void setSessionId(String sessionId) {
+		this.sessionId = sessionId;
+	}
+
     public synchronized Object getValue(String key)
     {
         if (!isValid) throw new IllegalStateException("session invalid");

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.EventListener;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,12 +16,19 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.servlet.Filter;
+import javax.servlet.FilterRegistration;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.Servlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletContextAttributeListener;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
+import javax.servlet.ServletRegistration.Dynamic;
+import javax.servlet.SessionCookieConfig;
+import javax.servlet.SessionTrackingMode;
+import javax.servlet.descriptor.JspConfigDescriptor;
 
 import com.mockrunner.util.common.StreamUtil;
 
@@ -46,6 +54,11 @@ public class MockServletContext implements ServletContext
     private int minorVersion;
     private int effectiveMajorVersion;
     private int effectiveMinorVersion;
+    private Set<SessionTrackingMode> sessionTrackingModes;
+    private String virtualServerName;
+    private int sessonTimeOut;
+    private String requestCharacterSetEncoding;
+    private String responseCharacterSetEncoding;
     
     public MockServletContext()
     {
@@ -454,5 +467,177 @@ public class MockServletContext implements ServletContext
             ServletContextAttributeEvent event = new ServletContextAttributeEvent(this, key, value);
             ((ServletContextAttributeListener) anAttributeListener).attributeRemoved(event);
         }
+    }
+
+    @Override
+    public Dynamic addServlet(String servletName, String className) {
+        return new MockDynamic();
+    }
+
+    @Override
+    public Dynamic addServlet(String servletName, Servlet servlet) {
+        return new MockDynamic();
+    }
+
+    @Override
+    public Dynamic addServlet(String servletName, Class<? extends Servlet> servletClass) {
+        return new MockDynamic();
+    }
+
+    @Override
+    public Dynamic addJspFile(String servletName, String jspFile) {
+        return new MockDynamic();
+    }
+
+    @Override
+    public <T extends Servlet> T createServlet(Class<T> clazz) throws ServletException {
+        try {
+            return clazz.newInstance();
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
+    }
+
+    @Override
+    public ServletRegistration getServletRegistration(String servletName) {
+        return null;
+    }
+
+    @Override
+    public Map<String, ? extends ServletRegistration> getServletRegistrations() {
+        return Collections.emptyMap();
+    }
+
+    @Override
+    public javax.servlet.FilterRegistration.Dynamic addFilter(String filterName, String className) {
+        return new MockFilterRegistrationDynamic().setName(filterName).setClassName(className);
+    }
+
+    @Override
+    public javax.servlet.FilterRegistration.Dynamic addFilter(String filterName, Filter filter) {
+        return new MockFilterRegistrationDynamic().setName(filterName).setClassName(filter.getClass().getCanonicalName());
+    }
+
+    @Override
+    public javax.servlet.FilterRegistration.Dynamic addFilter(String filterName, Class<? extends Filter> filterClass) {
+        return new MockFilterRegistrationDynamic().setName(filterName).setClassName(filterClass.getCanonicalName());
+    }
+
+    @Override
+    public <T extends Filter> T createFilter(Class<T> clazz) throws ServletException {
+        try {
+            return clazz.newInstance();
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
+    }
+
+    @Override
+    public FilterRegistration getFilterRegistration(String filterName) {
+        return null;
+    }
+
+    @Override
+    public Map<String, ? extends FilterRegistration> getFilterRegistrations() {
+        return Collections.emptyMap();
+    }
+
+    @Override
+    public SessionCookieConfig getSessionCookieConfig() {
+        return new MockSessionCookieConfig();
+    }
+
+    @Override
+    public void setSessionTrackingModes(Set<SessionTrackingMode> sessionTrackingModes) {
+        this.sessionTrackingModes = sessionTrackingModes;
+    }
+
+    @Override
+    public Set<SessionTrackingMode> getDefaultSessionTrackingModes() {
+        return sessionTrackingModes;
+    }
+
+    @Override
+    public Set<SessionTrackingMode> getEffectiveSessionTrackingModes() {
+        return sessionTrackingModes;
+    }
+
+    @Override
+    public void addListener(String className) {
+        // No-op
+    }
+
+    @Override
+    public <T extends EventListener> void addListener(T t) {
+        // No-op
+    }
+
+    @Override
+    public void addListener(Class<? extends EventListener> listenerClass) {
+        // No-op
+    }
+
+    @Override
+    public <T extends EventListener> T createListener(Class<T> clazz) throws ServletException {
+        try {
+            return clazz.newInstance();
+        } catch (Exception e) {
+            throw new ServletException(e);
+        }
+    }
+
+    @Override
+    public JspConfigDescriptor getJspConfigDescriptor() {
+        return null;
+    }
+
+    @Override
+    public ClassLoader getClassLoader() {
+        return getClassLoader();
+    }
+
+    @Override
+    public void declareRoles(String... roleNames) {
+        // No-op
+    }
+
+    @Override
+    public String getVirtualServerName() {
+        return virtualServerName;
+    }
+
+    public MockServletContext setVirtualServerName(String virtualServerName) {
+        this.virtualServerName = virtualServerName;
+        return this;
+    }
+
+    @Override
+    public int getSessionTimeout() {
+        return sessonTimeOut;
+    }
+
+    @Override
+    public void setSessionTimeout(int sessionTimeout) {
+        this.sessonTimeOut = sessionTimeout;
+    }
+
+    @Override
+    public String getRequestCharacterEncoding() {
+        return requestCharacterSetEncoding;
+    }
+
+    @Override
+    public void setRequestCharacterEncoding(String encoding) {
+        this.requestCharacterSetEncoding = encoding;
+    }
+
+    @Override
+    public String getResponseCharacterEncoding() {
+        return responseCharacterSetEncoding;
+    }
+
+    @Override
+    public void setResponseCharacterEncoding(String encoding) {
+        this.responseCharacterSetEncoding = encoding;
     }
 }

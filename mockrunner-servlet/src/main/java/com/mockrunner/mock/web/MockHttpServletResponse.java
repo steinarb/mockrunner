@@ -176,6 +176,12 @@ public class MockHttpServletResponse implements HttpServletResponse
         setHeader(key, stringValue);
     }
 
+    public void setLongHeader(String key, long value)
+    {
+        String stringValue = Long.toString(value);
+        setHeader(key, stringValue);
+    }
+
     public void setStatus(int code, String message)
     {
         statusCode = code;
@@ -258,7 +264,12 @@ public class MockHttpServletResponse implements HttpServletResponse
     {
         setIntHeader("Content-Length", length);
     }
-    
+
+    @Override
+    public void setContentLengthLong(long len) {
+        setLongHeader("Content-Length", len);
+    }
+
     public String getContentType()
     {
         return getHeader("Content-Type");
