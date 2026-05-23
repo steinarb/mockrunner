@@ -35,7 +35,7 @@ public class MockHttpSessionTest extends TestCase
         assertNull(session.getAttribute("key"));
         assertEquals(-1, session.getMaxInactiveInterval());
     }
-    
+
     public void testBindingListenerInvalidate()
     {
         TestSessionListener listener1 = new TestSessionListener();
@@ -57,13 +57,13 @@ public class MockHttpSessionTest extends TestCase
         {
             session.invalidate();
             fail();
-        } 
+        }
         catch(IllegalStateException exc)
         {
             //should throw exception
         }
     }
-    
+
     public void testBindingListenerOverwriteAttribute()
     {
         TestSessionListener listener1 = new TestSessionListener();
@@ -74,7 +74,7 @@ public class MockHttpSessionTest extends TestCase
         assertTrue(listener2.wasValueBoundCalled());
         assertFalse(listener2.wasValueUnboundCalled());
     }
-    
+
     public void testBindingListenerOverwriteSameAttribute()
     {
         TestSessionListener listener = new TestSessionListener();
@@ -85,7 +85,7 @@ public class MockHttpSessionTest extends TestCase
         assertTrue(listener.wasValueBoundCalled());
         assertTrue(listener.wasValueUnboundBeforeBoundCalled());
     }
-    
+
     public void testBindingListenerCorrectOrder()
     {
         session.setAttribute("key", "test");
@@ -107,7 +107,7 @@ public class MockHttpSessionTest extends TestCase
         assertEquals(listener, listener.getUnboundEventValue());
         assertEquals(null, listener.getUnboundSessionValue());
     }
-    
+
     public void testAttributeListenerCalled()
     {
         TestAttributeListener listener1 = new TestAttributeListener();
@@ -138,7 +138,7 @@ public class MockHttpSessionTest extends TestCase
         assertTrue(listener2.wasAttributeRemovedCalled());
         assertTrue(listener3.wasAttributeRemovedCalled());
     }
-    
+
     public void testAttributeListenerOrder()
     {
         TestAttributeOrderListener listener = new TestAttributeOrderListener();
@@ -156,7 +156,7 @@ public class MockHttpSessionTest extends TestCase
         assertEquals("anotherValue", listener.getRemovedEventValue());
         assertNull("", listener.getRemovedSessionValue());
     }
-    
+
     public void testAttributeListenerNullValue()
     {
         TestAttributeListener listener = new TestAttributeListener();
@@ -175,7 +175,7 @@ public class MockHttpSessionTest extends TestCase
         session.removeAttribute("myKey");
         assertFalse(listener.wasAttributeRemovedCalled());
     }
-    
+
     public void testGetAttributeNames()
     {
         Enumeration enumeration = session.getAttributeNames();
@@ -206,20 +206,19 @@ public class MockHttpSessionTest extends TestCase
         enumeration = session.getAttributeNames();
         assertFalse(enumeration.hasMoreElements());
     }
-    
-    private static class TestSessionListener implements HttpSessionBindingListener
-    {
+
+    private static class TestSessionListener implements HttpSessionBindingListener {
         private boolean valueBoundCalled = false;
         private boolean valueUnboundCalled = false;
         private boolean valueUnboundBeforeBoundCalled = false;
-        
+
         public void reset()
         {
             valueBoundCalled = false;
             valueUnboundCalled = false;
             valueUnboundBeforeBoundCalled = false;
         }
-        
+
         public void valueBound(HttpSessionBindingEvent event)
         {
             valueBoundCalled = true;
@@ -233,7 +232,7 @@ public class MockHttpSessionTest extends TestCase
                 valueUnboundBeforeBoundCalled = true;
             }
         }
-        
+
         public boolean wasValueBoundCalled()
         {
             return valueBoundCalled;
@@ -243,22 +242,21 @@ public class MockHttpSessionTest extends TestCase
         {
             return valueUnboundCalled;
         }
-        
+
         public boolean wasValueUnboundBeforeBoundCalled()
         {
             return valueUnboundBeforeBoundCalled;
         }
     }
-    
-    private static class TestSessionOrderListener implements HttpSessionBindingListener
-    {
+
+    private static class TestSessionOrderListener implements HttpSessionBindingListener {
         private String boundEventKey;
         private Object boundEventValue;
         private Object boundSessionValue;
         private String unboundEventKey;
         private Object unboundEventValue;
         private Object unboundSessionValue;
-        
+
         public void valueBound(HttpSessionBindingEvent event)
         {
             boundEventKey = event.getName();
@@ -272,7 +270,7 @@ public class MockHttpSessionTest extends TestCase
             unboundEventValue = event.getValue();
             unboundSessionValue = event.getSession().getAttribute(unboundEventKey);
         }
-        
+
         public String getBoundEventKey()
         {
             return boundEventKey;
@@ -303,14 +301,13 @@ public class MockHttpSessionTest extends TestCase
             return unboundSessionValue;
         }
     }
-    
-    private static class InvalidateAttributeListener implements HttpSessionAttributeListener
-    {
+
+    private static class InvalidateAttributeListener implements HttpSessionAttributeListener {
         private boolean didThrowIllegalStateException = false;
-        
+
         public void attributeAdded(HttpSessionBindingEvent event)
         {
-            
+
         }
 
         public void attributeRemoved(HttpSessionBindingEvent event)
@@ -320,7 +317,7 @@ public class MockHttpSessionTest extends TestCase
             try
             {
                 session.getAttribute(event.getName());
-            } 
+            }
             catch(IllegalStateException exc)
             {
                 didThrowIllegalStateException = true;
@@ -329,7 +326,7 @@ public class MockHttpSessionTest extends TestCase
 
         public void attributeReplaced(HttpSessionBindingEvent event)
         {
-            
+
         }
 
         public boolean getDidThrowIllegalStateException()
@@ -337,13 +334,12 @@ public class MockHttpSessionTest extends TestCase
             return didThrowIllegalStateException;
         }
     }
-    
-    private static class TestAttributeListener implements HttpSessionAttributeListener
-    {
+
+    private static class TestAttributeListener implements HttpSessionAttributeListener {
         private boolean wasAttributeAddedCalled = false;
         private boolean wasAttributeReplacedCalled = false;
         private boolean wasAttributeRemovedCalled = false;
-        
+
         public void attributeAdded(HttpSessionBindingEvent event)
         {
             wasAttributeAddedCalled = true;
@@ -358,14 +354,14 @@ public class MockHttpSessionTest extends TestCase
         {
             wasAttributeReplacedCalled = true;
         }
-        
+
         public void reset()
         {
             wasAttributeAddedCalled = false;
             wasAttributeReplacedCalled = false;
             wasAttributeRemovedCalled = false;
         }
-        
+
         public boolean wasAttributeAddedCalled()
         {
             return wasAttributeAddedCalled;
@@ -381,9 +377,8 @@ public class MockHttpSessionTest extends TestCase
             return wasAttributeReplacedCalled;
         }
     }
-    
-    private static class TestAttributeOrderListener implements HttpSessionAttributeListener
-    {
+
+    private static class TestAttributeOrderListener implements HttpSessionAttributeListener {
         private String addedEventKey;
         private Object addedEventValue;
         private Object addedSessionValue;
@@ -393,7 +388,7 @@ public class MockHttpSessionTest extends TestCase
         private String removedEventKey;
         private Object removedEventValue;
         private Object removedSessionValue;
-        
+
         public void attributeAdded(HttpSessionBindingEvent event)
         {
             addedEventKey = event.getName();
@@ -414,7 +409,7 @@ public class MockHttpSessionTest extends TestCase
             replacedEventValue = event.getValue();
             replacedSessionValue = event.getSession().getAttribute(replacedEventKey);
         }
-        
+
         public String getAddedEventKey()
         {
             return addedEventKey;

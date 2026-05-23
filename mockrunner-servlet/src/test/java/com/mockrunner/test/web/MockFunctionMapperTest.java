@@ -12,14 +12,14 @@ public class MockFunctionMapperTest extends TestCase
     private Method method1;
     private Method method2;
     private Method method3;
-    
+
     protected void setUp() throws Exception
     {
         super.setUp();
         mapper = new MockFunctionMapper();
         method1 = this.getClass().getMethod("method1", null);
         method2 = this.getClass().getMethod("method2", null);
-        method3 = this.getClass().getMethod("method3", null);  
+        method3 = this.getClass().getMethod("method3", null);
     }
 
     public void testAddFuntion()
@@ -33,21 +33,21 @@ public class MockFunctionMapperTest extends TestCase
         assertNull(mapper.resolveFunction(null, "method2"));
         assertNull(mapper.resolveFunction("myPrefix", "method3"));
     }
-    
+
     public void method1()
     {
-    
+
     }
-    
+
     public void method2()
     {
 
     }
-    
+
     public void method3()
     {
 
     }
-    
+
     public void testDummy(){}
 }

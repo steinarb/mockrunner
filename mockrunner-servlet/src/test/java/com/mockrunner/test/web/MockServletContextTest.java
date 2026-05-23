@@ -38,7 +38,7 @@ public class MockServletContextTest extends TestCase
     {
         context = null;
     }
-    
+
     public void testResetAll() throws Exception
     {
         context.setAttribute("key", "value");
@@ -49,7 +49,7 @@ public class MockServletContextTest extends TestCase
         assertNull(context.getResourcePaths("path"));
         assertNull(context.getResource("path"));
     }
-    
+
     public void testResources() throws Exception
     {
         context.setResource("testPath", new URL("http://test"));
@@ -79,7 +79,7 @@ public class MockServletContextTest extends TestCase
         assertEquals(3, stream.read());
         assertEquals(-1, stream.read());
     }
-    
+
     public void testAttributeListenerCalled()
     {
         TestAttributeListener listener1 = new TestAttributeListener();
@@ -144,7 +144,7 @@ public class MockServletContextTest extends TestCase
         context.removeAttribute("myKey");
         assertFalse(listener.wasAttributeRemovedCalled());
     }
-    
+
     public void testGetAttributeNames()
     {
         Enumeration enumeration = context.getAttributeNames();
@@ -175,24 +175,24 @@ public class MockServletContextTest extends TestCase
         enumeration = context.getAttributeNames();
         assertFalse(enumeration.hasMoreElements());
     }
-    
+
     public void testRequestDispatcher() throws Exception
     {
         final String rdPath1 = "rdPathOne";
         final String rdPath2 = "rdPathTwo";
         final String rdPath3 = "rdPathThree";
-    
+
         assertEquals(0, context.getRequestDispatcherMap().size());
 
         MockRequestDispatcher rd1 = (MockRequestDispatcher)context.getRequestDispatcher(rdPath1);
         assertEquals(rdPath1, rd1.getPath());
         assertNull(rd1.getForwardedRequest());
         assertNull(rd1.getIncludedRequest());
-        
+
         assertEquals(1, context.getRequestDispatcherMap().size());
         assertTrue(context.getRequestDispatcherMap().containsKey(rdPath1));
         assertSame(rd1, context.getRequestDispatcherMap().get(rdPath1));
-        
+
         MockRequestDispatcher actualRd2 = new MockRequestDispatcher();
         context.setRequestDispatcher(rdPath2, actualRd2);
         MockRequestDispatcher rd2 = (MockRequestDispatcher)context.getRequestDispatcher(rdPath2);
@@ -200,31 +200,31 @@ public class MockServletContextTest extends TestCase
         assertSame(actualRd2, rd2);
         assertNull(rd1.getForwardedRequest());
         assertNull(rd1.getIncludedRequest());
-        
+
         rd2 = (MockRequestDispatcher)context.getNamedDispatcher(rdPath2);
         assertEquals(rdPath2, rd2.getPath());
         assertSame(actualRd2, rd2);
-        
+
         assertEquals(2, context.getRequestDispatcherMap().size());
         assertTrue(context.getRequestDispatcherMap().containsKey(rdPath2));
         assertSame(rd2, context.getRequestDispatcherMap().get(rdPath2));
-        
+
         RequestDispatcher actualRd3 = new TestRequestDispatcher();
         context.setRequestDispatcher(rdPath3, actualRd3);
         RequestDispatcher rd3 = context.getRequestDispatcher(rdPath3);
         assertSame(actualRd3, rd3);
-        
+
         rd3 = context.getNamedDispatcher(rdPath3);
         assertSame(actualRd3, rd3);
-        
+
         assertEquals(3, context.getRequestDispatcherMap().size());
         assertTrue(context.getRequestDispatcherMap().containsKey(rdPath3));
         assertSame(rd3, context.getRequestDispatcherMap().get(rdPath3));
-        
+
         context.clearRequestDispatcherMap();
         assertEquals(0, context.getRequestDispatcherMap().size());
     }
-    
+
     public void testSetResourceAsStream() throws Exception
     {
         byte[] input = {1, 2, 3, 4};
@@ -235,7 +235,7 @@ public class MockServletContextTest extends TestCase
         result = context.getResourceAsStream("testpath2");
         assertTrue(StreamUtil.compareStreams(new ByteArrayInputStream(input), result));
     }
-    
+
     public void testGetContext() throws Exception
     {
         assertNull(context.getContext("abc"));
@@ -245,7 +245,7 @@ public class MockServletContextTest extends TestCase
         context.setContext("xyz", anotherContext);
         assertSame(anotherContext, context.getContext("xyz"));
     }
-    
+
     public void testInitParameters()
     {
         context.setInitParameter("key1", "value1");
@@ -270,7 +270,7 @@ public class MockServletContextTest extends TestCase
         params = context.getInitParameterNames();
         assertFalse(params.hasMoreElements());
     }
-    
+
     public void testInitParametersOverwrite()
     {
         assertTrue(context.setInitParameter("key1", "value1"));
@@ -282,7 +282,7 @@ public class MockServletContextTest extends TestCase
         context.setInitParameters(parameters);
         assertEquals("value2", context.getInitParameter("key1"));
     }
-    
+
     public void testVersion()
     {
         context.setMajorVersion(5);
@@ -290,13 +290,12 @@ public class MockServletContextTest extends TestCase
         assertEquals(5, context.getMajorVersion());
         assertEquals(1, context.getMinorVersion());
     }
-    
-    private class TestAttributeListener implements ServletContextAttributeListener
-    {
+
+    private class TestAttributeListener implements ServletContextAttributeListener {
         private boolean wasAttributeAddedCalled = false;
         private boolean wasAttributeReplacedCalled = false;
         private boolean wasAttributeRemovedCalled = false;
-    
+
         public void attributeAdded(ServletContextAttributeEvent event)
         {
             wasAttributeAddedCalled = true;
@@ -311,14 +310,14 @@ public class MockServletContextTest extends TestCase
         {
             wasAttributeReplacedCalled = true;
         }
-    
+
         public void reset()
         {
             wasAttributeAddedCalled = false;
             wasAttributeReplacedCalled = false;
             wasAttributeRemovedCalled = false;
         }
-    
+
         public boolean wasAttributeAddedCalled()
         {
             return wasAttributeAddedCalled;
@@ -335,15 +334,14 @@ public class MockServletContextTest extends TestCase
         }
     }
 
-    private class TestAttributeOrderListener implements ServletContextAttributeListener
-    {
+    private class TestAttributeOrderListener implements ServletContextAttributeListener {
         private String addedEventKey;
         private Object addedEventValue;
         private String replacedEventKey;
         private Object replacedEventValue;
         private String removedEventKey;
         private Object removedEventValue;
-    
+
         public void attributeAdded(ServletContextAttributeEvent event)
         {
             addedEventKey = event.getName();
@@ -361,7 +359,7 @@ public class MockServletContextTest extends TestCase
             replacedEventKey = event.getName();
             replacedEventValue = event.getValue();
         }
-    
+
         public String getAddedEventKey()
         {
             return addedEventKey;
@@ -392,15 +390,14 @@ public class MockServletContextTest extends TestCase
             return replacedEventValue;
         }
     }
-    
-    private class TestRequestDispatcher implements RequestDispatcher
-    {
-        
+
+    private class TestRequestDispatcher implements RequestDispatcher {
+
         public void forward(ServletRequest request, ServletResponse response) throws ServletException, IOException
         {
 
         }
-        
+
         public void include(ServletRequest request, ServletResponse response) throws ServletException, IOException
         {
 

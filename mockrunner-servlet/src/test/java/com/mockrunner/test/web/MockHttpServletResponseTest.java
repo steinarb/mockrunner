@@ -14,13 +14,13 @@ import com.mockrunner.mock.web.MockServletOutputStream;
 public class MockHttpServletResponseTest extends TestCase
 {
     private MockHttpServletResponse response;
-    
+
     protected void setUp() throws Exception
     {
         super.setUp();
         response = new MockHttpServletResponse();
     }
-    
+
     public void testResetAll() throws Exception
     {
         response.addHeader("header", "headervalue");
@@ -31,7 +31,7 @@ public class MockHttpServletResponseTest extends TestCase
         assertEquals(8192, response.getBufferSize());
         assertFalse(response.wasErrorSent());
     }
-    
+
     public void testHeaders()
     {
         response.addHeader("testHeader", "xyz");
@@ -54,7 +54,7 @@ public class MockHttpServletResponseTest extends TestCase
         Collection headers = response.getHeaderNames();
         assertTrue(headers.isEmpty());
     }
-    
+
     public void testGetHeaderNames()
     {
         response.addHeader("testHeader1", "xyz1");
@@ -67,7 +67,7 @@ public class MockHttpServletResponseTest extends TestCase
         assertTrue(headerNames.contains("testHeader2"));
         assertTrue(headerNames.contains("testHeader3"));
     }
-    
+
     public void testGetHeaders()
     {
         response.addHeader("testHeader1", "xyz1");
@@ -78,7 +78,7 @@ public class MockHttpServletResponseTest extends TestCase
         assertTrue(headers.contains("xyz1"));
         assertTrue(headers.contains("abc"));
     }
-    
+
     public void testHeadersCaseInsensitive()
     {
         response.addHeader("testHeader", "xyz");
@@ -93,7 +93,7 @@ public class MockHttpServletResponseTest extends TestCase
         assertTrue(headerNames.contains("MYHEADER1"));
         assertTrue(headerNames.contains("myHeader2"));
     }
-    
+
     public void testOutputStreams() throws IOException
     {
         response.getOutputStream().print("test");
@@ -103,21 +103,21 @@ public class MockHttpServletResponseTest extends TestCase
         assertEquals("testtruetest", response.getOutputStreamContent());
         assertEquals("testtruetest".getBytes().length, response.getOutputStreamBinaryContent().length);
     }
-    
+
     public void testGetSetContentType() throws IOException
     {
         assertNull(response.getContentType());
         response.setContentType("myType");
         assertEquals("myType", response.getContentType());
     }
-    
+
     public void testFlush() throws IOException
     {
         response.getOutputStream().write('a');
         response.flushBuffer();
         assertEquals("a", ((MockServletOutputStream)response.getOutputStream()).getContent());
     }
-    
+
     public void testReset() throws IOException
     {
         response.addHeader("testHeader", "xyz");
@@ -130,7 +130,7 @@ public class MockHttpServletResponseTest extends TestCase
         response.reset();
         assertNull(response.getHeaderList("testHeader"));
     }
-    
+
     public void testSetCharacterEncoding() throws IOException
     {
         response.setCharacterEncoding("ISO-8859-1");
@@ -142,11 +142,11 @@ public class MockHttpServletResponseTest extends TestCase
         response.setCharacterEncoding("ISO-8859-1");
         assertTrue(response.getOutputStreamContent().startsWith("??"));
         response.resetAll();
-        response.setCharacterEncoding("UTF-8"); 
+        response.setCharacterEncoding("UTF-8");
         String input = "\u00F8";
-        PrintWriter writer = response.getWriter(); 
+        PrintWriter writer = response.getWriter();
         writer.write(input);
-        response.flushBuffer(); 
+        response.flushBuffer();
         String output = response.getOutputStreamContent();
         assertTrue(output.equals(input));
     }

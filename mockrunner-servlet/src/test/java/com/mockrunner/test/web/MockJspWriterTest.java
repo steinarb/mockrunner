@@ -20,7 +20,7 @@ public class MockJspWriterTest extends TestCase
         writer.print("test3");
         assertEquals("test3", writer.getOutputAsString());
     }
-    
+
     public void testWithProvidedWriter() throws Exception
     {
         StringWriter providedWriter = new StringWriter();
@@ -30,7 +30,7 @@ public class MockJspWriterTest extends TestCase
         {
             writer.clear();
             fail();
-        } 
+        }
         catch(IOException exc)
         {
             //should throw exception
@@ -42,7 +42,7 @@ public class MockJspWriterTest extends TestCase
         writer.flush();
         assertEquals("test1test2test3", providedWriter.toString());
     }
-    
+
     public void testWithProvidedResponse() throws Exception
     {
         MockHttpServletResponse response = new MockHttpServletResponse();

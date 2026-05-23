@@ -149,11 +149,11 @@ public class MockHttpServletRequestTest extends TestCase
         assertEquals(servletPath, request.getServletPath());
 
         Principal principal = new Principal() {
-                @Override
-                public String getName() {
-                    return "jad";
-                }
-            };
+            @Override
+            public String getName() {
+                return "jad";
+            }
+        };
         String remoteUser = "jad";
         String utf8 = "UTF-8";
         String contentType = "application/json";
@@ -486,8 +486,7 @@ public class MockHttpServletRequestTest extends TestCase
         return size;
     }
 
-    private class TestAttributeListener implements ServletRequestAttributeListener
-    {
+    private class TestAttributeListener implements ServletRequestAttributeListener {
         private boolean wasAttributeAddedCalled = false;
         private boolean wasAttributeReplacedCalled = false;
         private boolean wasAttributeRemovedCalled = false;
@@ -530,8 +529,7 @@ public class MockHttpServletRequestTest extends TestCase
         }
     }
 
-    private class TestAttributeOrderListener implements ServletRequestAttributeListener
-    {
+    private class TestAttributeOrderListener implements ServletRequestAttributeListener {
         private String addedEventKey;
         private Object addedEventValue;
         private String replacedEventKey;
@@ -588,8 +586,7 @@ public class MockHttpServletRequestTest extends TestCase
         }
     }
 
-    private class TestRequestDispatcher implements RequestDispatcher
-    {
+    private class TestRequestDispatcher implements RequestDispatcher {
 
         public void forward(ServletRequest request, ServletResponse response) throws ServletException, IOException
         {

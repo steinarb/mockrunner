@@ -17,7 +17,7 @@ public class MockVariableResolverTest extends TestCase
     {
         resolver = null;
     }
-    
+
     public void testResolve() throws Exception
     {
         assertNull(resolver.resolveVariable("test"));

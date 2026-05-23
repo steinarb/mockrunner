@@ -38,7 +38,7 @@ public class WebMockObjectFactoryTest extends TestCase
         assertNotSame(factory1.getMockServletConfig(), factory2.getMockServletConfig());
         assertNotSame(factory1.getMockServletContext(), factory2.getMockServletContext());
     }
-    
+
     public void testMockObjectsWithSameContext()
     {
         WebMockObjectFactory factory1 = new WebMockObjectFactory();
@@ -49,7 +49,7 @@ public class WebMockObjectFactoryTest extends TestCase
         assertNotSame(factory1.getMockServletConfig(), factory2.getMockServletConfig());
         assertSame(factory1.getMockServletContext(), factory2.getMockServletContext());
     }
-    
+
     public void testMockObjectsWithSameSessionAndContext()
     {
         WebMockObjectFactory factory1 = new WebMockObjectFactory();
@@ -66,7 +66,7 @@ public class WebMockObjectFactoryTest extends TestCase
         assertNotSame(factory1.getMockServletConfig(), factory2.getMockServletConfig());
         assertSame(factory1.getMockServletContext(), factory2.getMockServletContext());
     }
-    
+
     public void testSetDefaultJspFactory()
     {
         WebMockObjectFactory factory = new WebMockObjectFactory();
@@ -88,7 +88,7 @@ public class WebMockObjectFactoryTest extends TestCase
         assertNull(factory.getMockJspFactory());
         assertNull(factory.getJspFactory());
     }
-    
+
     public void testAddRequestWrapper()
     {
         WebMockObjectFactory factory = new WebMockObjectFactory();
@@ -100,7 +100,7 @@ public class WebMockObjectFactoryTest extends TestCase
         HttpServletRequestWrapper requestWrapper = (HttpServletRequestWrapper)factory.getWrappedRequest();
         assertSame(factory.getMockRequest(), requestWrapper.getRequest());
     }
-    
+
     public void testAddResponseWrapper() throws Exception
     {
         WebMockObjectFactory factory = new WebMockObjectFactory();
@@ -109,11 +109,11 @@ public class WebMockObjectFactoryTest extends TestCase
         assertTrue(response instanceof HttpServletResponseWrapper);
         response.getWriter().print("test");
         response.getWriter().flush();
-        assertEquals("test", factory.getMockResponse().getOutputStreamContent());    
+        assertEquals("test", factory.getMockResponse().getOutputStreamContent());
         HttpServletResponseWrapper responseWrapper = (HttpServletResponseWrapper)factory.getWrappedResponse();
         assertSame(factory.getMockResponse(), responseWrapper.getResponse());
     }
-    
+
     public void testAddRequestAndResponseWrapperClasses()
     {
         WebMockObjectFactory factory = new WebMockObjectFactory();
@@ -124,7 +124,7 @@ public class WebMockObjectFactoryTest extends TestCase
         assertTrue(factory.getWrappedResponse() instanceof TestResponseWrapper);
         assertSame(factory.getMockResponse(), ((TestResponseWrapper)factory.getWrappedResponse()).getResponse());
     }
-    
+
     public void testRefresh() throws Exception
     {
         WebMockObjectFactory factory = new WebMockObjectFactory();
@@ -141,7 +141,7 @@ public class WebMockObjectFactoryTest extends TestCase
         assertSame(responseWrapper, pageContext.getResponse());
         assertSame(pageContext, factory.getMockJspFactory().getPageContext());
     }
-    
+
     public void testOverrideCreate()
     {
         WebMockObjectFactory factory = new TestWebMockObjectFactory();
@@ -154,39 +154,36 @@ public class WebMockObjectFactoryTest extends TestCase
         assertNotSame(factory.getMockServletContext().getClass(), MockServletContext.class);
         assertNotSame(factory.getMockSession().getClass(), MockHttpSession.class);
     }
-    
-    public static class TestRequestWrapper extends MockHttpServletRequest
-    {
+
+    public static class TestRequestWrapper extends MockHttpServletRequest {
         private HttpServletRequest request;
-        
+
         public TestRequestWrapper(HttpServletRequest request)
         {
             this.request = request;
         }
-        
+
         public HttpServletRequest getRequest()
         {
             return request;
         }
     }
-    
-    public static class TestResponseWrapper extends MockHttpServletResponse
-    {
+
+    public static class TestResponseWrapper extends MockHttpServletResponse {
         private HttpServletResponse response;
-        
+
         public TestResponseWrapper(HttpServletResponse response)
         {
             this.response = response;
         }
-        
+
         public HttpServletResponse getResponse()
         {
             return response;
         }
     }
-    
-    public static class TestWebMockObjectFactory extends WebMockObjectFactory
-    {
+
+    public static class TestWebMockObjectFactory extends WebMockObjectFactory {
         public MockFilterChain createMockFilterChain()
         {
             return new MockFilterChain() {};
@@ -196,7 +193,7 @@ public class WebMockObjectFactoryTest extends TestCase
         {
             return new MockFilterConfig() {};
         }
-        
+
         public MockPageContext createMockPageContext()
         {
             return new MockPageContext() {};
@@ -204,7 +201,7 @@ public class WebMockObjectFactoryTest extends TestCase
 
         public MockHttpServletRequest createMockRequest()
         {
-  
+
             return new MockHttpServletRequest() {};
         }
 
@@ -228,9 +225,8 @@ public class WebMockObjectFactoryTest extends TestCase
             return new MockHttpSession() {};
         }
     }
-    
-    public static class TestJspFactory extends JspFactory
-    {
+
+    public static class TestJspFactory extends JspFactory {
         public JspEngineInfo getEngineInfo()
         {
             return null;
@@ -248,7 +244,7 @@ public class WebMockObjectFactoryTest extends TestCase
 
         public void releasePageContext(PageContext pageContext)
         {
-            
-        }     
+
+        }
     }
 }

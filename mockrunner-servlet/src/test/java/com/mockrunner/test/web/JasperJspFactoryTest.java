@@ -22,14 +22,14 @@ public class JasperJspFactoryTest extends TestCase
 {
     private WebMockObjectFactory mockFactory;
     private JasperJspFactory jasperFactory;
-    
+
     protected void setUp() throws Exception
     {
         super.setUp();
         mockFactory = new WebMockObjectFactory();
         jasperFactory = new JasperJspFactory();
     }
-    
+
     public void testConfigure()
     {
         assertSame(jasperFactory, jasperFactory.configure(mockFactory));
@@ -38,7 +38,7 @@ public class JasperJspFactoryTest extends TestCase
         assertSame(jasperFactory.getPageContext(null, null, null, null, true, 1, true), mockFactory.getMockPageContext());
         assertTrue(mockFactory.getMockPageContext().getELContext() instanceof ELContextImpl);
     }
-    
+
     public void testResolveVariable()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
@@ -46,7 +46,7 @@ public class JasperJspFactoryTest extends TestCase
         ELResolver resolver = mockFactory.getMockPageContext().getELContext().getELResolver();
         assertEquals("value", resolver.getValue(mockFactory.getMockPageContext().getELContext(), null, "test"));
     }
-    
+
     public void testValueExpressionGetAndSet()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
@@ -59,7 +59,7 @@ public class JasperJspFactoryTest extends TestCase
         valueExpression.setValue(mockFactory.getMockPageContext().getELContext(), "anotherValue");
         assertEquals("anotherValue", testObject.getTestProperty());
     }
-    
+
     public void testValueExpressionAttributes()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
@@ -78,7 +78,7 @@ public class JasperJspFactoryTest extends TestCase
         assertTrue(valueExpression.isReadOnly(mockFactory.getMockPageContext().getELContext()));
         assertEquals("${test.testReadOnlyProperty}", valueExpression.getExpressionString());
     }
-    
+
     public void testArithmeticValueExpression()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
@@ -86,7 +86,7 @@ public class JasperJspFactoryTest extends TestCase
         mockFactory.getMockRequest().setAttribute("test", testObject);
         assertExpressionEquals("${(test['testReadOnlyProperty'] + test.testArrayProperty[0]) == 26}", "true");
     }
-    
+
     public void testDeferredValueExpression()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
@@ -97,7 +97,7 @@ public class JasperJspFactoryTest extends TestCase
         mockFactory.getMockSession().setAttribute("test", "xyz");
         assertExpressionEquals("#{sessionScope.test}", "xyz");
     }
-    
+
     public void testDeferredMethodExpression()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
@@ -112,7 +112,7 @@ public class JasperJspFactoryTest extends TestCase
         assertTrue(Arrays.equals(new Class[] {String.class}, methodInfo.getParamTypes()));
         assertEquals("#{test.testMethod}", methodExpression.getExpressionString());
     }
-    
+
     public void testExpressionScopes()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
@@ -129,7 +129,7 @@ public class JasperJspFactoryTest extends TestCase
         assertExpressionEquals("${applicationScope.requesttest}", "");
         assertExpressionEquals("${sessionScope.requesttest}", "");
     }
-    
+
     public void testImplicitObjects()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
@@ -149,41 +149,41 @@ public class JasperJspFactoryTest extends TestCase
         assertExpressionEquals("${headerValues.header[1]}", "value2");
         assertExpressionEquals("${header.header}", "value1");
     }
-    
+
     private void assertExpressionEquals(String expression, String value)
     {
         JspApplicationContext applicationContext = JspFactory.getDefaultFactory().getJspApplicationContext(mockFactory.getMockPageContext().getServletContext());
         ValueExpression valueExpression = applicationContext.getExpressionFactory().createValueExpression(mockFactory.getMockPageContext().getELContext(), expression, String.class);
         assertEquals(value, valueExpression.getValue(mockFactory.getMockPageContext().getELContext()));
     }
-    
+
     public static class TestObject
     {
-        private String testProperty;
+            private String testProperty;
 
-        public String getTestProperty()
-        {
-            return testProperty;
-        }
+            public String getTestProperty()
+            {
+                return testProperty;
+            }
 
-        public void setTestProperty(String testProperty)
-        {
-            this.testProperty = testProperty;
-        }
-        
-        public String[] getTestArrayProperty()
-        {
-            return new String[] {"1"};
-        }
-        
-        public Integer getTestReadOnlyProperty()
-        {
-            return 25;
-        }
-        
-        public String testMethod(String test)
-        {
-            return test;
-        }
+            public void setTestProperty(String testProperty)
+            {
+                this.testProperty = testProperty;
+            }
+
+            public String[] getTestArrayProperty()
+            {
+                return new String[] {"1"};
+            }
+
+            public Integer getTestReadOnlyProperty()
+            {
+                return 25;
+            }
+
+            public String testMethod(String test)
+            {
+                return test;
+            }
     }
 }

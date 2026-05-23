@@ -21,7 +21,7 @@ public class TestTag extends TagSupport
     private boolean doStartTagCalled = false;
     private boolean doEndTagCalled = false;
     private boolean doAfterBodyCalled = false;
-    
+
     public void setDoAfterBodyReturnValue(int doAfterBodyReturnValue)
     {
         this.doAfterBodyReturnValue = doAfterBodyReturnValue;
@@ -50,14 +50,14 @@ public class TestTag extends TagSupport
         }
         return doStartTagReturnValue;
     }
-    
+
     public int doAfterBody() throws JspException
     {
         doAfterBodyCalled = true;
         int returnValue = doAfterBodyReturnValue;
         if(BodyTagSupport.EVAL_BODY_AGAIN == doAfterBodyReturnValue)
         {
-            doAfterBodyReturnValue = BodyTagSupport.SKIP_BODY;      
+            doAfterBodyReturnValue = BodyTagSupport.SKIP_BODY;
         }
         return returnValue;
     }
@@ -67,7 +67,7 @@ public class TestTag extends TagSupport
         doEndTagCalled = true;
         return doEndTagReturnValue;
     }
-    
+
     public double getTestDouble()
     {
         return testDouble;
@@ -111,12 +111,12 @@ public class TestTag extends TagSupport
     {
         return releaseCalled;
     }
-    
+
     public boolean wasReleaseCallLastMethodCall()
     {
         return releaseLastCall;
     }
-    
+
     public boolean wasDoAfterBodyCalled()
     {
         return doAfterBodyCalled;
@@ -131,7 +131,7 @@ public class TestTag extends TagSupport
     {
         return doStartTagCalled;
     }
-  
+
     public void setPageContext(PageContext context)
     {
         super.setPageContext(context);

@@ -9,7 +9,7 @@ import com.mockrunner.mock.web.MockJspPropertyGroupDescriptor;
 public class MockJspPropertyGroupDescriptorTest extends TestCase
 {
     private MockJspPropertyGroupDescriptor descriptor;
-    
+
     protected void setUp() throws Exception
     {
         descriptor = new MockJspPropertyGroupDescriptor();
@@ -60,7 +60,7 @@ public class MockJspPropertyGroupDescriptorTest extends TestCase
         assertEquals("false", descriptor.getScriptingInvalid());
         assertEquals("false", descriptor.getTrimDirectiveWhitespaces());
     }
-    
+
     public void testIncludeAndURLPatterns()
     {
         assertTrue(descriptor.getIncludeCodas().isEmpty());
@@ -82,7 +82,7 @@ public class MockJspPropertyGroupDescriptorTest extends TestCase
         assertTrue(descriptor.getIncludePreludes().isEmpty());
         assertTrue(descriptor.getUrlPatterns().isEmpty());
     }
-    
+
     public void testIncludeAndURLPatternsListChange()
     {
         descriptor.addIncludeCoda("coda1");

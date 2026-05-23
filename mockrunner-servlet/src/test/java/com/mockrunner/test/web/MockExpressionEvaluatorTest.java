@@ -41,7 +41,7 @@ public class MockExpressionEvaluatorTest extends TestCase
             //should throw exception
         }
     }
-    
+
     public void testEvaluateOk() throws Exception
     {
         evaluator.addObject("myexp", 3);
@@ -50,7 +50,7 @@ public class MockExpressionEvaluatorTest extends TestCase
         evaluator.addObject("myexp", object);
         assertEquals(object, evaluator.evaluate("myexp", Object.class, null, null));
     }
-    
+
     public void testExpression() throws Exception
     {
         Expression expression = evaluator.parseExpression("myexp", String.class, null);
@@ -76,6 +76,6 @@ public class MockExpressionEvaluatorTest extends TestCase
             //should throw exception
         }
     }
-    
+
     public void testDummy(){}
 }

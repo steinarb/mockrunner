@@ -8,12 +8,12 @@ public class ExceptionTestTag extends TestBodyTag implements TryCatchFinally
     private boolean doFinallyCalled = false;
     private Throwable caughtException = null;
     private Throwable throwException = null;
-    
+
     public ExceptionTestTag()
     {
         throwException = null;
     }
-    
+
     public ExceptionTestTag(Throwable throwException)
     {
         this.throwException = throwException;
