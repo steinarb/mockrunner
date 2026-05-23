@@ -101,6 +101,8 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
                     <argLine>--add-opens=java.base/java.lang=ALL-UNNAMED</argLine>
+                    <forkCount>0</forkCount>
+                    <useSystemClassLoader>false</useSystemClassLoader>
                 </configuration>
             </plugin>
         </plugins>
