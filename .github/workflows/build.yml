@@ -31,3 +31,6 @@ jobs:
           **/hs_err_pid*.log
           **/target/surefire-reports/*.dump*
           **/target/surefire-reports/*.txt
+    - name: Check System Logs for Memory (OOM) Kills
+      if: always()
+      run: dmesg | grep -i -E 'oom[-_]killer|killed process' || echo "No OS-level OOM kills detected."
