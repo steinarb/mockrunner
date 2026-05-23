@@ -21,7 +21,7 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Maven
-      run: mvn -B -X -e package --file pom.xml
+      run: mvn -B package --file pom.xml
     - name: Store JVM Crash and Surefire Logs
       if: always() # Forces this step to run even if the Maven build fails
       uses: actions/upload-artifact@v4
