@@ -5,9 +5,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 
-import org.junit.After;
-import org.junit.Before;
-
 import com.mockrunner.base.BasicHTMLOutputTestCase;
 import com.mockrunner.base.HTMLOutputModule;
 import com.mockrunner.mock.web.WebMockObjectFactory;
@@ -38,7 +35,6 @@ public abstract class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCas
         super(name);
     }
 
-    @After
     public void tearDown() throws Exception
     {
         servletTestModule = null;
@@ -49,7 +45,6 @@ public abstract class BasicServletTestCaseAdapter extends BasicHTMLOutputTestCas
      * Creates the {@link com.mockrunner.servlet.ServletTestModule}. If you
      * overwrite this method, you must call <code>super.setUp()</code>.
      */
-    @Before
     public void setUp() throws Exception
     {
         servletTestModule = createServletTestModule(getWebMockObjectFactory());
