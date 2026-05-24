@@ -1,10 +1,11 @@
 package com.mockrunner.mock.web;
 
+import javax.servlet.SessionCookieConfig;
 
 /**
  * Mock implementation of <code>SessionCookieConfig</code>.
  */
-public class MockSessionCookieConfig //implements SessionCookieConfig
+public class MockSessionCookieConfig implements SessionCookieConfig
 {
     private String comment;
     private String domain;

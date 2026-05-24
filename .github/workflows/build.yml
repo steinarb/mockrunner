@@ -22,3 +22,15 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - name: Store JVM Crash and Surefire Logs
+      if: always() # Forces this step to run even if the Maven build fails
+      uses: actions/upload-artifact@v4
+      with:
+        name: maven-crash-logs
+        path: |
+          **/hs_err_pid*.log
+          **/target/surefire-reports/*.dump*
+          **/target/surefire-reports/*.txt
+    - name: Check System Logs for Memory (OOM) Kills
+      if: always()
+      run: dmesg | grep -i -E 'oom[-_]killer|killed process' || echo "No OS-level OOM kills detected."

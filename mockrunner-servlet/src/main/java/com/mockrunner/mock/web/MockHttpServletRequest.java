@@ -11,6 +11,7 @@ import java.security.Principal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
@@ -18,16 +19,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 import java.util.Vector;
 
+import javax.servlet.AsyncContext;
+import javax.servlet.DispatcherType;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletInputStream;
+import javax.servlet.ServletRequest;
 import javax.servlet.ServletRequestAttributeEvent;
 import javax.servlet.ServletRequestAttributeListener;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpUpgradeHandler;
+import javax.servlet.http.Part;
 
 import com.mockrunner.base.NestedApplicationException;
 import com.mockrunner.util.common.CaseAwareMap;
@@ -64,6 +74,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     private Map roles;
     private String characterEncoding;
     private int contentLength;
+    private long contentLengthLong;
     private String contentType;
     private List cookies;
     private MockServletInputStream bodyContent;
@@ -74,6 +85,10 @@ public class MockHttpServletRequest implements HttpServletRequest
     private boolean sessionCreated;
     private List attributeListener;
     private boolean isAsyncSupported;
+    private AsyncContext asyncContext;
+    private DispatcherType dispatcherType;
+    private boolean authenticated;
+    private ArrayList<Part> parts = new ArrayList<>();
 
     public MockHttpServletRequest()
     {
@@ -166,6 +181,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         remoteAddr = "127.0.0.1";
         roles = new HashMap();
         contentLength = -1;
+        contentLengthLong = -1L;
         cookies = null;
         localAddr = "127.0.0.1";
         localName = "localhost";
@@ -672,6 +688,16 @@ public class MockHttpServletRequest implements HttpServletRequest
         return this;
     }
 
+    @Override
+    public long getContentLengthLong() {
+        return contentLengthLong;
+    }
+
+    public MockHttpServletRequest setContentLengthLong(long contentLength) {
+        contentLengthLong = contentLength;
+        return this;
+    }
+
     public String getContentType()
     {
         return contentType;
@@ -815,6 +841,12 @@ public class MockHttpServletRequest implements HttpServletRequest
         return this;
     }
 
+    public ServletContext getServletContext()
+    {
+        if(null == session) return new MockServletContext();
+        return session.getServletContext();
+    }
+
     public int getLocalPort()
     {
         return localPort;
@@ -846,6 +878,94 @@ public class MockHttpServletRequest implements HttpServletRequest
     {
         this.isAsyncSupported = isAsyncSupported;
         return this;
+    }
+
+    @Override
+    public AsyncContext startAsync() throws IllegalStateException {
+        asyncContext = asyncContext == null ? new MockAsyncContext() : asyncContext;
+        return asyncContext;
+    }
+
+    @Override
+    public AsyncContext startAsync(ServletRequest servletRequest, ServletResponse servletResponse) throws IllegalStateException {
+        asyncContext = asyncContext == null ? new MockAsyncContext().setRequest(servletRequest).setRequest(servletRequest) : asyncContext;
+        return asyncContext;
+    }
+
+    @Override
+    public boolean isAsyncStarted() {
+        return asyncContext != null;
+    }
+
+    @Override
+    public AsyncContext getAsyncContext() {
+        return asyncContext;
+    }
+
+    public MockHttpServletRequest setAsyncContext(AsyncContext asyncContext) {
+        this.asyncContext = asyncContext;
+        return this;
+    }
+
+    @Override
+    public DispatcherType getDispatcherType() {
+        return dispatcherType;
+    }
+
+    public MockHttpServletRequest getDispatcherType(DispatcherType dispatcherType) {
+        this.dispatcherType = dispatcherType;
+        return this;
+    }
+
+    @Override
+    public String changeSessionId() {
+        session = session == null ? new MockHttpSession() : session;
+        if (session instanceof MockHttpSession) {
+            ((MockHttpSession) session).setSessionId(UUID.randomUUID().toString());
+        }
+
+        return session.getId();
+    }
+
+    @Override
+    public boolean authenticate(HttpServletResponse response) throws IOException, ServletException {
+        return authenticated;
+    }
+
+    public MockHttpServletRequest setAuthenticated(boolean authenticated) {
+        this.authenticated = authenticated;
+        return this;
+    }
+
+    @Override
+    public void login(String username, String password) throws ServletException {
+        // No-op
+    }
+
+    @Override
+    public void logout() throws ServletException {
+        // No-op
+    }
+
+    @Override
+    public Collection<Part> getParts() throws IOException, ServletException {
+        return parts ;
+    }
+
+    public MockHttpServletRequest setParts(Collection<Part> newParts) {
+        this.parts.clear();
+        this.parts.addAll(newParts);
+        return this;
+    }
+
+    @Override
+    public Part getPart(String name) throws IOException, ServletException {
+        return parts.stream().filter(p -> p.getName() == name).findFirst().orElse(null);
+    }
+
+    @Override
+    public <T extends HttpUpgradeHandler> T upgrade(Class<T> handlerClass) throws IOException, ServletException {
+        return (T) new MockHttpUpgradeHandler();
     }
 
     private void handleAttributeListenerCalls(String key, Object value, Object oldValue)
@@ -896,11 +1016,5 @@ public class MockHttpServletRequest implements HttpServletRequest
                                                                                   value);
             ((ServletRequestAttributeListener) anAttributeListener).attributeRemoved(event);
         }
-    }
-
-    private ServletContext getServletContext()
-    {
-        if(null == session) return new MockServletContext();
-        return session.getServletContext();
     }
 }
