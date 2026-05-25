@@ -10,6 +10,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 public class TestBodyTag extends BodyTagSupport
 {
+    private static final long serialVersionUID = 6856704428326055577L;
     private String testString;
     private Integer testInteger;
     private double testDouble;
@@ -24,7 +25,7 @@ public class TestBodyTag extends BodyTagSupport
     private boolean doEndTagCalled = false;
     private boolean doAfterBodyCalled = false;
     private boolean doInitBodyCalled = false;
-    
+
     public void setDoAfterBodyReturnValue(int doAfterBodyReturnValue)
     {
         this.doAfterBodyReturnValue = doAfterBodyReturnValue;
@@ -53,7 +54,7 @@ public class TestBodyTag extends BodyTagSupport
         }
         return doStartTagReturnValue;
     }
-    
+
     public void doInitBody() throws JspException
     {
         doInitBodyCalled = true;
@@ -66,7 +67,7 @@ public class TestBodyTag extends BodyTagSupport
         int returnValue = doAfterBodyReturnValue;
         if(BodyTagSupport.EVAL_BODY_AGAIN == doAfterBodyReturnValue)
         {
-            doAfterBodyReturnValue = BodyTagSupport.SKIP_BODY;      
+            doAfterBodyReturnValue = BodyTagSupport.SKIP_BODY;
         }
         return returnValue;
     }
@@ -106,7 +107,7 @@ public class TestBodyTag extends BodyTagSupport
     {
         this.testString = testString;
     }
-    
+
     public void setPageContext(PageContext context)
     {
         super.setPageContext(context);
@@ -117,12 +118,12 @@ public class TestBodyTag extends BodyTagSupport
     {
         return context;
     }
-    
+
     public JspWriter getBufferedOut()
     {
         return bufferedOut;
     }
-    
+
     public void release()
     {
         if(wasDoStartTagCalled() && wasDoEndTagCalled())
@@ -131,17 +132,17 @@ public class TestBodyTag extends BodyTagSupport
         }
         releaseCalled = true;
     }
-    
+
     public boolean wasReleaseCalled()
     {
         return releaseCalled;
     }
-    
+
     public boolean wasReleaseCallLastMethodCall()
     {
         return releaseLastCall;
     }
-    
+
     public boolean wasDoInitBodyCalled()
     {
         return doInitBodyCalled;

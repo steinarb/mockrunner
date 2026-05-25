@@ -4,16 +4,17 @@ import javax.servlet.jsp.tagext.TryCatchFinally;
 
 public class ExceptionTestTag extends TestBodyTag implements TryCatchFinally
 {
+    private static final long serialVersionUID = -5883246210258932478L;
     private boolean doCatchCalled = false;
     private boolean doFinallyCalled = false;
     private Throwable caughtException = null;
     private Throwable throwException = null;
-    
+
     public ExceptionTestTag()
     {
         throwException = null;
     }
-    
+
     public ExceptionTestTag(Throwable throwException)
     {
         this.throwException = throwException;

@@ -9,6 +9,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 public class TestFragmentTag extends TagSupport
 {
+    private static final long serialVersionUID = -423825397076113310L;
     private JspFragment testFragment;
 
     public void setTestFragment(JspFragment testFragment)
@@ -30,6 +31,6 @@ public class TestFragmentTag extends TagSupport
         }
         return EVAL_BODY_INCLUDE;
     }
-    
-    
+
+
 }

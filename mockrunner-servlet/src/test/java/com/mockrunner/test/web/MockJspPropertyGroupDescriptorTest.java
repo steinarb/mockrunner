@@ -1,26 +1,34 @@
 package com.mockrunner.test.web;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Iterator;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.mockrunner.mock.web.MockJspPropertyGroupDescriptor;
 
-public class MockJspPropertyGroupDescriptorTest extends TestCase
+class MockJspPropertyGroupDescriptorTest
 {
     private MockJspPropertyGroupDescriptor descriptor;
-    
-    protected void setUp() throws Exception
+
+    @BeforeEach
+    void setUp() throws Exception
     {
         descriptor = new MockJspPropertyGroupDescriptor();
     }
 
-    protected void tearDown() throws Exception
+    @AfterEach
+    void tearDown() throws Exception
     {
         descriptor = null;
     }
 
-    public void testReset()
+    @Test
+    void testReset()
     {
         descriptor.addIncludeCoda("coda");
         descriptor.addIncludePrelude("prelude");
@@ -60,8 +68,9 @@ public class MockJspPropertyGroupDescriptorTest extends TestCase
         assertEquals("false", descriptor.getScriptingInvalid());
         assertEquals("false", descriptor.getTrimDirectiveWhitespaces());
     }
-    
-    public void testIncludeAndURLPatterns()
+
+    @Test
+    void testIncludeAndURLPatterns()
     {
         assertTrue(descriptor.getIncludeCodas().isEmpty());
         assertTrue(descriptor.getIncludePreludes().isEmpty());
@@ -82,8 +91,10 @@ public class MockJspPropertyGroupDescriptorTest extends TestCase
         assertTrue(descriptor.getIncludePreludes().isEmpty());
         assertTrue(descriptor.getUrlPatterns().isEmpty());
     }
-    
-    public void testIncludeAndURLPatternsListChange()
+
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Test
+    void testIncludeAndURLPatternsListChange()
     {
         descriptor.addIncludeCoda("coda1");
         descriptor.addIncludePrelude("prelude1");

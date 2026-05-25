@@ -1,24 +1,32 @@
 package com.mockrunner.test.web;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import com.mockrunner.mock.web.MockVariableResolver;
 
-import junit.framework.TestCase;
-
-public class MockVariableResolverTest extends TestCase
+class MockVariableResolverTest
 {
     private MockVariableResolver resolver;
 
-    protected void setUp() throws Exception
+    @BeforeEach
+    void setUp() throws Exception
     {
         resolver = new MockVariableResolver();
     }
 
-    protected void tearDown() throws Exception
+    @AfterEach
+    void tearDown() throws Exception
     {
         resolver = null;
     }
-    
-    public void testResolve() throws Exception
+
+    @Test
+    void testResolve() throws Exception
     {
         assertNull(resolver.resolveVariable("test"));
         resolver.addVariable("test", 3);

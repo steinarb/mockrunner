@@ -1,5 +1,12 @@
 package com.mockrunner.test.web;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -10,23 +17,23 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 
+import org.junit.jupiter.api.BeforeEach;
+
 import com.mockrunner.mock.web.MockFilterChain;
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.MockHttpServletResponse;
 
-import junit.framework.TestCase;
-
-public class MockFilterChainTest extends TestCase
+class MockFilterChainTest
 {
     private MockFilterChain chain;
-    
+
+    @BeforeEach
     protected void setUp() throws Exception
     {
-        super.setUp();
         chain = new MockFilterChain();
     }
-    
-    public void testNoServlet() throws Exception
+
+    void testNoServlet() throws Exception
     {
         chain.doFilter(null, null);
         TestServlet servlet = new TestServlet();
@@ -38,22 +45,22 @@ public class MockFilterChainTest extends TestCase
         chain.doFilter(null, null);
         assertFalse(servlet.wasServiceCalled());
     }
-    
-    public void testFilterInstance() throws Exception
+
+    void testFilterInstance() throws Exception
     {
         try
         {
             chain.addFilter(String.class);
             fail();
-        } 
+        }
         catch(IllegalArgumentException exc)
         {
             //should throw exception
         }
         chain.addFilter(TestFilter.class);
     }
-    
-    public void testDoFilter() throws Exception
+
+    void testDoFilter() throws Exception
     {
         TestFilter filter1 = new TestFilter();
         TestFilter filter2 = new TestFilter();
@@ -76,8 +83,8 @@ public class MockFilterChainTest extends TestCase
         assertNull(chain.getLastRequest());
         assertNull(chain.getLastResponse());
     }
-    
-    public void testRequestAndResponseList() throws Exception
+
+    void testRequestAndResponseList() throws Exception
     {
         TestFilter filter1 = new TestFilter();
         TestFilter filter2 = new TestFilter();
@@ -107,8 +114,8 @@ public class MockFilterChainTest extends TestCase
         assertSame(response2, chain.getResponseList().get(3));
         assertSame(response2, chain.getLastResponse());
     }
-    
-    public void testLastRequestAndResponse() throws Exception
+
+    void testLastRequestAndResponse() throws Exception
     {
         TestFilter filter1 = new TestFilter();
         TestFilter filter2 = new TestFilter();
@@ -122,8 +129,8 @@ public class MockFilterChainTest extends TestCase
         assertSame(request, chain.getLastRequest());
         assertSame(response, chain.getLastResponse());
     }
-    
-    public void testReset() throws Exception
+
+    void testReset() throws Exception
     {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -137,102 +144,103 @@ public class MockFilterChainTest extends TestCase
         chain.doFilter(request, response);
         assertFalse(filter2.wasDoFilterCalled());
     }
-    
+
     public static class SkipTestFilter implements Filter
     {
-        public void init(FilterConfig config) throws ServletException
-        {
+            public void init(FilterConfig config) throws ServletException
+            {
 
-        }
+            }
 
-        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
-        {
-            
-        }
+            public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
+            {
 
-        public void destroy()
-        {
-       
-        }
+            }
+
+            public void destroy()
+            {
+
+            }
     }
-    
+
     public static class TestFilter implements Filter
     {
-        private boolean doFilterCalled  = false;
-        private boolean doChain = true;
-        private ServletRequest request;
-        private ServletResponse response;
+            private boolean doFilterCalled  = false;
+            private boolean doChain = true;
+            private ServletRequest request;
+            private ServletResponse response;
 
-        public void init(FilterConfig config) throws ServletException
-        {
-
-        }
-
-        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
-        {
-            doFilterCalled = true;
-            if(doChain)
+            public void init(FilterConfig config) throws ServletException
             {
-                if(null != this.request)
-                {
-                    request = this.request;
-                }
-                if(null != this.response)
-                {
-                    response = this.response;
-                }
-                chain.doFilter(request, response);
+
             }
-        }
 
-        public void destroy()
-        {
-       
-        }
+            public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
+            {
+                doFilterCalled = true;
+                if(doChain)
+                {
+                    if(null != this.request)
+                    {
+                        request = this.request;
+                    }
+                    if(null != this.response)
+                    {
+                        response = this.response;
+                    }
+                    chain.doFilter(request, response);
+                }
+            }
 
-        public void setDoChain(boolean doChain)
-        {
-            this.doChain = doChain;
-        }
-        
-        public void setRequest(ServletRequest request)
-        {
-            this.request = request;
-        }
-        
-        public void setResponse(ServletResponse response)
-        {
-            this.response = response;
-        }
-        
-        public boolean wasDoFilterCalled()
-        {
-            return doFilterCalled;
-        }
+            public void destroy()
+            {
 
-        public void reset()
-        {
-            doFilterCalled  = false;
-        }
+            }
+
+            public void setDoChain(boolean doChain)
+            {
+                this.doChain = doChain;
+            }
+
+            public void setRequest(ServletRequest request)
+            {
+                this.request = request;
+            }
+
+            public void setResponse(ServletResponse response)
+            {
+                this.response = response;
+            }
+
+            public boolean wasDoFilterCalled()
+            {
+                return doFilterCalled;
+            }
+
+            public void reset()
+            {
+                doFilterCalled  = false;
+            }
     }
-    
+
     public static class TestServlet extends HttpServlet
     {
-        private boolean serviceCalled = false;
-        
-        public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException
-        {
-            serviceCalled = true;
-        }
-        
-        public void reset()
-        {
-            serviceCalled = false;
-        }
-        
-        public boolean wasServiceCalled()
-        {
-            return serviceCalled;
-        }
+            private static final long serialVersionUID = -395159716150268037L;
+            private boolean serviceCalled = false;
+
+            public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException
+            {
+                serviceCalled = true;
+            }
+
+            public void reset()
+            {
+                serviceCalled = false;
+            }
+
+            public boolean wasServiceCalled()
+            {
+                return serviceCalled;
+            }
     }
 }

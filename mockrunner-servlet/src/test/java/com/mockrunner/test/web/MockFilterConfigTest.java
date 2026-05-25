@@ -1,17 +1,24 @@
 package com.mockrunner.test.web;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import com.mockrunner.mock.web.MockFilterConfig;
 
-public class MockFilterConfigTest extends TestCase
+public class MockFilterConfigTest
 {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Test
     public void testInitParameters()
     {
         MockFilterConfig config = new MockFilterConfig();

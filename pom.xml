@@ -162,6 +162,23 @@
                 <version>4.12</version>
             </dependency>
             <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.14.4</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>3.24.2</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>5.23.0</version>
+            </dependency>
+            <dependency>
                 <groupId>org.mockejb</groupId>
                 <artifactId>mockejb</artifactId>
                 <version>0.6-beta2</version>
