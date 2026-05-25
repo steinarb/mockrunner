@@ -513,6 +513,20 @@ class MockHttpServletRequestTest
         assertThat(request.getHeader(MockHttpServletRequest.CONTENT_TYPE)).isEqualTo(contentType);
     }
 
+    @Test
+    void testThatSetContentLengthAlsoSetsHeaderValue() {
+        int contentLEngth = 30445;
+        MockHttpServletRequest request = new MockHttpServletRequest().setContentLength(contentLEngth);
+        assertThat(request.getHeader(MockHttpServletRequest.CONTENT_LENGTH)).isEqualTo(Integer.toString(contentLEngth));
+    }
+
+    @Test
+    void testThatSetContentLengthLongAlsoSetsHeaderValue() {
+        long contentLEngth = 30447L;
+        MockHttpServletRequest request = new MockHttpServletRequest().setContentLengthLong(contentLEngth);
+        assertThat(request.getHeader(MockHttpServletRequest.CONTENT_LENGTH)).isEqualTo(Long.toString(contentLEngth));
+    }
+
     private class TestAttributeListener implements ServletRequestAttributeListener {
         private boolean wasAttributeAddedCalled = false;
         private boolean wasAttributeReplacedCalled = false;

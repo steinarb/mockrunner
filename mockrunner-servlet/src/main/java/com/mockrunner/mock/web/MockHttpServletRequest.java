@@ -92,6 +92,7 @@ public class MockHttpServletRequest implements HttpServletRequest
 
     // HTTP Header names
     public static final String CONTENT_TYPE = "Content-Type";
+    public static final String CONTENT_LENGTH = "Content-Legth";
 
     public MockHttpServletRequest()
     {
@@ -688,6 +689,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     public MockHttpServletRequest setContentLength(int contentLength)
     {
         this.contentLength = contentLength;
+        setHeader(CONTENT_LENGTH, Integer.toString(contentLength));
         return this;
     }
 
