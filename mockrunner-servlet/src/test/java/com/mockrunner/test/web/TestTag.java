@@ -9,6 +9,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 public class TestTag extends TagSupport
 {
+    private static final long serialVersionUID = -6184401531349252629L;
     private String testString;
     private Integer testInteger;
     private double testDouble;

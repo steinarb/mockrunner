@@ -10,6 +10,7 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 public class TestBodyTag extends BodyTagSupport
 {
+    private static final long serialVersionUID = 6856704428326055577L;
     private String testString;
     private Integer testInteger;
     private double testDouble;
