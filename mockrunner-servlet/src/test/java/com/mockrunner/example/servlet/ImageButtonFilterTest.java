@@ -18,13 +18,11 @@ import com.mockrunner.servlet.BasicServletTestCaseAdapter;
  */
 public class ImageButtonFilterTest extends BasicServletTestCaseAdapter
 {
-    private ImageButtonFilter filter;
-
     @BeforeEach
     public void setUp() throws Exception
     {
         super.setUp();
-        filter = createFilter(ImageButtonFilter.class);
+        createFilter(ImageButtonFilter.class);
     }
 
     @Test
