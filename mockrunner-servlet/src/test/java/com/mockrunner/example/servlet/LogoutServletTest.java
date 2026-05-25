@@ -7,8 +7,8 @@ import static org.junit.Assert.assertTrue;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 
@@ -20,7 +20,7 @@ import com.mockrunner.servlet.BasicServletTestCaseAdapter;
  */
 public class LogoutServletTest extends BasicServletTestCaseAdapter
 {
-    @Before
+    @BeforeEach
     public void setUp() throws Exception
     {
         super.setUp();

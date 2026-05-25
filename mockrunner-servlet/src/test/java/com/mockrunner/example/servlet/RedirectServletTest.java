@@ -5,8 +5,8 @@ import static org.junit.Assert.assertEquals;
 import java.io.BufferedReader;
 
 import org.jdom2.Element;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 
@@ -20,7 +20,7 @@ import com.mockrunner.servlet.BasicServletTestCaseAdapter;
  */
 public class RedirectServletTest extends BasicServletTestCaseAdapter
 {
-    @Before
+    @BeforeEach
     public void setUp() throws Exception
     {
         super.setUp();
