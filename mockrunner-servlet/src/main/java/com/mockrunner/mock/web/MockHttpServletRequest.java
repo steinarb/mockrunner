@@ -90,6 +90,9 @@ public class MockHttpServletRequest implements HttpServletRequest
     private boolean authenticated;
     private ArrayList<Part> parts = new ArrayList<>();
 
+    // HTTP Header names
+    public static final String CONTENT_TYPE = "Content-Type";
+
     public MockHttpServletRequest()
     {
         resetAll();
@@ -706,6 +709,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     public MockHttpServletRequest setContentType(String contentType)
     {
         this.contentType = contentType;
+        setHeader(CONTENT_TYPE, contentType);
         return this;
     }
 

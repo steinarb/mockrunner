@@ -506,6 +506,13 @@ class MockHttpServletRequestTest
         assertFalse(request.isUserInRole("role3"));
     }
 
+    @Test
+    void testThatSetContentTypeAlsoSetsHeaderValue() {
+        String contentType = "application/octet-stream";
+        MockHttpServletRequest request = new MockHttpServletRequest().setContentType(contentType);
+        assertThat(request.getHeader(MockHttpServletRequest.CONTENT_TYPE)).isEqualTo(contentType);
+    }
+
     private class TestAttributeListener implements ServletRequestAttributeListener {
         private boolean wasAttributeAddedCalled = false;
         private boolean wasAttributeReplacedCalled = false;
