@@ -13,13 +13,13 @@ import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 /**
  * Example test for the {@link ImageButtonFilter}.
  * Demonstrates the usage of the filter test features in
- * {@link com.mockrunner.servlet.ServletTestModule} 
+ * {@link com.mockrunner.servlet.ServletTestModule}
  * and {@link com.mockrunner.servlet.BasicServletTestCaseAdapter}.
  */
 public class ImageButtonFilterTest extends BasicServletTestCaseAdapter
 {
     private ImageButtonFilter filter;
-    
+
     @Before
     public void setUp() throws Exception
     {

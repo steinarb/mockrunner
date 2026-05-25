@@ -12,22 +12,22 @@ import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 
 /**
  * Example test for {@link RedirectServlet}.
- * Demonstrates the usage of {@link com.mockrunner.servlet.ServletTestModule} 
+ * Demonstrates the usage of {@link com.mockrunner.servlet.ServletTestModule}
  * and {@link com.mockrunner.servlet.BasicServletTestCaseAdapter}.
  * Demonstrates the testing of output data as string as well as parsed
  * HTML data (<code>testServletOutputAsXML</code>).
- * 
+ *
  */
 public class RedirectServletTest extends BasicServletTestCaseAdapter
 {
-	@Before
+    @Before
     public void setUp() throws Exception
     {
         super.setUp();
         createServlet(RedirectServlet.class);
     }
-    
-	@Test
+
+    @Test
     public void testServletOutput() throws Exception
     {
         addRequestParameter("redirecturl", "http://www.mockrunner.com");
@@ -43,8 +43,8 @@ public class RedirectServletTest extends BasicServletTestCaseAdapter
         assertEquals("</html>", reader.readLine().trim());
         verifyOutputContains("URL=http://www.mockrunner.com");
     }
-    
-	@Test
+
+    @Test
     public void testServletOutputAsXML() throws Exception
     {
         addRequestParameter("redirecturl", "http://www.mockrunner.com");

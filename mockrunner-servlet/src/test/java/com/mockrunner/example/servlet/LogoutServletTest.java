@@ -14,28 +14,28 @@ import com.mockrunner.servlet.BasicServletTestCaseAdapter;
 
 /**
  * Example test for {@link LogoutServlet}.
- * Demonstrates the usage of {@link com.mockrunner.servlet.ServletTestModule} 
+ * Demonstrates the usage of {@link com.mockrunner.servlet.ServletTestModule}
  * and {@link com.mockrunner.servlet.BasicServletTestCaseAdapter}
  * with and without a filter.
  */
 public class LogoutServletTest extends BasicServletTestCaseAdapter
 {
-	@Before
+    @Before
     public void setUp() throws Exception
     {
         super.setUp();
         createServlet(LogoutServlet.class);
     }
-    
-	@Test
+
+    @Test
     public void testDoLogout() throws Exception
     {
         addRequestParameter("logout", "true");
         doPost();
         assertFalse(getWebMockObjectFactory().getMockSession().isValid());
     }
-    
-	@Test
+
+    @Test
     public void testDoLogoutWithFilteredImageButton() throws Exception
     {
         addRequestParameter("logout.x", "11");
