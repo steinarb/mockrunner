@@ -1,14 +1,23 @@
 package com.mockrunner.test.web;
 
+import static java.util.Collections.list;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
@@ -22,40 +31,45 @@ import javax.servlet.ServletRequestAttributeListener;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.Cookie;
 
-import org.apache.tools.ant.types.selectors.SelectorUtils;
-
-import junit.framework.TestCase;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.MockHttpSession;
 import com.mockrunner.mock.web.MockRequestDispatcher;
 
-public class MockHttpServletRequestTest extends TestCase
+class MockHttpServletRequestTest
 {
     private MockHttpServletRequest request;
+
+    @BeforeEach
     protected void setUp()
     {
         request = new MockHttpServletRequest();
     }
 
+    @AfterEach
     protected void tearDown()
     {
         request = null;
     }
 
-    public void testResetAll() throws Exception
+    @Test
+    void testResetAll() throws Exception
     {
         request
             .addAttribute("key", "value")
             .addHeader("header", "headervalue")
             .setContentLength(5)
             .resetAll();
-        assertNull(request.getAttribute("key"));
-        assertNull(request.getHeader("header"));
-        assertEquals(-1, request.getContentLength());
+        assertThat(request.getAttribute("key")).isNull();;
+        assertThat(request.getHeader("header")).isNull();
+        assertThat(request.getContentLength()).isEqualTo(-1);
     }
 
-    public void testAttributeListenerCalled()
+    @Test
+    void testAttributeListenerCalled()
     {
         TestAttributeListener listener1 = new TestAttributeListener();
         TestAttributeListener listener2 = new TestAttributeListener();
@@ -65,59 +79,59 @@ public class MockHttpServletRequestTest extends TestCase
             .addAttributeListener(listener2)
             .addAttributeListener(listener3)
             .addAttribute("key", "value");
-        assertTrue(listener1.wasAttributeAddedCalled());
-        assertTrue(listener2.wasAttributeAddedCalled());
-        assertTrue(listener3.wasAttributeAddedCalled());
-        assertFalse(listener1.wasAttributeReplacedCalled());
-        assertFalse(listener2.wasAttributeReplacedCalled());
-        assertFalse(listener3.wasAttributeReplacedCalled());
+        assertThat(listener1.wasAttributeAddedCalled()).isTrue();
+        assertThat(listener2.wasAttributeAddedCalled()).isTrue();
+        assertThat(listener3.wasAttributeAddedCalled()).isTrue();
+        assertThat(listener1.wasAttributeReplacedCalled()).isFalse();
+        assertThat(listener2.wasAttributeReplacedCalled()).isFalse();
+        assertThat(listener3.wasAttributeReplacedCalled()).isFalse();
         listener1.reset();
         listener2.reset();
         listener3.reset();
         request.setAttribute("key", "value1");
-        assertFalse(listener1.wasAttributeAddedCalled());
-        assertFalse(listener2.wasAttributeAddedCalled());
-        assertFalse(listener3.wasAttributeAddedCalled());
-        assertTrue(listener1.wasAttributeReplacedCalled());
-        assertTrue(listener2.wasAttributeReplacedCalled());
-        assertTrue(listener3.wasAttributeReplacedCalled());
+        assertThat(listener1.wasAttributeAddedCalled()).isFalse();
+        assertThat(listener2.wasAttributeAddedCalled()).isFalse();
+        assertThat(listener3.wasAttributeAddedCalled()).isFalse();
+        assertThat(listener1.wasAttributeReplacedCalled()).isTrue();
+        assertThat(listener2.wasAttributeReplacedCalled()).isTrue();
+        assertThat(listener3.wasAttributeReplacedCalled()).isTrue();
         request.removeAttribute("key");
-        assertTrue(listener1.wasAttributeRemovedCalled());
-        assertTrue(listener2.wasAttributeRemovedCalled());
-        assertTrue(listener3.wasAttributeRemovedCalled());
+        assertThat(listener1.wasAttributeRemovedCalled()).isTrue();
+        assertThat(listener2.wasAttributeRemovedCalled()).isTrue();
+        assertThat(listener3.wasAttributeRemovedCalled()).isTrue();
     }
 
-    @SuppressWarnings("rawtypes")
-    public void testFluentApi() throws Exception {
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Test
+    void testFluentApi() throws Exception {
         request
             .setupAddParameter("param1", "value1")
             .clearParameters()
             .setupAddParameter("param2", "value2")
             .setupAddParameter("param3", "value3");
-        assertEquals(2, request.getParameterMap().size());
+        assertThat(request.getParameterMap().size()).isEqualTo(2);
         request
             .addAttribute("attribute1", "avalue1")
             .clearAttributes()
             .addAttribute("attribute2", "avalue2")
             .addAttribute("attribute3", "avalue3");
         Enumeration attributeNames = request.getAttributeNames();
-        int attributeNamesSize = getEnumerationSize(attributeNames);
-        assertEquals(2, attributeNamesSize);
+        assertThat(list(attributeNames)).hasSize(2);
         Locale defaultLocale = request.getLocale();
-        assertNotNull(defaultLocale);
-        assertEquals("Expect an empty locales list", 0, getEnumerationSize(request.getLocales()));
+        assertThat(defaultLocale).isNotNull();
+        assertThat(Collections.list(request.getLocales())).isEmpty();
         Locale nbNo = Locale.forLanguageTag("nb-NO");
         request.addLocale(nbNo);
         // Verify default locale has changed and that getLocales() is non-empty
         assertNotEquals(defaultLocale, request.getLocale());
         assertEquals(nbNo, request.getLocale());
-        assertEquals(1, getEnumerationSize(request.getLocales()));
+        assertThat(list(request.getLocales())).hasSize(1);
 
         Locale nnNo = Locale.forLanguageTag("nn-NO");
         request.addLocales(Arrays.asList(nnNo, Locale.CANADA_FRENCH));
         // Verify that default locale hasn't changed and that the list of locales is changed by two
         assertEquals(nbNo, request.getLocale());
-        assertEquals(3, getEnumerationSize(request.getLocales()));
+        assertThat(Collections.list(request.getLocales())).hasSize(3);
 
         String basicAuth = "Basic";
         String post = "POST";
@@ -187,7 +201,8 @@ public class MockHttpServletRequestTest extends TestCase
         assertEquals(remoteHost, request.getRemoteHost());
     }
 
-    public void testFluentCreators() {
+    @Test
+    void testFluentCreators() {
         final String url = "http://localhost:8181/myapp/servlet/argument?arg1=value";
         MockHttpServletRequest getRequest = MockHttpServletRequest.getRequest(URI.create(url));
         assertEquals(url, getRequest.getRequestURL().toString());
@@ -197,7 +212,8 @@ public class MockHttpServletRequestTest extends TestCase
         assertEquals("POST", postJsonRequest.getMethod());
     }
 
-    public void testAttributeListenerValues()
+    @Test
+    void testAttributeListenerValues()
     {
         TestAttributeOrderListener listener = new TestAttributeOrderListener();
         request
@@ -213,7 +229,8 @@ public class MockHttpServletRequestTest extends TestCase
         assertEquals("anotherValue", listener.getRemovedEventValue());
     }
 
-    public void testAttributeListenerNullValue()
+    @Test
+    void testAttributeListenerNullValue()
     {
         TestAttributeListener listener = new TestAttributeListener();
         request
@@ -233,13 +250,15 @@ public class MockHttpServletRequestTest extends TestCase
         assertFalse(listener.wasAttributeRemovedCalled());
     }
 
-    public void testGetAttributeNames()
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Test
+    void testGetAttributeNames()
     {
         Enumeration enumeration = request.getAttributeNames();
-        assertFalse(enumeration.hasMoreElements());
+        assertThat(enumeration.hasMoreElements()).isFalse();
         request.setAttribute("key", null);
         enumeration = request.getAttributeNames();
-        assertFalse(enumeration.hasMoreElements());
+        assertThat(enumeration.hasMoreElements()).isFalse();
         request
             .addAttribute("key1", "value1")
             .addAttribute("key2", "value2");
@@ -249,23 +268,24 @@ public class MockHttpServletRequestTest extends TestCase
         List testList = new ArrayList();
         testList.add(enumeration.nextElement());
         testList.add(enumeration.nextElement());
-        assertFalse(enumeration.hasMoreElements());
-        assertTrue(testList.contains("key1"));
-        assertTrue(testList.contains("key2"));
+        assertThat(enumeration.hasMoreElements()).isFalse();
+        assertThat(testList.contains("key1")).isTrue();
+        assertThat(testList.contains("key2")).isTrue();
         request.setAttribute("key2", null);
-        assertNull(request.getAttribute("key2"));
+        assertThat(request.getAttribute("key2")).isNull();;
         enumeration = request.getAttributeNames();
         testList = new ArrayList();
         testList.add(enumeration.nextElement());
-        assertFalse(enumeration.hasMoreElements());
-        assertTrue(testList.contains("key1"));
+        assertThat(enumeration.hasMoreElements()).isFalse();
+        assertThat(testList).contains("key1");
         request.setAttribute("key1", null);
-        assertNull(request.getAttribute("key1"));
+        assertThat(request.getAttribute("key1")).isNull();;
         enumeration = request.getAttributeNames();
-        assertFalse(enumeration.hasMoreElements());
+        assertThat(enumeration.hasMoreElements()).isFalse();
     }
 
-    public void testAddRequestParameter() throws Exception
+    @Test
+    void testAddRequestParameter() throws Exception
     {
         request.setupAddParameter("abc", "abc");
         assertEquals("abc", request.getParameter("abc"));
@@ -279,7 +299,9 @@ public class MockHttpServletRequestTest extends TestCase
         assertEquals("456", request.getParameterValues("abc")[1]);
     }
 
-    public void testHeaders()
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Test
+    void testHeaders()
     {
         request
             .addHeader("testHeader", "xyz")
@@ -333,7 +355,9 @@ public class MockHttpServletRequestTest extends TestCase
         assertFalse(request.getHeaders("doesnotexist").hasMoreElements());
     }
 
-    public void testHeadersCaseInsensitive()
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Test
+    void testHeadersCaseInsensitive()
     {
         request
             .addHeader("testHeader", "xyz")
@@ -362,7 +386,8 @@ public class MockHttpServletRequestTest extends TestCase
         assertTrue(headerNames.contains("myHeader2"));
     }
 
-    public void testCookies()
+    @Test
+    void testCookies()
     {
         assertNull(request.getCookies());
         request
@@ -379,7 +404,8 @@ public class MockHttpServletRequestTest extends TestCase
         assertEquals("value3", cookies[2].getValue());
     }
 
-    public void testBodyContent() throws Exception
+    @Test
+    void testBodyContent() throws Exception
     {
         request.setBodyContent("test\nanothertest???");
         BufferedReader reader = request.getReader();
@@ -395,7 +421,8 @@ public class MockHttpServletRequestTest extends TestCase
         assertEquals(55, stream.read());
     }
 
-    public void testRequestDispatcher() throws Exception
+    @Test
+    void testRequestDispatcher() throws Exception
     {
         final String rdPath1 = "rdPathOne";
         final String rdPath2 = "rdPathTwo";
@@ -437,7 +464,8 @@ public class MockHttpServletRequestTest extends TestCase
         assertEquals(0, request.getRequestDispatcherMap().size());
     }
 
-    public void testSessionCreation() throws Exception
+    @Test
+    void testSessionCreation() throws Exception
     {
         request.setSession(null);
         assertNull(request.getSession(false));
@@ -458,7 +486,8 @@ public class MockHttpServletRequestTest extends TestCase
         assertNotNull(request.getSession(false));
     }
 
-    public void testSessionInvalidate() throws Exception
+    @Test
+    void testSessionInvalidate() throws Exception
     {
         request.setSession(new MockHttpSession());
         request.getSession().invalidate();
@@ -466,7 +495,8 @@ public class MockHttpServletRequestTest extends TestCase
         assertTrue(((MockHttpSession)request.getSession(true)).isValid());
     }
 
-    public void testIsUserInRole()
+    @Test
+    void testIsUserInRole()
     {
         request
             .setUserInRole("role1", true)
@@ -474,16 +504,6 @@ public class MockHttpServletRequestTest extends TestCase
         assertTrue(request.isUserInRole("role1"));
         assertFalse(request.isUserInRole("role2"));
         assertFalse(request.isUserInRole("role3"));
-    }
-
-    private int getEnumerationSize(Enumeration enumeration) {
-        int size = 0;
-        while(enumeration.hasMoreElements()) {
-            ++size;
-            enumeration.nextElement();
-        }
-
-        return size;
     }
 
     private class TestAttributeListener implements ServletRequestAttributeListener {

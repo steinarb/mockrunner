@@ -1,5 +1,12 @@
 package com.mockrunner.test.web;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 
 import javax.servlet.Filter;
@@ -10,23 +17,23 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServlet;
 
+import org.junit.jupiter.api.BeforeEach;
+
 import com.mockrunner.mock.web.MockFilterChain;
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.MockHttpServletResponse;
 
-import junit.framework.TestCase;
-
-public class MockFilterChainTest extends TestCase
+class MockFilterChainTest
 {
     private MockFilterChain chain;
 
+    @BeforeEach
     protected void setUp() throws Exception
     {
-        super.setUp();
         chain = new MockFilterChain();
     }
 
-    public void testNoServlet() throws Exception
+    void testNoServlet() throws Exception
     {
         chain.doFilter(null, null);
         TestServlet servlet = new TestServlet();
@@ -39,7 +46,7 @@ public class MockFilterChainTest extends TestCase
         assertFalse(servlet.wasServiceCalled());
     }
 
-    public void testFilterInstance() throws Exception
+    void testFilterInstance() throws Exception
     {
         try
         {
@@ -53,7 +60,7 @@ public class MockFilterChainTest extends TestCase
         chain.addFilter(TestFilter.class);
     }
 
-    public void testDoFilter() throws Exception
+    void testDoFilter() throws Exception
     {
         TestFilter filter1 = new TestFilter();
         TestFilter filter2 = new TestFilter();
@@ -77,7 +84,7 @@ public class MockFilterChainTest extends TestCase
         assertNull(chain.getLastResponse());
     }
 
-    public void testRequestAndResponseList() throws Exception
+    void testRequestAndResponseList() throws Exception
     {
         TestFilter filter1 = new TestFilter();
         TestFilter filter2 = new TestFilter();
@@ -108,7 +115,7 @@ public class MockFilterChainTest extends TestCase
         assertSame(response2, chain.getLastResponse());
     }
 
-    public void testLastRequestAndResponse() throws Exception
+    void testLastRequestAndResponse() throws Exception
     {
         TestFilter filter1 = new TestFilter();
         TestFilter filter2 = new TestFilter();
@@ -123,7 +130,7 @@ public class MockFilterChainTest extends TestCase
         assertSame(response, chain.getLastResponse());
     }
 
-    public void testReset() throws Exception
+    void testReset() throws Exception
     {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -218,6 +225,7 @@ public class MockFilterChainTest extends TestCase
 
     public static class TestServlet extends HttpServlet
     {
+            private static final long serialVersionUID = -395159716150268037L;
             private boolean serviceCalled = false;
 
             public void service(ServletRequest request, ServletResponse response) throws ServletException, IOException

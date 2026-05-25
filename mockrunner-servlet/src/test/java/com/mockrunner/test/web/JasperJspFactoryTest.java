@@ -1,6 +1,6 @@
 package com.mockrunner.test.web;
 
-import java.util.Arrays;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import javax.el.ELResolver;
 import javax.el.MethodExpression;
@@ -11,43 +11,46 @@ import javax.servlet.jsp.JspFactory;
 
 import org.apache.jasper.el.ELContextImpl;
 import org.apache.jasper.runtime.JspApplicationContextImpl;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.mockrunner.mock.web.JasperJspFactory;
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.WebMockObjectFactory;
 
-import junit.framework.TestCase;
-
-public class JasperJspFactoryTest extends TestCase
+class JasperJspFactoryTest
 {
     private WebMockObjectFactory mockFactory;
     private JasperJspFactory jasperFactory;
 
+    @BeforeEach
     protected void setUp() throws Exception
     {
-        super.setUp();
         mockFactory = new WebMockObjectFactory();
         jasperFactory = new JasperJspFactory();
     }
 
-    public void testConfigure()
+    @Test
+    void testConfigure()
     {
-        assertSame(jasperFactory, jasperFactory.configure(mockFactory));
-        assertTrue(jasperFactory.getJspApplicationContext(null) instanceof JspApplicationContextImpl);
-        assertSame(jasperFactory.getJspApplicationContext(null), mockFactory.getMockServletContext().getAttribute(JspApplicationContextImpl.class.getName()));
-        assertSame(jasperFactory.getPageContext(null, null, null, null, true, 1, true), mockFactory.getMockPageContext());
-        assertTrue(mockFactory.getMockPageContext().getELContext() instanceof ELContextImpl);
+        assertThat(jasperFactory).isSameAs(jasperFactory.configure(mockFactory));
+        assertThat(jasperFactory.getJspApplicationContext(null)).isInstanceOf(JspApplicationContextImpl.class);
+        assertThat(jasperFactory.getJspApplicationContext(null)).isSameAs(mockFactory.getMockServletContext().getAttribute(JspApplicationContextImpl.class.getName()));
+        assertThat(jasperFactory.getPageContext(null, null, null, null, true, 1, true)).isSameAs(mockFactory.getMockPageContext());
+        assertThat(mockFactory.getMockPageContext().getELContext()).isInstanceOf(ELContextImpl.class);
     }
 
-    public void testResolveVariable()
+    @Test
+    void testResolveVariable()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
         mockFactory.getMockSession().setAttribute("test", "value");
         ELResolver resolver = mockFactory.getMockPageContext().getELContext().getELResolver();
-        assertEquals("value", resolver.getValue(mockFactory.getMockPageContext().getELContext(), null, "test"));
+        assertThat(resolver.getValue(mockFactory.getMockPageContext().getELContext(), null, "test")).isEqualTo("value");
     }
 
-    public void testValueExpressionGetAndSet()
+    @Test
+    void testValueExpressionGetAndSet()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
         TestObject testObject = new TestObject();
@@ -55,12 +58,13 @@ public class JasperJspFactoryTest extends TestCase
         mockFactory.getMockSession().setAttribute("test", testObject);
         JspApplicationContext applicationContext = JspFactory.getDefaultFactory().getJspApplicationContext(mockFactory.getMockPageContext().getServletContext());
         ValueExpression valueExpression = applicationContext.getExpressionFactory().createValueExpression(mockFactory.getMockPageContext().getELContext(), "${test.testProperty}", String.class);
-        assertEquals("value", valueExpression.getValue(mockFactory.getMockPageContext().getELContext()));
+        assertThat(valueExpression.getValue(mockFactory.getMockPageContext().getELContext())).isEqualTo("value");
         valueExpression.setValue(mockFactory.getMockPageContext().getELContext(), "anotherValue");
-        assertEquals("anotherValue", testObject.getTestProperty());
+        assertThat(testObject.getTestProperty()).isEqualTo("anotherValue");
     }
 
-    public void testValueExpressionAttributes()
+    @Test
+    void testValueExpressionAttributes()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
         TestObject testObject = new TestObject();
@@ -68,18 +72,19 @@ public class JasperJspFactoryTest extends TestCase
         mockFactory.getMockSession().setAttribute("test", testObject);
         JspApplicationContext applicationContext = JspFactory.getDefaultFactory().getJspApplicationContext(mockFactory.getMockPageContext().getServletContext());
         ValueExpression valueExpression = applicationContext.getExpressionFactory().createValueExpression(mockFactory.getMockPageContext().getELContext(), "${test.testProperty}", String.class);
-        assertEquals(String.class, valueExpression.getExpectedType());
-        assertEquals(String.class, valueExpression.getType(mockFactory.getMockPageContext().getELContext()));
-        assertFalse(valueExpression.isReadOnly(mockFactory.getMockPageContext().getELContext()));
-        assertEquals("${test.testProperty}", valueExpression.getExpressionString());
+        assertThat(valueExpression.getExpectedType()).isEqualTo(String.class);
+        assertThat(valueExpression.getType(mockFactory.getMockPageContext().getELContext())).isEqualTo(String.class);
+        assertThat(valueExpression.isReadOnly(mockFactory.getMockPageContext().getELContext())).isFalse();
+        assertThat(valueExpression.getExpressionString()).isEqualTo("${test.testProperty}");
         valueExpression = applicationContext.getExpressionFactory().createValueExpression(mockFactory.getMockPageContext().getELContext(), "${test.testReadOnlyProperty}", Integer.class);
-        assertEquals(Integer.class, valueExpression.getExpectedType());
-        assertEquals(Integer.class, valueExpression.getType(mockFactory.getMockPageContext().getELContext()));
-        assertTrue(valueExpression.isReadOnly(mockFactory.getMockPageContext().getELContext()));
-        assertEquals("${test.testReadOnlyProperty}", valueExpression.getExpressionString());
+        assertThat(valueExpression.getExpectedType()).isEqualTo(Integer.class);
+        assertThat(valueExpression.getType(mockFactory.getMockPageContext().getELContext())).isEqualTo(Integer.class);
+        assertThat(valueExpression.isReadOnly(mockFactory.getMockPageContext().getELContext())).isTrue();
+        assertThat(valueExpression.getExpressionString()).isEqualTo("${test.testReadOnlyProperty}");
     }
 
-    public void testArithmeticValueExpression()
+    @Test
+    void testArithmeticValueExpression()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
         TestObject testObject = new TestObject();
@@ -87,7 +92,8 @@ public class JasperJspFactoryTest extends TestCase
         assertExpressionEquals("${(test['testReadOnlyProperty'] + test.testArrayProperty[0]) == 26}", "true");
     }
 
-    public void testDeferredValueExpression()
+    @Test
+    void testDeferredValueExpression()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
         TestObject testObject = new TestObject();
@@ -98,22 +104,24 @@ public class JasperJspFactoryTest extends TestCase
         assertExpressionEquals("#{sessionScope.test}", "xyz");
     }
 
-    public void testDeferredMethodExpression()
+    @Test
+    void testDeferredMethodExpression()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
         TestObject testObject = new TestObject();
         mockFactory.getMockServletContext().setAttribute("test", testObject);
         JspApplicationContext applicationContext = JspFactory.getDefaultFactory().getJspApplicationContext(mockFactory.getMockPageContext().getServletContext());
         MethodExpression methodExpression = applicationContext.getExpressionFactory().createMethodExpression(mockFactory.getMockPageContext().getELContext(), "#{test.testMethod}", String.class, new Class[] {String.class,});
-        assertEquals("Hello World", methodExpression.invoke(mockFactory.getMockPageContext().getELContext(), new String[] {"Hello World"}));
+        assertThat(methodExpression.invoke(mockFactory.getMockPageContext().getELContext(), new String[] {"Hello World"})).isEqualTo("Hello World");
         MethodInfo methodInfo = methodExpression.getMethodInfo(mockFactory.getMockPageContext().getELContext());
-        assertEquals("testMethod", methodInfo.getName());
-        assertEquals(String.class, methodInfo.getReturnType());
-        assertTrue(Arrays.equals(new Class[] {String.class}, methodInfo.getParamTypes()));
-        assertEquals("#{test.testMethod}", methodExpression.getExpressionString());
+        assertThat(methodInfo.getName()).isEqualTo("testMethod");
+        assertThat(methodInfo.getReturnType()).isEqualTo(String.class);
+        assertThat(methodInfo.getParamTypes()).isEqualTo(new Class[] {String.class});
+        assertThat(methodExpression.getExpressionString()).isEqualTo("#{test.testMethod}");
     }
 
-    public void testExpressionScopes()
+    @Test
+    void testExpressionScopes()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
         mockFactory.getMockRequest().setAttribute("requesttest", "requestvalue");
@@ -130,7 +138,8 @@ public class JasperJspFactoryTest extends TestCase
         assertExpressionEquals("${sessionScope.requesttest}", "");
     }
 
-    public void testImplicitObjects()
+    @Test
+    void testImplicitObjects()
     {
         mockFactory.setDefaultJspFactory(jasperFactory.configure(mockFactory));
         MockHttpServletRequest request = mockFactory.getMockRequest();
@@ -154,7 +163,7 @@ public class JasperJspFactoryTest extends TestCase
     {
         JspApplicationContext applicationContext = JspFactory.getDefaultFactory().getJspApplicationContext(mockFactory.getMockPageContext().getServletContext());
         ValueExpression valueExpression = applicationContext.getExpressionFactory().createValueExpression(mockFactory.getMockPageContext().getELContext(), expression, String.class);
-        assertEquals(value, valueExpression.getValue(mockFactory.getMockPageContext().getELContext()));
+        assertThat(valueExpression.getValue(mockFactory.getMockPageContext().getELContext())).isEqualTo(value);
     }
 
     public static class TestObject

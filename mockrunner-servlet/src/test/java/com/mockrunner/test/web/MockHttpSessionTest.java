@@ -1,5 +1,13 @@
 package com.mockrunner.test.web;
 
+import static java.util.Collections.list;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -9,25 +17,30 @@ import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.mockrunner.mock.web.MockHttpSession;
 
-public class MockHttpSessionTest extends TestCase
+class MockHttpSessionTest
 {
     private MockHttpSession session;
 
-    protected void setUp()
+    @BeforeEach
+    void setUp()
     {
         session = new MockHttpSession();
     }
 
-    protected void tearDown()
+    @AfterEach
+    void tearDown()
     {
         session = null;
     }
 
-    public void testResetAll() throws Exception
+    @Test
+    void testResetAll() throws Exception
     {
         session.setAttribute("key", "value");
         session.setMaxInactiveInterval(3);
@@ -36,7 +49,8 @@ public class MockHttpSessionTest extends TestCase
         assertEquals(-1, session.getMaxInactiveInterval());
     }
 
-    public void testBindingListenerInvalidate()
+    @Test
+    void testBindingListenerInvalidate()
     {
         TestSessionListener listener1 = new TestSessionListener();
         TestSessionListener listener2 = new TestSessionListener();
@@ -64,7 +78,8 @@ public class MockHttpSessionTest extends TestCase
         }
     }
 
-    public void testBindingListenerOverwriteAttribute()
+    @Test
+    void testBindingListenerOverwriteAttribute()
     {
         TestSessionListener listener1 = new TestSessionListener();
         TestSessionListener listener2 = new TestSessionListener();
@@ -75,7 +90,8 @@ public class MockHttpSessionTest extends TestCase
         assertFalse(listener2.wasValueUnboundCalled());
     }
 
-    public void testBindingListenerOverwriteSameAttribute()
+    @Test
+    void testBindingListenerOverwriteSameAttribute()
     {
         TestSessionListener listener = new TestSessionListener();
         session.setAttribute("key", listener);
@@ -86,7 +102,8 @@ public class MockHttpSessionTest extends TestCase
         assertTrue(listener.wasValueUnboundBeforeBoundCalled());
     }
 
-    public void testBindingListenerCorrectOrder()
+    @Test
+    void testBindingListenerCorrectOrder()
     {
         session.setAttribute("key", "test");
         TestSessionOrderListener listener = new TestSessionOrderListener();
@@ -108,7 +125,8 @@ public class MockHttpSessionTest extends TestCase
         assertEquals(null, listener.getUnboundSessionValue());
     }
 
-    public void testAttributeListenerCalled()
+    @Test
+    void testAttributeListenerCalled()
     {
         TestAttributeListener listener1 = new TestAttributeListener();
         TestAttributeListener listener2 = new TestAttributeListener();
@@ -139,7 +157,8 @@ public class MockHttpSessionTest extends TestCase
         assertTrue(listener3.wasAttributeRemovedCalled());
     }
 
-    public void testAttributeListenerOrder()
+    @Test
+    void testAttributeListenerOrder()
     {
         TestAttributeOrderListener listener = new TestAttributeOrderListener();
         session.addAttributeListener(listener);
@@ -154,10 +173,11 @@ public class MockHttpSessionTest extends TestCase
         session.removeAttribute("key");
         assertEquals("key", listener.getRemovedEventKey());
         assertEquals("anotherValue", listener.getRemovedEventValue());
-        assertNull("", listener.getRemovedSessionValue());
+        assertNull(listener.getRemovedSessionValue());
     }
 
-    public void testAttributeListenerNullValue()
+    @Test
+    void testAttributeListenerNullValue()
     {
         TestAttributeListener listener = new TestAttributeListener();
         session.addAttributeListener(listener);
@@ -176,24 +196,24 @@ public class MockHttpSessionTest extends TestCase
         assertFalse(listener.wasAttributeRemovedCalled());
     }
 
-    public void testGetAttributeNames()
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    @Test
+    void testGetAttributeNames()
     {
-        Enumeration enumeration = session.getAttributeNames();
-        assertFalse(enumeration.hasMoreElements());
+        assertThat(list(session.getAttributeNames())).isEmpty();
         session.setAttribute("key", null);
-        enumeration = session.getAttributeNames();
-        assertFalse(enumeration.hasMoreElements());
+        assertThat(list(session.getAttributeNames())).isEmpty();
         session.setAttribute("key1", "value1");
         session.setAttribute("key2", "value2");
         assertEquals("value1", session.getAttribute("key1"));
         assertEquals("value2", session.getAttribute("key2"));
-        enumeration = session.getAttributeNames();
+        Enumeration enumeration = session.getAttributeNames();
         List testList = new ArrayList();
         testList.add(enumeration.nextElement());
         testList.add(enumeration.nextElement());
         assertFalse(enumeration.hasMoreElements());
-        assertTrue(testList.contains("key1"));
-        assertTrue(testList.contains("key2"));
+        assertThat(testList).contains("key1");
+        assertThat(testList).contains("key2");
         session.setAttribute("key2", null);
         assertNull(session.getAttribute("key2"));
         enumeration = session.getAttributeNames();

@@ -1,16 +1,20 @@
 package com.mockrunner.test.web;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.io.IOException;
 import java.io.StringWriter;
+
+import org.junit.jupiter.api.Test;
 
 import com.mockrunner.mock.web.MockHttpServletResponse;
 import com.mockrunner.mock.web.MockJspWriter;
 
-import junit.framework.TestCase;
-
-public class MockJspWriterTest extends TestCase
+class MockJspWriterTest
 {
-    public void testWithDefaultWriter() throws Exception
+    @Test
+    void testWithDefaultWriter() throws Exception
     {
         MockJspWriter writer = new MockJspWriter();
         writer.print("test1");
@@ -21,7 +25,8 @@ public class MockJspWriterTest extends TestCase
         assertEquals("test3", writer.getOutputAsString());
     }
 
-    public void testWithProvidedWriter() throws Exception
+    @Test
+    void testWithProvidedWriter() throws Exception
     {
         StringWriter providedWriter = new StringWriter();
         MockJspWriter writer = new MockJspWriter(providedWriter);
@@ -43,7 +48,8 @@ public class MockJspWriterTest extends TestCase
         assertEquals("test1test2test3", providedWriter.toString());
     }
 
-    public void testWithProvidedResponse() throws Exception
+    @Test
+    void testWithProvidedResponse() throws Exception
     {
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockJspWriter writer = new MockJspWriter(response);

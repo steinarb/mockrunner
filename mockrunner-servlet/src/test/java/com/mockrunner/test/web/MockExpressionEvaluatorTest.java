@@ -1,25 +1,31 @@
 package com.mockrunner.test.web;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import javax.servlet.jsp.el.ELException;
 import javax.servlet.jsp.el.Expression;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.mockrunner.mock.web.MockExpressionEvaluator;
 import com.mockrunner.mock.web.MockFunctionMapper;
 import com.mockrunner.mock.web.MockVariableResolver;
 
-public class MockExpressionEvaluatorTest extends TestCase
+@SuppressWarnings("deprecation")
+class MockExpressionEvaluatorTest
 {
     private MockExpressionEvaluator evaluator;
 
+    @BeforeEach
     protected void setUp() throws Exception
     {
-        super.setUp();
         evaluator = new MockExpressionEvaluator();
     }
 
-    public void testEvaluateFailure() throws Exception
+    @Test
+    void testEvaluateFailure() throws Exception
     {
         try
         {
@@ -42,7 +48,8 @@ public class MockExpressionEvaluatorTest extends TestCase
         }
     }
 
-    public void testEvaluateOk() throws Exception
+    @Test
+    void testEvaluateOk() throws Exception
     {
         evaluator.addObject("myexp", 3);
         assertEquals(3, evaluator.evaluate("myexp", Integer.class, null, null));
@@ -51,7 +58,8 @@ public class MockExpressionEvaluatorTest extends TestCase
         assertEquals(object, evaluator.evaluate("myexp", Object.class, null, null));
     }
 
-    public void testExpression() throws Exception
+    @Test
+    void testExpression() throws Exception
     {
         Expression expression = evaluator.parseExpression("myexp", String.class, null);
         try
@@ -77,5 +85,5 @@ public class MockExpressionEvaluatorTest extends TestCase
         }
     }
 
-    public void testDummy(){}
+    void testDummy(){}
 }

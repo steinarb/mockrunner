@@ -1,27 +1,33 @@
 package com.mockrunner.test.web;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Collection;
-
 import javax.servlet.http.HttpServletResponse;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import com.mockrunner.mock.web.MockHttpServletResponse;
 import com.mockrunner.mock.web.MockServletOutputStream;
 
-public class MockHttpServletResponseTest extends TestCase
+class MockHttpServletResponseTest
 {
     private MockHttpServletResponse response;
 
+    @BeforeEach
     protected void setUp() throws Exception
     {
-        super.setUp();
         response = new MockHttpServletResponse();
     }
 
-    public void testResetAll() throws Exception
+    @Test
+    void testResetAll() throws Exception
     {
         response.addHeader("header", "headervalue");
         response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -32,7 +38,9 @@ public class MockHttpServletResponseTest extends TestCase
         assertFalse(response.wasErrorSent());
     }
 
-    public void testHeaders()
+    @SuppressWarnings("unchecked")
+    @Test
+    void testHeaders()
     {
         response.addHeader("testHeader", "xyz");
         response.addHeader("testHeader", "abc");
@@ -51,35 +59,40 @@ public class MockHttpServletResponseTest extends TestCase
         response.addIntHeader("intHeader", 0);
         assertEquals("0", response.getHeader("intHeader"));
         response.clearHeaders();
-        Collection headers = response.getHeaderNames();
-        assertTrue(headers.isEmpty());
+        assertThat(response.getHeaderNames()).isEmpty();
     }
 
-    public void testGetHeaderNames()
+    @SuppressWarnings("unchecked")
+    @Test
+    void testGetHeaderNames()
     {
         response.addHeader("testHeader1", "xyz1");
         response.addHeader("testHeader1", "abc");
         response.addHeader("testHeader2", "xyz2");
         response.addHeader("testHeader3", "xyz3");
-        Collection headerNames= response.getHeaderNames();
-        assertEquals(3, headerNames.size());
-        assertTrue(headerNames.contains("testHeader1"));
-        assertTrue(headerNames.contains("testHeader2"));
-        assertTrue(headerNames.contains("testHeader3"));
+        assertThat(response.getHeaderNames())
+            .hasSize(3)
+            .contains("testHeader1")
+            .contains("testHeader2")
+            .contains("testHeader3");
     }
 
-    public void testGetHeaders()
+    @SuppressWarnings("unchecked")
+    @Test
+    void testGetHeaders()
     {
         response.addHeader("testHeader1", "xyz1");
         response.addHeader("testHeader1", "abc");
         response.addHeader("testHeader2", "xyz2");
-        Collection headers = response.getHeaders("testHeader1");
-        assertEquals(2, headers.size());
-        assertTrue(headers.contains("xyz1"));
-        assertTrue(headers.contains("abc"));
+        assertThat(response.getHeaders("testHeader1"))
+            .hasSize(2)
+            .contains("xyz1")
+            .contains("abc");
     }
 
-    public void testHeadersCaseInsensitive()
+    @SuppressWarnings("unchecked")
+    @Test
+    void testHeadersCaseInsensitive()
     {
         response.addHeader("testHeader", "xyz");
         response.addHeader("TESTHeader", "abc");
@@ -87,14 +100,15 @@ public class MockHttpServletResponseTest extends TestCase
         response.addHeader("myHeader2", "abc");
         assertEquals("xyz", response.getHeader("myheader1"));
         assertEquals("abc", response.getHeader("MYHEADER2"));
-        Collection headerNames = response.getHeaderNames();
-        assertEquals(3, headerNames.size());
-        assertTrue(headerNames.contains("testHeader"));
-        assertTrue(headerNames.contains("MYHEADER1"));
-        assertTrue(headerNames.contains("myHeader2"));
+        assertThat(response.getHeaderNames())
+            .hasSize(3)
+            .contains("testHeader")
+            .contains("MYHEADER1")
+            .contains("myHeader2");
     }
 
-    public void testOutputStreams() throws IOException
+    @Test
+    void testOutputStreams() throws IOException
     {
         response.getOutputStream().print("test");
         response.getWriter().print(true);
@@ -104,21 +118,24 @@ public class MockHttpServletResponseTest extends TestCase
         assertEquals("testtruetest".getBytes().length, response.getOutputStreamBinaryContent().length);
     }
 
-    public void testGetSetContentType() throws IOException
+    @Test
+    void testGetSetContentType() throws IOException
     {
         assertNull(response.getContentType());
         response.setContentType("myType");
         assertEquals("myType", response.getContentType());
     }
 
-    public void testFlush() throws IOException
+    @Test
+    void testFlush() throws IOException
     {
         response.getOutputStream().write('a');
         response.flushBuffer();
         assertEquals("a", ((MockServletOutputStream)response.getOutputStream()).getContent());
     }
 
-    public void testReset() throws IOException
+    @Test
+    void testReset() throws IOException
     {
         response.addHeader("testHeader", "xyz");
         assertTrue(response.getHeaderList("testHeader").size() == 1);
@@ -131,7 +148,8 @@ public class MockHttpServletResponseTest extends TestCase
         assertNull(response.getHeaderList("testHeader"));
     }
 
-    public void testSetCharacterEncoding() throws IOException
+    @Test
+    void testSetCharacterEncoding() throws IOException
     {
         response.setCharacterEncoding("ISO-8859-1");
         response.getWriter().write("?");
@@ -151,21 +169,24 @@ public class MockHttpServletResponseTest extends TestCase
         assertTrue(output.equals(input));
     }
 
-    public void testRedirect() throws IOException
+    @Test
+    void testRedirect() throws IOException
     {
         response.sendRedirect("/some-location");
         assertEquals("/some-location", response.getHeader("Location"));
         assertEquals(HttpServletResponse.SC_FOUND, response.getStatusCode());
     }
 
-    public void testEncodeRedirectURL() throws IOException {
+    @Test
+    void testEncodeRedirectURL() throws IOException {
         final String encoded1 = response.encodeRedirectURL("page#/some-location?a=b&c=d");
         assertEquals("page%23%2Fsome-location%3Fa%3Db%26c%3Dd", encoded1);
         final String encoded2 = response.encodeRedirectURL("page");
         assertEquals("page", encoded2);
     }
 
-    public void testEncodeRedirectUrl() throws IOException {
+    @Test
+    void testEncodeRedirectUrl() throws IOException {
         final String encoded = response.encodeRedirectUrl("page#/some-location?a=b&c=d");
         assertEquals("page%23%2Fsome-location%3Fa%3Db%26c%3Dd", encoded);
         final String encoded2 = response.encodeRedirectUrl("page");

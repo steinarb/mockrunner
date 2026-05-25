@@ -1,18 +1,25 @@
 package com.mockrunner.test.web;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import com.mockrunner.mock.web.MockServletConfig;
 
-public class MockServletConfigTest extends TestCase
+class MockServletConfigTest
 {
-    public void testInitParameters()
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Test
+    void testInitParameters()
     {
         MockServletConfig config = new MockServletConfig();
         config.setInitParameter("key1", "value1");
