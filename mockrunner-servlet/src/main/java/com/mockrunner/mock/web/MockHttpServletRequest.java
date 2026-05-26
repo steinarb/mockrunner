@@ -47,13 +47,18 @@ import com.mockrunner.util.common.CaseAwareMap;
  */
 public class MockHttpServletRequest implements HttpServletRequest
 {
+    @SuppressWarnings("rawtypes")
     private Map attributes;
+    @SuppressWarnings("rawtypes")
     private Map parameters;
+    @SuppressWarnings("rawtypes")
     private Vector locales;
+    @SuppressWarnings("rawtypes")
     private Map requestDispatchers;
     private HttpSession session;
     private String method;
     private String authType;
+    @SuppressWarnings("rawtypes")
     private Map headers;
     private String contextPath;
     private String pathInfo;
@@ -71,11 +76,13 @@ public class MockHttpServletRequest implements HttpServletRequest
     private String scheme;
     private String remoteHost;
     private String remoteAddr;
+    @SuppressWarnings("rawtypes")
     private Map roles;
     private String characterEncoding;
     private int contentLength;
     private long contentLengthLong;
     private String contentType;
+    @SuppressWarnings("rawtypes")
     private List cookies;
     private MockServletInputStream bodyContent;
     private String localAddr;
@@ -83,6 +90,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     private int localPort;
     private int remotePort;
     private boolean sessionCreated;
+    @SuppressWarnings("rawtypes")
     private List attributeListener;
     private boolean isAsyncSupported;
     private AsyncContext asyncContext;
@@ -168,6 +176,7 @@ public class MockHttpServletRequest implements HttpServletRequest
     /**
      * Resets the state of this object to the default values
      */
+    @SuppressWarnings("rawtypes")
     public void resetAll()
     {
         attributes = new HashMap();
@@ -197,6 +206,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         isAsyncSupported = false;
     }
 
+    @SuppressWarnings("unchecked")
     public MockHttpServletRequest addAttributeListener(ServletRequestAttributeListener listener)
     {
         attributeListener.add(listener);
@@ -234,6 +244,7 @@ public class MockHttpServletRequest implements HttpServletRequest
      * @param values the parameters values
      * @return a reference to the request (fluent API)
      */
+    @SuppressWarnings("unchecked")
     public MockHttpServletRequest setupAddParameter(String key, String[] values)
     {
         parameters.put(key, values);
@@ -252,12 +263,14 @@ public class MockHttpServletRequest implements HttpServletRequest
         return this;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Enumeration getParameterNames()
     {
         Vector parameterKeys = new Vector(parameters.keySet());
         return parameterKeys.elements();
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Map getParameterMap()
     {
         return Collections.unmodifiableMap(parameters);
@@ -274,6 +287,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         return attributes.get(key);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Enumeration getAttributeNames()
     {
         Vector attKeys = new Vector(attributes.keySet());
@@ -290,6 +304,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         }
     }
 
+    @SuppressWarnings("unchecked")
     public void setAttribute(String key, Object value)
     {
         Object oldValue = attributes.get(key);
@@ -359,6 +374,7 @@ public class MockHttpServletRequest implements HttpServletRequest
      * maps to the corresponding <code>RequestDispatcher</code> object.
      * @return the map of <code>RequestDispatcher</code> objects
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Map getRequestDispatcherMap()
     {
         return Collections.unmodifiableMap(requestDispatchers);
@@ -383,6 +399,7 @@ public class MockHttpServletRequest implements HttpServletRequest
      * @param dispatcher the <code>RequestDispatcher</code> object
      * @return a reference to the request (fluent API)
      */
+    @SuppressWarnings("unchecked")
     public MockHttpServletRequest setRequestDispatcher(String path, RequestDispatcher dispatcher)
     {
         if(dispatcher instanceof MockRequestDispatcher)
@@ -399,18 +416,21 @@ public class MockHttpServletRequest implements HttpServletRequest
         return (Locale)locales.get(0);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Enumeration getLocales()
     {
         return locales.elements();
     }
 
+    @SuppressWarnings("unchecked")
     public MockHttpServletRequest addLocale(Locale locale)
     {
         locales.add(locale);
         return this;
     }
 
-    public MockHttpServletRequest addLocales(List localeList)
+    @SuppressWarnings("unchecked")
+    public MockHttpServletRequest addLocales(@SuppressWarnings("rawtypes") List localeList)
     {
         locales.addAll(localeList);
         return this;
@@ -455,16 +475,19 @@ public class MockHttpServletRequest implements HttpServletRequest
 
     public String getHeader(String key)
     {
+        @SuppressWarnings("rawtypes")
         List headerList = (List)headers.get(key);
         if(null == headerList || 0 == headerList.size()) return null;
         return (String)headerList.get(0);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Enumeration getHeaderNames()
     {
         return new Vector(headers.keySet()).elements();
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Enumeration getHeaders(String key)
     {
         List headerList = (List)headers.get(key);
@@ -479,6 +502,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         return new Integer(header);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public MockHttpServletRequest addHeader(String key, String value)
     {
         List valueList = (List) headers.get(key);
@@ -491,8 +515,10 @@ public class MockHttpServletRequest implements HttpServletRequest
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public void setHeader(String key, String value)
     {
+        @SuppressWarnings("rawtypes")
         List valueList = new ArrayList();
         headers.put(key, valueList);
         valueList.add(value);
@@ -603,12 +629,14 @@ public class MockHttpServletRequest implements HttpServletRequest
         return this;
     }
 
+    @SuppressWarnings("unchecked")
     public Cookie[] getCookies()
     {
         if(null == cookies) return null;
         return (Cookie[])cookies.toArray(new Cookie[cookies.size()]);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public MockHttpServletRequest addCookie(Cookie cookie)
     {
         if(null == cookies)
@@ -659,6 +687,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         return (Boolean) roles.get(role);
     }
 
+    @SuppressWarnings("unchecked")
     public MockHttpServletRequest setUserInRole(String role, boolean isInRole)
     {
         roles.put(role, isInRole);
@@ -700,6 +729,7 @@ public class MockHttpServletRequest implements HttpServletRequest
 
     public MockHttpServletRequest setContentLengthLong(long contentLength) {
         contentLengthLong = contentLength;
+        setHeader(CONTENT_LENGTH, Long.toString(contentLength));
         return this;
     }
 
@@ -969,6 +999,7 @@ public class MockHttpServletRequest implements HttpServletRequest
         return parts.stream().filter(p -> p.getName() == name).findFirst().orElse(null);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public <T extends HttpUpgradeHandler> T upgrade(Class<T> handlerClass) throws IOException, ServletException {
         return (T) new MockHttpUpgradeHandler();

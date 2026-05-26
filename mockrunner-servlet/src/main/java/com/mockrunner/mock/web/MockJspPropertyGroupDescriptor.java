@@ -14,19 +14,23 @@ public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescri
     private String deferredSyntaxAllowedAsLiteral;
     private String elIgnored;
     private String errorOnUndeclaredNamespace;
+    @SuppressWarnings("rawtypes")
     private List includeCodas;
+    @SuppressWarnings("rawtypes")
     private List includePreludes;
     private String isXml;
     private String pageEncoding;
     private String scriptingInvalid;
     private String trimDirectiveWhitespaces;
+    @SuppressWarnings("rawtypes")
     private Collection urlPatterns;
-    
+
     public MockJspPropertyGroupDescriptor()
     {
         reset();
     }
-    
+
+    @SuppressWarnings("rawtypes")
     public void reset()
     {
         buffer = "8kb";
@@ -68,11 +72,13 @@ public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescri
         return errorOnUndeclaredNamespace;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Collection getIncludeCodas()
     {
         return new ArrayList(includeCodas);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Collection getIncludePreludes()
     {
         return new ArrayList(includePreludes);
@@ -98,6 +104,7 @@ public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescri
         return trimDirectiveWhitespaces;
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Collection getUrlPatterns()
     {
         return new ArrayList(urlPatterns);
@@ -105,7 +112,7 @@ public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescri
 
     /**
      * Sets the buffer size.
-     * 
+     *
      * @param buffer the buffer size
      */
     public void setBuffer(String buffer)
@@ -115,7 +122,7 @@ public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescri
 
     /**
      * Sets the default content type.
-     * 
+     *
      * @param defaultContentType the default content type
      */
     public void setDefaultContentType(String defaultContentType)
@@ -125,7 +132,7 @@ public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescri
 
     /**
      * Sets if the deferred character sequence is allowed as literal text.
-     * 
+     *
      * @param deferredSyntaxAllowedAsLiteral is the deferred character sequence allowed as literal text
      */
     public void setDeferredSyntaxAllowedAsLiteral(String deferredSyntaxAllowedAsLiteral)
@@ -135,7 +142,7 @@ public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescri
 
     /**
      * Sets if EL evaluation is disabled or enabled.
-     * 
+     *
      * @param elIgnored is EL evaluation disabled or enabled
      */
     public void setElIgnored(String elIgnored)
@@ -145,24 +152,25 @@ public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescri
 
     /**
      * Sets if an error should be raised on undeclared namespace.
-     * 
+     *
      * @param errorOnUndeclaredNamespace should an error should be raised on undeclared namespace
      */
     public void setErrorOnUndeclaredNamespace(String errorOnUndeclaredNamespace)
     {
         this.errorOnUndeclaredNamespace = errorOnUndeclaredNamespace;
     }
-    
+
     /**
      * Adds an include coda to the collection of include codas.
-     * 
+     *
      * @param includeCode the include coda to add
      */
+    @SuppressWarnings("unchecked")
     public void addIncludeCoda(String includeCode)
     {
         this.includeCodas.add(includeCode);
     }
-    
+
     /**
      * Clears the collection of include codas.
      */
@@ -170,17 +178,18 @@ public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescri
     {
         this.includeCodas.clear();
     }
-    
+
     /**
      * Adds an include prelude to the collection of include preludes.
-     * 
+     *
      * @param includePrelude the include prelude to add
      */
+    @SuppressWarnings("unchecked")
     public void addIncludePrelude(String includePrelude)
     {
         this.includePreludes.add(includePrelude);
     }
-    
+
     /**
      * Clears the collection of include preludes.
      */
@@ -191,7 +200,7 @@ public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescri
 
     /**
      * Sets if it is an XML JSP document.
-     * 
+     *
      * @param isXml is it an XML JSP document
      */
     public void setIsXml(String isXml)
@@ -201,7 +210,7 @@ public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescri
 
     /**
      * Sets the page encoding.
-     * 
+     *
      * @param pageEncoding the page encoding
      */
     public void setPageEncoding(String pageEncoding)
@@ -211,7 +220,7 @@ public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescri
 
     /**
      * Sets if scripting is invalid.
-     * 
+     *
      * @param scriptingInvalid is scripting invalid
      */
     public void setScriptingInvalid(String scriptingInvalid)
@@ -221,7 +230,7 @@ public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescri
 
     /**
      * Sets if directive whitespaces should be trimmed.
-     * 
+     *
      * @param trimDirectiveWhitespaces should directive whitespaces be trimmed
      */
     public void setTrimDirectiveWhitespaces(String trimDirectiveWhitespaces)
@@ -231,14 +240,15 @@ public class MockJspPropertyGroupDescriptor // implements JspPropertyGroupDescri
 
     /**
      * Adds an URL pattern to the collection of URL patterns.
-     * 
+     *
      * @param urlPattern the URL pattern to add
      */
+    @SuppressWarnings("unchecked")
     public void addUrlPattern(String urlPattern)
     {
         this.urlPatterns.add(urlPattern);
     }
-    
+
     /**
      * Clears the collection of URL patterns.
      */

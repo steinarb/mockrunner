@@ -3,7 +3,6 @@ package com.mockrunner.mock.web;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -20,6 +19,7 @@ import javax.servlet.http.HttpSessionContext;
  */
 public class MockHttpSession implements HttpSession
 {
+    @SuppressWarnings("rawtypes")
     private HashMap attributes;
     private String sessionId;
     private boolean isNew;
@@ -27,16 +27,18 @@ public class MockHttpSession implements HttpSession
     private long creationTime;
     private ServletContext servletContext;
     private int maxInactiveInterval;
+    @SuppressWarnings("rawtypes")
     private List attributeListener;
 
     public MockHttpSession()
     {
         resetAll();
     }
-    
+
     /**
      * Resets the state of this object to the default values
      */
+    @SuppressWarnings("rawtypes")
     public synchronized void resetAll()
     {
         attributes = new HashMap();
@@ -47,6 +49,7 @@ public class MockHttpSession implements HttpSession
         attributeListener = new ArrayList();
     }
 
+    @SuppressWarnings("unchecked")
     public synchronized void addAttributeListener(HttpSessionAttributeListener listener)
     {
         attributeListener.add(listener);
@@ -65,7 +68,7 @@ public class MockHttpSession implements HttpSession
     {
         return servletContext;
     }
-    
+
     public synchronized boolean isValid()
     {
         return isValid;
@@ -87,10 +90,12 @@ public class MockHttpSession implements HttpSession
         return creationTime;
     }
 
+    @SuppressWarnings("unchecked")
     public synchronized void invalidate()
     {
         if (!isValid) throw new IllegalStateException("session invalid");
         isValid = false;
+        @SuppressWarnings("rawtypes")
         Map clone = new HashMap(attributes);
         for (Object o : clone.keySet()) {
             doRemoveAttribute((String) o);
@@ -112,9 +117,11 @@ public class MockHttpSession implements HttpSession
         return getAttribute(key);
     }
 
+    @SuppressWarnings("unchecked")
     public synchronized String[] getValueNames()
     {
         if (!isValid) throw new IllegalStateException("session invalid");
+        @SuppressWarnings("rawtypes")
         Vector attKeys = new Vector(attributes.keySet());
         return (String[]) attKeys.toArray();
     }
@@ -130,7 +137,7 @@ public class MockHttpSession implements HttpSession
         if (!isValid) throw new IllegalStateException("session invalid");
         removeAttribute(key);
     }
-    
+
     public synchronized void clearAttributes()
     {
         attributes.clear();
@@ -142,6 +149,7 @@ public class MockHttpSession implements HttpSession
         return attributes.get(key);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public synchronized Enumeration getAttributeNames()
     {
         if (!isValid) throw new IllegalStateException("session invalid");
@@ -166,10 +174,11 @@ public class MockHttpSession implements HttpSession
         }
     }
 
+    @SuppressWarnings("unchecked")
     public synchronized void setAttribute(String key, Object value)
     {
         if (!isValid) throw new IllegalStateException("session invalid");
-        Object oldValue = attributes.get(key); 
+        Object oldValue = attributes.get(key);
         if(null == value)
         {
             attributes.remove(key);
@@ -213,15 +222,15 @@ public class MockHttpSession implements HttpSession
             {
                 callAttributeListenersAddedMethod(key, value);
             }
-        
+
         }
     }
-    
+
     public synchronized long getLastAccessedTime()
     {
         return System.currentTimeMillis();
     }
-    
+
     public synchronized void setMaxInactiveInterval(int maxInactiveInterval)
     {
         this.maxInactiveInterval = maxInactiveInterval;
@@ -236,7 +245,7 @@ public class MockHttpSession implements HttpSession
     {
         return new MockSessionContext();
     }
-    
+
     private synchronized void callAttributeListenersAddedMethod(String key, Object value)
     {
         for (Object anAttributeListener : attributeListener) {

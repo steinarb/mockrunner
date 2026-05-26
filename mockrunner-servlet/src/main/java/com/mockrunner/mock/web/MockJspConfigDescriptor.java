@@ -6,40 +6,45 @@ import java.util.List;
 
 public class MockJspConfigDescriptor // implements JspConfigDescriptor
 {
+    @SuppressWarnings("rawtypes")
     private List jspPropertyGroups;
+    @SuppressWarnings("rawtypes")
     private List taglibs;
-    
+
     public MockJspConfigDescriptor()
     {
         reset();
     }
-    
+
+    @SuppressWarnings("rawtypes")
     public void reset()
     {
         jspPropertyGroups = new ArrayList();
         taglibs = new ArrayList();
     }
-    
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Collection getJspPropertyGroups()
     {
         return new ArrayList(jspPropertyGroups);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Collection getTaglibs()
     {
         return new ArrayList(taglibs);
     }
 
     /*
-      Adds a <code>JspPropertyGroupDescriptor</code> to the list of JSP property groups.
+    Adds a <code>JspPropertyGroupDescriptor</code> to the list of JSP property groups.
 
       @param jspPropertyGroup the <code>JspPropertyGroupDescriptor</code> to add
      */
-//    public void addJspPropertyGroup(JspPropertyGroupDescriptor jspPropertyGroup)
-//    {
-//        this.jspPropertyGroups.add(jspPropertyGroup);
-//    }
-    
+    //    public void addJspPropertyGroup(JspPropertyGroupDescriptor jspPropertyGroup)
+    //    {
+    //        this.jspPropertyGroups.add(jspPropertyGroup);
+    //    }
+
     /**
      * Clears the list of JSP property groups.
      */
@@ -47,17 +52,17 @@ public class MockJspConfigDescriptor // implements JspConfigDescriptor
     {
         this.jspPropertyGroups.clear();
     }
-    
+
     /*
-      Adds a <code>TaglibDescriptor</code> to the list of taglibs.
+    Adds a <code>TaglibDescriptor</code> to the list of taglibs.
 
       @param taglib the <code>TaglibDescriptor</code> to add
      */
-//    public void addTaglib(TaglibDescriptor taglib)
-//    {
-//        this.taglibs.add(taglib);
-//    }
-    
+    //    public void addTaglib(TaglibDescriptor taglib)
+    //    {
+    //        this.taglibs.add(taglib);
+    //    }
+
     /**
      * Clears the list of taglibs.
      */
