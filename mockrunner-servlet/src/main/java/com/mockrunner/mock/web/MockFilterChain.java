@@ -20,12 +20,17 @@ import com.mockrunner.base.NestedApplicationException;
  */
 public class MockFilterChain implements FilterChain
 {
+    @SuppressWarnings("rawtypes")
     private List filters = new ArrayList();
     private Servlet servlet;
+    @SuppressWarnings("rawtypes")
     private Iterator iterator;
+    @SuppressWarnings("rawtypes")
     private List requestList = new ArrayList();
+    @SuppressWarnings("rawtypes")
     private List responseList = new ArrayList();
-    
+
+    @SuppressWarnings("unchecked")
     public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException
     {
         requestList.add(request);
@@ -46,7 +51,7 @@ public class MockFilterChain implements FilterChain
             servlet.service(request, response);
         }
     }
-    
+
     /**
      * Resets the internal iterator of this chain.
      */
@@ -59,11 +64,12 @@ public class MockFilterChain implements FilterChain
      * Adds a filter to the chain.
      * @param filter the filter
      */
-    public void addFilter(Filter filter) 
+    @SuppressWarnings("unchecked")
+    public void addFilter(Filter filter)
     {
         filters.add(filter);
     }
-    
+
     /**
      * Adds a filter to the chain. The filter must implement
      * <code>javax.servlet.Filter</code>.
@@ -71,7 +77,8 @@ public class MockFilterChain implements FilterChain
      * @throws IllegalArgumentException if the specified class does not implement
      *         <code>javax.servlet.Filter</code>
      */
-    public void addFilter(Class filterClass) 
+    @SuppressWarnings("unchecked")
+    public void addFilter(@SuppressWarnings("rawtypes") Class filterClass)
     {
         if(!Filter.class.isAssignableFrom(filterClass))
         {
@@ -86,12 +93,12 @@ public class MockFilterChain implements FilterChain
             throw new NestedApplicationException(exc);
         }
     }
-    
+
     /**
      * Sets the servlet that is called at the end of the chain.
      * @param servlet the servlet
      */
-    public void setServlet(Servlet servlet) 
+    public void setServlet(Servlet servlet)
     {
         this.servlet = servlet;
     }
@@ -105,27 +112,29 @@ public class MockFilterChain implements FilterChain
         setServlet(null);
         reset();
     }
-    
+
     /**
      * Returns the list of all request objects used to call
      * {@link #doFilter} when iterating through the chain.
      * @return the request list
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public List getRequestList()
     {
         return Collections.unmodifiableList(requestList);
     }
-    
+
     /**
      * Returns the list of all response objects used to call
      * {@link #doFilter} when iterating through the chain.
      * @return the response list
      */
+    @SuppressWarnings("rawtypes")
     public List getResponseList()
     {
-        return Collections.unmodifiableList(responseList);
+        return responseList;
     }
-    
+
     /**
      * Returns the last request, usually the request that was
      * used to call the final servlet. Returns <code>null</code>

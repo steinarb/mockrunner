@@ -14,9 +14,11 @@ import javax.servlet.ServletContext;
 public class MockFilterConfig implements FilterConfig
 {
     private ServletContext context;
+    @SuppressWarnings("rawtypes")
     private Map initParameters;
     private String name;
-    
+
+    @SuppressWarnings("rawtypes")
     public MockFilterConfig()
     {
         initParameters = new HashMap();
@@ -35,7 +37,7 @@ public class MockFilterConfig implements FilterConfig
     {
         return name;
     }
-    
+
     public synchronized void setFilterName(String name)
     {
         this.name = name;
@@ -45,7 +47,7 @@ public class MockFilterConfig implements FilterConfig
     {
         return context;
     }
-    
+
     public synchronized void clearInitParameters()
     {
         initParameters.clear();
@@ -58,26 +60,29 @@ public class MockFilterConfig implements FilterConfig
     {
         return (String)initParameters.get(name);
     }
-    
+
     /**
      * Sets an init parameter.
      * @param name the name
      * @param value the value
      */
-    public synchronized void setInitParameter(String name, String value) 
+    @SuppressWarnings("unchecked")
+    public synchronized void setInitParameter(String name, String value)
     {
         initParameters.put(name, value);
     }
-    
+
     /**
      * Sets several init parameters.
      * @param parameters the parameter map
      */
-    public synchronized void setInitParameters(Map parameters) 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public synchronized void setInitParameters(Map parameters)
     {
         initParameters.putAll(parameters);
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public synchronized Enumeration getInitParameterNames()
     {
         return new Vector(initParameters.keySet()).elements();

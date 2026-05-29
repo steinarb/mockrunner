@@ -28,6 +28,7 @@ public class MockHttpServletResponse implements HttpServletResponse
 {
     private PrintWriter writer;
     private MockServletOutputStream outputStream;
+    @SuppressWarnings("rawtypes")
     private Map headers;
     private Locale locale;
     private String characterEncoding;
@@ -36,6 +37,7 @@ public class MockHttpServletResponse implements HttpServletResponse
     private boolean wasRedirectSent;
     private int errorCode;
     private int statusCode;
+    @SuppressWarnings("rawtypes")
     private List cookies;
 
     public MockHttpServletResponse()
@@ -46,6 +48,7 @@ public class MockHttpServletResponse implements HttpServletResponse
     /**
      * Resets the state of this object to the default values
      */
+    @SuppressWarnings("rawtypes")
     public void resetAll()
     {
         headers = new CaseAwareMap();
@@ -60,7 +63,7 @@ public class MockHttpServletResponse implements HttpServletResponse
         try
         {
             writer = new PrintWriter(new OutputStreamWriter(outputStream, characterEncoding), true);
-        } 
+        }
         catch(UnsupportedEncodingException exc)
         {
             throw new NestedApplicationException(exc);
@@ -107,6 +110,7 @@ public class MockHttpServletResponse implements HttpServletResponse
         return outputStream.getBinaryContent();
     }
 
+    @SuppressWarnings("unchecked")
     public void addCookie(Cookie cookie)
     {
         cookies.add(cookie);
@@ -117,6 +121,7 @@ public class MockHttpServletResponse implements HttpServletResponse
         addHeader(key, getDateString(date));
     }
 
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public void addHeader(String key, String value)
     {
         List valueList = (List) headers.get(key);
@@ -161,11 +166,13 @@ public class MockHttpServletResponse implements HttpServletResponse
     public void setDateHeader(String key, long date)
     {
         setHeader(key, getDateString(date));
-    } 
+    }
 
+    @SuppressWarnings("unchecked")
     public void setHeader(String key, String value)
     {
-        List valueList = new ArrayList();
+        @SuppressWarnings("rawtypes")
+            List valueList = new ArrayList();
         headers.put(key, valueList);
         valueList.add(value);
     }
@@ -215,7 +222,7 @@ public class MockHttpServletResponse implements HttpServletResponse
         try
         {
             writer = new PrintWriter(new OutputStreamWriter(outputStream, characterEncoding), true);
-        } 
+        }
         catch(UnsupportedEncodingException exc)
         {
             throw new NestedApplicationException(exc);
@@ -236,7 +243,7 @@ public class MockHttpServletResponse implements HttpServletResponse
     {
         return false;
     }
-    
+
     public void reset()
     {
         errorCode = SC_OK;
@@ -249,7 +256,7 @@ public class MockHttpServletResponse implements HttpServletResponse
     {
         outputStream.clearContent();
     }
-    
+
     public void clearHeaders()
     {
         headers.clear();
@@ -279,61 +286,66 @@ public class MockHttpServletResponse implements HttpServletResponse
     {
         setHeader("Content-Type", type);
     }
-    
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Collection getHeaderNames()
     {
         return headers.keySet();
     }
-    
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public Collection getHeaders(String name)
     {
         List headerList = (List)headers.get(name);
         if(null == headerList) return null;
         return headerList;
     }
-    
+
+    @SuppressWarnings("rawtypes")
     public List getHeaderList(String key)
     {
         return (List)headers.get(key);
     }
-    
+
+    @SuppressWarnings("rawtypes")
     public String getHeader(String key)
     {
         List list = getHeaderList(key);
         if(null == list || 0 == list.size()) return null;
         return (String)list.get(0);
     }
-    
+
     public int getStatusCode()
     {
         return statusCode;
     }
-    
+
     public int getStatus()
     {
         return getStatusCode();
     }
-    
+
     public int getErrorCode()
     {
         return errorCode;
     }
-    
+
+    @SuppressWarnings("rawtypes")
     public List getCookies()
     {
         return cookies;
     }
-    
+
     public boolean wasErrorSent()
     {
         return wasErrorSent;
     }
-    
+
     public boolean wasRedirectSent()
     {
         return wasRedirectSent;
     }
-    
+
     private String getDateString(long date)
     {
         Date dateValue = new Date(date);
